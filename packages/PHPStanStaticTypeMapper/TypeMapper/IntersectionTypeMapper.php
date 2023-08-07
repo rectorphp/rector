@@ -4,12 +4,10 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Node as AstNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -18,8 +16,6 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */
@@ -32,24 +28,19 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     private $phpVersionProvider;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper
      */
-    private $reflectionProvider;
+    private $objectWithoutClassTypeMapper;
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
+     * @readonly
+     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper
      */
-    private $phpStanStaticTypeMapper;
-    public function __construct(PhpVersionProvider $phpVersionProvider, ReflectionProvider $reflectionProvider)
+    private $objectTypeMapper;
+    public function __construct(PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper $objectTypeMapper)
     {
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->reflectionProvider = $reflectionProvider;
-    }
-    /**
-     * @required
-     */
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;
+        $this->objectTypeMapper = $objectTypeMapper;
     }
     /**
      * @return class-string<Type>
@@ -83,23 +74,15 @@ final class IntersectionTypeMapper implements TypeMapperInterface
             return null;
         }
         $intersectionedTypeNodes = [];
-        foreach ($type->getTypes() as $intersectionedType) {
-            $resolvedType = $this->phpStanStaticTypeMapper->mapToPhpParserNode($intersectionedType, $typeKind);
-            if (!$resolvedType instanceof Name && !$resolvedType instanceof Identifier) {
+        foreach ($type->getTypes() as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                return $this->objectWithoutClassTypeMapper->mapToPhpParserNode($type, $typeKind);
+            }
+            if (!$type instanceof ObjectType) {
                 return null;
             }
-            $resolvedTypeName = (string) $resolvedType;
-            /**
-             * ObjectWithoutClassType can happen when use along with \PHPStan\Type\Accessory\HasMethodType
-             * Use "object" as returned type
-             */
-            if ($intersectionedType instanceof ObjectWithoutClassType) {
-                return $resolvedType;
-            }
-            if (!$intersectionedType instanceof ObjectType) {
-                return null;
-            }
-            if (!$this->reflectionProvider->hasClass($resolvedTypeName)) {
+            $resolvedType = $this->objectTypeMapper->mapToPhpParserNode($type, $typeKind);
+            if (!$resolvedType instanceof FullyQualified) {
                 return null;
             }
             $intersectionedTypeNodes[] = $resolvedType;

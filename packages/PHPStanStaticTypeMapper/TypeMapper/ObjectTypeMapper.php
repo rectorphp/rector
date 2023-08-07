@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use RectorPrefix202308\Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -56,8 +55,9 @@ final class ObjectTypeMapper implements TypeMapperInterface
     }
     /**
      * @param ObjectType $type
+     * @return null|\PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind)
     {
         if ($type instanceof SelfObjectType) {
             return new Name('self');
