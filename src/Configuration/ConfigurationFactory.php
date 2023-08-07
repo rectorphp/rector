@@ -5,19 +5,19 @@ namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConfigurationFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\Contract\Console\OutputStyleInterface
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $rectorOutputStyle;
-    public function __construct(OutputStyleInterface $rectorOutputStyle)
+    private $symfonyStyle;
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->symfonyStyle = $symfonyStyle;
     }
     /**
      * @api used in tests
@@ -52,7 +52,7 @@ final class ConfigurationFactory
         if ($noProgressBar) {
             return \false;
         }
-        if ($this->rectorOutputStyle->isVerbose()) {
+        if ($this->symfonyStyle->isVerbose()) {
             return \false;
         }
         return $outputFormat === ConsoleOutputFormatter::NAME;

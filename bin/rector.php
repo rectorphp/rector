@@ -8,7 +8,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
+use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
@@ -121,9 +121,9 @@ try {
         echo Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
     } else {
         // report fatal errors in console format
-        $rectorConsoleOutputStyleFactory = new RectorConsoleOutputStyleFactory(new PrivatesAccessor());
-        $rectorConsoleOutputStyle = $rectorConsoleOutputStyleFactory->create();
-        $rectorConsoleOutputStyle->error($throwable->getMessage());
+        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesAccessor());
+        $symfonyStyle = $symfonyStyleFactory->create();
+        $symfonyStyle->error($throwable->getMessage());
     }
     exit(Command::FAILURE);
 }

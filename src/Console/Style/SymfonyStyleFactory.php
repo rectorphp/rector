@@ -41,7 +41,7 @@ final class SymfonyStyleFactory
         if ($this->isPHPUnitRun()) {
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
-        return new SymfonyStyle($argvInput, $consoleOutput);
+        return new \Rector\Core\Console\Style\RectorStyle($argvInput, $consoleOutput);
     }
     /**
      * Never ever used static methods if not neccesary, this is just handy for tests + src to prevent duplication.

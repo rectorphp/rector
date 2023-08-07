@@ -42,11 +42,8 @@ use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Configuration\ConfigInitializer;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Console\Output\OutputFormatterCollector;
-use Rector\Core\Console\Output\RectorOutputStyle;
-use Rector\Core\Console\Style\RectorConsoleOutputStyle;
-use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
+use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
-use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -258,7 +255,6 @@ final class LazyContainerFactory
             $inflectorFactory = new InflectorFactory();
             return $inflectorFactory->build();
         });
-        $lazyRectorConfig->singleton(OutputStyleInterface::class, RectorOutputStyle::class);
         $lazyRectorConfig->singleton(PhpFileProcessor::class);
         $lazyRectorConfig->tag(PhpFileProcessor::class, FileProcessorInterface::class);
         $lazyRectorConfig->singleton(NonPhpFileProcessor::class);
@@ -268,10 +264,6 @@ final class LazyContainerFactory
         $lazyRectorConfig->when(FileFactory::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $lazyRectorConfig->when(RectorNodeTraverser::class)->needs('$phpRectors')->giveTagged(PhpRectorInterface::class);
         $lazyRectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
-        $lazyRectorConfig->singleton(RectorConsoleOutputStyle::class, static function (Container $container) : RectorConsoleOutputStyle {
-            $rectorConsoleOutputStyleFactory = $container->make(RectorConsoleOutputStyleFactory::class);
-            return $rectorConsoleOutputStyleFactory->create();
-        });
         $lazyRectorConfig->when(ClassNameImportSkipper::class)->needs('$classNameImportSkipVoters')->giveTagged(ClassNameImportSkipVoterInterface::class);
         $lazyRectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (Container $container) : DynamicSourceLocatorProvider {
             $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
@@ -292,7 +284,7 @@ final class LazyContainerFactory
         // node name resolvers
         $lazyRectorConfig->when(NodeNameResolver::class)->needs('$nodeNameResolvers')->giveTagged(NodeNameResolverInterface::class);
         $lazyRectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector, Container $container) : void {
-            $rector->autowire($container->make(NodeNameResolver::class), $container->make(NodeTypeResolver::class), $container->make(SimpleCallableNodeTraverser::class), $container->make(NodeFactory::class), $container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(CurrentRectorProvider::class), $container->make(CurrentNodeProvider::class), $container->make(Skipper::class), $container->make(ValueResolver::class), $container->make(BetterNodeFinder::class), $container->make(NodeComparator::class), $container->make(CurrentFileProvider::class), $container->make(RectifiedAnalyzer::class), $container->make(CreatedByRuleDecorator::class), $container->make(ChangedNodeScopeRefresher::class), $container->make(RectorOutputStyle::class), $container->make(FilePathHelper::class));
+            $rector->autowire($container->make(NodeNameResolver::class), $container->make(NodeTypeResolver::class), $container->make(SimpleCallableNodeTraverser::class), $container->make(NodeFactory::class), $container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(CurrentRectorProvider::class), $container->make(CurrentNodeProvider::class), $container->make(Skipper::class), $container->make(ValueResolver::class), $container->make(BetterNodeFinder::class), $container->make(NodeComparator::class), $container->make(CurrentFileProvider::class), $container->make(RectifiedAnalyzer::class), $container->make(CreatedByRuleDecorator::class), $container->make(ChangedNodeScopeRefresher::class), $container->make(RectorStyle::class), $container->make(FilePathHelper::class));
         });
         $this->registerTagged($lazyRectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($lazyRectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
@@ -302,6 +294,7 @@ final class LazyContainerFactory
         $this->registerTagged($lazyRectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($lazyRectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
         $this->registerTagged($lazyRectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
+        $lazyRectorConfig->alias(RectorStyle::class, SymfonyStyle::class);
         $lazyRectorConfig->singleton(SymfonyStyle::class, static function (Container $container) : SymfonyStyle {
             $symfonyStyleFactory = $container->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();

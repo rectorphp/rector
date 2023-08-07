@@ -8,7 +8,6 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\ArrayParametersMerger;
@@ -21,6 +20,7 @@ use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202308\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202308\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202308\Symplify\EasyParallel\ScheduleFactory;
@@ -29,9 +29,9 @@ final class ApplicationFileProcessor
 {
     /**
      * @readonly
-     * @var \Rector\Core\Contract\Console\OutputStyleInterface
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $rectorOutputStyle;
+    private $symfonyStyle;
     /**
      * @readonly
      * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
@@ -88,9 +88,9 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, iterable $fileProcessors)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, iterable $fileProcessors)
     {
-        $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->arrayParametersMerger = $arrayParametersMerger;
@@ -133,8 +133,8 @@ final class ApplicationFileProcessor
         // progress bar on parallel handled on runParallel()
         if (!$isParallel && $shouldShowProgressBar) {
             $fileCount = \count($filePaths);
-            $this->rectorOutputStyle->progressStart($fileCount);
-            $this->rectorOutputStyle->progressAdvance(0);
+            $this->symfonyStyle->progressStart($fileCount);
+            $this->symfonyStyle->progressAdvance(0);
         }
         $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => [], Bridge::SYSTEM_ERRORS_COUNT => 0];
         foreach ($filePaths as $filePath) {
@@ -145,7 +145,7 @@ final class ApplicationFileProcessor
                 // progress bar +1,
                 // progress bar on parallel handled on runParallel()
                 if (!$isParallel && $shouldShowProgressBar) {
-                    $this->rectorOutputStyle->progressAdvance();
+                    $this->symfonyStyle->progressAdvance();
                 }
             } catch (Throwable $throwable) {
                 $this->invalidateFile($file);
@@ -185,7 +185,7 @@ final class ApplicationFileProcessor
     {
         $errorMessage = \sprintf('System error: "%s"', $throwable->getMessage()) . \PHP_EOL;
         $filePath = $filePath instanceof File ? $filePath->getFilePath() : $filePath;
-        if ($this->rectorOutputStyle->isDebug()) {
+        if ($this->symfonyStyle->isDebug()) {
             return new SystemError($errorMessage . \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString(), $filePath, $throwable->getLine());
         }
         $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
@@ -232,10 +232,10 @@ final class ApplicationFileProcessor
         };
         if ($configuration->shouldShowProgressBar()) {
             $fileCount = \count($filePaths);
-            $this->rectorOutputStyle->progressStart($fileCount);
-            $this->rectorOutputStyle->progressAdvance(0);
+            $this->symfonyStyle->progressStart($fileCount);
+            $this->symfonyStyle->progressAdvance(0);
             $postFileCallback = function (int $stepCount) : void {
-                $this->rectorOutputStyle->progressAdvance($stepCount);
+                $this->symfonyStyle->progressAdvance($stepCount);
                 // running in parallel here → nothing else to do
             };
         }

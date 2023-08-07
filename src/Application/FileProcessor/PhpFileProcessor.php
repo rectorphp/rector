@@ -9,7 +9,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
-use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
@@ -21,6 +20,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {
@@ -36,9 +36,9 @@ final class PhpFileProcessor implements FileProcessorInterface
     private $fileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\Contract\Console\OutputStyleInterface
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $rectorOutputStyle;
+    private $symfonyStyle;
     /**
      * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
@@ -69,11 +69,11 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @see https://regex101.com/r/xP2MGa/1
      */
     private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
-        $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->fileDiffFactory = $fileDiffFactory;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->postFileProcessor = $postFileProcessor;
@@ -158,7 +158,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             $autoloadSystemError = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getFilePath());
             return [$autoloadSystemError];
         } catch (Throwable $throwable) {
-            if ($this->rectorOutputStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
             $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
@@ -203,10 +203,10 @@ final class PhpFileProcessor implements FileProcessorInterface
     }
     private function notifyFile(File $file) : void
     {
-        if (!$this->rectorOutputStyle->isVerbose()) {
+        if (!$this->symfonyStyle->isVerbose()) {
             return;
         }
         $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
-        $this->rectorOutputStyle->writeln($relativeFilePath);
+        $this->symfonyStyle->writeln($relativeFilePath);
     }
 }

@@ -18,7 +18,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
@@ -37,6 +36,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
@@ -131,9 +131,9 @@ CODE_SAMPLE;
      */
     private $createdByRuleDecorator;
     /**
-     * @var \Rector\Core\Console\Output\RectorOutputStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $rectorOutputStyle;
+    private $symfonyStyle;
     /**
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
@@ -145,7 +145,7 @@ CODE_SAMPLE;
     /**
      * @required
      */
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper) : void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, SymfonyStyle $symfonyStyle, FilePathHelper $filePathHelper) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -163,7 +163,7 @@ CODE_SAMPLE;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
-        $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->filePathHelper = $filePathHelper;
     }
     /**
@@ -187,7 +187,7 @@ CODE_SAMPLE;
         if ($this->shouldSkipCurrentNode($node)) {
             return null;
         }
-        $isDebug = $this->rectorOutputStyle->isDebug();
+        $isDebug = $this->symfonyStyle->isDebug();
         $this->currentRectorProvider->changeCurrentRector($this);
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
@@ -363,15 +363,15 @@ CODE_SAMPLE;
     private function printCurrentFileAndRule() : void
     {
         $relativeFilePath = $this->filePathHelper->relativePath($this->file->getFilePath());
-        $this->rectorOutputStyle->writeln('[file] ' . $relativeFilePath);
-        $this->rectorOutputStyle->writeln('[rule] ' . static::class);
+        $this->symfonyStyle->writeln('[file] ' . $relativeFilePath);
+        $this->symfonyStyle->writeln('[rule] ' . static::class);
     }
     private function printConsumptions(float $startTime, int $previousMemory) : void
     {
         $elapsedTime = \microtime(\true) - $startTime;
         $currentTotalMemory = \memory_get_peak_usage(\true);
         $consumed = \sprintf('--- consumed %s, total %s, took %.2f s', BytesHelper::bytes($currentTotalMemory - $previousMemory), BytesHelper::bytes($currentTotalMemory), $elapsedTime);
-        $this->rectorOutputStyle->writeln($consumed);
-        $this->rectorOutputStyle->newLine(1);
+        $this->symfonyStyle->writeln($consumed);
+        $this->symfonyStyle->newLine(1);
     }
 }

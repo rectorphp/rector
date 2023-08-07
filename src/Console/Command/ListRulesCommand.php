@@ -6,7 +6,6 @@ namespace Rector\Core\Console\Command;
 use RectorPrefix202308\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
@@ -15,14 +14,15 @@ use RectorPrefix202308\Symfony\Component\Console\Command\Command;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202308\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202308\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class ListRulesCommand extends Command
 {
     /**
      * @readonly
-     * @var \Rector\Core\Console\Output\RectorOutputStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $rectorOutputStyle;
+    private $symfonyStyle;
     /**
      * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
@@ -35,9 +35,9 @@ final class ListRulesCommand extends Command
     /**
      * @param RewindableGenerator<RectorInterface>|RectorInterface[] $rectors
      */
-    public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, iterable $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, iterable $rectors)
     {
-        $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->skippedClassResolver = $skippedClassResolver;
         parent::__construct();
         if ($rectors instanceof RewindableGenerator) {
@@ -61,11 +61,11 @@ final class ListRulesCommand extends Command
             echo Json::encode($data, Json::PRETTY) . \PHP_EOL;
             return Command::SUCCESS;
         }
-        $this->rectorOutputStyle->title('Loaded Rector rules');
-        $this->rectorOutputStyle->listing($rectorClasses);
+        $this->symfonyStyle->title('Loaded Rector rules');
+        $this->symfonyStyle->listing($rectorClasses);
         if ($skippedClasses !== []) {
-            $this->rectorOutputStyle->title('Skipped Rector rules');
-            $this->rectorOutputStyle->listing($skippedClasses);
+            $this->symfonyStyle->title('Skipped Rector rules');
+            $this->symfonyStyle->listing($skippedClasses);
         }
         return Command::SUCCESS;
     }

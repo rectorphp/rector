@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1ab3abf084614a2564c15cafc53d154f
+class ComposerStaticInit2de9e0e7fdbb90e14135faecd56343a6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1774,11 +1774,8 @@ class ComposerStaticInit1ab3abf084614a2564c15cafc53d154f
         'Rector\\Core\\Console\\Formatter\\CompleteUnifiedDiffOutputBuilderFactory' => __DIR__ . '/../..' . '/src/Console/Formatter/CompleteUnifiedDiffOutputBuilderFactory.php',
         'Rector\\Core\\Console\\Formatter\\ConsoleDiffer' => __DIR__ . '/../..' . '/src/Console/Formatter/ConsoleDiffer.php',
         'Rector\\Core\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
-        'Rector\\Core\\Console\\Output\\RectorOutputStyle' => __DIR__ . '/../..' . '/src/Console/Output/RectorOutputStyle.php',
-        'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyle.php',
-        'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyleFactory.php',
+        'Rector\\Core\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
         'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
-        'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => __DIR__ . '/../..' . '/src/Contract/Console/OutputStyleInterface.php',
         'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => __DIR__ . '/../..' . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
         'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => __DIR__ . '/../..' . '/src/Contract/Processor/FileProcessorInterface.php',
@@ -3012,9 +3009,9 @@ class ComposerStaticInit1ab3abf084614a2564c15cafc53d154f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1ab3abf084614a2564c15cafc53d154f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1ab3abf084614a2564c15cafc53d154f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1ab3abf084614a2564c15cafc53d154f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2de9e0e7fdbb90e14135faecd56343a6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2de9e0e7fdbb90e14135faecd56343a6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2de9e0e7fdbb90e14135faecd56343a6::$classMap;
 
         }, null, ClassLoader::class);
     }

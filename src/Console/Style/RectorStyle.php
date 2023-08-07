@@ -9,7 +9,7 @@ use RectorPrefix202308\Symfony\Component\Console\Helper\ProgressBar;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
-final class RectorConsoleOutputStyle extends SymfonyStyle
+final class RectorStyle extends SymfonyStyle
 {
     /**
      * @var \Symfony\Component\Console\Helper\ProgressBar|null
