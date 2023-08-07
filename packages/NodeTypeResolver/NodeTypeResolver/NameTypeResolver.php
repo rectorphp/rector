@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
+use PHPStan\Analyser\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -13,9 +14,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  *
@@ -24,22 +24,22 @@ use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 final class NameTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    /**
-     * @required
-     */
-    public function autowire(ReflectionResolver $reflectionResolver) : void
-    {
-        $this->reflectionResolver = $reflectionResolver;
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array
     {
         return [Name::class, FullyQualified::class];
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified $node
+     */
+    private function resolveClassReflection($node) : ?ClassReflection
+    {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return null;
+        }
+        return $scope->getClassReflection();
     }
     /**
      * @param Name $node
@@ -60,7 +60,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
      */
     private function resolveParent(Name $name)
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($name);
+        $classReflection = $this->resolveClassReflection($name);
         if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
             return new MixedType();
         }
@@ -83,7 +83,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC, 'this'], \true)) {
-            $classReflection = $this->reflectionResolver->resolveClassReflection($name);
+            $classReflection = $this->resolveClassReflection($name);
             if (!$classReflection instanceof ClassReflection || $classReflection->isAnonymous()) {
                 return $name->toString();
             }
