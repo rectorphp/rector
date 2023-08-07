@@ -36,6 +36,11 @@ final class NameScopeFactory
      */
     private $astResolver;
     /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -43,24 +48,20 @@ final class NameScopeFactory
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    /**
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    public function __construct(UseImportsResolver $useImportsResolver, AstResolver $astResolver)
+    public function __construct(UseImportsResolver $useImportsResolver, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->useImportsResolver = $useImportsResolver;
         $this->astResolver = $astResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     // This is needed to avoid circular references
     /**
      * @required
      */
-    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver) : void
+    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->reflectionResolver = $reflectionResolver;
     }
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node) : NameScope
     {
