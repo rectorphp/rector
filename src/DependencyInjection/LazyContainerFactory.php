@@ -26,7 +26,6 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayP
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
-use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -229,10 +228,6 @@ final class LazyContainerFactory
         $container->afterResolving(ArrayItemNodeAnnotationToAttributeMapper::class, static function (ArrayItemNodeAnnotationToAttributeMapper $arrayItemNodeAnnotationToAttributeMapper, Container $container) : void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
             $arrayItemNodeAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
-        });
-        $container->afterResolving(ShortNameResolver::class, static function (ShortNameResolver $shortNameResolver, Container $container) : void {
-            $phpDocInfoFactory = $container->make(PhpDocInfoFactory::class);
-            $shortNameResolver->autowire($phpDocInfoFactory);
         });
         $container->afterResolving(NameScopeFactory::class, static function (NameScopeFactory $nameScopeFactory, Container $container) : void {
             $nameScopeFactory->autowire($container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(ReflectionResolver::class));
