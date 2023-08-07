@@ -311,6 +311,7 @@ final class ValueResolver
         if (!$classReflection->isClass()) {
             throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "parent" references is resolvable to lookup parent class');
         }
+        // XXX rework this hack, after https://github.com/phpstan/phpstan-src/pull/2563 landed
         // ensure parent class name still resolved even not autoloaded
         $nativeReflection = $classReflection->getNativeReflection();
         $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');

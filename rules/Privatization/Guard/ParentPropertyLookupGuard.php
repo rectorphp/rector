@@ -72,6 +72,7 @@ final class ParentPropertyLookupGuard
         if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return \false;
         }
+        // XXX rework this hack, after https://github.com/phpstan/phpstan-src/pull/2563 landed
         $nativeReflection = $classReflection->getNativeReflection();
         $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
         $parentClassName = $this->privatesAccessor->getPrivateProperty($betterReflectionClass, 'parentClassName');

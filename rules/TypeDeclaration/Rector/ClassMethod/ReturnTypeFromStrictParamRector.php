@@ -177,7 +177,7 @@ CODE_SAMPLE
             return \true;
         }
         if ($node instanceof ClassMethod) {
-            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
+            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node) !== \false) {
                 return \true;
             }
             if ($node->isMagic()) {

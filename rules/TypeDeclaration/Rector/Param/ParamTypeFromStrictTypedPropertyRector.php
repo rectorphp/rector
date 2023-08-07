@@ -108,7 +108,7 @@ CODE_SAMPLE
         if ($classMethod->isAbstract()) {
             return null;
         }
-        if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
+        if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod) !== \false) {
             return null;
         }
         $originalParamType = $this->resolveParamOriginalType($param, $scope);

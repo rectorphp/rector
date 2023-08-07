@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticIniteb2977d07722edfb3f92b84a842954d4
+class ComposerStaticInitd60879e03e03619f65217abab90852fe
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2979,6 +2979,7 @@ class ComposerStaticIniteb2977d07722edfb3f92b84a842954d4
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
         'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
+        'Rector\\VendorLocker\\Exception\\UnresolvableClassException' => __DIR__ . '/../..' . '/packages/VendorLocker/Exception/UnresolvableClassException.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnVendorLockResolver.php',
@@ -3010,9 +3011,9 @@ class ComposerStaticIniteb2977d07722edfb3f92b84a842954d4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticIniteb2977d07722edfb3f92b84a842954d4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticIniteb2977d07722edfb3f92b84a842954d4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticIniteb2977d07722edfb3f92b84a842954d4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd60879e03e03619f65217abab90852fe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd60879e03e03619f65217abab90852fe::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd60879e03e03619f65217abab90852fe::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -121,7 +121,7 @@ CODE_SAMPLE
             if (!$paramType instanceof Node) {
                 continue;
             }
-            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
+            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node) !== \false) {
                 return null;
             }
             $param->type = $paramType;
