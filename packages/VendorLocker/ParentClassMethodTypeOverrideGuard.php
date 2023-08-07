@@ -62,16 +62,23 @@ final class ParentClassMethodTypeOverrideGuard
     public function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
     {
         try {
-            $parentClassMethod = $this->resolveParentClassMethod($classMethod);
-            return $parentClassMethod;
+            return $this->resolveParentClassMethod($classMethod);
         } catch (UnresolvableClassException $exception) {
             // we don't know all involved parents.
             throw new ShouldNotHappenException('Unable to resolve involved class. You are likely missing hasParentClassMethod() before calling getParentClassMethod().');
         }
     }
-    /**
-     * @throws UnresolvableClassException
-     */
+    public function shouldSkipReturnTypeChange(ClassMethod $classMethod, Type $parentType) : bool
+    {
+        if ($classMethod->returnType === null) {
+            return \false;
+        }
+        $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        if ($this->typeComparator->isSubtype($currentReturnType, $parentType)) {
+            return \true;
+        }
+        return $this->typeComparator->areTypesEqual($currentReturnType, $parentType);
+    }
     private function resolveParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
@@ -108,16 +115,5 @@ final class ParentClassMethodTypeOverrideGuard
         $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
         $parentClassName = $this->privatesAccessor->getPrivateProperty($betterReflectionClass, 'parentClassName');
         return $parentClassName !== null;
-    }
-    public function shouldSkipReturnTypeChange(ClassMethod $classMethod, Type $parentType) : bool
-    {
-        if ($classMethod->returnType === null) {
-            return \false;
-        }
-        $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
-        if ($this->typeComparator->isSubtype($currentReturnType, $parentType)) {
-            return \true;
-        }
-        return $this->typeComparator->areTypesEqual($currentReturnType, $parentType);
     }
 }

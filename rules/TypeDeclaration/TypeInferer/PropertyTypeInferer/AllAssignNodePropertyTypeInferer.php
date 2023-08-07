@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\ClassLikeAstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 final class AllAssignNodePropertyTypeInferer
