@@ -19,10 +19,14 @@ abstract class AbstractLazyTestCase extends TestCase
      */
     protected function make(string $class) : object
     {
+        return self::getContainer()->make($class);
+    }
+    protected static function getContainer() : Container
+    {
         if (!self::$container instanceof Container) {
             $lazyContainerFactory = new LazyContainerFactory();
             self::$container = $lazyContainerFactory->create();
         }
-        return self::$container->make($class);
+        return self::$container;
     }
 }

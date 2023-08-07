@@ -33,13 +33,16 @@ final class ListRulesCommand extends Command
      */
     private $rectors = [];
     /**
-     * @param RewindableGenerator<RectorInterface> $rectors
+     * @param RewindableGenerator<RectorInterface>|RectorInterface[] $rectors
      */
     public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, iterable $rectors)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->skippedClassResolver = $skippedClassResolver;
         parent::__construct();
+        if ($rectors instanceof RewindableGenerator) {
+            $rectors = $rectors->getIterator();
+        }
         $this->rectors = \iterator_to_array($rectors);
     }
     protected function configure() : void
