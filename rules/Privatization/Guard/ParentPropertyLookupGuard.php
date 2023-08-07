@@ -14,6 +14,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\ClassLikeAstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
@@ -37,9 +38,9 @@ final class ParentPropertyLookupGuard
     private $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $classLikeAstResolver;
+    private $astResolver;
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
@@ -50,12 +51,12 @@ final class ParentPropertyLookupGuard
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, ClassLikeAstResolver $classLikeAstResolver, PropertyManipulator $propertyManipulator, PrivatesAccessor $privatesAccessor)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator, PrivatesAccessor $privatesAccessor)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->classLikeAstResolver = $classLikeAstResolver;
+        $this->astResolver = $astResolver;
         $this->propertyManipulator = $propertyManipulator;
         $this->privatesAccessor = $privatesAccessor;
     }
@@ -87,7 +88,7 @@ final class ParentPropertyLookupGuard
     }
     private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName, string $className) : bool
     {
-        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($parentClassReflection);
+        $classLike = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
         if (!$classLike instanceof Class_) {
             return \false;
         }

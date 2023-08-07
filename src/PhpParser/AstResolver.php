@@ -211,7 +211,7 @@ final class AstResolver
      */
     public function resolveClassFromClassReflection(ClassReflection $classReflection)
     {
-        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
+        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $this);
     }
     /**
      * @return Trait_[]

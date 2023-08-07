@@ -21,7 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\ClassLikeAstResolver;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -49,16 +49,16 @@ final class ArrayTypeAnalyzer
     private $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $classLikeAstResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver)
+    private $astResolver;
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
-        $this->classLikeAstResolver = $classLikeAstResolver;
+        $this->astResolver = $astResolver;
     }
     public function isArrayType(Expr $expr) : bool
     {
@@ -118,7 +118,7 @@ final class ArrayTypeAnalyzer
             return \false;
         }
         /** @var ClassLike $classLike */
-        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
+        $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
         $property = $classLike->getProperty($propertyName);
         if (!$property instanceof Property) {
             return \false;
@@ -147,7 +147,7 @@ final class ArrayTypeAnalyzer
             return \false;
         }
         /** @var ClassLike $classLike */
-        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
+        $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             return \false;

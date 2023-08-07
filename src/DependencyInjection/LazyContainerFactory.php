@@ -29,7 +29,6 @@ use Rector\Caching\CacheFactory;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\PhpParser\ClassLikeAstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
@@ -236,7 +235,7 @@ final class LazyContainerFactory
             $shortNameResolver->autowire($phpDocInfoFactory);
         });
         $container->afterResolving(NameScopeFactory::class, static function (NameScopeFactory $nameScopeFactory, Container $container) : void {
-            $nameScopeFactory->autowire($container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(ReflectionResolver::class), $container->make(ClassLikeAstResolver::class));
+            $nameScopeFactory->autowire($container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(ReflectionResolver::class));
         });
         $container->afterResolving(ArrayTypeMapper::class, static function (ArrayTypeMapper $arrayTypeMapper, Container $container) : void {
             $arrayTypeMapper->autowire($container->make(PHPStanStaticTypeMapper::class), $container->make(UnionTypeCommonTypeNarrower::class), $container->make(ReflectionProvider::class), $container->make(GenericClassStringTypeNormalizer::class), $container->make(DetailedTypeAnalyzer::class));
