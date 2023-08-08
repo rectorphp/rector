@@ -15,11 +15,6 @@
             "bootstrap.php"
         ]
     },
-    "extra": {
-        "branch-alias": {
-            "dev-main": "0.15-dev"
-        }
-    },
     "conflict": {
         "rector/rector-phpunit": "*",
         "rector/rector-symfony": "*",

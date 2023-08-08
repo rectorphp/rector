@@ -390,31 +390,31 @@
         },
         {
             "name": "evenement\/evenement",
-            "version": "v3.0.1",
-            "version_normalized": "3.0.1.0",
+            "version": "v3.0.2",
+            "version_normalized": "3.0.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/igorw\/evenement.git",
-                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7"
+                "reference": "0a16b0d71ab13284339abb99d9d2bd813640efbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/igorw\/evenement\/zipball\/531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
-                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
+                "url": "https:\/\/api.github.com\/repos\/igorw\/evenement\/zipball\/0a16b0d71ab13284339abb99d9d2bd813640efbc",
+                "reference": "0a16b0d71ab13284339abb99d9d2bd813640efbc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^6.0"
+                "phpunit\/phpunit": "^9 || ^6"
             },
-            "time": "2017-07-23T21:35:13+00:00",
+            "time": "2023-08-08T05:53:35+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202308\\Evenement\\": "src\/Evenement\/"
+                    "RectorPrefix202308\\Evenement\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -434,7 +434,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/igorw\/evenement\/issues",
-                "source": "https:\/\/github.com\/igorw\/evenement\/tree\/master"
+                "source": "https:\/\/github.com\/igorw\/evenement\/tree\/v3.0.2"
             },
             "install-path": "..\/evenement\/evenement"
         },

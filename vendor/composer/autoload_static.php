@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd
+class ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -227,7 +227,7 @@ class ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd
         ),
         'RectorPrefix202308\\Evenement\\' => 
         array (
-            0 => __DIR__ . '/..' . '/evenement/evenement/src/Evenement',
+            0 => __DIR__ . '/..' . '/evenement/evenement/src',
         ),
         'RectorPrefix202308\\Doctrine\\Inflector\\' => 
         array (
@@ -663,9 +663,9 @@ class ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd
         'RectorPrefix202308\\Doctrine\\Inflector\\Rules\\Word' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/Rules/Word.php',
         'RectorPrefix202308\\Doctrine\\Inflector\\RulesetInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/RulesetInflector.php',
         'RectorPrefix202308\\Doctrine\\Inflector\\WordInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/WordInflector.php',
-        'RectorPrefix202308\\Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitter.php',
-        'RectorPrefix202308\\Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitterInterface.php',
-        'RectorPrefix202308\\Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/Evenement/EventEmitterTrait.php',
+        'RectorPrefix202308\\Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitter.php',
+        'RectorPrefix202308\\Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterInterface.php',
+        'RectorPrefix202308\\Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterTrait.php',
         'RectorPrefix202308\\Fidry\\CpuCoreCounter\\CpuCoreCounter' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/CpuCoreCounter.php',
         'RectorPrefix202308\\Fidry\\CpuCoreCounter\\Diagnoser' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Diagnoser.php',
         'RectorPrefix202308\\Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Executor/ProcOpenExecutor.php',
@@ -3009,9 +3009,9 @@ class ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit24cd621939e1c0be213e3232a0d86dbd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$classMap;
 
         }, null, ClassLoader::class);
     }

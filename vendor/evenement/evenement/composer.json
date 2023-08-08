@@ -16,19 +16,19 @@
         "php": ">=7.0"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^6.0"
+        "phpunit\/phpunit": "^9 || ^6"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202308\\Evenement\\": "src\/Evenement\/"
+            "RectorPrefix202308\\Evenement\\": "src\/"
         }
     },
     "autoload-dev": {
-        "files": [
-            "tests\/Evenement\/Tests\/functions.php"
-        ],
         "psr-4": {
-            "RectorPrefix202308\\Evenement\\": "tests\/Evenement\/"
-        }
+            "RectorPrefix202308\\Evenement\\Tests\\": "tests\/"
+        },
+        "files": [
+            "tests\/functions.php"
+        ]
     }
 }
