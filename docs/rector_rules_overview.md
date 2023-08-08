@@ -1,4 +1,4 @@
-# 360 Rules Overview
+# 357 Rules Overview
 
 <br>
 
@@ -54,7 +54,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (44)
+- [TypeDeclaration](#typedeclaration) (41)
 
 - [Visibility](#visibility) (3)
 
@@ -7701,30 +7701,6 @@ Change numeric return type based on strict returns type operations
 
 <br>
 
-### ParamAnnotationIncorrectNullableRector
-
-Add or remove null type from `@param` phpdoc typehint based on php parameter type declaration
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamAnnotationIncorrectNullableRector.php)
-
-```diff
- final class SomeClass
- {
-     /**
--     * @param \DateTime[] $dateTimes
-+     * @param \DateTime[]|null $dateTimes
-      */
-     public function setDateTimes(?array $dateTimes): self
-     {
-         $this->dateTimes = $dateTimes;
-
-         return $this;
-     }
- }
-```
-
-<br>
-
 ### ParamTypeByMethodCallTypeRector
 
 Change param type based on passed method call type
@@ -7823,28 +7799,6 @@ Add property type based on strict setter and getter method
      public function getName(): string
      {
          return $this->name;
-     }
- }
-```
-
-<br>
-
-### ReturnAnnotationIncorrectNullableRector
-
-Add or remove null type from `@return` phpdoc typehint based on php return type declaration
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnAnnotationIncorrectNullableRector.php)
-
-```diff
- final class SomeClass
- {
-     /**
--     * @return \DateTime[]
-+     * @return \DateTime[]|null
-      */
-     public function getDateTimes(): ?array
-     {
-         return $this->dateTimes;
      }
  }
 ```
@@ -8283,25 +8237,6 @@ Add strict typed property based on `setUp()` strict typed assigns in TestCase
      {
          $this->value = 1000;
      }
- }
-```
-
-<br>
-
-### VarAnnotationIncorrectNullableRector
-
-Add or remove null type from `@var` phpdoc typehint based on php property type declaration
-
-- class: [`Rector\TypeDeclaration\Rector\Property\VarAnnotationIncorrectNullableRector`](../rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php)
-
-```diff
- final class SomeClass
- {
-     /**
--     * @var DateTime[]
-+     * @var DateTime[]|null
-      */
-     private ?array $dateTimes;
  }
 ```
 
