@@ -35,21 +35,30 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
      * @var string|null
      */
     private $inputFilePath;
+    /**
+     * @var array<string, true>
+     */
+    private static $cacheByRuleAndConfig = [];
     protected function setUp() : void
     {
         @\ini_set('memory_limit', '-1');
-        $this->includePreloadFilesAndScoperAutoload();
         $configFile = $this->provideConfigFilePath();
-        $this->bootFromConfigFiles([$configFile]);
+        // boot once for config + test case to avoid booting again and again for every test fixture
+        $cacheKey = \sha1($configFile . static::class);
+        if (!isset(self::$cacheByRuleAndConfig[$cacheKey])) {
+            $this->includePreloadFilesAndScoperAutoload();
+            $this->bootFromConfigFiles([$configFile]);
+            /** @var AdditionalAutoloader $additionalAutoloader */
+            $additionalAutoloader = $this->getService(AdditionalAutoloader::class);
+            $additionalAutoloader->autoloadPaths();
+            /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
+            $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
+            $bootstrapFilesIncluder->includeBootstrapFiles();
+            $bootstrapFilesIncluder->includePHPStanExtensionsBoostrapFiles();
+            self::$cacheByRuleAndConfig[$cacheKey] = \true;
+        }
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
-        /** @var AdditionalAutoloader $additionalAutoloader */
-        $additionalAutoloader = $this->getService(AdditionalAutoloader::class);
-        $additionalAutoloader->autoloadPaths();
-        /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
-        $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
-        $bootstrapFilesIncluder->includeBootstrapFiles();
-        $bootstrapFilesIncluder->includePHPStanExtensionsBoostrapFiles();
     }
     protected function tearDown() : void
     {
