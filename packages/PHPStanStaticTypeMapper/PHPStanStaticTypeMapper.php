@@ -11,6 +11,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 final class PHPStanStaticTypeMapper
 {
     /**
@@ -24,6 +25,7 @@ final class PHPStanStaticTypeMapper
     public function __construct(iterable $typeMappers)
     {
         $this->typeMappers = $typeMappers;
+        Assert::notEmpty($typeMappers);
     }
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {

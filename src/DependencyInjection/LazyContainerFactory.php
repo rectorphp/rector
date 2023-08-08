@@ -18,6 +18,11 @@ use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ArrayTypePhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\CallableTypePhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\IntersectionTypeNodePhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\TemplatePhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\UnionTypeNodePhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\ConstExprClassNameDecorator;
 use Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator;
@@ -41,6 +46,11 @@ use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Configuration\ConfigInitializer;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Console\Command\ListRulesCommand;
+use Rector\Core\Console\Command\ProcessCommand;
+use Rector\Core\Console\Command\SetupCICommand;
+use Rector\Core\Console\Command\WorkerCommand;
+use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
@@ -169,7 +179,10 @@ use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\Utils\Command\MissingInSetCommand;
+use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202308\Symfony\Component\Console\Application;
+use RectorPrefix202308\Symfony\Component\Console\Command\Command;
 use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 final class LazyContainerFactory
@@ -178,6 +191,10 @@ final class LazyContainerFactory
      * @var array<class-string<NodeNameResolverInterface>>
      */
     private const NODE_NAME_RESOLVER_CLASSES = [ClassConstFetchNameResolver::class, ClassConstNameResolver::class, ClassNameResolver::class, EmptyNameResolver::class, FuncCallNameResolver::class, FunctionNameResolver::class, NameNameResolver::class, ParamNameResolver::class, PropertyNameResolver::class, UseNameResolver::class, VariableNameResolver::class];
+    /**
+     * @var array<class-string<BasePhpDocNodeVisitorInterface>>
+     */
+    private const BASE_PHP_DOC_NODE_VISITORS = [ArrayTypePhpDocNodeVisitor::class, CallableTypePhpDocNodeVisitor::class, IntersectionTypeNodePhpDocNodeVisitor::class, TemplatePhpDocNodeVisitor::class, UnionTypeNodePhpDocNodeVisitor::class];
     /**
      * @var array<class-string<AnnotationToAttributeMapperInterface>>
      */
@@ -221,12 +238,12 @@ final class LazyContainerFactory
     /**
      * @api used as next container factory
      */
-    public function create() : Container
+    public function create() : LazyRectorConfig
     {
         $lazyRectorConfig = new LazyRectorConfig();
         // setup base parameters - from RectorConfig
         // make use of https://github.com/symplify/easy-parallel
-        // $rectorConfig->import(EasyParallelConfig::FILE_PATH);
+        // $lazyRectorConfig->import(EasyParallelConfig::FILE_PATH);
         $lazyRectorConfig->paths([]);
         $lazyRectorConfig->skip([]);
         $lazyRectorConfig->autoloadPaths([]);
@@ -240,6 +257,8 @@ final class LazyContainerFactory
         $lazyRectorConfig->fileExtensions(['php']);
         $lazyRectorConfig->cacheDirectory(\sys_get_temp_dir() . '/rector_cached_files');
         $lazyRectorConfig->containerCacheDirectory(\sys_get_temp_dir());
+        // make use of https://github.com/symplify/easy-parallel
+        //        $lazyRectorConfig->import(EasyParallelConfig::FILE_PATH);
         $lazyRectorConfig->singleton(Application::class, static function () : Application {
             $application = new Application();
             // @todo inject commands
@@ -255,10 +274,18 @@ final class LazyContainerFactory
             $inflectorFactory = new InflectorFactory();
             return $inflectorFactory->build();
         });
-        $lazyRectorConfig->singleton(PhpFileProcessor::class);
+        $lazyRectorConfig->singleton(ConsoleApplication::class, ConsoleApplication::class);
+        $lazyRectorConfig->when(ConsoleApplication::class)->needs('$commands')->giveTagged(Command::class);
         $lazyRectorConfig->tag(PhpFileProcessor::class, FileProcessorInterface::class);
-        $lazyRectorConfig->singleton(NonPhpFileProcessor::class);
         $lazyRectorConfig->tag(NonPhpFileProcessor::class, FileProcessorInterface::class);
+        $lazyRectorConfig->tag(ProcessCommand::class, Command::class);
+        $lazyRectorConfig->tag(WorkerCommand::class, Command::class);
+        $lazyRectorConfig->tag(SetupCICommand::class, Command::class);
+        $lazyRectorConfig->tag(ListRulesCommand::class, Command::class);
+        $lazyRectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
+        // dev
+        $lazyRectorConfig->tag(MissingInSetCommand::class, Command::class);
+        $lazyRectorConfig->tag(OutsideAnySetCommand::class, Command::class);
         $lazyRectorConfig->when(NonPhpFileProcessor::class)->needs('$nonPhpRectors')->giveTagged(NonPhpRectorInterface::class);
         $lazyRectorConfig->when(ApplicationFileProcessor::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $lazyRectorConfig->when(FileFactory::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
@@ -277,6 +304,10 @@ final class LazyContainerFactory
         });
         // tagged services
         $lazyRectorConfig->when(BetterPhpDocParser::class)->needs('$phpDocNodeDecorators')->giveTagged(PhpDocNodeDecoratorInterface::class);
+        $lazyRectorConfig->afterResolving(ConditionalTypeForParameterMapper::class, static function (ConditionalTypeForParameterMapper $conditionalTypeForParameterMapper, Container $container) : void {
+            $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
+            $conditionalTypeForParameterMapper->autowire($phpStanStaticTypeMapper);
+        });
         $lazyRectorConfig->when(PHPStanStaticTypeMapper::class)->needs('$typeMappers')->giveTagged(TypeMapperInterface::class);
         $lazyRectorConfig->when(PhpDocTypeMapper::class)->needs('$phpDocTypeMappers')->giveTagged(PhpDocTypeMapperInterface::class);
         $lazyRectorConfig->when(PhpParserNodeMapper::class)->needs('$phpParserNodeMappers')->giveTagged(PhpParserNodeMapperInterface::class);
@@ -288,13 +319,14 @@ final class LazyContainerFactory
         });
         $this->registerTagged($lazyRectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($lazyRectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
+        $this->registerTagged($lazyRectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
         $this->registerTagged($lazyRectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
         $this->registerTagged($lazyRectorConfig, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
         $this->registerTagged($lazyRectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
         $this->registerTagged($lazyRectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($lazyRectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
         $this->registerTagged($lazyRectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
-        $lazyRectorConfig->alias(RectorStyle::class, SymfonyStyle::class);
+        $lazyRectorConfig->alias(SymfonyStyle::class, RectorStyle::class);
         $lazyRectorConfig->singleton(SymfonyStyle::class, static function (Container $container) : SymfonyStyle {
             $symfonyStyleFactory = $container->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();
@@ -320,9 +352,21 @@ final class LazyContainerFactory
         $lazyRectorConfig->afterResolving(PlainValueParser::class, static function (PlainValueParser $plainValueParser, Container $container) : void {
             $plainValueParser->autowire($container->make(StaticDoctrineAnnotationParser::class), $container->make(ArrayParser::class));
         });
+        $lazyRectorConfig->afterResolving(\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper::class, static function (\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper $unionTypeMapper, Container $container) : void {
+            $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
+            $unionTypeMapper->autowire($phpStanStaticTypeMapper);
+        });
         $lazyRectorConfig->singleton(Parser::class, static function (Container $container) {
             $phpstanServiceFactory = $container->make(PHPStanServicesFactory::class);
             return $phpstanServiceFactory->createPHPStanParser();
+        });
+        $lazyRectorConfig->afterResolving(CurlyListNodeAnnotationToAttributeMapper::class, static function (CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper, Container $container) : void {
+            $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
+            $curlyListNodeAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
+        });
+        $lazyRectorConfig->afterResolving(DoctrineAnnotationAnnotationToAttributeMapper::class, static function (DoctrineAnnotationAnnotationToAttributeMapper $doctrineAnnotationAnnotationToAttributeMapper, Container $container) : void {
+            $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
+            $doctrineAnnotationAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
         });
         $lazyRectorConfig->when(PHPStanNodeScopeResolver::class)->needs('$nodeVisitors')->giveTagged(ScopeResolverNodeVisitorInterface::class);
         $this->registerTagged($lazyRectorConfig, self::SCOPE_RESOLVER_NODE_VISITOR_CLASSES, ScopeResolverNodeVisitorInterface::class);
