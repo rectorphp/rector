@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465
+class ComposerStaticInitf4b6ba6296aa1eebcada166dcd43c854
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1881,6 +1881,7 @@ class ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465
         'Rector\\Core\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Provider/CurrentFileProvider.php',
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
         'Rector\\Core\\Rector\\AbstractScopeAwareRector' => __DIR__ . '/../..' . '/src/Rector/AbstractScopeAwareRector.php',
+        'Rector\\Core\\Reflection\\MethodReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/MethodReflectionResolver.php',
         'Rector\\Core\\Reflection\\ReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/ReflectionResolver.php',
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\Core\\Util\\ArrayChecker' => __DIR__ . '/../..' . '/src/Util/ArrayChecker.php',
@@ -3009,9 +3010,9 @@ class ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9529323d9728a32f7dfa8b6e233dc465::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf4b6ba6296aa1eebcada166dcd43c854::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf4b6ba6296aa1eebcada166dcd43c854::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf4b6ba6296aa1eebcada166dcd43c854::$classMap;
 
         }, null, ClassLoader::class);
     }

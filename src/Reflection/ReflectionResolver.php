@@ -31,7 +31,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 final class ReflectionResolver
 {
     /**
@@ -60,22 +59,23 @@ final class ReflectionResolver
      */
     private $classAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\Reflection\MethodReflectionResolver
+     */
+    private $methodReflectionResolver;
+    /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry, ClassAnalyzer $classAnalyzer)
+    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry, ClassAnalyzer $classAnalyzer, \Rector\Core\Reflection\MethodReflectionResolver $methodReflectionResolver, AstResolver $astResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
         $this->classAnalyzer = $classAnalyzer;
-    }
-    /**
-     * @required
-     */
-    public function autowire(AstResolver $astResolver) : void
-    {
+        $this->methodReflectionResolver = $methodReflectionResolver;
         $this->astResolver = $astResolver;
     }
     /**
@@ -128,19 +128,7 @@ final class ReflectionResolver
      */
     public function resolveMethodReflection(string $className, string $methodName, ?Scope $scope) : ?MethodReflection
     {
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        // better, with support for "@method" annotation methods
-        if ($scope instanceof Scope) {
-            if ($classReflection->hasMethod($methodName)) {
-                return $classReflection->getMethod($methodName, $scope);
-            }
-        } elseif ($classReflection->hasNativeMethod($methodName)) {
-            return $classReflection->getNativeMethod($methodName);
-        }
-        return null;
+        return $this->methodReflectionResolver->resolveMethodReflection($className, $methodName, $scope);
     }
     public function resolveMethodReflectionFromStaticCall(StaticCall $staticCall) : ?MethodReflection
     {
