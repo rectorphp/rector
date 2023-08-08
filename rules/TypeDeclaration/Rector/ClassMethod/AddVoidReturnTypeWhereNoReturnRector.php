@@ -9,23 +9,18 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\VoidType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
-final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
+final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -39,11 +34,6 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
     private $classMethodReturnVendorLockResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
@@ -52,20 +42,15 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
      * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code being processed.
      */
     public const USE_PHPDOC = 'use_phpdoc';
-    /**
-     * @var bool
-     */
-    private $usePhpdoc = \false;
-    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, PhpDocTypeChanger $phpDocTypeChanger, ReflectionResolver $reflectionResolver)
+    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ReflectionResolver $reflectionResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add return type void to function like without any return', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type void to function like without any return', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getValues()
@@ -85,7 +70,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::USE_PHPDOC => \false])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -108,13 +93,6 @@ CODE_SAMPLE
         if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
             return null;
         }
-        if ($this->usePhpdoc) {
-            $hasChanged = $this->changePhpDocToVoidIfNotNever($node);
-            if ($hasChanged) {
-                return $node;
-            }
-            return null;
-        }
         if ($node instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
@@ -124,26 +102,6 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::VOID_TYPE;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration) : void
-    {
-        $usePhpdoc = $configuration[self::USE_PHPDOC] ?? (bool) \current($configuration);
-        Assert::boolean($usePhpdoc);
-        $this->usePhpdoc = $usePhpdoc;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     */
-    private function changePhpDocToVoidIfNotNever($node) : bool
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->getReturnType() instanceof NeverType) {
-            return \false;
-        }
-        return $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, new VoidType());
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
