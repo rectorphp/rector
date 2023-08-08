@@ -4,25 +4,12 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use RectorPrefix202308\Symfony\Component\Console\Command\Command;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractProcessCommand extends Command
 {
-    /**
-     * @var \Rector\Core\Configuration\ConfigurationFactory
-     */
-    protected $configurationFactory;
-    /**
-     * @required
-     */
-    public function autowire(ConfigurationFactory $configurationFactory) : void
-    {
-        $this->configurationFactory = $configurationFactory;
-    }
     protected function configure() : void
     {
         $this->addArgument(Option::SOURCE, InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Files or directories to be upgraded.');

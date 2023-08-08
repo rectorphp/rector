@@ -8,6 +8,7 @@ use RectorPrefix202308\Clue\React\NDJson\Encoder;
 use RectorPrefix202308\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202308\React\Socket\ConnectionInterface;
 use RectorPrefix202308\React\Socket\TcpConnector;
+use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Util\MemoryLimiter;
 use Rector\Parallel\WorkerRunner;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
@@ -33,10 +34,16 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(WorkerRunner $workerRunner, MemoryLimiter $memoryLimiter)
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\ConfigurationFactory
+     */
+    private $configurationFactory;
+    public function __construct(WorkerRunner $workerRunner, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
     {
         $this->workerRunner = $workerRunner;
         $this->memoryLimiter = $memoryLimiter;
+        $this->configurationFactory = $configurationFactory;
         parent::__construct();
     }
     protected function configure() : void

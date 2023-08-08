@@ -8,6 +8,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\ConfigInitializer;
+use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ExitCode;
 use Rector\Core\Console\Output\OutputFormatterCollector;
@@ -68,7 +69,12 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter)
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\ConfigurationFactory
+     */
+    private $configurationFactory;
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -79,6 +85,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->memoryLimiter = $memoryLimiter;
+        $this->configurationFactory = $configurationFactory;
         parent::__construct();
     }
     protected function configure() : void
