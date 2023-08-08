@@ -87,6 +87,9 @@ CODE_SAMPLE
      */
     private function shouldSkip($node, Scope $scope) : bool
     {
+        if ($node->returnType instanceof Node && !$this->isName($node->returnType, 'void')) {
+            return \true;
+        }
         $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, Return_::class);
         if ($hasReturn) {
             return \true;
