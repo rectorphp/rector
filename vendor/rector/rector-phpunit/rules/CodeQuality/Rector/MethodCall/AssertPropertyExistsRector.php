@@ -100,7 +100,7 @@ CODE_SAMPLE
         }
         unset($node->args[0]);
         $newArgs = $this->nodeFactory->createArgs([$secondArgument->value->value, $secondArg]);
-        $node->args = $this->appendArgs($newArgs, $node->getArgs());
+        $node->args = \array_merge($newArgs, $node->getArgs());
         $this->identifierManipulator->renameNodeWithMap($node, $map);
         return $node;
     }

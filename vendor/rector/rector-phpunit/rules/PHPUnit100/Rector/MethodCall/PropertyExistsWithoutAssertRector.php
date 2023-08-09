@@ -97,7 +97,7 @@ CODE_SAMPLE
         unset($node->args[1]);
         $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), [new Arg($firstArg), new Arg($secondArg)]);
         $newArgs = $this->nodeFactory->createArgs([$propertyExistsFuncCall]);
-        $node->args = $this->appendArgs($newArgs, $node->getArgs());
+        $node->args = \array_merge($newArgs, $node->getArgs());
         $this->identifierManipulator->renameNodeWithMap($node, $map);
         return $node;
     }

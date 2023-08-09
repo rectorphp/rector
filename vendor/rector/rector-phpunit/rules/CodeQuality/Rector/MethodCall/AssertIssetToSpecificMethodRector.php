@@ -147,7 +147,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         $oldArgs = $node->getArgs();
         unset($oldArgs[0]);
         $newArgs = $this->nodeFactory->createArgs([new String_($name), $propertyFetch->var]);
-        $node->args = $this->appendArgs($newArgs, $oldArgs);
+        $node->args = \array_merge($newArgs, $oldArgs);
         return $node;
     }
     /**
