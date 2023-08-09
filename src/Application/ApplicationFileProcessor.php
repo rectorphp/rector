@@ -124,7 +124,7 @@ final class ApplicationFileProcessor
         return $systemErrorsAndFileDiffs;
     }
     /**
-     * @param string[]|File[] $filePaths
+     * @param string[] $filePaths
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[], system_errors_count: int}
      */
     public function processFiles(array $filePaths, Configuration $configuration, bool $isParallel = \true) : array
@@ -138,9 +138,8 @@ final class ApplicationFileProcessor
         }
         $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => [], Bridge::SYSTEM_ERRORS_COUNT => 0];
         foreach ($filePaths as $filePath) {
-            $file = null;
+            $file = new File($filePath, UtilsFileSystem::read($filePath));
             try {
-                $file = $filePath instanceof File ? $filePath : new File($filePath, UtilsFileSystem::read($filePath));
                 $systemErrorsAndFileDiffs = $this->processFile($file, $systemErrorsAndFileDiffs, $configuration);
                 // progress bar +1,
                 // progress bar on parallel handled on runParallel()
@@ -148,7 +147,7 @@ final class ApplicationFileProcessor
                     $this->symfonyStyle->progressAdvance();
                 }
             } catch (Throwable $throwable) {
-                $this->invalidateFile($file);
+                $this->changedFilesDetector->invalidateFile($filePath);
                 if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
                     throw $throwable;
                 }
@@ -190,13 +189,6 @@ final class ApplicationFileProcessor
         }
         $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
         return new SystemError($errorMessage, $filePath, $throwable->getLine());
-    }
-    private function invalidateFile(?File $file) : void
-    {
-        if (!$file instanceof File) {
-            return;
-        }
-        $this->changedFilesDetector->invalidateFile($file->getFilePath());
     }
     /**
      * Inspired by @see https://github.com/phpstan/phpstan-src/blob/89af4e7db257750cdee5d4259ad312941b6b25e8/src/Analyser/Analyser.php#L134

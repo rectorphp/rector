@@ -15,7 +15,6 @@ use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\Fixture\FixtureFileFinder;
@@ -100,7 +99,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         }
         // write temp file
         FileSystem::write($inputFilePath, $inputFileContents);
-        $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
+        $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFileContents, $fixtureFilePath);
     }
     private function includePreloadFilesAndScoperAutoload() : void
     {
@@ -116,10 +115,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
         }
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
+    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFileContents, string $fixtureFilePath) : void
     {
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
-        $changedContent = $this->processFilePath($originalFilePath, $inputFileContents);
+        $changedContent = $this->processFilePath($originalFilePath);
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
         try {
@@ -130,7 +129,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             $this->assertStringMatchesFormat($expectedFileContents, $changedContent, $failureMessage);
         }
     }
-    private function processFilePath(string $filePath, string $inputFileContents) : string
+    private function processFilePath(string $filePath) : string
     {
         $this->dynamicSourceLocatorProvider->setFilePath($filePath);
         // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
@@ -140,9 +139,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         /** @var ConfigurationFactory $configurationFactory */
         $configurationFactory = $this->getService(ConfigurationFactory::class);
         $configuration = $configurationFactory->createForTests([$filePath]);
-        $file = new File($filePath, $inputFileContents);
-        $this->applicationFileProcessor->processFiles([$file], $configuration);
-        return $file->getFileContent();
+        $this->applicationFileProcessor->processFiles([$filePath], $configuration);
+        return FileSystem::read($filePath);
     }
     private function createInputFilePath(string $fixtureFilePath) : string
     {
