@@ -25,6 +25,7 @@ use RectorPrefix202308\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202308\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202308\Symplify\EasyParallel\ScheduleFactory;
 use Throwable;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**
@@ -100,6 +101,11 @@ final class ApplicationFileProcessor
         $this->changedFilesDetector = $changedFilesDetector;
         $this->currentFileProvider = $currentFileProvider;
         $this->fileProcessors = $fileProcessors;
+        $fileProcessorClasses = [];
+        foreach ($fileProcessors as $fileProcessor) {
+            $fileProcessorClasses[] = \get_class($fileProcessor);
+        }
+        Assert::uniqueValues($fileProcessorClasses);
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
