@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\VendorLocker;
 
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;

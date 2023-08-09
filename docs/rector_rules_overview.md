@@ -1,4 +1,4 @@
-# 357 Rules Overview
+# 356 Rules Overview
 
 <br>
 
@@ -26,7 +26,7 @@
 
 - [Php55](#php55) (6)
 
-- [Php56](#php56) (2)
+- [Php56](#php56) (1)
 
 - [Php70](#php70) (19)
 
@@ -3818,28 +3818,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 ## Php56
 
-### AddDefaultValueForUndefinedVariableRector
-
-Adds default value for undefined variable
-
-- class: [`Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`](../rules/Php56/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-+        $a = null;
-         if (rand(0, 1)) {
-             $a = 5;
-         }
-         echo $a;
-     }
- }
-```
-
-<br>
-
 ### PowToExpRector
 
 Changes pow(val, val2) to ** (exp) parameter
@@ -7565,26 +7543,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Add return type void to function like without any return
 
-:wrench: **configure it!**
-
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddVoidReturnTypeWhereNoReturnRector::class, [
-        AddVoidReturnTypeWhereNoReturnRector::USE_PHPDOC => false,
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass

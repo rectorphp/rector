@@ -67,13 +67,6 @@ final class RectorConfig extends ContainerConfigurator
         SimpleParameterProvider::setParameter(Option::MEMORY_LIMIT, $memoryLimit);
     }
     /**
-     * @param mixed $skipRule
-     */
-    private function isRuleNoLongerExists($skipRule) : bool
-    {
-        return \is_string($skipRule) && \strpos($skipRule, '*') === \false && \realpath($skipRule) === \false && \substr_compare($skipRule, 'Rector', -\strlen('Rector')) === 0 && !\class_exists($skipRule);
-    }
-    /**
      * @param array<int|string, mixed> $criteria
      */
     public function skip(array $criteria) : void
@@ -244,6 +237,13 @@ final class RectorConfig extends ContainerConfigurator
     {
         SimpleParameterProvider::setParameter(Option::INDENT_CHAR, $character);
         SimpleParameterProvider::setParameter(Option::INDENT_SIZE, $count);
+    }
+    /**
+     * @param mixed $skipRule
+     */
+    private function isRuleNoLongerExists($skipRule) : bool
+    {
+        return \is_string($skipRule) && \strpos($skipRule, '*') === \false && \realpath($skipRule) === \false && \substr_compare($skipRule, 'Rector', -\strlen('Rector')) === 0 && !\class_exists($skipRule);
     }
     /**
      * @param string[] $values

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2b34e9dcc0472662e43329a42359ee72
+class ComposerStaticInit49fe253cd6feaf0ecb83e42669503603
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2380,9 +2380,7 @@ class ComposerStaticInit2b34e9dcc0472662e43329a42359ee72
         'Rector\\Php55\\Rector\\FuncCall\\PregReplaceEModifierRector' => __DIR__ . '/../..' . '/rules/Php55/Rector/FuncCall/PregReplaceEModifierRector.php',
         'Rector\\Php55\\Rector\\String_\\StringClassNameToClassConstantRector' => __DIR__ . '/../..' . '/rules/Php55/Rector/String_/StringClassNameToClassConstantRector.php',
         'Rector\\Php55\\RegexMatcher' => __DIR__ . '/../..' . '/rules/Php55/RegexMatcher.php',
-        'Rector\\Php56\\NodeAnalyzer\\UndefinedVariableResolver' => __DIR__ . '/../..' . '/rules/Php56/NodeAnalyzer/UndefinedVariableResolver.php',
         'Rector\\Php56\\Rector\\FuncCall\\PowToExpRector' => __DIR__ . '/../..' . '/rules/Php56/Rector/FuncCall/PowToExpRector.php',
-        'Rector\\Php56\\Rector\\FunctionLike\\AddDefaultValueForUndefinedVariableRector' => __DIR__ . '/../..' . '/rules/Php56/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php',
         'Rector\\Php70\\Enum\\BattleshipCompareOrder' => __DIR__ . '/../..' . '/rules/Php70/Enum/BattleshipCompareOrder.php',
         'Rector\\Php70\\EregToPcreTransformer' => __DIR__ . '/../..' . '/rules/Php70/EregToPcreTransformer.php',
         'Rector\\Php70\\Exception\\InvalidEregException' => __DIR__ . '/../..' . '/rules/Php70/Exception/InvalidEregException.php',
@@ -3004,9 +3002,9 @@ class ComposerStaticInit2b34e9dcc0472662e43329a42359ee72
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2b34e9dcc0472662e43329a42359ee72::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2b34e9dcc0472662e43329a42359ee72::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2b34e9dcc0472662e43329a42359ee72::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit49fe253cd6feaf0ecb83e42669503603::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit49fe253cd6feaf0ecb83e42669503603::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit49fe253cd6feaf0ecb83e42669503603::$classMap;
 
         }, null, ClassLoader::class);
     }
