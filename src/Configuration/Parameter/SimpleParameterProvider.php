@@ -99,6 +99,15 @@ final class SimpleParameterProvider
         return self::$parameters[$name] ?? $default;
     }
     /**
+     * @api
+     * For cache invalidation
+     */
+    public static function hash() : string
+    {
+        $parameterKeys = self::$parameters;
+        return \sha1(\serialize($parameterKeys));
+    }
+    /**
      * @param Option::* $name
      */
     private static function ensureParameterIsSet(string $name) : void
