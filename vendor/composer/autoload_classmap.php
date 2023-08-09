@@ -1556,6 +1556,7 @@ return array(
     'Rector\\Core\\Kernel\\ContainerBuilderFactory' => $baseDir . '/src/Kernel/ContainerBuilderFactory.php',
     'Rector\\Core\\Kernel\\RectorKernel' => $baseDir . '/src/Kernel/RectorKernel.php',
     'Rector\\Core\\Logging\\CurrentRectorProvider' => $baseDir . '/src/Logging/CurrentRectorProvider.php',
+    'Rector\\Core\\Logging\\RectorOutput' => $baseDir . '/src/Logging/RectorOutput.php',
     'Rector\\Core\\NodeAnalyzer\\ArgsAnalyzer' => $baseDir . '/src/NodeAnalyzer/ArgsAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\BinaryOpAnalyzer' => $baseDir . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CallAnalyzer.php',
