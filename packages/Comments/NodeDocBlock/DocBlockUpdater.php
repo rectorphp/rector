@@ -52,16 +52,6 @@ final class DocBlockUpdater
     }
     private function setCommentsAttribute(Node $node) : void
     {
-        if ($node->hasAttribute(AttributeKey::PREVIOUS_DOCS_AS_COMMENTS)) {
-            /** @var Comment[] $previousDocsAsComments */
-            $previousDocsAsComments = $node->getAttribute(AttributeKey::PREVIOUS_DOCS_AS_COMMENTS);
-            $node->setAttribute(AttributeKey::COMMENTS, $previousDocsAsComments);
-        }
-        if ($node->hasAttribute(AttributeKey::NEW_MAIN_DOC)) {
-            /** @var Doc $newMainDoc */
-            $newMainDoc = $node->getAttribute(AttributeKey::NEW_MAIN_DOC);
-            $node->setDocComment($newMainDoc);
-        }
         $comments = \array_filter($node->getComments(), static function (Comment $comment) : bool {
             return !$comment instanceof Doc;
         });
