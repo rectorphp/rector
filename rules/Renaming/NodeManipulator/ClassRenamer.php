@@ -27,7 +27,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\Renaming\Helper\RenameClassCallbackHandler;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassRenamer
 {
@@ -73,11 +72,6 @@ final class ClassRenamer
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
-     */
-    private $renameClassCallbackHandler;
-    /**
-     * @readonly
      * @var \Rector\Core\Util\FileHasher
      */
     private $fileHasher;
@@ -89,7 +83,7 @@ final class ClassRenamer
      * @var array<string, OldToNewType[]>
      */
     private $oldToNewTypesByCacheKey = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -99,7 +93,6 @@ final class ClassRenamer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->renameClassCallbackHandler = $renameClassCallbackHandler;
         $this->fileHasher = $fileHasher;
     }
     /**
@@ -107,7 +100,7 @@ final class ClassRenamer
      */
     public function renameNode(Node $node, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
-        $oldToNewTypes = $this->createOldToNewTypes($node, $oldToNewClasses);
+        $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
         if ($node instanceof Name) {
             return $this->refactorName($node, $oldToNewClasses);
         }
@@ -333,9 +326,8 @@ final class ClassRenamer
      * @param array<string, string> $oldToNewClasses
      * @return OldToNewType[]
      */
-    private function createOldToNewTypes(Node $node, array $oldToNewClasses) : array
+    private function createOldToNewTypes(array $oldToNewClasses) : array
     {
-        $oldToNewClasses = $this->resolveOldToNewClassCallbacks($node, $oldToNewClasses);
         $serialized = \serialize($oldToNewClasses);
         $cacheKey = $this->fileHasher->hash($serialized);
         if (isset($this->oldToNewTypesByCacheKey[$cacheKey])) {
@@ -349,13 +341,5 @@ final class ClassRenamer
         }
         $this->oldToNewTypesByCacheKey[$cacheKey] = $oldToNewTypes;
         return $oldToNewTypes;
-    }
-    /**
-     * @param array<string, string> $oldToNewClasses
-     * @return array<string, string>
-     */
-    private function resolveOldToNewClassCallbacks(Node $node, array $oldToNewClasses) : array
-    {
-        return \array_merge($oldToNewClasses, $this->renameClassCallbackHandler->getOldToNewClassesFromNode($node));
     }
 }

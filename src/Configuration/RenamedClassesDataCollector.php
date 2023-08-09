@@ -10,10 +10,6 @@ final class RenamedClassesDataCollector
      * @var array<string, string>
      */
     private $oldToNewClasses = [];
-    public function addOldToNewClass(string $oldClass, string $newClass) : void
-    {
-        $this->oldToNewClasses[$oldClass] = $newClass;
-    }
     public function hasOldClass(string $oldClass) : bool
     {
         return isset($this->oldToNewClasses[$oldClass]);
