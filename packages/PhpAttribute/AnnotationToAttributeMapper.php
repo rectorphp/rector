@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use RectorPrefix202308\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */
@@ -32,6 +33,7 @@ final class AnnotationToAttributeMapper
         } else {
             $this->annotationToAttributeMappers = $annotationToAttributeMappers;
         }
+        Assert::notEmpty($this->annotationToAttributeMappers);
     }
     /**
      * @return Expr|DocTagNodeState::REMOVE_ARRAY

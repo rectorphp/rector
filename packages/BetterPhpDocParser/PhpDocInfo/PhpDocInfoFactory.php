@@ -115,7 +115,7 @@ final class PhpDocInfoFactory
         return $phpDocInfo;
     }
     /**
-     * @api
+     * @api downgrade
      */
     public function createEmpty(Node $node) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {

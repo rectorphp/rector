@@ -31,6 +31,7 @@ final class ConsoleApplication extends Application
         if ($commands instanceof RewindableGenerator) {
             $commands = \iterator_to_array($commands->getIterator());
         }
+        Assert::notEmpty($commands);
         Assert::allIsInstanceOf($commands, Command::class);
         $this->addCommands($commands);
         // remove unused commands
