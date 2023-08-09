@@ -43,6 +43,16 @@ final class RectorNodeTraverser extends NodeTraverser
         return parent::traverse($nodes);
     }
     /**
+     * @api used in tests to update the active rules
+     * @param PhpRectorInterface[] $phpRectors
+     */
+    public function refreshPhpRectors(array $phpRectors) : void
+    {
+        $this->phpRectors = $phpRectors;
+        $this->visitors = [];
+        $this->areNodeVisitorsPrepared = \false;
+    }
+    /**
      * This must happen after $this->configuration is set after ProcessCommand::execute() is run,
      * otherwise we get default false positives.
      *
