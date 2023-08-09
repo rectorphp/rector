@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
@@ -289,18 +288,6 @@ CODE_SAMPLE;
         if (!$newNode instanceof Nop) {
             $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
         }
-    }
-    /**
-     * @param Arg[] $currentArgs
-     * @param Arg[] $appendingArgs
-     * @return Arg[]
-     */
-    protected function appendArgs(array $currentArgs, array $appendingArgs) : array
-    {
-        foreach ($appendingArgs as $appendingArg) {
-            $currentArgs[] = new Arg($appendingArg->value);
-        }
-        return $currentArgs;
     }
     /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
