@@ -170,7 +170,8 @@ CODE_SAMPLE;
         if (!$this->isMatchingNodeType($node)) {
             return null;
         }
-        if ($this->shouldSkipCurrentNode($node)) {
+        $filePath = $this->file->getFilePath();
+        if ($this->skipper->shouldSkipCurrentNode($this, $filePath, static::class, $node)) {
             return null;
         }
         $isDebug = $this->rectorOutput->isDebug();
@@ -178,7 +179,6 @@ CODE_SAMPLE;
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
         if ($isDebug) {
-            $filePath = $this->file->getFilePath();
             $this->rectorOutput->printCurrentFileAndRule($filePath, static::class);
         }
         $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
@@ -214,7 +214,7 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
+        return $this->postRefactorProcess($originalNode, $node, $refactoredNode, $filePath);
     }
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
@@ -279,7 +279,7 @@ CODE_SAMPLE;
     /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
-    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode) : Node
+    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode, string $filePath) : Node
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
@@ -287,7 +287,6 @@ CODE_SAMPLE;
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
-        $filePath = $this->file->getFilePath();
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = \spl_object_hash($originalNode);
         if (\is_array($refactoredNode)) {
@@ -325,10 +324,5 @@ CODE_SAMPLE;
             return \true;
         }
         return \false;
-    }
-    private function shouldSkipCurrentNode(Node $node) : bool
-    {
-        $filePath = $this->file->getFilePath();
-        return $this->skipper->shouldSkipCurrentNode($this, $filePath, static::class, $node);
     }
 }
