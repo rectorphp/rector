@@ -10,14 +10,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Core\Reflection\ClassReflectionAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ParentPropertyLookupGuard
 {
@@ -48,17 +47,17 @@ final class ParentPropertyLookupGuard
     private $propertyManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Reflection\ClassReflectionAnalyzer
      */
-    private $privatesAccessor;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator, PrivatesAccessor $privatesAccessor)
+    private $classReflectionAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->astResolver = $astResolver;
         $this->propertyManipulator = $propertyManipulator;
-        $this->privatesAccessor = $privatesAccessor;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     public function isLegal(Property $property, ?ClassReflection $classReflection) : bool
     {
@@ -72,11 +71,7 @@ final class ParentPropertyLookupGuard
         if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return \false;
         }
-        // XXX rework this hack, after https://github.com/phpstan/phpstan-src/pull/2563 landed
-        $nativeReflection = $classReflection->getNativeReflection();
-        $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
-        /** @var ReflectionClass $betterReflectionClass */
-        $parentClassName = $betterReflectionClass->getParentClassName();
+        $parentClassName = $this->classReflectionAnalyzer->resolveParentClassName($classReflection);
         if ($parentClassName === null) {
             return \true;
         }

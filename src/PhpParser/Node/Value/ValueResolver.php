@@ -13,7 +13,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Analyser\Scope;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -23,8 +22,8 @@ use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\Reflection\ClassReflectionAnalyzer;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -67,14 +66,14 @@ final class ValueResolver
     private $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Reflection\ClassReflectionAnalyzer
      */
-    private $privatesAccessor;
+    private $classReflectionAnalyzer;
     /**
      * @var \PhpParser\ConstExprEvaluator|null
      */
     private $constExprEvaluator;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, ReflectionResolver $reflectionResolver, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -82,7 +81,7 @@ final class ValueResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->currentFileProvider = $currentFileProvider;
         $this->reflectionResolver = $reflectionResolver;
-        $this->privatesAccessor = $privatesAccessor;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     /**
      * @param mixed $value
@@ -312,12 +311,8 @@ final class ValueResolver
         if (!$classReflection->isClass()) {
             throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "parent" references is resolvable to lookup parent class');
         }
-        // XXX rework this hack, after https://github.com/phpstan/phpstan-src/pull/2563 landed
         // ensure parent class name still resolved even not autoloaded
-        $nativeReflection = $classReflection->getNativeReflection();
-        $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
-        /** @var ReflectionClass $betterReflectionClass */
-        $parentClassName = $betterReflectionClass->getParentClassName();
+        $parentClassName = $this->classReflectionAnalyzer->resolveParentClassName($classReflection);
         if ($parentClassName === null) {
             throw new ShouldNotHappenException();
         }

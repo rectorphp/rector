@@ -4,12 +4,11 @@ declare (strict_types=1);
 namespace Rector\VendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
+use Rector\Core\Reflection\ClassReflectionAnalyzer;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -38,16 +37,16 @@ final class ParentClassMethodTypeOverrideGuard
     private $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Reflection\ClassReflectionAnalyzer
      */
-    private $privatesAccessor;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, PrivatesAccessor $privatesAccessor)
+    private $classReflectionAnalyzer;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->privatesAccessor = $privatesAccessor;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     public function hasParentClassMethod(ClassMethod $classMethod) : bool
     {
@@ -110,11 +109,6 @@ final class ParentClassMethodTypeOverrideGuard
     }
     private function hasClassParent(ClassReflection $classReflection) : bool
     {
-        // XXX rework this hack, after https://github.com/phpstan/phpstan-src/pull/2563 landed
-        $nativeReflection = $classReflection->getNativeReflection();
-        $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
-        /** @var ReflectionClass $betterReflectionClass */
-        $parentClassName = $betterReflectionClass->getParentClassName();
-        return $parentClassName !== null;
+        return $this->classReflectionAnalyzer->resolveParentClassName($classReflection) !== null;
     }
 }
