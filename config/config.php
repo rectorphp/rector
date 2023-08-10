@@ -43,10 +43,8 @@ use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
@@ -188,7 +186,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(ConfigInitializer::class)->arg('$rectors', tagged_iterator(RectorInterface::class));
     $services->set(ListRulesCommand::class)->arg('$rectors', tagged_iterator(RectorInterface::class));
     $services->set(OutputFormatterCollector::class)->arg('$outputFormatters', tagged_iterator(OutputFormatterInterface::class));
-    $services->set(NonPhpFileProcessor::class)->arg('$nonPhpRectors', tagged_iterator(NonPhpRectorInterface::class));
     $services->set(RectorNodeTraverser::class)->arg('$phpRectors', tagged_iterator(PhpRectorInterface::class));
     $services->set(NodeNameResolver::class)->arg('$nodeNameResolvers', tagged_iterator(NodeNameResolverInterface::class));
     $services->set(ApplicationFileProcessor::class)->arg('$fileProcessors', tagged_iterator(FileProcessorInterface::class));

@@ -269,7 +269,7 @@ final class RectorConfig extends ContainerConfigurator
         return $this->servicesConfigurator;
     }
     /**
-     * @param class-string<RectorInterface|PhpRectorInterface|NonPhpRectorInterface> $rectorClass
+     * @param class-string<RectorInterface|PhpRectorInterface> $rectorClass
      */
     private function tagRectorService(ServiceConfigurator $rectorServiceConfigurator, string $rectorClass) : void
     {
@@ -277,7 +277,8 @@ final class RectorConfig extends ContainerConfigurator
         if (\is_a($rectorClass, PhpRectorInterface::class, \true)) {
             $rectorServiceConfigurator->tag(PhpRectorInterface::class);
         } elseif (\is_a($rectorClass, NonPhpRectorInterface::class, \true)) {
-            $rectorServiceConfigurator->tag(NonPhpRectorInterface::class);
+            \trigger_error(\sprintf('The "%s" interface of "%s" rule is deprecated. Rector will only PHP code, as designed to with AST. For another file format, use custom tooling.', NonPhpRectorInterface::class, $rectorClass));
+            exit;
         }
     }
 }

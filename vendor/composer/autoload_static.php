@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite95326904e6f6eeea7178ffc963954b8
+class ComposerStaticInitcda04089830bd931ef1039b6cb51d8fc
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1832,8 +1832,6 @@ class ComposerStaticInite95326904e6f6eeea7178ffc963954b8
         'Rector\\Core\\NodeManipulator\\PropertyFetchAssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyFetchAssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyManipulator.php',
         'Rector\\Core\\NodeManipulator\\StmtsManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/StmtsManipulator.php',
-        'Rector\\Core\\NonPhpFile\\NonPhpFileProcessor' => __DIR__ . '/../..' . '/src/NonPhpFile/NonPhpFileProcessor.php',
-        'Rector\\Core\\NonPhpFile\\Rector\\RenameClassNonPhpRector' => __DIR__ . '/../..' . '/src/NonPhpFile/Rector/RenameClassNonPhpRector.php',
         'Rector\\Core\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\Core\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ClosureTypeToCallReflectionResolver' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver.php',
@@ -2540,7 +2538,6 @@ class ComposerStaticInite95326904e6f6eeea7178ffc963954b8
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
-        'Rector\\PostRector\\Contract\\Rector\\PostRectorDependencyInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/PostRectorDependencyInterface.php',
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/AbstractPostRector.php',
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/ClassRenamingPostRector.php',
@@ -2985,9 +2982,9 @@ class ComposerStaticInite95326904e6f6eeea7178ffc963954b8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite95326904e6f6eeea7178ffc963954b8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite95326904e6f6eeea7178ffc963954b8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite95326904e6f6eeea7178ffc963954b8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcda04089830bd931ef1039b6cb51d8fc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcda04089830bd931ef1039b6cb51d8fc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcda04089830bd931ef1039b6cb51d8fc::$classMap;
 
         }, null, ClassLoader::class);
     }
