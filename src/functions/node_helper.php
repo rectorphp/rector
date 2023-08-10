@@ -6,31 +6,16 @@ namespace RectorPrefix202308;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use RectorPrefix202308\Tracy\Dumper;
-if (!\function_exists('dump_with_depth')) {
-    /**
-     * @param mixed $value
-     */
-    function dump_with_depth($value, int $depth = 2) : void
-    {
-        Dumper::dump($value, [Dumper::DEPTH => $depth]);
-    }
-}
-if (!\function_exists('dn')) {
-    function dn(Node $node, int $depth = 2) : void
-    {
-        \RectorPrefix202308\dump_node($node, $depth);
-    }
-}
+// @deprecated, use dump() or dd() instead
 if (!\function_exists('dump_node')) {
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @return never
+     * @param mixed $variable
      */
-    function dump_node($node, int $depth = 2) : void
+    function dump_node($variable, int $depth = 2)
     {
-        $nodes = \is_array($node) ? $node : [$node];
-        foreach ($nodes as $node) {
-            Dumper::dump($node, [Dumper::DEPTH => $depth]);
-        }
+        \trigger_error('This function is deprecated, to avoid enforcing of Rector debug package. Use your own favorite debugging package instead');
+        exit;
     }
 }
 if (!\function_exists('print_node')) {
