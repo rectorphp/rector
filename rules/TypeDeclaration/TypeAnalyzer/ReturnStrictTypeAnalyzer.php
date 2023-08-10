@@ -74,6 +74,9 @@ final class ReturnStrictTypeAnalyzer
             if (!$returnNode instanceof Node) {
                 return [];
             }
+            if ($returnNode instanceof Identifier && $returnNode->toString() === 'void') {
+                return [];
+            }
             $returnedStrictTypeNodes[] = $returnNode;
         }
         if (!$containsStrictCall) {
