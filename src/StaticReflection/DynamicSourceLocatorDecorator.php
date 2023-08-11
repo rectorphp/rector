@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\StaticReflection;
 
 use Rector\Core\FileSystem\FileAndDirectoryFilter;
+use Rector\Core\FileSystem\FilesystemTweaker;
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 /**
@@ -27,11 +28,17 @@ final class DynamicSourceLocatorDecorator
      * @var \Rector\Core\FileSystem\FileAndDirectoryFilter
      */
     private $fileAndDirectoryFilter;
-    public function __construct(DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, PhpFilesFinder $phpFilesFinder, FileAndDirectoryFilter $fileAndDirectoryFilter)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilesystemTweaker
+     */
+    private $filesystemTweaker;
+    public function __construct(DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, PhpFilesFinder $phpFilesFinder, FileAndDirectoryFilter $fileAndDirectoryFilter, FilesystemTweaker $filesystemTweaker)
     {
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->fileAndDirectoryFilter = $fileAndDirectoryFilter;
+        $this->filesystemTweaker = $filesystemTweaker;
     }
     /**
      * @param string[] $paths
@@ -41,6 +48,7 @@ final class DynamicSourceLocatorDecorator
         if ($paths === []) {
             return;
         }
+        $paths = $this->filesystemTweaker->resolveWithFnmatch($paths);
         $files = $this->fileAndDirectoryFilter->filterFiles($paths);
         $this->dynamicSourceLocatorProvider->addFiles($files);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($paths);
