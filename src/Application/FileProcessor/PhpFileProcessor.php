@@ -130,8 +130,7 @@ final class PhpFileProcessor implements FileProcessorInterface
     }
     public function supports(File $file, Configuration $configuration) : bool
     {
-        $filePathExtension = \pathinfo($file->getFilePath(), \PATHINFO_EXTENSION);
-        return \in_array($filePathExtension, $configuration->getFileExtensions(), \true);
+        return \true;
     }
     /**
      * @return string[]
