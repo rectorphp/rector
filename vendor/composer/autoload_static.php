@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1
+class ComposerStaticInit16be4751e7661197313674642b820328
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1513,13 +1513,11 @@ class ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1
         'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\SwapFuncCallArgumentsRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/SwapFuncCallArgumentsRector.php',
         'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
-        'Rector\\Arguments\\Rector\\MethodCall\\SwapMethodCallArgumentsRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/SwapMethodCallArgumentsRector.php',
         'Rector\\Arguments\\ValueObject\\ArgumentAdder' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdder.php',
         'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
-        'Rector\\Arguments\\ValueObject\\SwapMethodCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapMethodCallArguments.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
@@ -2982,9 +2980,9 @@ class ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit40acdc2d042f21bbee32f3edf8d89ae1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit16be4751e7661197313674642b820328::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit16be4751e7661197313674642b820328::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit16be4751e7661197313674642b820328::$classMap;
 
         }, null, ClassLoader::class);
     }

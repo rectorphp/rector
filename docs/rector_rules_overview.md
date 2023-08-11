@@ -1,10 +1,10 @@
-# 356 Rules Overview
+# 355 Rules Overview
 
 <br>
 
 ## Categories
 
-- [Arguments](#arguments) (6)
+- [Arguments](#arguments) (5)
 
 - [CodeQuality](#codequality) (70)
 
@@ -248,49 +248,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
 -        return some_function('one', 'two', 'three');
 +        return some_function('three', 'two', 'one');
-     }
- }
-```
-
-<br>
-
-### SwapMethodCallArgumentsRector
-
-Reorder arguments in method calls
-
-:wrench: **configure it!**
-
-- class: [`Rector\Arguments\Rector\MethodCall\SwapMethodCallArgumentsRector`](../rules/Arguments/Rector/MethodCall/SwapMethodCallArgumentsRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Arguments\Rector\MethodCall\SwapMethodCallArgumentsRector;
-use Rector\Arguments\ValueObject\SwapMethodCallArguments;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(SwapMethodCallArgumentsRector::class, [
-        new SwapMethodCallArguments('Caller', 'call', [
-            2,
-            1,
-            0,
-        ]),
-    ]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run(Caller $caller)
-     {
--        return $caller->call('one', 'two', 'three');
-+        return $caller->call('three', 'two', 'one');
      }
  }
 ```
