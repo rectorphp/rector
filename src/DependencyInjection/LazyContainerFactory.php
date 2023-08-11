@@ -9,7 +9,6 @@ use RectorPrefix202308\Illuminate\Container\Container;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
-use PHPStan\Dependency\DependencyResolver;
 use PHPStan\File\FileHelper;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -221,7 +220,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string>
      */
-    private const PUBLIC_PHPSTAN_SERVICE_TYPES = [DependencyResolver::class, ScopeFactory::class, TypeNodeResolver::class, FileHelper::class, NodeScopeResolver::class, ReflectionProvider::class];
+    private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, FileHelper::class, NodeScopeResolver::class, ReflectionProvider::class];
     /**
      * @var array<class-string<OutputFormatterInterface>>
      */

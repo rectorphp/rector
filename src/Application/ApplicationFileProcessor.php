@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\Application;
 
 use RectorPrefix202308\Nette\Utils\FileSystem as UtilsFileSystem;
-use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
@@ -38,11 +37,6 @@ final class ApplicationFileProcessor
      * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
      */
     private $fileFactory;
-    /**
-     * @readonly
-     * @var \PHPStan\Analyser\NodeScopeResolver
-     */
-    private $nodeScopeResolver;
     /**
      * @readonly
      * @var \Rector\Core\Util\ArrayParametersMerger
@@ -89,11 +83,10 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, iterable $fileProcessors)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, iterable $fileProcessors)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
-        $this->nodeScopeResolver = $nodeScopeResolver;
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->parallelFileProcessor = $parallelFileProcessor;
         $this->scheduleFactory = $scheduleFactory;
@@ -121,8 +114,6 @@ final class ApplicationFileProcessor
         if ($configuration->isParallel()) {
             $systemErrorsAndFileDiffs = $this->runParallel($filePaths, $configuration, $input);
         } else {
-            // 1. allow PHPStan to work with static reflection on provided files
-            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
             $systemErrorsAndFileDiffs = $this->processFiles($filePaths, $configuration, \false);
         }
         $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = \array_merge($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS], $this->systemErrors);
@@ -179,7 +170,7 @@ final class ApplicationFileProcessor
         if ($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] !== []) {
             $this->changedFilesDetector->invalidateFile($file->getFilePath());
         } elseif (!$configuration->isDryRun() || $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] === []) {
-            $this->changedFilesDetector->cacheFileWithDependencies($file->getFilePath());
+            $this->changedFilesDetector->cacheFile($file->getFilePath());
         }
         return $systemErrorsAndFileDiffs;
     }

@@ -37,6 +37,6 @@ final class PhpFilesFinder
                 unset($filePaths[$key]);
             }
         }
-        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
+        return $this->unchangedFilesFilter->filterFileInfos($filePaths);
     }
 }

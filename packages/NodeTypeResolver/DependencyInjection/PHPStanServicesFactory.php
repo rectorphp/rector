@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\DependencyInjection;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
-use PHPStan\Dependency\DependencyResolver;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\File\FileHelper;
@@ -102,13 +101,6 @@ final class PHPStanServicesFactory
     public function getByType(string $type) : object
     {
         return $this->container->getByType($type);
-    }
-    /**
-     * @api
-     */
-    public function createDependencyResolver() : DependencyResolver
-    {
-        return $this->container->getByType(DependencyResolver::class);
     }
     /**
      * @api

@@ -1323,7 +1323,6 @@ return array(
     'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => $baseDir . '/packages/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
     'Rector\\Caching\\Detector\\ChangedFilesDetector' => $baseDir . '/packages/Caching/Detector/ChangedFilesDetector.php',
     'Rector\\Caching\\Enum\\CacheKey' => $baseDir . '/packages/Caching/Enum/CacheKey.php',
-    'Rector\\Caching\\FileSystem\\DependencyResolver' => $baseDir . '/packages/Caching/FileSystem/DependencyResolver.php',
     'Rector\\Caching\\UnchangedFilesFilter' => $baseDir . '/packages/Caching/UnchangedFilesFilter.php',
     'Rector\\Caching\\ValueObject\\CacheFilePaths' => $baseDir . '/packages/Caching/ValueObject/CacheFilePaths.php',
     'Rector\\Caching\\ValueObject\\CacheItem' => $baseDir . '/packages/Caching/ValueObject/CacheItem.php',

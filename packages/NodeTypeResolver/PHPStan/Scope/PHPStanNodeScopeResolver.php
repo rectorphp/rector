@@ -43,7 +43,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
-use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
@@ -51,8 +50,6 @@ use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
-use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -68,16 +65,6 @@ use RectorPrefix202308\Webmozart\Assert\Assert;
  */
 final class PHPStanNodeScopeResolver
 {
-    /**
-     * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-    /**
-     * @readonly
-     * @var \Rector\Caching\FileSystem\DependencyResolver
-     */
-    private $dependencyResolver;
     /**
      * @readonly
      * @var \PHPStan\Analyser\NodeScopeResolver
@@ -124,10 +111,8 @@ final class PHPStanNodeScopeResolver
     /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
-    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
-        $this->changedFilesDetector = $changedFilesDetector;
-        $this->dependencyResolver = $dependencyResolver;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->scopeFactory = $scopeFactory;
@@ -249,7 +234,7 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         };
-        return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
+        return $this->processNodesWithDependentFiles($stmts, $scope, $nodeCallback);
     }
     public function hasUnreachableStatementNode() : bool
     {
@@ -373,10 +358,9 @@ final class PHPStanNodeScopeResolver
      * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
      * @return Stmt[]
      */
-    private function processNodesWithDependentFiles(string $filePath, array $stmts, MutatingScope $mutatingScope, callable $nodeCallback) : array
+    private function processNodesWithDependentFiles(array $stmts, MutatingScope $mutatingScope, callable $nodeCallback) : array
     {
         $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $filePath);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
         $nodeTraverser->traverse($stmts);
@@ -417,21 +401,5 @@ final class PHPStanNodeScopeResolver
             throw new ShouldNotHappenException();
         }
         return $classLike->name->toString();
-    }
-    /**
-     * @param Stmt[] $stmts
-     */
-    private function resolveAndSaveDependentFiles(array $stmts, MutatingScope $mutatingScope, string $filePath) : void
-    {
-        $dependentFiles = [];
-        foreach ($stmts as $stmt) {
-            try {
-                $nodeDependentFiles = $this->dependencyResolver->resolveDependencies($stmt, $mutatingScope);
-                $dependentFiles = \array_merge($dependentFiles, $nodeDependentFiles);
-            } catch (AnalysedCodeException $exception) {
-                // @ignoreException
-            }
-        }
-        $this->changedFilesDetector->addFileDependentFiles($filePath, $dependentFiles);
     }
 }

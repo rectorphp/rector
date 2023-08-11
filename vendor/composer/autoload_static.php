@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a
+class ComposerStaticInitb1f853723313c9a6ff06eb1b9dbec065
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1576,7 +1576,6 @@ class ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a
         'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/packages/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\Detector\\ChangedFilesDetector' => __DIR__ . '/../..' . '/packages/Caching/Detector/ChangedFilesDetector.php',
         'Rector\\Caching\\Enum\\CacheKey' => __DIR__ . '/../..' . '/packages/Caching/Enum/CacheKey.php',
-        'Rector\\Caching\\FileSystem\\DependencyResolver' => __DIR__ . '/../..' . '/packages/Caching/FileSystem/DependencyResolver.php',
         'Rector\\Caching\\UnchangedFilesFilter' => __DIR__ . '/../..' . '/packages/Caching/UnchangedFilesFilter.php',
         'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheFilePaths.php',
         'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheItem.php',
@@ -2980,9 +2979,9 @@ class ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1d339f8bdb26c3f1f2726ea7bd5b1c9a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb1f853723313c9a6ff06eb1b9dbec065::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb1f853723313c9a6ff06eb1b9dbec065::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb1f853723313c9a6ff06eb1b9dbec065::$classMap;
 
         }, null, ClassLoader::class);
     }
