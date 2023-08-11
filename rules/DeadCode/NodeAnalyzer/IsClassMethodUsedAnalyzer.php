@@ -13,7 +13,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Parser\ArrayMapArgVisitor;
 use PHPStan\Reflection\ClassReflection;
@@ -25,6 +27,7 @@ use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class IsClassMethodUsedAnalyzer
 {
     /**
@@ -62,7 +65,12 @@ final class IsClassMethodUsedAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver, ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer $callCollectionAnalyzer, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    public function __construct(NodeNameResolver $nodeNameResolver, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver, ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer $callCollectionAnalyzer, ReflectionResolver $reflectionResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->astResolver = $astResolver;
@@ -71,6 +79,7 @@ final class IsClassMethodUsedAnalyzer
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
         $this->callCollectionAnalyzer = $callCollectionAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     public function isClassMethodUsed(Class_ $class, ClassMethod $classMethod, Scope $scope) : bool
     {
@@ -176,25 +185,35 @@ final class IsClassMethodUsedAnalyzer
             /**
              * Trait can't detect class type, so it rely on "this" or "self" or "static" or "ClassName::methodName()" usage...
              */
-            $callMethod = $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $subNode) use($className, $classMethodName) : bool {
-                if ($subNode instanceof MethodCall) {
-                    return $this->nodeNameResolver->isName($subNode->var, 'this') && $this->nodeNameResolver->isName($subNode->name, $classMethodName);
+            $callMethod = null;
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $subNode) use($className, $classMethodName, &$callMethod) : ?int {
+                if ($subNode instanceof Class_ || $subNode instanceof Function_) {
+                    return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
-                if (!$subNode instanceof StaticCall) {
-                    return \false;
+                if ($subNode instanceof MethodCall && $this->nodeNameResolver->isName($subNode->var, 'this') && $this->nodeNameResolver->isName($subNode->name, $classMethodName)) {
+                    $callMethod = $subNode;
+                    return NodeTraverser::STOP_TRAVERSAL;
                 }
-                if (!$subNode->class instanceof Name) {
-                    return \false;
+                if ($this->isStaticCallMatch($subNode, $className, $classMethodName)) {
+                    $callMethod = $subNode;
+                    return NodeTraverser::STOP_TRAVERSAL;
                 }
-                if ($subNode->class->isSpecialClassName() || $subNode->class->toString() === $className) {
-                    return $this->nodeNameResolver->isName($subNode->name, $classMethodName);
-                }
-                return \false;
+                return null;
             });
             if ($callMethod instanceof CallLike) {
                 return \true;
             }
         }
         return \false;
+    }
+    private function isStaticCallMatch(Node $subNode, string $className, string $classMethodName) : bool
+    {
+        if (!$subNode instanceof StaticCall) {
+            return \false;
+        }
+        if (!$subNode->class instanceof Name) {
+            return \false;
+        }
+        return ($subNode->class->isSpecialClassName() || $subNode->class->toString() === $className) && $this->nodeNameResolver->isName($subNode->name, $classMethodName);
     }
 }
