@@ -163,10 +163,7 @@ final class RectorConfig extends ContainerConfigurator
     public function rules(array $rectorClasses) : void
     {
         Assert::allString($rectorClasses);
-        $duplicatedRectorClasses = $this->resolveDuplicatedValues($rectorClasses);
-        if ($duplicatedRectorClasses !== []) {
-            throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
-        }
+        $this->ensureNotDuplicatedClasses($rectorClasses);
         foreach ($rectorClasses as $rectorClass) {
             $this->rule($rectorClass);
         }
@@ -280,5 +277,16 @@ final class RectorConfig extends ContainerConfigurator
             \trigger_error(\sprintf('The "%s" interface of "%s" rule is deprecated. Rector will only PHP code, as designed to with AST. For another file format, use custom tooling.', NonPhpRectorInterface::class, $rectorClass));
             exit;
         }
+    }
+    /**
+     * @param string[] $rectorClasses
+     */
+    private function ensureNotDuplicatedClasses(array $rectorClasses) : void
+    {
+        $duplicatedRectorClasses = $this->resolveDuplicatedValues($rectorClasses);
+        if ($duplicatedRectorClasses === []) {
+            return;
+        }
+        throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
     }
 }

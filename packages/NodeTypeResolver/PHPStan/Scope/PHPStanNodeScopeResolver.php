@@ -145,20 +145,15 @@ final class PHPStanNodeScopeResolver
             }
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof Assign || $node instanceof AssignOp) {
+            } elseif ($node instanceof Assign || $node instanceof AssignOp) {
                 $this->processAssign($node, $mutatingScope);
-            }
-            if ($node instanceof Ternary) {
+            } elseif ($node instanceof Ternary) {
                 $this->processTernary($node, $mutatingScope);
-            }
-            if ($node instanceof BinaryOp) {
+            } elseif ($node instanceof BinaryOp) {
                 $this->processBinaryOp($node, $mutatingScope);
-            }
-            if ($node instanceof Arg) {
+            } elseif ($node instanceof Arg) {
                 $node->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof Foreach_) {
+            } elseif ($node instanceof Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 if ($node->valueVar instanceof Array_) {
@@ -167,42 +162,32 @@ final class PHPStanNodeScopeResolver
             }
             if ($node instanceof Array_) {
                 $this->processArray($node, $mutatingScope);
-            }
-            if ($node instanceof Property) {
+            } elseif ($node instanceof Property) {
                 $this->processProperty($node, $mutatingScope);
-            }
-            if ($node instanceof Switch_) {
+            } elseif ($node instanceof Switch_) {
                 $this->processSwitch($node, $mutatingScope);
-            }
-            if ($node instanceof TryCatch) {
+            } elseif ($node instanceof TryCatch) {
                 $this->processTryCatch($node, $filePath, $mutatingScope);
-            }
-            if ($node instanceof ArrayItem) {
+            } elseif ($node instanceof ArrayItem) {
                 $this->processArrayItem($node, $mutatingScope);
-            }
-            if ($node instanceof NullableType) {
+            } elseif ($node instanceof NullableType) {
                 $node->type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof UnionType || $node instanceof IntersectionType) {
+            } elseif ($node instanceof UnionType || $node instanceof IntersectionType) {
                 foreach ($node->types as $type) {
                     $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 }
-            }
-            if ($node instanceof StaticPropertyFetch) {
+            } elseif ($node instanceof StaticPropertyFetch) {
                 $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof PropertyFetch) {
+            } elseif ($node instanceof PropertyFetch) {
                 $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
             if ($node instanceof CallLike) {
                 $this->processCallike($node, $mutatingScope);
-            }
-            if ($node instanceof ConstFetch) {
+            } elseif ($node instanceof ConstFetch) {
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof ClassConstFetch) {
+            } elseif ($node instanceof ClassConstFetch) {
                 $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
