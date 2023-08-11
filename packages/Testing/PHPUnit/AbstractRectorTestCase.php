@@ -52,7 +52,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
             $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
             $bootstrapFilesIncluder->includeBootstrapFiles();
-            $bootstrapFilesIncluder->includePHPStanExtensionsBoostrapFiles();
             self::$cacheByRuleAndConfig[$cacheKey] = \true;
         }
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
