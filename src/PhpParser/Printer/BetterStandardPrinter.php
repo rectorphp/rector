@@ -71,25 +71,16 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const REPLACE_COLON_WITH_SPACE_REGEX = '#(^.*function .*\\(.*\\)) : #';
-    /**
-     * Use space by default
-     * @var string
-     */
-    private $tabOrSpaceIndentCharacter = ' ';
-    /**
-     * @param mixed[] $options
-     */
-    public function __construct(DocBlockUpdater $docBlockUpdater, array $options = [])
+    public function __construct(DocBlockUpdater $docBlockUpdater)
     {
         $this->docBlockUpdater = $docBlockUpdater;
-        parent::__construct($options);
+        parent::__construct(['shortArraySyntax' => \true]);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_ArrowFunction->returnType'] = [')', \false, ': ', null];
-        $this->tabOrSpaceIndentCharacter = SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
     }
     /**
      * @param Node[] $stmts
@@ -156,7 +147,7 @@ final class BetterStandardPrinter extends Standard
             return parent::pExpr_ArrowFunction($arrowFunction);
         }
         $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
-        $indent = \str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel) . \str_repeat($this->tabOrSpaceIndentCharacter, $indentSize);
+        $indent = \str_repeat($this->getIndentCharacter(), $this->indentLevel) . \str_repeat($this->getIndentCharacter(), $indentSize);
         $text = "\n" . $indent;
         foreach ($comments as $key => $comment) {
             $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
@@ -171,7 +162,7 @@ final class BetterStandardPrinter extends Standard
     {
         $level = \max($level, 0);
         $this->indentLevel = $level;
-        $this->nl = "\n" . \str_repeat($this->tabOrSpaceIndentCharacter, $level);
+        $this->nl = "\n" . \str_repeat($this->getIndentCharacter(), $level);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
@@ -180,14 +171,14 @@ final class BetterStandardPrinter extends Standard
     {
         $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
         $this->indentLevel += $indentSize;
-        $this->nl .= \str_repeat($this->tabOrSpaceIndentCharacter, $indentSize);
+        $this->nl .= \str_repeat($this->getIndentCharacter(), $indentSize);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */
     protected function outdent() : void
     {
-        if ($this->tabOrSpaceIndentCharacter === ' ') {
+        if ($this->getIndentCharacter() === ' ') {
             // - 4 spaces
             \assert($this->indentLevel >= 4);
             $this->indentLevel -= 4;
@@ -196,7 +187,7 @@ final class BetterStandardPrinter extends Standard
             \assert($this->indentLevel >= 1);
             --$this->indentLevel;
         }
-        $this->nl = "\n" . \str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel);
+        $this->nl = "\n" . \str_repeat($this->getIndentCharacter(), $this->indentLevel);
     }
     /**
      * @param mixed[] $nodes
@@ -407,6 +398,13 @@ final class BetterStandardPrinter extends Standard
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    /**
+     * Must be a method to be able to react to changed parameter in tests
+     */
+    private function getIndentCharacter() : string
+    {
+        return SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
