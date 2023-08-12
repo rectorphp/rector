@@ -70,25 +70,6 @@ This Rector adds new default arguments in calls of defined methods and class typ
 
 - class: [`Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`](../rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use PHPStan\Type\ObjectType;
-use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Arguments\ValueObject\ArgumentAdder;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [
-        new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType')),
-    ]);
-};
-```
-
-↓
-
 ```diff
  $someObject = new SomeExampleClass;
 -$someObject->someMethod();
@@ -113,24 +94,6 @@ Streamline the operator arguments of version_compare function
 
 - class: [`Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector`](../rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
-use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FunctionArgumentDefaultValueReplacerRector::class, [
-        new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -version_compare(PHP_VERSION, '5.6', 'gte');
 +version_compare(PHP_VERSION, '5.6', 'ge');
@@ -145,24 +108,6 @@ Remove parameter of method call
 :wrench: **configure it!**
 
 - class: [`Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector`](../rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector;
-use Rector\Arguments\ValueObject\RemoveMethodCallParam;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveMethodCallParamRector::class, [
-        new RemoveMethodCallParam('Caller', 'process', 1),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -185,24 +130,6 @@ Replaces defined map of arguments in defined methods and their calls.
 
 - class: [`Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector`](../rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
-use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
-        new ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', false),
-    ]);
-};
-```
-
-↓
-
 ```diff
  $someObject = new SomeClass;
 -$someObject->someMethod(SomeClass::OLD_CONSTANT);
@@ -218,28 +145,6 @@ Reorder arguments in function calls
 :wrench: **configure it!**
 
 - class: [`Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`](../rules/Arguments/Rector/FuncCall/SwapFuncCallArgumentsRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Arguments\ValueObject\SwapFuncCallArguments;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(SwapFuncCallArgumentsRector::class, [
-        new SwapFuncCallArguments('some_function', [
-            2,
-            1,
-            0,
-        ]),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -2301,23 +2206,6 @@ Remove annotation by names
 
 - class: [`Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector`](../rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveAnnotationRector::class, [
-        'method',
-    ]);
-};
-```
-
-↓
-
 ```diff
 -/**
 - * @method getName()
@@ -3738,24 +3626,6 @@ Replace string class names by <class>::class constant
 
 - class: [`Rector\Php55\Rector\String_\StringClassNameToClassConstantRector`](../rules/Php55/Rector/String_/StringClassNameToClassConstantRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
-        'ClassName',
-        'AnotherClassName',
-    ]);
-};
-```
-
-↓
-
 ```diff
  class AnotherClass
  {
@@ -4578,23 +4448,6 @@ Add "_" as thousands separator in numbers for higher or equals to limitValue con
 
 - class: [`Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector`](../rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddLiteralSeparatorToNumberRector::class, [
-        AddLiteralSeparatorToNumberRector::LIMIT_VALUE => 1000000,
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -4847,24 +4700,6 @@ Change annotation to attribute
 
 - class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](../rules/Php80/Rector/Class_/AnnotationToAttributeRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
-        new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  use Symfony\Component\Routing\Annotation\Route;
 
@@ -4954,23 +4789,6 @@ Change simple property init and assign to constructor promotion
 
 - class: [`Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector`](../rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ClassPropertyAssignToConstructorPromotionRector::class, [
-        ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -5052,30 +4870,6 @@ Changed nested annotations to attributes
 :wrench: **configure it!**
 
 - class: [`Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector`](../rules/Php80/Rector/Property/NestedAnnotationToAttributeRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
-use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NestedAnnotationToAttributeRector::class, [
-        [
-            new NestedAnnotationToAttribute([
-                new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\JoinColumn', 'joinColumns', false),
-                new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\InverseJoinColumn', 'inverseJoinColumns', false),
-            ], 'Doctrine\ORM\Mapping\JoinTable', false),
-        ],
-    ]);
-};
-```
-
-↓
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -5450,25 +5244,6 @@ Add SensitiveParameter attribute to method and function configured parameters
 
 - class: [`Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector`](../rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddSensitiveParameterAttributeRector::class, [
-        AddSensitiveParameterAttributeRector::SENSITIVE_PARAMETERS => [
-            'password',
-        ],
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -5625,26 +5400,6 @@ Removes defined arguments in defined methods and their calls.
 
 - class: [`Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector`](../rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
-use Rector\Removing\ValueObject\ArgumentRemover;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArgumentRemoverRector::class, [
-        new ArgumentRemover('ExampleClass', 'someMethod', 0, [
-            true,
-        ]),
-    ]);
-};
-```
-
-↓
-
 ```diff
  $someObject = new SomeClass;
 -$someObject->someMethod(true);
@@ -5661,24 +5416,6 @@ Remove argument by position by function name
 
 - class: [`Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector`](../rules/Removing/Rector/FuncCall/RemoveFuncCallArgRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
-use Rector\Removing\ValueObject\RemoveFuncCallArg;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
-        new RemoveFuncCallArg('remove_last_arg', 1),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -remove_last_arg(1, 2);
 +remove_last_arg(1);
@@ -5693,23 +5430,6 @@ Remove function
 :wrench: **configure it!**
 
 - class: [`Rector\Removing\Rector\FuncCall\RemoveFuncCallRector`](../rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveFuncCallRector::class, [
-        'var_dump',
-    ]);
-};
-```
-
-↓
 
 ```diff
 -$x = 'something';
@@ -5727,23 +5447,6 @@ Removes interfaces usage from class.
 
 - class: [`Rector\Removing\Rector\Class_\RemoveInterfacesRector`](../rules/Removing/Rector/Class_/RemoveInterfacesRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveInterfacesRector::class, [
-        'SomeInterface',
-    ]);
-};
-```
-
-↓
-
 ```diff
 -class SomeClass implements SomeInterface
 +class SomeClass
@@ -5760,23 +5463,6 @@ Remove specific traits from code
 :wrench: **configure it!**
 
 - class: [`Rector\Removing\Rector\Class_\RemoveTraitUseRector`](../rules/Removing/Rector/Class_/RemoveTraitUseRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\Class_\RemoveTraitUseRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveTraitUseRector::class, [
-        'TraitNameToRemove',
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -5797,26 +5483,6 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
 - class: [`Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`](../rules/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
-use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(PseudoNamespaceToNamespaceRector::class, [
-        new PseudoNamespaceToNamespace('Some_', [
-            'Some_Class_To_Keep',
-        ]),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -/** @var Some_Chicken $someService */
 -$someService = new Some_Chicken;
@@ -5834,24 +5500,6 @@ Turns defined annotations above properties and methods to their new values.
 :wrench: **configure it!**
 
 - class: [`Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector`](../rules/Renaming/Rector/ClassMethod/RenameAnnotationRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
-use Rector\Renaming\ValueObject\RenameAnnotationByType;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameAnnotationRector::class, [
-        new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -5878,26 +5526,6 @@ Replaces defined class constants in their calls.
 
 - class: [`Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector`](../rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
-use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
-use Rector\Renaming\ValueObject\RenameClassConstFetch;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
-        new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-        new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -$value = SomeClass::OLD_CONSTANT;
 -$value = SomeClass::OTHER_OLD_CONSTANT;
@@ -5914,23 +5542,6 @@ Replaces defined classes by new ones.
 :wrench: **configure it!**
 
 - class: [`Rector\Renaming\Rector\Name\RenameClassRector`](../rules/Renaming/Rector/Name/RenameClassRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\Name\RenameClassRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        'App\SomeOldClass' => 'App\SomeNewClass',
-    ]);
-};
-```
-
-↓
 
 ```diff
  namespace App;
@@ -5959,24 +5570,6 @@ Replace constant by new ones
 
 - class: [`Rector\Renaming\Rector\ConstFetch\RenameConstantRector`](../rules/Renaming/Rector/ConstFetch/RenameConstantRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameConstantRector::class, [
-        'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-        'OLD_CONSTANT' => 'NEW_CONSTANT',
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class SomeClass
  {
@@ -5998,23 +5591,6 @@ Turns defined function call new one.
 
 - class: [`Rector\Renaming\Rector\FuncCall\RenameFunctionRector`](../rules/Renaming/Rector/FuncCall/RenameFunctionRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
-        'view' => 'Laravel\Templating\render',
-    ]);
-};
-```
-
-↓
-
 ```diff
 -view("...", []);
 +Laravel\Templating\render("...", []);
@@ -6029,24 +5605,6 @@ Turns method names to new ones.
 :wrench: **configure it!**
 
 - class: [`Rector\Renaming\Rector\MethodCall\RenameMethodRector`](../rules/Renaming/Rector/MethodCall/RenameMethodRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  $someObject = new SomeExampleClass;
@@ -6064,24 +5622,6 @@ Replaces defined old properties by new ones.
 
 - class: [`Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector`](../rules/Renaming/Rector/PropertyFetch/RenamePropertyRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Renaming\ValueObject\RenameProperty;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenamePropertyRector::class, [
-        new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -$someObject->someOldProperty;
 +$someObject->someNewProperty;
@@ -6097,24 +5637,6 @@ Turns method names to new ones.
 
 - class: [`Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector`](../rules/Renaming/Rector/StaticCall/RenameStaticMethodRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
-use Rector\Renaming\ValueObject\RenameStaticMethod;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameStaticMethodRector::class, [
-        new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -SomeClass::oldStaticMethod();
 +AnotherExampleClass::newStaticMethod();
@@ -6129,23 +5651,6 @@ Change string value
 :wrench: **configure it!**
 
 - class: [`Rector\Renaming\Rector\String_\RenameStringRector`](../rules/Renaming/Rector/String_/RenameStringRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\String_\RenameStringRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
-        'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -6169,23 +5674,6 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 :wrench: **configure it!**
 
 - class: [`Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector`](../rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInBooleanNotRuleFixerRector::class, [
-        BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY => true,
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -6212,23 +5700,6 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 
 - class: [`Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector`](../rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInIfConditionRuleFixerRector::class, [
-        BooleanInIfConditionRuleFixerRector::TREAT_AS_NON_EMPTY => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class NegatedString
  {
@@ -6254,23 +5725,6 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 
 - class: [`Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector`](../rules/Strict/Rector/Ternary/BooleanInTernaryOperatorRuleFixerRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(BooleanInTernaryOperatorRuleFixerRector::class, [
-        BooleanInTernaryOperatorRuleFixerRector::TREAT_AS_NON_EMPTY => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class ArrayCompare
  {
@@ -6292,23 +5746,6 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstru
 
 - class: [`Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector`](../rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DisallowedEmptyRuleFixerRector::class, [
-        DisallowedEmptyRuleFixerRector::TREAT_AS_NON_EMPTY => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class SomeEmptyArray
  {
@@ -6329,23 +5766,6 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstru
 :wrench: **configure it!**
 
 - class: [`Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector`](../rules/Strict/Rector/Ternary/DisallowedShortTernaryRuleFixerRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DisallowedShortTernaryRuleFixerRector::class, [
-        DisallowedShortTernaryRuleFixerRector::TREAT_AS_NON_EMPTY => false,
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class ShortTernaryArray
@@ -6370,23 +5790,6 @@ Add the `AllowDynamicProperties` attribute to all classes
 
 - class: [`Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector`](../rules/Transform/Rector/Class_/AddAllowDynamicPropertiesAttributeRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddAllowDynamicPropertiesAttributeRector::class, [
-        'Example\*',
-    ]);
-};
-```
-
-↓
-
 ```diff
  namespace Example\Domain;
 
@@ -6406,23 +5809,6 @@ Add interface by used trait
 
 - class: [`Rector\Transform\Rector\Class_\AddInterfaceByTraitRector`](../rules/Transform/Rector/Class_/AddInterfaceByTraitRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddInterfaceByTraitRector::class, [
-        'SomeTrait' => 'SomeInterface',
-    ]);
-};
-```
-
-↓
-
 ```diff
 -class SomeClass
 +class SomeClass implements SomeInterface
@@ -6440,26 +5826,6 @@ Replace key value on specific attribute to class constant
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector`](../rules/Transform/Rector/Attribute/AttributeKeyToClassConstFetchRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
-use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AttributeKeyToClassConstFetchRector::class, [
-        new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', [
-            'STRING',
-        ]),
-    ]);
-};
-```
-
-↓
 
 ```diff
  use Doctrine\ORM\Mapping\Column;
@@ -6483,23 +5849,6 @@ Changes use of function calls to use constants
 
 - class: [`Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector`](../rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToConstFetchRector::class, [
-        'php_sapi_name' => 'PHP_SAPI',
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -6520,24 +5869,6 @@ Turns defined function calls to local method calls.
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector`](../rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
-use Rector\Transform\ValueObject\FuncCallToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToMethodCallRector::class, [
-        new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -6570,25 +5901,6 @@ Change configured function calls to new Instance
 
 - class: [`Rector\Transform\Rector\FuncCall\FuncCallToNewRector`](../rules/Transform/Rector/FuncCall/FuncCallToNewRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToNewRector::class, [
-        'collection' => [
-            'Collection',
-        ],
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -6610,24 +5922,6 @@ Turns defined function call to static method call.
 
 - class: [`Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector`](../rules/Transform/Rector/FuncCall/FuncCallToStaticCallRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Transform\ValueObject\FuncCallToStaticCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToStaticCallRector::class, [
-        new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -view("...", []);
 +SomeClass::render("...", []);
@@ -6642,23 +5936,6 @@ Merges old interface to a new one, that already has its methods
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\Class_\MergeInterfacesRector`](../rules/Transform/Rector/Class_/MergeInterfacesRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Class_\MergeInterfacesRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MergeInterfacesRector::class, [
-        'SomeOldInterface' => 'SomeInterface',
-    ]);
-};
-```
-
-↓
 
 ```diff
 -class SomeClass implements SomeInterface, SomeOldInterface
@@ -6676,24 +5953,6 @@ Change method call to function call
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\MethodCall\MethodCallToFuncCallRector`](../rules/Transform/Rector/MethodCall/MethodCallToFuncCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\MethodCallToFuncCallRector;
-use Rector\Transform\ValueObject\MethodCallToFuncCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToFuncCallRector::class, [
-        new MethodCallToFuncCall('SomeClass', 'render', 'view'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -6716,23 +5975,6 @@ Turns method call `"$this->something()"` to property fetch "$this->something"
 
 - class: [`Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector`](../rules/Transform/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToPropertyFetchRector::class, [
-        'someMethod' => 'someProperty',
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -6753,24 +5995,6 @@ Change method call to desired static call
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector`](../rules/Transform/Rector/MethodCall/MethodCallToStaticCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
-use Rector\Transform\ValueObject\MethodCallToStaticCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToStaticCallRector::class, [
-        new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -6800,24 +6024,6 @@ Change new Object to static call
 
 - class: [`Rector\Transform\Rector\New_\NewToStaticCallRector`](../rules/Transform/Rector/New_/NewToStaticCallRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\New_\NewToStaticCallRector;
-use Rector\Transform\ValueObject\NewToStaticCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NewToStaticCallRector::class, [
-        new NewToStaticCall('Cookie', 'Cookie', 'create'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -6839,26 +6045,6 @@ Replaces parent class to specific traits
 
 - class: [`Rector\Transform\Rector\Class_\ParentClassToTraitsRector`](../rules/Transform/Rector/Class_/ParentClassToTraitsRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
-use Rector\Transform\ValueObject\ParentClassToTraits;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ParentClassToTraitsRector::class, [
-        new ParentClassToTraits('Nette\Object', [
-            'Nette\SmartObject',
-        ]),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -class SomeClass extends Nette\Object
 +class SomeClass
@@ -6877,24 +6063,6 @@ Turns property assign of specific type and property name to method call
 
 - class: [`Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector`](../rules/Transform/Rector/Assign/PropertyAssignToMethodCallRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
-use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(PropertyAssignToMethodCallRector::class, [
-        new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  $someObject = new SomeClass;
 -$someObject->oldProperty = false;
@@ -6910,28 +6078,6 @@ Replaces properties assign calls be defined methods.
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector`](../rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
-use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(PropertyFetchToMethodCallRector::class, [
-        new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty', [
-        ]),
-        new PropertyFetchToMethodCall('SomeObject', 'bareProperty', 'getConfig', [
-            'someArg',
-        ]),
-    ]);
-};
-```
-
-↓
 
 ```diff
 -$result = $object->property;
@@ -6952,24 +6098,6 @@ Changes method calls in child of specific types to defined property method call
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](../rules/Transform/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceParentCallByPropertyCallRector::class, [
-        new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -6992,24 +6120,6 @@ Add #[\ReturnTypeWillChange] attribute to configured instanceof class with metho
 
 - class: [`Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector`](../rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector;
-use Rector\Transform\ValueObject\ClassMethodReference;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReturnTypeWillChangeRector::class, [
-        new ClassMethodReference('ArrayAccess', 'offsetGet'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass implements ArrayAccess
  {
@@ -7030,24 +6140,6 @@ Turns static call to function call.
 
 - class: [`Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector`](../rules/Transform/Rector/StaticCall/StaticCallToFuncCallRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
-use Rector\Transform\ValueObject\StaticCallToFuncCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [
-        new StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function'),
-    ]);
-};
-```
-
-↓
-
 ```diff
 -OldClass::oldMethod("args");
 +new_function("args");
@@ -7062,24 +6154,6 @@ Change static call to service method via constructor injection
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector`](../rules/Transform/Rector/StaticCall/StaticCallToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
-use Rector\Transform\ValueObject\StaticCallToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(StaticCallToMethodCallRector::class, [
-        new StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'App\Custom\SmartFileSystem', 'dumpFile'),
-    ]);
-};
-```
-
-↓
 
 ```diff
 -use Nette\Utils\FileSystem;
@@ -7115,24 +6189,6 @@ Change static call to new instance
 
 - class: [`Rector\Transform\Rector\StaticCall\StaticCallToNewRector`](../rules/Transform/Rector/StaticCall/StaticCallToNewRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
-use Rector\Transform\ValueObject\StaticCallToNew;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(StaticCallToNewRector::class, [
-        new StaticCallToNew('JsonResponse', 'create'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -7154,24 +6210,6 @@ Changes strings to specific constants
 
 - class: [`Rector\Transform\Rector\String_\StringToClassConstantRector`](../rules/Transform/Rector/String_/StringToClassConstantRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\String_\StringToClassConstantRector;
-use Rector\Transform\ValueObject\StringToClassConstant;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(StringToClassConstantRector::class, [
-        new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class SomeSubscriber
  {
@@ -7192,24 +6230,6 @@ Wrap return value of specific method
 :wrench: **configure it!**
 
 - class: [`Rector\Transform\Rector\ClassMethod\WrapReturnRector`](../rules/Transform/Rector/ClassMethod/WrapReturnRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
-use Rector\Transform\ValueObject\WrapReturn;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(WrapReturnRector::class, [
-        new WrapReturn('SomeClass', 'getItem', true),
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -7298,25 +6318,6 @@ Add param types where needed
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use PHPStan\Type\StringType;
-use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType()),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass
  {
@@ -7381,25 +6382,6 @@ Add type to property by added rules, mostly public/property by parent type
 
 - class: [`Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector`](../rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use PHPStan\Type\StringType;
-use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddPropertyTypeDeclarationRector::class, [
-        new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType()),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class SomeClass extends ParentClass
  {
@@ -7463,26 +6445,6 @@ Changes defined return typehint of method and class.
 :wrench: **configure it!**
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
-use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
-        new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(), new MixedType())),
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -8037,23 +6999,6 @@ Add typed property from assigned types
 
 - class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TypedPropertyFromAssignsRector::class, [
-        TypedPropertyFromAssignsRector::INLINE_PUBLIC => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
  final class SomeClass
  {
@@ -8189,24 +7134,6 @@ Change visibility of constant from parent class.
 
 - class: [`Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector`](../rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Visibility\ValueObject\ChangeConstantVisibility;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeConstantVisibilityRector::class, [
-        new ChangeConstantVisibility('ParentObject', 'SOME_CONSTANT', 2),
-    ]);
-};
-```
-
-↓
-
 ```diff
  class FrameworkClass
  {
@@ -8229,24 +7156,6 @@ Change visibility of method from parent class.
 :wrench: **configure it!**
 
 - class: [`Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector`](../rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Visibility\ValueObject\ChangeMethodVisibility;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeMethodVisibilityRector::class, [
-        new ChangeMethodVisibility('FrameworkClass', 'someMethod', 2),
-    ]);
-};
-```
-
-↓
 
 ```diff
  class FrameworkClass
