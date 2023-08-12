@@ -10,6 +10,6 @@ final class StaticPHPUnitEnvironment
      */
     public static function isPHPUnitRun() : bool
     {
-        return \defined('PHPUNIT_COMPOSER_INSTALL') || \defined('__PHPUNIT_PHAR__');
+        return \defined('PHPUNIT_COMPOSER_INSTALL');
     }
 }

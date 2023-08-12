@@ -159,8 +159,7 @@ final class PHPStanNodeScopeResolver
                 if ($node->valueVar instanceof Array_) {
                     $this->processArray($node->valueVar, $mutatingScope);
                 }
-            }
-            if ($node instanceof Array_) {
+            } elseif ($node instanceof Array_) {
                 $this->processArray($node, $mutatingScope);
             } elseif ($node instanceof Property) {
                 $this->processProperty($node, $mutatingScope);
@@ -176,20 +175,16 @@ final class PHPStanNodeScopeResolver
                 foreach ($node->types as $type) {
                     $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 }
-            } elseif ($node instanceof StaticPropertyFetch) {
+            } elseif ($node instanceof StaticPropertyFetch || $node instanceof ClassConstFetch) {
                 $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             } elseif ($node instanceof PropertyFetch) {
                 $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof CallLike) {
-                $this->processCallike($node, $mutatingScope);
             } elseif ($node instanceof ConstFetch) {
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            } elseif ($node instanceof ClassConstFetch) {
-                $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            } elseif ($node instanceof CallLike) {
+                $this->processCallike($node, $mutatingScope);
             }
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
@@ -234,18 +229,14 @@ final class PHPStanNodeScopeResolver
         if ($callLike instanceof StaticCall) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
-        if ($callLike instanceof MethodCall) {
+        } elseif ($callLike instanceof MethodCall) {
             $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
-        if ($callLike instanceof FuncCall) {
+        } elseif ($callLike instanceof FuncCall) {
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
-        if ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
+        } elseif ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
-        if ($callLike instanceof NullsafeMethodCall) {
+        } elseif ($callLike instanceof NullsafeMethodCall) {
             $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }

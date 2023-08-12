@@ -6,6 +6,7 @@ namespace Rector\Skipper\SkipCriteriaResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\FileSystem\FilePathHelper;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 /**
  * @see \Rector\Tests\Skipper\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
@@ -29,8 +30,12 @@ final class SkippedPathsResolver
      */
     public function resolve() : array
     {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            // disable cache in tests
+            $this->skippedPaths = [];
+        }
         // disable cache in tests
-        if ($this->skippedPaths !== [] && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if ($this->skippedPaths !== []) {
             return $this->skippedPaths;
         }
         $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);

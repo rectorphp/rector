@@ -6,6 +6,7 @@ namespace Rector\Skipper\SkipCriteriaResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class SkippedClassResolver
 {
     /**
@@ -26,8 +27,12 @@ final class SkippedClassResolver
      */
     public function resolve() : array
     {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            // disable cache in tests
+            $this->skippedClasses = [];
+        }
         // skip cache in tests
-        if ($this->skippedClasses !== [] && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if ($this->skippedClasses !== []) {
             return $this->skippedClasses;
         }
         $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);
