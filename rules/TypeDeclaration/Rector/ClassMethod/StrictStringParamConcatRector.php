@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -115,29 +115,21 @@ CODE_SAMPLE
             if ($node instanceof FunctionLike || $node instanceof Class_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($node instanceof Arg && $this->isVariableInArg($node, $paramName)) {
+            if ($node instanceof Assign && $node->var instanceof Variable && $this->isName($node->var, $paramName)) {
                 $variableConcatted = null;
                 return NodeTraverser::STOP_TRAVERSAL;
             }
             $expr = $this->resolveAssignConcatVariable($node, $paramName);
             if ($expr instanceof Variable) {
                 $variableConcatted = $expr;
-                return NodeTraverser::STOP_TRAVERSAL;
             }
             $variableBinaryConcat = $this->resolveBinaryConcatVariable($node, $paramName);
             if ($variableBinaryConcat instanceof Variable) {
                 $variableConcatted = $variableBinaryConcat;
-                return NodeTraverser::STOP_TRAVERSAL;
             }
             return null;
         });
         return $variableConcatted;
-    }
-    private function isVariableInArg(Arg $arg, string $paramName) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($arg->value, function (Node $subNode) use($paramName) : bool {
-            return $subNode instanceof Variable && $this->isName($subNode, $paramName);
-        });
     }
     private function isVariableWithSameParam(Expr $expr, string $paramName) : bool
     {
