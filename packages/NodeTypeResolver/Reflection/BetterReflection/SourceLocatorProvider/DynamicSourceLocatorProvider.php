@@ -83,4 +83,13 @@ final class DynamicSourceLocatorProvider
     {
         return $this->filePaths === [] && $this->filesByDirectory === [];
     }
+    /**
+     * @api to allow fast single-container tests
+     */
+    public function reset() : void
+    {
+        $this->filePaths = [];
+        $this->filesByDirectory = [];
+        $this->aggregateSourceLocator = null;
+    }
 }

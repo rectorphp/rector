@@ -229,16 +229,13 @@ final class PHPStanNodeScopeResolver
         if ($callLike instanceof StaticCall) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        } elseif ($callLike instanceof MethodCall) {
+        } elseif ($callLike instanceof MethodCall || $callLike instanceof NullsafeMethodCall) {
             $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         } elseif ($callLike instanceof FuncCall) {
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         } elseif ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        } elseif ($callLike instanceof NullsafeMethodCall) {
-            $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
     }
     /**
