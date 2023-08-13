@@ -2588,6 +2588,7 @@ return array(
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
     'Rector\\TypeDeclaration\\Contract\\PHPStan\\TypeWithClassTypeSpecifierInterface' => $baseDir . '/rules/TypeDeclaration/Contract/PHPStan/TypeWithClassTypeSpecifierInterface.php',
     'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => $baseDir . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
+    'Rector\\TypeDeclaration\\Guard\\ParamTypeAddGuard' => $baseDir . '/rules/TypeDeclaration/Guard/ParamTypeAddGuard.php',
     'Rector\\TypeDeclaration\\Guard\\PropertyTypeOverrideGuard' => $baseDir . '/rules/TypeDeclaration/Guard/PropertyTypeOverrideGuard.php',
     'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => $baseDir . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodOrPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodOrPropertyAnalyzer.php',
