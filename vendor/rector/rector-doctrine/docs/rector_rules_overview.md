@@ -1,4 +1,4 @@
-# 15 Rules Overview
+# 14 Rules Overview
 
 ## ChangeBigIntEntityPropertyToIntTypeRector
 
@@ -67,29 +67,6 @@ Change default value types to match Doctrine annotation type
       */
 -    private $isOld = '0';
 +    private $isOld = false;
- }
-```
-
-<br>
-
-## DoctrineTargetEntityStringToClassConstantRector
-
-Convert targetEntities defined as String to <class>::class Constants in Doctrine Entities.
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\Property\DoctrineTargetEntityStringToClassConstantRector`](../rules/CodeQuality/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php)
-
-```diff
- final class SomeClass
- {
-     /**
--     * @ORM\OneToMany(targetEntity="AnotherClass")
-+     * @ORM\OneToMany(targetEntity=\MyNamespace\Source\AnotherClass::class)
-      */
-     private readonly ?Collection $items;
-
--    #[ORM\ManyToOne(targetEntity: "AnotherClass")]
-+    #[ORM\ManyToOne(targetEntity: \MyNamespace\Source\AnotherClass::class)]
-     private readonly ?Collection $items2;
  }
 ```
 

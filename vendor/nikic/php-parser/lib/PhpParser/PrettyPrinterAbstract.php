@@ -28,6 +28,10 @@ abstract class PrettyPrinterAbstract
     // Name operand that may require ${} bracing
     const FIXUP_ENCAPSED = 6;
     // Encapsed string part
+    const FIXUP_NEW = 7;
+    // New/instanceof operand
+    const FIXUP_STATIC_DEREF_LHS = 8;
+    // LHS of static dereferencing operation
     protected $precedenceMap = [
         // [precedence, associativity]
         // where for precedence -1 is %left, 0 is %nonassoc and 1 is %right
@@ -869,6 +873,16 @@ abstract class PrettyPrinterAbstract
                     return '(' . $this->p($subNode) . ')';
                 }
                 break;
+            case self::FIXUP_STATIC_DEREF_LHS:
+                if ($this->staticDereferenceLhsRequiresParens($subNode) && !$this->origTokens->haveParens($subStartPos, $subEndPos)) {
+                    return '(' . $this->p($subNode) . ')';
+                }
+                break;
+            case self::FIXUP_NEW:
+                if ($this->newOperandRequiresParens($subNode) && !$this->origTokens->haveParens($subStartPos, $subEndPos)) {
+                    return '(' . $this->p($subNode) . ')';
+                }
+                break;
             case self::FIXUP_BRACED_NAME:
             case self::FIXUP_VAR_BRACED_NAME:
                 if ($subNode instanceof Expr && !$this->origTokens->haveBraces($subStartPos, $subEndPos)) {
@@ -922,7 +936,7 @@ abstract class PrettyPrinterAbstract
         return !($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_);
     }
     /**
-     * Determines whether the LHS of a dereferencing operation must be wrapped in parenthesis.
+     * Determines whether the LHS of an array/object operation must be wrapped in parentheses.
      *
      * @param Node $node LHS of dereferencing operation
      *
@@ -930,7 +944,39 @@ abstract class PrettyPrinterAbstract
      */
     protected function dereferenceLhsRequiresParens(\PhpParser\Node $node) : bool
     {
-        return !($node instanceof Expr\Variable || $node instanceof \PhpParser\Node\Name || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch || $node instanceof Expr\StaticPropertyFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_ || $node instanceof Scalar\String_ || $node instanceof Expr\ConstFetch || $node instanceof Expr\ClassConstFetch);
+        // A constant can occur on the LHS of an array/object deref, but not a static deref.
+        return $this->staticDereferenceLhsRequiresParens($node) && !$node instanceof Expr\ConstFetch;
+    }
+    /**
+     * Determines whether the LHS of a static operation must be wrapped in parentheses.
+     *
+     * @param Node $node LHS of dereferencing operation
+     *
+     * @return bool Whether parentheses are required
+     */
+    protected function staticDereferenceLhsRequiresParens(\PhpParser\Node $node) : bool
+    {
+        return !($node instanceof Expr\Variable || $node instanceof \PhpParser\Node\Name || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch || $node instanceof Expr\StaticPropertyFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_ || $node instanceof Scalar\String_ || $node instanceof Expr\ClassConstFetch);
+    }
+    /**
+     * Determines whether an expression used in "new" or "instanceof" requires parentheses.
+     *
+     * @param Node $node New or instanceof operand
+     *
+     * @return bool Whether parentheses are required
+     */
+    protected function newOperandRequiresParens(\PhpParser\Node $node) : bool
+    {
+        if ($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable) {
+            return \false;
+        }
+        if ($node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch) {
+            return $this->newOperandRequiresParens($node->var);
+        }
+        if ($node instanceof Expr\StaticPropertyFetch) {
+            return $this->newOperandRequiresParens($node->class);
+        }
+        return \true;
     }
     /**
      * Print modifiers, including trailing whitespace.
@@ -1021,26 +1067,7 @@ abstract class PrettyPrinterAbstract
         if ($this->fixupMap) {
             return;
         }
-        $this->fixupMap = [
-            Expr\PreInc::class => ['var' => self::FIXUP_PREC_RIGHT],
-            Expr\PreDec::class => ['var' => self::FIXUP_PREC_RIGHT],
-            Expr\PostInc::class => ['var' => self::FIXUP_PREC_LEFT],
-            Expr\PostDec::class => ['var' => self::FIXUP_PREC_LEFT],
-            Expr\Instanceof_::class => ['expr' => self::FIXUP_PREC_LEFT, 'class' => self::FIXUP_PREC_RIGHT],
-            Expr\Ternary::class => ['cond' => self::FIXUP_PREC_LEFT, 'else' => self::FIXUP_PREC_RIGHT],
-            Expr\FuncCall::class => ['name' => self::FIXUP_CALL_LHS],
-            Expr\StaticCall::class => ['class' => self::FIXUP_DEREF_LHS],
-            Expr\ArrayDimFetch::class => ['var' => self::FIXUP_DEREF_LHS],
-            Expr\ClassConstFetch::class => ['var' => self::FIXUP_DEREF_LHS],
-            Expr\New_::class => ['class' => self::FIXUP_DEREF_LHS],
-            // TODO: FIXUP_NEW_VARIABLE
-            Expr\MethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            Expr\NullsafeMethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            Expr\StaticPropertyFetch::class => ['class' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_VAR_BRACED_NAME],
-            Expr\PropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            Expr\NullsafePropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME],
-            Scalar\Encapsed::class => ['parts' => self::FIXUP_ENCAPSED],
-        ];
+        $this->fixupMap = [Expr\PreInc::class => ['var' => self::FIXUP_PREC_RIGHT], Expr\PreDec::class => ['var' => self::FIXUP_PREC_RIGHT], Expr\PostInc::class => ['var' => self::FIXUP_PREC_LEFT], Expr\PostDec::class => ['var' => self::FIXUP_PREC_LEFT], Expr\Instanceof_::class => ['expr' => self::FIXUP_PREC_LEFT, 'class' => self::FIXUP_NEW], Expr\Ternary::class => ['cond' => self::FIXUP_PREC_LEFT, 'else' => self::FIXUP_PREC_RIGHT], Expr\FuncCall::class => ['name' => self::FIXUP_CALL_LHS], Expr\StaticCall::class => ['class' => self::FIXUP_STATIC_DEREF_LHS], Expr\ArrayDimFetch::class => ['var' => self::FIXUP_DEREF_LHS], Expr\ClassConstFetch::class => ['class' => self::FIXUP_STATIC_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\New_::class => ['class' => self::FIXUP_NEW], Expr\MethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\NullsafeMethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\StaticPropertyFetch::class => ['class' => self::FIXUP_STATIC_DEREF_LHS, 'name' => self::FIXUP_VAR_BRACED_NAME], Expr\PropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\NullsafePropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Scalar\Encapsed::class => ['parts' => self::FIXUP_ENCAPSED]];
         $binaryOps = [BinaryOp\Pow::class, BinaryOp\Mul::class, BinaryOp\Div::class, BinaryOp\Mod::class, BinaryOp\Plus::class, BinaryOp\Minus::class, BinaryOp\Concat::class, BinaryOp\ShiftLeft::class, BinaryOp\ShiftRight::class, BinaryOp\Smaller::class, BinaryOp\SmallerOrEqual::class, BinaryOp\Greater::class, BinaryOp\GreaterOrEqual::class, BinaryOp\Equal::class, BinaryOp\NotEqual::class, BinaryOp\Identical::class, BinaryOp\NotIdentical::class, BinaryOp\Spaceship::class, BinaryOp\BitwiseAnd::class, BinaryOp\BitwiseXor::class, BinaryOp\BitwiseOr::class, BinaryOp\BooleanAnd::class, BinaryOp\BooleanOr::class, BinaryOp\Coalesce::class, BinaryOp\LogicalAnd::class, BinaryOp\LogicalXor::class, BinaryOp\LogicalOr::class];
         foreach ($binaryOps as $binaryOp) {
             $this->fixupMap[$binaryOp] = ['left' => self::FIXUP_PREC_LEFT, 'right' => self::FIXUP_PREC_RIGHT];
@@ -1071,7 +1098,7 @@ abstract class PrettyPrinterAbstract
         $stripDoubleArrow = ['right' => \T_DOUBLE_ARROW];
         $stripColon = ['left' => ':'];
         $stripEquals = ['left' => '='];
-        $this->removalMap = ['Expr_ArrayDimFetch->dim' => $stripBoth, 'Expr_ArrayItem->key' => $stripDoubleArrow, 'Expr_ArrowFunction->returnType' => $stripColon, 'Expr_Closure->returnType' => $stripColon, 'Expr_Exit->expr' => $stripBoth, 'Expr_Ternary->if' => $stripBoth, 'Expr_Yield->key' => $stripDoubleArrow, 'Expr_Yield->value' => $stripBoth, 'Param->type' => $stripRight, 'Param->default' => $stripEquals, 'Stmt_Break->num' => $stripBoth, 'Stmt_Catch->var' => $stripLeft, 'Stmt_ClassMethod->returnType' => $stripColon, 'Stmt_Class->extends' => ['left' => \T_EXTENDS], 'Stmt_Enum->scalarType' => $stripColon, 'Stmt_EnumCase->expr' => $stripEquals, 'Expr_PrintableNewAnonClass->extends' => ['left' => \T_EXTENDS], 'Stmt_Continue->num' => $stripBoth, 'Stmt_Foreach->keyVar' => $stripDoubleArrow, 'Stmt_Function->returnType' => $stripColon, 'Stmt_If->else' => $stripLeft, 'Stmt_Namespace->name' => $stripLeft, 'Stmt_Property->type' => $stripRight, 'Stmt_PropertyProperty->default' => $stripEquals, 'Stmt_Return->expr' => $stripBoth, 'Stmt_StaticVar->default' => $stripEquals, 'Stmt_TraitUseAdaptation_Alias->newName' => $stripLeft, 'Stmt_TryCatch->finally' => $stripLeft];
+        $this->removalMap = ['Expr_ArrayDimFetch->dim' => $stripBoth, 'Expr_ArrayItem->key' => $stripDoubleArrow, 'Expr_ArrowFunction->returnType' => $stripColon, 'Expr_Closure->returnType' => $stripColon, 'Expr_Exit->expr' => $stripBoth, 'Expr_Ternary->if' => $stripBoth, 'Expr_Yield->key' => $stripDoubleArrow, 'Expr_Yield->value' => $stripBoth, 'Param->type' => $stripRight, 'Param->default' => $stripEquals, 'Stmt_Break->num' => $stripBoth, 'Stmt_Catch->var' => $stripLeft, 'Stmt_ClassConst->type' => $stripRight, 'Stmt_ClassMethod->returnType' => $stripColon, 'Stmt_Class->extends' => ['left' => \T_EXTENDS], 'Stmt_Enum->scalarType' => $stripColon, 'Stmt_EnumCase->expr' => $stripEquals, 'Expr_PrintableNewAnonClass->extends' => ['left' => \T_EXTENDS], 'Stmt_Continue->num' => $stripBoth, 'Stmt_Foreach->keyVar' => $stripDoubleArrow, 'Stmt_Function->returnType' => $stripColon, 'Stmt_If->else' => $stripLeft, 'Stmt_Namespace->name' => $stripLeft, 'Stmt_Property->type' => $stripRight, 'Stmt_PropertyProperty->default' => $stripEquals, 'Stmt_Return->expr' => $stripBoth, 'Stmt_StaticVar->default' => $stripEquals, 'Stmt_TraitUseAdaptation_Alias->newName' => $stripLeft, 'Stmt_TryCatch->finally' => $stripLeft];
     }
     protected function initializeInsertionMap()
     {
@@ -1093,6 +1120,7 @@ abstract class PrettyPrinterAbstract
             'Stmt_Break->num' => [\T_BREAK, \false, ' ', null],
             'Stmt_Catch->var' => [null, \false, ' ', null],
             'Stmt_ClassMethod->returnType' => [')', \false, ' : ', null],
+            'Stmt_ClassConst->type' => [\T_CONST, \false, ' ', null],
             'Stmt_Class->extends' => [null, \false, ' extends ', null],
             'Stmt_Enum->scalarType' => [null, \false, ' : ', null],
             'Stmt_EnumCase->expr' => [null, \false, ' = ', null],
@@ -1216,7 +1244,7 @@ abstract class PrettyPrinterAbstract
         if ($this->modifierChangeMap) {
             return;
         }
-        $this->modifierChangeMap = ['Stmt_ClassConst->flags' => \T_CONST, 'Stmt_ClassMethod->flags' => \T_FUNCTION, 'Stmt_Class->flags' => \T_CLASS, 'Stmt_Property->flags' => \T_VARIABLE, 'Param->flags' => \T_VARIABLE];
+        $this->modifierChangeMap = ['Stmt_ClassConst->flags' => \T_CONST, 'Stmt_ClassMethod->flags' => \T_FUNCTION, 'Stmt_Class->flags' => \T_CLASS, 'Stmt_Property->flags' => \T_VARIABLE, 'Expr_PrintableNewAnonClass->flags' => \T_CLASS, 'Param->flags' => \T_VARIABLE];
         // List of integer subnodes that are not modifiers:
         // Expr_Include->type
         // Stmt_GroupUse->type

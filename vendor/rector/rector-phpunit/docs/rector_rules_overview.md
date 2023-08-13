@@ -1,4 +1,4 @@
-# 45 Rules Overview
+# 46 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -76,27 +76,6 @@ Change annotations with value to attribute
 :wrench: **configure it!**
 
 - class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector`](../rules/AnnotationsToAttributes/Rector/Class_/AnnotationWithValueToAttributeRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
-use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [
-        new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', [
-            true,
-            false,
-        ]),
-    ]);
-};
-```
-
-↓
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -972,6 +951,27 @@ Change `@testWith()` annotation to #[TestWith] attribute
      public function test(): void
      {
      }
+ }
+```
+
+<br>
+
+## TicketAnnotationToAttributeRector
+
+Change annotations with value to attribute
+
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\TicketAnnotationToAttributeRector`](../rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
++use PHPUnit\Framework\Attributes\Ticket;
+
+-/**
+- * @ticket 123
+- */
++#[Ticket('123')]
+ final class SomeTest extends TestCase
+ {
  }
 ```
 

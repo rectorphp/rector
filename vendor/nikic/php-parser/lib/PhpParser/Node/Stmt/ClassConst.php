@@ -10,26 +10,30 @@ class ClassConst extends Node\Stmt
     public $flags;
     /** @var Node\Const_[] Constant declarations */
     public $consts;
-    /** @var Node\AttributeGroup[] */
+    /** @var Node\AttributeGroup[] PHP attribute groups */
     public $attrGroups;
+    /** @var Node\Identifier|Node\Name|Node\ComplexType Type declaration */
+    public $type;
     /**
      * Constructs a class const list node.
      *
-     * @param Node\Const_[]         $consts     Constant declarations
-     * @param int                   $flags      Modifiers
-     * @param array                 $attributes Additional attributes
-     * @param Node\AttributeGroup[] $attrGroups PHP attribute groups
+     * @param Node\Const_[]                                          $consts     Constant declarations
+     * @param int                                                    $flags      Modifiers
+     * @param array                                                  $attributes Additional attributes
+     * @param Node\AttributeGroup[]                                  $attrGroups PHP attribute groups
+     * @param null|string|Node\Identifier|Node\Name|Node\ComplexType $type       Type declaration
      */
-    public function __construct(array $consts, int $flags = 0, array $attributes = [], array $attrGroups = [])
+    public function __construct(array $consts, int $flags = 0, array $attributes = [], array $attrGroups = [], $type = null)
     {
         $this->attributes = $attributes;
         $this->flags = $flags;
         $this->consts = $consts;
         $this->attrGroups = $attrGroups;
+        $this->type = $type;
     }
     public function getSubNodeNames() : array
     {
-        return ['attrGroups', 'flags', 'consts'];
+        return ['attrGroups', 'flags', 'type', 'consts'];
     }
     /**
      * Whether constant is explicitly or implicitly public.

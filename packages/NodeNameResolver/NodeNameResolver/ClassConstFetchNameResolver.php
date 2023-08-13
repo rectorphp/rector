@@ -6,7 +6,7 @@ namespace Rector\NodeNameResolver\NodeNameResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Error;
+use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 /**
@@ -26,7 +26,7 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
         if ($node->class instanceof Expr) {
             return null;
         }
-        if ($node->name instanceof Error) {
+        if (!$node->name instanceof Identifier) {
             return null;
         }
         $class = $node->class->toString();
