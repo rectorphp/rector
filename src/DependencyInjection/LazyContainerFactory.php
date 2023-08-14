@@ -47,6 +47,7 @@ use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Configuration\ConfigInitializer;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Console\Command\ListRulesCommand;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Console\Command\SetupCICommand;
@@ -55,6 +56,7 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
+use Rector\Core\Contract\DependencyInjection\ResetableInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -292,6 +294,9 @@ final class LazyContainerFactory
             $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();
         });
+        // resetables
+        $lazyRectorConfig->tag(DynamicSourceLocatorProvider::class, ResetableInterface::class);
+        $lazyRectorConfig->tag(RenamedClassesDataCollector::class, ResetableInterface::class);
         // caching
         $lazyRectorConfig->singleton(Cache::class, static function (Container $container) : Cache {
             /** @var CacheFactory $cacheFactory */

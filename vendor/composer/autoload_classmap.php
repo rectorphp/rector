@@ -1486,6 +1486,7 @@ return array(
     'Rector\\Core\\Console\\ProcessConfigureDecorator' => $baseDir . '/src/Console/ProcessConfigureDecorator.php',
     'Rector\\Core\\Console\\Style\\RectorStyle' => $baseDir . '/src/Console/Style/RectorStyle.php',
     'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => $baseDir . '/src/Console/Style/SymfonyStyleFactory.php',
+    'Rector\\Core\\Contract\\DependencyInjection\\ResetableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResetableInterface.php',
     'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => $baseDir . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
     'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => $baseDir . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
     'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => $baseDir . '/src/Contract/Processor/FileProcessorInterface.php',
