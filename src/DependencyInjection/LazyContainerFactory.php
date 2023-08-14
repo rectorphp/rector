@@ -75,7 +75,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\ClassConstFetchNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\ClassConstNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\ClassNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\EmptyNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\FuncCallNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\FunctionNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\NameNameResolver;
@@ -188,7 +187,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<NodeNameResolverInterface>>
      */
-    private const NODE_NAME_RESOLVER_CLASSES = [ClassConstFetchNameResolver::class, ClassConstNameResolver::class, ClassNameResolver::class, EmptyNameResolver::class, FuncCallNameResolver::class, FunctionNameResolver::class, NameNameResolver::class, ParamNameResolver::class, PropertyNameResolver::class, UseNameResolver::class, VariableNameResolver::class];
+    private const NODE_NAME_RESOLVER_CLASSES = [ClassConstFetchNameResolver::class, ClassConstNameResolver::class, ClassNameResolver::class, FuncCallNameResolver::class, FunctionNameResolver::class, NameNameResolver::class, ParamNameResolver::class, PropertyNameResolver::class, UseNameResolver::class, VariableNameResolver::class];
     /**
      * @var array<class-string<BasePhpDocNodeVisitorInterface>>
      */

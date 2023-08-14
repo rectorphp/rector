@@ -701,17 +701,17 @@
         },
         {
             "name": "nikic\/php-parser",
-            "version": "v4.17.0",
-            "version_normalized": "4.17.0.0",
+            "version": "v4.17.1",
+            "version_normalized": "4.17.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nikic\/PHP-Parser.git",
-                "reference": "844c228bf2b34a25ea8fed58f7929d14cf0c068e"
+                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/844c228bf2b34a25ea8fed58f7929d14cf0c068e",
-                "reference": "844c228bf2b34a25ea8fed58f7929d14cf0c068e",
+                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
+                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
                 "shasum": ""
             },
             "require": {
@@ -722,7 +722,7 @@
                 "ircmaxell\/php-yacc": "^0.0.7",
                 "phpunit\/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
             },
-            "time": "2023-08-13T14:53:08+00:00",
+            "time": "2023-08-13T19:53:39+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -771,7 +771,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nikic\/PHP-Parser\/issues",
-                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.17.0"
+                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.17.1"
             },
             "install-path": "..\/nikic\/php-parser"
         },

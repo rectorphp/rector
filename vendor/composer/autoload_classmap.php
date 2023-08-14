@@ -1891,7 +1891,6 @@ return array(
     'Rector\\NodeNameResolver\\NodeNameResolver\\ClassConstFetchNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/ClassConstFetchNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\ClassConstNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/ClassConstNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\ClassNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php',
-    'Rector\\NodeNameResolver\\NodeNameResolver\\EmptyNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/EmptyNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\FuncCallNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/FuncCallNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\FunctionNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/FunctionNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\NameNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/NameNameResolver.php',
