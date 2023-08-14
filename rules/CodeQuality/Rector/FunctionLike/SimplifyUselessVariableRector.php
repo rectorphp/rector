@@ -11,21 +11,19 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Type\MixedType;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
  */
-final class SimplifyUselessVariableRector extends AbstractScopeAwareRector
+final class SimplifyUselessVariableRector extends AbstractRector
 {
     /**
      * @readonly
@@ -73,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -88,7 +86,7 @@ CODE_SAMPLE
                 continue;
             }
             $previousStmt = $stmts[$key - 1];
-            if ($this->shouldSkipStmt($stmt, $previousStmt, $scope)) {
+            if ($this->shouldSkipStmt($stmt, $previousStmt)) {
                 return null;
             }
             if ($this->hasSomeComment($previousStmt)) {
@@ -120,13 +118,9 @@ CODE_SAMPLE
         unset($stmtsAware->stmts[$key - 1]);
         return $stmtsAware;
     }
-    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt, Scope $scope) : bool
+    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt) : bool
     {
         if (!$return->expr instanceof Variable) {
-            return \true;
-        }
-        $functionReflection = $scope->getFunction();
-        if ($functionReflection instanceof FunctionReflection && $functionReflection->returnsByReference()->yes()) {
             return \true;
         }
         if ($return->getAttribute(AttributeKey::IS_BYREF_RETURN) === \true) {

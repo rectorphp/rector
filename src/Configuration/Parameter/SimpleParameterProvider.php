@@ -44,7 +44,7 @@ final class SimpleParameterProvider
     {
         $parameter = self::$parameters[$name] ?? [];
         Assert::isArray($parameter);
-        $arrayIsList = function (array $array) : bool {
+        $arrayIsListFunction = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
                 return \array_is_list($array);
             }
@@ -60,7 +60,7 @@ final class SimpleParameterProvider
             }
             return \true;
         };
-        if ($arrayIsList($parameter)) {
+        if ($arrayIsListFunction($parameter)) {
             // remove duplicates
             $uniqueParameters = \array_unique($parameter);
             return \array_values($uniqueParameters);

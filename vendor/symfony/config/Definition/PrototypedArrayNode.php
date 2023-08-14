@@ -186,7 +186,7 @@ class PrototypedArrayNode extends ArrayNode
             return $value;
         }
         $value = $this->remapXml($value);
-        $arrayIsList = function (array $array) : bool {
+        $arrayIsListFunction = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
                 return \array_is_list($array);
             }
@@ -202,7 +202,7 @@ class PrototypedArrayNode extends ArrayNode
             }
             return \true;
         };
-        $isList = $arrayIsList($value);
+        $isList = $arrayIsListFunction($value);
         $normalized = [];
         foreach ($value as $k => $v) {
             if (null !== $this->keyAttribute && \is_array($v)) {
@@ -264,7 +264,7 @@ class PrototypedArrayNode extends ArrayNode
         if (\false === $leftSide || !$this->performDeepMerging) {
             return $rightSide;
         }
-        $arrayIsList = function (array $array) : bool {
+        $arrayIsListFunction = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
                 return \array_is_list($array);
             }
@@ -280,7 +280,7 @@ class PrototypedArrayNode extends ArrayNode
             }
             return \true;
         };
-        $isList = $arrayIsList($rightSide);
+        $isList = $arrayIsListFunction($rightSide);
         foreach ($rightSide as $k => $v) {
             // prototype, and key is irrelevant there are no named keys, append the element
             if (null === $this->keyAttribute && $isList) {

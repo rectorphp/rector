@@ -94,7 +94,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
             }
             if ($resolvedArguments !== $call[1]) {
                 \ksort($resolvedArguments);
-                $arrayIsList = function (array $array) : bool {
+                $arrayIsListFunction = function (array $array) : bool {
                     if (\function_exists('array_is_list')) {
                         return \array_is_list($array);
                     }
@@ -110,7 +110,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
                     }
                     return \true;
                 };
-                if (!$value->isAutowired() && !$arrayIsList($resolvedArguments)) {
+                if (!$value->isAutowired() && !$arrayIsListFunction($resolvedArguments)) {
                     \ksort($resolvedKeys);
                     $resolvedArguments = \array_combine($resolvedKeys, $resolvedArguments);
                 }

@@ -168,7 +168,7 @@ class YamlReferenceDumper
     }
     private function writeArray(array $array, int $depth) : void
     {
-        $arrayIsList = function (array $array) : bool {
+        $arrayIsListFunction = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
                 return \array_is_list($array);
             }
@@ -184,7 +184,7 @@ class YamlReferenceDumper
             }
             return \true;
         };
-        $isIndexed = $arrayIsList($array);
+        $isIndexed = $arrayIsListFunction($array);
         foreach ($array as $key => $value) {
             if (\is_array($value)) {
                 $val = '';

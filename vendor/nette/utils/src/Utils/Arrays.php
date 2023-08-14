@@ -198,7 +198,7 @@ class Arrays
      */
     public static function isList($value) : bool
     {
-        $arrayIsList = function (array $array) : bool {
+        $arrayIsListFunction = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
                 return \array_is_list($array);
             }
@@ -214,7 +214,7 @@ class Arrays
             }
             return \true;
         };
-        return is_array($value) && (\PHP_VERSION_ID < 80100 ? !$value || \array_keys($value) === \range(0, count($value) - 1) : $arrayIsList($value));
+        return is_array($value) && (\PHP_VERSION_ID < 80100 ? !$value || \array_keys($value) === \range(0, count($value) - 1) : $arrayIsListFunction($value));
     }
     /**
      * Reformats table to associative tree. Path looks like 'field|field[]field->field=field'.

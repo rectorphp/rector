@@ -17,8 +17,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,18 +27,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector\DowngradeArrayIsListRectorTest
  */
-final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
+final class DowngradeArrayIsListRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
-    /**
-     * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
-     */
-    private $variableNaming;
     /**
      * @readonly
      * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
@@ -49,10 +43,9 @@ final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
      * @var \PhpParser\Node\Expr\Closure|null
      */
     private $cachedClosure;
-    public function __construct(InlineCodeParser $inlineCodeParser, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
+    public function __construct(InlineCodeParser $inlineCodeParser, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
-        $this->variableNaming = $variableNaming;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -95,20 +88,19 @@ CODE_SAMPLE
      * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?array
+    public function refactor(Node $node) : ?array
     {
         $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
             // need pull Scope from target traversed sub Node
-            $scope = $subNode->getAttribute(AttributeKey::SCOPE);
-            return !$this->shouldSkip($subNode, $scope);
+            return !$this->shouldSkip($subNode);
         });
         if (!$expr instanceof FuncCall) {
             return null;
         }
-        $variable = new Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
+        $variable = new Variable('arrayIsListFunction');
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
         $expr->name = $variable;
@@ -129,7 +121,7 @@ CODE_SAMPLE
         $this->cachedClosure = $expr;
         return $expr;
     }
-    private function shouldSkip(CallLike $callLike, ?Scope $scope) : bool
+    private function shouldSkip(CallLike $callLike) : bool
     {
         if (!$callLike instanceof FuncCall) {
             return \false;
@@ -137,11 +129,8 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($callLike, 'array_is_list')) {
             return \true;
         }
-        if (!$scope instanceof Scope) {
-            $args = $callLike->getArgs();
-            return \count($args) !== 1;
-        }
-        if ($scope->isInFunctionExists('array_is_list')) {
+        $scope = $callLike->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope && $scope->isInFunctionExists('array_is_list')) {
             return \true;
         }
         $args = $callLike->getArgs();
