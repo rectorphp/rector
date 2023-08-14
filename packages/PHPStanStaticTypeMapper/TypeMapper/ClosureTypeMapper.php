@@ -11,6 +11,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -19,6 +21,15 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
  */
 final class ClosureTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
     /**
      * @return class-string<Type>
      */
@@ -50,7 +61,19 @@ final class ClosureTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        if ($typeKind === TypeKind::PROPERTY) {
+        // ref https://3v4l.org/iKMK6#v5.3.29
+        if ($typeKind === TypeKind::PARAM && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ANONYMOUS_FUNCTION_PARAM_TYPE)) {
+            return new FullyQualified('Closure');
+        }
+        // ref https://3v4l.org/g8WvW#v7.4.0
+        if ($typeKind === TypeKind::PROPERTY && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+            return new FullyQualified('Closure');
+        }
+        if ($typeKind !== TypeKind::RETURN) {
+            return null;
+        }
+        // ref https://3v4l.org/nUreN#v7.0.0
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ANONYMOUS_FUNCTION_RETURN_TYPE)) {
             return null;
         }
         return new FullyQualified('Closure');
