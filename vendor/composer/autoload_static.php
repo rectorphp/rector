@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa
+class ComposerStaticInitd0491821a1f961d1d51360ac6370685e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2470,7 +2470,6 @@ class ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\NullToStrictStringFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php',
-        'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
@@ -2959,9 +2958,9 @@ class ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4e479c6ca392702f962040c7fa54d1aa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd0491821a1f961d1d51360ac6370685e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd0491821a1f961d1d51360ac6370685e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd0491821a1f961d1d51360ac6370685e::$classMap;
 
         }, null, ClassLoader::class);
     }

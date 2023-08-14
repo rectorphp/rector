@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 354 Rules Overview
 
 <br>
 
@@ -40,7 +40,7 @@
 
 - [Php80](#php80) (16)
 
-- [Php81](#php81) (10)
+- [Php81](#php81) (9)
 
 - [Php82](#php82) (4)
 
@@ -5063,27 +5063,6 @@ Upgrade array callable to first class callable
      }
 
      public function name()
-     {
-     }
- }
-```
-
-<br>
-
-### IntersectionTypesRector
-
-Change docs to intersection types, where possible (properties are covered by TypedPropertyRector (@todo))
-
-- class: [`Rector\Php81\Rector\FunctionLike\IntersectionTypesRector`](../rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php)
-
-```diff
- final class SomeClass
- {
--    /**
--     * @param Foo&Bar $types
--     */
--    public function process($types)
-+    public function process(Foo&Bar $types)
      {
      }
  }
