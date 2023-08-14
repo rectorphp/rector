@@ -365,11 +365,11 @@ final class PHPStanNodeScopeResolver
         return $classLike->name->toString();
     }
     /**
-     * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
+     * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
      */
-    private function processTrait(Trait_ $node, MutatingScope $mutatingScope, callable $nodeCallback) : void
+    private function processTrait(Trait_ $trait, MutatingScope $mutatingScope, callable $nodeCallback) : void
     {
-        $traitName = $this->resolveClassName($node);
+        $traitName = $this->resolveClassName($trait);
         $traitClassReflection = $this->reflectionProvider->getClass($traitName);
         $traitScope = clone $mutatingScope;
         /** @var ScopeContext $scopeContext */
@@ -378,8 +378,8 @@ final class PHPStanNodeScopeResolver
         // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
         $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitClassReflection);
         $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
-        $node->setAttribute(AttributeKey::SCOPE, $traitScope);
-        $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
-        $this->decorateTraitAttrGroups($node, $traitScope);
+        $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
+        $this->nodeScopeResolver->processNodes($trait->stmts, $traitScope, $nodeCallback);
+        $this->decorateTraitAttrGroups($trait, $traitScope);
     }
 }
