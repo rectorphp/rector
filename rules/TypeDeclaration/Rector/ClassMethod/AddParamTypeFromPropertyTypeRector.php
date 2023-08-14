@@ -152,7 +152,7 @@ CODE_SAMPLE
             $exprType = $this->nodeTypeResolver->getNativeType($node->expr);
             $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, TypeKind::PARAM);
             $varType = $this->nodeTypeResolver->getNativeType($node->var);
-            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::ANY);
+            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY);
             if ($nodeExprType instanceof Node && !$this->nodeComparator->areNodesEqual($nodeExprType, $nodeVarType)) {
                 return null;
             }
