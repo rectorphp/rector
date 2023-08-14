@@ -13,26 +13,24 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\Type\ErrorType;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector\NullToStrictStringFuncCallArgRectorTest
  */
-final class NullToStrictStringFuncCallArgRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class NullToStrictStringFuncCallArgRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -91,21 +89,21 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $args = $node->getArgs();
-        $positions = $this->argsAnalyzer->hasNamedArg($args) ? $this->resolveNamedPositions($node, $args) : $this->resolveOriginalPositions($node, $scope);
+        $positions = $this->argsAnalyzer->hasNamedArg($args) ? $this->resolveNamedPositions($node, $args) : $this->resolveOriginalPositions($node);
         if ($positions === []) {
             return null;
         }
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         $isTrait = $classReflection instanceof ClassReflection && $classReflection->isTrait();
         $isChanged = \false;
         foreach ($positions as $position) {
-            $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position, $isTrait, $scope);
+            $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position, $isTrait);
             if ($result instanceof Node) {
                 $node = $result;
                 $isChanged = \true;
@@ -144,7 +142,7 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @param int|string $position
      */
-    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position, bool $isTrait, Scope $scope) : ?FuncCall
+    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position, bool $isTrait) : ?FuncCall
     {
         if (!isset($args[$position])) {
             return null;
@@ -163,9 +161,6 @@ CODE_SAMPLE
             return null;
         }
         if ($argValue instanceof Encapsed) {
-            return null;
-        }
-        if ($this->isAnErrorTypeFromParentScope($argValue, $scope)) {
             return null;
         }
         if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
@@ -191,29 +186,21 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isAnErrorTypeFromParentScope(Expr $expr, Scope $scope) : bool
-    {
-        $parentScope = $scope->getParentScope();
-        if ($parentScope instanceof Scope) {
-            return $parentScope->getType($expr) instanceof ErrorType;
-        }
-        return \false;
-    }
     /**
      * @return int[]|string[]
      */
-    private function resolveOriginalPositions(FuncCall $funcCall, Scope $scope) : array
+    private function resolveOriginalPositions(FuncCall $funcCall) : array
     {
         $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($funcCall);
         if (!$functionReflection instanceof NativeFunctionReflection) {
             return [];
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($functionReflection->getVariants());
         $functionName = $functionReflection->getName();
         $argNames = self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING[$functionName];
         $positions = [];
-        foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
-            if (\in_array($parameterReflection->getName(), $argNames, \true)) {
+        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $position => $parameterReflectionWithPhpDoc) {
+            if (\in_array($parameterReflectionWithPhpDoc->getName(), $argNames, \true)) {
                 $positions[] = $position;
             }
         }
