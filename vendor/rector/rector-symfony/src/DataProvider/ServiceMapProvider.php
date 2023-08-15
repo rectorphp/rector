@@ -28,6 +28,10 @@ final class ServiceMapProvider
     }
     public function provide() : ServiceMap
     {
+        // avoid caching in tests
+        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+            $this->serviceMap = null;
+        }
         if ($this->serviceMap instanceof ServiceMap) {
             return $this->serviceMap;
         }

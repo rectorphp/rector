@@ -32,7 +32,7 @@ final class RectorBetterReflectionSourceLocatorFactory
         $phpStanSourceLocator = $this->betterReflectionSourceLocatorFactory->create();
         // make PHPStan first source locator, so we avoid parsing every single file - huge performance hit!
         $aggregateSourceLocator = new AggregateSourceLocator([$phpStanSourceLocator, $this->intermediateSourceLocator]);
-        // important for cache
+        // important for cache, but should rebuild for tests
         return new MemoizingSourceLocator($aggregateSourceLocator);
     }
 }

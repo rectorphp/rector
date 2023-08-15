@@ -14,7 +14,6 @@ use RectorPrefix202308\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202308\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
@@ -23,14 +22,11 @@ final class ConsoleApplication extends Application
      */
     private const NAME = 'Rector';
     /**
-     * @param RewindableGenerator<int, Command>|Command[] $commands
+     * @param Command[] $commands
      */
-    public function __construct(iterable $commands)
+    public function __construct(array $commands)
     {
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
-        if ($commands instanceof RewindableGenerator) {
-            $commands = \iterator_to_array($commands->getIterator());
-        }
         Assert::notEmpty($commands);
         Assert::allIsInstanceOf($commands, Command::class);
         $this->addCommands($commands);

@@ -3,13 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Caching\Config;
 
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202308\Symfony\Component\Config\FileLocator;
-use RectorPrefix202308\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix202308\Symfony\Component\Config\Loader\LoaderResolver;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * Inspired by https://github.com/symplify/easy-coding-standard/blob/e598ab54686e416788f28fcfe007fd08e0f371d9/packages/changed-files-detector/src/FileHashComputer.php
  */
@@ -18,11 +13,8 @@ final class FileHashComputer
     public function compute(string $filePath) : string
     {
         $this->ensureIsPhp($filePath);
-        $containerBuilder = new ContainerBuilder();
-        $fileLoader = $this->createFileLoader($filePath, $containerBuilder);
-        $fileLoader->load($filePath);
-        $parameterBag = $containerBuilder->getParameterBag();
-        return $this->arrayToHash($containerBuilder->getDefinitions()) . $this->arrayToHash($parameterBag->all());
+        $parametersHash = SimpleParameterProvider::hash();
+        return \sha1($filePath . $parametersHash);
     }
     private function ensureIsPhp(string $filePath) : void
     {
@@ -35,24 +27,5 @@ final class FileHashComputer
             'Provide only PHP file, ready for Symfony Dependency Injection. "%s" given',
             $filePath
         ));
-    }
-    private function createFileLoader(string $filePath, ContainerBuilder $containerBuilder) : LoaderInterface
-    {
-        $fileLocator = new FileLocator([$filePath]);
-        $fileLoaders = [new GlobFileLoader($containerBuilder, $fileLocator), new PhpFileLoader($containerBuilder, $fileLocator)];
-        $loaderResolver = new LoaderResolver($fileLoaders);
-        $loader = $loaderResolver->resolve($filePath);
-        if ($loader === \false) {
-            throw new ShouldNotHappenException();
-        }
-        return $loader;
-    }
-    /**
-     * @param mixed[] $array
-     */
-    private function arrayToHash(array $array) : string
-    {
-        $serializedArray = \serialize($array);
-        return \md5($serializedArray);
     }
 }

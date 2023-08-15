@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix202308\Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
+use Rector\Config\RectorConfig;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\LazyContainerFactory;
@@ -14,20 +14,20 @@ use RectorPrefix202308\Webmozart\Assert\Assert;
 abstract class AbstractLazyTestCase extends TestCase
 {
     /**
-     * @var \Illuminate\Container\Container|null
+     * @var \Rector\Config\RectorConfig|null
      */
-    private static $container;
+    private static $rectorConfig;
     /**
      * @api
      * @param string[] $configFiles
      */
     protected function bootFromConfigFiles(array $configFiles) : void
     {
-        $container = self::getContainer();
+        $rectorConfig = self::getContainer();
         foreach ($configFiles as $configFile) {
             $configClosure = (require $configFile);
             Assert::isCallable($configClosure);
-            $configClosure($container);
+            $configClosure($rectorConfig);
         }
     }
     /**
@@ -39,38 +39,31 @@ abstract class AbstractLazyTestCase extends TestCase
     {
         return self::getContainer()->make($class);
     }
-    protected static function getContainer() : Container
+    protected static function getContainer() : RectorConfig
     {
-        if (!self::$container instanceof Container) {
+        if (!self::$rectorConfig instanceof RectorConfig) {
             $lazyContainerFactory = new LazyContainerFactory();
-            self::$container = $lazyContainerFactory->create();
+            self::$rectorConfig = $lazyContainerFactory->create();
         }
-        return self::$container;
+        return self::$rectorConfig;
     }
-    /**
-     * @api soon be used
-     */
     protected function forgetRectorsRules() : void
     {
-        $container = self::getContainer();
-        // 1. forget instance first! then remove tags
-        $rectors = $container->tagged(RectorInterface::class);
+        $rectorConfig = self::getContainer();
+        // 1. forget instance first, then remove tags
+        $rectors = $rectorConfig->tagged(RectorInterface::class);
         foreach ($rectors as $rector) {
-            $container->offsetUnset(\get_class($rector));
+            $rectorConfig->offsetUnset(\get_class($rector));
         }
         // 2. remove all tagged rules
         $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->propertyClosure($container, 'tags', static function (array $tags) : array {
+        $privatesAccessor->propertyClosure($rectorConfig, 'tags', static function (array $tags) : array {
             unset($tags[RectorInterface::class]);
             unset($tags[PhpRectorInterface::class]);
             return $tags;
         });
-        $rectors = $container->tagged(RectorInterface::class);
-        foreach ($rectors as $rector) {
-            $container->offsetUnset(\get_class($rector));
-        }
         // 3. remove after binding too, to avoid setting configuration over and over again
-        $privatesAccessor->propertyClosure($container, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks) : array {
+        $privatesAccessor->propertyClosure($rectorConfig, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks) : array {
             foreach (\array_keys($afterResolvingCallbacks) as $key) {
                 if ($key === AbstractRector::class) {
                     continue;

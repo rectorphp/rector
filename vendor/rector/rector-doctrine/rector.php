@@ -9,7 +9,6 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(__DIR__ . '/config/config.php');
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->skip([

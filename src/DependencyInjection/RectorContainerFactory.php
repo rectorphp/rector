@@ -6,7 +6,6 @@ namespace Rector\Core\DependencyInjection;
 use RectorPrefix202308\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {
@@ -26,11 +25,14 @@ final class RectorContainerFactory
     }
     /**
      * @param string[] $configFiles
-     * @api
      */
     private function createFromConfigs(array $configFiles) : ContainerInterface
     {
-        $rectorKernel = new RectorKernel();
-        return $rectorKernel->createFromConfigs($configFiles);
+        $lazyContainerFactory = new \Rector\Core\DependencyInjection\LazyContainerFactory();
+        $container = $lazyContainerFactory->create();
+        foreach ($configFiles as $configFile) {
+            $container->import($configFile);
+        }
+        return $container;
     }
 }
