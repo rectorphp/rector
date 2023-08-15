@@ -285,8 +285,10 @@ final class LazyContainerFactory
         $rectorConfig->tag(ListRulesCommand::class, Command::class);
         $rectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         // dev
-        $rectorConfig->tag(MissingInSetCommand::class, Command::class);
-        $rectorConfig->tag(OutsideAnySetCommand::class, Command::class);
+        if (\class_exists(MissingInSetCommand::class)) {
+            $rectorConfig->tag(MissingInSetCommand::class, Command::class);
+            $rectorConfig->tag(OutsideAnySetCommand::class, Command::class);
+        }
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->singleton(PhpFileProcessor::class);
         $rectorConfig->tag(PhpFileProcessor::class, FileProcessorInterface::class);
