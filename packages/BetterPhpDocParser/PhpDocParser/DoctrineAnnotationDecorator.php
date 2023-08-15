@@ -112,7 +112,8 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
                 if (!$nextPhpDocChildNode->value instanceof GenericTagValueNode) {
                     continue;
                 }
-                if ($this->isClosedContent($genericTagValueNode->value)) {
+                $isNewLinedGenericTagValueNode = \strncmp($genericTagValueNode->value, '(', \strlen('(')) === 0 && \substr_compare($genericTagValueNode->value, ')', -\strlen(')')) !== 0;
+                if ($this->isClosedContent($genericTagValueNode->value, $isNewLinedGenericTagValueNode)) {
                     break;
                 }
                 $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->name . $nextPhpDocChildNode->value->value;
@@ -171,7 +172,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
      * This is closed block, e.g. {( ... )},
      * false on: {( ... )
      */
-    private function isClosedContent(string $composedContent) : bool
+    private function isClosedContent(string $composedContent, bool $isNewLined) : bool
     {
         $composedTokenIterator = $this->tokenIteratorFactory->create($composedContent);
         $tokenCount = $composedTokenIterator->count();
@@ -181,11 +182,14 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             return \true;
         }
         do {
+            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES) || \strpos($composedTokenIterator->currentTokenValue(), ')') !== \false) {
+                ++$closeBracketCount;
+            }
             if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET, Lexer::TOKEN_OPEN_PARENTHESES) || \strpos($composedTokenIterator->currentTokenValue(), '(') !== \false) {
                 ++$openBracketCount;
             }
-            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES) || \strpos($composedTokenIterator->currentTokenValue(), ')') !== \false) {
-                ++$closeBracketCount;
+            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL) && $composedTokenIterator->getContentBetween($composedTokenIterator->currentPosition() - 1, $composedTokenIterator->currentPosition()) === '(' && $isNewLined && $openBracketCount > $closeBracketCount) {
+                --$openBracketCount;
             }
             $composedTokenIterator->next();
         } while ($composedTokenIterator->currentPosition() < $tokenCount - 1);
