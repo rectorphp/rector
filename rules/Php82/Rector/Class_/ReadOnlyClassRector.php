@@ -150,7 +150,7 @@ CODE_SAMPLE
             return \true;
         }
         $parents = $this->resolveParentClassReflections($scope);
-        if (!$class->isFinal()) {
+        if (!$class->isFinal() && !empty($parents)) {
             return !$this->isExtendsReadonlyClass($parents);
         }
         foreach ($parents as $parent) {
