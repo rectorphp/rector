@@ -301,9 +301,6 @@ final class LazyContainerFactory
         $rectorConfig->when(TypeParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
         $rectorConfig->when(ConstExprParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
-        // dev
-        $rectorConfig->tag(MissingInSetCommand::class, Command::class);
-        $rectorConfig->tag(OutsideAnySetCommand::class, Command::class);
         $rectorConfig->when(ApplicationFileProcessor::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $rectorConfig->when(FileFactory::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $rectorConfig->when(RectorNodeTraverser::class)->needs('$phpRectors')->giveTagged(PhpRectorInterface::class);
