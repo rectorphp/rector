@@ -16,10 +16,5 @@ if (!function_exists('print_node')) {
         return \RectorPrefix202308\print_node(...func_get_args());
     }
 }
-if (!function_exists('trigger_deprecation')) {
-    function trigger_deprecation() {
-        return \RectorPrefix202308\trigger_deprecation(...func_get_args());
-    }
-}
 
 return $loader;

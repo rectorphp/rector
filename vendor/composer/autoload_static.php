@@ -4,14 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a92502ba4241ad709e09cdec4c268e5
+class ComposerStaticInit282eb222ebec4ee71ff30f434a2553fa
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
@@ -2638,9 +2637,9 @@ class ComposerStaticInit9a92502ba4241ad709e09cdec4c268e5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a92502ba4241ad709e09cdec4c268e5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a92502ba4241ad709e09cdec4c268e5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a92502ba4241ad709e09cdec4c268e5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit282eb222ebec4ee71ff30f434a2553fa::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit282eb222ebec4ee71ff30f434a2553fa::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit282eb222ebec4ee71ff30f434a2553fa::$classMap;
 
         }, null, ClassLoader::class);
     }
