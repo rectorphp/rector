@@ -37,7 +37,6 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 use RectorPrefix202308\Webmozart\Assert\InvalidArgumentException;
 /**
@@ -94,9 +93,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeFactory = $typeFactory;
     }
-    /**
-     * @required
-     */
     public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

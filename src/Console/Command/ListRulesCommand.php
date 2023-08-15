@@ -14,7 +14,6 @@ use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202308\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class ListRulesCommand extends Command
 {
     /**
@@ -29,20 +28,18 @@ final class ListRulesCommand extends Command
     private $skippedClassResolver;
     /**
      * @var RectorInterface[]
+     * @readonly
      */
-    private $rectors = [];
+    private $rectors;
     /**
-     * @param RewindableGenerator<RectorInterface>|RectorInterface[] $rectors
+     * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, iterable $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->skippedClassResolver = $skippedClassResolver;
-        parent::__construct();
-        if ($rectors instanceof RewindableGenerator) {
-            $rectors = \iterator_to_array($rectors->getIterator());
-        }
         $this->rectors = $rectors;
+        parent::__construct();
     }
     protected function configure() : void
     {

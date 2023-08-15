@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration\Parameter;
 
 use Rector\Core\Configuration\Option;
-use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @api
@@ -115,6 +115,6 @@ final class SimpleParameterProvider
         if (\array_key_exists($name, self::$parameters)) {
             return;
         }
-        throw new ParameterNotFoundException($name);
+        throw new ShouldNotHappenException(\sprintf('Parameter "%s" was not found', $name));
     }
 }

@@ -15,7 +15,6 @@ use PHPStan\Type\TypeTraverser;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ConditionalType>
  */
@@ -26,7 +25,7 @@ final class ConditionalTypeMapper implements TypeMapperInterface
      */
     private $phpStanStaticTypeMapper;
     /**
-     * @required
+     * @api used in autowire, @todo add to lazy container or remove
      */
     public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
