@@ -2061,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "ecc3b33ddf1f7a69ff7560a19abec3188563ce41"
+                "reference": "670cccb40f93da45ade80bd508693e4408361b09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/ecc3b33ddf1f7a69ff7560a19abec3188563ce41",
-                "reference": "ecc3b33ddf1f7a69ff7560a19abec3188563ce41",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/670cccb40f93da45ade80bd508693e4408361b09",
+                "reference": "670cccb40f93da45ade80bd508693e4408361b09",
                 "shasum": ""
             },
             "require": {
@@ -2081,7 +2081,7 @@
                 "phpunit\/phpunit": "^10.3",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-generator": "^0.7",
-                "rector\/rector-src": "dev-tv-container-run-10",
+                "rector\/rector-src": "dev-main",
                 "symfony\/routing": "^6.2",
                 "symfony\/security-core": "^6.2",
                 "symfony\/security-http": "^6.1",
@@ -2098,7 +2098,7 @@
                 "tomasvotruba\/unused-public": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-08-15T22:02:58+00:00",
+            "time": "2023-08-15T22:30:03+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
