@@ -37,11 +37,6 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    /**
-     * @api
-     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code being processed.
-     */
-    public const USE_PHPDOC = 'use_phpdoc';
     public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ReflectionResolver $reflectionResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;
