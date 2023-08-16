@@ -116,9 +116,7 @@ final class RectorConfig extends Container
     public function phpstanConfig(string $filePath) : void
     {
         Assert::fileExists($filePath);
-        $paths = SimpleParameterProvider::provideArrayParameter(Option::PHPSTAN_FOR_RECTOR_PATHS);
-        $paths[] = $filePath;
-        SimpleParameterProvider::setParameter(Option::PHPSTAN_FOR_RECTOR_PATHS, $paths);
+        SimpleParameterProvider::addParameter(Option::PHPSTAN_FOR_RECTOR_PATHS, [$filePath]);
     }
     /**
      * Add PHPStan custom configs to load extensions and custom configuration to Rector.
@@ -127,9 +125,9 @@ final class RectorConfig extends Container
      */
     public function phpstanConfigs(array $filePaths) : void
     {
-        foreach ($filePaths as $filePath) {
-            $this->phpstanConfig($filePath);
-        }
+        Assert::allString($filePaths);
+        Assert::allFileExists($filePaths);
+        SimpleParameterProvider::addParameter(Option::PHPSTAN_FOR_RECTOR_PATHS, $filePaths);
     }
     /**
      * @param class-string<ConfigurableRectorInterface&RectorInterface> $rectorClass
