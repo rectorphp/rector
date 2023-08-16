@@ -124,7 +124,7 @@ final class Option
      * @internal Use @see \Rector\Config\RectorConfig::phpstanConfig() instead
      * @var string
      */
-    public const PHPSTAN_FOR_RECTOR_PATH = 'phpstan_for_rector_path';
+    public const PHPSTAN_FOR_RECTOR_PATHS = 'phpstan_for_rector_paths';
     /**
      * @var string
      */
