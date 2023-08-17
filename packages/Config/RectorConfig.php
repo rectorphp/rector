@@ -256,13 +256,6 @@ final class RectorConfig extends Container
         \trigger_error('The services() method is deprecated. Use $rectorConfig->singleton(ServiceType::class) instead', \E_USER_ERROR);
     }
     /**
-     * @api deprecated, just for BC layer warning
-     */
-    public function defaults() : void
-    {
-        \trigger_error('The defaults() method is deprecated. You can remove it.', \E_USER_ERROR);
-    }
-    /**
      * @param mixed $skipRule
      */
     private function isRuleNoLongerExists($skipRule) : bool
