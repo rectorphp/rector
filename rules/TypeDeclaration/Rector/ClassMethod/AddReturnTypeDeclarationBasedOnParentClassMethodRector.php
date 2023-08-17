@@ -8,6 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ParametersAcceptorWithPhpDocs;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -120,7 +122,11 @@ CODE_SAMPLE
             if ($parentMethodReflection->isPrivate()) {
                 return null;
             }
-            $parentReturnType = ParametersAcceptorSelector::selectSingle($parentMethodReflection->getVariants())->getReturnType();
+            $parameterAcceptor = ParametersAcceptorSelector::selectSingle($parentMethodReflection->getVariants());
+            if (!$parameterAcceptor instanceof ParametersAcceptorWithPhpDocs) {
+                return null;
+            }
+            $parentReturnType = $parameterAcceptor->getNativeReturnType();
             if (!$parentReturnType instanceof MixedType) {
                 return $parentReturnType;
             }
