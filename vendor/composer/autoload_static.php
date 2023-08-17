@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf543dd885299697716397dd03f6f5d19
+class ComposerStaticInit9badb1a20a1849a022489166140360b1
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2434,6 +2434,7 @@ class ComposerStaticInitf543dd885299697716397dd03f6f5d19
         'Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandPropertyToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/CommandPropertyToAttributeRector.php',
         'Rector\\Symfony\\Symfony61\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
         'Rector\\Symfony\\Symfony61\\Rector\\StaticPropertyFetch\\ErrorNamesPropertyToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony61/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php',
+        'Rector\\Symfony\\Symfony62\\Rector\\ClassMethod\\ClassMethod\\ArgumentValueResolverToValueResolverRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/ClassMethod/ClassMethod/ArgumentValueResolverToValueResolverRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\ClassMethod\\ParamConverterAttributeToMapEntityAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
@@ -2638,9 +2639,9 @@ class ComposerStaticInitf543dd885299697716397dd03f6f5d19
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf543dd885299697716397dd03f6f5d19::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf543dd885299697716397dd03f6f5d19::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf543dd885299697716397dd03f6f5d19::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9badb1a20a1849a022489166140360b1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9badb1a20a1849a022489166140360b1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9badb1a20a1849a022489166140360b1::$classMap;
 
         }, null, ClassLoader::class);
     }

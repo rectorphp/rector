@@ -19,7 +19,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
@@ -203,8 +202,8 @@ CODE_SAMPLE
     private function removeServicesSetMethodCalls(Closure $closure, array $stmtsToRemove) : void
     {
         foreach ($closure->stmts as $key => $stmt) {
-            foreach ($stmtsToRemove as $bareServicesSetMethodCallExpression) {
-                if ($stmt === $bareServicesSetMethodCallExpression) {
+            foreach ($stmtsToRemove as $stmtToRemove) {
+                if ($stmt === $stmtToRemove) {
                     unset($closure->stmts[$key]);
                     continue 2;
                 }

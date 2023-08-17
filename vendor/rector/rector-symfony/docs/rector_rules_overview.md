@@ -1,4 +1,4 @@
-# 81 Rules Overview
+# 82 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -55,6 +55,31 @@ Change `$context->addViolationAt` to `$context->buildViolation` on Validator Exe
 +    ->atPath('property')
 +    ->setParameter('{{ value }}', $invalidValue)
 +    ->addViolation();
+```
+
+<br>
+
+## ArgumentValueResolverToValueResolverRector
+
+Replaces ArgumentValueResolverInterface by ValueResolverInterface
+
+- class: [`Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector`](../rules/Symfony62/Rector/ClassMethod/ClassMethod/ArgumentValueResolverToValueResolverRector.php)
+
+```diff
+-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
++use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+
+-final class EntityValueResolver implements ArgumentValueResolverInterface
++final class EntityValueResolver implements ValueResolverInterface
+ {
+-    public function supports(Request $request, ArgumentMetadata $argument): bool
+-    {
+-    }
+-
+     public function resolve(Request $request, ArgumentMetadata $argument): iterable
+     {
+     }
+ }
 ```
 
 <br>

@@ -2202,6 +2202,7 @@ return array(
     'Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandPropertyToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/CommandPropertyToAttributeRector.php',
     'Rector\\Symfony\\Symfony61\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
     'Rector\\Symfony\\Symfony61\\Rector\\StaticPropertyFetch\\ErrorNamesPropertyToConstantRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php',
+    'Rector\\Symfony\\Symfony62\\Rector\\ClassMethod\\ClassMethod\\ArgumentValueResolverToValueResolverRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/ClassMethod/ClassMethod/ArgumentValueResolverToValueResolverRector.php',
     'Rector\\Symfony\\Symfony62\\Rector\\ClassMethod\\ParamConverterAttributeToMapEntityAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php',
     'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php',
     'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
