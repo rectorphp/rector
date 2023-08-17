@@ -106,11 +106,11 @@ CODE_SAMPLE
         if (!$parentMethodReflection instanceof MethodReflection) {
             return null;
         }
-        $parentClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($parentMethodReflection);
-        if (!$parentClassMethod instanceof ClassMethod) {
+        if ($parentMethodReflection->isPrivate()) {
             return null;
         }
-        if ($parentClassMethod->isPrivate()) {
+        $parentClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($parentMethodReflection);
+        if (!$parentClassMethod instanceof ClassMethod) {
             return null;
         }
         $currentClassMethodParams = $node->getParams();
