@@ -161,6 +161,9 @@ CODE_SAMPLE;
         $this->file = $file;
         return parent::beforeTraverse($nodes);
     }
+    /**
+     * @return int|\PhpParser\Node|null
+     */
     public final function enterNode(Node $node)
     {
         if (!$this->isMatchingNodeType($node)) {
@@ -215,6 +218,7 @@ CODE_SAMPLE;
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+     * @return mixed[]|int|\PhpParser\Node|null
      */
     public function leaveNode(Node $node)
     {

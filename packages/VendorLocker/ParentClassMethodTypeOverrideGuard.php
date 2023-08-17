@@ -12,7 +12,6 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 use Rector\VendorLocker\Exception\UnresolvableClassException;
 final class ParentClassMethodTypeOverrideGuard
 {

@@ -35,11 +35,11 @@ final class File
      */
     private $fileDiff;
     /**
-     * @var Stmt[]
+     * @var \PhpParser\Node[]
      */
     private $oldStmts = [];
     /**
-     * @var Stmt[]
+     * @var \PhpParser\Node[]
      */
     private $newStmts = [];
     /**
@@ -128,7 +128,7 @@ final class File
         return $this->oldTokens;
     }
     /**
-     * @param Stmt[] $newStmts
+     * @param \PhpParser\Node[] $newStmts
      */
     public function changeNewStmts(array $newStmts) : void
     {

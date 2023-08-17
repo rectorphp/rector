@@ -16,7 +16,7 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     /**
      * @param Node[] $nodes
      */
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes) : ?array
     {
         if ($nodes === []) {
             return null;
