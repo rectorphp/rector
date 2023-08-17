@@ -9,7 +9,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
-use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
@@ -22,7 +21,7 @@ use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-final class PhpFileProcessor implements FileProcessorInterface
+final class PhpFileProcessor
 {
     /**
      * @readonly
@@ -127,17 +126,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         }
         $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
         return $systemErrorsAndFileDiffs;
-    }
-    public function supports(File $file, Configuration $configuration) : bool
-    {
-        return \true;
-    }
-    /**
-     * @return string[]
-     */
-    public function getSupportedFileExtensions() : array
-    {
-        return ['php'];
     }
     /**
      * @return SystemError[]
