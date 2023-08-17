@@ -12,6 +12,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 use Rector\VendorLocker\Exception\UnresolvableClassException;
 final class ParentClassMethodTypeOverrideGuard
 {
@@ -48,7 +49,10 @@ final class ParentClassMethodTypeOverrideGuard
         $this->staticTypeMapper = $staticTypeMapper;
         $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
-    public function hasParentClassMethod(ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
+     */
+    public function hasParentClassMethod($classMethod) : bool
     {
         try {
             $parentClassMethod = $this->resolveParentClassMethod($classMethod);
@@ -59,7 +63,10 @@ final class ParentClassMethodTypeOverrideGuard
             return \true;
         }
     }
-    public function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
+     */
+    public function getParentClassMethod($classMethod) : ?MethodReflection
     {
         try {
             return $this->resolveParentClassMethod($classMethod);
@@ -78,15 +85,23 @@ final class ParentClassMethodTypeOverrideGuard
         }
         return $this->typeComparator->areTypesEqual($currentReturnType, $parentType);
     }
-    private function resolveParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
+     */
+    private function resolveParentClassMethod($classMethod) : ?MethodReflection
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            // we can't resolve the class, so we don't know.
-            throw new UnresolvableClassException();
+        if ($classMethod instanceof ClassMethod) {
+            $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+            if (!$classReflection instanceof ClassReflection) {
+                // we can't resolve the class, so we don't know.
+                throw new UnresolvableClassException();
+            }
+            /** @var string $methodName */
+            $methodName = $this->nodeNameResolver->getName($classMethod);
+        } else {
+            $classReflection = $classMethod->getDeclaringClass();
+            $methodName = $classMethod->getName();
         }
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
         $currentClassReflection = $classReflection;
         while ($this->hasClassParent($currentClassReflection)) {
             $parentClassReflection = $currentClassReflection->getParentClass();
