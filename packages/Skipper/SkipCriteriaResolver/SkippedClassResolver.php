@@ -3,25 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Skipper\SkipCriteriaResolver;
 
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class SkippedClassResolver
 {
     /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
      * @var array<string, string[]|null>
      */
     private $skippedClasses = [];
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
-    }
     /**
      * @return array<string, string[]|null>
      */
@@ -45,7 +35,8 @@ final class SkippedClassResolver
             if (!\is_string($key)) {
                 continue;
             }
-            if (!$this->reflectionProvider->hasClass($key)) {
+            // this only checks for Rector rules, that are always autoloaded
+            if (!\class_exists($key) && !\interface_exists($key)) {
                 continue;
             }
             $this->skippedClasses[$key] = $value;

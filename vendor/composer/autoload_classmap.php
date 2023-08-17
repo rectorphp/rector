@@ -1201,6 +1201,7 @@ return array(
     'Rector\\Core\\Contract\\Rector\\PhpRectorInterface' => $baseDir . '/src/Contract/Rector/PhpRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => $baseDir . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
+    'Rector\\Core\\DependencyInjection\\Laravel\\ContainerMemento' => $baseDir . '/src/DependencyInjection/Laravel/ContainerMemento.php',
     'Rector\\Core\\DependencyInjection\\LazyContainerFactory' => $baseDir . '/src/DependencyInjection/LazyContainerFactory.php',
     'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Core\\Differ\\DefaultDiffer' => $baseDir . '/src/Differ/DefaultDiffer.php',
