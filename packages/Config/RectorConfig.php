@@ -9,6 +9,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
@@ -277,13 +278,15 @@ final class RectorConfig extends Container
         return \array_unique($duplicates);
     }
     /**
-     * @param class-string<RectorInterface> $rectorClass
+     * @param class-string<RectorInterface|PhpRectorInterface> $rectorClass
      */
     private function tagRectorService(string $rectorClass) : void
     {
         $this->tag($rectorClass, RectorInterface::class);
-        if (\is_a($rectorClass, NonPhpRectorInterface::class, \true)) {
-            \trigger_error(\sprintf('The "%s" interface of "%s" rule is deprecated. Rector will only PHP code, as designed to with AST. For another file format, use custom tooling.', NonPhpRectorInterface::class, $rectorClass));
+        if (\is_a($rectorClass, PhpRectorInterface::class, \true)) {
+            $this->tag($rectorClass, PhpRectorInterface::class);
+        } elseif (\is_a($rectorClass, NonPhpRectorInterface::class, \true)) {
+            \trigger_error(\sprintf('The "%s" interface of "%s" rule is deprecated. Rector will process only PHP code, as designed to with AST. For another file format, use custom tooling.', NonPhpRectorInterface::class, $rectorClass));
             exit;
         }
     }
