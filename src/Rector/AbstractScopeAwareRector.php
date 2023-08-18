@@ -7,11 +7,11 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Contract\Rector\ScopeAwarePhpRectorInterface;
+use Rector\Core\Contract\Rector\ScopeAwareRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwarePhpRectorInterface
+abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwareRectorInterface
 {
     /**
      * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer

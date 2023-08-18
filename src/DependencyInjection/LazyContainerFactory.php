@@ -60,7 +60,6 @@ use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\DependencyInjection\ResetableInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Logging\CurrentRectorProvider;
@@ -303,7 +302,7 @@ final class LazyContainerFactory
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->when(ApplicationFileProcessor::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $rectorConfig->when(FileFactory::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
-        $rectorConfig->when(RectorNodeTraverser::class)->needs('$phpRectors')->giveTagged(PhpRectorInterface::class);
+        $rectorConfig->when(RectorNodeTraverser::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ClassNameImportSkipper::class)->needs('$classNameImportSkipVoters')->giveTagged(ClassNameImportSkipVoterInterface::class);
         $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (Container $container) : DynamicSourceLocatorProvider {

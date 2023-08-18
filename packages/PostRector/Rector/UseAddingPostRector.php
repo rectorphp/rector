@@ -13,8 +13,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -80,28 +78,6 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
             return $nodes;
         }
         return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode);
-    }
-    public function getRuleDefinition() : RuleDefinition
-    {
-        return new RuleDefinition('Add unique use imports collected during Rector run', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run(AnotherClass $anotherClass)
-    {
-    }
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-use App\AnotherClass;
-
-class SomeClass
-{
-    public function run(AnotherClass $anotherClass)
-    {
-    }
-}
-CODE_SAMPLE
-)]);
     }
     /**
      * @param Stmt[] $nodes

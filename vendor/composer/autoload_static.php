@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e
+class ComposerStaticInit60b57168041c172ab612e033f04a1177
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1430,9 +1430,8 @@ class ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e
         'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => __DIR__ . '/../..' . '/src/Contract/Processor/FileProcessorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\NonPhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/NonPhpRectorInterface.php',
-        'Rector\\Core\\Contract\\Rector\\PhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/PhpRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
-        'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
+        'Rector\\Core\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
         'Rector\\Core\\DependencyInjection\\Laravel\\ContainerMemento' => __DIR__ . '/../..' . '/src/DependencyInjection/Laravel/ContainerMemento.php',
         'Rector\\Core\\DependencyInjection\\LazyContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/LazyContainerFactory.php',
         'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
@@ -2639,9 +2638,9 @@ class ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc8b2dd093133f142591cd1b2c46cb94e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit60b57168041c172ab612e033f04a1177::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit60b57168041c172ab612e033f04a1177::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit60b57168041c172ab612e033f04a1177::$classMap;
 
         }, null, ClassLoader::class);
     }

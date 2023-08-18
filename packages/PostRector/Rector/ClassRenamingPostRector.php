@@ -17,8 +17,6 @@ use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -84,19 +82,5 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $removedUses = $this->renamedClassesDataCollector->getOldClasses();
         $this->rootNode->stmts = $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses);
         return $result;
-    }
-    public function getRuleDefinition() : RuleDefinition
-    {
-        return new RuleDefinition('Rename references for classes that were renamed during Rector run', [new CodeSample(<<<'CODE_SAMPLE'
-function (OriginalClass $someClass)
-{
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-function (RenamedClass $someClass)
-{
-}
-CODE_SAMPLE
-)]);
     }
 }

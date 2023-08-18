@@ -26,8 +26,6 @@ use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -103,28 +101,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return $node;
         }
         return null;
-    }
-    public function getRuleDefinition() : RuleDefinition
-    {
-        return new RuleDefinition('Imports fully qualified names', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run(App\AnotherClass $anotherClass)
-    {
-    }
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-use App\AnotherClass;
-
-class SomeClass
-{
-    public function run(AnotherClass $anotherClass)
-    {
-    }
-}
-CODE_SAMPLE
-)]);
     }
     private function processNodeName(Name $name, File $file) : ?Node
     {

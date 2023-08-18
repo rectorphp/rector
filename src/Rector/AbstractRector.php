@@ -16,7 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Logging\RectorOutput;
@@ -33,7 +33,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
+abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
      * @var string

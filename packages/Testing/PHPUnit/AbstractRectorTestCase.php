@@ -16,7 +16,6 @@ use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
@@ -71,11 +70,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $this->forgetRectorsRules();
             // this has to be always empty, so we can add new rules with their configuration
             $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
-            $this->assertEmpty($rectorConfig->tagged(PhpRectorInterface::class));
             $this->bootFromConfigFiles([$configFile]);
-            $phpRectorsGenerator = $rectorConfig->tagged(PhpRectorInterface::class);
-            if ($phpRectorsGenerator instanceof RewindableGenerator) {
-                $phpRectors = \iterator_to_array($phpRectorsGenerator->getIterator());
+            $rectorsGenerator = $rectorConfig->tagged(RectorInterface::class);
+            if ($rectorsGenerator instanceof RewindableGenerator) {
+                $phpRectors = \iterator_to_array($rectorsGenerator->getIterator());
             } else {
                 // no rules at all, e.g. in case of only post rector run
                 $phpRectors = [];
