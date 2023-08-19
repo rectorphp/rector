@@ -1257,6 +1257,7 @@ return array(
     'Rector\\Core\\NodeManipulator\\PropertyFetchAssignManipulator' => $baseDir . '/src/NodeManipulator/PropertyFetchAssignManipulator.php',
     'Rector\\Core\\NodeManipulator\\PropertyManipulator' => $baseDir . '/src/NodeManipulator/PropertyManipulator.php',
     'Rector\\Core\\NodeManipulator\\StmtsManipulator' => $baseDir . '/src/NodeManipulator/StmtsManipulator.php',
+    'Rector\\Core\\PHPStan\\NodeVisitor\\ExprScopeFromStmtNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/ExprScopeFromStmtNodeVisitor.php',
     'Rector\\Core\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
     'Rector\\Core\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ClosureTypeToCallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver.php',
