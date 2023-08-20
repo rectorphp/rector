@@ -50,7 +50,7 @@ final class BetterPhpDocParser extends PhpDocParser
     /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
      */
-    public function __construct(TypeParser $typeParser, ConstExprParser $constExprParser, CurrentNodeProvider $currentNodeProvider, TokenIteratorFactory $tokenIteratorFactory, iterable $phpDocNodeDecorators, PrivatesAccessor $privatesAccessor = null)
+    public function __construct(TypeParser $typeParser, ConstExprParser $constExprParser, CurrentNodeProvider $currentNodeProvider, TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, PrivatesAccessor $privatesAccessor = null)
     {
         $privatesAccessor = $privatesAccessor ?? new PrivatesAccessor();
         $this->currentNodeProvider = $currentNodeProvider;
