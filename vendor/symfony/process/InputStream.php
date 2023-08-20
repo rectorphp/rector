@@ -34,13 +34,13 @@ class InputStream implements \IteratorAggregate
         $this->onEmpty = $onEmpty;
     }
     /**
-    * Appends an input to the write buffer.
-    *
+     * Appends an input to the write buffer.
+     *
      * @param mixed $input The input to append as scalar,
-                                                              stream resource or \Traversable
-    *
-    * @return void
-    */
+     *                                                                stream resource or \Traversable
+     *
+     * @return void
+     */
     public function write($input)
     {
         if (null === $input) {

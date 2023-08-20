@@ -5,8 +5,7 @@
     "description": "Rector upgrades rules for Symfony Framework",
     "require": {
         "php": ">=8.1",
-        "ext-xml": "*",
-        "symfony\/string": "^6.3"
+        "ext-xml": "*"
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.3",

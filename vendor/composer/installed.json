@@ -1956,18 +1956,17 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "2a4d4c0380037bf78f513abe3da9bcb6f35abc48"
+                "reference": "9106fbaf0b056a1cda0555212f473cc3e28cce47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2a4d4c0380037bf78f513abe3da9bcb6f35abc48",
-                "reference": "2a4d4c0380037bf78f513abe3da9bcb6f35abc48",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/9106fbaf0b056a1cda0555212f473cc3e28cce47",
+                "reference": "9106fbaf0b056a1cda0555212f473cc3e28cce47",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
-                "php": ">=8.1",
-                "symfony\/string": "^6.3"
+                "php": ">=8.1"
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.3",
@@ -1993,7 +1992,7 @@
                 "tomasvotruba\/unused-public": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-08-17T14:03:59+00:00",
+            "time": "2023-08-20T09:47:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2137,6 +2136,11 @@
             },
             "time": "2023-07-19T20:17:28+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": [
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-console-helper-helper-php.patch"
+                ]
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -2319,93 +2323,6 @@
                 }
             ],
             "install-path": "..\/symfony\/finder"
-        },
-        {
-            "name": "symfony\/polyfill-intl-normalizer",
-            "version": "v1.27.0",
-            "version_normalized": "1.27.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer.git",
-                "reference": "19bd1e4fcd5b91116f14d8533c57831ed00571b6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-normalizer\/zipball\/19bd1e4fcd5b91116f14d8533c57831ed00571b6",
-                "reference": "19bd1e4fcd5b91116f14d8533c57831ed00571b6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "suggest": {
-                "ext-intl": "For best performance"
-            },
-            "time": "2022-11-03T14:55:06+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.27-dev"
-                },
-                "thanks": {
-                    "name": "symfony\/polyfill",
-                    "url": "https:\/\/github.com\/symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
-                },
-                "classmap": [
-                    "Resources\/stubs"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for intl's Normalizer class and related functions",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "intl",
-                "normalizer",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.27.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-intl-normalizer"
         },
         {
             "name": "symfony\/polyfill-mbstring",
@@ -2641,95 +2558,6 @@
                 }
             ],
             "install-path": "..\/symfony\/service-contracts"
-        },
-        {
-            "name": "symfony\/string",
-            "version": "v6.3.2",
-            "version_normalized": "6.3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "53d1a83225002635bca3482fcbf963001313fb68"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/53d1a83225002635bca3482fcbf963001313fb68",
-                "reference": "53d1a83225002635bca3482fcbf963001313fb68",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony\/polyfill-ctype": "~1.8",
-                "symfony\/polyfill-intl-grapheme": "~1.0",
-                "symfony\/polyfill-intl-normalizer": "~1.0",
-                "symfony\/polyfill-mbstring": "~1.0"
-            },
-            "conflict": {
-                "symfony\/translation-contracts": "<2.5"
-            },
-            "require-dev": {
-                "symfony\/error-handler": "^5.4|^6.0",
-                "symfony\/http-client": "^5.4|^6.0",
-                "symfony\/intl": "^6.2",
-                "symfony\/translation-contracts": "^2.5|^3.0",
-                "symfony\/var-exporter": "^5.4|^6.0"
-            },
-            "time": "2023-07-05T08:41:27+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "Resources\/functions.php"
-                ],
-                "psr-4": {
-                    "RectorPrefix202308\\Symfony\\Component\\String\\": ""
-                },
-                "exclude-from-classmap": [
-                    "\/Tests\/"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "grapheme",
-                "i18n",
-                "string",
-                "unicode",
-                "utf-8",
-                "utf8"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.3.2"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/string"
         },
         {
             "name": "symplify\/easy-parallel",

@@ -8,7 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
@@ -19,7 +18,6 @@ return array(
     'RectorPrefix202308\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix202308\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202308\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
-    'RectorPrefix202308\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202308\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix202308\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix202308\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),

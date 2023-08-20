@@ -4,13 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita2e20243822380e5a3d71b97daded207
+class ComposerStaticInit55650af7adf9a70d9f1a83c99bed9d0a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
@@ -21,7 +19,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
         array (
             'Symplify\\RuleDocGenerator\\' => 26,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
         ),
         'R' => 
         array (
@@ -35,7 +32,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
             'RectorPrefix202308\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202308\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202308\\Symfony\\Contracts\\Service\\' => 45,
-            'RectorPrefix202308\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202308\\Symfony\\Component\\Process\\' => 45,
             'RectorPrefix202308\\Symfony\\Component\\Finder\\' => 44,
             'RectorPrefix202308\\Symfony\\Component\\Filesystem\\' => 48,
@@ -76,10 +72,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
         'Rector\\Utils\\' => 
         array (
@@ -126,10 +118,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
         'RectorPrefix202308\\Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
-        ),
-        'RectorPrefix202308\\Symfony\\Component\\String\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/string',
         ),
         'RectorPrefix202308\\Symfony\\Component\\Process\\' => 
         array (
@@ -239,7 +227,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',
         'PHPStan\\PhpDocParser\\Ast\\Attribute' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Attribute.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
@@ -1134,20 +1121,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
         'RectorPrefix202308\\Symfony\\Component\\Process\\Pipes\\WindowsPipes' => __DIR__ . '/..' . '/symfony/process/Pipes/WindowsPipes.php',
         'RectorPrefix202308\\Symfony\\Component\\Process\\Process' => __DIR__ . '/..' . '/symfony/process/Process.php',
         'RectorPrefix202308\\Symfony\\Component\\Process\\ProcessUtils' => __DIR__ . '/..' . '/symfony/process/ProcessUtils.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\AbstractString' => __DIR__ . '/..' . '/symfony/string/AbstractString.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\AbstractUnicodeString' => __DIR__ . '/..' . '/symfony/string/AbstractUnicodeString.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\ByteString' => __DIR__ . '/..' . '/symfony/string/ByteString.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\CodePointString' => __DIR__ . '/..' . '/symfony/string/CodePointString.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/string/Exception/ExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/string/Exception/InvalidArgumentException.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/string/Exception/RuntimeException.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Inflector\\EnglishInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/EnglishInflector.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Inflector\\FrenchInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/FrenchInflector.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Inflector\\InflectorInterface' => __DIR__ . '/..' . '/symfony/string/Inflector/InflectorInterface.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\LazyString' => __DIR__ . '/..' . '/symfony/string/LazyString.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
-        'RectorPrefix202308\\Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
         'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\Required' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/Required.php',
         'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\SubscribedService' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/SubscribedService.php',
         'RectorPrefix202308\\Symfony\\Contracts\\Service\\ResetInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ResetInterface.php',
@@ -2619,7 +2592,6 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
-        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
@@ -2639,9 +2611,9 @@ class ComposerStaticInita2e20243822380e5a3d71b97daded207
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita2e20243822380e5a3d71b97daded207::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita2e20243822380e5a3d71b97daded207::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita2e20243822380e5a3d71b97daded207::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit55650af7adf9a70d9f1a83c99bed9d0a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit55650af7adf9a70d9f1a83c99bed9d0a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit55650af7adf9a70d9f1a83c99bed9d0a::$classMap;
 
         }, null, ClassLoader::class);
     }
