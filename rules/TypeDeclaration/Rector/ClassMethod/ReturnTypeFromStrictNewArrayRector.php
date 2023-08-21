@@ -175,11 +175,7 @@ CODE_SAMPLE
             if (!$this->nodeNameResolver->areNamesEqual($assign->var, $variable)) {
                 continue;
             }
-            if ($assign->expr instanceof Array_) {
-                continue;
-            }
-            $nativeType = $this->nodeTypeResolver->getNativeType($assign->expr);
-            if (!$nativeType->isArray()->yes()) {
+            if (!$assign->expr instanceof Array_) {
                 return \true;
             }
         }
