@@ -97,9 +97,6 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     {
         $shortName = $fullyQualifiedObjectType->getShortName();
         $filePath = $file->getFilePath();
-        if ($this->isShortClassImported($filePath, $shortName)) {
-            return \true;
-        }
         $fileConstantUseImportTypes = $this->constantUseImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileConstantUseImportTypes as $fileConstantUseImportType) {
             // don't compare strtolower for use const as insensitive is allowed, see https://3v4l.org/lteVa
@@ -107,9 +104,13 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
                 return \true;
             }
         }
+        $shortName = \strtolower($shortName);
+        if ($this->isShortClassImported($filePath, $shortName)) {
+            return \true;
+        }
         $fileFunctionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileFunctionUseImportTypes as $fileFunctionUseImportType) {
-            if (\strtolower($fileFunctionUseImportType->getShortName()) === \strtolower($shortName)) {
+            if (\strtolower($fileFunctionUseImportType->getShortName()) === $shortName) {
                 return \true;
             }
         }
@@ -163,7 +164,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     {
         $fileUseImports = $this->useImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileUseImports as $fileUseImport) {
-            if (\strtolower($fileUseImport->getShortName()) === \strtolower($shortName)) {
+            if (\strtolower($fileUseImport->getShortName()) === $shortName) {
                 return \true;
             }
         }
