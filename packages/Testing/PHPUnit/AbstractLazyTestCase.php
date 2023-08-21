@@ -11,7 +11,7 @@ abstract class AbstractLazyTestCase extends TestCase
     /**
      * @var \Rector\Config\RectorConfig|null
      */
-    private static $rectorConfig;
+    protected static $rectorConfig;
     /**
      * @api
      * @param string[] $configFiles
