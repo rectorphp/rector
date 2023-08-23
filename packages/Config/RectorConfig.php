@@ -11,6 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\FileSystem\FilesystemTweaker;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
@@ -160,7 +161,7 @@ final class RectorConfig extends Container
             });
         }
     }
-    public function import(string $filePath) : void
+    private function importFile(string $filePath) : void
     {
         Assert::fileExists($filePath);
         $self = $this;
@@ -168,6 +169,15 @@ final class RectorConfig extends Container
         Assert::isCallable($callable);
         /** @var callable(Container $container): void $callable */
         $callable($self);
+    }
+    public function import(string $filePath) : void
+    {
+        $paths = [$filePath];
+        $filesystemTweaker = new FilesystemTweaker();
+        $paths = $filesystemTweaker->resolveWithFnmatch($paths);
+        foreach ($paths as $path) {
+            $this->importFile($path);
+        }
     }
     /**
      * @param array<class-string<RectorInterface>> $rectorClasses
