@@ -15,7 +15,7 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\Contract\DependencyInjection\ResetableInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
@@ -66,9 +66,13 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         // boot once for config + test case to avoid booting again and again for every test fixture
         $cacheKey = \sha1($configFile . static::class);
         if (!isset(self::$cacheByRuleAndConfig[$cacheKey])) {
-            // reset class rename
-            $renamedClassesDataCollector = $rectorConfig->make(RenamedClassesDataCollector::class);
-            $renamedClassesDataCollector->reset();
+            // reset
+            /** @var RewindableGenerator<int, ResetableInterface> $resetables */
+            $resetables = $rectorConfig->tagged(ResetableInterface::class);
+            foreach ($resetables as $resetable) {
+                /** @var ResetableInterface $resetable */
+                $resetable->reset();
+            }
             $this->forgetRectorsRules();
             // this has to be always empty, so we can add new rules with their configuration
             $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
