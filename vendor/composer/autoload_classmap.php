@@ -1588,7 +1588,6 @@ return array(
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverAwareInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverAwareInterface.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
-    'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
     'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => $baseDir . '/packages/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => $baseDir . '/packages/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',

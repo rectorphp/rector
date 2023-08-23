@@ -267,6 +267,10 @@ final class RectorConfig extends Container
     {
         \trigger_error('The services() method is deprecated. Use $rectorConfig->singleton(ServiceType::class) instead', \E_USER_ERROR);
     }
+    public function resetRuleConfigurations() : void
+    {
+        $this->ruleConfigurations = [];
+    }
     private function importFile(string $filePath) : void
     {
         Assert::fileExists($filePath);
@@ -319,9 +323,5 @@ final class RectorConfig extends Container
             return;
         }
         throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
-    }
-    public function resetRuleConfigurations() : void
-    {
-        $this->ruleConfigurations = [];
     }
 }

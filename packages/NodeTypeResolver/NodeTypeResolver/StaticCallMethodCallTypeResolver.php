@@ -69,8 +69,8 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         } else {
             $callerType = $this->nodeTypeResolver->getType($node->class);
         }
-        foreach ($callerType->getObjectClassReflections() as $classReflection) {
-            $classMethodReturnType = $this->resolveClassMethodReturnType($classReflection, $node, $methodName, $scope);
+        foreach ($callerType->getObjectClassReflections() as $objectClassReflection) {
+            $classMethodReturnType = $this->resolveClassMethodReturnType($objectClassReflection, $node, $methodName, $scope);
             if (!$classMethodReturnType instanceof MixedType) {
                 return $classMethodReturnType;
             }
