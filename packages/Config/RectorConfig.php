@@ -22,6 +22,10 @@ use RectorPrefix202308\Webmozart\Assert\Assert;
 final class RectorConfig extends Container
 {
     /**
+     * @var array<class-string<RectorInterface>, mixed[]>>
+     */
+    private $ruleConfigurations = [];
+    /**
      * @param string[] $paths
      */
     public function paths(array $paths) : void
@@ -138,11 +142,19 @@ final class RectorConfig extends Container
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
+        // store configuration to cache
+        $this->ruleConfigurations[$rectorClass] = \array_merge($this->ruleConfigurations[$rectorClass] ?? [], $configuration);
+        $isBound = $this->bound($rectorClass);
+        // avoid double registration
+        if ($isBound) {
+            return;
+        }
         $this->singleton($rectorClass);
-        $this->afterResolving($rectorClass, static function (ConfigurableRectorInterface $configurableRector) use($configuration) : void {
-            $configurableRector->configure($configuration);
-        });
         $this->tagRectorService($rectorClass);
+        $this->afterResolving($rectorClass, function (ConfigurableRectorInterface $configurableRector) use($rectorClass) : void {
+            $ruleConfiguration = $this->ruleConfigurations[$rectorClass];
+            $configurableRector->configure($ruleConfiguration);
+        });
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
@@ -160,15 +172,6 @@ final class RectorConfig extends Container
                 return $scopeAwareRector;
             });
         }
-    }
-    private function importFile(string $filePath) : void
-    {
-        Assert::fileExists($filePath);
-        $self = $this;
-        $callable = (require $filePath);
-        Assert::isCallable($callable);
-        /** @var callable(Container $container): void $callable */
-        $callable($self);
     }
     public function import(string $filePath) : void
     {
@@ -264,6 +267,15 @@ final class RectorConfig extends Container
     {
         \trigger_error('The services() method is deprecated. Use $rectorConfig->singleton(ServiceType::class) instead', \E_USER_ERROR);
     }
+    private function importFile(string $filePath) : void
+    {
+        Assert::fileExists($filePath);
+        $self = $this;
+        $callable = (require $filePath);
+        Assert::isCallable($callable);
+        /** @var callable(Container $container): void $callable */
+        $callable($self);
+    }
     /**
      * @param mixed $skipRule
      */
@@ -307,5 +319,9 @@ final class RectorConfig extends Container
             return;
         }
         throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
+    }
+    public function resetRuleConfigurations() : void
+    {
+        $this->ruleConfigurations = [];
     }
 }

@@ -74,6 +74,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
                 $resetable->reset();
             }
             $this->forgetRectorsRules();
+            $rectorConfig->resetRuleConfigurations();
             // this has to be always empty, so we can add new rules with their configuration
             $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
             $this->bootFromConfigFiles([$configFile]);
@@ -87,7 +88,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $rectorNodeTraverser = $rectorConfig->make(RectorNodeTraverser::class);
             $rectorNodeTraverser->refreshPhpRectors($phpRectors);
             // store cache
-            self::$cacheByRuleAndConfig[$cacheKey] = \true;
             self::$cacheByRuleAndConfig[$cacheKey] = \true;
         }
         $this->applicationFileProcessor = $this->make(ApplicationFileProcessor::class);
