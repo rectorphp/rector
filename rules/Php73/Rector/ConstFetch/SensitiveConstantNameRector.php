@@ -82,7 +82,7 @@ CODE_SAMPLE
         if ($constantName === $uppercasedConstantName) {
             return null;
         }
-        if (\strpos($uppercasedConstantName, '\\') !== \false) {
+        if (\strpos($uppercasedConstantName, '\\') !== \false || \strpos($uppercasedConstantName, '(') !== \false || \strpos($uppercasedConstantName, "'") !== \false) {
             return null;
         }
         $node->name = new FullyQualified($uppercasedConstantName);
