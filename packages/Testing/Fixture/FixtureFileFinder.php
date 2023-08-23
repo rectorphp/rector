@@ -8,6 +8,7 @@ use RectorPrefix202308\Symfony\Component\Finder\Finder;
 final class FixtureFileFinder
 {
     /**
+     * @api used in tests
      * @return Iterator<array<int, string>>
      */
     public static function yieldDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
