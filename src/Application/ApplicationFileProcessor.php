@@ -8,7 +8,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\ArrayParametersMerger;
 use Rector\Core\ValueObject\Application\File;
@@ -25,7 +24,6 @@ use RectorPrefix202308\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202308\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202308\Symplify\EasyParallel\ScheduleFactory;
 use Throwable;
-use RectorPrefix202308\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**
@@ -74,11 +72,6 @@ final class ApplicationFileProcessor
      */
     private $phpFileProcessor;
     /**
-     * @var FileProcessorInterface[]
-     * @readonly
-     */
-    private $fileProcessors;
-    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -86,10 +79,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    /**
-     * @param FileProcessorInterface[] $fileProcessors
-     */
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, array $fileProcessors)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -100,17 +90,6 @@ final class ApplicationFileProcessor
         $this->changedFilesDetector = $changedFilesDetector;
         $this->currentFileProvider = $currentFileProvider;
         $this->phpFileProcessor = $phpFileProcessor;
-        $this->fileProcessors = $fileProcessors;
-        $fileProcessorClasses = [];
-        foreach ($this->fileProcessors as $fileProcessor) {
-            \trigger_error(\sprintf('Rector will support only PHP, as that is the only code the AST can handle.%sThe custom "%s" file processor will not be supported, and should be refactored into own tool with file finder/printer.', \PHP_EOL, \get_class($fileProcessor)) . \PHP_EOL . \PHP_EOL, \E_USER_WARNING);
-            // to notice
-            \sleep(2);
-        }
-        foreach ($fileProcessors as $fileProcessor) {
-            $fileProcessorClasses[] = \get_class($fileProcessor);
-        }
-        Assert::uniqueValues($fileProcessorClasses);
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
@@ -172,9 +151,6 @@ final class ApplicationFileProcessor
     private function processFile(File $file, array $systemErrorsAndFileDiffs, Configuration $configuration) : array
     {
         $this->currentFileProvider->setFile($file);
-        // BC layer, soon the file processors will be removed
-        $otherSystemErrorsAndFileDiffs = $this->processWithFileProcessors($file, $configuration, $systemErrorsAndFileDiffs);
-        $systemErrorsAndFileDiffs = $this->arrayParametersMerger->merge($systemErrorsAndFileDiffs, $otherSystemErrorsAndFileDiffs);
         $phpSystemErrorsAndFileDiffs = $this->phpFileProcessor->process($file, $configuration);
         $systemErrorsAndFileDiffs = $this->arrayParametersMerger->merge($systemErrorsAndFileDiffs, $phpSystemErrorsAndFileDiffs);
         if ($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] !== []) {
@@ -259,22 +235,5 @@ final class ApplicationFileProcessor
             return null;
         }
         return $potentialEcsBinaryPath;
-    }
-    /**
-     * @deprecated Custom file processors are deprecated. Use custom tool instead.
-     *
-     * @param array{system_errors: SystemError[], file_diffs: FileDiff[], system_errors_count: int} $systemErrorsAndFileDiffs
-     * @return array{system_errors: SystemError[], file_diffs: FileDiff[], system_errors_count: int}
-     */
-    private function processWithFileProcessors(File $file, Configuration $configuration, array $systemErrorsAndFileDiffs)
-    {
-        foreach ($this->fileProcessors as $fileProcessor) {
-            if (!$fileProcessor->supports($file, $configuration)) {
-                continue;
-            }
-            $result = $fileProcessor->process($file, $configuration);
-            $systemErrorsAndFileDiffs = $this->arrayParametersMerger->merge($systemErrorsAndFileDiffs, $result);
-        }
-        return $systemErrorsAndFileDiffs;
     }
 }

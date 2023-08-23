@@ -1180,7 +1180,6 @@ return array(
     'Rector\\Core\\Contract\\DependencyInjection\\ResetableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResetableInterface.php',
     'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => $baseDir . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
     'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => $baseDir . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
-    'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => $baseDir . '/src/Contract/Processor/FileProcessorInterface.php',
     'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\NonPhpRectorInterface' => $baseDir . '/src/Contract/Rector/NonPhpRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
