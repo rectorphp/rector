@@ -56,6 +56,7 @@ final class AttributeKey
      *
      * The parent node can be still enabled by using custom PHPStan configuration,
      * @see https://github.com/rectorphp/rector-src/pull/4458#discussion_r1257478146
+     * @see https://github.com/rectorphp/rector-src/pull/4841
      */
     public const PARENT_NODE = 'parent';
     /**
