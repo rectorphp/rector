@@ -1202,7 +1202,6 @@ return array(
     'Rector\\Core\\FileSystem\\FilesFinder' => $baseDir . '/src/FileSystem/FilesFinder.php',
     'Rector\\Core\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',
     'Rector\\Core\\FileSystem\\InitFilePathsResolver' => $baseDir . '/src/FileSystem/InitFilePathsResolver.php',
-    'Rector\\Core\\FileSystem\\PhpFilesFinder' => $baseDir . '/src/FileSystem/PhpFilesFinder.php',
     'Rector\\Core\\Logging\\CurrentRectorProvider' => $baseDir . '/src/Logging/CurrentRectorProvider.php',
     'Rector\\Core\\Logging\\RectorOutput' => $baseDir . '/src/Logging/RectorOutput.php',
     'Rector\\Core\\NodeAnalyzer\\ArgsAnalyzer' => $baseDir . '/src/NodeAnalyzer/ArgsAnalyzer.php',
