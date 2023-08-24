@@ -63,6 +63,8 @@ final class ListRulesCommand extends Command
             $this->symfonyStyle->title('Skipped Rector rules');
             $this->symfonyStyle->listing($skippedClasses);
         }
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->note(\sprintf('Loaded %d rules', \count($rectorClasses)));
         return Command::SUCCESS;
     }
     /**
@@ -77,7 +79,7 @@ final class ListRulesCommand extends Command
             return \get_class($rector);
         }, $customRectors);
         \sort($rectorClasses);
-        return $rectorClasses;
+        return \array_unique($rectorClasses);
     }
     /**
      * @return string[]
