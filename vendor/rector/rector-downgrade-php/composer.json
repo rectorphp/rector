@@ -14,7 +14,7 @@
         "phpunit\/phpunit": "^10.1",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.6",
-        "rector\/rector-src": "dev-phpstan-config",
+        "rector\/rector-src": "dev-main",
         "symplify\/easy-ci": "^11.2",
         "symplify\/easy-coding-standard": "^11.2",
         "symplify\/phpstan-extensions": "^11.2",
