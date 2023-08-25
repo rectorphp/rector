@@ -42,6 +42,10 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -106,8 +110,12 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
+        $this->hasChanged = \false;
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);
+        }
+        if ($this->hasChanged) {
+            return $node;
         }
         return null;
     }
@@ -221,6 +229,7 @@ CODE_SAMPLE
         }
         $this->decorateWithDocBlock($functionLike, $param);
         $param->type = null;
+        $this->hasChanged = \true;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike

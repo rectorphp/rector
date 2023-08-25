@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.0 (2023-08-25)
+
+*   Feature: Improve Promise v3 support and use template types.
+    (#307 and #309 by @clue)
+
+*   Improve test suite and update to collect all garbage cycles.
+    (#308 by @clue)
+
 ## 1.13.0 (2023-06-07)
 
 *   Feature: Include timeout logic to avoid dependency on reactphp/promise-timer.

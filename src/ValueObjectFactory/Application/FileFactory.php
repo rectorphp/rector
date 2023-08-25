@@ -37,10 +37,9 @@ final class FileFactory
         }
         $supportedFileExtensions = $configuration->getFileExtensions();
         $filePaths = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
-        $fileExtensions = $configuration->getFileExtensions();
-        $fileWithExtensionsFilter = static function (string $filePath) use($fileExtensions) : bool {
+        $fileWithExtensionsFilter = static function (string $filePath) use($supportedFileExtensions) : bool {
             $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
-            return \in_array($filePathExtension, $fileExtensions, \true);
+            return \in_array($filePathExtension, $supportedFileExtensions, \true);
         };
         return \array_filter($filePaths, $fileWithExtensionsFilter);
     }

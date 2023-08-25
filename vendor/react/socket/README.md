@@ -860,8 +860,8 @@ The interface only offers a single method:
 
 #### connect()
 
-The `connect(string $uri): PromiseInterface<ConnectionInterface,Exception>` method
-can be used to create a streaming connection to the given remote address.
+The `connect(string $uri): PromiseInterface<ConnectionInterface>` method can be used to
+create a streaming connection to the given remote address.
 
 It returns a [Promise](https://github.com/reactphp/promise) which either
 fulfills with a stream implementing [`ConnectionInterface`](#connectioninterface)
@@ -1494,7 +1494,7 @@ This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-composer require react/socket:^1.13
+composer require react/socket:^1.14
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.

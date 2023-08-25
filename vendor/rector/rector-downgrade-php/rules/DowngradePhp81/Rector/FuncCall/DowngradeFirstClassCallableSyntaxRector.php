@@ -16,7 +16,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -49,21 +48,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?StaticCall
     {
-        if ($this->shouldSkip($node)) {
+        if (!$node->isFirstClassCallable()) {
             return null;
         }
         $callbackExpr = $this->createCallback($node);
         return $this->createClosureFromCallableCall($callbackExpr);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
-     */
-    private function shouldSkip($node) : bool
-    {
-        if (\count($node->getRawArgs()) !== 1) {
-            return \true;
-        }
-        return !$node->args[0] instanceof VariadicPlaceholder;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
