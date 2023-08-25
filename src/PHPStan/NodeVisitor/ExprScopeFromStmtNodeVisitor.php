@@ -8,32 +8,31 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\VirtualNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
+use PHPStan\Analyser\MutatingScope;
 final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
+     * @var \PHPStan\Analyser\MutatingScope
      */
-    private $scopeFactory;
-    /**
-     * @var string
-     */
-    private $filePath;
+    private $mutatingScope;
     /**
      * @var \PhpParser\Node\Stmt|null
      */
     private $currentStmt;
-    public function __construct(ScopeFactory $scopeFactory, string $filePath)
+    public function __construct(MutatingScope $mutatingScope)
     {
-        $this->scopeFactory = $scopeFactory;
-        $this->filePath = $filePath;
+        $this->mutatingScope = $mutatingScope;
     }
     public function enterNode(Node $node) : ?Node
     {
         if ($node instanceof Stmt) {
             $this->currentStmt = $node;
+            return null;
+        }
+        if ($node instanceof VirtualNode) {
             return null;
         }
         if (!$node instanceof Expr || $node->getAttribute(AttributeKey::EXPRESSION_DEPTH) < 2) {
@@ -44,9 +43,8 @@ final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
             return null;
         }
         // too deep Expr, eg: $$param = $$bar = self::decodeValue($result->getItem()->getTextContent());
-        $filePath = $this->filePath;
-        $scope = $this->currentStmt instanceof Stmt ? $this->currentStmt->getAttribute(AttributeKey::SCOPE) : $this->scopeFactory->createFromFile($filePath);
-        $scope = $scope instanceof Scope ? $scope : $this->scopeFactory->createFromFile($filePath);
+        $scope = $this->currentStmt instanceof Stmt ? $this->currentStmt->getAttribute(AttributeKey::SCOPE) : $this->mutatingScope;
+        $scope = $scope instanceof Scope ? $scope : $this->mutatingScope;
         $node->setAttribute(AttributeKey::SCOPE, $scope);
         return null;
     }
