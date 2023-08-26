@@ -65,17 +65,17 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
+        if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($node)) {
+            return null;
+        }
         if ($this->shouldSkipArray($node)) {
             return null;
         }
         /** @var MutatingScope $scope */
-        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
+        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope);
     }
     private function shouldSkipArray(Array_ $array) : bool
     {
-        if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($array)) {
-            return \true;
-        }
         foreach ($array->items as $item) {
             if (!$item instanceof ArrayItem) {
                 continue;

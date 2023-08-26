@@ -108,7 +108,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var MutatingScope $scope */
-        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
+        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope);
     }
     private function refactorUnderClassConst(ClassConst $classConst) : ?ClassConst
     {
