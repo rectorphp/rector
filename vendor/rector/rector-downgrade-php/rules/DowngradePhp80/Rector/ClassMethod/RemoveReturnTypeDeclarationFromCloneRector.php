@@ -47,10 +47,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node, '__clone')) {
+        if (!$node->returnType instanceof Node) {
             return null;
         }
-        if (!$node->returnType instanceof Node) {
+        if (!$this->isName($node, '__clone')) {
             return null;
         }
         $node->returnType = null;

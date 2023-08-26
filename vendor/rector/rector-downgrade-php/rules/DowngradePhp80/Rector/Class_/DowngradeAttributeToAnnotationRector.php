@@ -88,6 +88,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->attrGroups === []) {
+            return null;
+        }
         $this->isDowngraded = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->attrGroups as $attrGroup) {
@@ -102,13 +105,13 @@ CODE_SAMPLE
                     continue;
                 }
                 unset($attrGroup->attrs[$key]);
+                $this->isDowngraded = \true;
                 if (\strpos($attributeToAnnotation->getTag(), '\\') === \false) {
                     $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new GenericTagValueNode('')));
-                } else {
-                    $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());
-                    $phpDocInfo->addTagValueNode($doctrineAnnotation);
+                    continue;
                 }
-                $this->isDowngraded = \true;
+                $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());
+                $phpDocInfo->addTagValueNode($doctrineAnnotation);
             }
         }
         // cleanup empty attr groups
