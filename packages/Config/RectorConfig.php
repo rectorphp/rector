@@ -176,8 +176,10 @@ final class RectorConfig extends Container
     public function import(string $filePath) : void
     {
         $paths = [$filePath];
-        $filesystemTweaker = new FilesystemTweaker();
-        $paths = $filesystemTweaker->resolveWithFnmatch($paths);
+        if (\strpos($filePath, '*') !== \false) {
+            $filesystemTweaker = new FilesystemTweaker();
+            $paths = $filesystemTweaker->resolveWithFnmatch($paths);
+        }
         foreach ($paths as $path) {
             $this->importFile($path);
         }
