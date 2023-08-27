@@ -218,7 +218,7 @@ CODE_SAMPLE;
     public function leaveNode(Node $node)
     {
         $objectHash = \spl_object_hash($node);
-        if ($this->toBeRemovedNodeHash !== null && $this->toBeRemovedNodeHash === $objectHash) {
+        if ($this->toBeRemovedNodeHash === $objectHash) {
             $this->toBeRemovedNodeHash = null;
             return NodeTraverser::REMOVE_NODE;
         }
