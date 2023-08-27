@@ -217,19 +217,12 @@ CODE_SAMPLE;
      */
     public function leaveNode(Node $node)
     {
-        if ($this->toBeRemovedNodeHash !== null && $this->toBeRemovedNodeHash === \spl_object_hash($node)) {
+        $objectHash = \spl_object_hash($node);
+        if ($this->toBeRemovedNodeHash !== null && $this->toBeRemovedNodeHash === $objectHash) {
             $this->toBeRemovedNodeHash = null;
             return NodeTraverser::REMOVE_NODE;
         }
-        $objectHash = \spl_object_hash($node);
-        $result = $this->nodesToReturn[$objectHash] ?? $node;
-        if (\is_array($result)) {
-            return $result;
-        }
-        if (\get_class($result) === \get_class($node)) {
-            return $result;
-        }
-        return $node;
+        return $this->nodesToReturn[$objectHash] ?? $node;
     }
     protected function isName(Node $node, string $name) : bool
     {
@@ -289,18 +282,17 @@ CODE_SAMPLE;
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
-        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-        $originalNodeHash = \spl_object_hash($originalNode);
         if (\is_array($refactoredNode)) {
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
+            // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+            $originalNodeHash = \spl_object_hash($originalNode);
             // will be replaced in leaveNode() the original node must be passed
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             return $originalNode;
         }
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-        $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
         return $refactoredNode;
     }
     /**
