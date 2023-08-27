@@ -222,7 +222,14 @@ CODE_SAMPLE;
             return NodeTraverser::REMOVE_NODE;
         }
         $objectHash = \spl_object_hash($node);
-        return $this->nodesToReturn[$objectHash] ?? $node;
+        $result = $this->nodesToReturn[$objectHash] ?? $node;
+        if (\is_array($result)) {
+            return $result;
+        }
+        if (\get_class($result) === \get_class($node)) {
+            return $result;
+        }
+        return $node;
     }
     protected function isName(Node $node, string $name) : bool
     {
