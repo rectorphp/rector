@@ -68,6 +68,9 @@ CODE_SAMPLE
         if (!$classReflection->isSubclassOf('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface')) {
             return null;
         }
+        if ($classReflection->getParentClass() === null) {
+            return null;
+        }
         if ($this->hasParentCallOfMethod($node, MethodName::CONSTRUCT)) {
             return null;
         }
