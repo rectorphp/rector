@@ -59,8 +59,9 @@ class ConsoleSectionOutput extends StreamOutput
     public function setMaxHeight(int $maxHeight) : void
     {
         // when changing max height, clear output of current section and redraw again with the new height
-        $existingContent = $this->popStreamContentUntilCurrentSection($this->maxHeight ? \min($this->maxHeight, $this->lines) : $this->lines);
+        $previousMaxHeight = $this->maxHeight;
         $this->maxHeight = $maxHeight;
+        $existingContent = $this->popStreamContentUntilCurrentSection($previousMaxHeight ? \min($previousMaxHeight, $this->lines) : $this->lines);
         parent::doWrite($this->getVisibleContent(), \false);
         parent::doWrite($existingContent, \false);
     }
@@ -120,8 +121,7 @@ class ConsoleSectionOutput extends StreamOutput
             // re-add the line break (that has been removed in the above `explode()` for
             // - every line that is not the last line
             // - if $newline is required, also add it to the last line
-            // - if it's not new line, but input ending with `\PHP_EOL`
-            if ($i < $count || $newline || \substr_compare($input, \PHP_EOL, -\strlen(\PHP_EOL)) === 0) {
+            if ($i < $count || $newline) {
                 $lineContent .= \PHP_EOL;
             }
             // skip line if there is no text (or newline for that matter)
@@ -159,6 +159,11 @@ class ConsoleSectionOutput extends StreamOutput
      */
     protected function doWrite(string $message, bool $newline)
     {
+        // Simulate newline behavior for consistent output formatting, avoiding extra logic
+        if (!$newline && \substr_compare($message, \PHP_EOL, -\strlen(\PHP_EOL)) === 0) {
+            $message = \substr($message, 0, -\strlen(\PHP_EOL));
+            $newline = \true;
+        }
         if (!$this->isDecorated()) {
             parent::doWrite($message, $newline);
             return;
@@ -194,7 +199,7 @@ class ConsoleSectionOutput extends StreamOutput
             if ($section === $this) {
                 break;
             }
-            $numberOfLinesToClear += $section->lines;
+            $numberOfLinesToClear += $section->maxHeight ? \min($section->lines, $section->maxHeight) : $section->lines;
             if ('' !== ($sectionContent = $section->getVisibleContent())) {
                 if (\substr_compare($sectionContent, \PHP_EOL, -\strlen(\PHP_EOL)) !== 0) {
                     $sectionContent .= \PHP_EOL;

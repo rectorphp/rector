@@ -11,6 +11,7 @@
 namespace RectorPrefix202308\Symfony\Component\Console\Formatter;
 
 use RectorPrefix202308\Symfony\Component\Console\Exception\InvalidArgumentException;
+use function RectorPrefix202308\Symfony\Component\String\b;
 /**
  * Formatter class for console output.
  *
@@ -213,7 +214,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             $prefix = '';
         }
         \preg_match('~(\\n)$~', $text, $matches);
-        $text = $prefix . \preg_replace('~([^\\n]{' . $width . '})\\ *~', "\$1\n", $text);
+        $text = $prefix . $this->addLineBreaks($text, $width);
         $text = \rtrim($text, "\n") . ($matches[1] ?? '');
         if (!$currentLineLength && '' !== $current && \substr_compare($current, "\n", -\strlen("\n")) !== 0) {
             $text = "\n" . $text;
@@ -231,5 +232,10 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             }
         }
         return \implode("\n", $lines);
+    }
+    private function addLineBreaks(string $text, int $width) : string
+    {
+        $encoding = \mb_detect_encoding($text, null, \true) ?: 'UTF-8';
+        return b($text)->toCodePointString($encoding)->wordwrap($width, "\n", \true)->toByteString($encoding);
     }
 }
