@@ -221,6 +221,9 @@ CODE_SAMPLE;
      */
     public function leaveNode(Node $node)
     {
+        if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
+            return null;
+        }
         $objectHash = \spl_object_hash($node);
         if ($this->toBeRemovedNodeHash === $objectHash) {
             $this->toBeRemovedNodeHash = null;
