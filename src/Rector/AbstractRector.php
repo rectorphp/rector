@@ -229,7 +229,6 @@ CODE_SAMPLE;
         $this->traverseNodesWithCallable($node, static function (Node $subNode) use($otherTypes) {
             if (\in_array(\get_class($subNode), $otherTypes, \true)) {
                 $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
-                $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
             }
             return null;
         });
