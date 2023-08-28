@@ -220,11 +220,14 @@ CODE_SAMPLE;
         //    1. registered in getNodesTypes() method
         //    2. different with current node type, as already decorated above
         //
-        $types = \array_filter($this->getNodeTypes(), static function (string $nodeType) use($node) : bool {
+        $otherTypes = \array_filter($this->getNodeTypes(), static function (string $nodeType) use($node) : bool {
             return $nodeType !== \get_class($node);
         });
-        $this->traverseNodesWithCallable($node, static function (Node $subNode) use($types) {
-            if (\in_array(\get_class($subNode), $types, \true)) {
+        if ($otherTypes === []) {
+            return;
+        }
+        $this->traverseNodesWithCallable($node, static function (Node $subNode) use($otherTypes) {
+            if (\in_array(\get_class($subNode), $otherTypes, \true)) {
                 $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
                 $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
             }
