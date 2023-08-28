@@ -47,9 +47,6 @@ final class RectifiedAnalyzer
         if ($originalNode instanceof Node) {
             return \false;
         }
-        if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
-            return \false;
-        }
         /**
          * Start token pos must be < 0 to continue, as the node and parent node just re-printed
          *
