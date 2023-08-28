@@ -114,6 +114,11 @@ final class AttributeKey
      */
     public const CREATED_BY_RULE = 'created_by_rule';
     /**
+     * Helps with skipped below node
+     * @var string
+     */
+    public const SKIPPED_BY_RECTOR_RULE = 'skipped_rector_rule';
+    /**
      * @var string
      */
     public const WRAPPED_IN_PARENTHESES = 'wrapped_in_parentheses';
