@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  *      - already applied same Rector rule before current Rector rule on last previous Rector rule.
  *      - just re-printed but token start still >= 0
+ *      - has above node skipped traverse children on current rule
  */
 final class RectifiedAnalyzer
 {
