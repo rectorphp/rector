@@ -61,9 +61,9 @@ final class PhpDocInfoFactory
      */
     private $phpDocNodeByTypeFinder;
     /**
-     * @var array<string, PhpDocInfo>
+     * @var array<int, PhpDocInfo>
      */
-    private $phpDocInfosByObjectHash = [];
+    private $phpDocInfosByObjectId = [];
     public function __construct(PhpDocNodeMapper $phpDocNodeMapper, CurrentNodeProvider $currentNodeProvider, Lexer $lexer, BetterPhpDocParser $betterPhpDocParser, StaticTypeMapper $staticTypeMapper, AnnotationNaming $annotationNaming, RectorChangeCollector $rectorChangeCollector, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNodeMapper = $phpDocNodeMapper;
@@ -90,9 +90,9 @@ final class PhpDocInfoFactory
     }
     public function createFromNode(Node $node) : ?\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $objectHash = \spl_object_hash($node);
-        if (isset($this->phpDocInfosByObjectHash[$objectHash])) {
-            return $this->phpDocInfosByObjectHash[$objectHash];
+        $objectId = \spl_object_id($node);
+        if (isset($this->phpDocInfosByObjectId[$objectId])) {
+            return $this->phpDocInfosByObjectId[$objectId];
         }
         /** @see \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator::decorate() */
         $this->currentNodeProvider->setNode($node);
@@ -111,7 +111,7 @@ final class PhpDocInfoFactory
             $this->setPositionOfLastToken($phpDocNode);
         }
         $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $tokenIterator, $node);
-        $this->phpDocInfosByObjectHash[$objectHash] = $phpDocInfo;
+        $this->phpDocInfosByObjectId[$objectId] = $phpDocInfo;
         return $phpDocInfo;
     }
     /**

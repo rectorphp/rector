@@ -16,9 +16,9 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
      */
     private $callable;
     /**
-     * @var string|null
+     * @var int|null
      */
-    private $nodeHashToRemove;
+    private $nodeIdToRemove;
     /**
      * @param callable(Node $node): (int|Node|null) $callable
      */
@@ -36,7 +36,7 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
         /** @var int|Node|null $newNode */
         $newNode = $callable($node);
         if ($newNode === NodeTraverser::REMOVE_NODE) {
-            $this->nodeHashToRemove = \spl_object_hash($originalNode);
+            $this->nodeIdToRemove = \spl_object_id($originalNode);
             return $originalNode;
         }
         if ($originalNode instanceof Stmt && $newNode instanceof Expr) {
@@ -49,8 +49,8 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($this->nodeHashToRemove === \spl_object_hash($node)) {
-            $this->nodeHashToRemove = null;
+        if ($this->nodeIdToRemove === \spl_object_id($node)) {
+            $this->nodeIdToRemove = null;
             return NodeTraverser::REMOVE_NODE;
         }
         return $node;

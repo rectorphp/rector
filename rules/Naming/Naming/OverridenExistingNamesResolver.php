@@ -30,7 +30,7 @@ final class OverridenExistingNamesResolver
      */
     private $nodeNameResolver;
     /**
-     * @var array<string, array<int, string>>
+     * @var array<int, array<int, string>>
      */
     private $overridenExistingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
@@ -73,9 +73,9 @@ final class OverridenExistingNamesResolver
      */
     private function resolveOveriddenNamesForNew($functionLike) : array
     {
-        $classMethodHash = \spl_object_hash($functionLike);
-        if (isset($this->overridenExistingVariableNamesByClassMethod[$classMethodHash])) {
-            return $this->overridenExistingVariableNamesByClassMethod[$classMethodHash];
+        $classMethodId = \spl_object_id($functionLike);
+        if (isset($this->overridenExistingVariableNamesByClassMethod[$classMethodId])) {
+            return $this->overridenExistingVariableNamesByClassMethod[$classMethodId];
         }
         $currentlyUsedNames = [];
         /** @var Assign[] $assigns */
@@ -91,7 +91,7 @@ final class OverridenExistingNamesResolver
         }
         $currentlyUsedNames = \array_values($currentlyUsedNames);
         $currentlyUsedNames = $this->arrayFilter->filterWithAtLeastTwoOccurences($currentlyUsedNames);
-        $this->overridenExistingVariableNamesByClassMethod[$classMethodHash] = $currentlyUsedNames;
+        $this->overridenExistingVariableNamesByClassMethod[$classMethodId] = $currentlyUsedNames;
         return $currentlyUsedNames;
     }
 }
