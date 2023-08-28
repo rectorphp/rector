@@ -1,10 +1,10 @@
-# 354 Rules Overview
+# 353 Rules Overview
 
 <br>
 
 ## Categories
 
-- [Arguments](#arguments) (5)
+- [Arguments](#arguments) (4)
 
 - [CodeQuality](#codequality) (70)
 
@@ -134,27 +134,6 @@ Replaces defined map of arguments in defined methods and their calls.
  $someObject = new SomeClass;
 -$someObject->someMethod(SomeClass::OLD_CONSTANT);
 +$someObject->someMethod(false);
-```
-
-<br>
-
-### SwapFuncCallArgumentsRector
-
-Reorder arguments in function calls
-
-:wrench: **configure it!**
-
-- class: [`Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`](../rules/Arguments/Rector/FuncCall/SwapFuncCallArgumentsRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        return some_function('one', 'two', 'three');
-+        return some_function('three', 'two', 'one');
-     }
- }
 ```
 
 <br>
