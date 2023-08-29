@@ -112,7 +112,7 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function resolveFromDocBlock(PhpDocInfo $phpDocInfo, Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : Type
     {
-        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(JoinColumn::class);
+        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
         return $this->processToOneRelation($property, $doctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode);
     }
     private function resolveFromObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable) : Type

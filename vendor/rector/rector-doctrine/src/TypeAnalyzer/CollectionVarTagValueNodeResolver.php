@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\TypeAnalyzer;
 
-use RectorPrefix202308\Doctrine\ORM\Mapping\OneToMany;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -21,7 +20,7 @@ final class CollectionVarTagValueNodeResolver
     public function resolve(Property $property) : ?VarTagValueNode
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (!$phpDocInfo->hasByAnnotationClass(OneToMany::class)) {
+        if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany')) {
             return null;
         }
         return $phpDocInfo->getVarTagValueNode();

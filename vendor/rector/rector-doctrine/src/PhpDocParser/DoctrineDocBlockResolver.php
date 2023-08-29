@@ -21,6 +21,6 @@ final class DoctrineDocBlockResolver
     public function isDoctrineEntityClass(Class_ $class) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        return $phpDocInfo->hasByAnnotationClasses([Entity::class, Embeddable::class]);
+        return $phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable']);
     }
 }

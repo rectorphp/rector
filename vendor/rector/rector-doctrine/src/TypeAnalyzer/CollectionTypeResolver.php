@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\TypeAnalyzer;
 
-use RectorPrefix202308\Doctrine\ORM\Mapping\OneToMany;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -60,7 +59,7 @@ final class CollectionTypeResolver
     public function resolveFromOneToManyProperty(Property $property) : ?FullyQualifiedObjectType
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(OneToMany::class);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
