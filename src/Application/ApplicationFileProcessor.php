@@ -160,13 +160,9 @@ final class ApplicationFileProcessor
         }
         return $systemErrorsAndFileDiffs;
     }
-    /**
-     * @param string|\Rector\Core\ValueObject\Application\File $filePath
-     */
-    private function resolveSystemError(Throwable $throwable, $filePath) : SystemError
+    private function resolveSystemError(Throwable $throwable, string $filePath) : SystemError
     {
         $errorMessage = \sprintf('System error: "%s"', $throwable->getMessage()) . \PHP_EOL;
-        $filePath = $filePath instanceof File ? $filePath->getFilePath() : $filePath;
         if ($this->symfonyStyle->isDebug()) {
             return new SystemError($errorMessage . \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString(), $filePath, $throwable->getLine());
         }
