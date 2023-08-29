@@ -136,7 +136,7 @@ final class ClassMethodReturnTypeOverrideGuard
         $parentClassMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
         // nothing to check
         if (!$parentClassMethodReflection instanceof MethodReflection) {
-            return \true;
+            return !$this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($parentClassMethodReflection, $classMethod, $scope);
         if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {

@@ -24,7 +24,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,17 +35,17 @@ final class ReturnTypeFromStrictParamRector extends AbstractScopeAwareRector imp
 {
     /**
      * @readonly
-     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $parentClassMethodTypeOverrideGuard;
+    private $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
-        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -89,7 +89,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        if ($this->shouldSkipNode($node)) {
+        if ($this->shouldSkipNode($node, $scope)) {
             return null;
         }
         $return = $this->findCurrentScopeReturn($node->stmts);
@@ -171,18 +171,13 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function shouldSkipNode($node) : bool
+    private function shouldSkipNode($node, Scope $scope) : bool
     {
         if ($node->returnType !== null) {
             return \true;
         }
-        if ($node instanceof ClassMethod) {
-            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
-                return \true;
-            }
-            if ($node->isMagic()) {
-                return \true;
-            }
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+            return \true;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($returnType instanceof MixedType) {
