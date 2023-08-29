@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\TypeAnalyzer;
 
+use RectorPrefix202308\Doctrine\Common\Collections\Collection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
@@ -20,6 +21,6 @@ final class CollectionTypeFactory
     private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType) : GenericObjectType
     {
         $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
-        return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
+        return new GenericObjectType(Collection::class, $genericTypes);
     }
 }

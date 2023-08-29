@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
+use RectorPrefix202308\Doctrine\ORM\Mapping\JoinColumn;
 use RectorPrefix202308\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
@@ -111,7 +112,7 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function resolveFromDocBlock(PhpDocInfo $phpDocInfo, Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : Type
     {
-        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
+        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(JoinColumn::class);
         return $this->processToOneRelation($property, $doctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode);
     }
     private function resolveFromObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable) : Type

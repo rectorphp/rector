@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\PhpDocParser;
 
+use RectorPrefix202308\Doctrine\ORM\Mapping\Entity;
+use RectorPrefix202308\Doctrine\ORM\Mapping\Embeddable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 final class DoctrineDocBlockResolver
@@ -19,6 +21,6 @@ final class DoctrineDocBlockResolver
     public function isDoctrineEntityClass(Class_ $class) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        return $phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable']);
+        return $phpDocInfo->hasByAnnotationClasses([Entity::class, Embeddable::class]);
     }
 }

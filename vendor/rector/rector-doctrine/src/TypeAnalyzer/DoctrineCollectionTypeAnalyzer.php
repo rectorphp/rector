@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\TypeAnalyzer;
 
+use RectorPrefix202308\Doctrine\Common\Collections\Collection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -40,6 +41,6 @@ final class DoctrineCollectionTypeAnalyzer
             return \false;
         }
         $className = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
-        return $className === 'Doctrine\\Common\\Collections\\Collection';
+        return $className === Collection::class;
     }
 }
