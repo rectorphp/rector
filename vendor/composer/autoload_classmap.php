@@ -1376,6 +1376,7 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ImproveDoctrineCollectionDocTypeInEntityRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\MakeEntityDateTimePropertyDateTimeInterfaceRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php',
+    'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\OrderByKeyToClassConstRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/OrderByKeyToClassConstRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromDoctrineCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToManyRelationTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php',

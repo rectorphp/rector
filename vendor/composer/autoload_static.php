@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a
+class ComposerStaticInit924c364c335ca8c735536588150332cd
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1596,6 +1596,7 @@ class ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ImproveDoctrineCollectionDocTypeInEntityRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\MakeEntityDateTimePropertyDateTimeInterfaceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php',
+        'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\OrderByKeyToClassConstRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/OrderByKeyToClassConstRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromDoctrineCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToManyRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php',
@@ -2606,9 +2607,9 @@ class ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb1d82d184156b56eb1a7dd71b46b888a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit924c364c335ca8c735536588150332cd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit924c364c335ca8c735536588150332cd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit924c364c335ca8c735536588150332cd::$classMap;
 
         }, null, ClassLoader::class);
     }

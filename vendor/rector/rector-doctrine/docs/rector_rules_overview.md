@@ -1,4 +1,4 @@
-# 14 Rules Overview
+# 15 Rules Overview
 
 ## ChangeBigIntEntityPropertyToIntTypeRector
 
@@ -213,6 +213,26 @@ Move default value for entity property to constructor, the safest place
 +        $this->when = new \DateTime();
 +    }
  }
+```
+
+<br>
+
+## OrderByKeyToClassConstRector
+
+Replace OrderBy Attribute ASC/DESC with class constant from Criteria
+
+- class: [`Rector\Doctrine\CodeQuality\Rector\Property\OrderByKeyToClassConstRector`](../rules/CodeQuality/Rector/Property/OrderByKeyToClassConstRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class ReplaceOrderByAscWithClassConstant
+ {
+-    #[ORM\OrderBy(['createdAt' => 'ASC'])]
++    #[ORM\OrderBy(['createdAt' => \Doctrine\Common\Collections\Criteria::ASC])]
+     protected \DateTimeInterface $messages;
+ }
+ ?>
 ```
 
 <br>
