@@ -144,11 +144,6 @@ final class RectorConfig extends Container
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
         // store configuration to cache
         $this->ruleConfigurations[$rectorClass] = \array_merge($this->ruleConfigurations[$rectorClass] ?? [], $configuration);
-        $isBound = $this->bound($rectorClass);
-        // avoid double registration
-        if ($isBound) {
-            return;
-        }
         $this->singleton($rectorClass);
         $this->tagRectorService($rectorClass);
         $this->afterResolving($rectorClass, function (ConfigurableRectorInterface $configurableRector) use($rectorClass) : void {
