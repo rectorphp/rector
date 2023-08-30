@@ -394,9 +394,12 @@ final class LazyContainerFactory
                 return;
             }
             $skippedClassResolver = new SkippedClassResolver();
-            $skippedClasses = \array_keys($skippedClassResolver->resolve());
-            foreach ($skippedClasses as $skippedClass) {
-                ContainerMemento::forgetService($container, $skippedClass);
+            $skippedElements = $skippedClassResolver->resolve();
+            foreach ($skippedElements as $skippedClass => $path) {
+                // completely forget the Rector rule only when no path specified
+                if ($path === null) {
+                    ContainerMemento::forgetService($container, $skippedClass);
+                }
             }
             $hasForgotten = \true;
         });
