@@ -27,7 +27,7 @@
         }
     ],
     "support": {
-        "irc": "irc:\/\/irc.freenode.org\/composer",
+        "irc": "ircs:\/\/irc.libera.chat:6697\/composer",
         "issues": "https:\/\/github.com\/composer\/semver\/issues"
     },
     "require": {

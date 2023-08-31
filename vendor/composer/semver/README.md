@@ -6,8 +6,9 @@ Semver (Semantic Versioning) library that offers utilities, version constraint p
 Originally written as part of [composer/composer](https://github.com/composer/composer),
 now extracted and made available as a stand-alone library.
 
-[![Continuous Integration](https://github.com/composer/semver/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/composer/semver/actions)
-
+[![Continuous Integration](https://github.com/composer/semver/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/composer/semver/actions/workflows/continuous-integration.yml)
+[![PHP Lint](https://github.com/composer/semver/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/composer/semver/actions/workflows/lint.yml)
+[![PHPStan](https://github.com/composer/semver/actions/workflows/phpstan.yml/badge.svg?branch=main)](https://github.com/composer/semver/actions/workflows/phpstan.yml)
 
 Installation
 ------------
@@ -15,7 +16,7 @@ Installation
 Install the latest version with:
 
 ```bash
-$ composer require composer/semver
+composer require composer/semver
 ```
 
 
