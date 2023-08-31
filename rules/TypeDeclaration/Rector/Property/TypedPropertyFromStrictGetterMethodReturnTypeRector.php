@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
@@ -19,6 +19,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -48,12 +49,18 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
+     */
+    private $constructorAssignDetector;
+    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
         $this->reflectionResolver = $reflectionResolver;
+        $this->constructorAssignDetector = $constructorAssignDetector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -105,8 +112,9 @@ CODE_SAMPLE
             if ($getterReturnType instanceof MixedType) {
                 continue;
             }
+            $isAssignedInConstructor = $this->constructorAssignDetector->isPropertyAssigned($node, $this->getName($property));
             // if property is public, it should be nullable
-            if ($property->isPublic() && !TypeCombinator::containsNull($getterReturnType)) {
+            if ($property->isPublic() && !TypeCombinator::containsNull($getterReturnType) && !$isAssignedInConstructor) {
                 $getterReturnType = TypeCombinator::addNull($getterReturnType);
             }
             $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, TypeKind::PROPERTY);
@@ -118,7 +126,7 @@ CODE_SAMPLE
                 continue;
             }
             $property->type = $propertyTypeNode;
-            $this->decorateDefaultExpr($getterReturnType, $property);
+            $this->decorateDefaultExpr($getterReturnType, $property, $isAssignedInConstructor);
             $this->refactorPhpDoc($property);
             $hasChanged = \true;
         }
@@ -131,8 +139,11 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function decorateDefaultExpr(Type $propertyType, Property $property) : void
+    private function decorateDefaultExpr(Type $propertyType, Property $property, bool $isAssignedInConstructor) : void
     {
+        if ($isAssignedInConstructor) {
+            return;
+        }
         $propertyProperty = $property->props[0];
         // already has a default value
         if ($propertyProperty->default instanceof Expr) {
