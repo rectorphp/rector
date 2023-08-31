@@ -3,11 +3,13 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -116,7 +118,7 @@ CODE_SAMPLE
                 continue;
             }
             $property->type = $propertyTypeNode;
-            $this->decorateDefaultNull($getterReturnType, $property);
+            $this->decorateDefaultExpr($getterReturnType, $property);
             $this->refactorPhpDoc($property);
             $hasChanged = \true;
         }
@@ -129,16 +131,21 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function decorateDefaultNull(Type $propertyType, Property $property) : void
+    private function decorateDefaultExpr(Type $propertyType, Property $property) : void
     {
-        if (!TypeCombinator::containsNull($propertyType)) {
-            return;
-        }
         $propertyProperty = $property->props[0];
+        // already has a default value
         if ($propertyProperty->default instanceof Expr) {
             return;
         }
-        $propertyProperty->default = $this->nodeFactory->createNull();
+        if (TypeCombinator::containsNull($propertyType)) {
+            $propertyProperty->default = $this->nodeFactory->createNull();
+            return;
+        }
+        // set default for string
+        if ($propertyType instanceof StringType) {
+            $propertyProperty->default = new String_('');
+        }
     }
     private function isConflictingDefaultExprType(Property $property, Type $getterReturnType) : bool
     {
