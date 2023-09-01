@@ -24,7 +24,8 @@
         "tomasvotruba\/class-leak": "^0.1",
         "tomasvotruba\/cognitive-complexity": "^0.1",
         "tomasvotruba\/type-coverage": "^0.2",
-        "tomasvotruba\/unused-public": "^0.2"
+        "tomasvotruba\/unused-public": "^0.2",
+        "tracy\/tracy": "^2.10"
     },
     "autoload": {
         "psr-4": {
