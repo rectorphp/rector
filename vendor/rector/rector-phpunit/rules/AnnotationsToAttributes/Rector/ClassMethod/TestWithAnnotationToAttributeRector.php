@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod;
 
-use RectorPrefix202308\Nette\Utils\Json;
+use RectorPrefix202309\Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;

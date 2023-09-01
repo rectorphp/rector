@@ -5,7 +5,7 @@ namespace Rector\Core\ValueObject;
 
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202308\Webmozart\Assert\Assert;
+use RectorPrefix202309\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\ValueObjectFactory\ProcessResultFactory
  */

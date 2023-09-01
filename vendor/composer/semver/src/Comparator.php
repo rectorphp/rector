@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202308\Composer\Semver;
+namespace RectorPrefix202309\Composer\Semver;
 
-use RectorPrefix202308\Composer\Semver\Constraint\Constraint;
+use RectorPrefix202309\Composer\Semver\Constraint\Constraint;
 class Comparator
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Broadcasting;
+namespace RectorPrefix202309\Illuminate\Contracts\Broadcasting;
 
 interface ShouldBroadcast
 {

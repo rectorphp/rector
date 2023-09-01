@@ -18,7 +18,7 @@ use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202308\Webmozart\Assert\Assert;
+use RectorPrefix202309\Webmozart\Assert\Assert;
 /**
  * @see \Rector\PHPUnit\Tests\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector\AnnotationWithValueToAttributeRectorTest
  */

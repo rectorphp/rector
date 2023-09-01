@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Validation;
+namespace RectorPrefix202309\Illuminate\Contracts\Validation;
 
-use RectorPrefix202308\Illuminate\Contracts\Support\MessageProvider;
+use RectorPrefix202309\Illuminate\Contracts\Support\MessageProvider;
 interface Validator extends MessageProvider
 {
     /**

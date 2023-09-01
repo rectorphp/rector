@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Filesystem;
+namespace RectorPrefix202309\Illuminate\Contracts\Filesystem;
 
 use Exception;
 class LockTimeoutException extends Exception

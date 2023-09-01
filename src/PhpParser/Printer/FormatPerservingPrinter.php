@@ -5,7 +5,7 @@ namespace Rector\Core\PhpParser\Printer;
 
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix202308\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202309\Symfony\Component\Filesystem\Filesystem;
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  */

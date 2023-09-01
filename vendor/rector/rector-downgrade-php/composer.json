@@ -11,20 +11,20 @@
         "phpstan\/phpstan": "^1.9",
         "phpstan\/phpstan-deprecation-rules": "^1.1",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
-        "phpunit\/phpunit": "^10.1",
-        "rector\/phpstan-rules": "^0.6",
-        "rector\/rector-generator": "^0.6",
+        "phpunit\/phpunit": "^10.3",
+        "rector\/phpstan-rules": "^0.7",
+        "rector\/rector-generator": "^0.7.3",
         "rector\/rector-src": "dev-main",
         "symplify\/easy-ci": "^11.2",
-        "symplify\/easy-coding-standard": "^11.2",
-        "symplify\/phpstan-extensions": "^11.2",
-        "symplify\/phpstan-rules": "^11.4",
+        "symplify\/easy-coding-standard": "^12.0",
+        "symplify\/phpstan-extensions": "^11.3",
+        "symplify\/phpstan-rules": "^12.0",
         "symplify\/rule-doc-generator": "^12.0",
         "symplify\/vendor-patches": "^11.2",
-        "tomasvotruba\/class-leak": "0.0.22.72",
+        "tomasvotruba\/class-leak": "^0.1",
         "tomasvotruba\/cognitive-complexity": "^0.1",
         "tomasvotruba\/type-coverage": "^0.2",
-        "tomasvotruba\/unused-public": "^0.1"
+        "tomasvotruba\/unused-public": "^0.2"
     },
     "autoload": {
         "psr-4": {

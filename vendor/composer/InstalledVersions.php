@@ -9,10 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202308\Composer;
+namespace RectorPrefix202309\Composer;
 
-use RectorPrefix202308\Composer\Autoload\ClassLoader;
-use RectorPrefix202308\Composer\Semver\VersionParser;
+use RectorPrefix202309\Composer\Autoload\ClassLoader;
+use RectorPrefix202309\Composer\Semver\VersionParser;
 /**
  * This class is copied in every Composer installed project and available to all
  *
@@ -277,7 +277,7 @@ class InstalledVersions
     private static function getInstalled()
     {
         if (null === self::$canGetVendors) {
-            self::$canGetVendors = \method_exists('RectorPrefix202308\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
+            self::$canGetVendors = \method_exists('RectorPrefix202309\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
         }
         $installed = array();
         if (self::$canGetVendors) {

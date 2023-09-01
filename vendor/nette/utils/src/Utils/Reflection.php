@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202308\Nette\Utils;
+namespace RectorPrefix202309\Nette\Utils;
 
-use RectorPrefix202308\Nette;
+use RectorPrefix202309\Nette;
 /**
  * PHP reflection helpers.
  */
@@ -36,7 +36,7 @@ final class Reflection
      */
     public static function getReturnType(\ReflectionFunctionAbstract $func) : ?string
     {
-        $type = $func->getReturnType() ?? (\PHP_VERSION_ID >= 80100 && $func instanceof \ReflectionMethod ? $func->getTentativeReturnType() : null);
+        $type = $func->getReturnType() ?? (\PHP_VERSION_ID >= 80100 && $func instanceof \ReflectionMethod ? $func->getReturnType() : null);
         return self::getType($func, $type);
     }
     /**

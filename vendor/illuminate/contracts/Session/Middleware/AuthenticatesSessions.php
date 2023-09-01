@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Session\Middleware;
+namespace RectorPrefix202309\Illuminate\Contracts\Session\Middleware;
 
 interface AuthenticatesSessions
 {

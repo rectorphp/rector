@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Auth;
+namespace RectorPrefix202309\Illuminate\Contracts\Auth;
 
 interface StatefulGuard extends Guard
 {

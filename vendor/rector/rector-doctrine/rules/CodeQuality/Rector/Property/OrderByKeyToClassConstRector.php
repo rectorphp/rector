@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
-use RectorPrefix202308\Doctrine\Common\Collections\Criteria;
+use RectorPrefix202309\Doctrine\Common\Collections\Criteria;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;

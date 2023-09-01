@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202308\Nette\Utils\FileSystem;
-use RectorPrefix202308\Nette\Utils\Strings;
+use RectorPrefix202309\Nette\Utils\FileSystem;
+use RectorPrefix202309\Nette\Utils\Strings;
 /**
  * @api
  */

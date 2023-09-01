@@ -19,11 +19,11 @@ use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use RectorPrefix202308\Symfony\Component\Console\Application;
-use RectorPrefix202308\Symfony\Component\Console\Command\Command;
-use RectorPrefix202308\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202308\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202309\Symfony\Component\Console\Application;
+use RectorPrefix202309\Symfony\Component\Console\Command\Command;
+use RectorPrefix202309\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202309\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202309\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends Command
 {
     /**

@@ -6,7 +6,7 @@ namespace Rector\Core\Logging;
 use PHPStan\Internal\BytesHelper;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\FileSystem\FilePathHelper;
-use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202309\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorOutput
 {
     /**

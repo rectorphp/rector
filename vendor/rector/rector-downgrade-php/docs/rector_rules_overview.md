@@ -1,4 +1,4 @@
-# 69 Rules Overview
+# 70 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -413,6 +413,25 @@ Downgrade `is_countable()` to former version
  $items = [];
 -return is_countable($items);
 +return is_array($items) || $items instanceof Countable;
+```
+
+<br>
+
+## DowngradeIsEnumRector
+
+Downgrades `isEnum()` on class reflection
+
+- class: [`Rector\DowngradePhp81\Rector\MethodCall\DowngradeIsEnumRector`](../rules/DowngradePhp81/Rector/MethodCall/DowngradeIsEnumRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(ReflectionClass $reflectionClass)
+     {
+-        return $reflectionClass->isEnum();
++        return false;
+     }
+ }
 ```
 
 <br>

@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202308\Illuminate\Contracts\Database\Query;
+namespace RectorPrefix202309\Illuminate\Contracts\Database\Query;
 
-use RectorPrefix202308\Illuminate\Database\Grammar;
+use RectorPrefix202309\Illuminate\Database\Grammar;
 interface Expression
 {
     /**
