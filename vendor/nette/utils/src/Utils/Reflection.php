@@ -36,7 +36,7 @@ final class Reflection
      */
     public static function getReturnType(\ReflectionFunctionAbstract $func) : ?string
     {
-        $type = $func->getReturnType() ?? (\PHP_VERSION_ID >= 80100 && $func instanceof \ReflectionMethod ? $func->getReturnType() : null);
+        $type = $func->getReturnType() ?? (\PHP_VERSION_ID >= 80100 && $func instanceof \ReflectionMethod ? $func->getTentativeReturnType() : null);
         return self::getType($func, $type);
     }
     /**

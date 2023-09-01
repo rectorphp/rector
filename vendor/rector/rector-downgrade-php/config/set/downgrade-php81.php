@@ -24,7 +24,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
     $rectorConfig->rules([DowngradeFinalizePublicClassConstantRector::class, DowngradeFirstClassCallableSyntaxRector::class, DowngradeNeverTypeDeclarationRector::class, DowngradePureIntersectionTypeRector::class, DowngradeNewInInitializerRector::class, DowngradePhp81ResourceReturnToObjectRector::class, DowngradeReadonlyPropertyRector::class, DowngradeArraySpreadStringKeyRector::class, DowngradeArrayIsListRector::class, DowngradeSetAccessibleReflectionPropertyRector::class, DowngradeIsEnumRector::class, DowngradeOctalNumberRector::class]);
     // @see https://php.watch/versions/8.1/internal-method-return-types#reflection
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('ReflectionFunctionAbstract', 'hasTentativeReturnType', 'hasReturnType'), new MethodCallRename('ReflectionFunctionAbstract', 'getTentativeReturnType', 'getReturnType')]);
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('ReflectionFunction', 'hasTentativeReturnType', 'hasReturnType'), new MethodCallRename('ReflectionFunction', 'getTentativeReturnType', 'getReturnType'), new MethodCallRename('ReflectionMethod', 'hasTentativeReturnType', 'hasReturnType'), new MethodCallRename('ReflectionMethod', 'getTentativeReturnType', 'getReturnType')]);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         // @see https://php.watch/versions/8.1/enums#enum-exists
         'enum_exists' => 'class_exists',
