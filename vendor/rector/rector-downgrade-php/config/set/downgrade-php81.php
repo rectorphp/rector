@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202309;
 
+use Rector\DowngradePhp81\Rector\LNumber\DowngradeOctalNumberRector;
 use Rector\DowngradePhp81\Rector\MethodCall\DowngradeIsEnumRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
@@ -21,7 +22,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
-    $rectorConfig->rules([DowngradeFinalizePublicClassConstantRector::class, DowngradeFirstClassCallableSyntaxRector::class, DowngradeNeverTypeDeclarationRector::class, DowngradePureIntersectionTypeRector::class, DowngradeNewInInitializerRector::class, DowngradePhp81ResourceReturnToObjectRector::class, DowngradeReadonlyPropertyRector::class, DowngradeArraySpreadStringKeyRector::class, DowngradeArrayIsListRector::class, DowngradeSetAccessibleReflectionPropertyRector::class, DowngradeIsEnumRector::class]);
+    $rectorConfig->rules([DowngradeFinalizePublicClassConstantRector::class, DowngradeFirstClassCallableSyntaxRector::class, DowngradeNeverTypeDeclarationRector::class, DowngradePureIntersectionTypeRector::class, DowngradeNewInInitializerRector::class, DowngradePhp81ResourceReturnToObjectRector::class, DowngradeReadonlyPropertyRector::class, DowngradeArraySpreadStringKeyRector::class, DowngradeArrayIsListRector::class, DowngradeSetAccessibleReflectionPropertyRector::class, DowngradeIsEnumRector::class, DowngradeOctalNumberRector::class]);
     // @see https://php.watch/versions/8.1/internal-method-return-types#reflection
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('ReflectionFunctionAbstract', 'hasTentativeReturnType', 'hasReturnType'), new MethodCallRename('ReflectionFunctionAbstract', 'getTentativeReturnType', 'getReturnType')]);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [

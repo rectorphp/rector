@@ -1488,6 +1488,7 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNewInInitializerRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php',
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradePureIntersectionTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php',
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
+    'Rector\\DowngradePhp81\\Rector\\LNumber\\DowngradeOctalNumberRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/LNumber/DowngradeOctalNumberRector.php',
     'Rector\\DowngradePhp81\\Rector\\MethodCall\\DowngradeIsEnumRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/MethodCall/DowngradeIsEnumRector.php',
     'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
     'Rector\\DowngradePhp81\\Rector\\StmtsAwareInterface\\DowngradeSetAccessibleReflectionPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/StmtsAwareInterface/DowngradeSetAccessibleReflectionPropertyRector.php',

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1
+class ComposerStaticInit91ee312d8eaa70d4974131caa25e5e59
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1708,6 +1708,7 @@ class ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1
         'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNewInInitializerRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php',
         'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradePureIntersectionTypeRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php',
         'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
+        'Rector\\DowngradePhp81\\Rector\\LNumber\\DowngradeOctalNumberRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/LNumber/DowngradeOctalNumberRector.php',
         'Rector\\DowngradePhp81\\Rector\\MethodCall\\DowngradeIsEnumRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/MethodCall/DowngradeIsEnumRector.php',
         'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
         'Rector\\DowngradePhp81\\Rector\\StmtsAwareInterface\\DowngradeSetAccessibleReflectionPropertyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/StmtsAwareInterface/DowngradeSetAccessibleReflectionPropertyRector.php',
@@ -2609,9 +2610,9 @@ class ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7eab50fc16188ec90f6a7ee7bf8d0cc1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit91ee312d8eaa70d4974131caa25e5e59::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit91ee312d8eaa70d4974131caa25e5e59::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit91ee312d8eaa70d4974131caa25e5e59::$classMap;
 
         }, null, ClassLoader::class);
     }

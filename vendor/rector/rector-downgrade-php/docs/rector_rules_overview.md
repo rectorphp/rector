@@ -1,4 +1,4 @@
-# 70 Rules Overview
+# 71 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -429,7 +429,7 @@ Downgrades `isEnum()` on class reflection
      public function run(ReflectionClass $reflectionClass)
      {
 -        return $reflectionClass->isEnum();
-+        return false;
++        return method_exists($reflectionClass, 'isEnum') ? $reflectionClass->isEnum() : false;
      }
  }
 ```
@@ -730,6 +730,25 @@ Remove the "object" param and return type, add a `@param` and `@return` tags ins
 +     */
 +    public function someFunction($someObject)
      {
+     }
+ }
+```
+
+<br>
+
+## DowngradeOctalNumberRector
+
+Downgrades octal numbers to decimal ones
+
+- class: [`Rector\DowngradePhp81\Rector\LNumber\DowngradeOctalNumberRector`](../rules/DowngradePhp81/Rector/LNumber/DowngradeOctalNumberRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return 0o777;
++        return 0777;
      }
  }
 ```
