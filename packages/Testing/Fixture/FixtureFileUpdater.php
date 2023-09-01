@@ -9,17 +9,16 @@ final class FixtureFileUpdater
     /**
      * @api
      */
-    public static function updateFixtureContent(string $originalFilePath, string $changedContent, string $fixtureFilePath) : void
+    public static function updateFixtureContent(string $originalContent, string $changedContent, string $fixtureFilePath) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {
             return;
         }
-        $newOriginalContent = self::resolveNewFixtureContent($originalFilePath, $changedContent);
+        $newOriginalContent = self::resolveNewFixtureContent($originalContent, $changedContent);
         FileSystem::write($fixtureFilePath, $newOriginalContent);
     }
-    private static function resolveNewFixtureContent(string $originalFilePath, string $changedContent) : string
+    private static function resolveNewFixtureContent(string $originalContent, string $changedContent) : string
     {
-        $originalContent = FileSystem::read($originalFilePath);
         if ($originalContent === $changedContent) {
             return $originalContent;
         }

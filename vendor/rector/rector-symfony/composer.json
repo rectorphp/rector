@@ -15,6 +15,8 @@
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.7",
         "rector\/rector-src": "dev-main",
+        "symfony\/config": "^6.3",
+        "symfony\/dependency-injection": "^6.3",
         "symfony\/routing": "^6.2",
         "symfony\/security-core": "^6.2",
         "symfony\/security-http": "^6.1",
