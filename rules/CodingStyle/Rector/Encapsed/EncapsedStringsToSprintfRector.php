@@ -146,15 +146,15 @@ CODE_SAMPLE
         if (\count($argumentVariables) !== 1) {
             return null;
         }
-        if (\substr_count($mask, '%s') !== 1) {
+        if (\substr_count($mask, '%s') !== 1 && \substr_count($mask, '%d') !== 1) {
             return null;
         }
         $cleanMask = Strings::replace($mask, '#\\%\\%#', '%');
-        if (\substr_compare($mask, '%s', -\strlen('%s')) === 0) {
+        if (\substr_compare($mask, '%s', -\strlen('%s')) === 0 || \substr_compare($mask, '%d', -\strlen('%d')) === 0) {
             $bareString = new String_(\substr($cleanMask, 0, -2));
             return new Concat($bareString, $argumentVariables[0]);
         }
-        if (\strncmp($mask, '%s', \strlen('%s')) === 0) {
+        if (\strncmp($mask, '%s', \strlen('%s')) === 0 || \strncmp($mask, '%d', \strlen('%d')) === 0) {
             $bareString = new String_(\substr($cleanMask, 2));
             return new Concat($argumentVariables[0], $bareString);
         }
