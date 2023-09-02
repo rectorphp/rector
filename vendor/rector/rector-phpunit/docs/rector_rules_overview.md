@@ -1,4 +1,4 @@
-# 46 Rules Overview
+# 47 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -1016,6 +1016,40 @@ Changes `->with()` to more specific method
              ->method('trans')
 -            ->with($this->equalTo('old max {{ max }}!'));
 +            ->with('old max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
+## WithConsecutiveRector
+
+Refactor `"withConsecutive()"` to
+
+- class: [`Rector\PHPUnit\Rector\StmtsAwareInterface\WithConsecutiveRector`](../src/Rector/StmtsAwareInterface/WithConsecutiveRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function run()
+     {
+-        $this->personServiceMock->expects($this->exactly(2))
++        $matcher = $this->exactly(2);
++
++        $this->personServiceMock->expects($matcher)
+             ->method('prepare')
+-            ->withConsecutive(
+-                [1, 2],
+-                [3, 4],
+-            );
++            ->willReturnCallback(function () use ($matcher) {
++                return match ($matcher->numberOfInvocations()) {
++                    1 => [1, 2],
++                    2 => [3, 4]
++                };
++        });
      }
  }
 ```

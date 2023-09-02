@@ -21,10 +21,11 @@
         "symplify\/vendor-patches": "^11.2.0",
         "symplify\/easy-ci": "^11.2.0",
         "rector\/rector-generator": "^0.7",
-        "tomasvotruba\/type-coverage": "^0.1",
-        "tomasvotruba\/unused-public": "^0.2",
+        "tomasvotruba\/type-coverage": "^0.2",
+        "tomasvotruba\/unused-public": "^0.3",
         "tomasvotruba\/cognitive-complexity": "^0.1",
-        "tomasvotruba\/class-leak": "^0.1"
+        "tomasvotruba\/class-leak": "^0.1",
+        "tracy\/tracy": "^2.10"
     },
     "autoload": {
         "psr-4": {
