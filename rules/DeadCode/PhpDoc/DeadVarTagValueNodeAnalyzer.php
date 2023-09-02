@@ -31,15 +31,15 @@ final class DeadVarTagValueNodeAnalyzer
         if ($property->type === null) {
             return \false;
         }
+        if ($varTagValueNode->description !== '') {
+            return \false;
+        }
         // is strict type superior to doc type? keep strict type only
         $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $property);
         if ($propertyType instanceof UnionType && !$docType instanceof UnionType) {
             return !$docType instanceof IntersectionType;
         }
-        if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($property->type, $varTagValueNode->type, $property)) {
-            return \false;
-        }
-        return $varTagValueNode->description === '';
+        return $this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($property->type, $varTagValueNode->type, $property);
     }
 }

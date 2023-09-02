@@ -65,6 +65,9 @@ final class DeadParamTagValueNodeAnalyzer
         if ($param->type === null) {
             return \false;
         }
+        if ($paramTagValueNode->description !== '') {
+            return \false;
+        }
         if ($param->type instanceof Name && $this->nodeNameResolver->isName($param->type, 'object')) {
             return $paramTagValueNode->type instanceof IdentifierTypeNode && (string) $paramTagValueNode->type === 'object';
         }
@@ -75,14 +78,11 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if (!$paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
-            return $paramTagValueNode->description === '';
+            return \true;
         }
         if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($paramTagValueNode->type)) {
             return \false;
         }
-        if (!$this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type)) {
-            return $paramTagValueNode->description === '';
-        }
-        return \false;
+        return !$this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type);
     }
 }
