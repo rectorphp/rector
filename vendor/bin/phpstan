@@ -91,7 +91,4 @@ if (\PHP_VERSION_ID < 80000) {
         return include "phpvfscomposer://" . __DIR__ . '/..' . '/phpstan/phpstan/phpstan';
     }
 }
-if (__FILE__ === \realpath($_SERVER['SCRIPT_NAME'])) {
-    $_SERVER['SCRIPT_NAME'] = \realpath(__DIR__ . '/..' . '/phpstan/phpstan/phpstan');
-}
 return include __DIR__ . '/..' . '/phpstan/phpstan/phpstan';

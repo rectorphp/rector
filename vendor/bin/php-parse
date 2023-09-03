@@ -91,7 +91,4 @@ if (\PHP_VERSION_ID < 80000) {
         return include "phpvfscomposer://" . __DIR__ . '/..' . '/nikic/php-parser/bin/php-parse';
     }
 }
-if (__FILE__ === \realpath($_SERVER['SCRIPT_NAME'])) {
-    $_SERVER['SCRIPT_NAME'] = \realpath(__DIR__ . '/..' . '/nikic/php-parser/bin/php-parse');
-}
 return include __DIR__ . '/..' . '/nikic/php-parser/bin/php-parse';
