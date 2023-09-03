@@ -43,6 +43,8 @@ final class RectorConfig extends Container
             Assert::fileExists($set);
             $this->import($set);
         }
+        // for cache invalidation in case of sets change
+        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_SETS, $sets);
     }
     public function disableParallel() : void
     {
@@ -150,6 +152,8 @@ final class RectorConfig extends Container
             $ruleConfiguration = $this->ruleConfigurations[$rectorClass];
             $configurableRector->configure($ruleConfiguration);
         });
+        // for cache invalidation in case of sets change
+        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
@@ -167,6 +171,8 @@ final class RectorConfig extends Container
                 return $scopeAwareRector;
             });
         }
+        // for cache invalidation in case of change
+        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
     }
     public function import(string $filePath) : void
     {
