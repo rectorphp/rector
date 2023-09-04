@@ -19,6 +19,7 @@ use Rector\Core\Contract\DependencyInjection\ResetableInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -44,6 +45,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
      * @var array<string, true>
      */
     private static $cacheByRuleAndConfig = [];
+    /**
+     * @var \Rector\Core\Provider\CurrentFileProvider
+     */
+    private $currentFileProvider;
     /**
      * Restore default parameters
      */
@@ -98,6 +103,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
         $bootstrapFilesIncluder = $this->make(BootstrapFilesIncluder::class);
         $bootstrapFilesIncluder->includeBootstrapFiles();
+        $this->currentFileProvider = $this->make(CurrentFileProvider::class);
     }
     protected function tearDown() : void
     {
@@ -183,14 +189,14 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFileContents, string $fixtureFilePath) : void
     {
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
-        $originalContents = FileSystem::read($originalFilePath);
         $changedContent = $this->processFilePath($originalFilePath);
+        $originalFileContent = $this->currentFileProvider->getFile()->getOriginalFileContent();
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
         try {
             $this->assertSame($expectedFileContents, $changedContent, $failureMessage);
         } catch (ExpectationFailedException $exception) {
-            FixtureFileUpdater::updateFixtureContent($originalContents, $changedContent, $fixtureFilePath);
+            FixtureFileUpdater::updateFixtureContent($originalFileContent, $changedContent, $fixtureFilePath);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($expectedFileContents, $changedContent, $failureMessage);
         }
@@ -206,7 +212,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $configurationFactory = $this->make(ConfigurationFactory::class);
         $configuration = $configurationFactory->createForTests([$filePath]);
         $this->applicationFileProcessor->processFiles([$filePath], $configuration);
-        return FileSystem::read($filePath);
+        return $this->currentFileProvider->getFile()->getFileContent();
     }
     private function createInputFilePath(string $fixtureFilePath) : string
     {
