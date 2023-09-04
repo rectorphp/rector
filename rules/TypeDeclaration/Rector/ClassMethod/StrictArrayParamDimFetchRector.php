@@ -133,11 +133,17 @@ CODE_SAMPLE
             $firstArg = $node->getArgs()[0];
             $nodeToCheck = $firstArg->value;
         }
+        if ($node instanceof Node\Stmt\Expression) {
+            $nodeToCheck = $node->expr;
+        }
         if ($node instanceof Coalesce) {
             $nodeToCheck = $node->left;
         }
         if ($node instanceof AssignOpCoalesce) {
             $nodeToCheck = $node->var;
+        }
+        if ($nodeToCheck instanceof Node\Expr\MethodCall) {
+            return $nodeToCheck->var instanceof Variable && $this->isName($nodeToCheck->var, $paramName);
         }
         if ($nodeToCheck instanceof ArrayDimFetch) {
             return $nodeToCheck->var instanceof Variable && $this->isName($nodeToCheck->var, $paramName);
