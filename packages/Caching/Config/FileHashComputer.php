@@ -25,7 +25,7 @@ final class FileHashComputer
         }
         throw new ShouldNotHappenException(\sprintf(
             // getRealPath() cannot be used, as it breaks in phar
-            'Provide only PHP file, ready for Symfony Dependency Injection. "%s" given',
+            'Provide only PHP file, ready for Dependency Injection. "%s" given',
             $filePath
         ));
     }
