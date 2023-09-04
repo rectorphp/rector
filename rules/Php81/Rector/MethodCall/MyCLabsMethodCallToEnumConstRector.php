@@ -138,7 +138,7 @@ CODE_SAMPLE
     private function refactorEqualsMethodCall(MethodCall $methodCall) : ?Identical
     {
         $expr = $this->getNonEnumReturnTypeExpr($methodCall->var);
-        if ($expr === null) {
+        if (!$expr instanceof Expr) {
             $expr = $this->getValidEnumExpr($methodCall->var);
             if (!$expr instanceof Expr) {
                 return null;
@@ -149,7 +149,7 @@ CODE_SAMPLE
             return null;
         }
         $right = $this->getNonEnumReturnTypeExpr($arg->value);
-        if ($right === null) {
+        if (!$right instanceof Expr) {
             $right = $this->getValidEnumExpr($arg->value);
             if (!$right instanceof Expr) {
                 return null;
