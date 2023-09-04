@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Symfony43\Rector\ClassMethod;
 
+use PHPStan\Reflection\ClassReflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -68,7 +69,7 @@ CODE_SAMPLE
         if (!$classReflection->isSubclassOf('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface')) {
             return null;
         }
-        if ($classReflection->getParentClass() === null) {
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
             return null;
         }
         if ($this->hasParentCallOfMethod($node, MethodName::CONSTRUCT)) {

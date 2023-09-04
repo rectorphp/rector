@@ -98,11 +98,11 @@ CODE_SAMPLE
         if (null === $classMethod->getStmts()) {
             return [$isIdentical, $supportFirstArg, $supportSecondArg];
         }
-        foreach ($classMethod->getStmts() as $statement) {
-            if (!$statement instanceof Return_) {
+        foreach ($classMethod->getStmts() as $stmt) {
+            if (!$stmt instanceof Return_) {
                 continue;
             }
-            $expression = $statement->expr;
+            $expression = $stmt->expr;
             if (!$expression instanceof BinaryOp) {
                 continue;
             }
