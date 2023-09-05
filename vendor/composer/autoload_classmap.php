@@ -1084,6 +1084,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
+    'Rector\\CodeQuality\\Rector\\Ternary\\NumberCompareToMaxFuncCallRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/NumberCompareToMaxFuncCallRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\TernaryEmptyArrayArrayDimFetchToCoalesceRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/TernaryEmptyArrayArrayDimFetchToCoalesceRector.php',

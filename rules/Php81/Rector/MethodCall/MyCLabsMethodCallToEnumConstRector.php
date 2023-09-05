@@ -87,14 +87,14 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::ENUM;
+    }
     private function isEnumConstant(string $className, string $constant) : bool
     {
         $classReflection = $this->reflectionProvider->getClass($className);
         return $classReflection->hasConstant($constant);
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::ENUM;
     }
     private function refactorGetKeyMethodCall(MethodCall $methodCall) : ?ClassConstFetch
     {

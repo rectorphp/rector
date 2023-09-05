@@ -1,4 +1,4 @@
-# 353 Rules Overview
+# 355 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [CodeQuality](#codequality) (70)
+- [CodeQuality](#codequality) (71)
 
 - [CodingStyle](#codingstyle) (30)
 
@@ -54,7 +54,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (41)
+- [TypeDeclaration](#typedeclaration) (42)
 
 - [Visibility](#visibility) (3)
 
@@ -862,6 +862,25 @@ Change unsafe new `static()` to new `self()`
 
 <br>
 
+### NumberCompareToMaxFuncCallRector
+
+Ternary number compare to `max()` call
+
+- class: [`Rector\CodeQuality\Rector\Ternary\NumberCompareToMaxFuncCallRector`](../rules/CodeQuality/Rector/Ternary/NumberCompareToMaxFuncCallRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return $value > 100 ? $value : 100;
++        return max($value, 100);
+     }
+ }
+```
+
+<br>
+
 ### OptionalParametersAfterRequiredRector
 
 Move required parameters after optional ones
@@ -993,8 +1012,9 @@ Simplify bool value compare to true or false
      public function run(bool $value, string $items)
      {
 -         $match = in_array($value, $items, TRUE) === TRUE;
--         $match = in_array($value, $items, TRUE) !== FALSE;
 +         $match = in_array($value, $items, TRUE);
+
+-         $match = in_array($value, $items, TRUE) !== FALSE;
 +         $match = in_array($value, $items, TRUE);
      }
  }
@@ -1714,8 +1734,11 @@ Convert enscaped {$string} to more readable sprintf or concat, if no mask is use
 - class: [`Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector`](../rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php)
 
 ```diff
--echo "Unsupported format {$format}";
-+echo sprintf('Unsupported format %s', $format);
+-echo "Unsupported format {$format} - use another";
++echo sprintf('Unsupported format %s - use another', $format);
+
+-echo "Try {$allowed}";
++echo 'Try ' . $allowed;
 ```
 
 <br>
@@ -6732,6 +6755,25 @@ Add strict type declaration based on returned constants
 +    public function run(): string
      {
          return self::NAME;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictFluentReturnRector
+
+Add return type from strict return `$this`
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictFluentReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictFluentReturnRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run()
++    public function run(): self
+     {
+         return $this;
      }
  }
 ```
