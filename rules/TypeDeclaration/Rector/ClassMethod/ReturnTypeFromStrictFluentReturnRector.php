@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractScopeAwareRector;
@@ -94,12 +95,16 @@ CODE_SAMPLE
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
-        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
-        if (!$returnType instanceof ThisType) {
-            return null;
-        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if ($returnType instanceof ObjectType && $returnType->getClassName() === $classReflection->getName()) {
+            $node->returnType = new Name('self');
+            return $node;
+        }
+        if (!$returnType instanceof ThisType) {
             return null;
         }
         if ($classReflection->isAnonymous() || $classReflection->isFinalByKeyword() || !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE)) {
