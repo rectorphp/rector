@@ -25,7 +25,6 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,11 +49,6 @@ final class ReflectionResolver
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry
-     */
-    private $typeToCallReflectionResolverRegistry;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
@@ -68,12 +62,11 @@ final class ReflectionResolver
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry, ClassAnalyzer $classAnalyzer, \Rector\Core\Reflection\MethodReflectionResolver $methodReflectionResolver, AstResolver $astResolver)
+    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, \Rector\Core\Reflection\MethodReflectionResolver $methodReflectionResolver, AstResolver $astResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
         $this->classAnalyzer = $classAnalyzer;
         $this->methodReflectionResolver = $methodReflectionResolver;
         $this->astResolver = $astResolver;
@@ -235,17 +228,12 @@ final class ReflectionResolver
     private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall)
     {
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
-        if ($funcCall->name instanceof Name) {
-            if ($this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
-                return $this->reflectionProvider->getFunction($funcCall->name, $scope);
-            }
+        if (!$funcCall->name instanceof Name) {
             return null;
         }
-        if (!$scope instanceof Scope) {
-            return null;
+        if ($this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
+            return $this->reflectionProvider->getFunction($funcCall->name, $scope);
         }
-        // fallback to callable
-        $funcCallNameType = $scope->getType($funcCall->name);
-        return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
+        return null;
     }
 }

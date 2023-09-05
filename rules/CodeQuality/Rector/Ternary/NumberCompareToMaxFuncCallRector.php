@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Ternary;
 
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\Ternary;
