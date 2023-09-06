@@ -20,7 +20,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\NullType;
@@ -85,7 +84,7 @@ final class AlwaysStrictScalarExprAnalyzer
     }
     private function isScalarType(Type $type) : bool
     {
-        if ($type->isString()->yes() && !$type instanceof ConstantStringType) {
+        if ($type->isString()->yes()) {
             return \true;
         }
         if ($type->isFloat()->yes()) {
