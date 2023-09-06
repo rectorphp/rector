@@ -46,9 +46,6 @@ final class SilentVoidResolver
         if ($classReflection instanceof ClassReflection && $classReflection->isInterface()) {
             return \false;
         }
-        if ($this->hasNeverType($functionLike)) {
-            return \false;
-        }
         if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, Yield_::class)) {
             return \false;
         }
@@ -121,14 +118,6 @@ final class SilentVoidResolver
             return $this->hasStmtsAlwaysReturn($catch->stmts);
         }
         return \true;
-    }
-    /**
-     * @see https://phpstan.org/writing-php-code/phpdoc-types#bottom-type
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    private function hasNeverType($functionLike) : bool
-    {
-        return $this->betterNodeFinder->hasInstancesOf($functionLike, [Throw_::class]);
     }
     private function resolveReturnCount(Switch_ $switch) : int
     {
