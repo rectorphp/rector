@@ -69,7 +69,7 @@ final class AlwaysStrictScalarExprAnalyzer
             return $this->resolveFuncCallType($expr, $scope);
         }
         $exprType = $this->nodeTypeResolver->getNativeType($expr);
-        if ($this->isScalarType($exprType)) {
+        if ($exprType->isScalar()->yes()) {
             return $exprType;
         }
         return null;
@@ -77,23 +77,10 @@ final class AlwaysStrictScalarExprAnalyzer
     private function resolveCastType(Cast $cast) : ?Type
     {
         $type = $this->nodeTypeResolver->getNativeType($cast);
-        if ($this->isScalarType($type)) {
+        if ($type->isScalar()->yes()) {
             return $type;
         }
         return null;
-    }
-    private function isScalarType(Type $type) : bool
-    {
-        if ($type->isString()->yes()) {
-            return \true;
-        }
-        if ($type->isFloat()->yes()) {
-            return \true;
-        }
-        if ($type->isInteger()->yes()) {
-            return \true;
-        }
-        return $type->isBoolean()->yes();
     }
     private function resolveTypeFromScalar(Scalar $scalar) : ?\PHPStan\Type\Type
     {
@@ -131,9 +118,9 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
         $returnType = $parametersAcceptor->getReturnType();
-        if (!$this->isScalarType($returnType)) {
-            return null;
+        if ($returnType->isScalar()->yes()) {
+            return $returnType;
         }
-        return $returnType;
+        return null;
     }
 }
