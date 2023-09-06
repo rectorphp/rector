@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
+use PHPStan\Type\Type;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
@@ -24,6 +25,7 @@ use PHPStan\Type\NeverType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,10 +45,16 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractScopeAwareRector 
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -104,23 +112,36 @@ CODE_SAMPLE
         }
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
-        if (\count($returns) !== 1) {
+        if ($returns === []) {
             return null;
         }
         if ($this->isVariableOverriddenWithNonArray($node, $variable)) {
             return null;
+        }
+        if (\count($returns) > 1) {
+            $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+            return $this->processAddArrayReturnType($node, $returnType);
         }
         $onlyReturn = $returns[0];
         if (!$onlyReturn->expr instanceof Variable) {
             return null;
         }
         $returnType = $this->nodeTypeResolver->getNativeType($onlyReturn->expr);
-        if (!$returnType instanceof ArrayType) {
+        return $this->processAddArrayReturnType($node, $returnType);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     */
+    private function processAddArrayReturnType($node, Type $returnType)
+    {
+        if (!$returnType->isArray()->yes()) {
             return null;
         }
-        // 3. always returns array
+        // always returns array
         $node->returnType = new Identifier('array');
-        // 4. add more precise array type if suitable
+        // add more precise array type if suitable
+        /** @var ArrayType $returnType */
         if ($this->shouldAddReturnArrayDocType($returnType)) {
             $this->changeReturnType($node, $returnType);
         }

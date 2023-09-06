@@ -83,9 +83,6 @@ final class TypeNormalizer
             if ($traversedType instanceof UnionType) {
                 $traversedTypeTypes = $traversedType->getTypes();
                 $countTraversedTypes = \count($traversedTypeTypes);
-                if ($this->isUnionMixedArrayNeverType($countTraversedTypes, $traversedTypeTypes)) {
-                    return new MixedType();
-                }
                 $collectedTypes = $this->getCollectedTypes($traversedTypeTypes);
                 $countCollectedTypes = \count($collectedTypes);
                 // re-create new union types
@@ -118,13 +115,6 @@ final class TypeNormalizer
             $collectedTypes[] = $traversedTypeType;
         }
         return $collectedTypes;
-    }
-    /**
-     * @param Type[] $traversedTypeTypes
-     */
-    private function isUnionMixedArrayNeverType(int $countTraversedTypes, array $traversedTypeTypes) : bool
-    {
-        return $countTraversedTypes === 2 && ($this->isArrayNeverType($traversedTypeTypes[0]) || $this->isArrayNeverType($traversedTypeTypes[1]));
     }
     private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting) : void
     {
