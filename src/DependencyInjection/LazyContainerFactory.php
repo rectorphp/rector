@@ -382,9 +382,7 @@ final class LazyContainerFactory
         });
         $rectorConfig->when(PHPStanNodeScopeResolver::class)->needs('$nodeVisitors')->giveTagged(ScopeResolverNodeVisitorInterface::class);
         $this->registerTagged($rectorConfig, self::SCOPE_RESOLVER_NODE_VISITOR_CLASSES, ScopeResolverNodeVisitorInterface::class);
-        // phpstan factory
         $this->createPHPStanServices($rectorConfig);
-        // @todo add base node visitors
         $rectorConfig->when(PhpDocNodeMapper::class)->needs('$phpDocNodeVisitors')->giveTagged(BasePhpDocNodeVisitorInterface::class);
         /** @param mixed $parameters */
         $hasForgotten = \false;

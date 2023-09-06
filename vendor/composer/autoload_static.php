@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5f5135105dfe05af7c7e838e0657a382
+class ComposerStaticInit9248641f2e4b94b552e9ef0a05e9df45
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1399,7 +1399,6 @@ class ComposerStaticInit5f5135105dfe05af7c7e838e0657a382
         'Rector\\Core\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
         'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
-        'Rector\\Core\\Contract\\Rector\\NonPhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/NonPhpRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
         'Rector\\Core\\DependencyInjection\\Laravel\\ContainerMemento' => __DIR__ . '/../..' . '/src/DependencyInjection/Laravel/ContainerMemento.php',
@@ -2197,7 +2196,6 @@ class ComposerStaticInit5f5135105dfe05af7c7e838e0657a382
         'Rector\\Renaming\\Rector\\ClassConstFetch\\RenameClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php',
         'Rector\\Renaming\\Rector\\ClassMethod\\RenameAnnotationRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/ClassMethod/RenameAnnotationRector.php',
         'Rector\\Renaming\\Rector\\ConstFetch\\RenameConstantRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/ConstFetch/RenameConstantRector.php',
-        'Rector\\Renaming\\Rector\\FileWithoutNamespace\\PseudoNamespaceToNamespaceRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php',
         'Rector\\Renaming\\Rector\\FuncCall\\RenameFunctionRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/FuncCall/RenameFunctionRector.php',
         'Rector\\Renaming\\Rector\\MethodCall\\RenameMethodRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/MethodCall/RenameMethodRector.php',
         'Rector\\Renaming\\Rector\\Name\\RenameClassRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/Name/RenameClassRector.php',
@@ -2206,7 +2204,6 @@ class ComposerStaticInit5f5135105dfe05af7c7e838e0657a382
         'Rector\\Renaming\\Rector\\String_\\RenameStringRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/String_/RenameStringRector.php',
         'Rector\\Renaming\\ValueObject\\MethodCallRename' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/MethodCallRename.php',
         'Rector\\Renaming\\ValueObject\\MethodCallRenameWithArrayKey' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/MethodCallRenameWithArrayKey.php',
-        'Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/PseudoNamespaceToNamespace.php',
         'Rector\\Renaming\\ValueObject\\RenameAnnotation' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotation.php',
         'Rector\\Renaming\\ValueObject\\RenameAnnotationByType' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotationByType.php',
         'Rector\\Renaming\\ValueObject\\RenameClassAndConstFetch' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameClassAndConstFetch.php',
@@ -2606,9 +2603,9 @@ class ComposerStaticInit5f5135105dfe05af7c7e838e0657a382
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5f5135105dfe05af7c7e838e0657a382::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5f5135105dfe05af7c7e838e0657a382::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5f5135105dfe05af7c7e838e0657a382::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9248641f2e4b94b552e9ef0a05e9df45::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9248641f2e4b94b552e9ef0a05e9df45::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9248641f2e4b94b552e9ef0a05e9df45::$classMap;
 
         }, null, ClassLoader::class);
     }

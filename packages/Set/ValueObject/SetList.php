@@ -30,11 +30,6 @@ final class SetList implements SetListInterface
      */
     public const GMAGICK_TO_IMAGICK = __DIR__ . '/../../../config/set/gmagick-to-imagick.php';
     /**
-     * @deprecated Handle manually with explicit refactoring instead.
-     * @var string
-     */
-    public const MYSQL_TO_MYSQLI = __DIR__ . '/../../../config/set/mysql-to-mysqli.php';
-    /**
      * @var string
      */
     public const NAMING = __DIR__ . '/../../../config/set/naming.php';

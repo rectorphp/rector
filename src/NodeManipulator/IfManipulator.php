@@ -168,13 +168,6 @@ final class IfManipulator
         }
         return $if->elseifs === [];
     }
-    /**
-     * @deprecated Create If_ directly, this is simple new with no added value
-     */
-    public function createIfStmt(Expr $condExpr, Stmt $stmt) : If_
-    {
-        return new If_($condExpr, ['stmts' => [$stmt]]);
-    }
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return) : ?Expr
     {
         if ($this->nodeComparator->areNodesEqual($notIdentical->left, $return->expr) && $this->valueResolver->isNull($notIdentical->right)) {

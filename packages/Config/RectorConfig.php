@@ -8,7 +8,6 @@ use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilesystemTweaker;
@@ -147,7 +146,7 @@ final class RectorConfig extends Container
         // store configuration to cache
         $this->ruleConfigurations[$rectorClass] = \array_merge($this->ruleConfigurations[$rectorClass] ?? [], $configuration);
         $this->singleton($rectorClass);
-        $this->tagRectorService($rectorClass);
+        $this->tag($rectorClass, RectorInterface::class);
         $this->afterResolving($rectorClass, function (ConfigurableRectorInterface $configurableRector) use($rectorClass) : void {
             $ruleConfiguration = $this->ruleConfigurations[$rectorClass];
             $configurableRector->configure($ruleConfiguration);
@@ -163,7 +162,7 @@ final class RectorConfig extends Container
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         $this->singleton($rectorClass);
-        $this->tagRectorService($rectorClass);
+        $this->tag($rectorClass, RectorInterface::class);
         if (\is_a($rectorClass, AbstractScopeAwareRector::class, \true)) {
             $this->extend($rectorClass, static function (AbstractScopeAwareRector $scopeAwareRector, Container $container) : AbstractScopeAwareRector {
                 $scopeAnalyzer = $container->make(ScopeAnalyzer::class);
@@ -304,17 +303,6 @@ final class RectorConfig extends Container
             }
         }
         return \array_unique($duplicates);
-    }
-    /**
-     * @param class-string<RectorInterface> $rectorClass
-     */
-    private function tagRectorService(string $rectorClass) : void
-    {
-        $this->tag($rectorClass, RectorInterface::class);
-        if (\is_a($rectorClass, NonPhpRectorInterface::class, \true)) {
-            \trigger_error(\sprintf('The "%s" interface of "%s" rule is deprecated. Rector will process only PHP code, as designed to with AST. For another file format, use custom tooling.', NonPhpRectorInterface::class, $rectorClass));
-            exit;
-        }
     }
     /**
      * @param string[] $rectorClasses
