@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
@@ -51,14 +52,13 @@ final class SilentVoidResolver
         if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, Yield_::class)) {
             return \false;
         }
-        /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
-        foreach ($returns as $return) {
-            if ($return->expr instanceof Expr) {
-                return \false;
+        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, function (Node $node) {
+            if ($node instanceof Return_ && $node->expr instanceof Expr) {
+                return \true;
             }
-        }
-        return \true;
+            return \false;
+        });
+        return $return === null;
     }
     public function hasSilentVoid(FunctionLike $functionLike) : bool
     {
