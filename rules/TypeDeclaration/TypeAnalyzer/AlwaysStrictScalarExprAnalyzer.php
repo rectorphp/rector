@@ -22,6 +22,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -66,7 +67,10 @@ final class AlwaysStrictScalarExprAnalyzer
             return null;
         }
         if ($expr instanceof FuncCall) {
-            return $this->resolveFuncCallType($expr, $scope);
+            $exprType = $this->resolveNativeFuncCallType($expr, $scope);
+            if ($exprType->isScalar()->yes()) {
+                return $exprType;
+            }
         }
         $exprType = $this->nodeTypeResolver->getNativeType($expr);
         if ($exprType->isScalar()->yes()) {
@@ -104,23 +108,23 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         return null;
     }
-    private function resolveFuncCallType(FuncCall $funcCall, Scope $scope) : ?Type
+    private function resolveNativeFuncCallType(FuncCall $funcCall, Scope $scope) : Type
     {
         if (!$funcCall->name instanceof Name) {
-            return null;
+            return new MixedType();
         }
         if (!$this->reflectionProvider->hasFunction($funcCall->name, null)) {
-            return null;
+            return new MixedType();
         }
         $functionReflection = $this->reflectionProvider->getFunction($funcCall->name, null);
         if (!$functionReflection instanceof NativeFunctionReflection) {
-            return null;
+            return new MixedType();
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
         $returnType = $parametersAcceptor->getReturnType();
         if ($returnType->isScalar()->yes()) {
             return $returnType;
         }
-        return null;
+        return new MixedType();
     }
 }
