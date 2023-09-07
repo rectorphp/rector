@@ -219,10 +219,10 @@ CODE_SAMPLE
             if (!$assign->var instanceof Variable) {
                 continue;
             }
-            if (!$assign->expr instanceof Array_) {
-                continue;
+            $nativeType = $this->nodeTypeResolver->getNativeType($assign->expr);
+            if ($nativeType->isArray()->yes()) {
+                return $assign->var;
             }
-            return $assign->var;
         }
         return null;
     }
