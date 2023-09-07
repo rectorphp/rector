@@ -60,8 +60,14 @@ Some rules like `AddRouteAnnotationRector` require additional access to your Sym
 ```php
 use Rector\Config\RectorConfig;
 
+use Rector\Symfony\Configs\Rector\ClassMethod\AddRouteAnnotationRector;
+use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->symfonyContainerPhp(__DIR__ . '/tests/symfony-container.php');
+
+    $rectorConfig->singleton(SymfonyRoutesProvider::class);
+    $rectorConfig->alias(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
 };
 ```
 
