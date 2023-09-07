@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PHPStan\Type\Type;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
@@ -22,6 +21,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
@@ -129,6 +129,10 @@ CODE_SAMPLE
         $returnType = $this->nodeTypeResolver->getNativeType($onlyReturn->expr);
         return $this->processAddArrayReturnType($node, $returnType);
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersion::PHP_70;
+    }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
@@ -141,15 +145,10 @@ CODE_SAMPLE
         // always returns array
         $node->returnType = new Identifier('array');
         // add more precise array type if suitable
-        /** @var ArrayType $returnType */
-        if ($this->shouldAddReturnArrayDocType($returnType)) {
+        if ($returnType instanceof ArrayType && $this->shouldAddReturnArrayDocType($returnType)) {
             $this->changeReturnType($node, $returnType);
         }
         return $node;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersion::PHP_70;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
