@@ -49,13 +49,10 @@ final class SilentVoidResolver
         if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, Yield_::class)) {
             return \false;
         }
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
-        foreach ($returns as $return) {
-            if ($return->expr instanceof Expr) {
-                return \false;
-            }
-        }
-        return \true;
+        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static function (Node $node) : bool {
+            return $node instanceof Return_ && $node->expr instanceof Expr;
+        });
+        return !$return instanceof Return_;
     }
     public function hasSilentVoid(FunctionLike $functionLike) : bool
     {
