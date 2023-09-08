@@ -153,18 +153,21 @@ class TypeParser
             $tokens->dropSavePoint();
             // because of ConstFetchNode
         }
-        $exception = new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER, null, $tokens->currentTokenLine());
+        $currentTokenValue = $tokens->currentTokenValue();
+        $currentTokenType = $tokens->currentTokenType();
+        $currentTokenOffset = $tokens->currentTokenOffset();
+        $currentTokenLine = $tokens->currentTokenLine();
         if ($this->constExprParser === null) {
-            throw $exception;
+            throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
         }
         try {
             $constExpr = $this->constExprParser->parse($tokens, \true);
             if ($constExpr instanceof Ast\ConstExpr\ConstExprArrayNode) {
-                throw $exception;
+                throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
             }
             return $this->enrichWithAttributes($tokens, new Ast\Type\ConstTypeNode($constExpr), $startLine, $startIndex);
         } catch (LogicException $e) {
-            throw $exception;
+            throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
         }
     }
     /** @phpstan-impure */
@@ -426,14 +429,17 @@ class TypeParser
                 // because of ConstFetchNode
             }
         }
-        $exception = new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER, null, $tokens->currentTokenLine());
+        $currentTokenValue = $tokens->currentTokenValue();
+        $currentTokenType = $tokens->currentTokenType();
+        $currentTokenOffset = $tokens->currentTokenOffset();
+        $currentTokenLine = $tokens->currentTokenLine();
         if ($this->constExprParser === null) {
-            throw $exception;
+            throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
         }
         try {
             $constExpr = $this->constExprParser->parse($tokens, \true);
             if ($constExpr instanceof Ast\ConstExpr\ConstExprArrayNode) {
-                throw $exception;
+                throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
             }
             $type = new Ast\Type\ConstTypeNode($constExpr);
             if ($tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
@@ -441,7 +447,7 @@ class TypeParser
             }
             return $type;
         } catch (LogicException $e) {
-            throw $exception;
+            throw new \PHPStan\PhpDocParser\Parser\ParserException($currentTokenValue, $currentTokenType, $currentTokenOffset, Lexer::TOKEN_IDENTIFIER, null, $currentTokenLine);
         }
     }
     /** @phpstan-impure */

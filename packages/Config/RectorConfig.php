@@ -9,11 +9,13 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilesystemTweaker;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use RectorPrefix202309\Webmozart\Assert\Assert;
 /**
  * @api
@@ -272,6 +274,21 @@ final class RectorConfig extends Container
     public function resetRuleConfigurations() : void
     {
         $this->ruleConfigurations = [];
+    }
+    /**
+     * Compiler passes-like method
+     */
+    public function boot() : void
+    {
+        $skippedClassResolver = new SkippedClassResolver();
+        $skippedElements = $skippedClassResolver->resolve();
+        foreach ($skippedElements as $skippedClass => $path) {
+            if ($path !== null) {
+                continue;
+            }
+            // completely forget the Rector rule only when no path specified
+            ContainerMemento::forgetService($this, $skippedClass);
+        }
     }
     private function importFile(string $filePath) : void
     {

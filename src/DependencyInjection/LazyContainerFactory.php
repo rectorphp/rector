@@ -59,7 +59,6 @@ use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\DependencyInjection\ResetableInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Logging\RectorOutput;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
@@ -161,7 +160,6 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\VoidTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\RectorGenerator\Command\GenerateCommand;
 use Rector\RectorGenerator\Command\InitRecipeCommand;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
@@ -384,23 +382,6 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::SCOPE_RESOLVER_NODE_VISITOR_CLASSES, ScopeResolverNodeVisitorInterface::class);
         $this->createPHPStanServices($rectorConfig);
         $rectorConfig->when(PhpDocNodeMapper::class)->needs('$phpDocNodeVisitors')->giveTagged(BasePhpDocNodeVisitorInterface::class);
-        /** @param mixed $parameters */
-        $hasForgotten = \false;
-        $rectorConfig->beforeResolving(static function (string $abstract, array $parameters, Container $container) use(&$hasForgotten) : void {
-            // run only once
-            if ($hasForgotten && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
-                return;
-            }
-            $skippedClassResolver = new SkippedClassResolver();
-            $skippedElements = $skippedClassResolver->resolve();
-            foreach ($skippedElements as $skippedClass => $path) {
-                // completely forget the Rector rule only when no path specified
-                if ($path === null) {
-                    ContainerMemento::forgetService($container, $skippedClass);
-                }
-            }
-            $hasForgotten = \true;
-        });
         return $rectorConfig;
     }
     /**

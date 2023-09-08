@@ -38,6 +38,7 @@ abstract class AbstractLazyTestCase extends TestCase
             $lazyContainerFactory = new LazyContainerFactory();
             self::$rectorConfig = $lazyContainerFactory->create();
         }
+        self::$rectorConfig->boot();
         return self::$rectorConfig;
     }
 }

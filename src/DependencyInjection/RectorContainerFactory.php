@@ -33,6 +33,7 @@ final class RectorContainerFactory
         foreach ($configFiles as $configFile) {
             $container->import($configFile);
         }
+        $container->boot();
         return $container;
     }
 }
