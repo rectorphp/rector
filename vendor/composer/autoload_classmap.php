@@ -1596,7 +1596,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/ParamTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\PropertyFetchTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/PropertyFetchTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\PropertyTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/PropertyTypeResolver.php',
-    'Rector\\NodeTypeResolver\\NodeTypeResolver\\ReturnTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/ReturnTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ScalarTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\StaticCallMethodCallTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/StaticCallMethodCallTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
