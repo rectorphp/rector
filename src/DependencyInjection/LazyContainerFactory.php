@@ -69,7 +69,6 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\ClassConstFetchNameResolver;
@@ -258,17 +257,15 @@ final class LazyContainerFactory
         $rectorConfig->cacheDirectory(\sys_get_temp_dir() . '/rector_cached_files');
         $rectorConfig->containerCacheDirectory(\sys_get_temp_dir());
         // make use of https://github.com/symplify/easy-parallel
-        $rectorConfig->singleton(Application::class, static function () : Application {
-            $application = new Application();
-            $privatesAccessor = new PrivatesAccessor();
-            $privatesAccessor->propertyClosure($application, 'commands', static function (array $commands) : array {
-                unset($commands['completion']);
-                unset($commands['help']);
-                return $commands;
-            });
+        $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
+            $application = $container->make(ConsoleApplication::class);
+            $commandNamesToHide = ['list', 'completion', 'help'];
+            foreach ($commandNamesToHide as $commandNameToHide) {
+                $commandToHide = $application->get($commandNameToHide);
+                $commandToHide->setHidden();
+            }
             return $application;
         });
-        $rectorConfig->singleton(ConsoleApplication::class, ConsoleApplication::class);
         $rectorConfig->when(ConsoleApplication::class)->needs('$commands')->giveTagged(Command::class);
         $rectorConfig->singleton(Inflector::class, static function () : Inflector {
             $inflectorFactory = new InflectorFactory();

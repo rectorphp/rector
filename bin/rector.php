@@ -7,11 +7,11 @@ use RectorPrefix202309\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\LazyContainerFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
+use RectorPrefix202309\Symfony\Component\Console\Application;
 use RectorPrefix202309\Symfony\Component\Console\Command\Command;
 use RectorPrefix202309\Symfony\Component\Console\Input\ArgvInput;
 // @ intentionally: continue anyway
@@ -127,6 +127,6 @@ try {
     }
     exit(Command::FAILURE);
 }
-/** @var ConsoleApplication $application */
-$application = $container->get(ConsoleApplication::class);
+/** @var Application $application */
+$application = $container->get(Application::class);
 exit($application->run());
