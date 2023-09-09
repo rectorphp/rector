@@ -208,9 +208,9 @@ CODE_SAMPLE
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\Constant\ConstantArrayType
      */
-    private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode)
+    private function getTypeFromClassMethodYield(Array_ $classMethodYieldArray)
     {
-        $arrayType = $this->nodeTypeResolver->getType($classMethodYieldArrayNode);
+        $arrayType = $this->nodeTypeResolver->getType($classMethodYieldArray);
         // impossible to resolve
         if (!$arrayType instanceof ConstantArrayType) {
             return new MixedType();

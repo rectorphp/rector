@@ -135,7 +135,7 @@ CODE_SAMPLE
                 if ($this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {
                     continue;
                 }
-                if (!$this->nodeNameResolver->matchesStringName($className, $transformOnNamespace)) {
+                if (!\fnmatch($transformOnNamespace, $className, \FNM_NOESCAPE)) {
                     return \true;
                 }
             }

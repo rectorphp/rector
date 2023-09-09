@@ -14,17 +14,10 @@ use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
-use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\Regex\RegexPatternDetector
-     */
-    private $regexPatternDetector;
     /**
      * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
@@ -47,9 +40,8 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(RegexPatternDetector $regexPatternDetector, ClassNaming $classNaming, CallAnalyzer $callAnalyzer, iterable $nodeNameResolvers = [])
+    public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, iterable $nodeNameResolvers = [])
     {
-        $this->regexPatternDetector = $regexPatternDetector;
         $this->classNaming = $classNaming;
         $this->callAnalyzer = $callAnalyzer;
         $this->nodeNameResolvers = $nodeNameResolvers;
@@ -164,23 +156,6 @@ final class NodeNameResolver
         return $names;
     }
     /**
-     * Ends with ucname
-     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
-     */
-    public function endsWith(string $currentName, string $expectedName) : bool
-    {
-        $suffixNamePattern = '#\\w+' . \ucfirst($expectedName) . '#';
-        return StringUtils::isMatch($currentName, $suffixNamePattern);
-    }
-    public function startsWith(Node $node, string $prefix) : bool
-    {
-        $name = $this->getName($node);
-        if (!\is_string($name)) {
-            return \false;
-        }
-        return \strncmp($name, $prefix, \strlen($prefix)) === 0;
-    }
-    /**
      * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
      */
     public function getShortName($name) : string
@@ -197,21 +172,6 @@ final class NodeNameResolver
             return $desiredName === $resolvedName;
         }
         return \strcasecmp($resolvedName, $desiredName) === 0;
-    }
-    /**
-     * @param string|\PhpParser\Node\Identifier $resolvedName
-     */
-    public function matchesStringName($resolvedName, string $desiredNamePattern) : bool
-    {
-        if ($resolvedName instanceof Identifier) {
-            $resolvedName = $resolvedName->toString();
-        }
-        // is probably regex pattern
-        if ($this->regexPatternDetector->isRegexPattern($desiredNamePattern)) {
-            return StringUtils::isMatch($resolvedName, $desiredNamePattern);
-        }
-        // is probably fnmatch
-        return \fnmatch($desiredNamePattern, $resolvedName, \FNM_NOESCAPE);
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node

@@ -153,7 +153,7 @@ CODE_SAMPLE
             if ($this->nodeNameResolver->isStringName($classLikeName, $classToSkip)) {
                 return \true;
             }
-            if ($this->nodeNameResolver->matchesStringName($classLikeName, $classToSkip)) {
+            if (\fnmatch($classToSkip, $classLikeName, \FNM_NOESCAPE)) {
                 return \true;
             }
         }

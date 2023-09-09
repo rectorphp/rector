@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -164,7 +165,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
      */
-    private function shouldSkipRename(string $methodName, Node\Stmt\ClassMethod $classMethod, MethodCallRenameInterface $methodCallRename, ClassReflection $classReflection, $classOrInterface) : bool
+    private function shouldSkipRename(string $methodName, ClassMethod $classMethod, MethodCallRenameInterface $methodCallRename, ClassReflection $classReflection, $classOrInterface) : bool
     {
         if (!$this->nodeNameResolver->isStringName($methodName, $methodCallRename->getOldMethod())) {
             return \true;
@@ -175,10 +176,7 @@ CODE_SAMPLE
         if ($this->shouldKeepForParentInterface($methodCallRename, $classReflection)) {
             return \true;
         }
-        if ($this->hasClassNewClassMethod($classOrInterface, $methodCallRename)) {
-            return \true;
-        }
-        return \false;
+        return $this->hasClassNewClassMethod($classOrInterface, $methodCallRename);
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call

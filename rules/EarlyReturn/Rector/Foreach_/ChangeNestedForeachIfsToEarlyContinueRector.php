@@ -123,9 +123,9 @@ CODE_SAMPLE
         }
         return $foreach;
     }
-    private function addInvertedIfStmtWithContinue(If_ $nestedIfWithOnlyReturn, Foreach_ $foreach) : void
+    private function addInvertedIfStmtWithContinue(If_ $onlyReturnIf, Foreach_ $foreach) : void
     {
-        $invertedCondExpr = $this->conditionInverter->createInvertedCondition($nestedIfWithOnlyReturn->cond);
+        $invertedCondExpr = $this->conditionInverter->createInvertedCondition($onlyReturnIf->cond);
         // special case
         if ($invertedCondExpr instanceof BooleanNot && $invertedCondExpr->expr instanceof BooleanAnd) {
             $leftExpr = $this->negateOrDeNegate($invertedCondExpr->expr->left);
@@ -135,14 +135,14 @@ CODE_SAMPLE
             return;
         }
         // should skip for weak inversion
-        if ($this->isBooleanOrWithWeakComparison($nestedIfWithOnlyReturn->cond)) {
-            $foreach->stmts[] = $nestedIfWithOnlyReturn;
+        if ($this->isBooleanOrWithWeakComparison($onlyReturnIf->cond)) {
+            $foreach->stmts[] = $onlyReturnIf;
             return;
         }
-        $nestedIfWithOnlyReturn->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $nestedIfWithOnlyReturn->cond = $invertedCondExpr;
-        $nestedIfWithOnlyReturn->stmts = [new Continue_()];
-        $foreach->stmts[] = $nestedIfWithOnlyReturn;
+        $onlyReturnIf->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $onlyReturnIf->cond = $invertedCondExpr;
+        $onlyReturnIf->stmts = [new Continue_()];
+        $foreach->stmts[] = $onlyReturnIf;
     }
     /**
      * Matches:

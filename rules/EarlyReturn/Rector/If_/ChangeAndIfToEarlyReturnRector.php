@@ -178,21 +178,21 @@ CODE_SAMPLE
      * @param Stmt[] $afters
      * @return Stmt[]
      */
-    private function processReplaceIfs(If_ $if, array $conditions, Return_ $ifNextReturnClone, array $afters, ?Stmt $nextStmt) : array
+    private function processReplaceIfs(If_ $if, array $conditions, Return_ $ifNextReturn, array $afters, ?Stmt $nextStmt) : array
     {
-        $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone, $nextStmt);
+        $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturn, $nextStmt);
         $this->mirrorComments($ifs[0], $if);
         $result = \array_merge($ifs, $afters);
         if ($if->stmts[0] instanceof Return_) {
             return $result;
         }
-        if (!$ifNextReturnClone->expr instanceof Expr) {
+        if (!$ifNextReturn->expr instanceof Expr) {
             return $result;
         }
         if ($this->contextAnalyzer->isInLoop($if)) {
             return $result;
         }
-        return \array_merge($result, [$ifNextReturnClone]);
+        return \array_merge($result, [$ifNextReturn]);
     }
     private function shouldSkip(If_ $if, ?Stmt $nexStmt) : bool
     {

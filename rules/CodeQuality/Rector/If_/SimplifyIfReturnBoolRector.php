@@ -135,23 +135,23 @@ CODE_SAMPLE
         }
         return !$if->cond instanceof NotIdentical;
     }
-    private function processReturnTrue(If_ $if, Return_ $nextReturnNode) : Return_
+    private function processReturnTrue(If_ $if, Return_ $nextReturn) : Return_
     {
-        if ($if->cond instanceof BooleanNot && $nextReturnNode->expr instanceof Expr && $this->valueResolver->isTrue($nextReturnNode->expr)) {
+        if ($if->cond instanceof BooleanNot && $nextReturn->expr instanceof Expr && $this->valueResolver->isTrue($nextReturn->expr)) {
             return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
         return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond));
     }
-    private function processReturnFalse(If_ $if, Return_ $nextReturnNode) : ?Return_
+    private function processReturnFalse(If_ $if, Return_ $nextReturn) : ?Return_
     {
         if ($if->cond instanceof Identical) {
             $notIdentical = new NotIdentical($if->cond->left, $if->cond->right);
             return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
         }
-        if (!$nextReturnNode->expr instanceof Expr) {
+        if (!$nextReturn->expr instanceof Expr) {
             return null;
         }
-        if (!$this->valueResolver->isTrue($nextReturnNode->expr)) {
+        if (!$this->valueResolver->isTrue($nextReturn->expr)) {
             return null;
         }
         if ($if->cond instanceof BooleanNot) {
