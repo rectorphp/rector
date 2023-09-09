@@ -196,7 +196,7 @@ final class NodeNameResolver
         if ($desiredName === 'Object') {
             return $desiredName === $resolvedName;
         }
-        return \strtolower($resolvedName) === \strtolower($desiredName);
+        return \strcasecmp($resolvedName, $desiredName) === 0;
     }
     /**
      * @param string|\PhpParser\Node\Identifier $resolvedName

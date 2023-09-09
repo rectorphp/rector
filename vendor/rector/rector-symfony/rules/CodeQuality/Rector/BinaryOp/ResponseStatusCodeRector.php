@@ -100,7 +100,7 @@ CODE_SAMPLE
     }
     private function processMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\CallLike
     {
-        if ($methodCall->name instanceof Identifier && $this->nodeNameResolver->matchesStringName($methodCall->name, 'assert*')) {
+        if ($this->nodeNameResolver->startsWith($methodCall->name, 'assert')) {
             return $this->processAssertMethodCall($methodCall);
         }
         if ($this->isName($methodCall->name, 'redirect')) {

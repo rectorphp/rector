@@ -82,7 +82,7 @@ CODE_SAMPLE
             if (!$this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
                 return null;
             }
-            if (!$this->nodeNameResolver->matchesStringName($methodName, 'assert*')) {
+            if (!$this->nodeNameResolver->startsWith($node->name, 'assert')) {
                 return null;
             }
             $hasChanged = \true;

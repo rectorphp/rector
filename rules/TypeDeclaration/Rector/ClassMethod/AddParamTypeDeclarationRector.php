@@ -86,8 +86,9 @@ CODE_SAMPLE
             if ($this->shouldSkip($node, $classMethod)) {
                 continue;
             }
+            $methodName = $this->getName($classMethod);
             foreach ($this->addParamTypeDeclarations as $addParamTypeDeclaration) {
-                if (!$this->isName($classMethod, $addParamTypeDeclaration->getMethodName())) {
+                if (!$this->nodeNameResolver->isStringName($methodName, $addParamTypeDeclaration->getMethodName())) {
                     continue;
                 }
                 if (!$this->isObjectType($node, $addParamTypeDeclaration->getObjectType())) {

@@ -64,8 +64,12 @@ CODE_SAMPLE
         if ($node instanceof New_) {
             return $this->refactorNew($node);
         }
+        $nodeName = $this->getName($node->name);
+        if ($nodeName === null) {
+            return null;
+        }
         foreach ($this->replaceArgumentDefaultValues as $replaceArgumentDefaultValue) {
-            if (!$this->isName($node->name, $replaceArgumentDefaultValue->getMethod())) {
+            if (!$this->nodeNameResolver->isStringName($nodeName, $replaceArgumentDefaultValue->getMethod())) {
                 continue;
             }
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replaceArgumentDefaultValue->getObjectType())) {
