@@ -103,7 +103,8 @@ CODE_SAMPLE
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
-        if ($this->nodeNameResolver->matchesStringName($classMethod->name->toString(), 'createComponent*')) {
+        // edge case in nette framework
+        if ($this->nodeNameResolver->startsWith($classMethod->name, 'createComponent')) {
             return \true;
         }
         return !$classMethod->isProtected();

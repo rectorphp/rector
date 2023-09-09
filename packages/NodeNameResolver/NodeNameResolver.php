@@ -87,6 +87,7 @@ final class NodeNameResolver
     }
     /**
      * @api
+     * @deprecated This method is unused and will be removed, go for isName() instead
      */
     public function isCaseSensitiveName(Node $node, string $name) : bool
     {
@@ -170,6 +171,14 @@ final class NodeNameResolver
     {
         $suffixNamePattern = '#\\w+' . \ucfirst($expectedName) . '#';
         return StringUtils::isMatch($currentName, $suffixNamePattern);
+    }
+    public function startsWith(Node $node, string $prefix) : bool
+    {
+        $name = $this->getName($node);
+        if (!\is_string($name)) {
+            return \false;
+        }
+        return \strncmp($name, $prefix, \strlen($prefix)) === 0;
     }
     /**
      * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
