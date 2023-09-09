@@ -115,11 +115,11 @@ CODE_SAMPLE
         return $classReflection->hasMethod($methodCallRename->getNewMethod());
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrInternace
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
      */
-    private function hasClassNewClassMethod($classOrInternace, MethodCallRenameInterface $methodCallRename) : bool
+    private function hasClassNewClassMethod($classOrInterface, MethodCallRenameInterface $methodCallRename) : bool
     {
-        return (bool) $classOrInternace->getMethod($methodCallRename->getNewMethod());
+        return (bool) $classOrInterface->getMethod($methodCallRename->getNewMethod());
     }
     private function shouldKeepForParentInterface(MethodCallRenameInterface $methodCallRename, ?ClassReflection $classReflection) : bool
     {
