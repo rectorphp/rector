@@ -17,7 +17,6 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
-use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202309\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
@@ -50,11 +49,6 @@ final class PhpFileProcessor
     private $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\PostRector\Application\PostFileProcessor
-     */
-    private $postFileProcessor;
-    /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
@@ -68,14 +62,13 @@ final class PhpFileProcessor
      * @see https://regex101.com/r/xP2MGa/1
      */
     private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
         $this->symfonyStyle = $symfonyStyle;
         $this->fileDiffFactory = $fileDiffFactory;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
     }
@@ -97,12 +90,8 @@ final class PhpFileProcessor
         $rectorWithLineChanges = null;
         do {
             $file->changeHasChanged(\false);
-            $this->fileProcessor->refactor($file);
-            // 3. apply post rectors
-            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
-            // this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($newStmts);
-            // 4. print to file or string
+            $this->fileProcessor->process($file);
+            // 3. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration);
             $fileHasChangedInCurrentPass = $file->hasChanged();
