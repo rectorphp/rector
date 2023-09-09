@@ -99,8 +99,9 @@ final class FileDiff implements SerializableInterface
     }
     /**
      * @param array<string, mixed> $json
+     * @return $this
      */
-    public static function decode(array $json) : SerializableInterface
+    public static function decode(array $json) : \RectorPrefix202309\Symplify\EasyParallel\Contract\SerializableInterface
     {
         $rectorWithLineChanges = [];
         foreach ($json[Name::RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {

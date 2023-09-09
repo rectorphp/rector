@@ -59,8 +59,9 @@ final class SystemError implements SerializableInterface
     }
     /**
      * @param mixed[] $json
+     * @return $this
      */
-    public static function decode(array $json) : SerializableInterface
+    public static function decode(array $json) : \RectorPrefix202309\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[Name::MESSAGE], $json[Name::RELATIVE_FILE_PATH], $json[Name::LINE], $json[Name::RECTOR_CLASS]);
     }

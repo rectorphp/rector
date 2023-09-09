@@ -1937,7 +1937,6 @@ return array(
     'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => $baseDir . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/packages/PostRector/Application/PostFileProcessor.php',
     'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => $baseDir . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
-    'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => $baseDir . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
     'Rector\\PostRector\\Rector\\AbstractPostRector' => $baseDir . '/packages/PostRector/Rector/AbstractPostRector.php',
     'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => $baseDir . '/packages/PostRector/Rector/ClassRenamingPostRector.php',

@@ -164,9 +164,10 @@ final class ApplicationFileProcessor
     {
         $errorMessage = \sprintf('System error: "%s"', $throwable->getMessage()) . \PHP_EOL;
         if ($this->symfonyStyle->isDebug()) {
-            return new SystemError($errorMessage . \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString(), $filePath, $throwable->getLine());
+            $errorMessage .= \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString();
+        } else {
+            $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
         }
-        $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
         return new SystemError($errorMessage, $filePath, $throwable->getLine());
     }
     /**
@@ -194,7 +195,7 @@ final class ApplicationFileProcessor
     }
     /**
      * @param string[] $filePaths
-     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[], system_errors_count: int}
      */
     private function runParallel(array $filePaths, Configuration $configuration, InputInterface $input) : array
     {
