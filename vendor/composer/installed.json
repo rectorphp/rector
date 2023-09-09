@@ -1744,12 +1744,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "b5eea3f1586e0539aafe6f96fbd21f8c8e86c290"
+                "reference": "84c5b0425dd687b2b126f2a817da82d7d239d006"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b5eea3f1586e0539aafe6f96fbd21f8c8e86c290",
-                "reference": "b5eea3f1586e0539aafe6f96fbd21f8c8e86c290",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/84c5b0425dd687b2b126f2a817da82d7d239d006",
+                "reference": "84c5b0425dd687b2b126f2a817da82d7d239d006",
                 "shasum": ""
             },
             "require": {
@@ -1774,16 +1774,11 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-09-04T16:27:58+00:00",
+            "time": "2023-09-09T10:23:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
-                "enable-patching": true,
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
+                "enable-patching": true
             },
             "installation-source": "dist",
             "autoload": {
@@ -1801,7 +1796,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.15.0"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },
@@ -1812,12 +1807,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "51a2650fc81ec757ff7832b20cacb2da5058dc5f"
+                "reference": "fa41cc710a086d98e3e5b908ce3d5484faa621df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/51a2650fc81ec757ff7832b20cacb2da5058dc5f",
-                "reference": "51a2650fc81ec757ff7832b20cacb2da5058dc5f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/fa41cc710a086d98e3e5b908ce3d5484faa621df",
+                "reference": "fa41cc710a086d98e3e5b908ce3d5484faa621df",
                 "shasum": ""
             },
             "require": {
@@ -1844,16 +1839,11 @@
                 "tomasvotruba\/unused-public": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-09-04T16:29:25+00:00",
+            "time": "2023-09-09T10:26:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
-                "enable-patching": true,
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
+                "enable-patching": true
             },
             "installation-source": "dist",
             "autoload": {
@@ -1882,12 +1872,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "0810d7c51e4f3e17410bebd33af2cfd9b9a0b2ca"
+                "reference": "bd82828bf0db205870b3dbb39490dc939b609836"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0810d7c51e4f3e17410bebd33af2cfd9b9a0b2ca",
-                "reference": "0810d7c51e4f3e17410bebd33af2cfd9b9a0b2ca",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/bd82828bf0db205870b3dbb39490dc939b609836",
+                "reference": "bd82828bf0db205870b3dbb39490dc939b609836",
                 "shasum": ""
             },
             "require": {
@@ -1917,18 +1907,13 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-09-04T16:28:25+00:00",
+            "time": "2023-09-09T10:27:30+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
                 "branch-alias": {
                     "dev-main": "0.11-dev"
-                },
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
                 }
             },
             "installation-source": "dist",
@@ -1958,12 +1943,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "44525c9bfce1b0bb979348c7c8fb6c2b3d407edb"
+                "reference": "083fabf0e9638a896cfd20f6552c88c14ba37f34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/44525c9bfce1b0bb979348c7c8fb6c2b3d407edb",
-                "reference": "44525c9bfce1b0bb979348c7c8fb6c2b3d407edb",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/083fabf0e9638a896cfd20f6552c88c14ba37f34",
+                "reference": "083fabf0e9638a896cfd20f6552c88c14ba37f34",
                 "shasum": ""
             },
             "require": {
@@ -1996,16 +1981,11 @@
                 "tomasvotruba\/unused-public": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-09-07T18:39:18+00:00",
+            "time": "2023-09-09T10:33:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
-                "enable-patching": true,
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
+                "enable-patching": true
             },
             "installation-source": "dist",
             "autoload": {

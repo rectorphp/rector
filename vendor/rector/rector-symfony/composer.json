@@ -59,12 +59,7 @@
         "docs": "vendor\/bin\/rule-doc-generator generate src rules --output-file docs\/rector_rules_overview.md --ansi"
     },
     "extra": {
-        "enable-patching": true,
-        "rector": {
-            "includes": [
-                "config\/config.php"
-            ]
-        }
+        "enable-patching": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

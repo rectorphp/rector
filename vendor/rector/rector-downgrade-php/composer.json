@@ -55,12 +55,7 @@
         ]
     },
     "extra": {
-        "enable-patching": true,
-        "rector": {
-            "includes": [
-                "config\/config.php"
-            ]
-        }
+        "enable-patching": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
