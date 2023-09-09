@@ -26,9 +26,9 @@ return static function (RectorConfig $rectorConfig) : void {
     if ((new CiDetector())->isCiDetected()) {
         $rectorConfig->cacheClass(MemoryCacheStorage::class);
     }
+    // load internal rector-* extension configs
     $extensionConfigResolver = new ExtensionConfigResolver();
-    $extensionConfigFiles = $extensionConfigResolver->provide();
-    foreach ($extensionConfigFiles as $extensionConfigFile) {
+    foreach ($extensionConfigResolver->provide() as $extensionConfigFile) {
         $rectorConfig->import($extensionConfigFile);
     }
 };

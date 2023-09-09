@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
-use RectorPrefix202309\Doctrine\ORM\Mapping\JoinColumn;
 use RectorPrefix202309\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;

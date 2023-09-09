@@ -156,8 +156,6 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ThisTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\TypeWithClassNameTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\VoidTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
-use Rector\RectorGenerator\Command\GenerateCommand;
-use Rector\RectorGenerator\Command\InitRecipeCommand;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
@@ -239,23 +237,7 @@ final class LazyContainerFactory
     public function create() : RectorConfig
     {
         $rectorConfig = new RectorConfig();
-        // setup base parameters - from RectorConfig
-        // make use of https://github.com/symplify/easy-parallel
-        // $rectorConfig->import(EasyParallelConfig::FILE_PATH);
-        $rectorConfig->paths([]);
-        $rectorConfig->skip([]);
-        $rectorConfig->autoloadPaths([]);
-        $rectorConfig->bootstrapFiles([]);
-        $rectorConfig->parallel(120, 16, 20);
-        // to avoid autoimporting out of the box
-        $rectorConfig->importNames(\false, \false);
-        $rectorConfig->removeUnusedImports(\false);
-        $rectorConfig->importShortClasses();
-        $rectorConfig->indent(' ', 4);
-        $rectorConfig->fileExtensions(['php']);
-        $rectorConfig->cacheDirectory(\sys_get_temp_dir() . '/rector_cached_files');
-        $rectorConfig->containerCacheDirectory(\sys_get_temp_dir());
-        // make use of https://github.com/symplify/easy-parallel
+        $rectorConfig->import(__DIR__ . '/../../config/config.php');
         $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
             $application = $container->make(ConsoleApplication::class);
             $commandNamesToHide = ['list', 'completion', 'help'];
@@ -283,10 +265,6 @@ final class LazyContainerFactory
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->singleton(PhpFileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
-        if (\class_exists(InitRecipeCommand::class)) {
-            $rectorConfig->tag(InitRecipeCommand::class, Command::class);
-            $rectorConfig->tag(GenerateCommand::class, Command::class);
-        }
         // phpdoc-parser
         $rectorConfig->when(TypeParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
         $rectorConfig->when(ConstExprParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);

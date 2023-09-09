@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\PhpDocParser;
 
-use RectorPrefix202309\Doctrine\ORM\Mapping\Entity;
-use RectorPrefix202309\Doctrine\ORM\Mapping\Embeddable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 final class DoctrineDocBlockResolver
