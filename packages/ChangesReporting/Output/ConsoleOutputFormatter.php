@@ -42,8 +42,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
-        $this->reportErrors($processResult->getErrors());
-        if ($processResult->getErrors() !== []) {
+        $this->reportErrors($processResult->getSystemErrors());
+        if ($processResult->getSystemErrors() !== []) {
             return;
         }
         // to keep space between progress bar and success message

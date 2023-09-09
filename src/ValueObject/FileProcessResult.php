@@ -6,18 +6,18 @@ namespace Rector\Core\ValueObject;
 use PHPStan\Collectors\CollectedData;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202309\Webmozart\Assert\Assert;
-final class ProcessResult
+final class FileProcessResult
 {
     /**
      * @var SystemError[]
+     * @readonly
      */
     private $systemErrors;
     /**
-     * @var FileDiff[]
      * @readonly
+     * @var \Rector\Core\ValueObject\Reporting\FileDiff|null
      */
-    private $fileDiffs;
+    private $fileDiff;
     /**
      * @var CollectedData[]
      * @readonly
@@ -25,17 +25,13 @@ final class ProcessResult
     private $collectedData;
     /**
      * @param SystemError[] $systemErrors
-     * @param FileDiff[] $fileDiffs
      * @param CollectedData[] $collectedData
      */
-    public function __construct(array $systemErrors, array $fileDiffs, array $collectedData)
+    public function __construct(array $systemErrors, ?FileDiff $fileDiff, array $collectedData)
     {
         $this->systemErrors = $systemErrors;
-        $this->fileDiffs = $fileDiffs;
+        $this->fileDiff = $fileDiff;
         $this->collectedData = $collectedData;
-        Assert::allIsInstanceOf($systemErrors, SystemError::class);
-        Assert::allIsInstanceOf($fileDiffs, FileDiff::class);
-        Assert::allIsInstanceOf($collectedData, CollectedData::class);
     }
     /**
      * @return SystemError[]
@@ -44,12 +40,9 @@ final class ProcessResult
     {
         return $this->systemErrors;
     }
-    /**
-     * @return FileDiff[]
-     */
-    public function getFileDiffs() : array
+    public function getFileDiff() : ?FileDiff
     {
-        return $this->fileDiffs;
+        return $this->fileDiff;
     }
     /**
      * @return CollectedData[]
@@ -57,13 +50,5 @@ final class ProcessResult
     public function getCollectedData() : array
     {
         return $this->collectedData;
-    }
-    /**
-     * @param SystemError[] $systemErrors
-     */
-    public function addSystemErrors(array $systemErrors) : void
-    {
-        Assert::allIsInstanceOf($systemErrors, SystemError::class);
-        $this->systemErrors = \array_merge($this->systemErrors, $systemErrors);
     }
 }

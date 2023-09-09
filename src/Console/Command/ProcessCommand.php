@@ -18,7 +18,6 @@ use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use RectorPrefix202309\Symfony\Component\Console\Application;
 use RectorPrefix202309\Symfony\Component\Console\Command\Command;
 use RectorPrefix202309\Symfony\Component\Console\Input\InputInterface;
@@ -48,11 +47,6 @@ final class ProcessCommand extends Command
     private $applicationFileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
-     */
-    private $processResultFactory;
-    /**
-     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
@@ -76,13 +70,12 @@ final class ProcessCommand extends Command
      * @var \Rector\Core\Configuration\ConfigurationFactory
      */
     private $configurationFactory;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->configInitializer = $configInitializer;
         $this->applicationFileProcessor = $applicationFileProcessor;
-        $this->processResultFactory = $processResultFactory;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->symfonyStyle = $symfonyStyle;
@@ -121,13 +114,12 @@ final class ProcessCommand extends Command
         }
         // MAIN PHASE
         // 2. run Rector
-        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($configuration, $input);
+        $processResult = $this->applicationFileProcessor->run($configuration, $input);
         // REPORTING PHASE
         // 3. reporting phase
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-        $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
         $outputFormatter->report($processResult, $configuration);
         return $this->resolveReturnCode($processResult, $configuration);
     }
@@ -153,7 +145,7 @@ final class ProcessCommand extends Command
     private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration) : int
     {
         // some system errors were found → fail
-        if ($processResult->getErrors() !== []) {
+        if ($processResult->getSystemErrors() !== []) {
             return ExitCode::FAILURE;
         }
         // inverse error code for CI dry-run

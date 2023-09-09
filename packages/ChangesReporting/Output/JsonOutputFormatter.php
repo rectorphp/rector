@@ -41,9 +41,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             // for Rector CI
             $errorsJson['changed_files'][] = $relativeFilePath;
         }
-        $errors = $processResult->getErrors();
-        $errorsJson['totals']['errors'] = \count($errors);
-        $errorsData = $this->createErrorsData($errors);
+        $systemErrors = $processResult->getSystemErrors();
+        $errorsJson['totals']['errors'] = \count($systemErrors);
+        $errorsData = $this->createErrorsData($systemErrors);
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
         }

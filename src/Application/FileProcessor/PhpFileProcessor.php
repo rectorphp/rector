@@ -15,8 +15,8 @@ use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\FileProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202309\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
@@ -72,18 +72,13 @@ final class PhpFileProcessor
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
     }
-    /**
-     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
-     */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(File $file, Configuration $configuration) : FileProcessResult
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         // 1. parse files to nodes
-        $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
-        if ($parsingSystemErrors !== []) {
+        $parsingSystemError = $this->parseFileAndDecorateNodes($file);
+        if ($parsingSystemError instanceof SystemError) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
-            return $systemErrorsAndFileDiffs;
+            return new FileProcessResult([$parsingSystemError], null, []);
         }
         $fileHasChanged = \false;
         // 2. change nodes with Rectors
@@ -106,20 +101,12 @@ final class PhpFileProcessor
             $this->changedFilesDetector->addCachableFile($file->getFilePath());
         }
         if ($configuration->shouldShowDiffs() && $rectorWithLineChanges !== null) {
-            $file->setFileDiff($this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges));
+            $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges);
+            $file->setFileDiff($currentFileDiff);
         }
-        // return json here
-        $fileDiff = $file->getFileDiff();
-        if (!$fileDiff instanceof FileDiff) {
-            return $systemErrorsAndFileDiffs;
-        }
-        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
-        return $systemErrorsAndFileDiffs;
+        return new FileProcessResult([], $file->getFileDiff(), []);
     }
-    /**
-     * @return SystemError[]
-     */
-    private function parseFileAndDecorateNodes(File $file) : array
+    private function parseFileAndDecorateNodes(File $file) : ?SystemError
     {
         $this->notifyFile($file);
         try {
@@ -131,17 +118,15 @@ final class PhpFileProcessor
             if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $analysedCodeException;
             }
-            $autoloadSystemError = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getFilePath());
-            return [$autoloadSystemError];
+            return $this->errorFactory->createAutoloadError($analysedCodeException, $file->getFilePath());
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
             $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
-            $systemError = new SystemError($throwable->getMessage(), $relativeFilePath, $throwable->getLine());
-            return [$systemError];
+            return new SystemError($throwable->getMessage(), $relativeFilePath, $throwable->getLine());
         }
-        return [];
+        return null;
     }
     private function printFile(File $file, Configuration $configuration) : void
     {

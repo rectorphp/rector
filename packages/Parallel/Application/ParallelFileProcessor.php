@@ -6,6 +6,7 @@ namespace Rector\Parallel\Application;
 use RectorPrefix202309\Clue\React\NDJson\Decoder;
 use RectorPrefix202309\Clue\React\NDJson\Encoder;
 use RectorPrefix202309\Nette\Utils\Random;
+use PHPStan\Collectors\CollectedData;
 use RectorPrefix202309\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202309\React\Socket\ConnectionInterface;
 use RectorPrefix202309\React\Socket\TcpServer;
@@ -13,6 +14,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\ValueObject\Bridge;
@@ -53,16 +55,18 @@ final class ParallelFileProcessor
     }
     /**
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
-     * @return array{file_diffs: FileDiff[], system_errors: SystemError[], system_errors_count: int}
      */
-    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input) : array
+    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input) : ProcessResult
     {
         $jobs = \array_reverse($schedule->getJobs());
         $streamSelectLoop = new StreamSelectLoop();
         // basic properties setup
         $numberOfProcesses = $schedule->getNumberOfProcesses();
         // initial counters
+        /** @var FileDiff[] $fileDiffs */
         $fileDiffs = [];
+        /** @var CollectedData[] $collectedDatas */
+        $collectedDatas = [];
         /** @var SystemError[] $systemErrors */
         $systemErrors = [];
         $tcpServer = new TcpServer('127.0.0.1:0', $streamSelectLoop);
@@ -113,7 +117,7 @@ final class ParallelFileProcessor
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
-                function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier) : void {
+                function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$collectedDatas, &$reachedInternalErrorsCountLimit, $processIdentifier) : void {
                     // decode arrays to objects
                     foreach ($json[Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (\is_string($jsonError)) {
@@ -124,6 +128,9 @@ final class ParallelFileProcessor
                     }
                     foreach ($json[Bridge::FILE_DIFFS] as $jsonFileDiff) {
                         $fileDiffs[] = FileDiff::decode($jsonFileDiff);
+                    }
+                    foreach ($json[Bridge::COLLECTED_DATA] as $jsonCollectedData) {
+                        $collectedDatas[] = CollectedData::decode($jsonCollectedData);
                     }
                     $postFileCallback($json[Bridge::FILES_COUNT]);
                     $systemErrorsCount += $json[Bridge::SYSTEM_ERRORS_COUNT];
@@ -158,6 +165,6 @@ final class ParallelFileProcessor
         if ($reachedSystemErrorsCountLimit) {
             $systemErrors[] = new SystemError(\sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
         }
-        return [Bridge::FILE_DIFFS => $fileDiffs, Bridge::SYSTEM_ERRORS => $systemErrors, Bridge::SYSTEM_ERRORS_COUNT => \count($systemErrors)];
+        return new ProcessResult($systemErrors, $fileDiffs, $collectedDatas);
     }
 }

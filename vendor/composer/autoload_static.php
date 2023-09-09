@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae
+class ComposerStaticInitb9b5af44a2d53749e903697952a80dea
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1497,11 +1497,11 @@ class ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae
         'Rector\\Core\\Util\\StringUtils' => __DIR__ . '/../..' . '/src/Util/StringUtils.php',
         'Rector\\Core\\Validation\\RectorAssert' => __DIR__ . '/../..' . '/src/Validation/RectorAssert.php',
         'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/Application/FileFactory.php',
-        'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/ProcessResultFactory.php',
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
         'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
         'Rector\\Core\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
         'Rector\\Core\\ValueObject\\Error\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Error/SystemError.php',
+        'Rector\\Core\\ValueObject\\FileProcessResult' => __DIR__ . '/../..' . '/src/ValueObject/FileProcessResult.php',
         'Rector\\Core\\ValueObject\\FuncCallAndExpr' => __DIR__ . '/../..' . '/src/ValueObject/FuncCallAndExpr.php',
         'Rector\\Core\\ValueObject\\MethodName' => __DIR__ . '/../..' . '/src/ValueObject/MethodName.php',
         'Rector\\Core\\ValueObject\\PhpVersion' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersion.php',
@@ -2599,9 +2599,9 @@ class ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2c4eb4dde5e28350050ca68006bbd2ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb9b5af44a2d53749e903697952a80dea::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb9b5af44a2d53749e903697952a80dea::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb9b5af44a2d53749e903697952a80dea::$classMap;
 
         }, null, ClassLoader::class);
     }
