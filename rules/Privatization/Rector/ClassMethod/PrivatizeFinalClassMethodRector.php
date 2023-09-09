@@ -103,7 +103,7 @@ CODE_SAMPLE
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
-        if ($this->isName($classMethod, 'createComponent*')) {
+        if ($this->nodeNameResolver->matchesStringName($classMethod->name->toString(), 'createComponent*')) {
             return \true;
         }
         return !$classMethod->isProtected();

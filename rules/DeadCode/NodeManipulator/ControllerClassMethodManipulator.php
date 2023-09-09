@@ -46,6 +46,6 @@ final class ControllerClassMethodManipulator
         if (!$class->extends instanceof Name) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($class->extends, '#(Controller|Presenter)$#');
+        return $this->nodeNameResolver->matchesStringName($class->extends->toString(), '#(Controller|Presenter)$#');
     }
 }

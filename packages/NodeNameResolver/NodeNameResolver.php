@@ -41,10 +41,6 @@ final class NodeNameResolver
      */
     private $nodeNameResolvers = [];
     /**
-     * Used to check if a string might contain a regex or fnmatch pattern
-     */
-    private const REGEX_WILDCARD_CHARS = ['*', '#', '~', '/'];
-    /**
      * @var array<string, NodeNameResolverInterface|null>
      */
     private $nodeNameResolversByClass = [];
@@ -191,24 +187,22 @@ final class NodeNameResolver
         if ($desiredName === 'Object') {
             return $desiredName === $resolvedName;
         }
-        $containsWildcard = \false;
-        foreach (self::REGEX_WILDCARD_CHARS as $char) {
-            if (\strpos($desiredName, $char) !== \false) {
-                $containsWildcard = \true;
-                break;
-            }
-        }
-        if ($containsWildcard) {
-            // is probably regex pattern
-            if ($this->regexPatternDetector->isRegexPattern($desiredName)) {
-                return StringUtils::isMatch($resolvedName, $desiredName);
-            }
-            // is probably fnmatch
-            if (\strpos($desiredName, '*') !== \false) {
-                return \fnmatch($desiredName, $resolvedName, \FNM_NOESCAPE);
-            }
-        }
         return \strtolower($resolvedName) === \strtolower($desiredName);
+    }
+    /**
+     * @param string|\PhpParser\Node\Identifier $resolvedName
+     */
+    public function matchesStringName($resolvedName, string $desiredNamePattern) : bool
+    {
+        if ($resolvedName instanceof Identifier) {
+            $resolvedName = $resolvedName->toString();
+        }
+        // is probably regex pattern
+        if ($this->regexPatternDetector->isRegexPattern($desiredNamePattern)) {
+            return StringUtils::isMatch($resolvedName, $desiredNamePattern);
+        }
+        // is probably fnmatch
+        return \fnmatch($desiredNamePattern, $resolvedName, \FNM_NOESCAPE);
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
