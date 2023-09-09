@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee
+class ComposerStaticInita953e68ac0ba27e05eae6658fac73f10
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1326,7 +1326,6 @@ class ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
         'Rector\\CodingStyle\\Guard\\StaticGuard' => __DIR__ . '/../..' . '/rules/CodingStyle/Guard/StaticGuard.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
-        'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
         'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',
         'Rector\\CodingStyle\\Node\\NameImporter' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/NameImporter.php',
@@ -1339,7 +1338,6 @@ class ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee
         'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\NewlineBeforeNewAssignSetRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php',
-        'Rector\\CodingStyle\\Rector\\ClassMethod\\UnSpreadOperatorRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php',
         'Rector\\CodingStyle\\Rector\\Class_\\AddArrayDefaultToArrayPropertyRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Class_/AddArrayDefaultToArrayPropertyRector.php',
         'Rector\\CodingStyle\\Rector\\Closure\\StaticClosureRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Closure/StaticClosureRector.php',
         'Rector\\CodingStyle\\Rector\\Encapsed\\EncapsedStringsToSprintfRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php',
@@ -2601,9 +2599,9 @@ class ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0adf00c77ea825bd3f6f8ff7362440ee::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita953e68ac0ba27e05eae6658fac73f10::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita953e68ac0ba27e05eae6658fac73f10::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita953e68ac0ba27e05eae6658fac73f10::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 353 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (71)
 
-- [CodingStyle](#codingstyle) (30)
+- [CodingStyle](#codingstyle) (29)
 
 - [DeadCode](#deadcode) (41)
 
@@ -48,7 +48,7 @@
 
 - [Removing](#removing) (5)
 
-- [Renaming](#renaming) (10)
+- [Renaming](#renaming) (9)
 
 - [Strict](#strict) (5)
 
@@ -2042,30 +2042,6 @@ Assign outcome of ternary condition to variable, where applicable
  {
 -    $value ? $a = 1 : $a = 0;
 +    $a = $value ? 1 : 0;
- }
-```
-
-<br>
-
-### UnSpreadOperatorRector
-
-Remove spread operator
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector`](../rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php)
-
-```diff
- class SomeClass
- {
--    public function run(...$array)
-+    public function run(array $array)
-     {
-     }
-
-     public function execute(array $data)
-     {
--        $this->run(...$data);
-+        $this->run($data);
-     }
  }
 ```
 
@@ -5455,24 +5431,6 @@ Remove specific traits from code
 <br>
 
 ## Renaming
-
-### PseudoNamespaceToNamespaceRector
-
-Replaces defined Pseudo_Namespaces by Namespace\Ones.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`](../rules/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php)
-
-```diff
--/** @var Some_Chicken $someService */
--$someService = new Some_Chicken;
-+/** @var Some\Chicken $someService */
-+$someService = new Some\Chicken;
- $someClassToKeep = new Some_Class_To_Keep;
-```
-
-<br>
 
 ### RenameAnnotationRector
 
