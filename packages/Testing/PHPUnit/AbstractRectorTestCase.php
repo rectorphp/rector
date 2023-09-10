@@ -207,7 +207,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $configurationFactory = $this->make(ConfigurationFactory::class);
         $configuration = $configurationFactory->createForTests([$filePath]);
         $this->applicationFileProcessor->processFiles([$filePath], $configuration);
-        return $this->currentFileProvider->getFile()->getFileContent();
+        $currentFile = $this->currentFileProvider->getFile();
+        return $currentFile->getFileContent();
     }
     private function createInputFilePath(string $fixtureFilePath) : string
     {

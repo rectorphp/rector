@@ -115,10 +115,17 @@ final class ApplicationFileProcessor
             $postFileCallback = static function (int $stepCount) : void {
             };
         }
+        if ($configuration->isDebug()) {
+            $preFileCallback = function (string $filePath) : void {
+                $this->symfonyStyle->writeln('[file] ' . $filePath);
+            };
+        } else {
+            $preFileCallback = null;
+        }
         if ($configuration->isParallel()) {
             $processResult = $this->runParallel($filePaths, $input, $postFileCallback);
         } else {
-            $processResult = $this->processFiles($filePaths, $configuration, $postFileCallback);
+            $processResult = $this->processFiles($filePaths, $configuration, $preFileCallback, $postFileCallback);
         }
         $processResult->addSystemErrors($this->systemErrors);
         $this->restoreErrorHandler();
@@ -126,9 +133,10 @@ final class ApplicationFileProcessor
     }
     /**
      * @param string[] $filePaths
+     * @param callable(string $file): void|null $preFileCallback
      * @param callable(int $fileCount): void|null $postFileCallback
      */
-    public function processFiles(array $filePaths, Configuration $configuration, ?callable $postFileCallback = null) : ProcessResult
+    public function processFiles(array $filePaths, Configuration $configuration, ?callable $preFileCallback = null, ?callable $postFileCallback = null) : ProcessResult
     {
         /** @var SystemError[] $systemErrors */
         $systemErrors = [];
@@ -137,6 +145,9 @@ final class ApplicationFileProcessor
         /** @var CollectedData[] $collectedData */
         $collectedData = [];
         foreach ($filePaths as $filePath) {
+            if ($preFileCallback !== null) {
+                $preFileCallback($filePath);
+            }
             $file = new File($filePath, UtilsFileSystem::read($filePath));
             try {
                 $fileProcessResult = $this->processFile($file, $configuration);
