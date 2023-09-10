@@ -61,7 +61,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!\fnmatch('test*', $node->name->toString(), \FNM_NOESCAPE)) {
+        if (\strncmp($node->name->toString(), 'test', \strlen('test')) !== 0) {
             return null;
         }
         if ($node->stmts === null) {

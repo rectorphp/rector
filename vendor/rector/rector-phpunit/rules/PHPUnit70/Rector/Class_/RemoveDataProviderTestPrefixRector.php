@@ -97,10 +97,11 @@ CODE_SAMPLE
         $hasChanged = \false;
         $dataProviderClassMethods = $this->dataProviderClassMethodFinder->find($node);
         foreach ($dataProviderClassMethods as $dataProviderClassMethod) {
-            if (!\fnmatch('test*', $dataProviderClassMethod->name->toString(), \FNM_NOESCAPE)) {
+            $dataProviderClassMethodName = $dataProviderClassMethod->name->toString();
+            if (\strncmp($dataProviderClassMethodName, 'test', \strlen('test')) !== 0) {
                 continue;
             }
-            $shortMethodName = Strings::substring($dataProviderClassMethod->name->toString(), 4);
+            $shortMethodName = Strings::substring($dataProviderClassMethodName, 4);
             $shortMethodName = \lcfirst($shortMethodName);
             $dataProviderClassMethod->name = new Identifier($shortMethodName);
             $hasChanged = \true;

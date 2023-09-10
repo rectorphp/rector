@@ -64,7 +64,7 @@ final class TestsNodeAnalyzer
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        if (\fnmatch('test*', $classMethod->name->toString(), \FNM_NOESCAPE)) {
+        if (\strncmp($classMethod->name->toString(), 'test', \strlen('test')) === 0) {
             return \true;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);

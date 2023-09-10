@@ -47,6 +47,10 @@ final class AssertCallAnalyzer
      */
     private const MAX_NESTED_METHOD_CALL_LEVEL = 5;
     /**
+     * @var string[]
+     */
+    private const ASSERT_METHOD_NAME_PREFIXES = ['expectNotToPerformAssertions', 'assert', 'expectException', 'setExpectedException', 'expectOutput', 'should'];
+    /**
      * @var array<string, bool>
      */
     private $containsAssertCallByClassMethod = [];
@@ -160,14 +164,12 @@ final class AssertCallAnalyzer
         if (!$call->name instanceof Identifier) {
             return \false;
         }
-        $callname = $call->name->toString();
-        foreach (['doTestFileInfo', 'expectNotToPerformAssertions'] as $methodCallName) {
-            if ($callname === $methodCallName) {
-                return \true;
-            }
+        $callName = $this->nodeNameResolver->getName($call->name);
+        if (!\is_string($callName)) {
+            return \false;
         }
-        foreach (['*assert', 'assert*', 'expectException*', 'setExpectedException*', 'expectOutput*', 'should*'] as $methodCallNamePattern) {
-            if (\fnmatch($methodCallNamePattern, $callname, \FNM_NOESCAPE)) {
+        foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
+            if (\strncmp($callName, $assertMethodNamePrefix, \strlen($assertMethodNamePrefix)) === 0) {
                 return \true;
             }
         }
