@@ -1746,7 +1746,6 @@ return array(
     'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => $baseDir . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
     'Rector\\Parallel\\ValueObject\\Bridge' => $baseDir . '/packages/Parallel/ValueObject/Bridge.php',
     'Rector\\Parallel\\ValueObject\\Name' => $baseDir . '/packages/Parallel/ValueObject/Name.php',
-    'Rector\\Parallel\\WorkerRunner' => $baseDir . '/packages/Parallel/WorkerRunner.php',
     'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => $baseDir . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
     'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => $baseDir . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
     'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => $baseDir . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',

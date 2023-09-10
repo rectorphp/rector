@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26
+class ComposerStaticInit5034a22d527007e796e7effa1686f173
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1966,7 +1966,6 @@ class ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Bridge.php',
         'Rector\\Parallel\\ValueObject\\Name' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Name.php',
-        'Rector\\Parallel\\WorkerRunner' => __DIR__ . '/../..' . '/packages/Parallel/WorkerRunner.php',
         'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
         'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
         'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',
@@ -2599,9 +2598,9 @@ class ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0e72cd77db4f8f5a6ba9bdc34539aa26::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5034a22d527007e796e7effa1686f173::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5034a22d527007e796e7effa1686f173::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5034a22d527007e796e7effa1686f173::$classMap;
 
         }, null, ClassLoader::class);
     }
