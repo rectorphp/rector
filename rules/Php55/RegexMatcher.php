@@ -89,7 +89,7 @@ final class RegexMatcher
     }
     private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers) : string
     {
-        $modifiersWithoutE = Strings::replace($modifiers, '#e#');
+        $modifiersWithoutE = \str_replace('e', '', $modifiers);
         return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
     private function matchConcat(Concat $concat) : ?Concat
