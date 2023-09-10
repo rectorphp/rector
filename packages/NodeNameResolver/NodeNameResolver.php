@@ -14,9 +14,7 @@ use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
-use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
 {
@@ -31,11 +29,6 @@ final class NodeNameResolver
      */
     private $callAnalyzer;
     /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\Regex\RegexPatternDetector
-     */
-    private $regexPatternDetector;
-    /**
      * @var NodeNameResolverInterface[]
      * @readonly
      */
@@ -47,11 +40,10 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, RegexPatternDetector $regexPatternDetector, iterable $nodeNameResolvers = [])
+    public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, iterable $nodeNameResolvers = [])
     {
         $this->classNaming = $classNaming;
         $this->callAnalyzer = $callAnalyzer;
-        $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
     /**
@@ -179,16 +171,7 @@ final class NodeNameResolver
         if ($desiredName === 'Object') {
             return $desiredName === $resolvedName;
         }
-        if (\strcasecmp($resolvedName, $desiredName) === 0) {
-            return \true;
-        }
-        if ($this->regexPatternDetector->isRegexPattern($desiredName)) {
-            return StringUtils::isMatch($resolvedName, $desiredName);
-        }
-        if (\strpos($desiredName, '*') !== \false) {
-            return \fnmatch($desiredName, $resolvedName, \FNM_NOESCAPE);
-        }
-        return \false;
+        return \strcasecmp($resolvedName, $desiredName) === 0;
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
