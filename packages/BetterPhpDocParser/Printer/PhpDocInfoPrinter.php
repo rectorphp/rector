@@ -53,11 +53,6 @@ final class PhpDocInfoPrinter
     private const CLOSING_DOCBLOCK_REGEX = '#\\*\\/(\\s+)?$#';
     /**
      * @var string
-     * @see https://regex101.com/r/mVmOCY/2
-     */
-    private const OPENING_DOCBLOCK_REGEX = '#^(/\\*\\*)#';
-    /**
-     * @var string
      * @see https://regex101.com/r/5fJyws/1
      */
     private const CALLABLE_REGEX = '#callable(\\s+)\\(#';
@@ -168,7 +163,7 @@ final class PhpDocInfoPrinter
             $output = '/**' . $output;
         }
         // fix missing end
-        if (StringUtils::isMatch($output, self::OPENING_DOCBLOCK_REGEX) && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
+        if (\strncmp($output, '/**', \strlen('/**')) === 0 && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
         return \str_replace(" \n", "\n", $output);
