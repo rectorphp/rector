@@ -46,11 +46,6 @@ final class BetterStandardPrinter extends Standard
     private $docBlockUpdater;
     /**
      * @var string
-     * @see https://regex101.com/r/F5x783/1
-     */
-    private const USE_REGEX = '#( use)\\(#';
-    /**
-     * @var string
      * @see https://regex101.com/r/DrsMY4/1
      */
     private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|\$)#";
@@ -237,7 +232,7 @@ final class BetterStandardPrinter extends Standard
         if ($closure->uses === []) {
             return $closureContent;
         }
-        return Strings::replace($closureContent, self::USE_REGEX, '$1 (');
+        return \str_replace(' use(', ' use (', (string) $closureContent);
     }
     /**
      * Do not add "()" on Expressions
