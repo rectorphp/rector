@@ -31,7 +31,6 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
@@ -45,11 +44,6 @@ final class BetterStandardPrinter extends Standard
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
-    /**
-     * @var string
-     * @see https://regex101.com/r/jUFizd/1
-     */
-    private const NEWLINE_END_REGEX = "#\n\$#";
     /**
      * @var string
      * @see https://regex101.com/r/F5x783/1
@@ -92,7 +86,7 @@ final class BetterStandardPrinter extends Standard
         $newStmts = $this->resolveNewStmts($stmts);
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         // add new line in case of added stmts
-        if (\count($newStmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
+        if (\count($newStmts) !== \count($origStmts) && \substr_compare($content, "\n", -\strlen("\n")) !== 0) {
             $content .= $this->nl;
         }
         return $content;
