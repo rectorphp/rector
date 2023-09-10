@@ -48,11 +48,6 @@ final class PhpNestedAttributeGroupFactory
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
-    /**
-     * @var string
-     * @see https://regex101.com/r/g3d9jy/1
-     */
-    private const SHORT_ORM_ALIAS_REGEX = '#^@ORM#';
     public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
@@ -129,8 +124,7 @@ final class PhpNestedAttributeGroupFactory
     {
         /** @var string $shortDoctrineAttributeName */
         $shortDoctrineAttributeName = Strings::after($annotationPropertyToAttributeClass->getAttributeClass(), '\\', -1);
-        $matches = Strings::match($originalIdentifier, self::SHORT_ORM_ALIAS_REGEX);
-        if ($matches !== null) {
+        if (\strncmp($originalIdentifier, '@ORM', \strlen('@ORM')) === 0) {
             // or alias
             return new Name('ORM\\' . $shortDoctrineAttributeName);
         }
