@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 use RectorPrefix202309\Nette\Utils\FileSystem as UtilsFileSystem;
 use PHPStan\Collectors\CollectedData;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -65,9 +64,9 @@ final class ApplicationFileProcessor
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Core\Application\FileProcessor\PhpFileProcessor
+     * @var \Rector\Core\Application\FileProcessor
      */
-    private $phpFileProcessor;
+    private $fileProcessor;
     /**
      * @readonly
      * @var \Rector\Core\Util\ArrayParametersMerger
@@ -81,7 +80,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, ArrayParametersMerger $arrayParametersMerger)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -90,7 +89,7 @@ final class ApplicationFileProcessor
         $this->cpuCoreCountProvider = $cpuCoreCountProvider;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->currentFileProvider = $currentFileProvider;
-        $this->phpFileProcessor = $phpFileProcessor;
+        $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
@@ -164,7 +163,7 @@ final class ApplicationFileProcessor
     private function processFile(File $file, Configuration $configuration) : FileProcessResult
     {
         $this->currentFileProvider->setFile($file);
-        $fileProcessResult = $this->phpFileProcessor->process($file, $configuration);
+        $fileProcessResult = $this->fileProcessor->processFile($file, $configuration);
         if ($fileProcessResult->getSystemErrors() !== []) {
             $this->changedFilesDetector->invalidateFile($file->getFilePath());
         } elseif (!$configuration->isDryRun() || !$fileProcessResult->getFileDiff() instanceof FileDiff) {

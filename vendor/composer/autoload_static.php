@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5034a22d527007e796e7effa1686f173
+class ComposerStaticInit12504be6e3a1af970ae15041b542760c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1369,7 +1369,6 @@ class ComposerStaticInit5034a22d527007e796e7effa1686f173
         'Rector\\Core\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
         'Rector\\Core\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
-        'Rector\\Core\\Application\\FileProcessor\\PhpFileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor/PhpFileProcessor.php',
         'Rector\\Core\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
         'Rector\\Core\\Autoloading\\AdditionalAutoloader' => __DIR__ . '/../..' . '/src/Autoloading/AdditionalAutoloader.php',
         'Rector\\Core\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
@@ -2598,9 +2597,9 @@ class ComposerStaticInit5034a22d527007e796e7effa1686f173
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5034a22d527007e796e7effa1686f173::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5034a22d527007e796e7effa1686f173::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5034a22d527007e796e7effa1686f173::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit12504be6e3a1af970ae15041b542760c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit12504be6e3a1af970ae15041b542760c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit12504be6e3a1af970ae15041b542760c::$classMap;
 
         }, null, ClassLoader::class);
     }

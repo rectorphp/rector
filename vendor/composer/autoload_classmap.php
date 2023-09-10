@@ -1149,7 +1149,6 @@ return array(
     'Rector\\Core\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => $baseDir . '/src/Application/ChangedNodeScopeRefresher.php',
     'Rector\\Core\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',
-    'Rector\\Core\\Application\\FileProcessor\\PhpFileProcessor' => $baseDir . '/src/Application/FileProcessor/PhpFileProcessor.php',
     'Rector\\Core\\Application\\VersionResolver' => $baseDir . '/src/Application/VersionResolver.php',
     'Rector\\Core\\Autoloading\\AdditionalAutoloader' => $baseDir . '/src/Autoloading/AdditionalAutoloader.php',
     'Rector\\Core\\Autoloading\\BootstrapFilesIncluder' => $baseDir . '/src/Autoloading/BootstrapFilesIncluder.php',
