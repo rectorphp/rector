@@ -73,7 +73,7 @@ final class UseImportNameMatcher
         if (!$originalUseUseNode->alias instanceof Identifier) {
             return $prefix . $originalUseUseNode->name->toString();
         }
-        $unaliasedShortClass = Strings::substring($tag, Strings::length($originalUseUseNode->alias->toString()));
+        $unaliasedShortClass = Strings::substring($tag, \strlen($originalUseUseNode->alias->toString()));
         if (\strncmp($unaliasedShortClass, '\\', \strlen('\\')) === 0) {
             return $prefix . $originalUseUseNode->name . $unaliasedShortClass;
         }

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
-use RectorPrefix202309\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -142,7 +141,7 @@ CODE_SAMPLE
             return \true;
         }
         // too short
-        return Strings::length($rawValue) <= self::GROUP_SIZE;
+        return \strlen($rawValue) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]
