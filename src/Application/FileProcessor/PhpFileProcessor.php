@@ -11,6 +11,7 @@ use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
@@ -137,7 +138,7 @@ final class PhpFileProcessor
          * On printing, the space may be wiped, these below check compare with original file content used to verify
          * that no change actually needed
          */
-        if (!$file->getFileDiff() instanceof FileDiff) {
+        if (!$file->getFileDiff() instanceof FileDiff && \current($file->getNewStmts()) instanceof FileWithoutNamespace) {
             /**
              * Handle new line or space before <?php or InlineHTML node wiped on print format preserving
              * On very first content level
