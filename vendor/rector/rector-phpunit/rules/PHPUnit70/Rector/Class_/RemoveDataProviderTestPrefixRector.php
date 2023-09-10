@@ -97,7 +97,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $dataProviderClassMethods = $this->dataProviderClassMethodFinder->find($node);
         foreach ($dataProviderClassMethods as $dataProviderClassMethod) {
-            if (!$this->isName($dataProviderClassMethod, 'test*')) {
+            if (!\fnmatch('test*', $dataProviderClassMethod->name->toString(), \FNM_NOESCAPE)) {
                 continue;
             }
             $shortMethodName = Strings::substring($dataProviderClassMethod->name->toString(), 4);

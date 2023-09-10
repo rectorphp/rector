@@ -85,7 +85,7 @@ CODE_SAMPLE
             if (!$this->isNames($node->class, ['static', 'self'])) {
                 return null;
             }
-            if (!$this->isName($node->name, 'assert*')) {
+            if (!\fnmatch('assert*', $methodName, \FNM_NOESCAPE)) {
                 return null;
             }
             $hasChanged = \true;

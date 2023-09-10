@@ -64,7 +64,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         if (!$firstArgumentValue instanceof FuncCall && !$firstArgumentValue instanceof Empty_) {
             return null;
         }
-        $firstArgumentName = $this->getName($firstArgumentValue);
+        $firstArgumentName = $this->resolveFirstArgument($firstArgumentValue);
         if ($firstArgumentName === null || !\array_key_exists($firstArgumentName, self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES)) {
             return null;
         }
@@ -87,6 +87,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         $this->renameMethod($node, $functionNameWithAssertMethods);
         $this->moveFunctionArgumentsUp($node);
         return $node;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Empty_ $firstArgumentValue
+     */
+    private function resolveFirstArgument($firstArgumentValue) : ?string
+    {
+        return $firstArgumentValue instanceof Empty_ ? 'empty' : $this->getName($firstArgumentValue);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node

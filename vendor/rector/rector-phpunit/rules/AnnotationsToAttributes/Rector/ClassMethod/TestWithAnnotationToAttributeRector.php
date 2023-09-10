@@ -5,9 +5,6 @@ namespace Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod;
 
 use RectorPrefix202309\Nette\Utils\Json;
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;

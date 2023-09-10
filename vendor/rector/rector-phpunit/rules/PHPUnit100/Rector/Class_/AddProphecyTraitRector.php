@@ -8,7 +8,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
