@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -108,8 +109,11 @@ CODE_SAMPLE
     }
     private function shouldSkipClass(Class_ $class) : bool
     {
+        if ($class->isAnonymous()) {
+            return \true;
+        }
         // we are in the test case
-        if ($this->isName($class, '*Test')) {
+        if ($class->name instanceof Identifier && \substr_compare($class->name->toString(), 'Test', -\strlen('Test')) === 0) {
             return \true;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
