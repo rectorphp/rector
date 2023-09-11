@@ -22,4 +22,4 @@ if (PHP_VERSION_ID < 50600) {
 
 require_once __DIR__ . '/composer/autoload_real.php';
 
-return ComposerAutoloaderInit5a0949f5d5844b35a83019a08ebf0c76::getLoader();
+return ComposerAutoloaderInitbd6b28def8d74c9cc21238e5a263a42b::getLoader();

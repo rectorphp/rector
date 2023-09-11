@@ -175,12 +175,15 @@ final class NodeNameResolver
         if ($desiredName === 'Object') {
             return $desiredName === $resolvedName;
         }
+        if (\strcasecmp($resolvedName, $desiredName) === 0) {
+            return \true;
+        }
         foreach (self::REGEX_WILDCARD_CHARS as $char) {
             if (\strpos($desiredName, $char) !== \false) {
                 throw new ShouldNotHappenException('Matching of regular expressions is no longer supported. Use $this->getName() and compare with e.g. str_ends_with() or str_starts_with() instead.');
             }
         }
-        return \strcasecmp($resolvedName, $desiredName) === 0;
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
