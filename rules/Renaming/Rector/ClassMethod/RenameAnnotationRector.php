@@ -8,6 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
@@ -27,12 +29,18 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
      */
     private $docBlockTagReplacer;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var RenameAnnotationInterface[]
      */
     private $renameAnnotations = [];
-    public function __construct(DocBlockTagReplacer $docBlockTagReplacer)
+    public function __construct(DocBlockTagReplacer $docBlockTagReplacer, DocBlockUpdater $docBlockUpdater)
     {
         $this->docBlockTagReplacer = $docBlockTagReplacer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -76,31 +84,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $hasChanged = \false;
         if ($node instanceof Expression) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            foreach ($this->renameAnnotations as $renameAnnotation) {
-                $hasDocBlockChanged = $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
-                if ($hasDocBlockChanged) {
-                    $hasChanged = \true;
-                }
-            }
-            if ($hasChanged) {
-                return $node;
-            }
-            return null;
+            return $this->refactorExpression($node);
         }
+        $hasChanged = \false;
         foreach ($node->stmts as $stmt) {
             if (!$stmt instanceof ClassMethod && !$stmt instanceof Property) {
                 continue;
             }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($stmt);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($stmt);
+            if (!$phpDocInfo instanceof PhpDocInfo) {
+                continue;
+            }
             foreach ($this->renameAnnotations as $renameAnnotation) {
                 if ($renameAnnotation instanceof RenameAnnotationByType && !$this->isObjectType($node, $renameAnnotation->getObjectType())) {
                     continue;
                 }
                 $hasDocBlockChanged = $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
                 if ($hasDocBlockChanged) {
+                    $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
                     $hasChanged = \true;
                 }
             }
@@ -117,5 +119,21 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, RenameAnnotationInterface::class);
         $this->renameAnnotations = $configuration;
+    }
+    private function refactorExpression(Expression $expression) : ?Expression
+    {
+        $hasChanged = \false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
+        foreach ($this->renameAnnotations as $renameAnnotation) {
+            $hasDocBlockChanged = $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
+            if ($hasDocBlockChanged) {
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($expression);
+            return $expression;
+        }
+        return null;
     }
 }

@@ -24,6 +24,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Naming\PropertyRenamer\PropertyPromotionRenamer;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -77,6 +78,11 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $reflectionResolver;
     /**
+     * @readonly
+     * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
+     */
+    private $propertyPromotionRenamer;
+    /**
      * @api
      * @var string
      */
@@ -91,7 +97,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * @var bool
      */
     private $inlinePublic = \false;
-    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver)
+    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver, PropertyPromotionRenamer $propertyPromotionRenamer)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
@@ -100,6 +106,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         $this->makePropertyPromotionGuard = $makePropertyPromotionGuard;
         $this->typeComparator = $typeComparator;
         $this->reflectionResolver = $reflectionResolver;
+        $this->propertyPromotionRenamer = $propertyPromotionRenamer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -180,8 +187,7 @@ CODE_SAMPLE
             if (!$paramTagValueNode instanceof ParamTagValueNode) {
                 $this->propertyPromotionDocBlockMerger->decorateParamWithPropertyPhpDocInfo($constructClassMethod, $property, $param, $paramName);
             } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
-                $paramTagValueNode->parameterName = '$' . $propertyName;
-                $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+                $this->propertyPromotionRenamer->renameParamDoc($constructorPhpDocInfo, $constructClassMethod, $param, $paramTagValueNode->parameterName, $propertyName);
             }
             // property name has higher priority
             $paramName = $this->getName($property);

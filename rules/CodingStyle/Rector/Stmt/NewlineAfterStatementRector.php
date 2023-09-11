@@ -131,12 +131,9 @@ CODE_SAMPLE
         if ($this->hasNoComment($comments)) {
             return $rangeLine;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($nextStmt);
-        if ($phpDocInfo->hasChanged()) {
-            return $rangeLine;
-        }
         /** @var Comment[] $comments */
-        $line = $comments[0]->getStartLine();
+        $firstComment = $comments[0];
+        $line = $firstComment->getStartLine();
         return $line - $endLine;
     }
     /**
@@ -144,10 +141,7 @@ CODE_SAMPLE
      */
     private function hasNoComment(?array $comments) : bool
     {
-        if ($comments === null) {
-            return \true;
-        }
-        return !isset($comments[0]);
+        return $comments === null || $comments === [];
     }
     private function shouldSkip(Stmt $stmt) : bool
     {

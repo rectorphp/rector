@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -42,13 +43,19 @@ final class PropertyPromotionDocBlockMerger
      * @var \Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger, VarTagRemover $varTagRemover, PhpDocInfoPrinter $phpDocInfoPrinter)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger, VarTagRemover $varTagRemover, PhpDocInfoPrinter $phpDocInfoPrinter, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->varTagRemover = $varTagRemover;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function mergePropertyAndParamDocBlocks(Property $property, Param $param, ?ParamTagValueNode $paramTagValueNode) : void
     {
@@ -65,6 +72,7 @@ final class PropertyPromotionDocBlockMerger
                 $param->setAttribute(AttributeKey::COMMENTS, $mergedComments);
             }
         }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($param);
     }
     public function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName) : void
     {

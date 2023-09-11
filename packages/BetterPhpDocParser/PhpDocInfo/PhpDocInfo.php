@@ -26,7 +26,6 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
@@ -80,10 +79,6 @@ final class PhpDocInfo
      * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
     private $originalPhpDocNode;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
     public function __construct(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNode = $phpDocNode;
@@ -341,26 +336,11 @@ final class PhpDocInfo
      * @deprecated Change doc block and print directly in the node instead
      * @internal
      * Should be handled by attributes of phpdoc node - if stard_and_end is missing in one of nodes, it has been changed
-     * Similar to missing original node in php-aprser
+     *
+     * @api
      */
     public function markAsChanged() : void
     {
-        $this->hasChanged = \true;
-    }
-    public function hasChanged() : bool
-    {
-        if ($this->isNewNode()) {
-            return \true;
-        }
-        if ($this->hasChanged) {
-            return \true;
-        }
-        // has a single node with missing start_end
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $changedPhpDocNodeVisitor = new ChangedPhpDocNodeVisitor();
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpDocNodeVisitor);
-        $phpDocNodeTraverser->traverse($this->phpDocNode);
-        return $changedPhpDocNodeVisitor->hasChanged();
     }
     public function makeMultiLined() : void
     {

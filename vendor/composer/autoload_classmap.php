@@ -951,7 +951,6 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/PhpDocClassRenamer.php',
     'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocTagRemover' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php',
     'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocTypeChanger' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTypeChanger.php',
-    'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PropertyDocBlockManipulator' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/PropertyDocBlockManipulator.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeFinder\\PhpDocNodeByTypeFinder' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeMapper' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeMapper.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ArrayTypePhpDocNodeVisitor' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ArrayTypePhpDocNodeVisitor.php',

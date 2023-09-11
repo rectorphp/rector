@@ -130,14 +130,14 @@ final class PhpDocTypeChanger
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
         return \true;
     }
-    public function changeParamType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : void
+    public function changeParamType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : bool
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {
-            return;
+            return \false;
         }
         if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {
-            return;
+            return \false;
         }
         $phpDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
@@ -147,10 +147,10 @@ final class PhpDocTypeChanger
             $currentType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $param);
             // avoid overriding better type
             if ($this->typeComparator->isSubtype($currentType, $newType)) {
-                return;
+                return \false;
             }
             if ($this->typeComparator->areTypesEqual($currentType, $newType)) {
-                return;
+                return \false;
             }
             $paramTagValueNode->type = $phpDocTypeNode;
         } else {
@@ -158,6 +158,7 @@ final class PhpDocTypeChanger
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
+        return \true;
     }
     public function isAllowed(TypeNode $typeNode) : bool
     {

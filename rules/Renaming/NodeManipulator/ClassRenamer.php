@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\FileHasher;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -76,6 +77,11 @@ final class ClassRenamer
      */
     private $fileHasher;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var string[]
      */
     private $alreadyProcessedClasses = [];
@@ -83,7 +89,7 @@ final class ClassRenamer
      * @var array<string, OldToNewType[]>
      */
     private $oldToNewTypesByCacheKey = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher, DocBlockUpdater $docBlockUpdater)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -94,6 +100,7 @@ final class ClassRenamer
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileHasher = $fileHasher;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -104,16 +111,18 @@ final class ClassRenamer
         if ($node instanceof Name) {
             return $this->refactorName($node, $oldToNewClasses);
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses, $phpDocInfo);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $hasPhpDocChanged = $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses, $phpDocInfo);
+            if ($hasPhpDocChanged) {
+                return $node;
+            }
+        }
         if ($node instanceof Namespace_) {
             return $this->refactorNamespace($node, $oldToNewClasses);
         }
         if ($node instanceof ClassLike) {
             return $this->refactorClassLike($node, $oldToNewClasses, $scope);
-        }
-        if ($phpDocInfo->hasChanged()) {
-            return $node;
         }
         return null;
     }
@@ -121,16 +130,21 @@ final class ClassRenamer
      * @param OldToNewType[] $oldToNewTypes
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorPhpDoc(Node $node, array $oldToNewTypes, array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
+    private function refactorPhpDoc(Node $node, array $oldToNewTypes, array $oldToNewClasses, PhpDocInfo $phpDocInfo) : bool
     {
         if (!$phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && !$phpDocInfo->hasByAnnotationClasses(NodeTypes::TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES)) {
-            return;
+            return \false;
         }
         if ($node instanceof AttributeGroup) {
-            return;
+            return \false;
         }
-        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
+        $hasChanged = $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
+        $hasChanged = $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses, $hasChanged);
+        if ($hasChanged) {
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+            return \true;
+        }
+        return \false;
     }
     private function shouldSkip(string $newName, Name $name) : bool
     {

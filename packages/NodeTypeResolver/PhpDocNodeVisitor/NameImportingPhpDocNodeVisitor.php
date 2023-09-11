@@ -54,6 +54,10 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider, IdentifierTypeMapper $identifierTypeMapper)
     {
         $this->classNameImportSkipper = $classNameImportSkipper;
@@ -99,7 +103,12 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
     public function setCurrentNode(PhpParserNode $phpParserNode) : void
     {
+        $this->hasChanged = \false;
         $this->currentPhpParserNode = $phpParserNode;
+    }
+    public function hasChanged() : bool
+    {
+        return $this->hasChanged;
     }
     private function processFqnNameImport(PhpParserNode $phpParserNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType, File $file) : ?IdentifierTypeNode
     {
@@ -108,6 +117,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             // might break
             return null;
         }
+        // standardize to FQN
         if (\strncmp($fullyQualifiedObjectType->getClassName(), '@', \strlen('@')) === 0) {
             $fullyQualifiedObjectType = new FullyQualifiedObjectType(\ltrim($fullyQualifiedObjectType->getClassName(), '@'));
         }
@@ -121,6 +131,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
+            $this->hasChanged = \true;
             return $newNode;
         }
         return null;

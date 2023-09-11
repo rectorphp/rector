@@ -77,6 +77,7 @@ CODE_SAMPLE
             return null;
         }
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChanged = \false;
         foreach ($node->getParams() as $param) {
             if ($param->type === null) {
                 continue;
@@ -96,9 +97,12 @@ CODE_SAMPLE
                 continue;
             }
             $paramName = $this->getName($param);
-            $this->phpDocTypeChanger->changeParamType($node, $functionLikePhpDocInfo, $genericParamType, $param, $paramName);
+            $changedParamType = $this->phpDocTypeChanger->changeParamType($node, $functionLikePhpDocInfo, $genericParamType, $param, $paramName);
+            if ($changedParamType) {
+                $hasChanged = \true;
+            }
         }
-        if ($functionLikePhpDocInfo->hasChanged()) {
+        if ($hasChanged) {
             return $node;
         }
         return null;

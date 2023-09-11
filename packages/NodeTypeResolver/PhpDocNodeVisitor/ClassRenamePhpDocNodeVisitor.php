@@ -45,6 +45,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var OldToNewType[]
      */
     private $oldToNewTypes = [];
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider, UseImportsResolver $useImportsResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
@@ -56,6 +60,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         if ($this->oldToNewTypes === []) {
             throw new ShouldNotHappenException('Configure "$oldToNewClasses" first');
         }
+        $this->hasChanged = \false;
     }
     public function enterNode(Node $node) : ?Node
     {
@@ -91,6 +96,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
                 // mirror attributes
                 $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parentType);
             }
+            $this->hasChanged = \true;
             return $newTypeNode;
         }
         return null;
@@ -101,6 +107,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     public function setOldToNewTypes(array $oldToNewTypes) : void
     {
         $this->oldToNewTypes = $oldToNewTypes;
+    }
+    public function hasChanged() : bool
+    {
+        return $this->hasChanged;
     }
     private function resolveNamespacedName(IdentifierTypeNode $identifierTypeNode, PhpParserNode $phpParserNode, string $name) : string
     {
