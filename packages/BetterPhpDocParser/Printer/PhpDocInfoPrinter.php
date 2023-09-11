@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use RectorPrefix202309\Nette\Utils\Strings;
+use PhpParser\Comment;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -136,6 +137,14 @@ final class PhpDocInfoPrinter
         $phpDocString = $this->printPhpDocNode($phpDocNode);
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
+    }
+    /**
+     * @return Comment[]
+     */
+    public function printToComments(PhpDocInfo $phpDocInfo) : array
+    {
+        $printedPhpDocContents = $this->printFormatPreserving($phpDocInfo);
+        return [new Comment($printedPhpDocContents)];
     }
     private function getCurrentPhpDocInfo() : PhpDocInfo
     {

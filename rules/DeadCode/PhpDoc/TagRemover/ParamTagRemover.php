@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
@@ -18,15 +19,21 @@ final class ParamTagRemover
      * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
      */
     private $deadParamTagValueNodeAnalyzer;
-    public function __construct(DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : bool
     {
         $hasChanged = \false;
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, $phpDocInfo, &$hasChanged) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, &$hasChanged) : ?int {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
@@ -44,10 +51,12 @@ final class ParamTagRemover
             if (!$this->deadParamTagValueNodeAnalyzer->isDead($docNode->value, $functionLike)) {
                 return null;
             }
-            $phpDocInfo->markAsChanged();
             $hasChanged = \true;
             return PhpDocNodeTraverser::NODE_REMOVE;
         });
+        if ($hasChanged) {
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
+        }
         return $hasChanged;
     }
 }

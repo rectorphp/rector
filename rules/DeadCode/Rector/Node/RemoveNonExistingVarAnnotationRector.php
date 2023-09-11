@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -39,12 +40,18 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
      */
     private $stmtsManipulator;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var array<class-string<Stmt>>
      */
     private const NODE_TYPES = [Foreach_::class, Static_::class, Echo_::class, Return_::class, Expression::class, Throw_::class, If_::class, While_::class, Switch_::class, Nop::class];
-    public function __construct(StmtsManipulator $stmtsManipulator)
+    public function __construct(StmtsManipulator $stmtsManipulator, DocBlockUpdater $docBlockUpdater)
     {
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -120,6 +127,7 @@ CODE_SAMPLE
                 continue;
             }
             $phpDocInfo->removeByType(VarTagValueNode::class);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
             $hasChanged = \true;
         }
         if ($hasChanged) {

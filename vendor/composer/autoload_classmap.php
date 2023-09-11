@@ -1833,6 +1833,7 @@ return array(
     'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
     'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => $baseDir . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
     'Rector\\Php80\\Contract\\ValueObject\\AnnotationToAttributeInterface' => $baseDir . '/rules/Php80/Contract/ValueObject/AnnotationToAttributeInterface.php',
+    'Rector\\Php80\\DocBlock\\PropertyPromotionDocBlockMerger' => $baseDir . '/rules/Php80/DocBlock/PropertyPromotionDocBlockMerger.php',
     'Rector\\Php80\\Enum\\MatchKind' => $baseDir . '/rules/Php80/Enum/MatchKind.php',
     'Rector\\Php80\\Guard\\MakePropertyPromotionGuard' => $baseDir . '/rules/Php80/Guard/MakePropertyPromotionGuard.php',
     'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => $baseDir . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',

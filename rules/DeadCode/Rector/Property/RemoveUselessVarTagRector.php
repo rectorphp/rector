@@ -55,10 +55,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
-        if ($phpDocInfo->hasChanged()) {
-            return $node;
+        $hasChanged = $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
+        if (!$hasChanged) {
+            return null;
         }
-        return null;
+        return $node;
     }
 }

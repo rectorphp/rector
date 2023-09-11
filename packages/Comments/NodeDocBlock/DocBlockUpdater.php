@@ -50,7 +50,6 @@ final class DocBlockUpdater
         }
         $printedPhpDoc = $this->printPhpDocInfoToString($phpDocInfo);
         $node->setDocComment(new Doc($printedPhpDoc));
-        //        $node->setDocComment(new Doc((string) $phpDocNode));
     }
     private function setCommentsAttribute(Node $node) : void
     {
