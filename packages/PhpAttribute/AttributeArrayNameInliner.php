@@ -15,7 +15,7 @@ use RectorPrefix202309\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**
-     * @param \PhpParser\Node\Expr\Array_|mixed[] $array
+     * @param Array_|Arg[] $array
      * @return Arg[]
      */
     public function inlineArrayToArgs($array) : array

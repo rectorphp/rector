@@ -227,7 +227,7 @@ CODE_SAMPLE;
         return $this->nodeTypeResolver->getType($node);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @param callable(Node $node): (Node|null|int) $callable
      */
     protected function traverseNodesWithCallable($nodes, callable $callable) : void
@@ -267,7 +267,7 @@ CODE_SAMPLE;
         });
     }
     /**
-     * @param \PhpParser\Node|mixed[]|int $refactoredNode
+     * @param Node|Node[] $refactoredNode
      */
     private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode, string $filePath) : Node
     {
@@ -291,7 +291,7 @@ CODE_SAMPLE;
         return $refactoredNode;
     }
     /**
-     * @param mixed[]|\PhpParser\Node $node
+     * @param Node[]|Node $node
      */
     private function refreshScopeNodes($node, string $filePath, ?MutatingScope $mutatingScope) : void
     {

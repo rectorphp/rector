@@ -52,7 +52,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
     public function findInstancesOf($nodes, array $types) : array
@@ -67,7 +67,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
     public function findInstanceOf($nodes, string $type) : array
@@ -79,7 +79,7 @@ final class BetterNodeFinder
      * @param class-string<T> $type
      * @return T|null
      *
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      */
     public function findFirstInstanceOf($nodes, string $type) : ?Node
     {
@@ -104,7 +104,7 @@ final class BetterNodeFinder
     }
     /**
      * @api
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @return Variable|null
      */
     public function findVariableOfName($nodes, string $name) : ?Node
@@ -112,7 +112,7 @@ final class BetterNodeFinder
         return $this->findInstanceOfName($nodes, Variable::class, $name);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @param array<class-string<Node>> $types
      */
     public function hasInstancesOf($nodes, array $types) : bool
@@ -128,7 +128,7 @@ final class BetterNodeFinder
         return \false;
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @param callable(Node $node): bool $filter
      * @return Node[]
      */
@@ -149,7 +149,7 @@ final class BetterNodeFinder
         });
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @param callable(Node $filter): bool $filter
      */
     public function findFirst($nodes, callable $filter) : ?Node
@@ -249,7 +249,7 @@ final class BetterNodeFinder
     }
     /**
      * @template T of Node
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node|Node[] $nodes
      * @param class-string<T> $type
      */
     private function findInstanceOfName($nodes, string $type, string $name) : ?Node

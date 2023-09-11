@@ -19,7 +19,7 @@ if (!\function_exists('dump_node')) {
 }
 if (!\function_exists('print_node')) {
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @param Node|Node[] $node
      */
     function print_node($node) : void
     {

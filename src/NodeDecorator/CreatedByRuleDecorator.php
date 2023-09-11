@@ -9,7 +9,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CreatedByRuleDecorator
 {
     /**
-     * @param mixed[]|\PhpParser\Node $node
+     * @param array<Node>|Node $node
      * @param class-string<RectorInterface> $rectorClass
      */
     public function decorate($node, Node $originalNode, string $rectorClass) : void

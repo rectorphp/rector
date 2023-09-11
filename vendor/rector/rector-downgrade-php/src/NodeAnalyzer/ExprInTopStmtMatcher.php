@@ -87,7 +87,7 @@ final class ExprInTopStmtMatcher
         return $this->resolveExpr($stmt, $stmt->expr, $filter);
     }
     /**
-     * @param mixed[]|\PhpParser\Node\Expr $exprs
+     * @param Expr[]|Expr $exprs
      * @param callable(Node $node): bool $filter
      * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */

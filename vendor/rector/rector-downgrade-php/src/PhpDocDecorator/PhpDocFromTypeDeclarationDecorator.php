@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -223,10 +224,14 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private function moveParamTypeToParamDoc($functionLike, Param $param, Type $type) : void
     {
+        $param->type = null;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramName = $this->nodeNameResolver->getName($param);
+        $phpDocParamType = $phpDocInfo->getParamType($paramName);
+        if (!$type instanceof MixedType && \get_class($type) === \get_class($phpDocParamType)) {
+            return;
+        }
         $this->phpDocTypeChanger->changeParamType($functionLike, $phpDocInfo, $type, $param, $paramName);
-        $param->type = null;
     }
     /**
      * @param array<class-string<Type>> $requiredTypes

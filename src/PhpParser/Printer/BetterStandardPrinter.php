@@ -87,7 +87,7 @@ final class BetterStandardPrinter extends Standard
         return $content;
     }
     /**
-     * @param \PhpParser\Node|mixed[]|null $node
+     * @param Node|Node[]|null $node
      */
     public function print($node) : string
     {

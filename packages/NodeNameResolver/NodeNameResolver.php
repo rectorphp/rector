@@ -59,7 +59,7 @@ final class NodeNameResolver
         return \false;
     }
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @param Node|Node[] $node
      */
     public function isName($node, string $name) : bool
     {

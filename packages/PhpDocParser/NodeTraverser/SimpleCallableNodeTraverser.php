@@ -13,7 +13,7 @@ final class SimpleCallableNodeTraverser
 {
     /**
      * @param callable(Node $node): (int|Node|null) $callable
-     * @param \PhpParser\Node|mixed[]|null $node
+     * @param Node|Node[]|null $node
      */
     public function traverseNodesWithCallable($node, callable $callable) : void
     {

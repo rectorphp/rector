@@ -27,7 +27,7 @@ final class RectorWithLineChange implements SerializableInterface
      */
     private $rectorClass;
     /**
-     * @param string|\Rector\Core\Contract\Rector\RectorInterface $rectorClass
+     * @param class-string<RectorInterface>|RectorInterface $rectorClass
      */
     public function __construct($rectorClass, int $line)
     {

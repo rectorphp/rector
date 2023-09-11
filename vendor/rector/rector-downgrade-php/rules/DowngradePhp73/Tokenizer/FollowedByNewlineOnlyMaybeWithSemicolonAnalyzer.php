@@ -14,6 +14,6 @@ final class FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer
         if (isset($oldTokens[$nextTokenPosition]) && $oldTokens[$nextTokenPosition] === ';') {
             ++$nextTokenPosition;
         }
-        return !isset($oldTokens[$nextTokenPosition]) || isset($oldTokens[$nextTokenPosition][1]) && \strncmp((string) $oldTokens[$nextTokenPosition][1], "\n", \strlen("\n")) === 0;
+        return !isset($oldTokens[$nextTokenPosition]) || isset($oldTokens[$nextTokenPosition][1]) && \strncmp($oldTokens[$nextTokenPosition][1], "\n", \strlen("\n")) === 0;
     }
 }
