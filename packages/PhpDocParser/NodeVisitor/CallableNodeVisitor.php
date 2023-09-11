@@ -49,7 +49,7 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($this->nodeIdToRemove === \spl_object_id($node)) {
+        if ($this->nodeIdToRemove !== null && $this->nodeIdToRemove === \spl_object_id($node)) {
             $this->nodeIdToRemove = null;
             return NodeTraverser::REMOVE_NODE;
         }

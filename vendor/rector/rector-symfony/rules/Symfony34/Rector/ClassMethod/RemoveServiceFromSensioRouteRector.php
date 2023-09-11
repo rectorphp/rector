@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -15,6 +16,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveServiceFromSensioRouteRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(DocBlockUpdater $docBlockUpdater)
+    {
+        $this->docBlockUpdater = $docBlockUpdater;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove service from Sensio @Route', [new CodeSample(<<<'CODE_SAMPLE'
@@ -63,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $doctrineAnnotationTagValueNode->removeValue('service');
-        $phpDocInfo->markAsChanged();
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
 }
