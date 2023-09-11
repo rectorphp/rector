@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit97f1607b3134c94f56f4c959cc89264f
+class ComposerStaticInitd18128c094309ba9f50f7f991ae2360a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1223,7 +1223,6 @@ class ComposerStaticInit97f1607b3134c94f56f4c959cc89264f
         'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/MemoryCacheStorage.php',
         'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/AnnotationExtractor.php',
         'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/RectorsChangelogResolver.php',
-        'Rector\\ChangesReporting\\Collector\\RectorChangeCollector' => __DIR__ . '/../..' . '/packages/ChangesReporting/Collector/RectorChangeCollector.php',
         'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => __DIR__ . '/../..' . '/packages/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
         'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => __DIR__ . '/../..' . '/packages/ChangesReporting/Output/ConsoleOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => __DIR__ . '/../..' . '/packages/ChangesReporting/Output/JsonOutputFormatter.php',
@@ -1416,7 +1415,6 @@ class ComposerStaticInit97f1607b3134c94f56f4c959cc89264f
         'Rector\\Core\\FileSystem\\FilesFinder' => __DIR__ . '/../..' . '/src/FileSystem/FilesFinder.php',
         'Rector\\Core\\FileSystem\\FilesystemTweaker' => __DIR__ . '/../..' . '/src/FileSystem/FilesystemTweaker.php',
         'Rector\\Core\\FileSystem\\InitFilePathsResolver' => __DIR__ . '/../..' . '/src/FileSystem/InitFilePathsResolver.php',
-        'Rector\\Core\\Logging\\CurrentRectorProvider' => __DIR__ . '/../..' . '/src/Logging/CurrentRectorProvider.php',
         'Rector\\Core\\NodeAnalyzer\\ArgsAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ArgsAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\BinaryOpAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CallAnalyzer.php',
@@ -2596,9 +2594,9 @@ class ComposerStaticInit97f1607b3134c94f56f4c959cc89264f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit97f1607b3134c94f56f4c959cc89264f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit97f1607b3134c94f56f4c959cc89264f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit97f1607b3134c94f56f4c959cc89264f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd18128c094309ba9f50f7f991ae2360a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd18128c094309ba9f50f7f991ae2360a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd18128c094309ba9f50f7f991ae2360a::$classMap;
 
         }, null, ClassLoader::class);
     }
