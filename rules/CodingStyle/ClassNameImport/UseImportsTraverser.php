@@ -60,7 +60,7 @@ final class UseImportsTraverser
      */
     private function traverseForType(array $stmts, callable $callable, int $desiredType) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($callable, $desiredType) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($callable, $desiredType) : ?int {
             if ($node instanceof Namespace_ || $node instanceof FileWithoutNamespace) {
                 // traverse into namespaces
                 return null;
