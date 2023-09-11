@@ -129,25 +129,46 @@ CODE_SAMPLE
     }
     private function shouldSkip(Class_ $class) : bool
     {
-        $className = (string) $this->nodeNameResolver->getName($class);
-        foreach ($this->transformOnNamespaces as $transformOnNamespace) {
-            if (\strpos($transformOnNamespace, '*') !== \false) {
-                if (!\fnmatch($transformOnNamespace, $className, \FNM_NOESCAPE)) {
-                    return \true;
-                }
-                continue;
-            }
-            if ($this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {
-                continue;
-            }
-        }
         if ($this->isDescendantOfStdclass($class)) {
             return \true;
         }
         if ($this->hasNeededAttributeAlready($class)) {
             return \true;
         }
-        return $this->hasMagicSetMethod($class);
+        if ($this->hasMagicSetMethod($class)) {
+            return \true;
+        }
+        $className = (string) $this->getName($class);
+        if ($this->transformOnNamespaces !== []) {
+            return !$this->isExistsWithWildCards($className) && !$this->isExistsWithClassName($className);
+        }
+        return \false;
+    }
+    private function isExistsWithWildCards(string $className) : bool
+    {
+        $wildcardTransformOnNamespaces = \array_filter($this->transformOnNamespaces, static function (string $transformOnNamespace) : bool {
+            return \strpos($transformOnNamespace, '*') !== \false;
+        });
+        foreach ($wildcardTransformOnNamespaces as $wildcardTransformOnNamespace) {
+            if (!\fnmatch($wildcardTransformOnNamespace, $className, \FNM_NOESCAPE)) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
+    }
+    private function isExistsWithClassName(string $className) : bool
+    {
+        $transformedClassNames = \array_filter($this->transformOnNamespaces, static function (string $transformOnNamespace) : bool {
+            return \strpos($transformOnNamespace, '*') === \false;
+        });
+        foreach ($transformedClassNames as $transformedClassName) {
+            if (!$this->nodeNameResolver->isStringName($className, $transformedClassName)) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
     }
     private function hasMagicSetMethod(Class_ $class) : bool
     {
