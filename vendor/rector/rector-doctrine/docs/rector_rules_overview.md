@@ -1,29 +1,4 @@
-# 15 Rules Overview
-
-## ChangeBigIntEntityPropertyToIntTypeRector
-
-Change database type "bigint" for @var/type declaration to string
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector`](../rules/CodeQuality/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity()
-  */
- class SomeEntity
- {
-     /**
--     * @var int|null
-+     * @var string|null
-      * @ORM\Column(type="bigint", nullable=true)
-      */
-     private $bigNumber;
- }
-```
-
-<br>
+# 14 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 

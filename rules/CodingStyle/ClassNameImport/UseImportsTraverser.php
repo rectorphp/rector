@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node\Stmt\Namespace_;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class UseImportsTraverser

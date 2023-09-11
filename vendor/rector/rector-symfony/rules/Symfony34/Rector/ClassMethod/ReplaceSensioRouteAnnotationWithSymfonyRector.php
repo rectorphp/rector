@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -37,11 +38,17 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater)
     {
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -99,6 +106,7 @@ CODE_SAMPLE
         $values = $doctrineAnnotationTagValueNode->getValues();
         $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($values);
         $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
 }

@@ -8,6 +8,9 @@ use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix202309\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202309\Symfony\Component\Console\Style\SymfonyStyle;
+/**
+ * @see \Rector\Core\Tests\Configuration\ConfigurationFactoryTest
+ */
 final class ConfigurationFactory
 {
     /**

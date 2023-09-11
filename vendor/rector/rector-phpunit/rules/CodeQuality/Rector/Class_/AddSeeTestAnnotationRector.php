@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\Naming\TestClassNameResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,14 +37,20 @@ final class AddSeeTestAnnotationRector extends AbstractRector
      */
     private $testClassNameResolver;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var string
      */
     private const SEE = 'see';
-    public function __construct(ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover, TestClassNameResolver $testClassNameResolver)
+    public function __construct(ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover, TestClassNameResolver $testClassNameResolver, DocBlockUpdater $docBlockUpdater)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->testClassNameResolver = $testClassNameResolver;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -105,6 +112,7 @@ CODE_SAMPLE
         }
         $phpDocTagNode = $this->createSeePhpDocTagNode($matchingTestClassName);
         $phpDocInfo->addPhpDocTagNode($phpDocTagNode);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
     private function shouldSkipClass(Class_ $class) : bool

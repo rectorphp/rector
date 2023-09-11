@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver;
@@ -40,11 +41,17 @@ final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver
      */
     private $classAnnotationAssertResolver;
-    public function __construct(MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver, PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver, ClassAnnotationAssertResolver $classAnnotationAssertResolver)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver, PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver, ClassAnnotationAssertResolver $classAnnotationAssertResolver, DocBlockUpdater $docBlockUpdater)
     {
         $this->methodCallAnnotationAssertResolver = $methodCallAnnotationAssertResolver;
         $this->propertyAnnotationAssertResolver = $propertyAnnotationAssertResolver;
         $this->classAnnotationAssertResolver = $classAnnotationAssertResolver;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -91,7 +98,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $loadValidatorMetadataClassMethod = $node->getMethod('loadValidatorMetadata');
-        if (!$loadValidatorMetadataClassMethod instanceof ClassMethod || $loadValidatorMetadataClassMethod->stmts === null) {
+        if (!$loadValidatorMetadataClassMethod instanceof ClassMethod) {
+            return null;
+        }
+        if ($loadValidatorMetadataClassMethod->stmts === null) {
             return null;
         }
         foreach ($loadValidatorMetadataClassMethod->stmts as $key => $methodStmt) {
@@ -127,6 +137,7 @@ CODE_SAMPLE
             }
             $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $getterPhpDocInfo->addTagValueNode($classMethodAndAnnotation->getDoctrineAnnotationTagValueNode());
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
             unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
         }
     }
@@ -138,6 +149,7 @@ CODE_SAMPLE
         }
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $propertyPhpDocInfo->addTagValueNode($propertyAndAnnotation->getDoctrineAnnotationTagValueNode());
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
         unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
     }
     private function refactorClassAnnotation(Class_ $class, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
@@ -145,5 +157,6 @@ CODE_SAMPLE
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $classPhpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
         unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
     }
 }

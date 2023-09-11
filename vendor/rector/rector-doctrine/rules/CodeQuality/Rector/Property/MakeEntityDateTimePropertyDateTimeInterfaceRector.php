@@ -9,8 +9,11 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Doctrine\NodeManipulator\PropertyTypeManipulator;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
+use Rector\NodeTypeResolver\ValueObject\OldToNewType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,12 +25,18 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRe
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator
+     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer
      */
-    private $propertyTypeManipulator;
-    public function __construct(PropertyTypeManipulator $propertyTypeManipulator)
+    private $docBlockClassRenamer;
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, DocBlockUpdater $docBlockUpdater)
     {
-        $this->propertyTypeManipulator = $propertyTypeManipulator;
+        $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -84,17 +93,27 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $varType = $phpDocInfo->getVarType();
-            if ($varType instanceof UnionType) {
-                $varType = TypeCombinator::removeNull($varType);
-            }
-            if (!$varType->equals(new ObjectType('DateTime'))) {
-                return null;
-            }
-            $this->propertyTypeManipulator->changePropertyType($node, 'DateTime', 'DateTimeInterface');
-            return $node;
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return null;
         }
-        return null;
+        $varType = $phpDocInfo->getVarType();
+        if ($varType instanceof UnionType) {
+            $varType = TypeCombinator::removeNull($varType);
+        }
+        if (!$varType->equals(new ObjectType('DateTime'))) {
+            return null;
+        }
+        $this->changePropertyType($node, 'DateTime', 'DateTimeInterface');
+        return $node;
+    }
+    private function changePropertyType(Property $property, string $oldClass, string $newClass) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $oldToNewTypes = [new OldToNewType(new FullyQualifiedObjectType($oldClass), new FullyQualifiedObjectType($newClass))];
+        $hasChanged = $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
+        if (!$hasChanged) {
+            return;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
     }
 }

@@ -34,13 +34,13 @@ final class NodeNameResolver
      */
     private $nodeNameResolvers = [];
     /**
-     * @var array<string, NodeNameResolverInterface|null>
-     */
-    private $nodeNameResolversByClass = [];
-    /**
      * Used to check if a string might contain a regex or fnmatch pattern
      */
     private const REGEX_WILDCARD_CHARS = ['*', '#', '~', '/'];
+    /**
+     * @var array<string, NodeNameResolverInterface|null>
+     */
+    private $nodeNameResolversByClass = [];
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
