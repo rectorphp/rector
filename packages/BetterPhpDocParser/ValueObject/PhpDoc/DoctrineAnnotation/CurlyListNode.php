@@ -10,7 +10,6 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
 {
     /**
      * @var ArrayItemNode[]
-     * @readonly
      */
     private $arrayItemNodes = [];
     /**

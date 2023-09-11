@@ -13,7 +13,9 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\UnionTypeNodePhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer;
@@ -44,14 +46,20 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
      */
     private $constructorAssignPropertyAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer)
+    public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->constructorManipulator = $constructorManipulator;
         $this->valueAssignFactory = $valueAssignFactory;
         $this->constructorAssignPropertyAnalyzer = $constructorAssignPropertyAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -156,9 +164,7 @@ CODE_SAMPLE
             }
             $this->hasChanged = \true;
         }
-        if ($this->hasChanged) {
-            $phpDocInfo->markAsChanged();
-        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
         $this->refactorClassWithRemovalDefault($class, $property);
     }
     private function refactorClassWithRemovalDefault(Class_ $class, Property $property) : void

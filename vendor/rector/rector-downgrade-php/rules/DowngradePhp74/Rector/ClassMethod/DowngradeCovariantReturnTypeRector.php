@@ -18,6 +18,7 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
@@ -60,13 +61,19 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, UnionTypeAnalyzer $unionTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, UnionTypeAnalyzer $unionTypeAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->returnTagRemover = $returnTagRemover;
         $this->reflectionResolver = $reflectionResolver;
         $this->privatesAccessor = $privatesAccessor;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -184,6 +191,7 @@ CODE_SAMPLE
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
         $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $classMethod);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     /**
      * @param ClassReflection[] $parentClassesAndInterfaces
