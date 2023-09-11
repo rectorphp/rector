@@ -100,7 +100,7 @@ final class RectorConfig extends Container
             }
         }
         if ($notExistsRules !== []) {
-            throw new ShouldNotHappenException('Following skipped rules on $rectorConfig->skip() are no longer exists or changed to different namespace: ' . \implode(', ', $notExistsRules));
+            throw new ShouldNotHappenException('Following rules on $rectorConfig->skip() do no longer exist or changed to different namespace: ' . \implode(', ', $notExistsRules));
         }
         SimpleParameterProvider::addParameter(Option::SKIP, $criteria);
     }
