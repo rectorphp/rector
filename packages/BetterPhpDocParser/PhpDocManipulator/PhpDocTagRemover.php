@@ -10,8 +10,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocTagRemover
 {
-    public function removeByName(PhpDocInfo $phpDocInfo, string $name) : void
+    public function removeByName(PhpDocInfo $phpDocInfo, string $name) : bool
     {
+        $hasChanged = \false;
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             if (!$phpDocChildNode instanceof PhpDocTagNode) {
@@ -19,13 +20,16 @@ final class PhpDocTagRemover
             }
             if ($this->areAnnotationNamesEqual($name, $phpDocChildNode->name)) {
                 unset($phpDocNode->children[$key]);
+                $hasChanged = \true;
                 $phpDocInfo->markAsChanged();
             }
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode && $phpDocChildNode->value->hasClassName($name)) {
                 unset($phpDocNode->children[$key]);
+                $hasChanged = \true;
                 $phpDocInfo->markAsChanged();
             }
         }
+        return $hasChanged;
     }
     public function removeTagValueFromNode(PhpDocInfo $phpDocInfo, Node $desiredNode) : void
     {
