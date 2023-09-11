@@ -90,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
         // skip test methods
-        if ($this->isName($node, 'test*')) {
+        if (\strncmp($node->name->toString(), 'test', \strlen('test')) === 0) {
             return null;
         }
         // find array in data provider - must contain a return node
