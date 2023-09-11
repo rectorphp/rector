@@ -38,6 +38,10 @@ final class NodeNameResolver
      */
     private $nodeNameResolversByClass = [];
     /**
+     * Used to check if a string might contain a regex or fnmatch pattern
+     */
+    private const REGEX_WILDCARD_CHARS = ['*', '#', '~', '/'];
+    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, iterable $nodeNameResolvers = [])
@@ -170,6 +174,11 @@ final class NodeNameResolver
         // special case
         if ($desiredName === 'Object') {
             return $desiredName === $resolvedName;
+        }
+        foreach (self::REGEX_WILDCARD_CHARS as $char) {
+            if (\strpos($desiredName, $char) !== \false) {
+                throw new ShouldNotHappenException('Matching of regular expressions is no longer supported. Use $this->getName() and compare with e.g. str_ends_with() or str_starts_with() instead.');
+            }
         }
         return \strcasecmp($resolvedName, $desiredName) === 0;
     }
