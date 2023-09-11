@@ -7,6 +7,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,10 +27,16 @@ final class ReplaceTestAnnotationWithPrefixedFunctionRector extends AbstractRect
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocTagRemover $phpDocTagRemover)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -83,6 +90,7 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->phpDocTagRemover->removeByName($phpDocInfo, 'test');
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         $node->name->name = 'test' . \ucfirst($node->name->name);
         return $node;
     }

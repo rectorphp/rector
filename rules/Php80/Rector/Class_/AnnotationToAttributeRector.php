@@ -20,6 +20,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -76,10 +77,15 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      */
     private $phpAttributeAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var AnnotationToAttribute[]
      */
     private $annotationsToAttributes = [];
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
@@ -87,6 +93,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         $this->attributeGroupNamedArgumentManipulator = $attributeGroupNamedArgumentManipulator;
         $this->useImportsResolver = $useImportsResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -144,6 +151,8 @@ CODE_SAMPLE
         if ($attributeGroups === []) {
             return null;
         }
+        // 3. Reprint docblock
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         $this->attributeGroupNamedArgumentManipulator->decorate($attributeGroups);
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         return $node;

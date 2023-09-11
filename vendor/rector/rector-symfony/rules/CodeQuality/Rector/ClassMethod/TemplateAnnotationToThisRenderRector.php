@@ -20,6 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -69,7 +70,12 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
      * @var \Rector\Symfony\Annotation\AnnotationAnalyzer
      */
     private $annotationAnalyzer;
-    public function __construct(ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, ThisRenderFactory $thisRenderFactory, PhpDocTagRemover $phpDocTagRemover, EmptyReturnNodeFinder $emptyReturnNodeFinder, AnnotationAnalyzer $annotationAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    public function __construct(ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, ThisRenderFactory $thisRenderFactory, PhpDocTagRemover $phpDocTagRemover, EmptyReturnNodeFinder $emptyReturnNodeFinder, AnnotationAnalyzer $annotationAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
@@ -77,6 +83,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->emptyReturnNodeFinder = $emptyReturnNodeFinder;
         $this->annotationAnalyzer = $annotationAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -224,7 +231,11 @@ CODE_SAMPLE
     private function removeDoctrineAnnotationTagValueNode(ClassMethod $classMethod, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        $hasChanged = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        if ($hasChanged === \false) {
+            return;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     private function refactorStmtsAwareNode(StmtsAwareInterface $stmtsAware, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : void
     {

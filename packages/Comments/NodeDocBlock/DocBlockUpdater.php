@@ -39,7 +39,7 @@ final class DocBlockUpdater
     public function updateRefactoredNodeWithPhpDocInfo(Node $node) : void
     {
         // nothing to change? don't save it
-        $phpDocInfo = $this->resolveChangedPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return;
         }
@@ -48,7 +48,9 @@ final class DocBlockUpdater
             $this->setCommentsAttribute($node);
             return;
         }
-        $node->setDocComment(new Doc((string) $phpDocNode));
+        $printedPhpDoc = $this->printPhpDocInfoToString($phpDocInfo);
+        $node->setDocComment(new Doc($printedPhpDoc));
+        //        $node->setDocComment(new Doc((string) $phpDocNode));
     }
     private function setCommentsAttribute(Node $node) : void
     {

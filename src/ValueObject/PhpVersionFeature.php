@@ -57,9 +57,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const CLASSNAME_CONSTANT = \Rector\Core\ValueObject\PhpVersion::PHP_55;
-    /*
-     * @var int
-     */
     /**
      * @var int
      */
