@@ -3,11 +3,14 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class UseImportsTraverser
@@ -58,11 +61,11 @@ final class UseImportsTraverser
     private function traverseForType(array $stmts, callable $callable, int $desiredType) : void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($callable, $desiredType) {
-            if ($node instanceof Use_) {
-                // only import uses
-                if ($node->type !== $desiredType) {
-                    return null;
-                }
+            if ($node instanceof Namespace_ || $node instanceof FileWithoutNamespace) {
+                // traverse into namespaces
+                return null;
+            }
+            if ($node instanceof Use_ && $node->type === $desiredType) {
                 foreach ($node->uses as $useUse) {
                     $name = $this->nodeNameResolver->getName($useUse);
                     if ($name === null) {
@@ -70,11 +73,10 @@ final class UseImportsTraverser
                     }
                     $callable($useUse, $name);
                 }
-            }
-            if ($node instanceof GroupUse) {
+            } elseif ($node instanceof GroupUse) {
                 $this->processGroupUse($node, $desiredType, $callable);
             }
-            return null;
+            return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
         });
     }
     /**
