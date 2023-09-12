@@ -199,7 +199,10 @@ CODE_SAMPLE
             if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
                 continue;
             }
-            $hasChanged = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            $hasTagRemoved = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            if ($hasTagRemoved) {
+                $hasChanged = \true;
+            }
         }
         if ($hasChanged) {
             $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
