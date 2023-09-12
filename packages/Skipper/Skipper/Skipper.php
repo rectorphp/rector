@@ -7,8 +7,7 @@ use PhpParser\Node;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Skipper\Contract\SkipVoterInterface;
-use Rector\Skipper\SkipVoter\ClassSkipVoter;
-use Rector\Skipper\SkipVoter\PathSkipVoter;
+use RectorPrefix202309\Webmozart\Assert\Assert;
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest
@@ -21,17 +20,22 @@ final class Skipper
      */
     private $rectifiedAnalyzer;
     /**
+     * @var array<SkipVoterInterface>
+     * @readonly
+     */
+    private $skipVoters;
+    /**
      * @var string
      */
     private const FILE_ELEMENT = 'file_elements';
     /**
-     * @var SkipVoterInterface[]
+     * @param array<SkipVoterInterface> $skipVoters
      */
-    private $skipVoters = [];
-    public function __construct(ClassSkipVoter $classSkipVoter, PathSkipVoter $pathSkipVoter, RectifiedAnalyzer $rectifiedAnalyzer)
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, array $skipVoters)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
-        $this->skipVoters = [$classSkipVoter, $pathSkipVoter];
+        $this->skipVoters = $skipVoters;
+        Assert::allIsInstanceOf($this->skipVoters, SkipVoterInterface::class);
     }
     /**
      * @param string|object $element
