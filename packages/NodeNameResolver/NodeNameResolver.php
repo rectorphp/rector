@@ -55,8 +55,12 @@ final class NodeNameResolver
      */
     public function isNames(Node $node, array $names) : bool
     {
+        $nodeName = $this->getName($node);
+        if ($nodeName === null) {
+            return \false;
+        }
         foreach ($names as $name) {
-            if ($this->isName($node, $name)) {
+            if ($this->isStringName($nodeName, $name)) {
                 return \true;
             }
         }
