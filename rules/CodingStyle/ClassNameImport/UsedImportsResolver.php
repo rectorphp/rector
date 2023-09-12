@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\ValueObject\UsedImports;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;

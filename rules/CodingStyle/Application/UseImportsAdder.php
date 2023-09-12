@@ -142,8 +142,10 @@ final class UseImportsAdder
     private function createUses(array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, ?string $namespaceName) : array
     {
         $newUses = [];
+        /** @var array<Use_::TYPE_*, array<AliasedObjectType|FullyQualifiedObjectType>> $importsMapping */
         $importsMapping = [Use_::TYPE_NORMAL => $useImportTypes, Use_::TYPE_CONSTANT => $constantUseImportTypes, Use_::TYPE_FUNCTION => $functionUseImportTypes];
         foreach ($importsMapping as $type => $importTypes) {
+            /** @var AliasedObjectType|FullyQualifiedObjectType $importType */
             foreach ($importTypes as $importType) {
                 if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $importType)) {
                     continue;

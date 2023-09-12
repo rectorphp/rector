@@ -118,6 +118,19 @@ final class PropertyPromotionRenamer
         }
         return $hasChanged;
     }
+    public function renameParamDoc(PhpDocInfo $phpDocInfo, ClassMethod $classMethod, Param $param, string $paramVarName, string $desiredPropertyName) : void
+    {
+        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramVarName);
+        if (!$paramTagValueNode instanceof ParamTagValueNode) {
+            return;
+        }
+        $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($classMethod, $param, $desiredPropertyName);
+        if (!$paramRename instanceof ParamRename) {
+            return;
+        }
+        $this->paramRenamer->rename($paramRename);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
+    }
     private function renameParamVarNameAndVariableUsage(ClassLike $classLike, ClassMethod $classMethod, string $desiredPropertyName, Param $param) : void
     {
         if ($param->var instanceof Error) {
@@ -131,19 +144,6 @@ final class PropertyPromotionRenamer
         $this->renameParamDoc($classMethodPhpDocInfo, $classMethod, $param, $paramVarName, $desiredPropertyName);
         $param->var = new Variable($desiredPropertyName);
         $this->variableRenamer->renameVariableInFunctionLike($classMethod, $paramVarName, $desiredPropertyName);
-    }
-    public function renameParamDoc(PhpDocInfo $phpDocInfo, ClassMethod $classMethod, Param $param, string $paramVarName, string $desiredPropertyName) : void
-    {
-        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramVarName);
-        if (!$paramTagValueNode instanceof ParamTagValueNode) {
-            return;
-        }
-        $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($classMethod, $param, $desiredPropertyName);
-        if (!$paramRename instanceof ParamRename) {
-            return;
-        }
-        $this->paramRenamer->rename($paramRename);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     /**
      * Sometimes the bare type is not enough.
