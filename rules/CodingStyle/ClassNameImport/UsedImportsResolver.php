@@ -3,10 +3,12 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\ClassNameImport\ValueObject\UsedImports;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -36,9 +38,8 @@ final class UsedImportsResolver
     }
     /**
      * @param Stmt[] $stmts
-     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    public function resolveForStmts(array $stmts) : array
+    public function resolveForStmts(array $stmts) : UsedImports
     {
         $usedImports = [];
         /** @var Class_|null $class */
@@ -49,37 +50,24 @@ final class UsedImportsResolver
             $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
-        $this->useImportsTraverser->traverserStmts($stmts, static function (UseUse $useUse, string $name) use(&$usedImports) : void {
-            if ($useUse->alias instanceof Identifier) {
-                $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
-            } else {
-                $usedImports[] = new FullyQualifiedObjectType($name);
+        $usedConstImports = [];
+        $usedFunctionImports = [];
+        /** @param Use_::TYPE_* $useType */
+        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseUse $useUse, string $name) use(&$usedImports, &$usedFunctionImports, &$usedConstImports) : void {
+            if ($useType === Use_::TYPE_NORMAL) {
+                if ($useUse->alias instanceof Identifier) {
+                    $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
+                } else {
+                    $usedImports[] = new FullyQualifiedObjectType($name);
+                }
+            }
+            if ($useType === Use_::TYPE_FUNCTION) {
+                $usedFunctionImports[] = new FullyQualifiedObjectType($name);
+            }
+            if ($useType === Use_::TYPE_CONSTANT) {
+                $usedConstImports[] = new FullyQualifiedObjectType($name);
             }
         });
-        return $usedImports;
-    }
-    /**
-     * @param Stmt[] $stmts
-     * @return FullyQualifiedObjectType[]
-     */
-    public function resolveConstantImportsForStmts(array $stmts) : array
-    {
-        $usedConstImports = [];
-        $this->useImportsTraverser->traverserStmtsForConstants($stmts, static function (UseUse $useUse, string $name) use(&$usedConstImports) : void {
-            $usedConstImports[] = new FullyQualifiedObjectType($name);
-        });
-        return $usedConstImports;
-    }
-    /**
-     * @param Stmt[] $stmts
-     * @return FullyQualifiedObjectType[]
-     */
-    public function resolveFunctionImportsForStmts(array $stmts) : array
-    {
-        $usedFunctionImports = [];
-        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, static function (UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
-            $usedFunctionImports[] = new FullyQualifiedObjectType($name);
-        });
-        return $usedFunctionImports;
+        return new UsedImports($usedImports, $usedFunctionImports, $usedConstImports);
     }
 }

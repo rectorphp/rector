@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcf163137832100dcfaee9be37765beff
+class ComposerStaticInit07977e21b93fabd68f9574de1dd036c6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1321,6 +1321,7 @@ class ComposerStaticInitcf163137832100dcfaee9be37765beff
         'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',
         'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
         'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
+        'Rector\\CodingStyle\\ClassNameImport\\ValueObject\\UsedImports' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ValueObject/UsedImports.php',
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
         'Rector\\CodingStyle\\Guard\\StaticGuard' => __DIR__ . '/../..' . '/rules/CodingStyle/Guard/StaticGuard.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
@@ -2592,9 +2593,9 @@ class ComposerStaticInitcf163137832100dcfaee9be37765beff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcf163137832100dcfaee9be37765beff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcf163137832100dcfaee9be37765beff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcf163137832100dcfaee9be37765beff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit07977e21b93fabd68f9574de1dd036c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit07977e21b93fabd68f9574de1dd036c6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit07977e21b93fabd68f9574de1dd036c6::$classMap;
 
         }, null, ClassLoader::class);
     }

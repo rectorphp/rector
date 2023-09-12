@@ -1101,6 +1101,7 @@ return array(
     'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',
     'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => $baseDir . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
     'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
+    'Rector\\CodingStyle\\ClassNameImport\\ValueObject\\UsedImports' => $baseDir . '/rules/CodingStyle/ClassNameImport/ValueObject/UsedImports.php',
     'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => $baseDir . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
     'Rector\\CodingStyle\\Guard\\StaticGuard' => $baseDir . '/rules/CodingStyle/Guard/StaticGuard.php',
     'Rector\\CodingStyle\\Naming\\ClassNaming' => $baseDir . '/rules/CodingStyle/Naming/ClassNaming.php',
