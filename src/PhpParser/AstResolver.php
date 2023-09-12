@@ -33,6 +33,7 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
+use Throwable;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
  * They are not part of node tree processed by Rector, so any changes will not make effect in final printed file.
@@ -296,9 +297,20 @@ final class AstResolver
         if (isset($this->parsedFileNodes[$fileName])) {
             return $this->parsedFileNodes[$fileName];
         }
-        $stmts = $this->smartPhpParser->parseFile($fileName);
-        if ($stmts === []) {
-            return $this->parsedFileNodes[$fileName] = [];
+        try {
+            $stmts = $this->smartPhpParser->parseFile($fileName);
+        } catch (Throwable $throwable) {
+            /**
+             * phpstan.phar contains jetbrains/phpstorm-stubs which the code is not downgraded
+             * that if read from lower php < 8.1 may cause crash
+             *
+             * @see https://github.com/rectorphp/rector/issues/8193 on php 8.0
+             * @see https://github.com/rectorphp/rector/issues/8145 on php 7.4
+             */
+            if (\strpos($fileName, 'phpstan.phar') !== \false) {
+                return [];
+            }
+            throw $throwable;
         }
         return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($fileName, $stmts);
     }
