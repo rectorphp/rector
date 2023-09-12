@@ -8,5 +8,5 @@ use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([__DIR__.'/src']);
 
-    $rectorConfig->import(SetList::PHP_53);
+    $rectorConfig->sets([SetList::PHP_53]);
 };
