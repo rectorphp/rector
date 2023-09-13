@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
         $upper = \strtoupper($nodeAttribute->args[0]->value->items[0]->value->value);
-        $nodeAttribute->args[0]->value->items[0]->value = $this->nodeFactory->createClassConstFetch(Criteria::class, $upper);
+        $nodeAttribute->args[0]->value->items[0]->value = $this->nodeFactory->createClassConstFetch('Doctrine\\Common\\Collections\\Criteria', $upper);
         return $node;
     }
 }
