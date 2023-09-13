@@ -372,7 +372,9 @@ final class PhpDocInfo
         $genericTagValueNodes = $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, GenericTagValueNode::class);
         $resolvedClasses = [];
         foreach ($genericTagValueNodes as $genericTagValueNode) {
-            $resolvedClasses[] = $genericTagValueNode->value;
+            if ($genericTagValueNode->value !== '') {
+                $resolvedClasses[] = $genericTagValueNode->value;
+            }
         }
         return $resolvedClasses;
     }
