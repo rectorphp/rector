@@ -56,8 +56,6 @@ final class ClassMethodParamVendorLockResolver
         if ($this->hasParentInterfaceMethod($classReflection, $methodName)) {
             return \true;
         }
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '/vendor/');
     }
     private function hasTraitMethodVendorLock(ClassReflection $classReflection, string $methodName) : bool
