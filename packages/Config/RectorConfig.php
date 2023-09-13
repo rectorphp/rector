@@ -177,7 +177,15 @@ final class RectorConfig extends Container
     }
     public function import(string $filePath) : void
     {
-        $this->importFile($filePath);
+        if (\strpos($filePath, '*') !== \false) {
+            throw new ShouldNotHappenException('Matching file paths by using glob-patterns is no longer supported. Use specific file path instead.');
+        }
+        Assert::fileExists($filePath);
+        $self = $this;
+        $callable = (require $filePath);
+        Assert::isCallable($callable);
+        /** @var callable(Container $container): void $callable */
+        $callable($self);
     }
     /**
      * @param array<class-string<RectorInterface>> $rectorClasses
@@ -282,15 +290,6 @@ final class RectorConfig extends Container
             // completely forget the Rector rule only when no path specified
             ContainerMemento::forgetService($this, $skippedClass);
         }
-    }
-    private function importFile(string $filePath) : void
-    {
-        Assert::fileExists($filePath);
-        $self = $this;
-        $callable = (require $filePath);
-        Assert::isCallable($callable);
-        /** @var callable(Container $container): void $callable */
-        $callable($self);
     }
     /**
      * @param mixed $skipRule
