@@ -5,17 +5,16 @@ namespace Rector\Symfony\Symfony43\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\ObjectType;
 /**
  * @see \Rector\Symfony\Tests\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector\TwigBundleFilesystemLoaderToTwigRectorTest
  */

@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
-use RectorPrefix202309\Doctrine\Common\Collections\Criteria;
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -63,7 +63,7 @@ CODE_SAMPLE
             }
         }
         // If Attribute is not OrderBy, return null
-        if (null === $nodeAttribute) {
+        if (!$nodeAttribute instanceof Attribute) {
             return null;
         }
         if (!isset($nodeAttribute->args[0])) {
@@ -75,14 +75,14 @@ CODE_SAMPLE
         if (!isset($nodeAttribute->args[0]->value->items[0])) {
             return null;
         }
-        if (!$nodeAttribute->args[0]->value->items[0] instanceof Node\Expr\ArrayItem) {
+        if (!$nodeAttribute->args[0]->value->items[0] instanceof ArrayItem) {
             return null;
         }
         if (!$nodeAttribute->args[0]->value->items[0]->value instanceof String_) {
             return null;
         }
         // If Attribute value from key is not `ASC` or `DESC`, return null
-        if (!\in_array($nodeAttribute->args[0]->value->items[0]->value->value, ['ASC', 'asc', 'DESC', 'desc'])) {
+        if (!\in_array($nodeAttribute->args[0]->value->items[0]->value->value, ['ASC', 'asc', 'DESC', 'desc'], \true)) {
             return null;
         }
         $upper = \strtoupper($nodeAttribute->args[0]->value->items[0]->value->value);

@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;

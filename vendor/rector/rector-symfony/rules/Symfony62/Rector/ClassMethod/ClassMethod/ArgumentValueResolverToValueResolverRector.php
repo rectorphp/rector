@@ -88,14 +88,13 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     *
      * @return array{bool, Expr|null, Expr|null}
      */
     private function extractSupportsArguments(Class_ $class, int $key, ClassMethod $classMethod) : array
     {
         $isIdentical = \true;
         $supportFirstArg = $supportSecondArg = null;
-        if (null === $classMethod->getStmts()) {
+        if ($classMethod->getStmts() === null) {
             return [$isIdentical, $supportFirstArg, $supportSecondArg];
         }
         foreach ($classMethod->getStmts() as $stmt) {

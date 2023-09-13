@@ -11,7 +11,7 @@ use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->importNames();
     $rectorConfig->removeUnusedImports();
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/rules', __DIR__ . '/rules-tests']);
+    $rectorConfig->paths([__DIR__ . '/config', __DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/rules', __DIR__ . '/rules-tests', __DIR__ . '/rector.php', __DIR__ . '/ecs.php']);
     $rectorConfig->skip([
         // for tests
         '*/Source/*',

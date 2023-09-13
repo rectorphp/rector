@@ -1,15 +1,16 @@
 <?php
 
+declare (strict_types=1);
 namespace Rector\Symfony\Symfony63\Rector\Class_;
 
-use Rector\Core\Rector\AbstractRector;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\UnionType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\UnionType;
+use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
@@ -51,9 +52,6 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @inheritDoc
-     */
     public function getNodeTypes() : array
     {
         return [Class_::class];

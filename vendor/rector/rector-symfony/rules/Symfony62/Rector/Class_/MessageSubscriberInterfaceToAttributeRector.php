@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Name;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -134,7 +134,7 @@ CODE_SAMPLE
             return null;
         }
         $stmts = (array) $getHandledMessagesClassMethod->stmts;
-        if ([] === $stmts) {
+        if ($stmts === []) {
             return null;
         }
         if ($stmts[0] instanceof Expression && $stmts[0]->expr instanceof Yield_) {
@@ -184,7 +184,7 @@ CODE_SAMPLE
             }
             $key = (string) $this->valueResolver->getValue($item->key);
             $value = $this->valueResolver->getValue($item->value);
-            if ('method' === $key) {
+            if ($key === 'method') {
                 $method = $value;
                 continue;
             }
@@ -201,7 +201,7 @@ CODE_SAMPLE
         if (!$classMethod instanceof ClassMethod) {
             return;
         }
-        if (MethodName::INVOKE === $classMethodName) {
+        if ($classMethodName === MethodName::INVOKE) {
             $this->renameInvoke($classMethod);
         }
         $this->messengerHelper->addAttribute($classMethod, $arguments);
