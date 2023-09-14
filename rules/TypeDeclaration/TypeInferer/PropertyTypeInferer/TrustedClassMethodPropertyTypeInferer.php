@@ -114,7 +114,7 @@ final class TrustedClassMethodPropertyTypeInferer
         $assignedExprs = $this->classMethodPropertyFetchManipulator->findAssignsToPropertyName($classMethod, $propertyName);
         $resolvedTypes = [];
         foreach ($assignedExprs as $assignedExpr) {
-            $resolvedTypes[] = $this->nodeTypeResolver->getType($assignedExpr);
+            $resolvedTypes[] = $this->nodeTypeResolver->getNativeType($assignedExpr);
         }
         if ($resolvedTypes === []) {
             return new MixedType();
