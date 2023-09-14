@@ -5,6 +5,7 @@ namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
+use Rector\Core\FileSystem\FilePathHelper;
 use RectorPrefix202309\Symfony\Component\Console\Command\Command;
 use RectorPrefix202309\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202309\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
@@ -16,17 +17,23 @@ use RectorPrefix202309\Symplify\EasyParallel\Reflection\CommandFromReflectionFac
 final class WorkerCommandLineFactory
 {
     /**
-     * @var string
-     */
-    private const OPTION_DASHES = '--';
-    /**
      * @readonly
      * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
      */
     private $commandFromReflectionFactory;
-    public function __construct()
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    /**
+     * @var string
+     */
+    private const OPTION_DASHES = '--';
+    public function __construct(CommandFromReflectionFactory $commandFromReflectionFactory, FilePathHelper $filePathHelper)
     {
-        $this->commandFromReflectionFactory = new CommandFromReflectionFactory();
+        $this->commandFromReflectionFactory = $commandFromReflectionFactory;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @param class-string<Command> $mainCommandClass
@@ -89,7 +96,8 @@ final class WorkerCommandLineFactory
              *
              * tested in macOS and Ubuntu (github action)
              */
-            $workerCommandArray[] = \escapeshellarg((string) $input->getOption(Option::CONFIG));
+            $config = (string) $input->getOption(Option::CONFIG);
+            $workerCommandArray[] = \escapeshellarg($this->filePathHelper->relativePath($config));
         }
         return \implode(' ', $workerCommandArray);
     }
