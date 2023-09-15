@@ -1,4 +1,4 @@
-# 14 Rules Overview
+# 15 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -42,6 +42,46 @@ Change default value types to match Doctrine annotation type
       */
 -    private $isOld = '0';
 +    private $isOld = false;
+ }
+```
+
+<br>
+
+## EventSubscriberInterfaceToAttributeRector
+
+Replace EventSubscriberInterface with AsDoctrineListener attribute(s)
+
+- class: [`Rector\Doctrine\Bundle210\Rector\Class_\EventSubscriberInterfaceToAttributeRector`](../rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php)
+
+```diff
++use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+ use Doctrine\ORM\Event\PrePersistEventArgs;
+ use Doctrine\ORM\Event\PostUpdateEventArgs;
+-use Doctrine\Common\EventSubscriber;
+ use Doctrine\ORM\Events;
+
+-class MyEventSubscriber implements EventSubscriber
++#[AsDoctrineListener(event: Events::postUpdate)]
++#[AsDoctrineListener(event: Events::prePersist)]
++class MyEventSubscriber
+ {
+-    public function getSubscribedEvents()
+-    {
+-        return array(
+-            Events::postUpdate,
+-            Events::prePersist,
+-        );
+-    }
+-
+     public function postUpdate(PostUpdateEventArgs $args)
+     {
+         // ...
+     }
+
+     public function prePersist(PrePersistEventArgs $args)
+     {
+         // ...
+     }
  }
 ```
 

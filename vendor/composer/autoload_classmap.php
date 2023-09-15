@@ -1355,6 +1355,7 @@ return array(
     'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
     'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => $baseDir . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
     'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
+    'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => $vendorDir . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\ClassMethod\\MakeEntitySetterNullabilityInSyncWithPropertyRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',

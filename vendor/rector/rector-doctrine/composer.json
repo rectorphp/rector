@@ -23,7 +23,8 @@
         "symplify\/easy-ci": "^11.2",
         "tomasvotruba\/unused-public": "^0.3",
         "tomasvotruba\/type-coverage": "^0.2",
-        "tomasvotruba\/class-leak": "^0.1"
+        "tomasvotruba\/class-leak": "^0.1",
+        "doctrine\/doctrine-bundle": "^2.10"
     },
     "autoload": {
         "psr-4": {

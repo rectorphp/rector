@@ -1744,18 +1744,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "2c67f2cd122c2befd837e06eb020b2d918107263"
+                "reference": "4b2518028cc5bf9266a9069b1f3e287d62a0012d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/2c67f2cd122c2befd837e06eb020b2d918107263",
-                "reference": "2c67f2cd122c2befd837e06eb020b2d918107263",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4b2518028cc5bf9266a9069b1f3e287d62a0012d",
+                "reference": "4b2518028cc5bf9266a9069b1f3e287d62a0012d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
             "require-dev": {
+                "doctrine\/doctrine-bundle": "^2.10",
                 "doctrine\/orm": "^2.16",
                 "phpstan\/extension-installer": "^1.3",
                 "phpstan\/phpstan": "^1.10",
@@ -1774,7 +1775,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.3"
             },
-            "time": "2023-09-15T11:47:10+00:00",
+            "time": "2023-09-15T19:02:03+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

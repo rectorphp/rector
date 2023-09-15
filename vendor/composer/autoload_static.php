@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08
+class ComposerStaticInite631a2204478291d1675f8dd2aa29d81
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1575,6 +1575,7 @@ class ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
+        'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\ClassMethod\\MakeEntitySetterNullabilityInSyncWithPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
@@ -2592,9 +2593,9 @@ class ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1748bd5e300405eaf0158ac3d4debd08::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite631a2204478291d1675f8dd2aa29d81::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite631a2204478291d1675f8dd2aa29d81::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite631a2204478291d1675f8dd2aa29d81::$classMap;
 
         }, null, ClassLoader::class);
     }

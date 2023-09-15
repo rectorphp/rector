@@ -63,6 +63,10 @@ final class DoctrineSetList implements SetListInterface
     /**
      * @var string
      */
+    public const DOCTRINE_BUNDLE_210 = __DIR__ . '/../../config/sets/doctrine-bundle-210.php';
+    /**
+     * @var string
+     */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/doctrine-annotations-to-attributes.php';
     /**
      * @var string
