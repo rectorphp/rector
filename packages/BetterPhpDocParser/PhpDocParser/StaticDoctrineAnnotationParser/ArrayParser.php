@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 
+use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -28,7 +29,7 @@ final class ArrayParser
      *
      * @return ArrayItemNode[]
      */
-    public function parseCurlyArray(BetterTokenIterator $tokenIterator) : array
+    public function parseCurlyArray(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
     {
         $values = [];
         // nothing
@@ -42,7 +43,7 @@ final class ArrayParser
             return [];
         }
         // first item
-        $values[] = $this->resolveArrayItem($tokenIterator);
+        $values[] = $this->resolveArrayItem($tokenIterator, $currentPhpNode);
         // 2nd+ item
         while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_COMMA)) {
             // optional trailing comma
@@ -51,7 +52,7 @@ final class ArrayParser
             if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
                 break;
             }
-            $values[] = $this->resolveArrayItem($tokenIterator);
+            $values[] = $this->resolveArrayItem($tokenIterator, $currentPhpNode);
             if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
                 break;
             }
@@ -92,7 +93,7 @@ final class ArrayParser
      * Mimics https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1354-L1385
      * @return array<null|mixed, mixed>
      */
-    private function resolveArrayItem(BetterTokenIterator $tokenIterator) : array
+    private function resolveArrayItem(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
     {
         // skip newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
@@ -117,17 +118,17 @@ final class ArrayParser
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
             if ($key === null) {
                 if ($tokenIterator->isNextTokenType(Lexer::TOKEN_IDENTIFIER)) {
-                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                    $key = $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode);
                 } else {
                     $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COMMA);
-                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                    $key = $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode);
                 }
             }
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
-            return [$key, $this->plainValueParser->parseValue($tokenIterator)];
+            return [$key, $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode)];
         }
-        return [$key, $this->plainValueParser->parseValue($tokenIterator)];
+        return [$key, $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode)];
     }
     /**
      * @return String_::KIND_SINGLE_QUOTED|String_::KIND_DOUBLE_QUOTED|null

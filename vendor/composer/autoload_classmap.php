@@ -1155,7 +1155,6 @@ return array(
     'Rector\\Core\\Bootstrap\\RectorConfigsResolver' => $baseDir . '/src/Bootstrap/RectorConfigsResolver.php',
     'Rector\\Core\\Configuration\\ConfigInitializer' => $baseDir . '/src/Configuration/ConfigInitializer.php',
     'Rector\\Core\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
-    'Rector\\Core\\Configuration\\CurrentNodeProvider' => $baseDir . '/src/Configuration/CurrentNodeProvider.php',
     'Rector\\Core\\Configuration\\Option' => $baseDir . '/src/Configuration/Option.php',
     'Rector\\Core\\Configuration\\Parameter\\SimpleParameterProvider' => $baseDir . '/src/Configuration/Parameter/SimpleParameterProvider.php',
     'Rector\\Core\\Configuration\\RenamedClassesDataCollector' => $baseDir . '/src/Configuration/RenamedClassesDataCollector.php',

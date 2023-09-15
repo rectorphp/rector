@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
@@ -38,7 +39,7 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator) : array
+    public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
     {
         if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return [];
@@ -48,28 +49,28 @@ final class StaticDoctrineAnnotationParser
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
             return [];
         }
-        return $this->resolveAnnotationValues($tokenIterator);
+        return $this->resolveAnnotationValues($tokenIterator, $currentPhpNode);
     }
     /**
      * @api tests
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    public function resolveAnnotationValue(BetterTokenIterator $tokenIterator)
+    public function resolveAnnotationValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
     {
         // skips dummy tokens like newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         // no assign
         if (!$tokenIterator->isNextTokenType(Lexer::TOKEN_EQUAL)) {
             // 1. plain value - mimics https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1234-L1282
-            return $this->parseValue($tokenIterator);
+            return $this->parseValue($tokenIterator, $currentPhpNode);
         }
         // 2. assign key = value - mimics FieldAssignment() https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1291-L1303
         /** @var int $key */
-        $key = $this->parseValue($tokenIterator);
+        $key = $this->parseValue($tokenIterator, $currentPhpNode);
         $tokenIterator->consumeTokenType(Lexer::TOKEN_EQUAL);
         // mimics https://github.com/doctrine/annotations/blob/1.13.x/lib/Doctrine/Common/Annotations/DocParser.php#L1236-L1238
-        $value = $this->parseValue($tokenIterator);
+        $value = $this->parseValue($tokenIterator, $currentPhpNode);
         return [
             // plain token value
             $key => $value,
@@ -80,10 +81,10 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    private function resolveAnnotationValues(BetterTokenIterator $tokenIterator) : array
+    private function resolveAnnotationValues(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
     {
         $values = [];
-        $resolvedValue = $this->resolveAnnotationValue($tokenIterator);
+        $resolvedValue = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
         if (\is_array($resolvedValue)) {
             $values = \array_merge($values, $resolvedValue);
         } else {
@@ -95,7 +96,7 @@ final class StaticDoctrineAnnotationParser
             if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
                 continue;
             }
-            $nestedValues = $this->resolveAnnotationValue($tokenIterator);
+            $nestedValues = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
             if (\is_array($nestedValues)) {
                 $values = \array_merge($values, $nestedValues);
             } else {
@@ -110,12 +111,12 @@ final class StaticDoctrineAnnotationParser
     /**
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    private function parseValue(BetterTokenIterator $tokenIterator)
+    private function parseValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
     {
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
-            $items = $this->arrayParser->parseCurlyArray($tokenIterator);
+            $items = $this->arrayParser->parseCurlyArray($tokenIterator, $currentPhpNode);
             return new CurlyListNode($items);
         }
-        return $this->plainValueParser->parseValue($tokenIterator);
+        return $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode);
     }
 }
