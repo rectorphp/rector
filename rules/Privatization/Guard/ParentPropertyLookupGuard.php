@@ -107,7 +107,6 @@ final class ParentPropertyLookupGuard
             if (!$this->propertyFetchAnalyzer->isPropertyFetch($subNode)) {
                 return \false;
             }
-            /** @var PropertyFetch|StaticPropertyFetch $subNode */
             if ($subNode instanceof PropertyFetch) {
                 if (!$subNode->var instanceof Variable) {
                     return \false;

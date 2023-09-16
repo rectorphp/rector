@@ -79,7 +79,6 @@ final class CountableAnalyzer
         if ($arrayType instanceof ConstantArrayType) {
             return \false;
         }
-        /** @var StaticPropertyFetch|PropertyFetch $expr */
         $callerObjectType = $expr instanceof StaticPropertyFetch ? $this->nodeTypeResolver->getType($expr->class) : $this->nodeTypeResolver->getType($expr->var);
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if (!\is_string($propertyName)) {

@@ -103,6 +103,9 @@ final class PropertyFetchAnalyzer
             return $this->isLocalPropertyFetchName($node, $propertyName);
         });
     }
+    /**
+     * @phpstan-assert-if-true PropertyFetch|StaticPropertyFetch $node
+     */
     public function isPropertyFetch(Node $node) : bool
     {
         if ($node instanceof PropertyFetch) {

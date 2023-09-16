@@ -136,7 +136,6 @@ CODE_SAMPLE
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
             return $this->exprAnalyzer->isNonTypedFromParam($expr);
         }
-        /** @var PropertyFetch|StaticPropertyFetch $expr */
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
             $propertyType = $expr instanceof StaticPropertyFetch ? $this->nodeTypeResolver->getType($expr->class) : $this->nodeTypeResolver->getType($expr->var);
