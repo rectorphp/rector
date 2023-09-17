@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Matcher;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -33,7 +34,7 @@ final class ForeachMatcher
     public function match(Foreach_ $foreach, $functionLike) : ?VariableAndCallForeach
     {
         $call = $this->callMatcher->matchCall($foreach);
-        if ($call === null) {
+        if (!$call instanceof Node) {
             return null;
         }
         if (!$foreach->valueVar instanceof Variable) {

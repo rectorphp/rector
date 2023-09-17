@@ -159,7 +159,7 @@ final class NodeFactory
         $param = new ParamBuilder($name);
         if ($type instanceof Type) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
-            if ($typeNode !== null) {
+            if ($typeNode instanceof Node) {
                 $param->setType($typeNode);
             }
         }
@@ -279,7 +279,7 @@ final class NodeFactory
         $propertyType = $propertyMetadata->getType();
         if ($propertyType instanceof Type) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
-            if ($typeNode !== null) {
+            if ($typeNode instanceof Node) {
                 $paramBuilder->setType($typeNode);
             }
         }

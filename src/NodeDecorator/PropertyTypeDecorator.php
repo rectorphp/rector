@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeDecorator;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
@@ -49,7 +50,7 @@ final class PropertyTypeDecorator
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
-            if ($phpParserType !== null) {
+            if ($phpParserType instanceof Node) {
                 $property->type = $phpParserType;
                 if ($type instanceof GenericObjectType) {
                     $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $type);

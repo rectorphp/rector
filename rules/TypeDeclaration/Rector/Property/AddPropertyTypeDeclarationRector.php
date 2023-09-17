@@ -70,7 +70,7 @@ CODE_SAMPLE
                 continue;
             }
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($addPropertyTypeDeclaration->getType(), TypeKind::PROPERTY);
-            if ($typeNode === null) {
+            if (!$typeNode instanceof Node) {
                 // invalid configuration
                 throw new ShouldNotHappenException();
             }
