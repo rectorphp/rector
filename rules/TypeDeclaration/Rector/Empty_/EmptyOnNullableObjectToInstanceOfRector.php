@@ -74,7 +74,7 @@ CODE_SAMPLE
         if ($empty->expr instanceof ArrayDimFetch) {
             return null;
         }
-        $exprType = $this->getType($empty->expr);
+        $exprType = $this->nodeTypeResolver->getNativeType($empty->expr);
         if (!$exprType instanceof ObjectType) {
             return null;
         }
