@@ -110,7 +110,7 @@ CODE_SAMPLE
             if (!$keyFuncCall instanceof FuncCall) {
                 continue;
             }
-            if ($this->hasPrevCallNext($stmtsAware, $key + 2, $totalKeys, $keyFuncCall)) {
+            if ($this->hasInternalPointerChangeNext($stmtsAware, $key + 1, $totalKeys, $keyFuncCall)) {
                 continue;
             }
             $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($stmt->expr)];
@@ -143,7 +143,7 @@ CODE_SAMPLE
             return $this->nodeComparator->areNodesEqual($resetOrEndFuncCall->getArgs()[0], $subNode->getArgs()[0]);
         });
     }
-    private function hasPrevCallNext(StmtsAwareInterface $stmtsAware, int $nextKey, int $totalKeys, FuncCall $funcCall) : bool
+    private function hasInternalPointerChangeNext(StmtsAwareInterface $stmtsAware, int $nextKey, int $totalKeys, FuncCall $funcCall) : bool
     {
         for ($key = $nextKey; $key <= $totalKeys; ++$key) {
             if (!isset($stmtsAware->stmts[$key])) {
@@ -153,7 +153,7 @@ CODE_SAMPLE
                 if (!$subNode instanceof FuncCall) {
                     return \false;
                 }
-                if (!$this->isName($subNode, 'prev')) {
+                if (!$this->isNames($subNode, ['prev', 'next'])) {
                     return \false;
                 }
                 if ($subNode->isFirstClassCallable()) {
