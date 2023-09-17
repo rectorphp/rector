@@ -1163,14 +1163,16 @@ Direct return on if nullable check before return
  {
      public function run()
      {
--        /** @var \stdClass|null $value */
--        $value = $this->foo->bar();
+-        $value = $this->get();
 -        if (! $value instanceof \stdClass) {
 -            return null;
 -        }
 -
 -        return $value;
-+        return $this->foo->bar();
++        return $this->get();
+     }
+
+     public function get(): ?stdClass {
      }
  }
 ```
