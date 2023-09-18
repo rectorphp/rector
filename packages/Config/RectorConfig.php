@@ -295,7 +295,7 @@ final class RectorConfig extends Container
      */
     private function isRuleNoLongerExists($skipRule) : bool
     {
-        return \is_string($skipRule) && \strpos($skipRule, '*') === \false && \realpath($skipRule) === \false && \substr_compare($skipRule, 'Rector', -\strlen('Rector')) === 0 && !\class_exists($skipRule);
+        return \is_string($skipRule) && \strpos($skipRule, '*') === \false && \substr_compare($skipRule, 'Rector', -\strlen('Rector')) === 0 && !\is_dir($skipRule) && !\is_file($skipRule) && !\class_exists($skipRule);
     }
     /**
      * @param string[] $values

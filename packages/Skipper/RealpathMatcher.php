@@ -7,10 +7,12 @@ final class RealpathMatcher
 {
     public function match(string $matchingPath, string $filePath) : bool
     {
+        /** @var string|false $realPathMatchingPath */
         $realPathMatchingPath = \realpath($matchingPath);
         if (!\is_string($realPathMatchingPath)) {
             return \false;
         }
+        /** @var string|false $realpathFilePath */
         $realpathFilePath = \realpath($filePath);
         if (!\is_string($realpathFilePath)) {
             return \false;

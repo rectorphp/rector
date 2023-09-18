@@ -14,6 +14,7 @@ final class FnMatchPathNormalizer
             return '*' . \trim($path, '*') . '*';
         }
         if (\strpos($path, '..') !== \false) {
+            /** @var string|false $path */
             $path = \realpath($path);
             if ($path === \false) {
                 return '';
