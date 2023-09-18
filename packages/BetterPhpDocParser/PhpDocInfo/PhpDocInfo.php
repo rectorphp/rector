@@ -334,7 +334,6 @@ final class PhpDocInfo
     }
     /**
      * @deprecated Change doc block and print directly in the node instead
-     * @internal
      * Should be handled by attributes of phpdoc node - if stard_and_end is missing in one of nodes, it has been changed
      *
      * @api

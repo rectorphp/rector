@@ -8,6 +8,7 @@ use PHPStan\AnalysedCodeException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Application\Collector\CollectorProcessor;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -63,6 +64,11 @@ final class FileProcessor
     private $filePathHelper;
     /**
      * @readonly
+     * @var \Rector\Core\Application\Collector\CollectorProcessor
+     */
+    private $collectorProcessor;
+    /**
+     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
@@ -81,7 +87,7 @@ final class FileProcessor
      * @see https://regex101.com/r/xP2MGa/1
      */
     private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, CollectorProcessor $collectorProcessor, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
@@ -90,6 +96,7 @@ final class FileProcessor
         $this->changedFilesDetector = $changedFilesDetector;
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
+        $this->collectorProcessor = $collectorProcessor;
         $this->postFileProcessor = $postFileProcessor;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -108,6 +115,8 @@ final class FileProcessor
         do {
             $file->changeHasChanged(\false);
             $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
+            // collect data
+            $fileCollectedData = $this->collectorProcessor->process($newStmts);
             // apply post rectors
             $postNewStmts = $this->postFileProcessor->traverse($newStmts);
             // this is needed for new tokens added in "afterTraverse()"
@@ -130,7 +139,7 @@ final class FileProcessor
             $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges);
             $file->setFileDiff($currentFileDiff);
         }
-        return new FileProcessResult([], $file->getFileDiff(), []);
+        return new FileProcessResult([], $file->getFileDiff(), $fileCollectedData);
     }
     private function parseFileAndDecorateNodes(File $file) : ?SystemError
     {

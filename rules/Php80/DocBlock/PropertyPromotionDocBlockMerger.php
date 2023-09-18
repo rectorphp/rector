@@ -77,7 +77,6 @@ final class PropertyPromotionDocBlockMerger
     public function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName) : void
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $propertyPhpDocInfo->markAsChanged();
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
         // make sure the docblock is useful
         if ($param->type === null) {

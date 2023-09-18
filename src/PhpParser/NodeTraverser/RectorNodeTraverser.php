@@ -63,7 +63,7 @@ final class RectorNodeTraverser extends NodeTraverser
         }
         // filer out by version
         $activePhpRectors = $this->phpVersionedFilter->filter($this->rectors);
-        $this->visitors = $this->visitors === [] ? $activePhpRectors : \array_merge($this->visitors, $activePhpRectors);
+        $this->visitors = \array_merge($this->visitors, $activePhpRectors);
         $this->areNodeVisitorsPrepared = \true;
     }
 }

@@ -9,6 +9,8 @@ use RectorPrefix202309\Illuminate\Container\Container;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
+use PHPStan\Collectors\Collector;
+use PHPStan\Collectors\Registry;
 use PHPStan\File\FileHelper;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -242,6 +244,8 @@ final class LazyContainerFactory
     {
         $rectorConfig = new RectorConfig();
         $rectorConfig->import(__DIR__ . '/../../config/config.php');
+        // rector collectors
+        $rectorConfig->when(Registry::class)->needs('$collectors')->giveTagged(Collector::class);
         $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
             $application = $container->make(ConsoleApplication::class);
             $commandNamesToHide = ['list', 'completion', 'help'];
