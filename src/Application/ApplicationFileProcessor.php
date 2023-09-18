@@ -123,7 +123,7 @@ final class ApplicationFileProcessor
             $preFileCallback = null;
         }
         if ($configuration->isParallel()) {
-            $processResult = $this->runParallel($filePaths, $input, $postFileCallback);
+            $processResult = $this->runParallel($filePaths, $configuration, $input, $postFileCallback);
         } else {
             $processResult = $this->processFiles($filePaths, $configuration, $preFileCallback, $postFileCallback);
         }
@@ -219,7 +219,7 @@ final class ApplicationFileProcessor
      * @param string[] $filePaths
      * @param callable(int $stepCount): void $postFileCallback
      */
-    private function runParallel(array $filePaths, InputInterface $input, callable $postFileCallback) : ProcessResult
+    private function runParallel(array $filePaths, Configuration $configuration, InputInterface $input, callable $postFileCallback) : ProcessResult
     {
         $schedule = $this->scheduleFactory->create($this->cpuCoreCountProvider->provide(), SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_SIZE), SimpleParameterProvider::provideIntParameter(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES), $filePaths);
         $mainScript = $this->resolveCalledRectorBinary();
@@ -227,7 +227,7 @@ final class ApplicationFileProcessor
             throw new ParallelShouldNotHappenException('[parallel] Main script was not found');
         }
         // mimics see https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-387b8f04e0db7a06678eb52ce0c0d0aff73e0d7d8fc5df834d0a5fbec198e5daR139
-        return $this->parallelFileProcessor->process($schedule, $mainScript, $postFileCallback, $input);
+        return $this->parallelFileProcessor->process($schedule, $mainScript, $postFileCallback, $input, $configuration);
     }
     /**
      * Path to called "rector" binary file, e.g. "vendor/bin/rector" returns "vendor/bin/rector" This is needed to re-call the

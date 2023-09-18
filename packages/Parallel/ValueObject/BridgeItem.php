@@ -7,7 +7,7 @@ namespace Rector\Parallel\ValueObject;
  * @api
  * Helpers constant for passing constant names around
  */
-final class Name
+final class BridgeItem
 {
     /**
      * @var string

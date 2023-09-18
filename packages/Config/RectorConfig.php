@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Config;
 
 use RectorPrefix202309\Illuminate\Container\Container;
+use PHPStan\Collectors\Collector;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
@@ -173,6 +174,14 @@ final class RectorConfig extends Container
         }
         // for cache invalidation in case of change
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
+    }
+    /**
+     * @param class-string<Collector> $collectorClass
+     */
+    public function collector(string $collectorClass) : void
+    {
+        $this->singleton($collectorClass);
+        $this->tag($collectorClass, Collector::class);
     }
     public function import(string $filePath) : void
     {

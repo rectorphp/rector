@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c
+class ComposerStaticInit62066db96b30e43209b6c691adcb2d06
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1367,6 +1367,8 @@ class ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/packages/Config/RectorConfig.php',
         'Rector\\Core\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
+        'Rector\\Core\\Application\\Collector\\CollectorNodeVisitor' => __DIR__ . '/../..' . '/src/Application/Collector/CollectorNodeVisitor.php',
+        'Rector\\Core\\Application\\Collector\\CollectorProcessor' => __DIR__ . '/../..' . '/src/Application/Collector/CollectorProcessor.php',
         'Rector\\Core\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
         'Rector\\Core\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
         'Rector\\Core\\Autoloading\\AdditionalAutoloader' => __DIR__ . '/../..' . '/src/Autoloading/AdditionalAutoloader.php',
@@ -1960,7 +1962,7 @@ class ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/packages/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Bridge.php',
-        'Rector\\Parallel\\ValueObject\\Name' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Name.php',
+        'Rector\\Parallel\\ValueObject\\BridgeItem' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/BridgeItem.php',
         'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
         'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
         'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',
@@ -2594,9 +2596,9 @@ class ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf58ceb7d781d6a2df409794df76d5a5c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit62066db96b30e43209b6c691adcb2d06::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit62066db96b30e43209b6c691adcb2d06::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit62066db96b30e43209b6c691adcb2d06::$classMap;
 
         }, null, ClassLoader::class);
     }
