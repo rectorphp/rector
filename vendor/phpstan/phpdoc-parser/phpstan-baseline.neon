@@ -11,11 +11,6 @@ parameters:
 			path: src/Ast/NodeTraverser.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between 2 and 2 will always evaluate to true\\.$#"
-			count: 2
-			path: src/Ast/NodeTraverser.php
-
-		-
 			message: "#^Variable property access on PHPStan\\\\PhpDocParser\\\\Ast\\\\Node\\.$#"
 			count: 1
 			path: src/Ast/NodeTraverser.php

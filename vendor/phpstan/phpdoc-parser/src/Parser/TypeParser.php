@@ -282,34 +282,26 @@ class TypeParser
     public function parseGeneric(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $baseType) : Ast\Type\GenericTypeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_ANGLE_BRACKET);
-        $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+        $startLine = $baseType->getAttribute(Ast\Attribute::START_LINE);
+        $startIndex = $baseType->getAttribute(Ast\Attribute::START_INDEX);
         $genericTypes = [];
         $variances = [];
-        [$genericTypes[], $variances[]] = $this->parseGenericTypeArgument($tokens);
-        $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        while ($tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA)) {
+        $isFirst = \true;
+        while ($isFirst || $tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA)) {
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-            if ($tokens->tryConsumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET)) {
-                // trailing comma case
-                $type = new Ast\Type\GenericTypeNode($baseType, $genericTypes, $variances);
-                $startLine = $baseType->getAttribute(Ast\Attribute::START_LINE);
-                $startIndex = $baseType->getAttribute(Ast\Attribute::START_INDEX);
-                if ($startLine !== null && $startIndex !== null) {
-                    $type = $this->enrichWithAttributes($tokens, $type, $startLine, $startIndex);
-                }
-                return $type;
+            // trailing comma case
+            if (!$isFirst && $tokens->isCurrentTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET)) {
+                break;
             }
+            $isFirst = \false;
             [$genericTypes[], $variances[]] = $this->parseGenericTypeArgument($tokens);
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         }
-        $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET);
         $type = new Ast\Type\GenericTypeNode($baseType, $genericTypes, $variances);
-        $startLine = $baseType->getAttribute(Ast\Attribute::START_LINE);
-        $startIndex = $baseType->getAttribute(Ast\Attribute::START_INDEX);
         if ($startLine !== null && $startIndex !== null) {
             $type = $this->enrichWithAttributes($tokens, $type, $startLine, $startIndex);
         }
+        $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET);
         return $type;
     }
     /**

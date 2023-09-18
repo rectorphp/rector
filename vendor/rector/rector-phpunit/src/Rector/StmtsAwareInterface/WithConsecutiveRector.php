@@ -17,13 +17,15 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\StmtsAwareInterface\WithConsecutiveRector\WithConsecutiveRectorTest
  */
-final class WithConsecutiveRector extends AbstractRector
+final class WithConsecutiveRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -149,5 +151,9 @@ CODE_SAMPLE
             return $node;
         });
         return $exactlyMethodCall;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::MATCH_EXPRESSION;
     }
 }
