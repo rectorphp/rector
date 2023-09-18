@@ -1732,6 +1732,7 @@ return array(
     'Rector\\PHPUnit\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
     'Rector\\PHPUnit\\Set\\PHPUnitLevelSetList' => $vendorDir . '/rector/rector-phpunit/src/Set/PHPUnitLevelSetList.php',
     'Rector\\PHPUnit\\Set\\PHPUnitSetList' => $vendorDir . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
+    'Rector\\PHPUnit\\Transform\\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector' => $vendorDir . '/rector/rector-phpunit/src/Transform/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php',
     'Rector\\PHPUnit\\ValueObject\\AnnotationWithValueToAttribute' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/AnnotationWithValueToAttribute.php',
     'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
     'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
