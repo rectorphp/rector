@@ -7,9 +7,6 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PHPStan\Collectors\CollectedData;
 use PHPStan\Collectors\Registry;
-/**
- * @api
- */
 final class CollectorProcessor
 {
     /**
@@ -36,6 +33,6 @@ final class CollectorProcessor
     public function process(array $stmts) : array
     {
         $this->nodeTraverser->traverse($stmts);
-        return $this->collectorNodeVisitor->getCollectedDatas();
+        return $this->collectorNodeVisitor->getCollectedData();
     }
 }

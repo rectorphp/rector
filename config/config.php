@@ -13,6 +13,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->autoloadPaths([]);
     $rectorConfig->bootstrapFiles([]);
     $rectorConfig->parallel();
+    $rectorConfig->disableCollectors();
     // to avoid autoimporting out of the box
     $rectorConfig->importNames(\false, \false);
     $rectorConfig->removeUnusedImports(\false);

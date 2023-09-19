@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
+class ComposerStaticInit9a5baaca6ad7ba8e6ad063003e0a6fee
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1395,6 +1395,7 @@ class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
         'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Core\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
         'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
+        'Rector\\Core\\Contract\\Rector\\CollectorRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/CollectorRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
@@ -1479,6 +1480,7 @@ class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
         'Rector\\Core\\Php\\ReservedKeywordAnalyzer' => __DIR__ . '/../..' . '/src/Php/ReservedKeywordAnalyzer.php',
         'Rector\\Core\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
         'Rector\\Core\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Provider/CurrentFileProvider.php',
+        'Rector\\Core\\Rector\\AbstractCollectorRector' => __DIR__ . '/../..' . '/src/Rector/AbstractCollectorRector.php',
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
         'Rector\\Core\\Rector\\AbstractScopeAwareRector' => __DIR__ . '/../..' . '/src/Rector/AbstractScopeAwareRector.php',
         'Rector\\Core\\Reflection\\ClassReflectionAnalyzer' => __DIR__ . '/../..' . '/src/Reflection/ClassReflectionAnalyzer.php',
@@ -2163,6 +2165,7 @@ class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
+        'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenCollectorRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenCollectorRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
@@ -2475,6 +2478,7 @@ class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
+        'Rector\\TypeDeclaration\\Collector\\ParentClassCollector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Collector/ParentClassCollector.php',
         'Rector\\TypeDeclaration\\Contract\\PHPStan\\TypeWithClassTypeSpecifierInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PHPStan/TypeWithClassTypeSpecifierInterface.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
         'Rector\\TypeDeclaration\\Guard\\ParamTypeAddGuard' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Guard/ParamTypeAddGuard.php',
@@ -2596,9 +2600,9 @@ class ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticIniteb8b71a07cc01b1bdf06402c4a91c2cb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9a5baaca6ad7ba8e6ad063003e0a6fee::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9a5baaca6ad7ba8e6ad063003e0a6fee::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9a5baaca6ad7ba8e6ad063003e0a6fee::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,6 +5,7 @@ namespace Rector\Core\Console\Command;
 
 use RectorPrefix202309\Clue\React\NDJson\Decoder;
 use RectorPrefix202309\Clue\React\NDJson\Encoder;
+use PHPStan\Collectors\CollectedData;
 use RectorPrefix202309\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202309\React\Socket\ConnectionInterface;
 use RectorPrefix202309\React\Socket\TcpConnector;
@@ -23,6 +24,7 @@ use RectorPrefix202309\Symplify\EasyParallel\Enum\Action;
 use RectorPrefix202309\Symplify\EasyParallel\Enum\ReactCommand;
 use RectorPrefix202309\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
+use RectorPrefix202309\Webmozart\Assert\Assert;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php
@@ -111,8 +113,22 @@ final class WorkerCommand extends Command
             if ($action !== Action::MAIN) {
                 return;
             }
+            $previouslyCollectedDataItems = $json[Bridge::PREVIOUSLY_COLLECTED_DATA] ?? [];
+            if ($previouslyCollectedDataItems !== []) {
+                // turn to value objects
+                $previouslyCollectedDatas = [];
+                foreach ($previouslyCollectedDataItems as $previouslyCollectedDataItem) {
+                    Assert::keyExists($previouslyCollectedDataItem, 'data');
+                    Assert::keyExists($previouslyCollectedDataItem, 'filePath');
+                    Assert::keyExists($previouslyCollectedDataItem, 'collectorType');
+                    $previouslyCollectedDatas[] = CollectedData::decode($previouslyCollectedDataItem);
+                }
+                $configuration->setCollectedData($previouslyCollectedDatas);
+                $configuration->enableSecondRun();
+            }
             /** @var string[] $filePaths */
             $filePaths = $json[Bridge::FILES] ?? [];
+            Assert::notEmpty($filePaths);
             $processResult = $this->applicationFileProcessor->processFiles($filePaths, $configuration, $preFileCallback);
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA

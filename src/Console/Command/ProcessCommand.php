@@ -115,8 +115,21 @@ final class ProcessCommand extends Command
         // MAIN PHASE
         // 2. run Rector
         $processResult = $this->applicationFileProcessor->run($configuration, $input);
+        // 3. collectors phase
+        if ($processResult->getCollectedData() !== []) {
+            $this->symfonyStyle->newLine(2);
+            $this->symfonyStyle->title('Running 2nd time with collectors data');
+            $configuration->setCollectedData($processResult->getCollectedData());
+            $configuration->enableSecondRun();
+            // reset rules in Rector traverser
+            $nextProcessResult = $this->applicationFileProcessor->run($configuration, $input);
+            // @todo merge results here
+            $this->symfonyStyle->newLine(3);
+            // unset all rectors that are not collector
+            // set new collector rectors - have a custom tag? yes
+        }
         // REPORTING PHASE
-        // 3. reporting phase
+        // 4. reporting phaseRunning 2nd time with collectors data
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);

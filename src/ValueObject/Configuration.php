@@ -69,6 +69,11 @@ final class Configuration
      */
     private $isDebug = \false;
     /**
+     * @readonly
+     * @var bool
+     */
+    private $isCollectors = \false;
+    /**
      * @var bool
      */
     private $isSecondRun = \false;
@@ -80,7 +85,7 @@ final class Configuration
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $isCollectors = \false)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -94,6 +99,7 @@ final class Configuration
         $this->isParallel = $isParallel;
         $this->memoryLimit = $memoryLimit;
         $this->isDebug = $isDebug;
+        $this->isCollectors = $isCollectors;
     }
     public function isDryRun() : bool
     {
@@ -151,18 +157,16 @@ final class Configuration
         return $this->isDebug;
     }
     /**
-     * @api
-     * @param CollectedData[] $collectedDatas
+     * @param CollectedData[] $collectedData
      */
-    public function setCollectedDatas(array $collectedDatas) : void
+    public function setCollectedData(array $collectedData) : void
     {
-        $this->collectedData = $collectedDatas;
+        $this->collectedData = $collectedData;
     }
     /**
-     * @api
      * @return CollectedData[]
      */
-    public function getCollectedDatas() : array
+    public function getCollectedData() : array
     {
         return $this->collectedData;
     }
@@ -179,5 +183,19 @@ final class Configuration
     public function isSecondRun() : bool
     {
         return $this->isSecondRun;
+    }
+    /**
+     * @api used in tests
+     */
+    public function reset() : void
+    {
+        $this->isSecondRun = \false;
+    }
+    /**
+     * @api
+     */
+    public function isCollectors() : bool
+    {
+        return $this->isCollectors;
     }
 }

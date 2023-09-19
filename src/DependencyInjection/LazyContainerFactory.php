@@ -59,6 +59,7 @@ use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Style\RectorStyle;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\DependencyInjection\ResetableInterface;
+use Rector\Core\Contract\Rector\CollectorRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -177,6 +178,7 @@ use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclaration\Collector\ParentClassCollector;
 use Rector\Utils\Command\MissingInSetCommand;
 use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202309\Symfony\Component\Console\Application;
@@ -246,6 +248,8 @@ final class LazyContainerFactory
         $rectorConfig->import(__DIR__ . '/../../config/config.php');
         // rector collectors
         $rectorConfig->when(Registry::class)->needs('$collectors')->giveTagged(Collector::class);
+        // @todo collectors - just for testing purpose
+        $rectorConfig->collector(ParentClassCollector::class);
         $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
             $application = $container->make(ConsoleApplication::class);
             $commandNamesToHide = ['list', 'completion', 'help'];
@@ -278,6 +282,7 @@ final class LazyContainerFactory
         $rectorConfig->when(ConstExprParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->when(RectorNodeTraverser::class)->needs('$rectors')->giveTagged(RectorInterface::class);
+        $rectorConfig->when(RectorNodeTraverser::class)->needs('$collectorRectors')->giveTagged(CollectorRectorInterface::class);
         $rectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ClassNameImportSkipper::class)->needs('$classNameImportSkipVoters')->giveTagged(ClassNameImportSkipVoterInterface::class);
         $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (Container $container) : DynamicSourceLocatorProvider {
@@ -308,7 +313,7 @@ final class LazyContainerFactory
         $rectorConfig->when(Skipper::class)->needs('$skipVoters')->giveTagged(SkipVoterInterface::class);
         $this->registerTagged($rectorConfig, self::SKIP_VOTER_CLASSES, SkipVoterInterface::class);
         $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector, Container $container) : void {
-            $rector->autowire($container->make(NodeNameResolver::class), $container->make(NodeTypeResolver::class), $container->make(SimpleCallableNodeTraverser::class), $container->make(NodeFactory::class), $container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(Skipper::class), $container->make(ValueResolver::class), $container->make(BetterNodeFinder::class), $container->make(NodeComparator::class), $container->make(CurrentFileProvider::class), $container->make(CreatedByRuleDecorator::class), $container->make(ChangedNodeScopeRefresher::class));
+            $rector->autowire($container->get(NodeNameResolver::class), $container->get(NodeTypeResolver::class), $container->get(SimpleCallableNodeTraverser::class), $container->get(NodeFactory::class), $container->get(PhpDocInfoFactory::class), $container->get(StaticTypeMapper::class), $container->get(Skipper::class), $container->get(ValueResolver::class), $container->get(BetterNodeFinder::class), $container->get(NodeComparator::class), $container->get(CurrentFileProvider::class), $container->get(CreatedByRuleDecorator::class), $container->get(ChangedNodeScopeRefresher::class));
         });
         $this->registerTagged($rectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);

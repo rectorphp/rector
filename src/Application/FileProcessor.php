@@ -103,6 +103,10 @@ final class FileProcessor
     }
     public function processFile(File $file, Configuration $configuration) : FileProcessResult
     {
+        if ($configuration->isSecondRun() && $configuration->isCollectors()) {
+            // 2nd run
+            $this->rectorNodeTraverser->prepareCollectorRectorsRun($configuration);
+        }
         // 1. parse files to nodes
         $parsingSystemError = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemError instanceof SystemError) {
@@ -116,7 +120,7 @@ final class FileProcessor
             $file->changeHasChanged(\false);
             $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
             // collect data
-            $fileCollectedData = $this->collectorProcessor->process($newStmts);
+            $fileCollectedData = $configuration->isCollectors() ? $this->collectorProcessor->process($newStmts) : [];
             // apply post rectors
             $postNewStmts = $this->postFileProcessor->traverse($newStmts);
             // this is needed for new tokens added in "afterTraverse()"
