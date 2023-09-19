@@ -12,8 +12,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\AnnotationsToAttributes\Rector\ClassMethod\TestWithAnnotationToAttributeRector\TestWithAnnotationToAttributeRectorTest
  */
-final class TestWithAnnotationToAttributeRector extends AbstractRector
+final class TestWithAnnotationToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -125,5 +127,9 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         return $node;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
     }
 }
