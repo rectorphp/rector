@@ -8,14 +8,13 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\FuncCall\DowngradeProcOpenArrayCommandArgRector\DowngradeProcOpenArrayCommandArgRectorTest
  */
-final class DowngradeProcOpenArrayCommandArgRector extends AbstractScopeAwareRector
+final class DowngradeProcOpenArrayCommandArgRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
@@ -37,7 +36,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?FuncCall
+    public function refactor(Node $node) : ?FuncCall
     {
         if (!$this->isName($node, 'proc_open')) {
             return null;
