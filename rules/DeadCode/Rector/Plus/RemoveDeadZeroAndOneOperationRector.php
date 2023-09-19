@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -135,6 +136,9 @@ CODE_SAMPLE
      */
     private function processBinaryMulAndDiv($binaryOp) : ?Expr
     {
+        if ($binaryOp->left instanceof ClassConstFetch || $binaryOp->right instanceof ClassConstFetch) {
+            return null;
+        }
         if (!$this->areNumberType($binaryOp)) {
             return null;
         }
