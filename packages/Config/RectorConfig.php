@@ -53,7 +53,7 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::PARALLEL, \false);
     }
     /**
-     * @experimental since Rector 0.17.x
+     * @experimental since Rector 0.18.x
      */
     public function enableCollectors() : void
     {
@@ -311,7 +311,7 @@ final class RectorConfig extends Container
         }
     }
     /**
-     * @experimental since Rector 0.17.x
+     * @experimental since Rector 0.18.x
      */
     public function disableCollectors() : void
     {
