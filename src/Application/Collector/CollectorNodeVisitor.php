@@ -40,9 +40,9 @@ final class CollectorNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         $collectors = $this->collectorRegistry->getCollectors(\get_class($node));
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         foreach ($collectors as $collector) {
-            /** @var Scope $scope */
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
             try {
                 $collectedData = $collector->processNode($node, $scope);
             } catch (Throwable $exception) {
