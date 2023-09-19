@@ -4,9 +4,7 @@ declare (strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
@@ -16,7 +14,6 @@ use PHPStan\Type\MixedType;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -40,11 +37,6 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
@@ -79,12 +71,11 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var array<class-string, array<string>>
      */
     private const CHAOTIC_CLASS_METHOD_NAMES = ['PhpParser\\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse']];
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->returnTypeInferer = $returnTypeInferer;
@@ -125,10 +116,7 @@ final class ClassMethodReturnTypeOverrideGuard
         if ($classMethod->returnType instanceof Node) {
             return \true;
         }
-        if ($this->shouldSkipHasChildHasReturnType($childrenClassReflections, $classMethod)) {
-            return \true;
-        }
-        return $this->hasClassMethodExprReturn($classMethod);
+        return $this->shouldSkipHasChildHasReturnType($childrenClassReflections, $classMethod);
     }
     private function isReturnTypeChangeAllowed(ClassMethod $classMethod, Scope $scope) : bool
     {
@@ -176,6 +164,9 @@ final class ClassMethodReturnTypeOverrideGuard
     private function shouldSkipHasChildHasReturnType(array $childrenClassReflections, ClassMethod $classMethod) : bool
     {
         $returnType = $this->returnTypeInferer->inferFunctionLike($classMethod);
+        if (!$returnType->isVoid()->yes()) {
+            return \true;
+        }
         $methodName = $this->nodeNameResolver->getName($classMethod);
         foreach ($childrenClassReflections as $childClassReflection) {
             if (!$childClassReflection->hasNativeMethod($methodName)) {
@@ -190,9 +181,6 @@ final class ClassMethodReturnTypeOverrideGuard
                 return \true;
             }
             $childReturnType = $this->returnTypeInferer->inferFunctionLike($method);
-            if (!$returnType->isVoid()->yes()) {
-                continue;
-            }
             if ($childReturnType->isVoid()->yes()) {
                 continue;
             }
@@ -217,14 +205,5 @@ final class ClassMethodReturnTypeOverrideGuard
             return $this->nodeNameResolver->isNames($classMethod, $chaoticMethodNames);
         }
         return \false;
-    }
-    private function hasClassMethodExprReturn(ClassMethod $classMethod) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, static function (Node $node) : bool {
-            if (!$node instanceof Return_) {
-                return \false;
-            }
-            return $node->expr instanceof Expr;
-        });
     }
 }
