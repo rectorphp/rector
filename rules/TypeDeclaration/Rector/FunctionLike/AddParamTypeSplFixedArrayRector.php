@@ -11,6 +11,7 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,12 +27,18 @@ final class AddParamTypeSplFixedArrayRector extends AbstractRector
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
      * @var array<string, string>
      */
     private const SPL_FIXED_ARRAY_TO_SINGLE = ['PhpCsFixer\\Tokenizer\\Tokens' => 'PhpCsFixer\\Tokenizer\\Token', 'PhpCsFixer\\Doctrine\\Annotation\\Tokens' => 'PhpCsFixer\\Doctrine\\Annotation\\Token'];
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**
      * @return array<class-string<Node>>

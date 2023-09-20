@@ -313,7 +313,22 @@ final class LazyContainerFactory
         $rectorConfig->when(Skipper::class)->needs('$skipVoters')->giveTagged(SkipVoterInterface::class);
         $this->registerTagged($rectorConfig, self::SKIP_VOTER_CLASSES, SkipVoterInterface::class);
         $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector, Container $container) : void {
-            $rector->autowire($container->get(NodeNameResolver::class), $container->get(NodeTypeResolver::class), $container->get(SimpleCallableNodeTraverser::class), $container->get(NodeFactory::class), $container->get(PhpDocInfoFactory::class), $container->get(StaticTypeMapper::class), $container->get(Skipper::class), $container->get(ValueResolver::class), $container->get(BetterNodeFinder::class), $container->get(NodeComparator::class), $container->get(CurrentFileProvider::class), $container->get(CreatedByRuleDecorator::class), $container->get(ChangedNodeScopeRefresher::class));
+            $rector->autowire(
+                $container->get(NodeNameResolver::class),
+                $container->get(NodeTypeResolver::class),
+                $container->get(SimpleCallableNodeTraverser::class),
+                $container->get(NodeFactory::class),
+                // @deprecated, use injected PhpDocInfoFactory service in your Rector rules
+                $container->get(PhpDocInfoFactory::class),
+                $container->get(StaticTypeMapper::class),
+                $container->get(Skipper::class),
+                $container->get(ValueResolver::class),
+                $container->get(BetterNodeFinder::class),
+                $container->get(NodeComparator::class),
+                $container->get(CurrentFileProvider::class),
+                $container->get(CreatedByRuleDecorator::class),
+                $container->get(ChangedNodeScopeRefresher::class)
+            );
         });
         $this->registerTagged($rectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
