@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\StmtsManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -25,9 +26,15 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector implements 
      * @var \Rector\Core\NodeManipulator\StmtsManipulator
      */
     private $stmtsManipulator;
-    public function __construct(StmtsManipulator $stmtsManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(StmtsManipulator $stmtsManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

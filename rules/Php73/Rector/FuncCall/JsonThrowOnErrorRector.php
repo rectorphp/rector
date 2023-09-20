@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -30,12 +31,18 @@ final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersi
      */
     private $valueResolver;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->valueResolver = $valueResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

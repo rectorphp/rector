@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\StmtsManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,11 +34,17 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
      * @var \Rector\Core\NodeManipulator\StmtsManipulator
      */
     private $stmtsManipulator;
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, StmtsManipulator $stmtsManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, StmtsManipulator $stmtsManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

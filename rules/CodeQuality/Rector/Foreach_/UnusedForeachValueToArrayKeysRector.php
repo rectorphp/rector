@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,9 +25,15 @@ final class UnusedForeachValueToArrayKeysRector extends AbstractRector
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
-    public function __construct(ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

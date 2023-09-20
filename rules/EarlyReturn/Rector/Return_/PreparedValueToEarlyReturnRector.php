@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\ValueObject\BareSingleAssignIf;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +28,15 @@ final class PreparedValueToEarlyReturnRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(IfManipulator $ifManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

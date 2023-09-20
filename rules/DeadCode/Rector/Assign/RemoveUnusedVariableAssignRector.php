@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,11 +43,17 @@ final class RemoveUnusedVariableAssignRector extends AbstractScopeAwareRector
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->variableAnalyzer = $variableAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

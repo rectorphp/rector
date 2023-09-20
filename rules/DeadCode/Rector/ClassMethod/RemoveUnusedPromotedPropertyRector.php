@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Analyser\Scope;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
@@ -39,11 +40,17 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractScopeAwareRector 
      * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
      */
     private $propertyWriteonlyAnalyzer;
-    public function __construct(PropertyFetchFinder $propertyFetchFinder, VisibilityManipulator $visibilityManipulator, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(PropertyFetchFinder $propertyFetchFinder, VisibilityManipulator $visibilityManipulator, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

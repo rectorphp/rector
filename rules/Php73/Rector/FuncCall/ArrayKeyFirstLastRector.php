@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -31,6 +32,11 @@ final class ArrayKeyFirstLastRector extends AbstractRector implements MinPhpVers
      */
     private $reflectionProvider;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @var string
      */
     private const ARRAY_KEY_FIRST = 'array_key_first';
@@ -42,9 +48,10 @@ final class ArrayKeyFirstLastRector extends AbstractRector implements MinPhpVers
      * @var array<string, string>
      */
     private const PREVIOUS_TO_NEW_FUNCTIONS = ['reset' => self::ARRAY_KEY_FIRST, 'end' => self::ARRAY_KEY_LAST];
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

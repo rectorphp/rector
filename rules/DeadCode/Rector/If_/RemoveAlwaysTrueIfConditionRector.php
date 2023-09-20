@@ -16,6 +16,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,10 +36,16 @@ final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ExprAnalyzer $exprAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(ReflectionResolver $reflectionResolver, ExprAnalyzer $exprAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->exprAnalyzer = $exprAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

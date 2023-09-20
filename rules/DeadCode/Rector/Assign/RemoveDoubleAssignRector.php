@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -31,9 +32,15 @@ final class RemoveDoubleAssignRector extends AbstractScopeAwareRector
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(SideEffectNodeDetector $sideEffectNodeDetector)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(SideEffectNodeDetector $sideEffectNodeDetector, BetterNodeFinder $betterNodeFinder)
     {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {

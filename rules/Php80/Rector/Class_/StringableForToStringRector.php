@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -44,14 +45,20 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
      */
     private $classAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @var string
      */
     private const STRINGABLE = 'Stringable';
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classAnalyzer = $classAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function provideMinPhpVersion() : int
     {
