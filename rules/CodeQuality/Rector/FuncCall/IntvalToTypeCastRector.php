@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,6 +18,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IntvalToTypeCastRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change intval() to faster and readable (int) $value', [new CodeSample(<<<'CODE_SAMPLE'

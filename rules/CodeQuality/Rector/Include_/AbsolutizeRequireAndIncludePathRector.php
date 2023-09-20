@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,6 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require being changed depends on the current working directory.', [new CodeSample(<<<'CODE_SAMPLE'
@@ -81,11 +91,7 @@ CODE_SAMPLE
             return null;
         }
         // add preslash to string
-        if (\strncmp($includeValue, './', \strlen('./')) === 0) {
-            $node->expr->value = Strings::substring($includeValue, 1);
-        } else {
-            $node->expr->value = '/' . $includeValue;
-        }
+        $node->expr->value = \strncmp($includeValue, './', \strlen('./')) === 0 ? Strings::substring($includeValue, 1) : '/' . $includeValue;
         $node->expr = $this->prefixWithDirConstant($node->expr);
         return $node;
     }

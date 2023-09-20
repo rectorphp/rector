@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,9 +23,15 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(IfManipulator $ifManipulator, ValueResolver $valueResolver)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

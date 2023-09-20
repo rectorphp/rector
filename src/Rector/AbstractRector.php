@@ -30,8 +30,9 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 /**
- * @property-read PhpDocInfoFactory $phpDocInfoFactory; @deprecated The parent AbstractRector dependency is deprecated and will be removed.
- *  Use dependency injection in your own rule instead.
+ * @property-read PhpDocInfoFactory $phpDocInfoFactory; @deprecated The parent AbstractRector dependency is deprecated and will be removed. Use dependency injection in your own rule instead.
+ *
+ * @property-read ValueResolver $valueResolver; @deprecated The parent AbstractRector dependency is deprecated and will be removed. Use dependency injection in your own rule instead.
  */
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
@@ -65,10 +66,6 @@ CODE_SAMPLE;
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     protected $nodeFactory;
-    /**
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
-     */
-    protected $valueResolver;
     /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -129,13 +126,13 @@ CODE_SAMPLE;
         $this->nodeFactory = $nodeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->skipper = $skipper;
-        $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->deprecatedDependencies['phpDocInfoFactory'] = $phpDocInfoFactory;
+        $this->deprecatedDependencies['valueResolver'] = $valueResolver;
     }
     /**
      * @return Node[]|null

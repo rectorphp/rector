@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,9 +27,15 @@ final class WhileNullableToInstanceofRector extends AbstractRector
      * @var \Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer
      */
     private $nullableTypeAnalyzer;
-    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, ValueResolver $valueResolver)
     {
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

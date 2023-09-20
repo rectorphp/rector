@@ -20,6 +20,7 @@ use PHPStan\Type\UnionType;
 use Rector\CodeQuality\TypeResolver\AssignVariableTypeResolver;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -45,11 +46,17 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
-    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver, VarTagRemover $varTagRemover)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver, VarTagRemover $varTagRemover, ValueResolver $valueResolver)
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignVariableTypeResolver = $assignVariableTypeResolver;
         $this->varTagRemover = $varTagRemover;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

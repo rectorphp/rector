@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeTraverser;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,9 +28,15 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(ForeachAnalyzer $foreachAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ForeachAnalyzer $foreachAnalyzer, ValueResolver $valueResolver)
     {
         $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

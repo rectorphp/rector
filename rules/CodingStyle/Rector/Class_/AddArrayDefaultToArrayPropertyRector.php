@@ -18,6 +18,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -54,13 +55,19 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, VisibilityManipulator $visibilityManipulator, ConstructorAssignDetector $constructorAssignDetector, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, VisibilityManipulator $visibilityManipulator, ConstructorAssignDetector $constructorAssignDetector, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

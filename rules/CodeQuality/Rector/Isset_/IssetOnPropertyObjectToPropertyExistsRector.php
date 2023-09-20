@@ -19,6 +19,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -40,10 +41,16 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ValueResolver $valueResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

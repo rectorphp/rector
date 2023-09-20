@@ -22,6 +22,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -51,11 +52,17 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

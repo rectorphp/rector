@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,6 +28,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new CodeSample(<<<'CODE_SAMPLE'

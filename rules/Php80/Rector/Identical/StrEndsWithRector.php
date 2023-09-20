@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\FuncCallAndExpr;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -35,9 +36,15 @@ final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInt
      * @var \Rector\Core\NodeAnalyzer\BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;
-    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer, ValueResolver $valueResolver)
     {
         $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function provideMinPhpVersion() : int
     {

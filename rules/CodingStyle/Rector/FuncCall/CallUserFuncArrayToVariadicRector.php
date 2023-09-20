@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -29,9 +30,15 @@ final class CallUserFuncArrayToVariadicRector extends AbstractRector implements 
      * @var \Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory
      */
     private $arrayCallableToMethodCallFactory;
-    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory, ValueResolver $valueResolver)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,9 +30,15 @@ final class InlineArrayReturnAssignRector extends AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver
      */
     private $variableDimFetchAssignResolver;
-    public function __construct(VariableDimFetchAssignResolver $variableDimFetchAssignResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(VariableDimFetchAssignResolver $variableDimFetchAssignResolver, ValueResolver $valueResolver)
     {
         $this->variableDimFetchAssignResolver = $variableDimFetchAssignResolver;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

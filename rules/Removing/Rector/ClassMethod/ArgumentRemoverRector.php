@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -21,6 +22,11 @@ use RectorPrefix202309\Webmozart\Assert\Assert;
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var ArgumentRemover[]
      */
     private $removedArguments = [];
@@ -28,6 +34,10 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
      * @var bool
      */
     private $hasChanged = \false;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Removes defined arguments in defined methods and their calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

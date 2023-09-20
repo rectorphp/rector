@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,6 +30,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SetTypeToCastRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var array<string, class-string<Cast>>
      */
     private const TYPE_TO_CAST = ['array' => Array_::class, 'bool' => Bool_::class, 'boolean' => Bool_::class, 'double' => Double::class, 'float' => Double::class, 'int' => Int_::class, 'integer' => Int_::class, 'object' => Object_::class, 'string' => String_::class];
@@ -36,6 +42,10 @@ final class SetTypeToCastRector extends AbstractRector
      * @var string
      */
     private const IS_ARG_VALUE_ITEM_SET_TYPE = 'is_arg_value_item_set_type';
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes settype() to (type) where possible', [new CodeSample(<<<'CODE_SAMPLE'

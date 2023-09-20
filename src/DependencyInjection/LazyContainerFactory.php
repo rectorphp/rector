@@ -322,6 +322,7 @@ final class LazyContainerFactory
                 $container->get(PhpDocInfoFactory::class),
                 $container->get(StaticTypeMapper::class),
                 $container->get(Skipper::class),
+                // @deprecated, use injected PhpDocInfoFactory service in your Rector rules
                 $container->get(ValueResolver::class),
                 $container->get(BetterNodeFinder::class),
                 $container->get(NodeComparator::class),

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -21,9 +22,18 @@ use RectorPrefix202309\Webmozart\Assert\Assert;
 final class AttributeKeyToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var AttributeKeyToClassConstFetch[]
      */
     private $attributeKeysToClassConstFetches = [];
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replace key value on specific attribute to class constant', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

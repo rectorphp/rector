@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ConstantType;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -23,6 +24,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveZeroBreakContinueRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::NO_ZERO_BREAK;

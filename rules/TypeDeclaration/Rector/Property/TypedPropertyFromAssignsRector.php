@@ -14,6 +14,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -61,6 +62,11 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @api
      * @var string
      */
@@ -75,7 +81,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
      * @var bool
      */
     private $inlinePublic = \false;
-    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
@@ -83,6 +89,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
         $this->reflectionResolver = $reflectionResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->valueResolver = $valueResolver;
     }
     public function configure(array $configuration) : void
     {

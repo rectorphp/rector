@@ -12,6 +12,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -29,9 +30,15 @@ final class MoneyFormatToNumberFormatRector extends AbstractRector implements Mi
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver)
     {
         $this->argsAnalyzer = $argsAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function provideMinPhpVersion() : int
     {
