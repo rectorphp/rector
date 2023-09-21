@@ -26,20 +26,16 @@ final class ControllerClassMethodManipulator
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function isControllerClassMethodWithBehaviorAnnotation(Class_ $class, ClassMethod $classMethod) : bool
-    {
-        if (!$this->isControllerClassMethod($class, $classMethod)) {
-            return \false;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByType(GenericTagValueNode::class);
-    }
-    private function isControllerClassMethod(Class_ $class, ClassMethod $classMethod) : bool
+    public function isControllerClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        return $this->hasParentClassController($class);
+        if (!$this->hasParentClassController($class)) {
+            return \false;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByType(GenericTagValueNode::class);
     }
     private function hasParentClassController(Class_ $class) : bool
     {
