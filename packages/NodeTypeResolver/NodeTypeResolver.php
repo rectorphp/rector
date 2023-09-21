@@ -247,7 +247,7 @@ final class NodeTypeResolver
              *  if (!empty($parts['host'])) { }
              */
             $variableType = $scope->getNativeType($expr->var);
-            if (!$variableType instanceof ArrayType || !$variableType->getItemType() instanceof MixedType) {
+            if (!$variableType instanceof MixedType && (!$variableType instanceof ArrayType || !$variableType->getItemType() instanceof MixedType)) {
                 $type = $scope->getType($expr);
             }
         }
