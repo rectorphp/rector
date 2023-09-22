@@ -6,6 +6,7 @@ namespace Rector\Symfony\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -81,10 +82,7 @@ CODE_SAMPLE
     private function resolveCommandNameFromSetName(Class_ $class) : ?Expr
     {
         $configureClassMethod = $class->getMethod('configure');
-        if (!$configureClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($configureClassMethod->stmts === null) {
+        if (!$configureClassMethod instanceof ClassMethod || $configureClassMethod->stmts === null) {
             return null;
         }
         foreach ($configureClassMethod->stmts as $key => $stmt) {
@@ -95,17 +93,31 @@ CODE_SAMPLE
                 continue;
             }
             $methodCall = $stmt->expr;
-            if (!$this->isName($methodCall->name, 'setName')) {
-                continue;
+            if ($methodCall->var instanceof Variable) {
+                return $this->resolveFromNonFluentMethodCall($methodCall, $configureClassMethod, $key);
             }
-            if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
-                continue;
-            }
-            $commandNameEpxr = $methodCall->getArgs()[0]->value;
-            unset($configureClassMethod->stmts[$key]);
-            return $commandNameEpxr;
+            $expr = null;
+            $this->traverseNodesWithCallable($stmt, function (Node $node) use(&$expr) {
+                if ($node instanceof MethodCall && $this->isName($node->name, 'setName')) {
+                    $expr = $node->getArgs()[0]->value;
+                    // remove nested call
+                    return $node->var;
+                }
+                return null;
+            });
+            return $expr;
         }
         return null;
+    }
+    private function resolveFromNonFluentMethodCall(MethodCall $methodCall, ClassMethod $classMethod, int $key) : ?Expr
+    {
+        if (!$this->isName($methodCall->name, 'setName')) {
+            return null;
+        }
+        $expr = $methodCall->getArgs()[0]->value;
+        // cleanup fluent call
+        unset($classMethod->stmts[$key]);
+        return $expr;
     }
     private function createStaticProtectedPropertyWithDefault(string $name, Node $node) : Property
     {
