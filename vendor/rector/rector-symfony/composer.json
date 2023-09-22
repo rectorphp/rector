@@ -14,7 +14,7 @@
         "phpunit\/phpunit": "^10.3",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.7",
-        "rector\/rector-src": "dev-tv-narrow-abstract-10",
+        "rector\/rector-src": "dev-main",
         "symfony\/config": "^6.3",
         "symfony\/dependency-injection": "^6.3",
         "symfony\/routing": "^6.2",
