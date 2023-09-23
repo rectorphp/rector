@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -34,10 +35,16 @@ final class MakeEntitySetterNullabilityInSyncWithPropertyRector extends Abstract
      * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
-    public function __construct(SetterClassMethodAnalyzer $setterClassMethodAnalyzer, DoctrineDocBlockResolver $doctrineDocBlockResolver)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    public function __construct(SetterClassMethodAnalyzer $setterClassMethodAnalyzer, DoctrineDocBlockResolver $doctrineDocBlockResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->setterClassMethodAnalyzer = $setterClassMethodAnalyzer;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {

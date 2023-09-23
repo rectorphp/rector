@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,11 +19,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var ObjectType[]
      */
     private $definitionObjectTypes = [];
-    public function __construct()
+    public function __construct(ValueResolver $valueResolver)
     {
+        $this->valueResolver = $valueResolver;
         $this->definitionObjectTypes = [new ObjectType('Symfony\\Component\\DependencyInjection\\Alias'), new ObjectType('Symfony\\Component\\DependencyInjection\\Definition')];
     }
     public function getRuleDefinition() : RuleDefinition

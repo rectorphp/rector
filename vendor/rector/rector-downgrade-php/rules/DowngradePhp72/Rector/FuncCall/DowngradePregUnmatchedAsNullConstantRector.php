@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer;
 use Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner;
@@ -40,14 +41,20 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     private $regexFuncAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @see https://www.php.net/manual/en/function.preg-match.php
      * @var string
      */
     private const UNMATCHED_NULL_FLAG = 'PREG_UNMATCHED_AS_NULL';
-    public function __construct(BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer)
+    public function __construct(BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->bitwiseFlagCleaner = $bitwiseFlagCleaner;
         $this->regexFuncAnalyzer = $regexFuncAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return array<class-string<Node>>

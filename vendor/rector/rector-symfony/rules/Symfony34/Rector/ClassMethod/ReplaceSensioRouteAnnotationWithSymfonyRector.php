@@ -51,7 +51,7 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
-    private $findDoctrineAnnotationsByClass;
+    private $phpDocNodeByTypeFinder;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
@@ -61,13 +61,13 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
      * @var string
      */
     private const SENSIO_ROUTE_NAME = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route';
-    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater, PhpDocNodeByTypeFinder $findDoctrineAnnotationsByClass, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->findDoctrineAnnotationsByClass = $findDoctrineAnnotationsByClass;
+        $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -120,7 +120,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        $sensioDoctrineAnnotationTagValueNodes = $this->findDoctrineAnnotationsByClass->findDoctrineAnnotationsByClass($phpDocInfo->getPhpDocNode(), self::SENSIO_ROUTE_NAME);
+        $sensioDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($phpDocInfo->getPhpDocNode(), self::SENSIO_ROUTE_NAME);
         // nothing to find
         if ($sensioDoctrineAnnotationTagValueNodes === []) {
             return null;

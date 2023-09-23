@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -45,6 +46,11 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
      */
     private $classAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var \PhpParser\Node\Stmt\Class_
      */
     private $subscriberClass;
@@ -52,11 +58,12 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
      * @var string
      */
     private $newInvokeMethodName;
-    public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer)
+    public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer, ValueResolver $valueResolver)
     {
         $this->messengerHelper = $messengerHelper;
         $this->classManipulator = $classManipulator;
         $this->classAnalyzer = $classAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function provideMinPhpVersion() : int
     {

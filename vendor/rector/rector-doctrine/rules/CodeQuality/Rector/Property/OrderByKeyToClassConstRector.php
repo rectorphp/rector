@@ -6,7 +6,6 @@ namespace Rector\Doctrine\CodeQuality\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
@@ -73,9 +72,6 @@ CODE_SAMPLE
             return null;
         }
         if (!isset($nodeAttribute->args[0]->value->items[0])) {
-            return null;
-        }
-        if (!$nodeAttribute->args[0]->value->items[0] instanceof ArrayItem) {
             return null;
         }
         if (!$nodeAttribute->args[0]->value->items[0]->value instanceof String_) {

@@ -18,6 +18,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,12 +34,18 @@ final class ConsoleExecuteReturnIntRector extends AbstractRector
      */
     private $terminatedNodeAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
+    public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer, ValueResolver $valueResolver)
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
