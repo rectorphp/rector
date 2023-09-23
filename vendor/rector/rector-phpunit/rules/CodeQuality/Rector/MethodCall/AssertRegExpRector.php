@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,6 +27,11 @@ final class AssertRegExpRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
     /**
      * @var string
      */
@@ -42,9 +48,10 @@ final class AssertRegExpRector extends AbstractRector
      * @var string
      */
     private const ASSERT_NOT_EQUALS = 'assertNotEquals';
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {

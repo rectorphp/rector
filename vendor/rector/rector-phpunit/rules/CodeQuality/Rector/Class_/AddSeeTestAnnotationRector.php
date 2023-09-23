@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
@@ -42,15 +43,21 @@ final class AddSeeTestAnnotationRector extends AbstractRector
      */
     private $docBlockUpdater;
     /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
      * @var string
      */
     private const SEE = 'see';
-    public function __construct(ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover, TestClassNameResolver $testClassNameResolver, DocBlockUpdater $docBlockUpdater)
+    public function __construct(ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover, TestClassNameResolver $testClassNameResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->testClassNameResolver = $testClassNameResolver;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {
