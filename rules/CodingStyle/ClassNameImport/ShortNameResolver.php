@@ -99,7 +99,7 @@ final class ShortNameResolver
     public function resolveShortClassLikeNames(File $file) : array
     {
         $newStmts = $file->getNewStmts();
-        /** @var Namespace_[] $namespaces */
+        /** @var Namespace_[]|FileWithoutNamespace[] $namespaces */
         $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
             return $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace;
         });
@@ -109,7 +109,7 @@ final class ShortNameResolver
         }
         $namespace = \current($namespaces);
         /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($namespace, ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($namespace->stmts, ClassLike::class);
         $shortClassLikeNames = [];
         foreach ($classLikes as $classLike) {
             $shortClassLikeNames[] = $this->nodeNameResolver->getShortName($classLike);
