@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -100,7 +101,7 @@ final class ShortNameResolver
         $newStmts = $file->getNewStmts();
         /** @var Namespace_[] $namespaces */
         $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_;
+            return $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace;
         });
         if (\count($namespaces) !== 1) {
             // only handle single namespace nodes
