@@ -375,7 +375,7 @@ class TypeParser
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_NULLABLE)) {
             return $this->parseNullable($tokens);
         } elseif ($tokens->tryConsumeTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
-            $type = $this->parse($tokens);
+            $type = $this->subParse($tokens);
             $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
             if ($tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
                 $type = $this->tryParseArrayOrOffsetAccess($tokens, $type);

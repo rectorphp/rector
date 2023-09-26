@@ -132,7 +132,7 @@ CODE_SAMPLE
             $values = $sensioDoctrineAnnotationTagValueNode->getValues();
             $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($values);
             // avoid adding this one
-            if ($node instanceof Class_ && $this->isSingleItemWithDefaultPath($values)) {
+            if ($node instanceof Class_ && $this->isEmptySensioRoute($values)) {
                 continue;
             }
             $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
@@ -144,8 +144,11 @@ CODE_SAMPLE
     /**
      * @param mixed[] $values
      */
-    private function isSingleItemWithDefaultPath(array $values) : bool
+    private function isEmptySensioRoute(array $values) : bool
     {
+        if (\count($values) === 0) {
+            return \true;
+        }
         if (\count($values) !== 1) {
             return \false;
         }

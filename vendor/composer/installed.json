@@ -504,8 +504,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v10.24.0",
-            "version_normalized": "10.24.0.0",
+            "version": "v10.25.0",
+            "version_normalized": "10.25.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -561,8 +561,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v10.24.0",
-            "version_normalized": "10.24.0.0",
+            "version": "v10.25.0",
+            "version_normalized": "10.25.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -858,17 +858,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.24.1",
-            "version_normalized": "1.24.1.0",
+            "version": "1.24.2",
+            "version_normalized": "1.24.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "9f854d275c2dbf84915a5c0ec9a2d17d2cd86b01"
+                "reference": "bcad8d995980440892759db0c32acae7c8e79442"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/9f854d275c2dbf84915a5c0ec9a2d17d2cd86b01",
-                "reference": "9f854d275c2dbf84915a5c0ec9a2d17d2cd86b01",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/bcad8d995980440892759db0c32acae7c8e79442",
+                "reference": "bcad8d995980440892759db0c32acae7c8e79442",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +885,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2023-09-18T12:18:02+00:00",
+            "time": "2023-09-26T12:28:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -902,7 +902,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.24.1"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.24.2"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -1873,12 +1873,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "0fe343adc98a0cbadd7d613bb6a579cb15e1b15d"
+                "reference": "d9f1f10f90a779327b0997df543e390a72f90713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0fe343adc98a0cbadd7d613bb6a579cb15e1b15d",
-                "reference": "0fe343adc98a0cbadd7d613bb6a579cb15e1b15d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/d9f1f10f90a779327b0997df543e390a72f90713",
+                "reference": "d9f1f10f90a779327b0997df543e390a72f90713",
                 "shasum": ""
             },
             "require": {
@@ -1908,7 +1908,7 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-09-23T12:10:56+00:00",
+            "time": "2023-09-26T10:02:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1944,12 +1944,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "b63fcb21a69b696165deed299530162670283e25"
+                "reference": "b4fc584fa83f9db81e7fcc9c304eedb00393427a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b63fcb21a69b696165deed299530162670283e25",
-                "reference": "b63fcb21a69b696165deed299530162670283e25",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b4fc584fa83f9db81e7fcc9c304eedb00393427a",
+                "reference": "b4fc584fa83f9db81e7fcc9c304eedb00393427a",
                 "shasum": ""
             },
             "require": {
@@ -1982,7 +1982,7 @@
                 "tomasvotruba\/unused-public": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2023-09-23T12:20:24+00:00",
+            "time": "2023-09-25T17:26:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
