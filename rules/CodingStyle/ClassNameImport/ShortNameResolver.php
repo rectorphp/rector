@@ -19,7 +19,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -61,11 +60,6 @@ final class ShortNameResolver
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    /**
-     * @var string
-     * @see https://regex101.com/r/KphLd2/1
-     */
-    private const BIG_LETTER_START_REGEX = '#^[A-Z]#';
     /**
      * @var array<string, string[]>
      */
@@ -170,7 +164,7 @@ final class ShortNameResolver
             $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', static function ($node) use(&$shortNames) {
                 if ($node instanceof PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');
-                    if (StringUtils::isMatch($shortName, self::BIG_LETTER_START_REGEX)) {
+                    if (\ucfirst($shortName) === $shortName) {
                         $shortNames[] = $shortName;
                     }
                     return null;
