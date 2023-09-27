@@ -128,7 +128,7 @@ CODE_SAMPLE
                 continue;
             }
             // readonly property cannot have default value
-            if ($classStmt->isReadonly()) {
+            if ($classStmt->isReadonly() || $class->isReadonly()) {
                 continue;
             }
             foreach ($classStmt->props as $propertyProperty) {
