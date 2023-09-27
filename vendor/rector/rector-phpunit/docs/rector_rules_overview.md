@@ -378,12 +378,12 @@ Change covers annotations with value to attribute
 - * @covers SomeClass
 - */
 +#[CoversClass(SomeClass::class)]
++#[CoversFunction('someFunction')]
  final class SomeTest extends TestCase
  {
 -    /**
--     * @covers ::someFunction
+-     * @covers ::someFunction()
 -     */
-+    #[CoversFunction('someFunction')]
      public function test()
      {
      }
@@ -479,13 +479,11 @@ Change depends annotations with value to attribute
  final class SomeTest extends TestCase
  {
      public function testOne() {}
-     public function testTwo() {}
+
 -    /**
 -     * @depends testOne
--     * @depends testTwo
 -     */
 +    #[\PHPUnit\Framework\Attributes\Depends('testOne')]
-+    #[\PHPUnit\Framework\Attributes\Depends('testTwo')]
      public function testThree(): void
      {
      }
