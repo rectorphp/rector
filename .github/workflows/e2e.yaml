@@ -33,9 +33,9 @@ jobs:
                     coverage: none
 
             -
-                run: composer install --ansi
+                run: composer require rector/rector --dev
                 working-directory: ${{ matrix.directory }}
 
             -
-                run: ../../bin/rector process --dry-run --ansi
+                run: vendor/bin/rector process --dry-run --ansi
                 working-directory: ${{ matrix.directory }}

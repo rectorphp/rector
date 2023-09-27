@@ -24,7 +24,7 @@ jobs:
             -   run: sleep 40
 
             -
-                run: composer install --ansi
+                run: composer require rector/rector --ansi
                 working-directory: e2e/reflection-union-php72
 
             -
