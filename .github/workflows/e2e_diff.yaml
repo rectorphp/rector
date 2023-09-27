@@ -33,5 +33,5 @@ jobs:
                 working-directory: ${{ matrix.directory }}
 
             -
-                run: vendor/bin/rector process --dry-run --ansi
+                run: vendor/bin/rector process --ansi
                 working-directory: ${{ matrix.directory }}
