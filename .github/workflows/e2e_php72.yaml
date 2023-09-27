@@ -1,7 +1,6 @@
 name: End to End tests on PHP 7.2
 
 on:
-    pull_request: null
     push:
         branches:
             - main

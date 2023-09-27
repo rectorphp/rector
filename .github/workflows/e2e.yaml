@@ -4,7 +4,6 @@
 name: End to End tests
 
 on:
-    pull_request: null
     push:
         branches:
             - main

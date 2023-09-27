@@ -4,7 +4,6 @@
 name: End to End tests that expect diff
 
 on:
-    pull_request: null
     push:
         branches:
             - main
@@ -34,5 +33,5 @@ jobs:
                 working-directory: ${{ matrix.directory }}
 
             -
-                run: vendor/bin/rector process --dry-run --ansi
+                run: vendor/bin/rector process --ansi
                 working-directory: ${{ matrix.directory }}
