@@ -1,7 +1,6 @@
 name: End to End global tests
 
 on:
-    pull_request: null
     push:
         branches:
             - main

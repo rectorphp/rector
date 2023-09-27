@@ -4,7 +4,6 @@
 name: End to End tests that expect diff
 
 on:
-    pull_request: null
     push:
         branches:
             - main
@@ -19,7 +18,7 @@ jobs:
                 directory:
                     - 'e2e/attributes'
 
-        name: End to end test with diff - ${{ matrix.directory }}
+        name: Tests with diffs on PHP ${{ matrix.php_version }} - ${{ matrix.directory }}
 
         steps:
             -   uses: actions/checkout@v4

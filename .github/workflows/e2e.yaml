@@ -4,7 +4,6 @@
 name: End to End tests
 
 on:
-    pull_request: null
     push:
         branches:
             - main
@@ -22,7 +21,7 @@ jobs:
                     - 'e2e/parse-php7-code'
                     - 'e2e/parse-php8-code'
 
-        name: End to end test - ${{ matrix.directory }}
+        name: Tests on PHP ${{ matrix.php_version }} - ${{ matrix.directory }}
 
         steps:
             -   uses: actions/checkout@v4
