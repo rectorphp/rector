@@ -26,8 +26,6 @@ use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
@@ -44,27 +42,16 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer
      */
     private $scopeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, CurrentFileProvider $currentFileProvider)
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeAnalyzer = $scopeAnalyzer;
-        $this->currentFileProvider = $currentFileProvider;
     }
-    public function refresh(Node $node, ?MutatingScope $mutatingScope, ?string $filePath = null) : void
+    public function refresh(Node $node, string $filePath, ?MutatingScope $mutatingScope) : void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->isRefreshable($node)) {
             return;
-        }
-        if (!\is_string($filePath)) {
-            /** @var File $file */
-            $file = $this->currentFileProvider->getFile();
-            $filePath = $file->getFilePath();
         }
         $mutatingScope = $mutatingScope instanceof MutatingScope ? $mutatingScope : $this->scopeAnalyzer->resolveScope($node, $filePath);
         if (!$mutatingScope instanceof MutatingScope) {
