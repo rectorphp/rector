@@ -123,12 +123,15 @@ CODE_SAMPLE
     }
     private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key) : bool
     {
+        if ($class->isReadonly()) {
+            return \false;
+        }
         foreach ($class->stmts as $classStmt) {
             if (!$classStmt instanceof Property) {
                 continue;
             }
             // readonly property cannot have default value
-            if ($classStmt->isReadonly() || $class->isReadonly()) {
+            if ($classStmt->isReadonly()) {
                 continue;
             }
             foreach ($classStmt->props as $propertyProperty) {
