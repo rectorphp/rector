@@ -192,11 +192,11 @@ final class FileProcessor
     }
     private function parseFileNodes(File $file) : void
     {
-        // store tokens by absolute path, so we don't have to print them right now
-        $stmtsAndTokens = $this->rectorParser->parseFileToStmtsAndTokens($file->getFilePath());
+        // store tokens by original file content, so we don't have to print them right now
+        $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent());
         $oldStmts = $stmtsAndTokens->getStmts();
         $oldTokens = $stmtsAndTokens->getTokens();
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts);
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file->getFilePath(), $oldStmts);
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
 }
