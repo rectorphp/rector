@@ -4,8 +4,16 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\Attribute;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -62,18 +70,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Attribute::class];
+        return [Class_::class, Property::class, Param::class, ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class, Interface_::class];
     }
     /**
-     * @param Attribute $node
+     * @param Class_|Property|Param|ClassMethod|Function_|Closure|ArrowFunction|Interface_ $node
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->attrGroups === []) {
+            return null;
+        }
+        $hasChanged = \false;
         foreach ($this->attributeKeysToClassConstFetches as $attributeKeyToClassConstFetch) {
-            if (!$this->isName($node->name, $attributeKeyToClassConstFetch->getAttributeClass())) {
+            foreach ($node->attrGroups as $attrGroup) {
+                if ($this->processToClassConstFetch($attrGroup, $attributeKeyToClassConstFetch)) {
+                    $hasChanged = \true;
+                }
+            }
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration) : void
+    {
+        Assert::allIsAOf($configuration, AttributeKeyToClassConstFetch::class);
+        $this->attributeKeysToClassConstFetches = $configuration;
+    }
+    private function processToClassConstFetch(AttributeGroup $attributeGroup, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch) : bool
+    {
+        $hasChanged = \false;
+        foreach ($attributeGroup->attrs as $attribute) {
+            if (!$this->isName($attribute->name, $attributeKeyToClassConstFetch->getAttributeClass())) {
                 continue;
             }
-            foreach ($node->args as $arg) {
+            foreach ($attribute->args as $arg) {
                 $argName = $arg->name;
                 if (!$argName instanceof Identifier) {
                     continue;
@@ -87,17 +122,10 @@ CODE_SAMPLE
                     continue;
                 }
                 $arg->value = $this->nodeFactory->createClassConstFetch($attributeKeyToClassConstFetch->getConstantClass(), $constName);
-                return $node;
+                $hasChanged = \true;
+                continue 2;
             }
         }
-        return null;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration) : void
-    {
-        Assert::allIsAOf($configuration, AttributeKeyToClassConstFetch::class);
-        $this->attributeKeysToClassConstFetches = $configuration;
+        return $hasChanged;
     }
 }

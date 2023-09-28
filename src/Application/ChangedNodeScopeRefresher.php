@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\Application;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
@@ -20,7 +18,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\MutatingScope;
@@ -57,13 +54,6 @@ final class ChangedNodeScopeRefresher
         if (!$mutatingScope instanceof MutatingScope) {
             $errorMessage = \sprintf('Node "%s" with is missing scope required for scope refresh', \get_class($node));
             throw new ShouldNotHappenException($errorMessage);
-        }
-        // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
-        // so we need to somehow get a parent scope that is already in the same place the $node is
-        if ($node instanceof Attribute) {
-            // we'll have to fake-traverse 2 layers up, as PHPStan skips Scope for AttributeGroups and consequently Attributes
-            $attributeGroup = new AttributeGroup([$node]);
-            $node = new Property(0, [], [], null, [$attributeGroup]);
         }
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
