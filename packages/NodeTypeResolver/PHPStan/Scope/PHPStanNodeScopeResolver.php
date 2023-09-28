@@ -207,7 +207,7 @@ final class PHPStanNodeScopeResolver
         $this->nodeScopeResolver->processNodes($stmts, $scope, $nodeCallback);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
-        $nodeTraverser->addVisitor(new ExprScopeFromStmtNodeVisitor($scope));
+        $nodeTraverser->addVisitor(new ExprScopeFromStmtNodeVisitor($this, $filePath, $scope));
         $nodeTraverser->traverse($stmts);
         return $stmts;
     }
