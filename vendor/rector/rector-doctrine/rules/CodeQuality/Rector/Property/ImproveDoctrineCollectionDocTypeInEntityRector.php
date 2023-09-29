@@ -180,7 +180,7 @@ CODE_SAMPLE
             if (!$collectionObjectType instanceof Type) {
                 continue;
             }
-            if ((\is_array($classMethod->params) || $classMethod->params instanceof \Countable ? \count($classMethod->params) : 0) !== 1) {
+            if (\count($classMethod->params) !== 1) {
                 continue;
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
