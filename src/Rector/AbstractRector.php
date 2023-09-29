@@ -35,6 +35,8 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
  * @property-read ValueResolver $valueResolver; @deprecated The parent AbstractRector dependency is deprecated and will be removed. Use dependency injection in your own rule instead.
  *
  * @property-read BetterNodeFinder $betterNodeFinder; @deprecated The parent AbstractRector dependency is deprecated and will be removed. Use dependency injection in your own rule instead.
+ *
+ * @property-read StaticTypeMapper $staticTypeMapper; @deprecated The parent AbstractRector dependency is deprecated and will be removed. Use dependency injection in your own rule instead.
  */
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
@@ -60,10 +62,6 @@ CODE_SAMPLE;
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     protected $nodeTypeResolver;
-    /**
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
-     */
-    protected $staticTypeMapper;
     /**
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
@@ -131,7 +129,6 @@ CODE_SAMPLE;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->skipper = $skipper;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
@@ -140,6 +137,7 @@ CODE_SAMPLE;
         $this->deprecatedDependencies['phpDocInfoFactory'] = $phpDocInfoFactory;
         $this->deprecatedDependencies['valueResolver'] = $valueResolver;
         $this->deprecatedDependencies['betterNodeFinder'] = $betterNodeFinder;
+        $this->deprecatedDependencies['staticTypeMapper'] = $staticTypeMapper;
     }
     /**
      * @return Node[]|null

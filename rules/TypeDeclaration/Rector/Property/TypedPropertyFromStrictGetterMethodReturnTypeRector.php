@@ -20,6 +20,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -60,7 +61,12 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver, ConstructorAssignDetector $constructorAssignDetector, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver, ConstructorAssignDetector $constructorAssignDetector, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
@@ -68,6 +74,7 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
         $this->reflectionResolver = $reflectionResolver;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {

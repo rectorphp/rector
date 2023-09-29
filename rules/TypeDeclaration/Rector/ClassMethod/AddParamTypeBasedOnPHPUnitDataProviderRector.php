@@ -27,6 +27,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -55,6 +56,11 @@ final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
      */
     private $betterNodeFinder;
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
      * @var string
      */
     private const ERROR_MESSAGE = 'Adds param type declaration based on PHPUnit provider return type declaration';
@@ -63,12 +69,13 @@ final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
      * @var string
      */
     private const METHOD_NAME_REGEX = '#^(?<method_name>\\w+)(\\(\\))?#';
-    public function __construct(TypeFactory $typeFactory, TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
+    public function __construct(TypeFactory $typeFactory, TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper)
     {
         $this->typeFactory = $typeFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -276,8 +283,8 @@ CODE_SAMPLE
                 continue;
             }
             $paramTypes = [];
-            foreach ($dataProviderPhpDocTagNodes as $phpDocTagNode) {
-                $paramTypes[] = $this->inferParam($class, $param, $phpDocTagNode);
+            foreach ($dataProviderPhpDocTagNodes as $dataProviderPhpDocTagNode) {
+                $paramTypes[] = $this->inferParam($class, $param, $dataProviderPhpDocTagNode);
             }
             $paramTypeDeclaration = TypeCombinator::union(...$paramTypes);
             if ($paramTypeDeclaration instanceof MixedType) {

@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,9 +23,18 @@ use RectorPrefix202309\Webmozart\Assert\Assert;
 final class AddPropertyTypeDeclarationRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
      * @var AddPropertyTypeDeclaration[]
      */
     private $addPropertyTypeDeclarations = [];
+    public function __construct(StaticTypeMapper $staticTypeMapper)
+    {
+        $this->staticTypeMapper = $staticTypeMapper;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         $configuration = [new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType())];

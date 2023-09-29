@@ -21,6 +21,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -67,6 +68,11 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
      */
     private $valueResolver;
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
      * @api
      * @var string
      */
@@ -81,7 +87,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
      * @var bool
      */
     private $inlinePublic = \false;
-    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
+    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
@@ -90,6 +96,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
         $this->reflectionResolver = $reflectionResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->valueResolver = $valueResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function configure(array $configuration) : void
     {

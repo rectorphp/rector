@@ -320,6 +320,7 @@ final class LazyContainerFactory
                 $container->get(NodeFactory::class),
                 // @deprecated, use injected service in your Rector rules
                 $container->get(PhpDocInfoFactory::class),
+                // @deprecated, use injected service in your Rector rules
                 $container->get(StaticTypeMapper::class),
                 $container->get(Skipper::class),
                 // @deprecated, use injected service in your Rector rules

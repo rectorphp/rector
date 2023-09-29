@@ -27,6 +27,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202309\Webmozart\Assert\Assert;
@@ -56,6 +57,11 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private $betterStandardPrinter;
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
      * @var ArgumentAdder[]
      */
     private $addedArguments = [];
@@ -63,12 +69,13 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, StaticTypeMapper $staticTypeMapper)
     {
         $this->argumentAddingScope = $argumentAddingScope;
         $this->changedArgumentsDetector = $changedArgumentsDetector;
         $this->astResolver = $astResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {

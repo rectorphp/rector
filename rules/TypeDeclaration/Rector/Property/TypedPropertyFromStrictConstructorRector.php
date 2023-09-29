@@ -18,6 +18,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeAnalyzer\PropertyTypeDefaultValueAnalyzer;
@@ -75,7 +76,12 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, ReflectionResolver $reflectionResolver, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PropertyTypeDefaultValueAnalyzer $propertyTypeDefaultValueAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, ReflectionResolver $reflectionResolver, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PropertyTypeDefaultValueAnalyzer $propertyTypeDefaultValueAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
@@ -86,6 +92,7 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->propertyTypeDefaultValueAnalyzer = $propertyTypeDefaultValueAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {
