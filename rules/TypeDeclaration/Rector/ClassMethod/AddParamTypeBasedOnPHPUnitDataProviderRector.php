@@ -17,6 +17,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -132,11 +133,11 @@ CODE_SAMPLE
             if ($classMethod->getParams() === []) {
                 continue;
             }
-            $dataProviderPhpDocTagNode = $this->resolveDataProviderPhpDocTagNode($classMethod);
-            if (!$dataProviderPhpDocTagNode instanceof PhpDocTagNode) {
+            $dataProviderPhpDocTagNodes = $this->resolveDataProviderPhpDocTagNode($classMethod);
+            if ($dataProviderPhpDocTagNodes === []) {
                 return null;
             }
-            $hasClassMethodChanged = $this->refactorClassMethod($classMethod, $node, $dataProviderPhpDocTagNode);
+            $hasClassMethodChanged = $this->refactorClassMethod($classMethod, $node, $dataProviderPhpDocTagNodes);
             if ($hasClassMethodChanged) {
                 $hasChanged = \true;
             }
@@ -253,22 +254,32 @@ CODE_SAMPLE
         }
         return $paramOnPositionTypes;
     }
-    private function resolveDataProviderPhpDocTagNode(ClassMethod $classMethod) : ?PhpDocTagNode
+    /**
+     * @return array<PhpDocTagNode>
+     */
+    private function resolveDataProviderPhpDocTagNode(ClassMethod $classMethod) : array
     {
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {
-            return null;
+            return [];
         }
-        return $classMethodPhpDocInfo->getByName('@dataProvider');
+        return $classMethodPhpDocInfo->getTagsByName('@dataProvider');
     }
-    private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, PhpDocTagNode $dataProviderPhpDocTagNode) : bool
+    /**
+     * @param array<PhpDocTagNode> $dataProviderPhpDocTagNodes
+     */
+    private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, array $dataProviderPhpDocTagNodes) : bool
     {
         $hasChanged = \false;
         foreach ($classMethod->getParams() as $param) {
             if ($param->type instanceof Node) {
                 continue;
             }
-            $paramTypeDeclaration = $this->inferParam($class, $param, $dataProviderPhpDocTagNode);
+            $paramTypes = [];
+            foreach ($dataProviderPhpDocTagNodes as $phpDocTagNode) {
+                $paramTypes[] = $this->inferParam($class, $param, $phpDocTagNode);
+            }
+            $paramTypeDeclaration = TypeCombinator::union(...$paramTypes);
             if ($paramTypeDeclaration instanceof MixedType) {
                 continue;
             }

@@ -195,6 +195,9 @@ final class PhpDocInfo
     {
         return (bool) $this->getTagsByName($name);
     }
+    /**
+     * @api
+     */
     public function getByName(string $name) : ?Node
     {
         return $this->getTagsByName($name)[0] ?? null;
