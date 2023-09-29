@@ -15,6 +15,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver;
 use Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -44,12 +45,18 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector implements 
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->columnPropertyTypeResolver = $columnPropertyTypeResolver;
         $this->nullabilityColumnPropertyTypeResolver = $nullabilityColumnPropertyTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {

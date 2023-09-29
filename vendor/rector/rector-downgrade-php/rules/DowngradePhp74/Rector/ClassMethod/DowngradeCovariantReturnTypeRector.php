@@ -27,6 +27,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -72,7 +73,12 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, UnionTypeAnalyzer $unionTypeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, UnionTypeAnalyzer $unionTypeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->returnTagRemover = $returnTagRemover;
@@ -81,6 +87,7 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {

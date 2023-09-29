@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Doctrine\TypeAnalyzer\DoctrineCollectionTypeAnalyzer;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,10 +31,16 @@ final class TypedPropertyFromDoctrineCollectionRector extends AbstractRector imp
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(DoctrineCollectionTypeAnalyzer $doctrineCollectionTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(DoctrineCollectionTypeAnalyzer $doctrineCollectionTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->doctrineCollectionTypeAnalyzer = $doctrineCollectionTypeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {

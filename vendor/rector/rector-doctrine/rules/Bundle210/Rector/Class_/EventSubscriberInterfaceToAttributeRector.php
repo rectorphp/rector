@@ -128,7 +128,6 @@ CODE_SAMPLE
             if (!$expression instanceof Return_ || !$expression->expr instanceof Array_) {
                 continue;
             }
-            $arguments = [];
             $arguments = $this->parseArguments($expression->expr);
             $this->addAttribute($arguments);
         }

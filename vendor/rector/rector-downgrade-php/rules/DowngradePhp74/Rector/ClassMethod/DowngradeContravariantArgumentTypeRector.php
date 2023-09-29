@@ -16,6 +16,7 @@ use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -49,15 +50,21 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramAnalyzer = $paramAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     /**
      * @return array<class-string<Node>>

@@ -146,7 +146,7 @@ CODE_SAMPLE
      */
     private function isEmptySensioRoute(array $values) : bool
     {
-        if (\count($values) === 0) {
+        if ($values === []) {
             return \true;
         }
         if (\count($values) !== 1) {
