@@ -10,12 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\PhpParser\AstResolver;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
@@ -38,13 +36,13 @@ final class FirstClassCallableRector extends AbstractScopeAwareRector implements
     private $arrayCallableMethodMatcher;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $astResolver;
-    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, AstResolver $astResolver)
+    private $reflectionProvider;
+    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider)
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
-        $this->astResolver = $astResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -120,17 +118,15 @@ CODE_SAMPLE
         if ($classReflection->getName() === $fullyQualifiedObjectType->getClassName()) {
             return \false;
         }
-        $class = $this->astResolver->resolveClassFromName($arrayCallable->getClass());
-        if (!$class instanceof ClassLike) {
+        $arrayClassReflection = $this->reflectionProvider->getClass($arrayCallable->getClass());
+        // we're unable to find it
+        if (!$arrayClassReflection->hasMethod($arrayCallable->getMethod())) {
             return \false;
         }
-        $classMethod = $class->getMethod($arrayCallable->getMethod());
-        if (!$classMethod instanceof ClassMethod) {
-            return \false;
-        }
-        if (!$classMethod->isStatic()) {
+        $extendedMethodReflection = $arrayClassReflection->getMethod($arrayCallable->getMethod(), $scope);
+        if (!$extendedMethodReflection->isStatic()) {
             return \true;
         }
-        return !$classMethod->isPublic();
+        return !$extendedMethodReflection->isPublic();
     }
 }
