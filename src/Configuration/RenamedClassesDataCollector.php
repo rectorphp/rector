@@ -11,9 +11,6 @@ final class RenamedClassesDataCollector implements ResetableInterface
      * @var array<string, string>
      */
     private $oldToNewClasses = [];
-    /**
-     * @api for fast tests with single container
-     */
     public function reset() : void
     {
         $this->oldToNewClasses = [];

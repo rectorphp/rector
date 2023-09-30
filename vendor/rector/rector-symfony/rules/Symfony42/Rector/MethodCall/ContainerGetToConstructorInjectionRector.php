@@ -5,10 +5,15 @@ namespace Rector\Symfony\Symfony42\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
@@ -113,6 +118,23 @@ CODE_SAMPLE
         foreach ($propertyMetadatas as $propertyMetadata) {
             $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
         }
+        $this->decorateCommandConstructor($class);
         return $node;
+    }
+    private function decorateCommandConstructor(Class_ $class) : void
+    {
+        // special case for command to keep parent constructor call
+        if (!$this->isObjectType($class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            return;
+        }
+        $constuctClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constuctClassMethod instanceof ClassMethod) {
+            return;
+        }
+        // empty stmts? add parent::__construct() to setup command
+        if (\count((array) $constuctClassMethod->stmts) === 0) {
+            $parentConstructStaticCall = new StaticCall(new Name('parent'), '__construct');
+            $constuctClassMethod->stmts[] = new Expression($parentConstructStaticCall);
+        }
     }
 }

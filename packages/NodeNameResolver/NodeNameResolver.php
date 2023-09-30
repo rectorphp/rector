@@ -137,6 +137,9 @@ final class NodeNameResolver
         }
         return (string) $node->name;
     }
+    /**
+     * @api
+     */
     public function areNamesEqual(Node $firstNode, Node $secondNode) : bool
     {
         $secondResolvedName = $this->getName($secondNode);
