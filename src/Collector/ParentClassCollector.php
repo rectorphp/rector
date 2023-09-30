@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Collector;
+namespace Rector\Core\Collector;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
