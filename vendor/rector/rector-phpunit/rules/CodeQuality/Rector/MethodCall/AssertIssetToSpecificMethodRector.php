@@ -9,15 +9,12 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ClassReflectionAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -39,14 +36,9 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
     private $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
+     * @var \Rector\Core\Reflection\ClassReflectionAnalyzer
      */
-    private $astResolver;
-    /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
+    private $classReflectionAnalyzer;
     /**
      * @var string
      */
@@ -55,12 +47,11 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
      * @var string
      */
     private const ASSERT_FALSE = 'assertFalse';
-    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, AstResolver $astResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->astResolver = $astResolver;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -121,18 +112,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         if ($classReflection->hasMethod('__isset')) {
             return \true;
         }
-        // reflection->getParents() got empty array when
-        // extends class not found by PHPStan
-        $className = $classReflection->getName();
-        $class = $this->astResolver->resolveClassFromName($className);
-        if (!$class instanceof Class_) {
+        if (!$classReflection->isClass()) {
             return \false;
         }
-        if (!$class->extends instanceof FullyQualified) {
-            return \false;
-        }
-        // if parent class not detected by PHPStan, assume it has __isset
-        return !$this->reflectionProvider->hasClass($class->extends->toString());
+        return $this->classReflectionAnalyzer->resolveParentClassName($classReflection) !== null;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
