@@ -2348,6 +2348,7 @@ return array(
     'Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddPropertyTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => $baseDir . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
+    'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => $baseDir . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
     'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => $baseDir . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
     'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => $vendorDir . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
     'Rector\\VendorLocker\\Exception\\UnresolvableClassException' => $baseDir . '/packages/VendorLocker/Exception/UnresolvableClassException.php',

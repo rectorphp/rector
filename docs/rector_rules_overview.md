@@ -6230,7 +6230,7 @@ Adds param type declaration based on PHPUnit provider return type declaration
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php)
 
 ```diff
- use PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
 
  final class SomeTest extends TestCase
  {
