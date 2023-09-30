@@ -146,29 +146,12 @@ final class ArrayTypeAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        /** @var ClassLike $classLike */
-        $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
-        $propertyName = $this->nodeNameResolver->getName($expr->name);
-        if ($propertyName === null) {
-            return \false;
-        }
-        // A. local property
-        $property = $classLike->getProperty($propertyName);
-        if ($property instanceof Property) {
-            $propertyProperty = $property->props[0];
-            return $propertyProperty->default instanceof Array_;
-        }
-        // B. another object property
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if ($phpPropertyReflection instanceof PhpPropertyReflection) {
             $reflectionProperty = $phpPropertyReflection->getNativeReflection();
             $betterReflection = $reflectionProperty->getBetterReflection();
             $defaultValueExpr = $betterReflection->getDefaultValueExpression();
-            if (!$defaultValueExpr instanceof Expr) {
-                return \false;
-            }
-            $defaultValueType = $this->nodeTypeResolver->getType($defaultValueExpr);
-            return $defaultValueType->isArray()->yes();
+            return $defaultValueExpr instanceof Array_;
         }
         return \false;
     }
