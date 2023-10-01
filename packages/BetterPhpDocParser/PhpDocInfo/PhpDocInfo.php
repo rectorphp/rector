@@ -219,7 +219,7 @@ final class PhpDocInfo
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
     /**
-     * @api used in tests
+     * @api used in tests, doctrine
      */
     public function hasByAnnotationClass(string $class) : bool
     {
@@ -399,6 +399,14 @@ final class PhpDocInfo
         });
         return $classNames;
     }
+    /**
+     * @param class-string $desiredClass
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    public function findByAnnotationClass(string $desiredClass) : array
+    {
+        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
+    }
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : ?string
     {
         foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
@@ -408,14 +416,6 @@ final class PhpDocInfo
             }
         }
         return null;
-    }
-    /**
-     * @param class-string $desiredClass
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function findByAnnotationClass(string $desiredClass) : array
-    {
-        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type
