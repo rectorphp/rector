@@ -108,6 +108,7 @@ final class FileProcessor
             return new FileProcessResult([$parsingSystemError], null, []);
         }
         $fileHasChanged = \false;
+        $filePath = $file->getFilePath();
         // 2. change nodes with Rectors
         $rectorWithLineChanges = null;
         do {
@@ -116,12 +117,12 @@ final class FileProcessor
             // collect data
             $fileCollectedData = $configuration->isCollectors() ? $this->collectorProcessor->process($newStmts) : [];
             // apply post rectors
-            $postNewStmts = $this->postFileProcessor->traverse($newStmts);
+            $postNewStmts = $this->postFileProcessor->traverse($newStmts, $filePath);
             // this is needed for new tokens added in "afterTraverse()"
             $file->changeNewStmts($postNewStmts);
             // 3. print to file or string
             // important to detect if file has changed
-            $this->printFile($file, $configuration);
+            $this->printFile($file, $configuration, $filePath);
             $fileHasChangedInCurrentPass = $file->hasChanged();
             if ($fileHasChangedInCurrentPass) {
                 $file->setFileDiff($this->fileDiffFactory->createTempFileDiff($file));
@@ -131,7 +132,7 @@ final class FileProcessor
         } while ($fileHasChangedInCurrentPass);
         // 5. add as cacheable if not changed at all
         if (!$fileHasChanged) {
-            $this->changedFilesDetector->addCachableFile($file->getFilePath());
+            $this->changedFilesDetector->addCachableFile($filePath);
         }
         if ($configuration->shouldShowDiffs() && $rectorWithLineChanges !== null) {
             $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges);
@@ -160,7 +161,7 @@ final class FileProcessor
         }
         return null;
     }
-    private function printFile(File $file, Configuration $configuration) : void
+    private function printFile(File $file, Configuration $configuration, string $filePath) : void
     {
         // only save to string first, no need to print to file when not needed
         $newContent = $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file);
@@ -188,7 +189,7 @@ final class FileProcessor
         if (!$file->hasChanged()) {
             return;
         }
-        $this->formatPerservingPrinter->dumpFile($file->getFilePath(), $newContent);
+        $this->formatPerservingPrinter->dumpFile($filePath, $newContent);
     }
     private function parseFileNodes(File $file) : void
     {
