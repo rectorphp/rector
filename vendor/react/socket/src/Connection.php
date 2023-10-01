@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix202309\React\Socket;
+namespace RectorPrefix202310\React\Socket;
 
-use RectorPrefix202309\Evenement\EventEmitter;
-use RectorPrefix202309\React\EventLoop\LoopInterface;
-use RectorPrefix202309\React\Stream\DuplexResourceStream;
-use RectorPrefix202309\React\Stream\Util;
-use RectorPrefix202309\React\Stream\WritableResourceStream;
-use RectorPrefix202309\React\Stream\WritableStreamInterface;
+use RectorPrefix202310\Evenement\EventEmitter;
+use RectorPrefix202310\React\EventLoop\LoopInterface;
+use RectorPrefix202310\React\Stream\DuplexResourceStream;
+use RectorPrefix202310\React\Stream\Util;
+use RectorPrefix202310\React\Stream\WritableResourceStream;
+use RectorPrefix202310\React\Stream\WritableStreamInterface;
 /**
  * The actual connection implementation for ConnectionInterface
  *
@@ -128,7 +128,7 @@ class Connection extends EventEmitter implements ConnectionInterface
         if ($this->unix) {
             // remove trailing colon from address for HHVM < 3.19: https://3v4l.org/5C1lo
             // note that technically ":" is a valid address, so keep this in place otherwise
-            if (\substr($address, -1) === ':' && \defined('RectorPrefix202309\\HHVM_VERSION_ID') && \RectorPrefix202309\HHVM_VERSION_ID < 31900) {
+            if (\substr($address, -1) === ':' && \defined('RectorPrefix202310\\HHVM_VERSION_ID') && \RectorPrefix202310\HHVM_VERSION_ID < 31900) {
                 $address = (string) \substr($address, 0, -1);
                 // @codeCoverageIgnore
             }

@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202309\React\Socket;
+namespace RectorPrefix202310\React\Socket;
 
-use RectorPrefix202309\React\Dns\Config\Config as DnsConfig;
-use RectorPrefix202309\React\Dns\Resolver\Factory as DnsFactory;
-use RectorPrefix202309\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix202309\React\EventLoop\LoopInterface;
+use RectorPrefix202310\React\Dns\Config\Config as DnsConfig;
+use RectorPrefix202310\React\Dns\Resolver\Factory as DnsFactory;
+use RectorPrefix202310\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix202310\React\EventLoop\LoopInterface;
 /**
  * The `Connector` class is the main class in this package that implements the
  * `ConnectorInterface` and allows you to create streaming connections.
@@ -125,7 +125,7 @@ final class Connector implements ConnectorInterface
             $scheme = (string) \substr($uri, 0, \strpos($uri, '://'));
         }
         if (!isset($this->connectors[$scheme])) {
-            return \RectorPrefix202309\React\Promise\reject(new \RuntimeException('No connector available for URI scheme "' . $scheme . '" (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22)));
+            return \RectorPrefix202310\React\Promise\reject(new \RuntimeException('No connector available for URI scheme "' . $scheme . '" (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22)));
         }
         return $this->connectors[$scheme]->connect($uri);
     }

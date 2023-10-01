@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202309\OndraM\CiDetector\Ci;
+namespace RectorPrefix202310\OndraM\CiDetector\Ci;
 
-use RectorPrefix202309\OndraM\CiDetector\CiDetector;
-use RectorPrefix202309\OndraM\CiDetector\Env;
-use RectorPrefix202309\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202310\OndraM\CiDetector\CiDetector;
+use RectorPrefix202310\OndraM\CiDetector\Env;
+use RectorPrefix202310\OndraM\CiDetector\TrinaryLogic;
 class Drone extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

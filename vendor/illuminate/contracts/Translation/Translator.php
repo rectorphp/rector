@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202309\Illuminate\Contracts\Translation;
+namespace RectorPrefix202310\Illuminate\Contracts\Translation;
 
 interface Translator
 {

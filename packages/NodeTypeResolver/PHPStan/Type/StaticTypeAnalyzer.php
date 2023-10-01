@@ -44,26 +44,10 @@ final class StaticTypeAnalyzer
         if ($type instanceof ConstantScalarType && !$type instanceof NullType) {
             return (bool) $type->getValue();
         }
-        if ($this->isScalarType($type)) {
+        if ($type->isScalar()->yes()) {
             return \false;
         }
         return $this->isAlwaysTruableUnionType($type);
-    }
-    private function isScalarType(Type $type) : bool
-    {
-        if ($type instanceof NullType) {
-            return \true;
-        }
-        if ($type->isBoolean()->yes()) {
-            return \true;
-        }
-        if ($type->isString()->yes()) {
-            return \true;
-        }
-        if ($type->isInteger()->yes()) {
-            return \true;
-        }
-        return $type->isFloat()->yes();
     }
     private function isAlwaysTruableUnionType(Type $type) : bool
     {

@@ -5,7 +5,7 @@ namespace Rector\Core\ValueObject;
 
 use PHPStan\Collectors\CollectedData;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use RectorPrefix202309\Webmozart\Assert\Assert;
+use RectorPrefix202310\Webmozart\Assert\Assert;
 final class Configuration
 {
     /**

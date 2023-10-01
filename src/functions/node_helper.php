@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202309;
+namespace RectorPrefix202310;
 
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;

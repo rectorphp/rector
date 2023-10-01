@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202309\Symfony\Component\Process;
+namespace RectorPrefix202310\Symfony\Component\Process;
 
-use RectorPrefix202309\Symfony\Component\Process\Exception\InvalidArgumentException;
-use RectorPrefix202309\Symfony\Component\Process\Exception\LogicException;
-use RectorPrefix202309\Symfony\Component\Process\Exception\ProcessFailedException;
-use RectorPrefix202309\Symfony\Component\Process\Exception\ProcessSignaledException;
-use RectorPrefix202309\Symfony\Component\Process\Exception\ProcessTimedOutException;
-use RectorPrefix202309\Symfony\Component\Process\Exception\RuntimeException;
-use RectorPrefix202309\Symfony\Component\Process\Pipes\PipesInterface;
-use RectorPrefix202309\Symfony\Component\Process\Pipes\UnixPipes;
-use RectorPrefix202309\Symfony\Component\Process\Pipes\WindowsPipes;
+use RectorPrefix202310\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202310\Symfony\Component\Process\Exception\LogicException;
+use RectorPrefix202310\Symfony\Component\Process\Exception\ProcessFailedException;
+use RectorPrefix202310\Symfony\Component\Process\Exception\ProcessSignaledException;
+use RectorPrefix202310\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use RectorPrefix202310\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix202310\Symfony\Component\Process\Pipes\PipesInterface;
+use RectorPrefix202310\Symfony\Component\Process\Pipes\UnixPipes;
+use RectorPrefix202310\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.

@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202309\React\Dns\Query;
+namespace RectorPrefix202310\React\Dns\Query;
 
-use RectorPrefix202309\React\Dns\Config\HostsFile;
-use RectorPrefix202309\React\Dns\Model\Message;
-use RectorPrefix202309\React\Dns\Model\Record;
-use RectorPrefix202309\React\Promise;
+use RectorPrefix202310\React\Dns\Config\HostsFile;
+use RectorPrefix202310\React\Dns\Model\Message;
+use RectorPrefix202310\React\Dns\Model\Record;
+use RectorPrefix202310\React\Promise;
 /**
  * Resolves hosts from the given HostsFile or falls back to another executor
  *

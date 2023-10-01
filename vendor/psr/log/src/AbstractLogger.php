@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202309\Psr\Log;
+namespace RectorPrefix202310\Psr\Log;
 
 /**
  * This is a simple Logger implementation that other Loggers can inherit from.

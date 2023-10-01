@@ -20,9 +20,9 @@ final class RemoveEmptyTableAttributeRector extends AbstractRector implements Mi
         return new RuleDefinition("Remove empty Table attribute on entities because it's useless", [new CodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202309;
+namespace RectorPrefix202310;
 
-use RectorPrefix202309\Doctrine\ORM\Mapping as ORM;
+use RectorPrefix202310\Doctrine\ORM\Mapping as ORM;
 #[\Doctrine\ORM\Mapping\Table]
 #[\Doctrine\ORM\Mapping\Entity]
 class Product
@@ -32,9 +32,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202309;
+namespace RectorPrefix202310;
 
-use RectorPrefix202309\Doctrine\ORM\Mapping as ORM;
+use RectorPrefix202310\Doctrine\ORM\Mapping as ORM;
 #[\Doctrine\ORM\Mapping\Entity]
 class Product
 {

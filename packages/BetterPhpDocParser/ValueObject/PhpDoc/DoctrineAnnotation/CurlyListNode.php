@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Stringable;
-use RectorPrefix202309\Webmozart\Assert\Assert;
+use RectorPrefix202310\Webmozart\Assert\Assert;
 final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
 {
     /**
