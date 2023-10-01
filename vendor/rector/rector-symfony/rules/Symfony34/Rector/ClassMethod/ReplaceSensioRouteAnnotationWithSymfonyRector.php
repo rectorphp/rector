@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
@@ -49,11 +48,6 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
     private $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
-     */
-    private $phpDocNodeByTypeFinder;
-    /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
@@ -61,13 +55,12 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
      * @var string
      */
     private const SENSIO_ROUTE_NAME = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route';
-    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -120,7 +113,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        $sensioDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($phpDocInfo->getPhpDocNode(), self::SENSIO_ROUTE_NAME);
+        $sensioDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(self::SENSIO_ROUTE_NAME);
         // nothing to find
         if ($sensioDoctrineAnnotationTagValueNodes === []) {
             return null;

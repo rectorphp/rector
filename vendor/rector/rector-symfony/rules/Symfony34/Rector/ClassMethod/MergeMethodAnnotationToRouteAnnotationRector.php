@@ -10,7 +10,6 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
@@ -41,17 +40,11 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
-     */
-    private $phpDocNodeByTypeFinder;
-    public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -108,7 +101,7 @@ CODE_SAMPLE
                 continue;
             }
             // get all routes
-            $symfonyDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($phpDocInfo->getPhpDocNode(), SymfonyAnnotation::ROUTE);
+            $symfonyDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(SymfonyAnnotation::ROUTE);
             // no symfony route? skip it
             if ($symfonyDoctrineAnnotationTagValueNodes === []) {
                 continue;
