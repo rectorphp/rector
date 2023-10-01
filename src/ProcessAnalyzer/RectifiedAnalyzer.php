@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -38,7 +39,7 @@ final class RectifiedAnalyzer
         /** @var class-string<RectorInterface>[] $createdByRule */
         $createdByRule = $createdByRuleNode->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
         if ($createdByRule === []) {
-            return !$originalNode instanceof Node && \count($node->getAttributes()) <= 1;
+            return !$originalNode instanceof Node && $node instanceof Stmt && \count($node->getAttributes()) <= 1;
         }
         return \end($createdByRule) === $rectorClass;
     }
