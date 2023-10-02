@@ -127,14 +127,14 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         /** @var Use_[]|GroupUse[] $currentUses */
         $currentUses = $this->useImportsResolver->resolve();
-        if ($this->classNameImportSkipper->shouldImportName($name, $currentUses)) {
-            $nameInUse = $this->resolveNameInUse($name, $currentUses);
-            if ($nameInUse instanceof Name) {
-                return $nameInUse;
-            }
-            return $this->nameImporter->importName($name, $file);
+        if ($this->classNameImportSkipper->shouldSkipName($name, $currentUses)) {
+            return null;
         }
-        return null;
+        $nameInUse = $this->resolveNameInUse($name, $currentUses);
+        if ($nameInUse instanceof Name) {
+            return $nameInUse;
+        }
+        return $this->nameImporter->importName($name, $file);
     }
     /**
      * @param Use_[]|GroupUse[] $currentUses
