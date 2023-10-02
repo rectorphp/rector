@@ -28,8 +28,7 @@ final class CommentRemover
         if ($node === null) {
             return null;
         }
-        $copiedNodes = $node;
-        $nodes = \is_array($copiedNodes) ? $copiedNodes : [$copiedNodes];
+        $nodes = \is_array($node) ? $node : [$node];
         return $this->commentRemovingNodeTraverser->traverse($nodes);
     }
 }
