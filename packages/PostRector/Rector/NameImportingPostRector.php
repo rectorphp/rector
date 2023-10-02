@@ -127,7 +127,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         /** @var Use_[]|GroupUse[] $currentUses */
         $currentUses = $this->useImportsResolver->resolve();
-        if ($this->shouldImportName($name, $currentUses)) {
+        if ($this->classNameImportSkipper->shouldImportName($name, $currentUses)) {
             $nameInUse = $this->resolveNameInUse($name, $currentUses);
             if ($nameInUse instanceof FullyQualified) {
                 return null;
@@ -197,18 +197,5 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             }
         }
         return null;
-    }
-    /**
-     * @param Use_[]|GroupUse[] $currentUses
-     */
-    private function shouldImportName(Name $name, array $currentUses) : bool
-    {
-        if (\substr_count($name->toCodeString(), '\\') <= 1) {
-            return \true;
-        }
-        if (!$this->classNameImportSkipper->isFoundInUse($name, $currentUses)) {
-            return \true;
-        }
-        return $this->classNameImportSkipper->isAlreadyImported($name, $currentUses);
     }
 }

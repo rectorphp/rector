@@ -51,24 +51,11 @@ final class ClassNameImportSkipper
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    public function isAlreadyImported(Name $name, array $uses) : bool
+    public function shouldImportName(Name $name, array $uses) : bool
     {
-        $stringName = $name->toString();
-        foreach ($uses as $use) {
-            $prefix = $this->useImportsResolver->resolvePrefix($use);
-            foreach ($use->uses as $useUse) {
-                if ($prefix . $useUse->name->toString() === $stringName) {
-                    return \true;
-                }
-            }
+        if (\substr_count($name->toCodeString(), '\\') <= 1) {
+            return \true;
         }
-        return \false;
-    }
-    /**
-     * @param Use_[]|GroupUse[] $uses
-     */
-    public function isFoundInUse(Name $name, array $uses) : bool
-    {
         $stringName = $name->toString();
         $nameLastName = \strtolower($name->getLast());
         foreach ($uses as $use) {
@@ -81,10 +68,10 @@ final class ClassNameImportSkipper
                 if ($this->isJustRenamedClass($stringName, $prefix, $useUse)) {
                     continue;
                 }
-                return \true;
+                return $prefix . $useUse->name->toString() === $stringName;
             }
         }
-        return \false;
+        return \true;
     }
     private function isJustRenamedClass(string $stringName, string $prefix, UseUse $useUse) : bool
     {
