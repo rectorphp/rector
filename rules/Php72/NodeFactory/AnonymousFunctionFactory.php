@@ -275,13 +275,7 @@ final class AnonymousFunctionFactory
         if (!$paramDefaultExpr instanceof Expr) {
             return null;
         }
-        // reset original node, to allow the printer to re-use the expr
-        $paramDefaultExpr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($paramDefaultExpr, static function (Node $node) : Node {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return $node;
-        });
-        return $paramDefaultExpr;
+        return $this->nodeFactory->createReprintedExpr($paramDefaultExpr);
     }
     /**
      * @param Param[] $params

@@ -185,7 +185,7 @@ CODE_SAMPLE
             }
             $paramDefault = $parentClassMethodParam->default;
             if ($paramDefault instanceof Expr) {
-                $paramDefault = $this->resolveParamDefault($paramDefault);
+                $paramDefault = $this->nodeFactory->createReprintedExpr($paramDefault);
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
@@ -196,16 +196,6 @@ CODE_SAMPLE
             }
         }
         return $node;
-    }
-    private function resolveParamDefault(Expr $expr) : Expr
-    {
-        // reset original node, to allow the printer to re-use the expr
-        $expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->traverseNodesWithCallable($expr, static function (Node $node) : Node {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return $node;
-        });
-        return $expr;
     }
     /**
      * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
