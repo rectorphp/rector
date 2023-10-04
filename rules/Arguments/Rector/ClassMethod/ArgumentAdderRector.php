@@ -7,7 +7,6 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -24,8 +23,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -53,11 +52,6 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     private $astResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-    /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -69,12 +63,11 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      * @var bool
      */
     private $hasChanged = \false;
-    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, StaticTypeMapper $staticTypeMapper)
+    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->argumentAddingScope = $argumentAddingScope;
         $this->changedArgumentsDetector = $changedArgumentsDetector;
         $this->astResolver = $astResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -202,9 +195,18 @@ CODE_SAMPLE
             if (!$param->default instanceof Expr) {
                 throw new ShouldNotHappenException('Previous position does not have default value');
             }
-            $default = $this->betterStandardPrinter->print($param->default);
-            $node->args[$index] = new Arg(new ConstFetch(new Name($default)));
+            $node->args[$index] = new Arg($this->resolveParamDefault($param->default));
         }
+    }
+    private function resolveParamDefault(Expr $expr) : Expr
+    {
+        // reset original node, to allow the printer to re-use the expr
+        $expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->traverseNodesWithCallable($expr, static function (Node $node) : Node {
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $node;
+        });
+        return $expr;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
