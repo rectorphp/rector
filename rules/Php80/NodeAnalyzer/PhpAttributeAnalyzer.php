@@ -14,16 +14,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 final class PhpAttributeAnalyzer
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -34,9 +28,8 @@ final class PhpAttributeAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(AstResolver $astResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
-        $this->astResolver = $astResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -64,11 +57,8 @@ final class PhpAttributeAnalyzer
         $classReflection = $this->reflectionProvider->getClass($className);
         $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
-            $resolvedClass = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection);
-            if (!$resolvedClass instanceof Class_) {
-                continue;
-            }
-            if ($this->hasPhpAttribute($resolvedClass, $attributeClass)) {
+            $nativeReflection = $ancestorClassReflection->getNativeReflection();
+            if ($nativeReflection->getAttributes($attributeClass) !== []) {
                 return \true;
             }
         }
