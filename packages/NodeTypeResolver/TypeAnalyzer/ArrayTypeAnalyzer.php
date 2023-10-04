@@ -7,31 +7,18 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayTypeAnalyzer
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -39,41 +26,23 @@ final class ArrayTypeAnalyzer
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
-        $this->astResolver = $astResolver;
     }
     public function isArrayType(Expr $expr) : bool
     {
-        $nodeType = $this->nodeTypeResolver->getType($expr);
+        $nodeType = $this->nodeTypeResolver->getNativeType($expr);
         if ($this->isIntersectionArrayType($nodeType)) {
             return \true;
         }
         // PHPStan false positive, when variable has type[] docblock, but default array is missing
-        if ($expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch) {
-            if ($this->isPropertyFetchWithArrayDefault($expr)) {
-                return \true;
-            }
-            if ($this->isPropertyFetchWithArrayDocblockWithoutDefault($expr)) {
-                return \false;
-            }
+        if (($expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch) && $this->isPropertyFetchWithArrayDefault($expr)) {
+            return \true;
         }
         if ($nodeType instanceof MixedType) {
             if ($nodeType->isExplicitMixed()) {
@@ -103,36 +72,6 @@ final class ArrayTypeAnalyzer
             return \false;
         }
         return \true;
-    }
-    private function isPropertyFetchWithArrayDocblockWithoutDefault(Expr $expr) : bool
-    {
-        if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
-            return \false;
-        }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        $propertyName = $this->nodeNameResolver->getName($expr->name);
-        if ($propertyName === null) {
-            return \false;
-        }
-        /** @var ClassLike $classLike */
-        $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
-        $property = $classLike->getProperty($propertyName);
-        if (!$property instanceof Property) {
-            return \false;
-        }
-        $propertyProperty = $property->props[0];
-        if ($propertyProperty->default instanceof Array_) {
-            return \false;
-        }
-        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if (!$propertyPhpDocInfo instanceof PhpDocInfo) {
-            return \false;
-        }
-        $varType = $propertyPhpDocInfo->getVarType();
-        return $varType instanceof ArrayType || $varType instanceof ArrayShapeNode || $varType instanceof IterableType;
     }
     /**
      * phpstan bug workaround - https://phpstan.org/r/0443f283-244c-42b8-8373-85e7deb3504c
