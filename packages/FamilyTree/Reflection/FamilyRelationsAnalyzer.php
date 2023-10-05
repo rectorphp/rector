@@ -62,6 +62,9 @@ final class FamilyRelationsAnalyzer
         $ancestorNames = [];
         if ($classOrName instanceof Name) {
             $fullName = $this->nodeNameResolver->getName($classOrName);
+            if (!$this->reflectionProvider->hasClass($fullName)) {
+                return [];
+            }
             $classReflection = $this->reflectionProvider->getClass($fullName);
             $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
             return \array_map(static function (ClassReflection $classReflection) : string {
