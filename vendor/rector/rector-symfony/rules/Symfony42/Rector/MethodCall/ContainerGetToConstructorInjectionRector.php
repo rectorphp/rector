@@ -132,7 +132,7 @@ CODE_SAMPLE
             return;
         }
         // empty stmts? add parent::__construct() to setup command
-        if (\count((array) $constuctClassMethod->stmts) === 0) {
+        if ((array) $constuctClassMethod->stmts === []) {
             $parentConstructStaticCall = new StaticCall(new Name('parent'), '__construct');
             $constuctClassMethod->stmts[] = new Expression($parentConstructStaticCall);
         }

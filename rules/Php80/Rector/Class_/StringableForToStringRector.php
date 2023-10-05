@@ -108,15 +108,15 @@ CODE_SAMPLE
         // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
         // reflection cannot be used for real detection
         $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
-        if (\in_array(self::STRINGABLE, $classLikeAncestorNames, \true)) {
-            return null;
-        }
+        $isAncestorHasStringable = \in_array(self::STRINGABLE, $classLikeAncestorNames, \true);
         $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
         if (!$returnType->isString()->yes()) {
             $this->processNotStringType($toStringClassMethod);
         }
-        // add interface
-        $node->implements[] = new FullyQualified(self::STRINGABLE);
+        if (!$isAncestorHasStringable) {
+            // add interface
+            $node->implements[] = new FullyQualified(self::STRINGABLE);
+        }
         // add return type
         if ($toStringClassMethod->returnType === null) {
             $toStringClassMethod->returnType = new Identifier('string');
