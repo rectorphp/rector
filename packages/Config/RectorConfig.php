@@ -13,8 +13,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
-use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use RectorPrefix202310\Webmozart\Assert\Assert;
@@ -181,13 +179,6 @@ final class RectorConfig extends Container
         $this->tag($rectorClass, RectorInterface::class);
         if (\is_a($rectorClass, CollectorRectorInterface::class, \true)) {
             $this->tag($rectorClass, CollectorRectorInterface::class);
-        }
-        if (\is_a($rectorClass, AbstractScopeAwareRector::class, \true)) {
-            $this->extend($rectorClass, static function (AbstractScopeAwareRector $scopeAwareRector, Container $container) : AbstractScopeAwareRector {
-                $scopeAnalyzer = $container->make(ScopeAnalyzer::class);
-                $scopeAwareRector->autowireAbstractScopeAwareRector($scopeAnalyzer);
-                return $scopeAwareRector;
-            });
         }
         // for cache invalidation in case of change
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);

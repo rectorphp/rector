@@ -141,6 +141,7 @@ final class PHPStanNodeScopeResolver
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $filePath) : void {
             if ($node instanceof FileWithoutNamespace) {
+                $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $this->nodeScopeResolver->processNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }

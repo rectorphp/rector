@@ -9,18 +9,9 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ScopeAwareRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwareRectorInterface
 {
-    /**
-     * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer
-     */
-    private $scopeAnalyzer;
-    public function autowireAbstractScopeAwareRector(ScopeAnalyzer $scopeAnalyzer) : void
-    {
-        $this->scopeAnalyzer = $scopeAnalyzer;
-    }
     /**
      * Process Node of matched type with its PHPStan scope
      * @return Node|Node[]|null|NodeTraverser::*
@@ -29,9 +20,6 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
     {
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$currentScope instanceof MutatingScope) {
-            $currentScope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath());
-        }
         if (!$currentScope instanceof Scope) {
             $errorMessage = \sprintf('Scope not available on "%s" node, but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), static::class);
             throw new ShouldNotHappenException($errorMessage);
