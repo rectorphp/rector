@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -44,10 +46,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [If_::class, ElseIf_::class, Else_::class];
     }
     /**
-     * @param If_ $node
+     * @param If_|ElseIf_|Else_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -64,11 +66,16 @@ CODE_SAMPLE
     }
     /**
      * @param mixed[] $oldTokens
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
      */
-    private function isIfConditionFollowedByOpeningCurlyBracket(If_ $if, array $oldTokens) : bool
+    private function isIfConditionFollowedByOpeningCurlyBracket($if, array $oldTokens) : bool
     {
         for ($i = $if->getStartTokenPos(); $i < $if->getEndTokenPos(); ++$i) {
             if ($oldTokens[$i] !== ')') {
+                if ($oldTokens[$i] === ';') {
+                    // all good
+                    return \true;
+                }
                 continue;
             }
             // first closing bracket must be followed by curly opening brackets
@@ -85,7 +92,10 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isBareNewNode(If_ $if) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
+     */
+    private function isBareNewNode($if) : bool
     {
         $originalNode = $if->getAttribute(AttributeKey::ORIGINAL_NODE);
         if (!$originalNode instanceof Node) {
