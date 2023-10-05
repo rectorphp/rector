@@ -317,6 +317,16 @@ final class NodeFactory
         }
         return $this->createBooleanAndFromNodes($newNodes);
     }
+    public function createReprintedExpr(Expr $expr) : Expr
+    {
+        // reset original node, to allow the printer to re-use the expr
+        $expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($expr, static function (Node $node) : Node {
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $node;
+        });
+        return $expr;
+    }
     /**
      * @param string|int|null $key
      * @param mixed $item
@@ -400,15 +410,5 @@ final class NodeFactory
             return new MethodCall($exprOrVariableName->var, $exprOrVariableName->name, $exprOrVariableName->args);
         }
         return $exprOrVariableName;
-    }
-    public function createReprintedExpr(Expr $expr) : Expr
-    {
-        // reset original node, to allow the printer to re-use the expr
-        $expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($expr, static function (Node $node) : Node {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return $node;
-        });
-        return $expr;
     }
 }

@@ -1,4 +1,4 @@
-# 353 Rules Overview
+# 354 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [CodeQuality](#codequality) (71)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (29)
 
@@ -449,6 +449,27 @@ Add missing dynamic properties
      public function set()
      {
          $this->value = 5;
+     }
+ }
+```
+
+<br>
+
+### CompleteMissingIfElseBracketRector
+
+Complete missing if/else brackets
+
+- class: [`Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector`](../rules/CodeQuality/Rector/If_/CompleteMissingIfElseBracketRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        if ($value)
++        if ($value) {
+             return 1;
++        }
      }
  }
 ```

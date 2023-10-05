@@ -1065,6 +1065,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector' => $baseDir . '/rules/CodeQuality/Rector/Identical/SimplifyConditionsRector.php',
     'Rector\\CodeQuality\\Rector\\Identical\\StrlenZeroToIdenticalEmptyStringRector' => $baseDir . '/rules/CodeQuality/Rector/Identical/StrlenZeroToIdenticalEmptyStringRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\CombineIfRector' => $baseDir . '/rules/CodeQuality/Rector/If_/CombineIfRector.php',
+    'Rector\\CodeQuality\\Rector\\If_\\CompleteMissingIfElseBracketRector' => $baseDir . '/rules/CodeQuality/Rector/If_/CompleteMissingIfElseBracketRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ConsecutiveNullCompareReturnsToNullCoalesceQueueRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ExplicitBoolCompareRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ExplicitBoolCompareRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ShortenElseIfRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ShortenElseIfRector.php',

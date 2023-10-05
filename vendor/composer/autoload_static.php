@@ -1284,6 +1284,7 @@ class ComposerStaticInit46a0b0ac2ea1371bb06be09a20f71c2b
         'Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Identical/SimplifyConditionsRector.php',
         'Rector\\CodeQuality\\Rector\\Identical\\StrlenZeroToIdenticalEmptyStringRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Identical/StrlenZeroToIdenticalEmptyStringRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\CombineIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/CombineIfRector.php',
+        'Rector\\CodeQuality\\Rector\\If_\\CompleteMissingIfElseBracketRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/CompleteMissingIfElseBracketRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ConsecutiveNullCompareReturnsToNullCoalesceQueueRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ExplicitBoolCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ExplicitBoolCompareRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ShortenElseIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ShortenElseIfRector.php',
