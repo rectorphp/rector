@@ -53,6 +53,10 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
      * @var string
      */
     private const STRINGABLE = 'Stringable';
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
@@ -105,6 +109,7 @@ CODE_SAMPLE
         if (!$toStringClassMethod instanceof ClassMethod) {
             return null;
         }
+        $this->hasChanged = \false;
         // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
         // reflection cannot be used for real detection
         $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
@@ -116,10 +121,15 @@ CODE_SAMPLE
         if (!$isAncestorHasStringable) {
             // add interface
             $node->implements[] = new FullyQualified(self::STRINGABLE);
+            $this->hasChanged = \true;
         }
         // add return type
         if ($toStringClassMethod->returnType === null) {
             $toStringClassMethod->returnType = new Identifier('string');
+            $this->hasChanged = \true;
+        }
+        if (!$this->hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -132,6 +142,7 @@ CODE_SAMPLE
         if (!$hasReturn) {
             $emptyStringReturn = new Return_(new String_(''));
             $toStringClassMethod->stmts[] = $emptyStringReturn;
+            $this->hasChanged = \true;
             return;
         }
         $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode) {
@@ -147,6 +158,7 @@ CODE_SAMPLE
                 return null;
             }
             $subNode->expr = new CastString_($subNode->expr);
+            $this->hasChanged = \true;
             return null;
         });
     }
