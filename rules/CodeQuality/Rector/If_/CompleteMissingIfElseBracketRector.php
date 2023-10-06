@@ -76,10 +76,6 @@ CODE_SAMPLE
                 break;
             }
             if ($oldTokens[$i] !== ')' && !\is_array($oldTokens[$i + 1])) {
-                if ($oldTokens[$i] === ';') {
-                    // all good
-                    return \true;
-                }
                 continue;
             }
             // first closing bracket must be followed by curly opening brackets
