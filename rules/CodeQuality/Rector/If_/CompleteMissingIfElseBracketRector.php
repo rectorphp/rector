@@ -71,7 +71,13 @@ CODE_SAMPLE
      */
     private function isIfConditionFollowedByOpeningCurlyBracket($if, array $oldTokens) : bool
     {
-        for ($i = $if->getStartTokenPos(); $i < $if->getEndTokenPos(); ++$i) {
+        $startStmt = \current($if->stmts);
+        if (!$startStmt instanceof Stmt) {
+            return \true;
+        }
+        /** @var Stmt $lastStmt */
+        $lastStmt = \end($if->stmts);
+        for ($i = $if->getStartTokenPos(); $i < $lastStmt->getEndTokenPos(); ++$i) {
             if (!isset($oldTokens[$i + 1])) {
                 break;
             }
@@ -94,8 +100,7 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        $startStmt = \current($if->stmts);
-        return !$startStmt instanceof Stmt;
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
