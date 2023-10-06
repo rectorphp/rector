@@ -75,30 +75,21 @@ CODE_SAMPLE
         if (!$startStmt instanceof Stmt) {
             return \true;
         }
-        /** @var Stmt $lastStmt */
-        $lastStmt = \end($if->stmts);
-        for ($i = $if->getStartTokenPos(); $i < $lastStmt->getEndTokenPos(); ++$i) {
-            if (!isset($oldTokens[$i + 1])) {
-                break;
+        $startTokenPos = $if->getStartTokenPos();
+        $i = $startStmt->getStartTokenPos() - 1;
+        $condEndTokenPos = $if instanceof Else_ ? 0 : $if->cond->getEndTokenPos();
+        while (isset($oldTokens[$i])) {
+            if ($i === $condEndTokenPos) {
+                return \false;
             }
-            if ($oldTokens[$i] !== ')' && !\is_array($oldTokens[$i + 1])) {
-                continue;
-            }
-            // first closing bracket must be followed by curly opening brackets
-            // what is next token?
-            $nextToken = $oldTokens[$i + 1];
-            if (\is_array($nextToken) && \trim((string) $nextToken[1]) === '') {
-                // next token is whitespace
-                $nextToken = $oldTokens[$i + 2];
-            }
-            if (\in_array($nextToken, ['{', ':'], \true)) {
+            if (\in_array($oldTokens[$i], ['{', ':'], \true)) {
                 // all good
                 return \true;
             }
-            if (\is_array($nextToken) && \trim((string) $nextToken[1]) === '?>') {
-                // all good
-                return \true;
+            if ($i === $startTokenPos) {
+                return \false;
             }
+            --$i;
         }
         return \false;
     }
