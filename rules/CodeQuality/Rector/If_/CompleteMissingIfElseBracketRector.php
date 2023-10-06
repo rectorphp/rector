@@ -70,27 +70,29 @@ CODE_SAMPLE
      */
     private function isIfConditionFollowedByOpeningCurlyBracket($if, array $oldTokens) : bool
     {
-        $startStmt = \current($if->stmts);
-        if ($startStmt === \false) {
-            return \true;
-        }
-        $startTokenPos = $startStmt->getStartTokenPos();
-        $i = $startTokenPos - 1;
-        $ifStartTokenPos = $if->getStartTokenPos();
-        while (isset($oldTokens[$i])) {
-            if ($i === $ifStartTokenPos) {
-                return \false;
+        for ($i = $if->getStartTokenPos(); $i < $if->getEndTokenPos(); ++$i) {
+            if ($oldTokens[$i] !== ')') {
+                if ($oldTokens[$i] === ';') {
+                    // all good
+                    return \true;
+                }
+                continue;
             }
-            if ($oldTokens[$i] === ')') {
-                break;
+            // first closing bracket must be followed by curly opening brackets
+            // what is next token?
+            $nextToken = $oldTokens[$i + 1];
+            if (\is_array($nextToken) && \trim((string) $nextToken[1]) === '') {
+                // next token is whitespace
+                $nextToken = $oldTokens[$i + 2];
             }
-            if (\in_array($oldTokens[$i], [':', '{'], \true)) {
+            if (\in_array($nextToken, ['{', ':'], \true)) {
                 // all good
                 return \true;
             }
-            --$i;
         }
-        return \false;
+        $startStmt = \current($if->stmts);
+        $lastStmt = \end($if->stmts);
+        return $startStmt === \false || $lastStmt === \false;
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
