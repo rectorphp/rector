@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
@@ -94,8 +95,7 @@ CODE_SAMPLE
             }
         }
         $startStmt = \current($if->stmts);
-        $lastStmt = \end($if->stmts);
-        return $startStmt === \false || $lastStmt === \false;
+        return !$startStmt instanceof Stmt;
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
