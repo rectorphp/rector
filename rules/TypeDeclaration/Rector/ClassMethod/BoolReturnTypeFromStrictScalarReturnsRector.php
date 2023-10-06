@@ -22,13 +22,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\BooleanType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
@@ -125,6 +124,10 @@ CODE_SAMPLE
         $node->returnType = new Identifier('bool');
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::SCALAR_TYPES;
+    }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
@@ -137,10 +140,6 @@ CODE_SAMPLE
             return \true;
         }
         return \false;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param Return_[] $returns
