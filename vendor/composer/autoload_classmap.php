@@ -1237,7 +1237,6 @@ return array(
     'Rector\\Core\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
     'Rector\\Core\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
     'Rector\\Core\\PhpParser\\AstResolver' => $baseDir . '/src/PhpParser/AstResolver.php',
-    'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => $baseDir . '/src/PhpParser/ClassLikeAstResolver.php',
     'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => $baseDir . '/src/PhpParser/Comparing/NodeComparator.php',
     'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => $baseDir . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
     'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => $baseDir . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',

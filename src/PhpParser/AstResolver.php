@@ -26,6 +26,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\MethodReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -72,14 +73,14 @@ final class AstResolver
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
-     */
-    private $classLikeAstResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\Reflection\MethodReflectionResolver
      */
     private $methodReflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
     /**
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, when no statements could be parsed from the file.
@@ -87,7 +88,7 @@ final class AstResolver
      * @var array<string, Stmt[]|null>
      */
     private $parsedFileNodes = [];
-    public function __construct(SmartPhpParser $smartPhpParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver, MethodReflectionResolver $methodReflectionResolver)
+    public function __construct(SmartPhpParser $smartPhpParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -95,8 +96,8 @@ final class AstResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->classLikeAstResolver = $classLikeAstResolver;
         $this->methodReflectionResolver = $methodReflectionResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @api downgrade
@@ -114,14 +115,7 @@ final class AstResolver
     {
         $classReflection = $methodReflection->getDeclaringClass();
         $fileName = $classReflection->getFileName();
-        // probably native PHP method → un-parseable
-        if ($fileName === null) {
-            return null;
-        }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        if ($nodes === []) {
-            return null;
-        }
         $classLikeName = $classReflection->getName();
         $methodName = $methodReflection->getName();
         $classMethod = null;
@@ -156,13 +150,7 @@ final class AstResolver
     public function resolveFunctionFromFunctionReflection(FunctionReflection $functionReflection) : ?Function_
     {
         $fileName = $functionReflection->getFileName();
-        if ($fileName === null) {
-            return null;
-        }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        if ($nodes === []) {
-            return null;
-        }
         $functionName = $functionReflection->getName();
         $functionNode = null;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($functionName, &$functionNode) : ?int {
@@ -213,7 +201,20 @@ final class AstResolver
      */
     public function resolveClassFromClassReflection(ClassReflection $classReflection)
     {
-        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $this);
+        if ($classReflection->isBuiltin()) {
+            return null;
+        }
+        $fileName = $classReflection->getFileName();
+        $stmts = $this->parseFileNameToDecoratedNodes($fileName);
+        $className = $classReflection->getName();
+        /** @var Class_|Trait_|Interface_|Enum_|null $classLike */
+        $classLike = $this->betterNodeFinder->findFirst($stmts, function (Node $node) use($className) : bool {
+            if (!$node instanceof ClassLike) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($node, $className);
+        });
+        return $classLike;
     }
     /**
      * @return Trait_[]
@@ -225,13 +226,7 @@ final class AstResolver
         $traits = [];
         foreach ($classLikes as $classLike) {
             $fileName = $classLike->getFileName();
-            if ($fileName === null) {
-                continue;
-            }
             $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-            if ($nodes === []) {
-                continue;
-            }
             $traitName = $classLike->getName();
             $traitNode = null;
             $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($traitName, &$traitNode) : ?int {
@@ -258,9 +253,6 @@ final class AstResolver
     {
         $classReflection = $phpPropertyReflection->getDeclaringClass();
         $fileName = $classReflection->getFileName();
-        if ($fileName === null) {
-            return null;
-        }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
         if ($nodes === []) {
             return null;
@@ -293,8 +285,12 @@ final class AstResolver
     /**
      * @return Stmt[]
      */
-    public function parseFileNameToDecoratedNodes(string $fileName) : array
+    public function parseFileNameToDecoratedNodes(?string $fileName) : array
     {
+        // probably native PHP → un-parseable
+        if ($fileName === null) {
+            return [];
+        }
         if (isset($this->parsedFileNodes[$fileName])) {
             return $this->parsedFileNodes[$fileName];
         }

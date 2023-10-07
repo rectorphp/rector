@@ -1456,7 +1456,6 @@ class ComposerStaticInit46a0b0ac2ea1371bb06be09a20f71c2b
         'Rector\\Core\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\Core\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
         'Rector\\Core\\PhpParser\\AstResolver' => __DIR__ . '/../..' . '/src/PhpParser/AstResolver.php',
-        'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => __DIR__ . '/../..' . '/src/PhpParser/ClassLikeAstResolver.php',
         'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
