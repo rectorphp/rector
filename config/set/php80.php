@@ -8,6 +8,7 @@ use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
+use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
@@ -28,7 +29,7 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rules([StrContainsRector::class, StrStartsWithRector::class, StrEndsWithRector::class, StringableForToStringRector::class, ClassOnObjectRector::class, GetDebugTypeRector::class, RemoveUnusedVariableInCatchRector::class, ClassPropertyAssignToConstructorPromotionRector::class, ChangeSwitchToMatchRector::class, RemoveParentCallWithoutParentRector::class, SetStateToStaticRector::class, FinalPrivateToPrivateVisibilityRector::class, AddParamBasedOnParentClassMethodRector::class, MixedTypeRector::class, ClassOnThisVariableObjectRector::class]);
+    $rectorConfig->rules([StrContainsRector::class, StrStartsWithRector::class, StrEndsWithRector::class, StringableForToStringRector::class, ClassOnObjectRector::class, GetDebugTypeRector::class, RemoveUnusedVariableInCatchRector::class, ClassPropertyAssignToConstructorPromotionRector::class, ChangeSwitchToMatchRector::class, RemoveParentCallWithoutParentRector::class, SetStateToStaticRector::class, FinalPrivateToPrivateVisibilityRector::class, AddParamBasedOnParentClassMethodRector::class, MixedTypeRector::class, ClassOnThisVariableObjectRector::class, ConsistentImplodeRector::class]);
     $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new StaticCallToFuncCall('Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new StaticCallToFuncCall('Nette\\Utils\\Strings', 'contains', 'str_contains')]);
     // nette\utils and Strings::replace()
     $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('Nette\\Utils\\Strings', 'replace', 2, 'replacement', '')]);
