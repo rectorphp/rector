@@ -9,26 +9,16 @@ final class UnionTypeAnalysis
      * @readonly
      * @var bool
      */
-    private $isNullableType;
-    /**
-     * @readonly
-     * @var bool
-     */
     private $hasIterable;
     /**
      * @readonly
      * @var bool
      */
     private $hasArray;
-    public function __construct(bool $isNullableType, bool $hasIterable, bool $hasArray)
+    public function __construct(bool $hasIterable, bool $hasArray)
     {
-        $this->isNullableType = $isNullableType;
         $this->hasIterable = $hasIterable;
         $this->hasArray = $hasArray;
-    }
-    public function isNullableType() : bool
-    {
-        return $this->isNullableType;
     }
     public function hasIterable() : bool
     {

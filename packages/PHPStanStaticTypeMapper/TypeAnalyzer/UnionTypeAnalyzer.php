@@ -13,9 +13,8 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Traversable;
 final class UnionTypeAnalyzer
 {
-    public function analyseForNullableAndIterable(UnionType $unionType) : ?UnionTypeAnalysis
+    public function analyseForArrayAndIterable(UnionType $unionType) : ?UnionTypeAnalysis
     {
-        $isNullableType = \false;
         $hasIterable = \false;
         $hasArray = \false;
         foreach ($unionType->getTypes() as $unionedType) {
@@ -27,17 +26,13 @@ final class UnionTypeAnalyzer
                 $hasArray = \true;
                 continue;
             }
-            if ($unionedType instanceof NullType) {
-                $isNullableType = \true;
-                continue;
-            }
             if ($unionedType instanceof ObjectType && $unionedType->getClassName() === Traversable::class) {
                 $hasIterable = \true;
                 continue;
             }
             return null;
         }
-        return new UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
+        return new UnionTypeAnalysis($hasIterable, $hasArray);
     }
     /**
      * @return TypeWithClassName[]
