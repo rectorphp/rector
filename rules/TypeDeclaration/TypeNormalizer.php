@@ -11,18 +11,12 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
 final class TypeNormalizer
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
-     */
-    private $typeFactory;
     /**
      * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
@@ -32,9 +26,8 @@ final class TypeNormalizer
      * @var NestedArrayType[]
      */
     private $collectedNestedArrayTypes = [];
-    public function __construct(TypeFactory $typeFactory, PrivatesAccessor $privatesAccessor)
+    public function __construct(PrivatesAccessor $privatesAccessor)
     {
-        $this->typeFactory = $typeFactory;
         $this->privatesAccessor = $privatesAccessor;
     }
     /**
@@ -80,16 +73,6 @@ final class TypeNormalizer
                 $this->privatesAccessor->setPrivateProperty($traversedType, 'itemType', new MixedType());
                 return $traversedType;
             }
-            if ($traversedType instanceof UnionType) {
-                $traversedTypeTypes = $traversedType->getTypes();
-                $countTraversedTypes = \count($traversedTypeTypes);
-                $collectedTypes = $this->getCollectedTypes($traversedTypeTypes);
-                $countCollectedTypes = \count($collectedTypes);
-                // re-create new union types
-                if ($countTraversedTypes !== $countCollectedTypes && $countTraversedTypes > 2) {
-                    return $this->typeFactory->createMixedPassedOrUnionType($collectedTypes);
-                }
-            }
             if ($traversedType instanceof NeverType) {
                 return new MixedType();
             }
@@ -99,22 +82,6 @@ final class TypeNormalizer
     private function isConstantArrayNever(Type $type) : bool
     {
         return $type instanceof ConstantArrayType && $type->getKeyType() instanceof NeverType && $type->getItemType() instanceof NeverType;
-    }
-    /**
-     * @param Type[] $traversedTypeTypes
-     * @return Type[]
-     */
-    private function getCollectedTypes(array $traversedTypeTypes) : array
-    {
-        $collectedTypes = [];
-        foreach ($traversedTypeTypes as $traversedTypeType) {
-            // basically an empty array - not useful at all
-            if ($this->isArrayNeverType($traversedTypeType)) {
-                continue;
-            }
-            $collectedTypes[] = $traversedTypeType;
-        }
-        return $collectedTypes;
     }
     private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting) : void
     {
@@ -146,12 +113,5 @@ final class TypeNormalizer
             return new UnionType($unionedTypes);
         }
         return $unionedTypes[0];
-    }
-    private function isArrayNeverType(Type $type) : bool
-    {
-        if (!$type instanceof ArrayType) {
-            return \false;
-        }
-        return $type->getKeyType() instanceof NeverType && $type->getItemType() instanceof NeverType;
     }
 }
