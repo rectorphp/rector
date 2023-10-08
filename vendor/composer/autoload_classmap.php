@@ -1631,7 +1631,6 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\DoctrineTypeAnalyzer' => $baseDir . '/packages/PHPStanStaticTypeMapper/DoctrineTypeAnalyzer.php',
     'Rector\\PHPStanStaticTypeMapper\\Enum\\TypeKind' => $baseDir . '/packages/PHPStanStaticTypeMapper/Enum/TypeKind.php',
     'Rector\\PHPStanStaticTypeMapper\\PHPStanStaticTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php',
-    'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\BoolUnionTypeAnalyzer' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/BoolUnionTypeAnalyzer.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryLiteralStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryLiteralStringTypeMapper.php',
