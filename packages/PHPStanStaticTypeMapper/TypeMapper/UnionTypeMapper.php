@@ -303,20 +303,11 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
             return $compatibleObjectTypeNode;
         }
-        $integerIdentifier = $this->narrowIntegerType($unionType);
-        if ($integerIdentifier instanceof Identifier) {
-            return $integerIdentifier;
+        $type = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
+        if (!$type instanceof UnionType) {
+            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($type, $typeKind);
         }
-        return $this->narrowStringTypes($unionType);
-    }
-    private function narrowStringTypes(UnionType $unionType) : ?Identifier
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType->isString()->yes()) {
-                return null;
-            }
-        }
-        return new Identifier('string');
+        return null;
     }
     private function processResolveCompatibleObjectCandidates(UnionType $unionType) : ?Node
     {
@@ -427,15 +418,6 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface');
         }
         return $typeWithClassName;
-    }
-    private function narrowIntegerType(UnionType $unionType) : ?Identifier
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType->isInteger()->yes()) {
-                return null;
-            }
-        }
-        return new Identifier('int');
     }
     /**
      * @param TypeKind::* $typeKind
