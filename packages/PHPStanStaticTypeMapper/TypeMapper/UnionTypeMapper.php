@@ -34,7 +34,6 @@ use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use RectorPrefix202310\Webmozart\Assert\Assert;
 use RectorPrefix202310\Webmozart\Assert\InvalidArgumentException;
@@ -60,11 +59,6 @@ final class UnionTypeMapper implements TypeMapperInterface
     private $unionTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
-     */
-    private $unionTypeCommonTypeNarrower;
-    /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
@@ -77,12 +71,11 @@ final class UnionTypeMapper implements TypeMapperInterface
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
+    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
-        $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeFactory = $typeFactory;
     }
@@ -272,17 +265,17 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private function matchTypeForUnionedTypes(UnionType $unionType, string $typeKind) : ?Node
     {
+        // use first unioned type in case of unioned object types
+        $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
+        if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
+            return $compatibleObjectTypeNode;
+        }
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType, $typeKind);
         if ($phpParserUnionType instanceof NullableType) {
             return $phpParserUnionType;
         }
         if ($phpParserUnionType instanceof PhpParserUnionType) {
             return $this->resolveUnionTypeNode($unionType, $phpParserUnionType, $typeKind);
-        }
-        // use first unioned type in case of unioned object types
-        $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
-        if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
-            return $compatibleObjectTypeNode;
         }
         $type = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
         if (!$type instanceof UnionType) {
@@ -368,8 +361,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($sharedTypeWithClassName instanceof TypeWithClassName) {
             return $this->correctObjectType($sharedTypeWithClassName);
         }
-        // find least common denominator
-        return $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
+        return null;
     }
     /**
      * @param TypeWithClassName[] $typesWithClassNames
