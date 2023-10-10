@@ -73,7 +73,7 @@ final class SomeTest extends TestCase
         $this->personServiceMock->expects($matcher)
             ->method('prepare')
             ->willReturnCallback(function () use ($matcher) {
-                return match ($matcher->numberOfInvocations()) {
+                return match ($matcher->getInvocationCount()) {
                     1 => [1, 2],
                     2 => [3, 4]
                 };
@@ -98,16 +98,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$node->expr instanceof MethodCall) {
-            return null;
-        }
-        /** @var MethodCall|null $withConsecutiveMethodCall */
-        $withConsecutiveMethodCall = $this->betterNodeFinder->findFirst($node->expr, function (Node $node) : bool {
-            if (!$node instanceof MethodCall) {
-                return \false;
-            }
-            return $this->isName($node->name, 'withConsecutive');
-        });
+        $withConsecutiveMethodCall = $this->findWithConsecutiveMethodCall($node);
         if (!$withConsecutiveMethodCall instanceof MethodCall) {
             return null;
         }
@@ -130,10 +121,11 @@ CODE_SAMPLE
         $closure = new Closure();
         $matcherVariable = new Variable('matcher');
         $closure->uses[] = new ClosureUse($matcherVariable);
-        $match = new Match_(new MethodCall($matcherVariable, new Identifier('numberOfInvocations')));
-        foreach ($expectsMethodCall->getArgs() as $key => $arg) {
-            $match->arms[] = new MatchArm([new LNumber($key + 1)], $arg->value);
+        $usedVariables = $this->resolveUniqueUsedVariables($expectsMethodCall);
+        foreach ($usedVariables as $usedVariable) {
+            $closure->uses[] = new ClosureUse($usedVariable);
         }
+        $match = $this->createMatch($matcherVariable, $expectsMethodCall);
         $closure->stmts[] = new Return_($match);
         return $closure;
     }
@@ -162,5 +154,45 @@ CODE_SAMPLE
             return $node;
         });
         return $exactlyMethodCall;
+    }
+    private function findWithConsecutiveMethodCall(Expression $expression) : ?MethodCall
+    {
+        if (!$expression->expr instanceof MethodCall) {
+            return null;
+        }
+        /** @var MethodCall|null $withConsecutiveMethodCall */
+        $withConsecutiveMethodCall = $this->betterNodeFinder->findFirst($expression->expr, function (Node $node) : bool {
+            if (!$node instanceof MethodCall) {
+                return \false;
+            }
+            return $this->isName($node->name, 'withConsecutive');
+        });
+        return $withConsecutiveMethodCall;
+    }
+    private function createMatch(Variable $matcherVariable, MethodCall $expectsMethodCall) : Match_
+    {
+        $getInvocationCountMethodCall = new MethodCall($matcherVariable, new Identifier('getInvocationCount'));
+        $matchArms = [];
+        foreach ($expectsMethodCall->getArgs() as $key => $arg) {
+            $matchArms[] = new MatchArm([new LNumber($key + 1)], $arg->value);
+        }
+        return new Match_($getInvocationCountMethodCall, $matchArms);
+    }
+    /**
+     * @return Variable[]
+     */
+    private function resolveUniqueUsedVariables(MethodCall $expectsMethodCall) : array
+    {
+        /** @var Variable[] $usedVariables */
+        $usedVariables = $this->betterNodeFinder->findInstanceOf($expectsMethodCall->getArgs(), Variable::class);
+        $uniqueUsedVariables = [];
+        foreach ($usedVariables as $usedVariable) {
+            if ($this->isName($usedVariable, 'this')) {
+                continue;
+            }
+            $usedVariableName = $this->getName($usedVariable);
+            $uniqueUsedVariables[$usedVariableName] = $usedVariable;
+        }
+        return $uniqueUsedVariables;
     }
 }
