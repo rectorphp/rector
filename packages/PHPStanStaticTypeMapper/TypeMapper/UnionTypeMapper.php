@@ -30,7 +30,6 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
@@ -42,11 +41,6 @@ use RectorPrefix202310\Webmozart\Assert\InvalidArgumentException;
  */
 final class UnionTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
     /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
@@ -71,9 +65,8 @@ final class UnionTypeMapper implements TypeMapperInterface
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
+    public function __construct(PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
     {
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -349,10 +342,6 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private function resolveCompatibleObjectCandidate(UnionType $unionType)
     {
-        if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
-            $objectType = new ObjectType('Doctrine\\Common\\Collections\\Collection');
-            return $this->unionTypeAnalyzer->isNullable($unionType) ? new UnionType([new NullType(), $objectType]) : $objectType;
-        }
         $typesWithClassNames = $this->unionTypeAnalyzer->matchExclusiveTypesWithClassNames($unionType);
         if ($typesWithClassNames === []) {
             return null;
