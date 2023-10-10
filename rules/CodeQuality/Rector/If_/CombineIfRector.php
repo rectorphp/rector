@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -82,6 +83,7 @@ CODE_SAMPLE
         if ($this->hasVarTag($subIf)) {
             return null;
         }
+        $node->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
         $this->commentsMerger->keepComments($node, [$subIf]);
