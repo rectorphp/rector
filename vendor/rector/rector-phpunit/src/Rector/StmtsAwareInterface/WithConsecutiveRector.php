@@ -55,7 +55,7 @@ final class WithConsecutiveRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Refactor "withConsecutive()" to ', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor deprecated withConsecutive() to willReturnCallback() structure', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -83,7 +83,7 @@ final class SomeTest extends TestCase
         $this->personServiceMock->expects($matcher)
             ->method('prepare')
             ->willReturnCallback(function () use ($matcher) {
-                return match ($matcher->getInvocationCount()) {
+                return match ($matcher->numberOfInvocations()) {
                     1 => [1, 2],
                     2 => [3, 4]
                 };
@@ -203,12 +203,12 @@ CODE_SAMPLE
     }
     private function createMatch(Variable $matcherVariable, MethodCall $expectsMethodCall) : Match_
     {
-        $getInvocationCountMethodCall = new MethodCall($matcherVariable, new Identifier('getInvocationCount'));
+        $numberOfInvocationsMethodCall = new MethodCall($matcherVariable, new Identifier('numberOfInvocations'));
         $matchArms = [];
         foreach ($expectsMethodCall->getArgs() as $key => $arg) {
             $matchArms[] = new MatchArm([new LNumber($key + 1)], $arg->value);
         }
-        return new Match_($getInvocationCountMethodCall, $matchArms);
+        return new Match_($numberOfInvocationsMethodCall, $matchArms);
     }
     /**
      * @return Variable[]

@@ -17,6 +17,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // https://github.com/sebastianbergmann/phpunit/issues/4087
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),
+        new MethodCallRename('PHPUnit\\Framework\\MockObject\\Rule\\InvocationOrder', 'getInvocationCount', 'numberOfInvocations'),
         // https://github.com/sebastianbergmann/phpunit/issues/4090
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'),
         // https://github.com/sebastianbergmann/phpunit/issues/4078

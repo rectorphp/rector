@@ -112,7 +112,7 @@ class Preg
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      * @return 0|positive-int
      *
-     * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
+     * @param-out array<int|string, list<array{string|null, int<-1, max>}>> $matches
      */
     public static function matchAllWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
