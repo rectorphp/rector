@@ -1322,6 +1322,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
     'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => $baseDir . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
     'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => $baseDir . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',

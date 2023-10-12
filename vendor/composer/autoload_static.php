@@ -1540,6 +1540,7 @@ class ComposerStaticInit46a0b0ac2ea1371bb06be09a20f71c2b
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
+        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
         'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
         'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',

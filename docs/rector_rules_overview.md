@@ -1,4 +1,4 @@
-# 354 Rules Overview
+# 355 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (29)
 
-- [DeadCode](#deadcode) (41)
+- [DeadCode](#deadcode) (42)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -2833,6 +2833,36 @@ Remove `@param` docblock with same type as parameter type
       */
      public function foo(string $a, string $b)
      {
+     }
+ }
+```
+
+<br>
+
+### RemoveUselessReturnExprInConstructRector
+
+Remove useless return Expr in `__construct()`
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnExprInConstructRector`](../rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function __construct()
+     {
+         if (rand(0, 1)) {
+             $this->init();
+-            return true;
++            return;
+         }
+
+         if (rand(2, 3)) {
+-            return parent::construct();
++            parent::construct();
++            return;
+         }
+
+         $this->execute();
      }
  }
 ```
