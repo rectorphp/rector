@@ -75,6 +75,7 @@ final class PureFunctionDetector
         'header_remove',
         'http_response_code',
         'setcookie',
+        'file_get_contents',
         // output buffer
         'ob_start',
         'ob_end_clean',
