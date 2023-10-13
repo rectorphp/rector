@@ -8,10 +8,13 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -48,6 +51,9 @@ final class ExprAnalyzer
             if ($expr instanceof Scalar) {
                 // string interpolation is true, otherwise false
                 return $expr instanceof Encapsed;
+            }
+            if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
+                return !$expr->expr instanceof LNumber && !$expr->expr instanceof DNumber;
             }
             return !$this->isAllowedConstFetchOrClassConstFetch($expr);
         }
