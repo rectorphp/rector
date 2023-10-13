@@ -111,6 +111,6 @@ CODE_SAMPLE
         if ($this->valueResolver->isTrueOrFalse($expr)) {
             return \false;
         }
-        return $this->getType($expr)->isBoolean()->yes();
+        return $this->nodeTypeResolver->getNativeType($expr)->isBoolean()->yes();
     }
 }
