@@ -18,6 +18,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
@@ -42,15 +43,21 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      */
     private $currentFileProvider;
     /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
+     */
+    private $useNodesToAddCollector;
+    /**
      * @var \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
      */
     private $rootNode = null;
-    public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, CurrentFileProvider $currentFileProvider)
+    public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, CurrentFileProvider $currentFileProvider, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->classRenamer = $classRenamer;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->useImportsRemover = $useImportsRemover;
         $this->currentFileProvider = $currentFileProvider;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
     /**
      * @param Stmt[] $nodes
@@ -91,8 +98,13 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if (!$file instanceof File) {
             return null;
         }
+        $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($file->getFilePath());
+        // nothing to remove, as no replacement
+        if ($useImportTypes === []) {
+            return null;
+        }
         $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-        $this->rootNode->stmts = $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses, $file->getFilePath());
+        $this->rootNode->stmts = $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses, $useImportTypes);
         return $result;
     }
 }
