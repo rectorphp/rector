@@ -35,11 +35,11 @@ final class PostFileProcessor
         $this->skipper = $skipper;
         $this->postRectors = [
             // priority: 650
-            $classRenamingPostRector,
-            // priority: 600
             $nameImportingPostRector,
-            // priority: 500
+            // priority: 600
             $useAddingPostRector,
+            // priority: 500
+            $classRenamingPostRector,
             // priority: 100
             $unusedImportRemovingPostRector,
         ];
