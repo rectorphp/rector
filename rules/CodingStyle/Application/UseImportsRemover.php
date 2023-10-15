@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Application;
 
+use RectorPrefix202310\Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Use_;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -54,14 +55,14 @@ final class UseImportsRemover
             if (!\in_array($useName, $removedUses, \true)) {
                 continue;
             }
+            $lastUseName = Strings::after($useName, '\\', -1);
             foreach ($useImportTypes as $useImportType) {
                 $className = $useImportType instanceof AliasedObjectType ? $useImportType->getFullyQualifiedName() : $useImportType->getClassName();
-                if ($className === $useName) {
+                if ($className === $useName || Strings::after($className, '\\', -1) === $lastUseName) {
                     unset($use->uses[$usesKey]);
                     continue 2;
                 }
             }
-            unset($use->uses[$usesKey]);
         }
         return $use;
     }
