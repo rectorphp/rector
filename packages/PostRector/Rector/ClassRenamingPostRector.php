@@ -96,12 +96,12 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         $file = $this->currentFileProvider->getFile();
         if (!$file instanceof File) {
-            return null;
+            return $result;
         }
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($file->getFilePath());
         // nothing to remove, as no replacement
         if ($useImportTypes === []) {
-            return null;
+            return $result;
         }
         $removedUses = $this->renamedClassesDataCollector->getOldClasses();
         $this->rootNode->stmts = $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses, $useImportTypes);
