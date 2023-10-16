@@ -23,17 +23,23 @@ final class PostFileProcessor
      * @var PostRectorInterface[]
      */
     private $postRectors = [];
-    public function __construct(Skipper $skipper, NameImportingPostRector $nameImportingPostRector, UseAddingPostRector $useAddingPostRector, ClassRenamingPostRector $classRenamingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector)
+    public function __construct(
+        Skipper $skipper,
+        // set order here
+        UseAddingPostRector $useAddingPostRector,
+        NameImportingPostRector $nameImportingPostRector,
+        ClassRenamingPostRector $classRenamingPostRector,
+        UnusedImportRemovingPostRector $unusedImportRemovingPostRector
+    )
     {
         $this->skipper = $skipper;
-        // set order here
         $this->postRectors = [
             // priority: 650
-            $nameImportingPostRector,
-            // priority: 600
-            $useAddingPostRector,
-            // priority: 500
             $classRenamingPostRector,
+            // priority: 600
+            $nameImportingPostRector,
+            // priority: 500
+            $useAddingPostRector,
             // priority: 100
             $unusedImportRemovingPostRector,
         ];
