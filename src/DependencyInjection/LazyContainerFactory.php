@@ -252,7 +252,7 @@ final class LazyContainerFactory
         $rectorConfig->collector(ParentClassCollector::class);
         $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
             $application = $container->make(ConsoleApplication::class);
-            $commandNamesToHide = ['list', 'completion', 'help'];
+            $commandNamesToHide = ['list', 'completion', 'help', 'worker'];
             foreach ($commandNamesToHide as $commandNameToHide) {
                 $commandToHide = $application->get($commandNameToHide);
                 $commandToHide->setHidden();
