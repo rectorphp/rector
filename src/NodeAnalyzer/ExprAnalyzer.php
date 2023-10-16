@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -47,17 +46,18 @@ final class ExprAnalyzer
     }
     public function isDynamicExpr(Expr $expr) : bool
     {
-        if (!$expr instanceof Array_) {
-            if ($expr instanceof Scalar) {
-                // string interpolation is true, otherwise false
-                return $expr instanceof Encapsed;
-            }
-            if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
-                return !$expr->expr instanceof LNumber && !$expr->expr instanceof DNumber;
-            }
-            return !$this->isAllowedConstFetchOrClassConstFetch($expr);
+        // Unwrap UnaryPlus and UnaryMinus
+        if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
+            $expr = $expr->expr;
         }
-        return $this->isDynamicArray($expr);
+        if ($expr instanceof Array_) {
+            return $this->isDynamicArray($expr);
+        }
+        if ($expr instanceof Scalar) {
+            // string interpolation is true, otherwise false
+            return $expr instanceof Encapsed;
+        }
+        return !$this->isAllowedConstFetchOrClassConstFetch($expr);
     }
     public function isDynamicArray(Array_ $array) : bool
     {
