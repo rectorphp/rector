@@ -193,7 +193,7 @@ class Terminal
         }
         $descriptorspec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
         $cp = \function_exists('sapi_windows_cp_set') ? \sapi_windows_cp_get() : 0;
-        $process = \proc_open(\is_array($command) ? \implode(' ', $command) : $command, $descriptorspec, $pipes, null, null, ['suppress_errors' => \true]);
+        $process = \proc_open(\is_array($command) ? \implode(' ', \array_map('escapeshellarg', $command)) : $command, $descriptorspec, $pipes, null, null, ['suppress_errors' => \true]);
         if (!\is_resource($process)) {
             return null;
         }

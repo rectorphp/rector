@@ -934,8 +934,8 @@ Change array command argument on proc_open to implode spaced string
 - class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeProcOpenArrayCommandArgRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeProcOpenArrayCommandArgRector.php)
 
 ```diff
--return proc_open($command, $descriptorspec, $pipes);
-+return proc_open(is_array($command) ? implode(' ', $command) : $command, $descriptorspec, $pipes);
+-return proc_open($command, $descriptorspec, $pipes, null, null, ['suppress_errors' => true]);
++return proc_open(is_array($command) ? implode(' ', array_map('escapeshellarg', $command)) : $command, $descriptorspec, $pipes, null, null, ['suppress_errors' => true]);
 ```
 
 <br>
