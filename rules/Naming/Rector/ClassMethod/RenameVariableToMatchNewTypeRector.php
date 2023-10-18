@@ -87,6 +87,10 @@ CODE_SAMPLE
         $assignsOfNew = $this->getAssignsOfNew($node);
         foreach ($assignsOfNew as $assignOfNew) {
             $expectedName = $this->expectedNameResolver->resolveForAssignNew($assignOfNew);
+            // skip self name as not useful
+            if ($expectedName === 'self') {
+                continue;
+            }
             /** @var Variable $variable */
             $variable = $assignOfNew->var;
             if ($expectedName === null) {
