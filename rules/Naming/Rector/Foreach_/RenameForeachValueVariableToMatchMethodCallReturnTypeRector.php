@@ -49,6 +49,10 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
      * @var \Rector\Naming\Matcher\ForeachMatcher
      */
     private $foreachMatcher;
+    /**
+     * @var string[]
+     */
+    private const UNREADABLE_GENERIC_NAMES = ['traversable', 'iterable', 'generator', 'rewindableGenerator'];
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, NamingConventionAnalyzer $namingConventionAnalyzer, VariableRenamer $variableRenamer, ForeachMatcher $foreachMatcher)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
@@ -137,6 +141,9 @@ CODE_SAMPLE
     }
     private function shouldSkip(VariableAndCallForeach $variableAndCallForeach, string $expectedName) : bool
     {
+        if (\in_array($expectedName, self::UNREADABLE_GENERIC_NAMES, \true)) {
+            return \true;
+        }
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName($variableAndCallForeach->getCall(), $variableAndCallForeach->getVariableName(), $expectedName)) {
             return \true;
         }
