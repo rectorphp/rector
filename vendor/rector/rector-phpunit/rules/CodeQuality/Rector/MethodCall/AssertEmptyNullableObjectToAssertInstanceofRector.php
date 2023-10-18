@@ -75,7 +75,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$this->isName($node->name, 'assertNotEmpty')) {
+        if (!$this->isNames($node->name, ['assertNotEmpty', 'assertEmpty'])) {
             return null;
         }
         $firstArg = $node->getArgs()[0];
@@ -87,7 +87,8 @@ CODE_SAMPLE
         if (!$pureType instanceof ObjectType) {
             return null;
         }
-        $node->name = new Identifier('assertInstanceOf');
+        $methodName = $this->isName($node->name, 'assertEmpty') ? 'assertNotInstanceOf' : 'assertInstanceOf';
+        $node->name = new Identifier($methodName);
         $fullyQualified = new FullyQualified($pureType->getClassName());
         $node->args[0] = new Arg(new ClassConstFetch($fullyQualified, 'class'));
         $node->args[1] = $firstArg;
