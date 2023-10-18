@@ -13,6 +13,7 @@ use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefi
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEqualsToSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertInstanceOfComparisonRector;
@@ -37,7 +38,7 @@ return static function (RectorConfig $rectorConfig) : void {
         YieldDataProviderRector::class,
         RemoveEmptyTestMethodRector::class,
         ReplaceTestAnnotationWithPrefixedFunctionRector::class,
-        // sepcific asserts
+        // specific asserts
         AssertCompareToSpecificMethodRector::class,
         AssertComparisonToSpecificMethodRector::class,
         AssertNotOperatorRector::class,
@@ -51,6 +52,7 @@ return static function (RectorConfig $rectorConfig) : void {
         SimplifyForeachInstanceOfRector::class,
         UseSpecificWillMethodRector::class,
         UseSpecificWithMethodRector::class,
+        AssertEmptyNullableObjectToAssertInstanceofRector::class,
         /**
          * Improve direct testing of your code, without mock creep. Make it simple, clear and easy to maintain:
          *

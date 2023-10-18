@@ -1,4 +1,4 @@
-# 47 Rules Overview
+# 49 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -128,6 +128,47 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 ```diff
 -$this->assertFalse($foo >= $bar, "message");
 +$this->assertLessThanOrEqual($bar, $foo, "message");
+```
+
+<br>
+
+## AssertEmptyNullableObjectToAssertInstanceofRector
+
+Change `assertNotEmpty()` on an object to more clear `assertInstanceof()`
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector`](../rules/CodeQuality/Rector/MethodCall/AssertEmptyNullableObjectToAssertInstanceofRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function test()
+     {
+         $someObject = new stdClass();
+
+-        $this->assertNotEmpty($someObject);
++        $this->assertInstanceof(stdClass::class, $someObject);
+     }
+ }
+```
+
+<br>
+
+## AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector
+
+Change `assertEquals()/assertSame()` method using float on expected argument to new specific alternatives.
+
+- class: [`Rector\PHPUnit\Transform\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector`](../src/Transform/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php)
+
+```diff
+-$this->assertSame(10.20, $value);
+-$this->assertEquals(10.20, $value);
+-$this->assertEquals(10.200, $value);
++$this->assertEqualsWithDelta(10.20, $value, PHP_FLOAT_EPSILON);
++$this->assertEqualsWithDelta(10.20, $value, PHP_FLOAT_EPSILON);
++$this->assertEqualsWithDelta(10.200, $value, PHP_FLOAT_EPSILON);
+ $this->assertSame(10, $value);
 ```
 
 <br>
@@ -1022,7 +1063,7 @@ Changes `->with()` to more specific method
 
 ## WithConsecutiveRector
 
-Refactor `"withConsecutive()"` to
+Refactor deprecated `withConsecutive()` to `willReturnCallback()` structure
 
 - class: [`Rector\PHPUnit\Rector\StmtsAwareInterface\WithConsecutiveRector`](../src/Rector/StmtsAwareInterface/WithConsecutiveRector.php)
 
