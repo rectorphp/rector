@@ -12,6 +12,7 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
+use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
@@ -25,5 +26,7 @@ return static function (RectorConfig $rectorConfig) : void {
         ParamTypeFromRouteRequiredRegexRector::class,
         ActionSuffixRemoverRector::class,
         LoadValidatorMetadataToAnnotationRector::class,
+        // tests
+        AssertSameResponseCodeWithDebugContentsRector::class,
     ]);
 };

@@ -2054,6 +2054,7 @@ return array(
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\MakeCommandLazyRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php',
+    'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\AssertSameResponseCodeWithDebugContentsRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
     'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',

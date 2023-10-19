@@ -2272,6 +2272,7 @@ class ComposerStaticInit46a0b0ac2ea1371bb06be09a20f71c2b
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php',
+        'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\AssertSameResponseCodeWithDebugContentsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
         'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',

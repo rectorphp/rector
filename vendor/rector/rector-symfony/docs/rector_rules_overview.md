@@ -1,4 +1,4 @@
-# 82 Rules Overview
+# 83 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -78,6 +78,30 @@ Replaces ArgumentValueResolverInterface by ValueResolverInterface
 -
      public function resolve(Request $request, ArgumentMetadata $argument): iterable
      {
+     }
+ }
+```
+
+<br>
+
+## AssertSameResponseCodeWithDebugContentsRector
+
+Make assertSame(200, `$response->getStatusCode())` in tests comparing response code to include response contents for faster feedback
+
+- class: [`Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector`](../rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function run()
+     {
+         /** @var \Symfony\Component\HttpFoundation\Response $response */
+         $response = $this->processResult();
+
+-        $this->assertSame(200, $response->getStatusCode());
++        $this->assertSame(200, $response->getStatusCode(), $response->getContents());
      }
  }
 ```
