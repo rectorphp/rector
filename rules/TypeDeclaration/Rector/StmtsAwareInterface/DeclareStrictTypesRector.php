@@ -44,6 +44,10 @@ CODE_SAMPLE
     public function beforeTraverse(array $nodes) : ?array
     {
         parent::beforeTraverse($nodes);
+        $filePath = $this->file->getFilePath();
+        if ($this->skipper->shouldSkipElementAndFilePath(self::class, $filePath)) {
+            return null;
+        }
         $newStmts = $this->file->getNewStmts();
         if ($newStmts === []) {
             return null;

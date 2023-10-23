@@ -85,7 +85,7 @@ CODE_SAMPLE;
     /**
      * @var \Rector\Skipper\Skipper\Skipper
      */
-    private $skipper;
+    protected $skipper;
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
