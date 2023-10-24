@@ -75,6 +75,10 @@ CODE_SAMPLE;
      */
     protected $file;
     /**
+     * @var \Rector\Skipper\Skipper\Skipper
+     */
+    protected $skipper;
+    /**
      * @var \Rector\Core\Application\ChangedNodeScopeRefresher
      */
     private $changedNodeScopeRefresher;
@@ -82,10 +86,6 @@ CODE_SAMPLE;
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    /**
-     * @var \Rector\Skipper\Skipper\Skipper
-     */
-    protected $skipper;
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
