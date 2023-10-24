@@ -60,6 +60,9 @@ CODE_SAMPLE
         if (!$this->controllerMethodAnalyzer->isAction($node)) {
             return null;
         }
+        if ($node->name->toString() === 'getAction') {
+            return null;
+        }
         $this->removeSuffix($node, 'Action');
         return $node;
     }
