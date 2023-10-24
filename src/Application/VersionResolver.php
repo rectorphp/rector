@@ -24,7 +24,7 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const RELEASE_DATE = '2023-10-24 16:33:12';
+    public const RELEASE_DATE = '2023-10-24 16:57:04';
     /**
      * @var int
      */
