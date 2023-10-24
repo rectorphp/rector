@@ -112,7 +112,9 @@ CODE_SAMPLE
             if ($this->hasCallLikeInAssignExpr($assign, $scope)) {
                 // clean safely
                 $cleanAssignedExpr = $this->cleanCastedExpr($assign->expr);
-                $node->stmts[$stmtPosition] = new Expression($cleanAssignedExpr);
+                $newExpression = new Expression($cleanAssignedExpr);
+                $this->mirrorComments($newExpression, $currentStmt);
+                $node->stmts[$stmtPosition] = $newExpression;
             } else {
                 unset($node->stmts[$stmtPosition]);
             }
