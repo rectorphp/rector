@@ -13,7 +13,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
-use Rector\Naming\RectorNamingInflector;
+use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -25,9 +25,9 @@ final class PropertyNaming
 {
     /**
      * @readonly
-     * @var \Rector\Naming\RectorNamingInflector
+     * @var \Rector\Naming\ExpectedNameResolver\InflectorSingularResolver
      */
-    private $rectorNamingInflector;
+    private $inflectorSingularResolver;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -55,9 +55,9 @@ final class PropertyNaming
      * @var string
      */
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
-    public function __construct(RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, NodeTypeResolver $nodeTypeResolver)
     {
-        $this->rectorNamingInflector = $rectorNamingInflector;
+        $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function getExpectedNameFromMethodName(string $methodName) : ?ExpectedName
@@ -67,7 +67,7 @@ final class PropertyNaming
             return null;
         }
         $originalName = \lcfirst((string) $matches['root_name']);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new ExpectedName($originalName, $this->inflectorSingularResolver->resolve($originalName));
     }
     public function getExpectedNameFromType(Type $type) : ?ExpectedName
     {
@@ -99,7 +99,7 @@ final class PropertyNaming
         $shortClassName = $this->normalizeShortClassName($shortClassName);
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new ExpectedName($originalName, $this->inflectorSingularResolver->resolve($originalName));
     }
     /**
      * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|string $objectType
