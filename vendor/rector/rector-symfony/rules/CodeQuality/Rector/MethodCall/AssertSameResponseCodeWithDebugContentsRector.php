@@ -52,7 +52,7 @@ class SomeClass extends TestCase
         /** @var \Symfony\Component\HttpFoundation\Response $response */
         $response = $this->processResult();
 
-        $this->assertSame(200, $response->getStatusCode(), $response->getContents());
+        $this->assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 }
 CODE_SAMPLE
@@ -91,8 +91,8 @@ CODE_SAMPLE
         if (!$responseExpr instanceof Expr) {
             return null;
         }
-        $getContentsMethodCall = new MethodCall($responseExpr, 'getContents');
-        $node->args[2] = new Arg($getContentsMethodCall);
+        $getContentMethodCall = new MethodCall($responseExpr, 'getContent');
+        $node->args[2] = new Arg($getContentMethodCall);
         return $node;
     }
     /**

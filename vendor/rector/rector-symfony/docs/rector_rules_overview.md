@@ -101,7 +101,7 @@ Make assertSame(200, `$response->getStatusCode())` in tests comparing response c
          $response = $this->processResult();
 
 -        $this->assertSame(200, $response->getStatusCode());
-+        $this->assertSame(200, $response->getStatusCode(), $response->getContents());
++        $this->assertSame(200, $response->getStatusCode(), $response->getContent());
      }
  }
 ```
