@@ -88,17 +88,17 @@ CODE_SAMPLE
         if ($this->exprAnalyzer->isNonTypedFromParam($node->right)) {
             return null;
         }
-        if ($this->isStringOrStaticNonNumbericString($node->left) && $this->nodeTypeResolver->isNumberType($node->right)) {
+        if ($this->isStringOrStaticNonNumericString($node->left) && $this->nodeTypeResolver->isNumberType($node->right)) {
             $node->left = new LNumber(0);
             return $node;
         }
-        if ($this->isStringOrStaticNonNumbericString($node->right) && $this->nodeTypeResolver->isNumberType($node->left)) {
+        if ($this->isStringOrStaticNonNumericString($node->right) && $this->nodeTypeResolver->isNumberType($node->left)) {
             $node->right = new LNumber(0);
             return $node;
         }
         return null;
     }
-    private function isStringOrStaticNonNumbericString(Expr $expr) : bool
+    private function isStringOrStaticNonNumericString(Expr $expr) : bool
     {
         // replace only scalar values, not variables/constants/etc.
         if (!$expr instanceof Scalar && !$expr instanceof Variable) {
