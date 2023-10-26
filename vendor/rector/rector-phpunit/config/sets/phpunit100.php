@@ -34,5 +34,7 @@ return static function (RectorConfig $rectorConfig) : void {
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsWritable', 'assertIsNotWritable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4063
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsReadable', 'assertIsNotReadable'),
+        // https://github.com/sebastianbergmann/phpunit/pull/3687
+        new MethodCallRename('PHPUnit\\Framework\\Assert', 'setMethods', 'onlyMethods'),
     ]);
 };
