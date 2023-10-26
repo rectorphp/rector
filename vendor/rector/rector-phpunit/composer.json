@@ -50,6 +50,7 @@
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "rector": "vendor\/bin\/rector process --ansi",
         "docs": "vendor\/bin\/rule-doc-generator generate src rules --output-file docs\/rector_rules_overview.md --ansi"
     },
     "extra": {

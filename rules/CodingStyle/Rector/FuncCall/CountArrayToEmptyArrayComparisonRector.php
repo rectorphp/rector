@@ -88,7 +88,7 @@ CODE_SAMPLE
     }
     private function isArray(Expr $expr) : bool
     {
-        return $this->getType($expr)->isArray()->yes();
+        return $this->nodeTypeResolver->getNativeType($expr)->isArray()->yes();
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
