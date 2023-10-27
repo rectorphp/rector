@@ -29,6 +29,7 @@ use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
@@ -169,6 +170,8 @@ final class PHPStanNodeScopeResolver
                 $this->processSwitch($node, $mutatingScope);
             } elseif ($node instanceof TryCatch) {
                 $this->processTryCatch($node, $filePath, $mutatingScope);
+            } elseif ($node instanceof Catch_) {
+                $this->processCatch($node, $filePath, $mutatingScope);
             } elseif ($node instanceof ArrayItem) {
                 $this->processArrayItem($node, $mutatingScope);
             } elseif ($node instanceof NullableType) {
@@ -274,15 +277,19 @@ final class PHPStanNodeScopeResolver
             $case->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
     }
+    private function processCatch(Catch_ $catch, string $filePath, MutatingScope $mutatingScope) : void
+    {
+        $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
+        $type = TypeCombinator::union(...\array_map(static function (Name $name) : ObjectType {
+            return new ObjectType((string) $name);
+        }, $catch->types));
+        $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
+        $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
+    }
     private function processTryCatch(TryCatch $tryCatch, string $filePath, MutatingScope $mutatingScope) : void
     {
         foreach ($tryCatch->catches as $catch) {
-            $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
-            $type = TypeCombinator::union(...\array_map(static function (Name $name) : ObjectType {
-                return new ObjectType((string) $name);
-            }, $catch->types));
-            $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
-            $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
+            $this->processCatch($catch, $filePath, $mutatingScope);
         }
         if ($tryCatch->finally instanceof Finally_) {
             $tryCatch->finally->setAttribute(AttributeKey::SCOPE, $mutatingScope);
