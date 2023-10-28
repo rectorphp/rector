@@ -126,12 +126,12 @@ final class UnionTypeMapper implements TypeMapperInterface
                 Assert::isAnyOf($firstType, [Name::class, Identifier::class]);
                 Assert::isAnyOf($secondType, [Name::class, Identifier::class]);
             } catch (InvalidArgumentException $exception) {
-                return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
+                return $this->resolveUnionTypes($phpParserUnionType);
             }
             $firstTypeValue = $firstType->toString();
             $secondTypeValue = $secondType->toString();
             if ($firstTypeValue === $secondTypeValue) {
-                return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
+                return $this->resolveUnionTypes($phpParserUnionType);
             }
             if ($firstTypeValue === 'null') {
                 return $this->resolveNullableType(new NullableType($secondType));
@@ -140,7 +140,7 @@ final class UnionTypeMapper implements TypeMapperInterface
                 return $this->resolveNullableType(new NullableType($firstType));
             }
         }
-        return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
+        return $this->resolveUnionTypes($phpParserUnionType);
     }
     /**
      * @return null|\PhpParser\Node\NullableType|PhpParserUnionType
@@ -195,30 +195,11 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return $unionTypeAnalysis->hasArray();
     }
-    private function resolveUnionTypes(PhpParserUnionType $phpParserUnionType, int $totalTypes) : ?PhpParserUnionType
+    private function resolveUnionTypes(PhpParserUnionType $phpParserUnionType) : ?PhpParserUnionType
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
-        if ($totalTypes === 2) {
-            return $phpParserUnionType;
-        }
-        $identifierNames = [];
-        foreach ($phpParserUnionType->types as $type) {
-            if ($type instanceof Identifier) {
-                $identifierNames[] = $type->toString();
-            }
-        }
-        if (!\in_array('bool', $identifierNames, \true)) {
-            return $phpParserUnionType;
-        }
-        if (!\in_array('false', $identifierNames, \true)) {
-            return $phpParserUnionType;
-        }
-        $phpParserUnionType->types = \array_filter($phpParserUnionType->types, static function (Node $node) : bool {
-            return !$node instanceof Identifier || $node->toString() !== 'false';
-        });
-        $phpParserUnionType->types = \array_values($phpParserUnionType->types);
         return $phpParserUnionType;
     }
     private function matchTypeForNullableUnionType(UnionType $unionType) : ?Type
