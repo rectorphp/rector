@@ -9,6 +9,9 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -49,30 +52,48 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [BooleanNot::class, FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param BooleanNot|FuncCall $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node, 'in_array')) {
+        if ($node instanceof BooleanNot) {
+            if (!$node->expr instanceof FuncCall) {
+                return null;
+            }
+            $firstArrayItem = $this->resolveArrayItem($node->expr);
+            if (!$firstArrayItem instanceof ArrayItem) {
+                return null;
+            }
+            return $this->processCompare($firstArrayItem, $node->expr, \true);
+        }
+        $firstArrayItem = $this->resolveArrayItem($node);
+        if (!$firstArrayItem instanceof ArrayItem) {
             return null;
         }
-        if ($node->isFirstClassCallable()) {
+        return $this->processCompare($firstArrayItem, $node);
+    }
+    private function resolveArrayItem(FuncCall $funcCall) : ?ArrayItem
+    {
+        if (!$this->isName($funcCall, 'in_array')) {
             return null;
         }
-        if (!isset($node->args[1])) {
+        if ($funcCall->isFirstClassCallable()) {
             return null;
         }
-        if (!$node->args[1] instanceof Arg) {
+        if (!isset($funcCall->args[1])) {
             return null;
         }
-        if (!$node->args[1]->value instanceof Array_) {
+        if (!$funcCall->args[1] instanceof Arg) {
+            return null;
+        }
+        if (!$funcCall->args[1]->value instanceof Array_) {
             return null;
         }
         /** @var Array_ $arrayNode */
-        $arrayNode = $node->args[1]->value;
+        $arrayNode = $funcCall->args[1]->value;
         if (\count($arrayNode->items) !== 1) {
             return null;
         }
@@ -83,15 +104,19 @@ CODE_SAMPLE
         if ($firstArrayItem->unpack) {
             return null;
         }
-        if (!isset($node->getArgs()[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return null;
         }
+        return $firstArrayItem;
+    }
+    private function processCompare(ArrayItem $firstArrayItem, FuncCall $funcCall, bool $isNegated = \false) : Node
+    {
         $firstArrayItemValue = $firstArrayItem->value;
-        $firstArg = $node->getArgs()[0];
+        $firstArg = $funcCall->getArgs()[0];
         // strict
-        if (isset($node->getArgs()[2])) {
-            return new Identical($firstArg->value, $firstArrayItemValue);
+        if (isset($funcCall->getArgs()[2])) {
+            return $isNegated ? new NotIdentical($firstArg->value, $firstArrayItemValue) : new Identical($firstArg->value, $firstArrayItemValue);
         }
-        return new Equal($firstArg->value, $firstArrayItemValue);
+        return $isNegated ? new NotEqual($firstArg->value, $firstArrayItemValue) : new Equal($firstArg->value, $firstArrayItemValue);
     }
 }
