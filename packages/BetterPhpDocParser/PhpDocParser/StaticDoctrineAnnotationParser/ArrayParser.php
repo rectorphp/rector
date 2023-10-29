@@ -167,6 +167,9 @@ final class ArrayParser
         if ($key !== null) {
             return new ArrayItemNode($value, $key);
         }
+        if (\is_string($value) && $valueQuoteKind === String_::KIND_SINGLE_QUOTED) {
+            $value = \trim($value, "'");
+        }
         return new ArrayItemNode($value);
     }
     /**
