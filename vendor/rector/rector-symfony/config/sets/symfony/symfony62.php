@@ -14,8 +14,21 @@ use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttribute
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
+use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(SimplifyFormRenderingRector::class);
+    // change to attribute before rename
+    // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
+    // @see https://github.com/rectorphp/rector-symfony/issues/535#issuecomment-1783983383
+    $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
+        // @see https://github.com/symfony/symfony/pull/46907
+        new AnnotationToAttribute('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted'),
+        // @see https://github.com/symfony/symfony/pull/46880
+        new AnnotationToAttribute('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Cache'),
+        // @see https://github.com/symfony/symfony/pull/46906
+        new AnnotationToAttribute('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template'),
+    ]);
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46907

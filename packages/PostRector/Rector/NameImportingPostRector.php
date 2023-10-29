@@ -20,6 +20,7 @@ use Rector\CodingStyle\Node\NameImporter;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -69,7 +70,12 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
-    public function __construct(NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    public function __construct(NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver, DocBlockUpdater $docBlockUpdater, RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->nameImporter = $nameImporter;
         $this->docBlockNameImporter = $docBlockNameImporter;
@@ -79,6 +85,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->useImportsResolver = $useImportsResolver;
         $this->aliasNameResolver = $aliasNameResolver;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function enterNode(Node $node) : ?Node
     {
@@ -94,6 +101,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return null;
         }
         if ($node instanceof Name) {
+            $node = $this->resolveNameFromAttribute($node);
             return $this->processNodeName($node, $file);
         }
         if (!$node instanceof Stmt && !$node instanceof Param) {
@@ -113,6 +121,22 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
+    }
+    private function resolveNameFromAttribute(Name $name) : Name
+    {
+        if ($name instanceof FullyQualified) {
+            return $name;
+        }
+        if ($name->hasAttribute(AttributeKey::PHP_ATTRIBUTE_NAME)) {
+            $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
+            $phpAttributeName = $name->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
+            foreach ($oldToNewClasses as $oldName => $newName) {
+                if ($oldName === $phpAttributeName) {
+                    return new FullyQualified($newName);
+                }
+            }
+        }
+        return $name;
     }
     private function processNodeName(Name $name, File $file) : ?Node
     {
