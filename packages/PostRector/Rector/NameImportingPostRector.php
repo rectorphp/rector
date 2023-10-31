@@ -127,12 +127,12 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($name instanceof FullyQualified) {
             return $name;
         }
-        if ($name->hasAttribute(AttributeKey::PHP_ATTRIBUTE_NAME)) {
+        if (\array_keys($name->getAttributes()) === [AttributeKey::PHP_ATTRIBUTE_NAME]) {
             $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
             $phpAttributeName = $name->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
             foreach ($oldToNewClasses as $oldName => $newName) {
                 if ($oldName === $phpAttributeName) {
-                    return new FullyQualified($newName);
+                    return new FullyQualified($newName, $name->getAttributes());
                 }
             }
         }
