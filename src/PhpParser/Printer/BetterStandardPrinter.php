@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
-use RectorPrefix202310\Nette\Utils\Strings;
+use RectorPrefix202311\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr;

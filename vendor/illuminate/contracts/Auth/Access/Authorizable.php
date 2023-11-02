@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202310\Illuminate\Contracts\Auth\Access;
+namespace RectorPrefix202311\Illuminate\Contracts\Auth\Access;
 
 interface Authorizable
 {

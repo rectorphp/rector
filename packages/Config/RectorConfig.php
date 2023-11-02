@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Config;
 
-use RectorPrefix202310\Illuminate\Container\Container;
+use RectorPrefix202311\Illuminate\Container\Container;
 use PHPStan\Collectors\Collector;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
@@ -15,7 +15,7 @@ use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use RectorPrefix202310\Webmozart\Assert\Assert;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 /**
  * @api
  */

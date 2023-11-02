@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202310\Illuminate\Container;
+namespace RectorPrefix202311\Illuminate\Container;
 
 use Closure;
-use RectorPrefix202310\Illuminate\Contracts\Container\BindingResolutionException;
+use RectorPrefix202311\Illuminate\Contracts\Container\BindingResolutionException;
 use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionMethod;

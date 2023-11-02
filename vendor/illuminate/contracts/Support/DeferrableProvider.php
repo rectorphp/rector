@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202310\Illuminate\Contracts\Support;
+namespace RectorPrefix202311\Illuminate\Contracts\Support;
 
 interface DeferrableProvider
 {

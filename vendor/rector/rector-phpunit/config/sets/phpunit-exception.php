@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202310;
+namespace RectorPrefix202311;
 
 use Rector\Config\RectorConfig;
 /** @deprecated Use PHPUnit 6.0 set instead, as related to the version */

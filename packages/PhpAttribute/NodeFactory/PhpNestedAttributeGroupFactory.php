@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\NodeFactory;
 
-use RectorPrefix202310\Nette\Utils\Strings;
+use RectorPrefix202311\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;

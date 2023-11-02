@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202310\Fidry\CpuCoreCounter;
+namespace RectorPrefix202311\Fidry\CpuCoreCounter;
 
 use RuntimeException;
 final class NumberOfCpuCoreNotFound extends RuntimeException

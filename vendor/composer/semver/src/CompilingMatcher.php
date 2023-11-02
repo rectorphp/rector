@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202310\Composer\Semver;
+namespace RectorPrefix202311\Composer\Semver;
 
-use RectorPrefix202310\Composer\Semver\Constraint\Constraint;
-use RectorPrefix202310\Composer\Semver\Constraint\ConstraintInterface;
+use RectorPrefix202311\Composer\Semver\Constraint\Constraint;
+use RectorPrefix202311\Composer\Semver\Constraint\ConstraintInterface;
 /**
  * Helper class to evaluate constraint by compiling and reusing the code to evaluate
  */

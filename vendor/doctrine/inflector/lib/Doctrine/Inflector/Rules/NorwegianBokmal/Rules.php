@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202310\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix202311\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix202310\Doctrine\Inflector\Rules\Patterns;
-use RectorPrefix202310\Doctrine\Inflector\Rules\Ruleset;
-use RectorPrefix202310\Doctrine\Inflector\Rules\Substitutions;
-use RectorPrefix202310\Doctrine\Inflector\Rules\Transformations;
+use RectorPrefix202311\Doctrine\Inflector\Rules\Patterns;
+use RectorPrefix202311\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix202311\Doctrine\Inflector\Rules\Substitutions;
+use RectorPrefix202311\Doctrine\Inflector\Rules\Transformations;
 final class Rules
 {
     public static function getSingularRuleset() : Ruleset

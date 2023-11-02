@@ -435,12 +435,12 @@ class Lexer
             }
         }
         // HHVM uses a special token for numbers that overflow to double
-        if (\defined('RectorPrefix202310\\T_ONUMBER')) {
-            $tokenMap[\RectorPrefix202310\T_ONUMBER] = Tokens::T_DNUMBER;
+        if (\defined('RectorPrefix202311\\T_ONUMBER')) {
+            $tokenMap[\RectorPrefix202311\T_ONUMBER] = Tokens::T_DNUMBER;
         }
         // HHVM also has a separate token for the __COMPILER_HALT_OFFSET__ constant
-        if (\defined('RectorPrefix202310\\T_COMPILER_HALT_OFFSET')) {
-            $tokenMap[\RectorPrefix202310\T_COMPILER_HALT_OFFSET] = Tokens::T_STRING;
+        if (\defined('RectorPrefix202311\\T_COMPILER_HALT_OFFSET')) {
+            $tokenMap[\RectorPrefix202311\T_COMPILER_HALT_OFFSET] = Tokens::T_STRING;
         }
         // Assign tokens for which we define compatibility constants, as token_name() does not know them.
         $tokenMap[\T_FN] = Tokens::T_FN;

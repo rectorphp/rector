@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202310;
+namespace RectorPrefix202311;
 
 ///////////////////////////////
 /// Utility regex constants ///
@@ -26,10 +26,10 @@ function preprocessGrammar($code)
 }
 function resolveNodes($code)
 {
-    return \preg_replace_callback('~\\b(?<name>[A-Z][a-zA-Z_\\\\]++)\\s*' . \RectorPrefix202310\PARAMS . '~', function ($matches) {
+    return \preg_replace_callback('~\\b(?<name>[A-Z][a-zA-Z_\\\\]++)\\s*' . \RectorPrefix202311\PARAMS . '~', function ($matches) {
         // recurse
         $matches['params'] = resolveNodes($matches['params']);
-        $params = magicSplit('(?:' . \RectorPrefix202310\PARAMS . '|' . \RectorPrefix202310\ARGS . ')(*SKIP)(*FAIL)|,', $matches['params']);
+        $params = magicSplit('(?:' . \RectorPrefix202311\PARAMS . '|' . \RectorPrefix202311\ARGS . ')(*SKIP)(*FAIL)|,', $matches['params']);
         $paramCode = '';
         foreach ($params as $param) {
             $paramCode .= $param . ', ';
@@ -39,11 +39,11 @@ function resolveNodes($code)
 }
 function resolveMacros($code)
 {
-    return \preg_replace_callback('~\\b(?<!::|->)(?!array\\()(?<name>[a-z][A-Za-z]++)' . \RectorPrefix202310\ARGS . '~', function ($matches) {
+    return \preg_replace_callback('~\\b(?<!::|->)(?!array\\()(?<name>[a-z][A-Za-z]++)' . \RectorPrefix202311\ARGS . '~', function ($matches) {
         // recurse
         $matches['args'] = resolveMacros($matches['args']);
         $name = $matches['name'];
-        $args = magicSplit('(?:' . \RectorPrefix202310\PARAMS . '|' . \RectorPrefix202310\ARGS . ')(*SKIP)(*FAIL)|,', $matches['args']);
+        $args = magicSplit('(?:' . \RectorPrefix202311\PARAMS . '|' . \RectorPrefix202311\ARGS . ')(*SKIP)(*FAIL)|,', $matches['args']);
         if ('attributes' === $name) {
             assertArgs(0, $args, $name);
             return '$this->startAttributeStack[#1] + $this->endAttributes';
@@ -113,7 +113,7 @@ function removeTrailingWhitespace($code)
 //////////////////////////////
 function regex($regex)
 {
-    return '~' . \RectorPrefix202310\LIB . '(?:' . \str_replace('~', '\\~', $regex) . ')~';
+    return '~' . \RectorPrefix202311\LIB . '(?:' . \str_replace('~', '\\~', $regex) . ')~';
 }
 function magicSplit($regex, $string)
 {

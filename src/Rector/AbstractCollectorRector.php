@@ -6,7 +6,7 @@ namespace Rector\Core\Rector;
 use PHPStan\Node\CollectedDataNode;
 use Rector\Core\Contract\Rector\CollectorRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202310\Webmozart\Assert\Assert;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 abstract class AbstractCollectorRector extends \Rector\Core\Rector\AbstractRector implements CollectorRectorInterface
 {
     /**

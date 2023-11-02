@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202310\Symfony\Component\Console\Command;
+namespace RectorPrefix202311\Symfony\Component\Console\Command;
 
-use RectorPrefix202310\Symfony\Component\Console\Application;
-use RectorPrefix202310\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202310\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202310\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202310\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix202310\Symfony\Component\Console\Exception\ExceptionInterface;
-use RectorPrefix202310\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202310\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix202310\Symfony\Component\Console\Helper\HelperInterface;
-use RectorPrefix202310\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix202310\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202310\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202310\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202310\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202310\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202311\Symfony\Component\Console\Application;
+use RectorPrefix202311\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202311\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202311\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202311\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202311\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix202311\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202311\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202311\Symfony\Component\Console\Helper\HelperInterface;
+use RectorPrefix202311\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202311\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202311\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202311\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202311\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202311\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base class for all commands.
  *
@@ -305,7 +305,7 @@ class Command
                         \cli_set_process_title($this->processTitle);
                     }
                 }
-            } elseif (\function_exists('RectorPrefix202310\\setproctitle')) {
+            } elseif (\function_exists('RectorPrefix202311\\setproctitle')) {
                 setproctitle($this->processTitle);
             } elseif (OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');

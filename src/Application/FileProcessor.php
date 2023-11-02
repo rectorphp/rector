@@ -22,7 +22,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202310\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202311\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {

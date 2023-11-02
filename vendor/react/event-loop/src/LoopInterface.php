@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202310\React\EventLoop;
+namespace RectorPrefix202311\React\EventLoop;
 
 interface LoopInterface
 {

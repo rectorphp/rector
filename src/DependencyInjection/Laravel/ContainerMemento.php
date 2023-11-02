@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\Laravel;
 
-use RectorPrefix202310\Illuminate\Container\Container;
+use RectorPrefix202311\Illuminate\Container\Container;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 /**
  * Helper service to modify Laravel container

@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\WrapReturn;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202310\Webmozart\Assert\Assert;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
  */

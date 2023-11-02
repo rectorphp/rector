@@ -6,7 +6,7 @@ namespace Rector\Core\ValueObject;
 use PHPStan\Collectors\CollectedData;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202310\Webmozart\Assert\Assert;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 final class ProcessResult
 {
     /**

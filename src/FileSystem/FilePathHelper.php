@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
-use RectorPrefix202310\Nette\Utils\Strings;
-use RectorPrefix202310\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202310\Webmozart\Assert\Assert;
+use RectorPrefix202311\Nette\Utils\Strings;
+use RectorPrefix202311\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilePathHelperTest
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202310\Illuminate\Contracts\Process;
+namespace RectorPrefix202311\Illuminate\Contracts\Process;
 
 interface InvokedProcess
 {

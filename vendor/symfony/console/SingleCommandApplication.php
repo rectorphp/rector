@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202310\Symfony\Component\Console;
+namespace RectorPrefix202311\Symfony\Component\Console;
 
-use RectorPrefix202310\Symfony\Component\Console\Command\Command;
-use RectorPrefix202310\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202310\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202311\Symfony\Component\Console\Command\Command;
+use RectorPrefix202311\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202311\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */

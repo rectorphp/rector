@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202310\Symfony\Component\Console\Completion\Output;
+namespace RectorPrefix202311\Symfony\Component\Console\Completion\Output;
 
-use RectorPrefix202310\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202310\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202311\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202311\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Jitendra A <adhocore@gmail.com>
  */

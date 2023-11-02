@@ -69,7 +69,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new Identifier($name);
         }
-        throw new \LogicException('RectorPrefix202310\\Expected string or instance of Node\\Identifier');
+        throw new \LogicException('RectorPrefix202311\\Expected string or instance of Node\\Identifier');
     }
     /**
      * Normalizes strings to Identifier, also allowing expressions.
@@ -86,7 +86,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new Identifier($name);
         }
-        throw new \LogicException('RectorPrefix202310\\Expected string or instance of Node\\Identifier or Node\\Expr');
+        throw new \LogicException('RectorPrefix202311\\Expected string or instance of Node\\Identifier or Node\\Expr');
     }
     /**
      * Normalizes a name: Converts string names to Name nodes.
@@ -112,7 +112,7 @@ final class BuilderHelpers
             }
             return new Name($name);
         }
-        throw new \LogicException('RectorPrefix202310\\Name must be a string or an instance of Node\\Name');
+        throw new \LogicException('RectorPrefix202311\\Name must be a string or an instance of Node\\Name');
     }
     /**
      * Normalizes a name: Converts string names to Name nodes, while also allowing expressions.
@@ -127,7 +127,7 @@ final class BuilderHelpers
             return $name;
         }
         if (!\is_string($name) && !$name instanceof Name) {
-            throw new \LogicException('RectorPrefix202310\\Name must be a string or an instance of Node\\Name or Node\\Expr');
+            throw new \LogicException('RectorPrefix202311\\Name must be a string or an instance of Node\\Name or Node\\Expr');
         }
         return self::normalizeName($name);
     }
@@ -226,7 +226,7 @@ final class BuilderHelpers
         if (\is_string($docComment)) {
             return new \PhpParser\Comment\Doc($docComment);
         }
-        throw new \LogicException('RectorPrefix202310\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
+        throw new \LogicException('RectorPrefix202311\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
     }
     /**
      * Normalizes a attribute: Converts attribute to the Attribute Group if needed.
@@ -241,7 +241,7 @@ final class BuilderHelpers
             return $attribute;
         }
         if (!$attribute instanceof \PhpParser\Node\Attribute) {
-            throw new \LogicException('RectorPrefix202310\\Attribute must be an instance of PhpParser\\Node\\Attribute or PhpParser\\Node\\AttributeGroup');
+            throw new \LogicException('RectorPrefix202311\\Attribute must be an instance of PhpParser\\Node\\Attribute or PhpParser\\Node\\AttributeGroup');
         }
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
