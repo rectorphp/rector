@@ -6,12 +6,6 @@ namespace Rector\Testing\PHPUnit;
 abstract class AbstractTestCase extends \Rector\Testing\PHPUnit\AbstractLazyTestCase
 {
     /**
-     * @deprecated only for BC
-     */
-    protected function boot() : void
-    {
-    }
-    /**
      * @param string[] $configFiles
      */
     protected function bootFromConfigFiles(array $configFiles) : void

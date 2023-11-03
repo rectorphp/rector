@@ -2216,6 +2216,7 @@ return array(
     'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => $baseDir . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',
     'Rector\\Testing\\PHPUnit\\AbstractTestCase' => $baseDir . '/packages/Testing/PHPUnit/AbstractTestCase.php',
     'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => $baseDir . '/packages/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
+    'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => $baseDir . '/packages/Testing/PHPUnit/ValueObject/RectorTestResult.php',
     'Rector\\Testing\\TestingParser\\TestingParser' => $baseDir . '/packages/Testing/TestingParser/TestingParser.php',
     'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => $baseDir . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
     'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => $baseDir . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',

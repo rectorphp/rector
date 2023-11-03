@@ -2434,6 +2434,7 @@ class ComposerStaticInit18ad0e678efbbb500e116f7c54cccdd4
         'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractTestCase.php',
         'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
+        'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/ValueObject/RectorTestResult.php',
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/packages/Testing/TestingParser/TestingParser.php',
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
         'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
