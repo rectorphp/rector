@@ -65,7 +65,7 @@ CODE_SAMPLE
         if ($node->getAttribute(self::IS_IF_TERNARY) === \true) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Reflector'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Reflector')) && !$this->isObjectType($node->var, new ObjectType('ReflectionClass'))) {
             return null;
         }
         $args = [new Arg($node->var), new Arg(new String_('getAttributes'))];
