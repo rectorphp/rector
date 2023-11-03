@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
+use RectorPrefix202311\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
@@ -41,14 +42,23 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
         /** @var array<string, string> $shortNamesToFullyQualifiedNames */
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
         $removedUses = $this->renamedClassesDataCollector->getOldClasses();
+        $fullyQualifiedObjectTypeShortName = $fullyQualifiedObjectType->getShortName();
+        $className = $fullyQualifiedObjectType->getClassName();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
-            if ($fullyQualifiedObjectType->getShortName() !== $shortName) {
+            if ($fullyQualifiedObjectTypeShortName !== $shortName) {
+                $shortName = \strncmp($shortName, '\\', \strlen('\\')) === 0 ? \ltrim((string) Strings::after($shortName, '\\', -1)) : $shortName;
+            }
+            if ($fullyQualifiedObjectTypeShortName !== $shortName) {
                 continue;
+            }
+            $fullyQualifiedName = \ltrim($fullyQualifiedName, '\\');
+            if ($className === $fullyQualifiedName) {
+                return \false;
             }
             if (\in_array($fullyQualifiedName, $removedUses, \true)) {
-                continue;
+                return \false;
             }
-            return $fullyQualifiedObjectType->getClassName() !== $fullyQualifiedName;
+            return \strpos($fullyQualifiedName, '\\') !== \false;
         }
         return \false;
     }
