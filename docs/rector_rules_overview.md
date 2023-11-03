@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 356 Rules Overview
 
 <br>
 
@@ -43,6 +43,8 @@
 - [Php81](#php81) (9)
 
 - [Php82](#php82) (4)
+
+- [Php83](#php83) (1)
 
 - [Privatization](#privatization) (4)
 
@@ -5310,6 +5312,33 @@ Change deprecated utf8_decode and utf8_encode to mb_convert_encoding
 -utf8_encode($value);
 +mb_convert_encoding($value, 'ISO-8859-1');
 +mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+```
+
+<br>
+
+## Php83
+
+### AddOverrideAttributeToOverriddenMethodsRector
+
+Add override attribute to overridden methods
+
+- class: [`Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector`](../rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php)
+
+```diff
+ class ParentClass
+ {
+     public function foo()
+     {
+     }
+ }
+
+ class ChildClass extends ParentClass
+ {
++    #[\Override]
+     public function foo()
+     {
+     }
+ }
 ```
 
 <br>

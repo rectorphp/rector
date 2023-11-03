@@ -1902,6 +1902,7 @@ return array(
     'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => $baseDir . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
     'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => $baseDir . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
     'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => $baseDir . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',
+    'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => $baseDir . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

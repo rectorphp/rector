@@ -88,6 +88,10 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
+    public const PHP_83 = __DIR__ . '/../../../config/set/php83.php';
+    /**
+     * @var string
+     */
     public const PRIVATIZATION = __DIR__ . '/../../../config/set/privatization.php';
     /**
      * @var string
