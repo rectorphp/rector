@@ -85,12 +85,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $this->assertEmpty($rectorConfig->tagged(Collector::class));
             $this->bootFromConfigFiles([$configFile]);
             $rectorsGenerator = $rectorConfig->tagged(RectorInterface::class);
-            if ($rectorsGenerator instanceof RewindableGenerator) {
-                $rectors = \iterator_to_array($rectorsGenerator->getIterator());
-            } else {
-                // no rules at all, e.g. in case of only post rector run
-                $rectors = [];
-            }
+            $rectors = $rectorsGenerator instanceof RewindableGenerator ? \iterator_to_array($rectorsGenerator->getIterator()) : [];
             /** @var RectorNodeTraverser $rectorNodeTraverser */
             $rectorNodeTraverser = $rectorConfig->make(RectorNodeTraverser::class);
             $rectorNodeTraverser->refreshPhpRectors($rectors);
@@ -188,7 +183,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $originalFileContent = FileSystem::read($originalFilePath);
         // the file is now changed (if any rule matches)
         $rectorTestResult = $this->processFilePath($originalFilePath);
-        $changedContent = $rectorTestResult->getChangedContents();
+        $changedContents = $rectorTestResult->getChangedContents();
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
         // give more context about used rules in case of set testing
@@ -200,11 +195,11 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             }
         }
         try {
-            $this->assertSame($expectedFileContents, $changedContent, $failureMessage);
+            $this->assertSame($expectedFileContents, $changedContents, $failureMessage);
         } catch (ExpectationFailedException $exception) {
-            FixtureFileUpdater::updateFixtureContent($originalFileContent, $changedContent, $fixtureFilePath);
+            FixtureFileUpdater::updateFixtureContent($originalFileContent, $changedContents, $fixtureFilePath);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
-            $this->assertStringMatchesFormat($expectedFileContents, $changedContent, $failureMessage);
+            $this->assertStringMatchesFormat($expectedFileContents, $changedContents, $failureMessage);
         }
     }
     private function processFilePath(string $filePath) : RectorTestResult

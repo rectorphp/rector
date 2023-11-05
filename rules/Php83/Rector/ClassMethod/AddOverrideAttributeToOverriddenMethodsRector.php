@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://wiki.php.net/rfc/marking_overriden_methods
  * @see \Rector\Tests\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector\AddOverrideAttributeToOverriddenMethodsRectorTest
  */
-class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector implements MinPhpVersionInterface
+final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -97,22 +97,22 @@ CODE_SAMPLE
         // Fetch the parent class reflection
         $parentClassReflection = $this->reflectionProvider->getClass((string) $node->extends);
         $hasChanged = \false;
-        foreach ($node->getMethods() as $method) {
-            if ($method->name->toString() === '__construct') {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->name->toString() === '__construct') {
                 continue;
             }
             // Private methods should be ignored
-            if ($parentClassReflection->hasNativeMethod($method->name->toString())) {
+            if ($parentClassReflection->hasNativeMethod($classMethod->name->toString())) {
                 // ignore if it is a private method on the parent
-                $parentMethod = $parentClassReflection->getNativeMethod($method->name->toString());
+                $parentMethod = $parentClassReflection->getNativeMethod($classMethod->name->toString());
                 if ($parentMethod->isPrivate()) {
                     continue;
                 }
                 // ignore if it already uses the attribute
-                if ($this->phpAttributeAnalyzer->hasPhpAttribute($method, 'Override')) {
+                if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Override')) {
                     continue;
                 }
-                $method->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Override'))]);
+                $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Override'))]);
                 $hasChanged = \true;
             }
         }
