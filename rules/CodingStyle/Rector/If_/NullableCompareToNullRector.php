@@ -9,12 +9,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
@@ -84,9 +78,6 @@ CODE_SAMPLE
             }
         }
         $nativeType = TypeCombinator::removeNull($nativeType);
-        if ($nativeType->isScalar()->yes()) {
-            return \false;
-        }
-        return \true;
+        return !$nativeType->isScalar()->yes();
     }
 }
