@@ -1906,6 +1906,7 @@ class ComposerStaticInit18ad0e678efbbb500e116f7c54cccdd4
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\TestWithToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/TestWithToDataProviderRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\YieldDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
