@@ -159,7 +159,7 @@ Change `assertNotEmpty()` on an object to more clear `assertInstanceof()`
 
 Change `assertEquals()/assertSame()` method using float on expected argument to new specific alternatives.
 
-- class: [`Rector\PHPUnit\Transform\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector`](../src/Transform/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php)
+- class: [`Rector\PHPUnit\Transform\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector`](../rules/CodeQuality/Rector/MethodCall/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php)
 
 ```diff
 -$this->assertSame(10.20, $value);
