@@ -15,6 +15,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -68,35 +69,24 @@ CODE_SAMPLE
     }
     private function isNullableNonScalarType(Expr $expr) : bool
     {
-        $staticType = $this->getType($expr);
-        if ($staticType instanceof MixedType) {
-            return \false;
-        }
-        if (!$staticType instanceof UnionType) {
-            return \false;
-        }
+        $nativeType = $this->nodeTypeResolver->getNativeType($expr);
         // is non-nullable?
-        if ($staticType->isSuperTypeOf(new NullType())->no()) {
+        if (!TypeCombinator::containsNull($nativeType)) {
+            return \false;
+        }
+        if (!$nativeType instanceof UnionType) {
             return \false;
         }
         // is array?
-        foreach ($staticType->getTypes() as $subType) {
+        foreach ($nativeType->getTypes() as $subType) {
             if ($subType->isArray()->yes()) {
                 return \false;
             }
         }
-        // is string?
-        if ($staticType->isSuperTypeOf(new StringType())->yes()) {
+        $nativeType = TypeCombinator::removeNull($nativeType);
+        if ($nativeType->isScalar()->yes()) {
             return \false;
         }
-        // is number?
-        if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
-            return \false;
-        }
-        // is bool?
-        if ($staticType->isSuperTypeOf(new BooleanType())->yes()) {
-            return \false;
-        }
-        return !$staticType->isSuperTypeOf(new FloatType())->yes();
+        return \true;
     }
 }
