@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ArrowFunction;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -11,8 +12,10 @@ use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -98,6 +101,29 @@ CODE_SAMPLE
             // throw expr to throw stmts
             return new Throw_($throw->expr);
         });
+        $this->appendUsesFromInsertedVariable($node->expr, $anonymousFunctionFactory);
         return $anonymousFunctionFactory;
+    }
+    private function appendUsesFromInsertedVariable(Expr $expr, Closure $anonymousFunctionFactory) : void
+    {
+        $this->traverseNodesWithCallable($expr, function (Node $subNode) use($anonymousFunctionFactory) {
+            if (!$subNode instanceof Variable) {
+                return null;
+            }
+            $variableName = $this->getName($subNode);
+            if ($variableName === null) {
+                return null;
+            }
+            if ($subNode->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
+                return null;
+            }
+            $scope = $subNode->getAttribute(AttributeKey::SCOPE);
+            if (!$scope instanceof Scope) {
+                return null;
+            }
+            if (!$scope->hasVariableType($variableName)->yes()) {
+                $anonymousFunctionFactory->uses[] = new ClosureUse(new Variable($variableName));
+            }
+        });
     }
 }
