@@ -5,8 +5,18 @@ namespace Rector\CodingStyle\Application;
 
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Renaming\Collector\RenamedNameCollector;
 final class UseImportsRemover
 {
+    /**
+     * @readonly
+     * @var \Rector\Renaming\Collector\RenamedNameCollector
+     */
+    private $renamedNameCollector;
+    public function __construct(RenamedNameCollector $renamedNameCollector)
+    {
+        $this->renamedNameCollector = $renamedNameCollector;
+    }
     /**
      * @param Stmt[] $stmts
      * @param string[] $removedUses
@@ -33,9 +43,13 @@ final class UseImportsRemover
     {
         foreach ($use->uses as $usesKey => $useUse) {
             $useName = $useUse->name->toString();
-            if (\in_array($useName, $removedUses, \true)) {
-                unset($use->uses[$usesKey]);
+            if (!\in_array($useName, $removedUses, \true)) {
+                continue;
             }
+            if (!$this->renamedNameCollector->has($useName)) {
+                continue;
+            }
+            unset($use->uses[$usesKey]);
         }
         return $use;
     }

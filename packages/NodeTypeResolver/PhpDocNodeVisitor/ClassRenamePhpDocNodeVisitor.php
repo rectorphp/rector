@@ -19,6 +19,7 @@ use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use Rector\Renaming\Collector\RenamedNameCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
@@ -34,6 +35,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      */
     private $useImportsResolver;
     /**
+     * @readonly
+     * @var \Rector\Renaming\Collector\RenamedNameCollector
+     */
+    private $renamedNameCollector;
+    /**
      * @var OldToNewType[]
      */
     private $oldToNewTypes = [];
@@ -45,10 +51,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var PhpNode|null
      */
     private $currentPhpNode;
-    public function __construct(StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver)
+    public function __construct(StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver, RenamedNameCollector $renamedNameCollector)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->useImportsResolver = $useImportsResolver;
+        $this->renamedNameCollector = $renamedNameCollector;
     }
     public function setCurrentPhpNode(PhpNode $phpNode) : void
     {
@@ -81,7 +88,9 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         // make sure to compare FQNs
         $objectType = $this->expandShortenedObjectType($staticType);
         foreach ($this->oldToNewTypes as $oldToNewType) {
-            if (!$objectType->equals($oldToNewType->getOldType())) {
+            /** @var ObjectType $oldType */
+            $oldType = $oldToNewType->getOldType();
+            if (!$objectType->equals($oldType)) {
                 continue;
             }
             $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType());
@@ -91,6 +100,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
                 $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parentType);
             }
             $this->hasChanged = \true;
+            $this->renamedNameCollector->add($oldType->getClassName());
             return $newTypeNode;
         }
         return null;

@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Renaming\Collector\RenamedNameCollector;
 final class PhpDocClassRenamer
 {
     /**
@@ -19,9 +20,15 @@ final class PhpDocClassRenamer
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher)
+    /**
+     * @readonly
+     * @var \Rector\Renaming\Collector\RenamedNameCollector
+     */
+    private $renamedNameCollector;
+    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, RenamedNameCollector $renamedNameCollector)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
+        $this->renamedNameCollector = $renamedNameCollector;
     }
     /**
      * Covers annotations like @ORM, @Serializer, @Assert etc
@@ -64,6 +71,7 @@ final class PhpDocClassRenamer
             if ($classNameStringNode->value !== $oldClass) {
                 continue;
             }
+            $this->renamedNameCollector->add($oldClass);
             $classNameStringNode->value = $newClass;
             // trigger reprint
             $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
@@ -99,6 +107,7 @@ final class PhpDocClassRenamer
                     $classNameStringNode->value = $newClass;
                     continue;
                 }
+                $this->renamedNameCollector->add($oldClass);
                 $classNameStringNode->value = Strings::replace($classNameStringNode->value, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
                 $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
                 $hasChanged = \true;
@@ -138,6 +147,7 @@ final class PhpDocClassRenamer
             if ($tagFullyQualifiedName !== $oldClass) {
                 continue;
             }
+            $this->renamedNameCollector->add($oldClass);
             $targetEntityStringNode->value = $newClass;
             $targetEntityArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             $hasChanged = \true;

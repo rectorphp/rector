@@ -2187,6 +2187,7 @@ class ComposerStaticInit18ad0e678efbbb500e116f7c54cccdd4
         'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php',
         'Rector\\Removing\\ValueObject\\ArgumentRemover' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/ArgumentRemover.php',
         'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
+        'Rector\\Renaming\\Collector\\RenamedNameCollector' => __DIR__ . '/../..' . '/rules/Renaming/Collector/RenamedNameCollector.php',
         'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
         'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
         'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',

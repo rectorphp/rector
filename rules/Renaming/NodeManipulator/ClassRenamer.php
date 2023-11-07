@@ -28,6 +28,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\Renaming\Collector\RenamedNameCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassRenamer
 {
@@ -82,6 +83,11 @@ final class ClassRenamer
      */
     private $docBlockUpdater;
     /**
+     * @readonly
+     * @var \Rector\Renaming\Collector\RenamedNameCollector
+     */
+    private $renamedNameCollector;
+    /**
      * @var string[]
      */
     private $alreadyProcessedClasses = [];
@@ -89,7 +95,7 @@ final class ClassRenamer
      * @var array<string, OldToNewType[]>
      */
     private $oldToNewTypesByCacheKey = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher, DocBlockUpdater $docBlockUpdater)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher, DocBlockUpdater $docBlockUpdater, RenamedNameCollector $renamedNameCollector)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -101,6 +107,7 @@ final class ClassRenamer
         $this->reflectionProvider = $reflectionProvider;
         $this->fileHasher = $fileHasher;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->renamedNameCollector = $renamedNameCollector;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -179,6 +186,7 @@ final class ClassRenamer
         if ($this->shouldSkip($newName, $name)) {
             return null;
         }
+        $this->renamedNameCollector->add($stringName);
         return new FullyQualified($newName);
     }
     /**

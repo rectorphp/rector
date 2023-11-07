@@ -1969,6 +1969,7 @@ return array(
     'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallRector' => $baseDir . '/rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php',
     'Rector\\Removing\\ValueObject\\ArgumentRemover' => $baseDir . '/rules/Removing/ValueObject/ArgumentRemover.php',
     'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => $baseDir . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
+    'Rector\\Renaming\\Collector\\RenamedNameCollector' => $baseDir . '/rules/Renaming/Collector/RenamedNameCollector.php',
     'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => $baseDir . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
     'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => $baseDir . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
     'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => $baseDir . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
