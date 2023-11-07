@@ -1,4 +1,4 @@
-# 356 Rules Overview
+# 355 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (72)
 
-- [CodingStyle](#codingstyle) (29)
+- [CodingStyle](#codingstyle) (28)
 
 - [DeadCode](#deadcode) (42)
 
@@ -1716,38 +1716,6 @@ Change count array comparison to empty array comparison to improve performance
 +$array === [];
 +$array !== [];
 +$array === [];
-```
-
-<br>
-
-### DataProviderArrayItemsNewlinedRector
-
-Change data provider in PHPUnit test case to newline per item
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\DataProviderArrayItemsNewlinedRector`](../rules/CodingStyle/Rector/ClassMethod/DataProviderArrayItemsNewlinedRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- final class ImageBinaryTest extends TestCase
- {
-     /**
-      * @dataProvider provideData()
-      */
-     public function testGetBytesSize(string $content, int $number): void
-     {
-         // ...
-     }
-
-     public static function provideData(): array
-     {
--        return [['content', 8], ['content123', 11]];
-+        return [
-+            ['content', 8],
-+            ['content123', 11]
-+        ];
-     }
- }
 ```
 
 <br>

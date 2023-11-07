@@ -1117,7 +1117,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => $baseDir . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
     'Rector\\CodingStyle\\Rector\\ClassConst\\RemoveFinalFromConstRector' => $baseDir . '/rules/CodingStyle/Rector/ClassConst/RemoveFinalFromConstRector.php',
     'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedClassConstantsRector' => $baseDir . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedClassConstantsRector.php',
-    'Rector\\CodingStyle\\Rector\\ClassMethod\\DataProviderArrayItemsNewlinedRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/DataProviderArrayItemsNewlinedRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\NewlineBeforeNewAssignSetRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php',
