@@ -28,5 +28,5 @@ return static function (RectorConfig $rectorConfig) : void {
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'apache_request_headers' => 'getallheaders',
     ]);
-    $rectorConfig->rules([ArrayKeyExistsOnPropertyRector::class, FilterVarToAddSlashesRector::class, ExportToReflectionFunctionRector::class, MbStrrposEncodingArgumentPositionRector::class, RealToFloatTypeCastRector::class, NullCoalescingOperatorRector::class, ClosureToArrowFunctionRector::class, ArraySpreadInsteadOfArrayMergeRector::class, AddLiteralSeparatorToNumberRector::class, RestoreDefaultNullToNullableTypePropertyRector::class, CurlyToSquareBracketArrayStringRector::class, MoneyFormatToNumberFormatRector::class, ParenthesizeNestedTernaryRector::class, TypedPropertyFromAssignsRector::class]);
+    $rectorConfig->rules([ArrayKeyExistsOnPropertyRector::class, FilterVarToAddSlashesRector::class, ExportToReflectionFunctionRector::class, MbStrrposEncodingArgumentPositionRector::class, RealToFloatTypeCastRector::class, NullCoalescingOperatorRector::class, ClosureToArrowFunctionRector::class, AddLiteralSeparatorToNumberRector::class, RestoreDefaultNullToNullableTypePropertyRector::class, CurlyToSquareBracketArrayStringRector::class, MoneyFormatToNumberFormatRector::class, ParenthesizeNestedTernaryRector::class, TypedPropertyFromAssignsRector::class]);
 };
