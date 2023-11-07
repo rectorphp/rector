@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (72)
 
-- [CodingStyle](#codingstyle) (28)
+- [CodingStyle](#codingstyle) (29)
 
 - [DeadCode](#deadcode) (42)
 
@@ -36,7 +36,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (13)
+- [Php74](#php74) (12)
 
 - [Php80](#php80) (16)
 
@@ -1591,6 +1591,32 @@ Adds array default value to property to prevent foreach over null error
      {
 -        return $this->values === null;
 +        return $this->values === [];
+     }
+ }
+```
+
+<br>
+
+### ArraySpreadInsteadOfArrayMergeRector
+
+Change `array_merge()` to spread operator
+
+- class: [`Rector\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](../rules/CodingStyle/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($iter1, $iter2)
+     {
+-        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
++        $values = [...$iter1, ...$iter2];
+
+         // Or to generalize to all iterables
+-        $anotherValues = array_merge(
+-            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
+-            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
+-        );
++        $anotherValues = [...$iter1, ...$iter2];
      }
  }
 ```
@@ -4479,32 +4505,6 @@ Change `array_key_exists()` on property to `property_exists()`
 
 -array_key_exists('value', $someClass);
 +property_exists($someClass, 'value');
-```
-
-<br>
-
-### ArraySpreadInsteadOfArrayMergeRector
-
-Change `array_merge()` to spread operator
-
-- class: [`Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](../rules/Php74/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($iter1, $iter2)
-     {
--        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
-+        $values = [...$iter1, ...$iter2];
-
-         // Or to generalize to all iterables
--        $anotherValues = array_merge(
--            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
--            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
--        );
-+        $anotherValues = [...$iter1, ...$iter2];
-     }
- }
 ```
 
 <br>
