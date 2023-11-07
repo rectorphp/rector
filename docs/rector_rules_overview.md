@@ -1720,38 +1720,6 @@ Change count array comparison to empty array comparison to improve performance
 
 <br>
 
-### DataProviderArrayItemsNewlinedRector
-
-Change data provider in PHPUnit test case to newline per item
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\DataProviderArrayItemsNewlinedRector`](../rules/CodingStyle/Rector/ClassMethod/DataProviderArrayItemsNewlinedRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- final class ImageBinaryTest extends TestCase
- {
-     /**
-      * @dataProvider provideData()
-      */
-     public function testGetBytesSize(string $content, int $number): void
-     {
-         // ...
-     }
-
-     public static function provideData(): array
-     {
--        return [['content', 8], ['content123', 11]];
-+        return [
-+            ['content', 8],
-+            ['content123', 11]
-+        ];
-     }
- }
-```
-
-<br>
-
 ### EncapsedStringsToSprintfRector
 
 Convert enscaped {$string} to more readable sprintf or concat, if no mask is used
