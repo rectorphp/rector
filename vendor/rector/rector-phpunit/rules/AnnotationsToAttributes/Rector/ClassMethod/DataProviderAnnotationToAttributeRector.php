@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -102,7 +102,13 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::ATTRIBUTES;
+        /**
+         * This rule just work for phpunit 10,
+         * And as php 8.1 is the min version supported by phpunit 10, then we decided to let this version as minimum.
+         *
+         * You can see more detail in this issue: https://github.com/rectorphp/rector-phpunit/issues/272
+         */
+        return PhpVersion::PHP_81;
     }
     /**
      * @param ClassMethod $node

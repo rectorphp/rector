@@ -21,7 +21,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -124,7 +124,13 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::MATCH_EXPRESSION;
+        /**
+         * This rule just work for phpunit 10,
+         * And as php 8.1 is the min version supported by phpunit 10, then we decided to let this version as minimum.
+         *
+         * You can see more detail in this issue: https://github.com/rectorphp/rector-phpunit/issues/272
+         */
+        return PhpVersion::PHP_81;
     }
     /**
      * @template T of Node

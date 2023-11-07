@@ -1,4 +1,4 @@
-# 49 Rules Overview
+# 51 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -159,7 +159,7 @@ Change `assertNotEmpty()` on an object to more clear `assertInstanceof()`
 
 Change `assertEquals()/assertSame()` method using float on expected argument to new specific alternatives.
 
-- class: [`Rector\PHPUnit\Transform\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector`](../rules/CodeQuality/Rector/MethodCall/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector`](../rules/CodeQuality/Rector/MethodCall/AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector.php)
 
 ```diff
 -$this->assertSame(10.20, $value);
@@ -479,6 +479,38 @@ Change dataProvider annotations to attribute
 +    #[\PHPUnit\Framework\Attributes\DataProvider('test')]
      public function test(): void
      {
+     }
+ }
+```
+
+<br>
+
+## DataProviderArrayItemsNewLinedRector
+
+Change data provider in PHPUnit test case to newline per item
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector`](../rules/CodeQuality/Rector/ClassMethod/DataProviderArrayItemsNewLinedRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class ImageBinaryTest extends TestCase
+ {
+     /**
+      * @dataProvider provideData()
+      */
+     public function testGetBytesSize(string $content, int $number): void
+     {
+         // ...
+     }
+
+     public static function provideData(): array
+     {
+-        return [['content', 8], ['content123', 11]];
++        return [
++            ['content', 8],
++            ['content123', 11]
++        ];
      }
  }
 ```
@@ -990,6 +1022,39 @@ Change `@testWith()` annotation to #[TestWith] attribute
      public function test(): void
      {
      }
+ }
+```
+
+<br>
+
+## TestWithToDataProviderRector
+
+Replace testWith annotation to data provider.
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\TestWithToDataProviderRector`](../rules/CodeQuality/Rector/Class_/TestWithToDataProviderRector.php)
+
+```diff
++public function dataProviderSum()
++{
++    return [
++        [0, 0, 0],
++        [0, 1, 1],
++        [1, 0, 1],
++        [1, 1, 3]
++    ];
++}
++
+ /**
+- * @testWith    [0, 0, 0]
+- * @testWith    [0, 1, 1]
+- * @testWith    [1, 0, 1]
+- * @testWith    [1, 1, 3]
++ * @dataProvider dataProviderSum
+  */
+-public function testSum(int $a, int $b, int $expected)
++public function test(int $a, int $b, int $expected)
+ {
+     $this->assertSame($expected, $a + $b);
  }
 ```
 
