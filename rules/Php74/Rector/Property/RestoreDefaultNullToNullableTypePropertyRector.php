@@ -88,7 +88,7 @@ CODE_SAMPLE
         if ($onlyProperty->default instanceof Expr) {
             return \true;
         }
-        if ($property->isReadonly()) {
+        if ($this->isReadonly($property)) {
             return \true;
         }
         if (!$this->nodeTypeResolver->isNullableType($property)) {
@@ -97,5 +97,16 @@ CODE_SAMPLE
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
         return $this->constructorAssignDetector->isPropertyAssigned($class, $propertyName);
+    }
+    private function isReadonly(Property $property) : bool
+    {
+        // native readonly
+        if ($property->isReadonly()) {
+            return \true;
+        }
+        // @readonly annotation
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $tags = $phpDocInfo->getTagsByName('@readonly');
+        return $tags !== [];
     }
 }
