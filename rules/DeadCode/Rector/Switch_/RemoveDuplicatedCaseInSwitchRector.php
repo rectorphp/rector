@@ -90,10 +90,14 @@ CODE_SAMPLE
         $totalKeys = \count($switch->cases);
         $insertByKeys = [];
         $appendKey = 0;
+        /** @var Case_|null $previousCase */
+        $previousCase = null;
         foreach ($switch->cases as $key => $case) {
-            if ($case->stmts === []) {
-                continue;
+            if ($previousCase instanceof Case_ && $this->areSwitchStmtsEqualsAndWithBreak($case, $previousCase)) {
+                $previousCase->stmts = [];
+                $this->hasChanged = \true;
             }
+            $previousCase = $case;
             for ($jumpToKey = $key + 2; $jumpToKey < $totalKeys; ++$jumpToKey) {
                 if (!isset($switch->cases[$jumpToKey])) {
                     continue;
@@ -118,20 +122,13 @@ CODE_SAMPLE
         foreach ($insertByKeys as $key => $insertByKey) {
             $nextKey = $key + 1;
             \array_splice($switch->cases, $nextKey, 0, $insertByKey);
-        }
-        /** @var Case_|null $previousCase */
-        $previousCase = null;
-        foreach ($switch->cases as $case) {
-            if ($previousCase instanceof Case_ && $this->areSwitchStmtsEqualsAndWithBreak($case, $previousCase)) {
-                $previousCase->stmts = [];
-                $this->hasChanged = \true;
-            }
-            $previousCase = $case;
+            $switch->cases[$key]->stmts = [];
+            $this->hasChanged = \true;
         }
     }
-    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextCase) : bool
+    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextOrPrevCase) : bool
     {
-        if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextCase->stmts)) {
+        if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextOrPrevCase->stmts)) {
             return \false;
         }
         foreach ($currentCase->stmts as $stmt) {
