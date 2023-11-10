@@ -75,55 +75,37 @@ CODE_SAMPLE
             return null;
         }
         $this->hasChanged = \false;
-        $insertByKeys = $this->resolveInsertedByKeys($node);
-        $this->insertCaseByKeys($node, $insertByKeys);
+        $this->removeDuplicatedCases($node);
         if (!$this->hasChanged) {
             return null;
         }
         return $node;
     }
-    /**
-     * @return array<int, array<int, Case_>>
-     */
-    private function resolveInsertedByKeys(Switch_ $switch) : array
+    private function removeDuplicatedCases(Switch_ $switch) : void
     {
         $totalKeys = \count($switch->cases);
-        $insertByKeys = [];
-        $appendKey = 0;
-        /** @var Case_|null $previousCase */
-        $previousCase = null;
-        foreach ($switch->cases as $key => $case) {
-            if ($previousCase instanceof Case_ && $this->areSwitchStmtsEqualsAndWithBreak($case, $previousCase)) {
-                $previousCase->stmts = [];
-                $this->hasChanged = \true;
-            }
-            $previousCase = $case;
-            for ($jumpToKey = $key + 2; $jumpToKey < $totalKeys; ++$jumpToKey) {
+        foreach (\array_keys($switch->cases) as $key) {
+            $nextCases = [];
+            for ($jumpToKey = $key + 1; $jumpToKey < $totalKeys; ++$jumpToKey) {
                 if (!isset($switch->cases[$jumpToKey])) {
                     continue;
                 }
-                if (!$this->areSwitchStmtsEqualsAndWithBreak($case, $switch->cases[$jumpToKey])) {
+                if (!$this->areSwitchStmtsEqualsAndWithBreak($switch->cases[$key], $switch->cases[$jumpToKey])) {
                     continue;
                 }
                 $nextCase = $switch->cases[$jumpToKey];
                 unset($switch->cases[$jumpToKey]);
-                $insertByKeys[$key + $appendKey][] = $nextCase;
+                $nextCases[] = $nextCase;
                 $this->hasChanged = \true;
             }
-            $appendKey = isset($insertByKeys[$key]) ? \count($insertByKeys[$key]) : 0;
-        }
-        return $insertByKeys;
-    }
-    /**
-     * @param array<int, array<int, Case_>> $insertByKeys
-     */
-    private function insertCaseByKeys(Switch_ $switch, array $insertByKeys) : void
-    {
-        foreach ($insertByKeys as $key => $insertByKey) {
-            $nextKey = $key + 1;
-            \array_splice($switch->cases, $nextKey, 0, $insertByKey);
-            $switch->cases[$key]->stmts = [];
-            $this->hasChanged = \true;
+            if ($nextCases === []) {
+                continue;
+            }
+            \array_splice($switch->cases, $key + 1, 0, $nextCases);
+            for ($jumpToKey = $key; $jumpToKey < $key + \count($nextCases); ++$jumpToKey) {
+                $switch->cases[$jumpToKey]->stmts = [];
+            }
+            $key += \count($nextCases);
         }
     }
     private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextOrPrevCase) : bool

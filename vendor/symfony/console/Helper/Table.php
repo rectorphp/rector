@@ -393,12 +393,12 @@ class Table
                     continue;
                 }
                 if ($isHeader && !$isHeaderSeparatorRendered) {
-                    $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
+                    $this->renderRowSeparator(self::SEPARATOR_TOP, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
                     $hasTitle = \false;
                     $isHeaderSeparatorRendered = \true;
                 }
                 if ($isFirstRow) {
-                    $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
+                    $this->renderRowSeparator($horizontal ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
                     $isFirstRow = \false;
                     $hasTitle = \false;
                 }

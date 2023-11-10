@@ -28,7 +28,6 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMet
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector;
-use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveSetMethodsMethodCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 return static function (RectorConfig $rectorConfig) : void {
@@ -69,7 +68,6 @@ return static function (RectorConfig $rectorConfig) : void {
          * @see https://steemit.com/php/@crell/don-t-use-mocking-libraries
          * @see https://davegebler.com/post/php/better-php-unit-testing-avoiding-mocks
          */
-        RemoveSetMethodsMethodCallRector::class,
         RemoveExpectAnyFromMockRector::class,
     ]);
 };
