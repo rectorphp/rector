@@ -108,9 +108,9 @@ CODE_SAMPLE
             $key += \count($nextCases);
         }
     }
-    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextOrPrevCase) : bool
+    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextCase) : bool
     {
-        if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextOrPrevCase->stmts)) {
+        if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextCase->stmts)) {
             return \false;
         }
         foreach ($currentCase->stmts as $stmt) {
