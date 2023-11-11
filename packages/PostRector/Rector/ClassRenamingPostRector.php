@@ -15,8 +15,8 @@ use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Rector\Renaming\Collector\RenamedNameCollector;
+use Rector\Renaming\NodeManipulator\ClassRenamer;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
