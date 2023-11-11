@@ -790,7 +790,7 @@ Remove `expect($this->any())` from mocks as it has no added value
 
 Remove `"setMethods()"` method as never used
 
-- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../rules/CodeQuality/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
