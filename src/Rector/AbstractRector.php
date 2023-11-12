@@ -89,27 +89,6 @@ CODE_SAMPLE;
      * @var int|null
      */
     private $toBeRemovedNodeId;
-    /**
-     * @var array<string, object>
-     */
-    private $deprecatedDependencies = [];
-    /**
-     * @var array<class-string, array<string, bool>>
-     */
-    private $cachedDeprecatedDependenciesWarning = [];
-    /**
-     * Handle deprecated dependencies compatbility
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        if (!isset($this->cachedDeprecatedDependenciesWarning[static::class][$name])) {
-            echo \sprintf('Get %s property from AbstractRector on %s is deprecated, inject via __construct() instead', $name, static::class);
-            echo \PHP_EOL;
-            $this->cachedDeprecatedDependenciesWarning[static::class][$name] = \true;
-        }
-        return $this->deprecatedDependencies[$name] ?? null;
-    }
     public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
