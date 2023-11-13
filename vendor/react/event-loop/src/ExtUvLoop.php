@@ -12,7 +12,7 @@ use SplObjectStorage;
  * that provides an interface to `libuv` library.
  * `libuv` itself supports a number of system-specific backends (epoll, kqueue).
  *
- * This loop is known to work with PHP 7.x.
+ * This loop is known to work with PHP 7+.
  *
  * @see https://github.com/bwoebi/php-uv
  */

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.5.0 (2023-11-13)
+
+*   Feature: Improve performance by using `spl_object_id()` on PHP 7.2+.
+    (#267 by @samsonasik)
+
+*   Feature: Full PHP 8.3 compatibility.
+    (#269 by @clue)
+
+*   Update tests for `ext-uv` on PHP 8+ and legacy PHP.
+    (#270 by @clue and #268 by @SimonFrings)
+
 ## 1.4.0 (2023-05-05)
 
 *   Feature: Improve performance of `Loop` by avoiding unneeded method calls.

@@ -419,7 +419,7 @@ This loop uses the [`uv` PECL extension](https://pecl.php.net/package/uv),
 that provides an interface to `libuv` library.
 `libuv` itself supports a number of system-specific backends (epoll, kqueue).
 
-This loop is known to work with PHP 7.x.
+This loop is known to work with PHP 7+.
 
 #### ~~ExtLibeventLoop~~
 
@@ -889,7 +889,7 @@ This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-composer require react/event-loop:^1.4
+composer require react/event-loop:^1.5
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
