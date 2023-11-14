@@ -81,15 +81,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [ClassMethod::class, Stmt\Function_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Stmt\Function_ $node
+     * @return null|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?ClassMethod
+    public function refactorWithScope(Node $node, Scope $scope)
     {
-        $classMethodStmts = $node->stmts;
-        if ($classMethodStmts === null) {
+        $stmts = $node->stmts;
+        if ($stmts === null || $stmts === []) {
             return null;
         }
         // we cannot be sure here
@@ -99,14 +100,14 @@ CODE_SAMPLE
         if ($this->containsFileIncludes($node)) {
             return null;
         }
-        $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($classMethodStmts);
+        $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
         $hasChanged = \false;
         foreach ($assignedVariableNamesByStmtPosition as $stmtPosition => $variableName) {
             if ($this->isVariableUsedInFollowingStmts($node, $stmtPosition, $variableName)) {
                 continue;
             }
             /** @var Expression<Assign> $currentStmt */
-            $currentStmt = $classMethodStmts[$stmtPosition];
+            $currentStmt = $stmts[$stmtPosition];
             /** @var Assign $assign */
             $assign = $currentStmt->expr;
             if ($this->hasCallLikeInAssignExpr($assign, $scope)) {
@@ -138,12 +139,15 @@ CODE_SAMPLE
             return $this->sideEffectNodeDetector->detectCallExpr($subNode, $scope);
         });
     }
-    private function isVariableUsedInFollowingStmts(ClassMethod $classMethod, int $assignStmtPosition, string $variableName) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function isVariableUsedInFollowingStmts($functionLike, int $assignStmtPosition, string $variableName) : bool
     {
-        if ($classMethod->stmts === null) {
+        if ($functionLike->stmts === null) {
             return \false;
         }
-        foreach ($classMethod->stmts as $key => $stmt) {
+        foreach ($functionLike->stmts as $key => $stmt) {
             // do not look yet
             if ($key <= $assignStmtPosition) {
                 continue;
@@ -160,11 +164,11 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function containsCompactFuncCall($node) : bool
+    private function containsCompactFuncCall($functionLike) : bool
     {
-        $compactFuncCall = $this->betterNodeFinder->findFirst($node, function (Node $node) : bool {
+        $compactFuncCall = $this->betterNodeFinder->findFirst($functionLike, function (Node $node) : bool {
             if (!$node instanceof FuncCall) {
                 return \false;
             }
@@ -172,9 +176,12 @@ CODE_SAMPLE
         });
         return $compactFuncCall instanceof FuncCall;
     }
-    private function containsFileIncludes(ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function containsFileIncludes($functionLike) : bool
     {
-        return (bool) $this->betterNodeFinder->findInstancesOf($classMethod, [Include_::class]);
+        return (bool) $this->betterNodeFinder->findInstancesOf($functionLike, [Include_::class]);
     }
     /**
      * @param array<int, Stmt> $stmts
