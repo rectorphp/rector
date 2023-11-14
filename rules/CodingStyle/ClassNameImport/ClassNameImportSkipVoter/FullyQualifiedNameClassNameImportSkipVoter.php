@@ -5,11 +5,10 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use RectorPrefix202311\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * Prevents adding:
@@ -27,9 +26,15 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
      * @var \Rector\CodingStyle\ClassNameImport\ShortNameResolver
      */
     private $shortNameResolver;
-    public function __construct(ShortNameResolver $shortNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    public function __construct(ShortNameResolver $shortNameResolver, RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->shortNameResolver = $shortNameResolver;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
@@ -38,10 +43,10 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
         $fullyQualifiedObjectTypeShortName = $fullyQualifiedObjectType->getShortName();
         $className = $fullyQualifiedObjectType->getClassName();
-        $justRenamed = $node instanceof FullyQualified && !$node->hasAttribute(AttributeKey::ORIGINAL_NAME);
+        $removedUses = $this->renamedClassesDataCollector->getOldClasses();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
             if ($fullyQualifiedObjectTypeShortName !== $shortName) {
-                $shortName = \strncmp($shortName, '\\', \strlen('\\')) === 0 ? \ltrim((string) Strings::after($shortName, '\\', -1)) : $shortName;
+                $shortName = $this->cleanShortName($shortName);
             }
             if ($fullyQualifiedObjectTypeShortName !== $shortName) {
                 continue;
@@ -50,8 +55,12 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
             if ($className === $fullyQualifiedName) {
                 return \false;
             }
-            return !$justRenamed;
+            return !\in_array($fullyQualifiedName, $removedUses, \true);
         }
         return \false;
+    }
+    private function cleanShortName(string $shortName) : string
+    {
+        return \strncmp($shortName, '\\', \strlen('\\')) === 0 ? \ltrim((string) Strings::after($shortName, '\\', -1)) : $shortName;
     }
 }
