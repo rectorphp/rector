@@ -13,7 +13,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
@@ -113,10 +112,7 @@ final class ExpectedNameResolver
             return null;
         }
         $returnedType = $this->nodeTypeResolver->getType($expr);
-        if ($returnedType instanceof ArrayType) {
-            return null;
-        }
-        if ($returnedType instanceof MixedType) {
+        if (!$returnedType->isObject()->yes()) {
             return null;
         }
         if ($this->isDateTimeType($returnedType)) {

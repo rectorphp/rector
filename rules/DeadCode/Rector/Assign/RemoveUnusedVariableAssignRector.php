@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
@@ -81,10 +82,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Stmt\Function_::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
-     * @param ClassMethod|Stmt\Function_ $node
+     * @param ClassMethod|Function_ $node
      * @return null|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
     public function refactorWithScope(Node $node, Scope $scope)
