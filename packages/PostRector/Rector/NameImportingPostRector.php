@@ -120,13 +120,8 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return null;
         }
         $namespaces = \array_filter($file->getNewStmts(), static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace;
+            return $stmt instanceof Namespace_;
         });
-        // handle overlapped resolve last new stmts
-        // @see https://github.com/rectorphp/rector-src/pull/5251
-        if ($namespaces === []) {
-            return null;
-        }
         if (\count($namespaces) > 1) {
             return null;
         }

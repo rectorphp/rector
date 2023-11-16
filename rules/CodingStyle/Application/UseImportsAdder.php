@@ -52,7 +52,7 @@ final class UseImportsAdder
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes($functionUseImportTypes, $existingFunctionUseImports);
         $newUses = $this->createUses($useImportTypes, $constantUseImportTypes, $functionUseImportTypes, null);
         if ($newUses === []) {
-            return $stmts;
+            return [$fileWithoutNamespace];
         }
         // place after declare strict_types
         foreach ($stmts as $key => $stmt) {
@@ -67,14 +67,14 @@ final class UseImportsAdder
                 \array_splice($stmts, $key + 1, 0, $nodesToAdd);
                 $fileWithoutNamespace->stmts = $stmts;
                 $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
-                return $fileWithoutNamespace->stmts;
+                return [$fileWithoutNamespace];
             }
         }
         $this->mirrorUseComments($stmts, $newUses);
         // make use stmts first
         $fileWithoutNamespace->stmts = \array_merge($newUses, $stmts);
         $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
-        return $fileWithoutNamespace->stmts;
+        return [$fileWithoutNamespace];
     }
     /**
      * @param FullyQualifiedObjectType[] $useImportTypes
