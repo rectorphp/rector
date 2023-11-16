@@ -7,9 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -19,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
-final class SensitiveConstantNameRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class SensitiveConstantNameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -63,7 +62,7 @@ CODE_SAMPLE
     /**
      * @param ConstFetch $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         $constantName = $this->getName($node);
         if ($constantName === null) {
@@ -75,7 +74,7 @@ CODE_SAMPLE
             return null;
         }
         // constant is defined in current lower/upper case
-        if ($this->reflectionProvider->hasConstant(new Name($constantName), $scope)) {
+        if ($this->reflectionProvider->hasConstant(new Name($constantName), null)) {
             return null;
         }
         // is uppercase, all good
