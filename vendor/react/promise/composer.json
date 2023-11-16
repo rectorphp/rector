@@ -28,7 +28,7 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.36"
+        "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36"
     },
     "autoload": {
         "psr-4": {
@@ -41,8 +41,8 @@
     "autoload-dev": {
         "psr-4": {
             "RectorPrefix202311\\React\\Promise\\": [
-                "tests",
-                "tests\/fixtures"
+                "tests\/",
+                "tests\/fixtures\/"
             ]
         }
     },

@@ -1,6 +1,15 @@
 CHANGELOG for 2.x
 =================
 
+## 2.11.0 (2023-11-16)
+
+This is a compatibility release to ensure a smooth upgrade path for those not yet
+on Promise v3. We encourage upgrading to the latest version when possible, as
+Promise v3 will be the way forward for this project.
+
+*   Feature: Full PHP 8.3 compatibility.
+    (#256 by @clue)
+
 ## 2.10.0 (2023-05-02)
 
 *   Feature: Support Disjunctive Normal Form Types (DNF types) for PHP 8.2+.

@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -45,13 +45,13 @@ final class ClassNameImportSkipper
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    public function shouldSkipName(Name $name, array $uses) : bool
+    public function shouldSkipName(FullyQualified $fullyQualified, array $uses) : bool
     {
-        if (\substr_count($name->toCodeString(), '\\') <= 1) {
+        if (\substr_count($fullyQualified->toCodeString(), '\\') <= 1) {
             return \false;
         }
-        $stringName = $name->toString();
-        $lastUseName = $name->getLast();
+        $stringName = $fullyQualified->toString();
+        $lastUseName = $fullyQualified->getLast();
         $nameLastName = \strtolower($lastUseName);
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
