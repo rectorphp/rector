@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignOpCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
@@ -77,6 +78,9 @@ CODE_SAMPLE
         }
         foreach ($node->getParams() as $param) {
             if ($param->type instanceof Node) {
+                continue;
+            }
+            if ($param->default instanceof Expr && !$this->getType($param->default)->isArray()->yes()) {
                 continue;
             }
             if (!$this->isParamAccessedArrayDimFetch($param, $node)) {
