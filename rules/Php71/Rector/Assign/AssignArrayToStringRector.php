@@ -167,7 +167,7 @@ CODE_SAMPLE
     }
     private function isReAssignedAsArray(Assign $assign, string $variableName, Variable $variable) : bool
     {
-        if ($assign->var instanceof Variable && $this->isName($assign->var, $variableName) && !$this->nodeComparator->areSameNode($assign->var, $variable)) {
+        if ($assign->var instanceof Variable && $this->isName($assign->var, $variableName) && $assign->var->getStartTokenPos() > $variable->getStartTokenPos()) {
             $exprType = $this->nodeTypeResolver->getNativeType($assign->expr);
             if ($exprType->isArray()->yes()) {
                 return \true;
