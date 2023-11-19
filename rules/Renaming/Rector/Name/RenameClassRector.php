@@ -7,12 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
@@ -94,5 +96,50 @@ CODE_SAMPLE
         Assert::allString($configuration);
         Assert::allString(\array_keys($configuration));
         $this->renamedClassesDataCollector->addOldToNewClasses($configuration);
+    }
+    /**
+     * @param Node[] $nodes
+     * @return null|Node[]
+     */
+    public function afterTraverse(array $nodes) : ?array
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Namespace_) {
+                return parent::afterTraverse($nodes);
+            }
+            if ($node instanceof FileWithoutNamespace) {
+                foreach ($node->stmts as $stmt) {
+                    if ($stmt instanceof Namespace_) {
+                        $this->restructureUnderNamespace($node);
+                        return $node->stmts;
+                    }
+                }
+                return parent::afterTraverse($nodes);
+            }
+        }
+        return parent::afterTraverse($nodes);
+    }
+    private function restructureUnderNamespace(FileWithoutNamespace $fileWithoutNamespace) : void
+    {
+        $stmts = \array_reverse($fileWithoutNamespace->stmts, \true);
+        $isBeforeNamespace = \false;
+        $stmtsBeforeNamespace = [];
+        $namepace = null;
+        foreach ($stmts as $key => $stmt) {
+            if ($stmt instanceof Namespace_) {
+                $isBeforeNamespace = \true;
+                $namepace = $stmt;
+                continue;
+            }
+            if ($isBeforeNamespace && !$stmt instanceof Declare_) {
+                $stmtsBeforeNamespace[] = $stmt;
+                unset($stmts[$key]);
+            }
+        }
+        if ($stmtsBeforeNamespace === [] || !$namepace instanceof Namespace_) {
+            return;
+        }
+        $namepace->stmts = \array_values(\array_merge(\is_array($stmtsBeforeNamespace) ? $stmtsBeforeNamespace : \iterator_to_array($stmtsBeforeNamespace), $namepace->stmts));
+        $fileWithoutNamespace->stmts = \array_values(\array_reverse($stmts, \true));
     }
 }
