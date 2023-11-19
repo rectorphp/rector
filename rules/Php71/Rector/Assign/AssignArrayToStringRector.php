@@ -143,9 +143,13 @@ CODE_SAMPLE
             return [];
         }
         $assignedArrayDimFetches = [];
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($variableName, &$assignedArrayDimFetches) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($variable, $variableName, &$assignedArrayDimFetches) {
             if (!$node instanceof Assign) {
                 return null;
+            }
+            if ($this->isReAssignedAsArray($node, $variableName, $variable)) {
+                $assignedArrayDimFetches = [];
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             if (!$node->var instanceof ArrayDimFetch) {
                 return null;
@@ -160,6 +164,16 @@ CODE_SAMPLE
             $assignedArrayDimFetches[] = $arrayDimFetch;
         });
         return $assignedArrayDimFetches;
+    }
+    private function isReAssignedAsArray(Assign $assign, string $variableName, Variable $variable) : bool
+    {
+        if ($assign->var instanceof Variable && $this->isName($assign->var, $variableName) && !$this->nodeComparator->areSameNode($assign->var, $variable)) {
+            $exprType = $this->nodeTypeResolver->getNativeType($assign->expr);
+            if ($exprType->isArray()->yes()) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
