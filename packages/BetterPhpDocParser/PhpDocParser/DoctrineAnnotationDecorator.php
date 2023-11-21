@@ -143,11 +143,12 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             // the @\FQN use case
             if ($phpDocChildNode instanceof PhpDocTextNode) {
-                $spacelessPhpDocTagNode = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocChildNode, $currentPhpNode);
-                if (!$spacelessPhpDocTagNode instanceof SpacelessPhpDocTagNode) {
+                $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocChildNode, $currentPhpNode);
+                if ($spacelessPhpDocTagNodes === []) {
                     continue;
                 }
-                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+                unset($phpDocNode->children[$key]);
+                \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
                 continue;
             }
             if (!$phpDocChildNode instanceof PhpDocTagNode) {
@@ -216,16 +217,23 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         $nextStartAndEnd = $endPhpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
         return new StartAndEnd($currentStartAndEnd->getStart(), $nextStartAndEnd->getEnd());
     }
-    private function resolveFqnAnnotationSpacelessPhpDocTagNode(PhpDocTextNode $phpDocTextNode, Node $currentPhpNode) : ?SpacelessPhpDocTagNode
+    /**
+     * @return SpacelessPhpDocTagNode[]
+     */
+    private function resolveFqnAnnotationSpacelessPhpDocTagNode(PhpDocTextNode $phpDocTextNode, Node $currentPhpNode) : array
     {
-        $match = Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
-        $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
-        if ($fullyQualifiedAnnotationClass === null) {
-            return null;
+        $matches = Strings::matchAll($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
+        $spacelessPhpDocTagNodes = [];
+        foreach ($matches as $match) {
+            $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
+            if ($fullyQualifiedAnnotationClass === null) {
+                continue;
+            }
+            $annotationContent = $match['annotation_content'] ?? null;
+            $tagName = '@\\' . $fullyQualifiedAnnotationClass;
+            $formerStartEnd = $phpDocTextNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+            $spacelessPhpDocTagNodes[] = $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
         }
-        $annotationContent = $match['annotation_content'] ?? null;
-        $tagName = '@\\' . $fullyQualifiedAnnotationClass;
-        $formerStartEnd = $phpDocTextNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        return $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
+        return $spacelessPhpDocTagNodes;
     }
 }
