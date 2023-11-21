@@ -9,6 +9,10 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -71,6 +75,9 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         if ($node instanceof Param) {
             $node->var->setAttribute(AttributeKey::IS_PARAM_VAR, \true);
             return null;
+        }
+        if ($node instanceof PostDec || $node instanceof PostInc || $node instanceof PreDec || $node instanceof PreInc) {
+            $node->var->setAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \true);
         }
         $this->processContextInClass($node);
         return null;

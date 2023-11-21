@@ -240,7 +240,11 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_PARAM_VAR = 'IS_PARAM_VAR';
+    public const IS_PARAM_VAR = 'is_param_var';
+    /**
+     * @var string
+     */
+    public const IS_INCREMENT_OR_DECREMENT = 'is_increment_or_decrement';
     /**
      * @var string
      */
