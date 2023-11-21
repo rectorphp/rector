@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 353 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (72)
 
-- [CodingStyle](#codingstyle) (29)
+- [CodingStyle](#codingstyle) (28)
 
 - [DeadCode](#deadcode) (42)
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (42)
+- [TypeDeclaration](#typedeclaration) (41)
 
 - [Visibility](#visibility) (3)
 
@@ -1618,29 +1618,6 @@ Change `array_merge()` to spread operator
 -        );
 +        $anotherValues = [...$iter1, ...$iter2];
      }
- }
-```
-
-<br>
-
-### BinarySwitchToIfElseRector
-
-Changes switch with 2 options to if-else
-
-- class: [`Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector`](../rules/CodingStyle/Rector/Switch_/BinarySwitchToIfElseRector.php)
-
-```diff
--switch ($foo) {
--    case 'my string':
--        $result = 'ok';
--    break;
--
--    default:
--        $result = 'not ok';
-+if ($foo == 'my string') {
-+    $result = 'ok';
-+} else {
-+    $result = 'not ok';
  }
 ```
 
@@ -7016,30 +6993,6 @@ Add typed property from assigned types
      public function run()
      {
          $this->name = 'string';
-     }
- }
-```
-
-<br>
-
-### TypedPropertyFromStrictConstructorReadonlyClassRector
-
-Add typed public properties based only on strict constructor types in readonly classes
-
-- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorReadonlyClassRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorReadonlyClassRector.php)
-
-```diff
- /**
-  * @immutable
-  */
- class SomeObject
- {
--    public $name;
-+    public string $name;
-
-     public function __construct(string $name)
-     {
-         $this->name = $name;
      }
  }
 ```
