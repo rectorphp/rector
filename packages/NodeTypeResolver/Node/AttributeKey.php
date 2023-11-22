@@ -212,10 +212,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_NAMESPACE_NAME = 'is_namespace_name';
-    /**
-     * @var string
-     */
     public const IS_USEUSE_NAME = 'is_useuse_name';
     /**
      * @var string

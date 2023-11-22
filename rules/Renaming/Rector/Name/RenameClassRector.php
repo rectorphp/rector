@@ -5,7 +5,7 @@ namespace Rector\Renaming\Rector\Name;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
@@ -87,10 +87,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Name::class, Property::class, FunctionLike::class, Expression::class, ClassLike::class, Namespace_::class, If_::class];
+        return [FullyQualified::class, Property::class, FunctionLike::class, Expression::class, ClassLike::class, Namespace_::class, If_::class];
     }
     /**
-     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|If_ $node
+     * @param FunctionLike|FullyQualified|ClassLike|Expression|Namespace_|Property|If_ $node
      */
     public function refactor(Node $node) : ?Node
     {
