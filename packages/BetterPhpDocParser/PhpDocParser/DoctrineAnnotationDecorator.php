@@ -193,7 +193,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         unset($phpDocNode->children[$unsetKey]);
         $classNode = new PhpDocTagNode($phpDocTagNode->name, $phpDocTagNode->value);
         $description = Strings::replace($description, self::LONG_ANNOTATION_REGEX, '');
-        $description = \trim(\str_replace("\n *", '', $description));
+        $description = \substr($description, 0, -7);
         $phpDocTagNode->value->description = $description;
         $phpDocNode->children[$unsetKey] = $classNode;
         \array_splice($phpDocNode->children, $unsetKey + 1, 0, $spacelessPhpDocTagNodes);
