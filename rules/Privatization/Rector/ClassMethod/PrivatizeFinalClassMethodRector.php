@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Privatization\Guard\OverrideByParentClassGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -34,11 +36,17 @@ final class PrivatizeFinalClassMethodRector extends AbstractScopeAwareRector
      * @var \Rector\Privatization\Guard\OverrideByParentClassGuard
      */
     private $overrideByParentClassGuard;
-    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->overrideByParentClassGuard = $overrideByParentClassGuard;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -109,6 +117,16 @@ CODE_SAMPLE
         if (\strncmp($methodName, 'createComponent', \strlen('createComponent')) === 0) {
             return \true;
         }
-        return !$classMethod->isProtected();
+        if (!$classMethod->isProtected()) {
+            return \true;
+        }
+        // if has parent call, its probably overriding parent one → skip it
+        $hasParentCall = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
+            if (!$node instanceof StaticCall) {
+                return \false;
+            }
+            return $this->isName($node->class, 'parent');
+        });
+        return $hasParentCall;
     }
 }
