@@ -276,7 +276,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             $tagName = '@\\' . $fullyQualifiedAnnotationClass;
             $formerStartEnd = $phpDocTextNode->getAttribute(PhpDocAttributeKey::START_AND_END);
             if (isset($nestedAnnotationOpen[1])) {
-                $annotationContent = '("' . \trim($nestedAnnotationOpen[1], '"') . '")';
+                $annotationContent = '("' . \trim($nestedAnnotationOpen[1], '"\'') . '")';
             }
             $spacelessPhpDocTagNodes[] = $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
         }
