@@ -138,37 +138,34 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             unset($phpDocNode->children[$key]);
         }
     }
-    private function processTextSpacelessInTextNode(PhpDocNode $phpDocNode, PhpDocTextNode $phpDocTextNode, Node $currentPhpNode, int $key) : int
+    private function processTextSpacelessInTextNode(PhpDocNode $phpDocNode, PhpDocTextNode $phpDocTextNode, Node $currentPhpNode, int $key) : void
     {
         $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
         if ($spacelessPhpDocTagNodes === []) {
-            return $key;
+            return;
         }
         $otherText = Strings::replace($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX, '');
         if (!\in_array($otherText, ["\n", ""], \true)) {
             $phpDocNode->children[$key] = new PhpDocTextNode($otherText);
             \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
-            $key += \count($spacelessPhpDocTagNodes);
         } else {
             unset($phpDocNode->children[$key]);
             \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
-            $key += \count($spacelessPhpDocTagNodes) - 1;
         }
-        return $key;
     }
     private function transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes(PhpDocNode $phpDocNode, Node $currentPhpNode) : void
     {
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             // the @\FQN use case
             if ($phpDocChildNode instanceof PhpDocTextNode) {
-                $key = $this->processTextSpacelessInTextNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
+                $this->processTextSpacelessInTextNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
                 continue;
             }
             if (!$phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
             if (!$phpDocChildNode->value instanceof GenericTagValueNode) {
-                $key = $this->processDescriptionAsSpacelessPhpDoctagNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
+                $this->processDescriptionAsSpacelessPhpDoctagNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
                 continue;
             }
             // known doc tag to annotation class
@@ -185,24 +182,24 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
         }
     }
-    private function processDescriptionAsSpacelessPhpDoctagNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode, Node $currentPhpNode, int $key) : int
+    private function processDescriptionAsSpacelessPhpDoctagNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode, Node $currentPhpNode, int $key) : void
     {
         if (!\property_exists($phpDocTagNode->value, 'description')) {
-            return $key;
+            return;
         }
         $description = (string) $phpDocTagNode->value->description;
         if (\strpos($description, "\n") === \false) {
-            return $key;
+            return;
         }
         $phpDocTextNode = new PhpDocTextNode($description);
         $startAndEnd = $phpDocTagNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
         if (!$startAndEnd instanceof StartAndEnd) {
-            return $key;
+            return;
         }
         $phpDocTextNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
         if ($spacelessPhpDocTagNodes === []) {
-            return $key;
+            return;
         }
         while (isset($phpDocNode->children[$key]) && $phpDocNode->children[$key] !== $phpDocTagNode) {
             ++$key;
@@ -214,7 +211,6 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         $phpDocTagNode->value->description = $description;
         $phpDocNode->children[$key] = $classNode;
         \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
-        return $key + \count($spacelessPhpDocTagNodes);
     }
     /**
      * This is closed block, e.g. {( ... )},
