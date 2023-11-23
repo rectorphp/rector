@@ -204,14 +204,16 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         if ($spacelessPhpDocTagNodes === []) {
             return $key;
         }
-        $unsetKey = $phpDocNode->children[$key] instanceof SpacelessPhpDocTagNode ? $key + \count($spacelessPhpDocTagNodes) : $key;
-        unset($phpDocNode->children[$unsetKey]);
+        while (isset($phpDocNode->children[$key]) && $phpDocNode->children[$key] !== $phpDocTagNode) {
+            ++$key;
+        }
+        unset($phpDocNode->children[$key]);
         $classNode = new PhpDocTagNode($phpDocTagNode->name, $phpDocTagNode->value);
         $description = Strings::replace($description, self::LONG_ANNOTATION_REGEX, '');
         $description = \substr($description, 0, -7);
         $phpDocTagNode->value->description = $description;
-        $phpDocNode->children[$unsetKey] = $classNode;
-        \array_splice($phpDocNode->children, $unsetKey + 1, 0, $spacelessPhpDocTagNodes);
+        $phpDocNode->children[$key] = $classNode;
+        \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
         return $key + \count($spacelessPhpDocTagNodes);
     }
     /**
