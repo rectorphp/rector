@@ -144,14 +144,11 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         if ($spacelessPhpDocTagNodes === []) {
             return;
         }
-        $otherText = Strings::replace($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX, '');
-        if (!\in_array($otherText, ["\n", ""], \true)) {
-            $phpDocNode->children[$key] = new PhpDocTextNode($otherText);
-            \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
-        } else {
-            unset($phpDocNode->children[$key]);
-            \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
-        }
+        // temporary restore keep comment feature to avoid error
+        // in nested annotation
+        // @see https://github.com/rectorphp/rector-src/pull/5280#pullrequestreview-1745794426
+        unset($phpDocNode->children[$key]);
+        \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
     }
     private function transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes(PhpDocNode $phpDocNode, Node $currentPhpNode) : void
     {
