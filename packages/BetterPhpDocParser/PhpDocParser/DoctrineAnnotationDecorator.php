@@ -203,7 +203,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             $this->attributeMirrorer->mirror($phpDocNode->children[$key], $spacelessPhpDocTagNode);
             $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
             // require to reprint the generic
-            $phpDocNode->children[$key]->setAttribute(PhpDocAttributeKey::IS_AFTER_GENERIC, \true);
+            $phpDocNode->children[$key]->value->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
         }
     }
