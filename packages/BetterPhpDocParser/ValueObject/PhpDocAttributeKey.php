@@ -27,4 +27,8 @@ final class PhpDocAttributeKey
      * @var string
      */
     public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
+    /**
+     * @var string
+     */
+    public const IS_AFTER_GENERIC = 'is_after_generic';
 }

@@ -21,6 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Util\StringUtils;
+use RectorPrefix202311\Webmozart\Assert\Assert;
 final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
@@ -175,12 +176,35 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             if (\strpos($fullyQualifiedAnnotationClass, '\\') === \false && !\in_array($fullyQualifiedAnnotationClass, self::ALLOWED_SHORT_ANNOTATIONS, \true)) {
                 continue;
             }
-            $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocChildNode->name, $phpDocChildNode->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
-            $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
             while (isset($phpDocNode->children[$key]) && $phpDocNode->children[$key] !== $phpDocChildNode) {
                 ++$key;
             }
+            $phpDocTextNode = new PhpDocTextNode($phpDocChildNode->value->value);
+            $startAndEnd = $phpDocChildNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
+            if (!$startAndEnd instanceof StartAndEnd) {
+                $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocChildNode->name, $phpDocChildNode->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
+                $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
+                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+                continue;
+            }
+            $phpDocTextNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+            $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
+            if ($spacelessPhpDocTagNodes === []) {
+                $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocChildNode->name, $phpDocChildNode->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
+                $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
+                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+                continue;
+            }
+            Assert::isAOf($phpDocNode->children[$key], PhpDocTagNode::class);
+            $texts = \explode("\n@\\", $phpDocChildNode->value->value);
+            $phpDocNode->children[$key]->value = new GenericTagValueNode($texts[0]);
+            $phpDocNode->children[$key]->value->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+            $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocNode->children[$key]->name, $phpDocNode->children[$key]->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
+            $this->attributeMirrorer->mirror($phpDocNode->children[$key], $spacelessPhpDocTagNode);
             $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+            // require to reprint the generic
+            $phpDocNode->children[$key]->setAttribute(PhpDocAttributeKey::IS_AFTER_GENERIC, \true);
+            \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
         }
     }
     private function processDescriptionAsSpacelessPhpDoctagNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode, Node $currentPhpNode, int $key) : void
