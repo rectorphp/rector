@@ -29,7 +29,7 @@ final class ArrayItemNode implements PhpDocTagValueNode
     public function __toString() : string
     {
         $value = '';
-        if ($this->key !== null && !\is_numeric($this->key)) {
+        if ($this->key !== null && !\is_int($this->key)) {
             $value .= $this->key . '=';
         }
         if (\is_array($this->value)) {
