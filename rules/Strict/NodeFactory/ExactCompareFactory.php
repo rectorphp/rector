@@ -96,6 +96,13 @@ final class ExactCompareFactory
         if (!$compareExpr instanceof Expr) {
             return null;
         }
+        if ($treatAsNotEmpty) {
+            return new BooleanAnd($toNullNotIdentical, $compareExpr);
+        }
+        if ($unionType->isString()->yes()) {
+            $booleanAnd = new BooleanAnd($toNullNotIdentical, $compareExpr);
+            return new BooleanAnd($booleanAnd, new NotIdentical($expr, new String_('0')));
+        }
         return new BooleanAnd($toNullNotIdentical, $compareExpr);
     }
     /**
@@ -184,6 +191,10 @@ final class ExactCompareFactory
         $scalarFalsyIdentical = $this->createIdenticalFalsyCompare($unionType, $expr, $treatAsNonEmpty);
         if (!$scalarFalsyIdentical instanceof Expr) {
             return null;
+        }
+        if ($unionType->isString()->yes()) {
+            $booleanOr = new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
+            return new BooleanOr($booleanOr, new Identical($expr, new String_('0')));
         }
         return new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
     }
