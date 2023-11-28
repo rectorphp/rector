@@ -1,4 +1,4 @@
-# 353 Rules Overview
+# 352 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (41)
+- [TypeDeclaration](#typedeclaration) (40)
 
 - [Visibility](#visibility) (3)
 
@@ -6596,27 +6596,6 @@ Change param type based on parent param type
 +    public function __construct(string $name)
      {
          parent::__construct($name);
-     }
- }
-```
-
-<br>
-
-### ParamTypeFromStrictTypedPropertyRector
-
-Add param type from `$param` set to typed property
-
-- class: [`Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector`](../rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php)
-
-```diff
- final class SomeClass
- {
-     private int $age;
-
--    public function setAge($age)
-+    public function setAge(int $age)
-     {
-         $this->age = $age;
      }
  }
 ```

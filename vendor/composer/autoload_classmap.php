@@ -2323,7 +2323,6 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddReturnTypeDeclarationFromYieldsRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddReturnTypeDeclarationFromYieldsRector.php',
-    'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\AddPropertyTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',

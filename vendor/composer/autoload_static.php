@@ -2541,7 +2541,6 @@ class ComposerStaticInita55c41c7fa52abd86138c6f32df1d185
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddReturnTypeDeclarationFromYieldsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddReturnTypeDeclarationFromYieldsRector.php',
-        'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\AddPropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
