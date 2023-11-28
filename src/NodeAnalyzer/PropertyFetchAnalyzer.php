@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -160,17 +159,6 @@ final class PropertyFetchAnalyzer
             }
         }
         return \false;
-    }
-    /**
-     * @param string[] $propertyNames
-     */
-    public function isLocalPropertyOfNames(Expr $expr, array $propertyNames) : bool
-    {
-        if (!$this->isLocalPropertyFetch($expr)) {
-            return \false;
-        }
-        /** @var PropertyFetch $expr */
-        return $this->nodeNameResolver->isNames($expr->name, $propertyNames);
     }
     private function isTraitLocalPropertyFetch(Node $node) : bool
     {
