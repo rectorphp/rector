@@ -163,13 +163,13 @@ CODE_SAMPLE
     }
     private function shouldSkipParam(Param $param, ClassMethod $classMethod) : bool
     {
-        if (!$this->paramTypeAddGuard->isLegal($param, $classMethod)) {
+        // already has type, skip
+        if ($param->type !== null) {
             return \true;
         }
         if ($param->variadic) {
             return \true;
         }
-        // already has type, skip
-        return $param->type !== null;
+        return !$this->paramTypeAddGuard->isLegal($param, $classMethod);
     }
 }
