@@ -26,6 +26,7 @@ use RectorPrefix202311\Symfony\Component\Console\Exception\RuntimeException;
 abstract class Input implements InputInterface, StreamableInputInterface
 {
     protected $definition;
+    /** @var resource */
     protected $stream;
     protected $options = [];
     protected $arguments = [];

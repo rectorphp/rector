@@ -101,6 +101,10 @@ class Application implements ResetInterface
     /**
      * @var bool
      */
+    private $catchErrors = \false;
+    /**
+     * @var bool
+     */
     private $autoExit = \true;
     /**
      * @var \Symfony\Component\Console\Input\InputDefinition
@@ -210,8 +214,11 @@ class Application implements ResetInterface
         $this->configureIO($input, $output);
         try {
             $exitCode = $this->doRun($input, $output);
-        } catch (\Exception $e) {
-            if (!$this->catchExceptions) {
+        } catch (\Throwable $e) {
+            if ($e instanceof \Exception && !$this->catchExceptions) {
+                throw $e;
+            }
+            if (!$e instanceof \Exception && !$this->catchErrors) {
                 throw $e;
             }
             $renderException($e);
@@ -412,6 +419,13 @@ class Application implements ResetInterface
     public function setCatchExceptions(bool $boolean)
     {
         $this->catchExceptions = $boolean;
+    }
+    /**
+     * Sets whether to catch errors or not during commands execution.
+     */
+    public function setCatchErrors(bool $catchErrors = \true) : void
+    {
+        $this->catchErrors = $catchErrors;
     }
     /**
      * Gets whether to automatically exit after a command execution or not.
@@ -919,7 +933,9 @@ class Application implements ResetInterface
                             }
                         }
                         if (\false !== $exitCode) {
-                            exit($exitCode);
+                            $event = new ConsoleTerminateEvent($command, $event->getInput(), $event->getOutput(), $exitCode, $signal);
+                            $this->dispatcher->dispatch($event, ConsoleEvents::TERMINATE);
+                            exit($event->getExitCode());
                         }
                     });
                 }

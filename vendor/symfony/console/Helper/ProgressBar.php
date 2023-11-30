@@ -337,7 +337,13 @@ final class ProgressBar
     /**
      * Returns an iterator that will automatically update the progress bar when iterated.
      *
-     * @param int|null $max Number of steps to complete the bar (0 if indeterminate), if null it will be inferred from $iterable
+     * @template TKey
+     * @template TValue
+     *
+     * @param iterable<TKey, TValue> $iterable
+     * @param int|null               $max      Number of steps to complete the bar (0 if indeterminate), if null it will be inferred from $iterable
+     *
+     * @return iterable<TKey, TValue>
      */
     public function iterate(iterable $iterable, int $max = null) : iterable
     {
@@ -533,17 +539,17 @@ final class ProgressBar
             }
             return $display;
         }, 'elapsed' => function (self $bar) {
-            return Helper::formatTime(\time() - $bar->getStartTime());
+            return Helper::formatTime(\time() - $bar->getStartTime(), 2);
         }, 'remaining' => function (self $bar) {
             if (!$bar->getMaxSteps()) {
                 throw new LogicException('Unable to display the remaining time if the maximum number of steps is not set.');
             }
-            return Helper::formatTime($bar->getRemaining());
+            return Helper::formatTime($bar->getRemaining(), 2);
         }, 'estimated' => function (self $bar) {
             if (!$bar->getMaxSteps()) {
                 throw new LogicException('Unable to display the estimated time if the maximum number of steps is not set.');
             }
-            return Helper::formatTime($bar->getEstimated());
+            return Helper::formatTime($bar->getEstimated(), 2);
         }, 'memory' => function (self $bar) {
             return Helper::formatMemory(\memory_get_usage(\true));
         }, 'current' => function (self $bar) {

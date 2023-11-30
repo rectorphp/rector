@@ -20,6 +20,7 @@ final class Cursor
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
+    /** @var resource */
     private $input;
     /**
      * @param resource|null $input

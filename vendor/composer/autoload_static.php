@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
+class ComposerStaticInita55c41c7fa52abd86138c6f32df1d185
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -990,6 +990,7 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
         'RectorPrefix202311\\Symfony\\Component\\Console\\Command\\ListCommand' => __DIR__ . '/..' . '/symfony/console/Command/ListCommand.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Command\\LockableTrait' => __DIR__ . '/..' . '/symfony/console/Command/LockableTrait.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Command\\SignalableCommandInterface' => __DIR__ . '/..' . '/symfony/console/Command/SignalableCommandInterface.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Command\\TraceableCommand' => __DIR__ . '/..' . '/symfony/console/Command/TraceableCommand.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Completion\\CompletionInput' => __DIR__ . '/..' . '/symfony/console/Completion/CompletionInput.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Completion\\CompletionSuggestions' => __DIR__ . '/..' . '/symfony/console/Completion/CompletionSuggestions.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Completion\\Output\\BashCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/BashCompletionOutput.php',
@@ -999,6 +1000,8 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
         'RectorPrefix202311\\Symfony\\Component\\Console\\Completion\\Suggestion' => __DIR__ . '/..' . '/symfony/console/Completion/Suggestion.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\ConsoleEvents' => __DIR__ . '/..' . '/symfony/console/ConsoleEvents.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Cursor' => __DIR__ . '/..' . '/symfony/console/Cursor.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\DataCollector\\CommandDataCollector' => __DIR__ . '/..' . '/symfony/console/DataCollector/CommandDataCollector.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Debug\\CliRequest' => __DIR__ . '/..' . '/symfony/console/Debug/CliRequest.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass' => __DIR__ . '/..' . '/symfony/console/DependencyInjection/AddConsoleCommandPass.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Descriptor\\ApplicationDescription' => __DIR__ . '/..' . '/symfony/console/Descriptor/ApplicationDescription.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Descriptor\\Descriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/Descriptor.php',
@@ -1015,6 +1018,7 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
         'RectorPrefix202311\\Symfony\\Component\\Console\\Exception\\LogicException' => __DIR__ . '/..' . '/symfony/console/Exception/LogicException.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Exception\\MissingInputException' => __DIR__ . '/..' . '/symfony/console/Exception/MissingInputException.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException' => __DIR__ . '/..' . '/symfony/console/Exception/NamespaceNotFoundException.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Exception\\RunCommandFailedException' => __DIR__ . '/..' . '/symfony/console/Exception/RunCommandFailedException.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/console/Exception/RuntimeException.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Formatter\\NullOutputFormatter' => __DIR__ . '/..' . '/symfony/console/Formatter/NullOutputFormatter.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Formatter\\NullOutputFormatterStyle' => __DIR__ . '/..' . '/symfony/console/Formatter/NullOutputFormatterStyle.php',
@@ -1055,6 +1059,9 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
         'RectorPrefix202311\\Symfony\\Component\\Console\\Input\\StreamableInputInterface' => __DIR__ . '/..' . '/symfony/console/Input/StreamableInputInterface.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Input\\StringInput' => __DIR__ . '/..' . '/symfony/console/Input/StringInput.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Logger\\ConsoleLogger' => __DIR__ . '/..' . '/symfony/console/Logger/ConsoleLogger.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Messenger\\RunCommandContext' => __DIR__ . '/..' . '/symfony/console/Messenger/RunCommandContext.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Messenger\\RunCommandMessage' => __DIR__ . '/..' . '/symfony/console/Messenger/RunCommandMessage.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\Messenger\\RunCommandMessageHandler' => __DIR__ . '/..' . '/symfony/console/Messenger/RunCommandMessageHandler.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Output\\AnsiColorMode' => __DIR__ . '/..' . '/symfony/console/Output/AnsiColorMode.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Output\\BufferedOutput' => __DIR__ . '/..' . '/symfony/console/Output/BufferedOutput.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Output\\ConsoleOutput' => __DIR__ . '/..' . '/symfony/console/Output/ConsoleOutput.php',
@@ -1068,6 +1075,7 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
         'RectorPrefix202311\\Symfony\\Component\\Console\\Question\\ChoiceQuestion' => __DIR__ . '/..' . '/symfony/console/Question/ChoiceQuestion.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion' => __DIR__ . '/..' . '/symfony/console/Question/ConfirmationQuestion.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Question\\Question' => __DIR__ . '/..' . '/symfony/console/Question/Question.php',
+        'RectorPrefix202311\\Symfony\\Component\\Console\\SignalRegistry\\SignalMap' => __DIR__ . '/..' . '/symfony/console/SignalRegistry/SignalMap.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\SignalRegistry\\SignalRegistry' => __DIR__ . '/..' . '/symfony/console/SignalRegistry/SignalRegistry.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\SingleCommandApplication' => __DIR__ . '/..' . '/symfony/console/SingleCommandApplication.php',
         'RectorPrefix202311\\Symfony\\Component\\Console\\Style\\OutputStyle' => __DIR__ . '/..' . '/symfony/console/Style/OutputStyle.php',
@@ -2606,9 +2614,9 @@ class ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6ee5b17c87a6bea7c9006b4ba8060b02::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita55c41c7fa52abd86138c6f32df1d185::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita55c41c7fa52abd86138c6f32df1d185::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita55c41c7fa52abd86138c6f32df1d185::$classMap;
 
         }, null, ClassLoader::class);
     }

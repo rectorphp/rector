@@ -18,7 +18,13 @@ use RectorPrefix202311\Symfony\Component\Console\Input\InputOption;
  */
 final class CompletionSuggestions
 {
+    /**
+     * @var mixed[]
+     */
     private $valueSuggestions = [];
+    /**
+     * @var mixed[]
+     */
     private $optionSuggestions = [];
     /**
      * Add a suggested value for an input option or argument.

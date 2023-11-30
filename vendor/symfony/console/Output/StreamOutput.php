@@ -27,6 +27,7 @@ use RectorPrefix202311\Symfony\Component\Console\Formatter\OutputFormatterInterf
  */
 class StreamOutput extends Output
 {
+    /** @var resource */
     private $stream;
     /**
      * @param resource                      $stream    A stream resource
