@@ -65,6 +65,10 @@ class Finder implements \IteratorAggregate, \Countable
     /**
      * @var mixed[]
      */
+    private $pruneFilters = [];
+    /**
+     * @var mixed[]
+     */
     private $depths = [];
     /**
      * @var mixed[]
@@ -582,13 +586,20 @@ class Finder implements \IteratorAggregate, \Countable
      * The anonymous function receives a \SplFileInfo and must return false
      * to remove files.
      *
+     * @param \Closure(SplFileInfo): bool $closure
+     * @param bool                        $prune   Whether to skip traversing directories further
+     *
      * @return $this
      *
      * @see CustomFilterIterator
      */
     public function filter(\Closure $closure)
     {
+        $prune = 1 < \func_num_args() ? \func_get_arg(1) : \false;
         $this->filters[] = $closure;
+        if ($prune) {
+            $this->pruneFilters[] = $closure;
+        }
         return $this;
     }
     /**
@@ -721,6 +732,9 @@ class Finder implements \IteratorAggregate, \Countable
     {
         $exclude = $this->exclude;
         $notPaths = $this->notPaths;
+        if ($this->pruneFilters) {
+            $exclude = \array_merge($exclude, $this->pruneFilters);
+        }
         if (static::IGNORE_VCS_FILES === (static::IGNORE_VCS_FILES & $this->ignore)) {
             $exclude = \array_merge($exclude, self::$vcsPatterns);
         }

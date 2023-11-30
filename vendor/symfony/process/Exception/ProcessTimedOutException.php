@@ -20,7 +20,13 @@ class ProcessTimedOutException extends RuntimeException
 {
     public const TYPE_GENERAL = 1;
     public const TYPE_IDLE = 2;
+    /**
+     * @var \Symfony\Component\Process\Process
+     */
     private $process;
+    /**
+     * @var int
+     */
     private $timeoutType;
     public function __construct(Process $process, int $timeoutType)
     {

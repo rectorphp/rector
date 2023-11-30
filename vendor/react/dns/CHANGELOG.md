@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.12.0 (2023-11-29)
+
+*   Feature: Full PHP 8.3 compatibility.
+    (#217 by @sergiy-petrov)
+
+*   Update test environment and avoid unhandled promise rejections.
+    (#215, #216 and #218 by @clue)
+
 ## 1.11.0 (2023-06-02)
 
 *   Feature: Include timeout logic to avoid dependency on reactphp/promise-timer.

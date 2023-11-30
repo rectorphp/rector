@@ -20,8 +20,17 @@ use RectorPrefix202311\Symfony\Component\Process\Process;
  */
 class UnixPipes extends AbstractPipes
 {
+    /**
+     * @var bool|null
+     */
     private $ttyMode;
+    /**
+     * @var bool
+     */
     private $ptyMode;
+    /**
+     * @var bool
+     */
     private $haveReadSupport;
     /**
      * @param mixed $input
@@ -37,7 +46,7 @@ class UnixPipes extends AbstractPipes
     {
         throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
-    public function __wakeup()
+    public function __wakeup() : void
     {
         throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }

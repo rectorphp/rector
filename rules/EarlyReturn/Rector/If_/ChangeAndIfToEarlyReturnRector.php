@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -128,6 +130,9 @@ CODE_SAMPLE
                 continue;
             }
             $nextStmt = $stmts[$key + 1] ?? null;
+            if ($this->isComplexReturn($nextStmt)) {
+                return null;
+            }
             if ($this->shouldSkip($stmt, $nextStmt)) {
                 $newStmts[] = $stmt;
                 continue;
@@ -221,5 +226,18 @@ CODE_SAMPLE
             return \true;
         }
         return $nextStmt instanceof Return_;
+    }
+    private function isComplexReturn(?Stmt $stmt) : bool
+    {
+        if (!$stmt instanceof Return_) {
+            return \false;
+        }
+        if (!$stmt->expr instanceof Expr) {
+            return \false;
+        }
+        if ($stmt->expr instanceof ConstFetch) {
+            return \false;
+        }
+        return !$stmt->expr instanceof Scalar;
     }
 }
