@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202311\Symfony\Component\Console\Output;
+namespace RectorPrefix202312\Symfony\Component\Console\Output;
 
-use RectorPrefix202311\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix202312\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * ConsoleOutput is the default class for all CLI output. It uses STDOUT and STDERR.
  *

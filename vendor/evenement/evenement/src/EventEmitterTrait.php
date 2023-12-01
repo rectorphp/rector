@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202311\Evenement;
+namespace RectorPrefix202312\Evenement;
 
 use InvalidArgumentException;
 use function count;

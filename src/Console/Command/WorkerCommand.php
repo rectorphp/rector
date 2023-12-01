@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202311\Clue\React\NDJson\Decoder;
-use RectorPrefix202311\Clue\React\NDJson\Encoder;
+use RectorPrefix202312\Clue\React\NDJson\Decoder;
+use RectorPrefix202312\Clue\React\NDJson\Encoder;
 use PHPStan\Collectors\CollectedData;
-use RectorPrefix202311\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202311\React\Socket\ConnectionInterface;
-use RectorPrefix202311\React\Socket\TcpConnector;
+use RectorPrefix202312\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202312\React\Socket\ConnectionInterface;
+use RectorPrefix202312\React\Socket\TcpConnector;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Console\ProcessConfigureDecorator;
@@ -17,14 +17,14 @@ use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202311\Symfony\Component\Console\Command\Command;
-use RectorPrefix202311\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202311\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202312\Symfony\Component\Console\Command\Command;
+use RectorPrefix202312\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202312\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
-use RectorPrefix202311\Webmozart\Assert\Assert;
+use RectorPrefix202312\Webmozart\Assert\Assert;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php

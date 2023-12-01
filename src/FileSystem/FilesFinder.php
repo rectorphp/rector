@@ -6,8 +6,8 @@ namespace Rector\Core\FileSystem;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix202311\Symfony\Component\Finder\Finder;
-use RectorPrefix202311\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202312\Symfony\Component\Finder\Finder;
+use RectorPrefix202312\Symfony\Component\Finder\SplFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

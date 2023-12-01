@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202311\Illuminate\Contracts\Console;
+namespace RectorPrefix202312\Illuminate\Contracts\Console;
 
 interface Application
 {

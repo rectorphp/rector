@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202311\Webmozart\Assert\Assert;
+use RectorPrefix202312\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Symfony\Tests\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector\ReplaceServiceArgumentRectorTest
  */

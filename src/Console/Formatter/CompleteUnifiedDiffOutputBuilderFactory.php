@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Formatter;
 
 use Rector\Core\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202311\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix202312\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 /**
  * @api
  * Creates @see UnifiedDiffOutputBuilder with "$contextLines = 1000;"

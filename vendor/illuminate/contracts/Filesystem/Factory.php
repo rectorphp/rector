@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202311\Illuminate\Contracts\Filesystem;
+namespace RectorPrefix202312\Illuminate\Contracts\Filesystem;
 
 interface Factory
 {

@@ -7,7 +7,7 @@ use PhpParser\Node;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix202311\Webmozart\Assert\Assert;
+use RectorPrefix202312\Webmozart\Assert\Assert;
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest

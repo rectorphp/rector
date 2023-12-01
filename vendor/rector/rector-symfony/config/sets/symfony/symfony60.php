@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202311;
+namespace RectorPrefix202312;
 
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;

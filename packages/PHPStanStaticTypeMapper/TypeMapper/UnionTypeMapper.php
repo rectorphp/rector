@@ -34,8 +34,8 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix202311\Webmozart\Assert\Assert;
-use RectorPrefix202311\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202312\Webmozart\Assert\Assert;
+use RectorPrefix202312\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */

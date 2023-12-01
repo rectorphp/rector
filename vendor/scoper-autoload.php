@@ -8,12 +8,12 @@ $loader = require_once __DIR__.'/autoload.php';
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
 if (!function_exists('dump_node')) {
     function dump_node() {
-        return \RectorPrefix202311\dump_node(...func_get_args());
+        return \RectorPrefix202312\dump_node(...func_get_args());
     }
 }
 if (!function_exists('print_node')) {
     function print_node() {
-        return \RectorPrefix202311\print_node(...func_get_args());
+        return \RectorPrefix202312\print_node(...func_get_args());
     }
 }
 

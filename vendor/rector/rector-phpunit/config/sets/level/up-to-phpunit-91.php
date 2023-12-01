@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202311;
+namespace RectorPrefix202312;
 
 use Rector\Config\RectorConfig;
 /** @deprecated Use PHPUnitSetList::PHPUNIT_100 directly */

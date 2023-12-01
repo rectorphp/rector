@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use RectorPrefix202311\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use RectorPrefix202312\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

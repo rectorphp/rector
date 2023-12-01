@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202311\Symfony\Component\Filesystem;
+namespace RectorPrefix202312\Symfony\Component\Filesystem;
 
-use RectorPrefix202311\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix202311\Symfony\Component\Filesystem\Exception\RuntimeException;
+use RectorPrefix202312\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix202312\Symfony\Component\Filesystem\Exception\RuntimeException;
 /**
  * Contains utility methods for handling path strings.
  *

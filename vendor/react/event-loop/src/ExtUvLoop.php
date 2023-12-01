@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202311\React\EventLoop;
+namespace RectorPrefix202312\React\EventLoop;
 
-use RectorPrefix202311\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix202311\React\EventLoop\Timer\Timer;
+use RectorPrefix202312\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix202312\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * An `ext-uv` based event loop.
@@ -150,8 +150,8 @@ final class ExtUvLoop implements LoopInterface
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
             $signals = $this->signals;
-            $this->signalEvents[$signal] = \RectorPrefix202311\uv_signal_init($this->uv);
-            \RectorPrefix202311\uv_signal_start($this->signalEvents[$signal], function () use($signals, $signal) {
+            $this->signalEvents[$signal] = \RectorPrefix202312\uv_signal_init($this->uv);
+            \RectorPrefix202312\uv_signal_start($this->signalEvents[$signal], function () use($signals, $signal) {
                 $signals->call($signal);
             }, $signal);
         }
@@ -197,7 +197,7 @@ final class ExtUvLoop implements LoopInterface
     private function addStream($stream)
     {
         if (!isset($this->streamEvents[(int) $stream])) {
-            $this->streamEvents[(int) $stream] = \RectorPrefix202311\uv_poll_init_socket($this->uv, $stream);
+            $this->streamEvents[(int) $stream] = \RectorPrefix202312\uv_poll_init_socket($this->uv, $stream);
         }
         if ($this->streamEvents[(int) $stream] !== \false) {
             $this->pollStream($stream);

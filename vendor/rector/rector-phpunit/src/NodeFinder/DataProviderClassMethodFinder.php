@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202311\PHPUnit\Framework\Attributes\DataProvider;
+use RectorPrefix202312\PHPUnit\Framework\Attributes\DataProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;

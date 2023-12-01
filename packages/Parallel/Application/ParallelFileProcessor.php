@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Parallel\Application;
 
-use RectorPrefix202311\Clue\React\NDJson\Decoder;
-use RectorPrefix202311\Clue\React\NDJson\Encoder;
-use RectorPrefix202311\Nette\Utils\Random;
+use RectorPrefix202312\Clue\React\NDJson\Decoder;
+use RectorPrefix202312\Clue\React\NDJson\Encoder;
+use RectorPrefix202312\Nette\Utils\Random;
 use PHPStan\Collectors\CollectedData;
-use RectorPrefix202311\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202311\React\Socket\ConnectionInterface;
-use RectorPrefix202311\React\Socket\TcpServer;
+use RectorPrefix202312\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202312\React\Socket\ConnectionInterface;
+use RectorPrefix202312\React\Socket\TcpServer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Console\Command\ProcessCommand;
@@ -19,15 +19,15 @@ use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202311\Symfony\Component\Console\Command\Command;
-use RectorPrefix202311\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\Content;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix202311\Symplify\EasyParallel\ValueObject\ParallelProcess;
-use RectorPrefix202311\Symplify\EasyParallel\ValueObject\ProcessPool;
-use RectorPrefix202311\Symplify\EasyParallel\ValueObject\Schedule;
+use RectorPrefix202312\Symfony\Component\Console\Command\Command;
+use RectorPrefix202312\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\Content;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202312\Symplify\EasyParallel\ValueObject\ParallelProcess;
+use RectorPrefix202312\Symplify\EasyParallel\ValueObject\ProcessPool;
+use RectorPrefix202312\Symplify\EasyParallel\ValueObject\Schedule;
 use Throwable;
 /**
  * Inspired from @see

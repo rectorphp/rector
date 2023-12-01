@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202311\Composer\Semver\Constraint;
+namespace RectorPrefix202312\Composer\Semver\Constraint;
 
 /**
  * Defines a constraint.

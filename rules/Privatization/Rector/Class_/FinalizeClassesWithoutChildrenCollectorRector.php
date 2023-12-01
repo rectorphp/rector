@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Privatization\Rector\Class_;
 
-use RectorPrefix202311\Nette\Utils\Arrays;
+use RectorPrefix202312\Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Node\CollectedDataNode;

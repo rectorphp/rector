@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202311;
+namespace RectorPrefix202312;
 
-use RectorPrefix202311\Nette\Utils\Json;
+use RectorPrefix202312\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
@@ -11,9 +11,9 @@ use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\LazyContainerFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202311\Symfony\Component\Console\Application;
-use RectorPrefix202311\Symfony\Component\Console\Command\Command;
-use RectorPrefix202311\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202312\Symfony\Component\Console\Application;
+use RectorPrefix202312\Symfony\Component\Console\Command\Command;
+use RectorPrefix202312\Symfony\Component\Console\Input\ArgvInput;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost

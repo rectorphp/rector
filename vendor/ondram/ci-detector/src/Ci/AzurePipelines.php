@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202311\OndraM\CiDetector\Ci;
+namespace RectorPrefix202312\OndraM\CiDetector\Ci;
 
-use RectorPrefix202311\OndraM\CiDetector\CiDetector;
-use RectorPrefix202311\OndraM\CiDetector\Env;
-use RectorPrefix202311\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202312\OndraM\CiDetector\CiDetector;
+use RectorPrefix202312\OndraM\CiDetector\Env;
+use RectorPrefix202312\OndraM\CiDetector\TrinaryLogic;
 class AzurePipelines extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202311\Illuminate\Contracts\Events;
+namespace RectorPrefix202312\Illuminate\Contracts\Events;
 
 interface ShouldHandleEventsAfterCommit
 {

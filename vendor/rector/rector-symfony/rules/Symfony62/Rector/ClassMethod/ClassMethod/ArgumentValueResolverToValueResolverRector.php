@@ -16,8 +16,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix202311\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix202311\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use RectorPrefix202312\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix202312\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

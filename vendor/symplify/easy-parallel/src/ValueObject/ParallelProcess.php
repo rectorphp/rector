@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202311\Symplify\EasyParallel\ValueObject;
+namespace RectorPrefix202312\Symplify\EasyParallel\ValueObject;
 
-use RectorPrefix202311\Clue\React\NDJson\Decoder;
-use RectorPrefix202311\Clue\React\NDJson\Encoder;
+use RectorPrefix202312\Clue\React\NDJson\Decoder;
+use RectorPrefix202312\Clue\React\NDJson\Encoder;
 use Exception;
-use RectorPrefix202311\React\ChildProcess\Process;
-use RectorPrefix202311\React\EventLoop\LoopInterface;
-use RectorPrefix202311\React\EventLoop\TimerInterface;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\Content;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202311\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix202311\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202312\React\ChildProcess\Process;
+use RectorPrefix202312\React\EventLoop\LoopInterface;
+use RectorPrefix202312\React\EventLoop\TimerInterface;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\Content;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202312\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202312\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use Throwable;
 /**
  * Inspired at @see https://raw.githubusercontent.com/phpstan/phpstan-src/master/src/Parallel/Process.php

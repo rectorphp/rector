@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
-use RectorPrefix202311\Nette\Utils\Strings;
+use RectorPrefix202312\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202311\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix202311\Webmozart\Assert\Assert;
+use RectorPrefix202312\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202312\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
 {
     /**
@@ -101,7 +101,7 @@ final class FileDiff implements SerializableInterface
      * @param array<string, mixed> $json
      * @return $this
      */
-    public static function decode(array $json) : \RectorPrefix202311\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix202312\Symplify\EasyParallel\Contract\SerializableInterface
     {
         $rectorWithLineChanges = [];
         foreach ($json[BridgeItem::RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {

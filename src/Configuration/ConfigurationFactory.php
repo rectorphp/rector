@@ -6,8 +6,8 @@ namespace Rector\Core\Configuration;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202311\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202311\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202312\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202312\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Core\Tests\Configuration\ConfigurationFactoryTest
  */

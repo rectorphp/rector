@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\TestingParser;
 
-use RectorPrefix202311\Nette\Utils\FileSystem;
+use RectorPrefix202312\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
