@@ -68,7 +68,8 @@ CODE_SAMPLE
     {
         $class = $node;
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use($class, &$hasChanged) : ?PropertyFetch {
+        $isFinal = $class->isFinal();
+        $this->traverseNodesWithCallable($node, function (Node $node) use($class, &$hasChanged, $isFinal) : ?PropertyFetch {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -84,6 +85,9 @@ CODE_SAMPLE
             }
             $classMethod = $class->getMethod($methodName);
             if (!$classMethod instanceof ClassMethod) {
+                return null;
+            }
+            if (!$classMethod->isPrivate() && !$isFinal) {
                 return null;
             }
             $propertyFetch = $this->matchLocalPropertyFetchInGetterMethod($classMethod);
