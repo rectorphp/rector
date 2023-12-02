@@ -144,7 +144,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         $alias = $this->resolveAliasName($useUse);
         // match partial import
         foreach ($names as $name) {
-            if (\substr_compare($comparedName, $name, -\strlen($name)) === 0) {
+            if (\substr_compare($comparedName, '\\' . $name, -\strlen('\\' . $name)) === 0) {
                 return \true;
             }
             if ($this->isSubNamespace($name, $namespacedPrefix)) {
