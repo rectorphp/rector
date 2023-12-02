@@ -85,7 +85,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('test')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('someMethod')]
     public function test(): void
     {
     }

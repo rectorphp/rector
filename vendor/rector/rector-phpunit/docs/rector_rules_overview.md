@@ -476,7 +476,7 @@ Change dataProvider annotations to attribute
 -    /**
 -     * @dataProvider someMethod()
 -     */
-+    #[\PHPUnit\Framework\Attributes\DataProvider('test')]
++    #[\PHPUnit\Framework\Attributes\DataProvider('someMethod')]
      public function test(): void
      {
      }
