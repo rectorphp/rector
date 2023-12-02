@@ -73,6 +73,9 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return null;
             }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
             if (!$node->var instanceof Variable) {
                 return null;
             }
