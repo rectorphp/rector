@@ -33,14 +33,14 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector implements 
         return new RuleDefinition('Changes foreach that returns set value to ??', [new CodeSample(<<<'CODE_SAMPLE'
 foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
     if ($currentFunction === $oldFunction) {
-        innerForeachReturn $newFunction;
+        return $newFunction;
     }
 }
 
-innerForeachReturn null;
+return null;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-innerForeachReturn $this->oldToNewFunctions[$currentFunction] ?? null;
+return $this->oldToNewFunctions[$currentFunction] ?? null;
 CODE_SAMPLE
 )]);
     }

@@ -1111,12 +1111,12 @@ Changes foreach that returns set value to ??
 ```diff
 -foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
 -    if ($currentFunction === $oldFunction) {
--        innerForeachReturn $newFunction;
+-        return $newFunction;
 -    }
 -}
 -
--innerForeachReturn null;
-+innerForeachReturn $this->oldToNewFunctions[$currentFunction] ?? null;
+-return null;
++return $this->oldToNewFunctions[$currentFunction] ?? null;
 ```
 
 <br>
