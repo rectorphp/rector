@@ -74,7 +74,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
     private function findNonUseImportNames($namespace) : array
     {
         $names = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace, static function (Node $node) use(&$names) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace->stmts, static function (Node $node) use(&$names) {
             if ($node instanceof Use_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -147,7 +147,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             if (\substr_compare($comparedName, $name, -\strlen($name)) === 0) {
                 return \true;
             }
-            if (\strncmp($name, $namespacedPrefix, \strlen($namespacedPrefix)) === 0) {
+            if ($this->isSubNamespace($name, $namespacedPrefix)) {
                 return \true;
             }
             if (!\is_string($alias)) {
@@ -163,6 +163,14 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             if ($alias === $namePrefix) {
                 return \true;
             }
+        }
+        return \false;
+    }
+    private function isSubNamespace(string $name, string $namespacedPrefix) : bool
+    {
+        if (\strncmp($name, $namespacedPrefix, \strlen($namespacedPrefix)) === 0) {
+            $subNamespace = \substr($name, \strlen($namespacedPrefix));
+            return \strpos($subNamespace, '\\') === \false;
         }
         return \false;
     }
