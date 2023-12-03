@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -62,6 +63,10 @@ final class DeadReturnTagValueNodeAnalyzer
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope && $scope->isInTrait() && $returnTagValueNode->type instanceof ThisTypeNode) {
             return \false;
+        }
+        // in case of void, there is no added value in @return tag
+        if ($returnType instanceof Identifier && $returnType->toString() === 'void') {
+            return \true;
         }
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $classMethod)) {
             return $returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void';
