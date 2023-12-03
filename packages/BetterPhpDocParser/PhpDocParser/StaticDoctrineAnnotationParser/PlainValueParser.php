@@ -61,10 +61,7 @@ final class PlainValueParser
         if ($constExprNode instanceof ConstExprNode) {
             return $constExprNode;
         }
-        while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_DOUBLE_COLON) || $tokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
-            $currentTokenValue .= $tokenIterator->currentTokenValue();
-            $tokenIterator->next();
-        }
+        $currentTokenValue = $this->parseStringValue($tokenIterator, $currentTokenValue);
         // nested entity!, supported in attribute since PHP 8.1
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator, $currentPhpNode);
@@ -79,6 +76,38 @@ final class PlainValueParser
         $end = $tokenIterator->currentPosition();
         if ($start + 1 < $end) {
             return new StringNode($tokenIterator->printFromTo($start, $end));
+        }
+        return $currentTokenValue;
+    }
+    private function parseStringValue(BetterTokenIterator $tokenIterator, string $currentTokenValue) : string
+    {
+        if (\strncmp($currentTokenValue, '"', \strlen('"')) === 0 && \substr_compare($currentTokenValue, '"', -\strlen('"')) !== 0) {
+            $currentTokenValue = $this->parseMultilineOrWhiteSpacedString($tokenIterator, $currentTokenValue);
+        } else {
+            while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_DOUBLE_COLON) || $tokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
+                $currentTokenValue .= $tokenIterator->currentTokenValue();
+                $tokenIterator->next();
+            }
+        }
+        return $currentTokenValue;
+    }
+    private function parseMultilineOrWhiteSpacedString(BetterTokenIterator $tokenIterator, string $currentTokenValue) : string
+    {
+        while (\strncmp($currentTokenValue, '"', \strlen('"')) === 0 && \substr_compare($currentTokenValue, '"', -\strlen('"')) !== 0) {
+            if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+                $currentTokenValue .= ' ';
+            }
+            if (\strncmp($currentTokenValue, '"', \strlen('"')) === 0 && \strpos($tokenIterator->currentTokenValue(), '"') !== \false && $currentTokenValue !== $tokenIterator->currentTokenValue()) {
+                //starts with '"' and current token contains '"', should be the end
+                $currentTokenValue .= \substr($tokenIterator->currentTokenValue(), 0, (int) \strpos($tokenIterator->currentTokenValue(), '"') + 1);
+                $tokenIterator->next();
+                break;
+            }
+            $currentTokenValue .= $tokenIterator->currentTokenValue();
+            $tokenIterator->next();
+        }
+        if (\strncmp($currentTokenValue, '"', \strlen('"')) === 0 && \substr_compare($currentTokenValue, '"', -\strlen('"')) === 0) {
+            return \trim(\str_replace('"', '', $currentTokenValue));
         }
         return $currentTokenValue;
     }
