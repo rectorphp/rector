@@ -99,7 +99,7 @@ CODE_SAMPLE
         foreach ($nativeCallLikes as $nativeCallLike) {
             $callLikeTypes[] = $this->getType($nativeCallLike);
         }
-        $returnType = $this->typeFactory->createMixedPassedOrUnionType($callLikeTypes);
+        $returnType = $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($callLikeTypes);
         if ($returnType instanceof MixedType) {
             return null;
         }

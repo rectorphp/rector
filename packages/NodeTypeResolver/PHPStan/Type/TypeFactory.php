@@ -54,13 +54,24 @@ final class TypeFactory
      */
     public function uniquateTypes(array $types, bool $keepConstant = \false) : array
     {
+        $constantTypeHashes = [];
         $uniqueTypes = [];
         foreach ($types as $type) {
-            if (!$keepConstant) {
-                $type = $this->removeValueFromConstantType($type);
+            $removedConstantType = $this->removeValueFromConstantType($type);
+            $removedConstantTypeHash = $this->typeHasher->createTypeHash($removedConstantType);
+            if ($keepConstant && $type !== $removedConstantType) {
+                $typeHash = $this->typeHasher->createTypeHash($type);
+                $constantTypeHashes[$typeHash] = $removedConstantTypeHash;
+            } else {
+                $type = $removedConstantType;
+                $typeHash = $removedConstantTypeHash;
             }
-            $typeHash = $this->typeHasher->createTypeHash($type);
             $uniqueTypes[$typeHash] = $type;
+        }
+        foreach ($constantTypeHashes as $constantTypeHash => $removedConstantTypeHash) {
+            if (\array_key_exists($removedConstantTypeHash, $uniqueTypes)) {
+                unset($uniqueTypes[$constantTypeHash]);
+            }
         }
         // re-index
         return \array_values($uniqueTypes);
