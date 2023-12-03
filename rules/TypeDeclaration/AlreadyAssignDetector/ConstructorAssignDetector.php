@@ -6,9 +6,12 @@ namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -66,6 +69,10 @@ final class ConstructorAssignDetector
         $this->decorateFirstLevelStatementAttribute($initializeClassMethods);
         foreach ($initializeClassMethods as $initializeClassMethod) {
             $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
+                if ($this->isIfElseAssign($node, $propertyName)) {
+                    $isAssignedInConstructor = \true;
+                    return NodeTraverser::STOP_TRAVERSAL;
+                }
                 $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
                 if (!$expr instanceof Expr) {
                     return null;
@@ -85,6 +92,31 @@ final class ConstructorAssignDetector
             return $this->propertyFetchAnalyzer->isFilledViaMethodCallInConstructStmts($classLike, $propertyName);
         }
         return $isAssignedInConstructor;
+    }
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function isAssignedInStmts(array $stmts, string $propertyName) : bool
+    {
+        $isAssigned = \false;
+        foreach ($stmts as $stmt) {
+            // non Expression can be on next stmt
+            if (!$stmt instanceof Expression) {
+                $isAssigned = \false;
+                break;
+            }
+            if ($this->matchAssignExprToPropertyName($stmt->expr, $propertyName) instanceof Expr) {
+                $isAssigned = \true;
+            }
+        }
+        return $isAssigned;
+    }
+    private function isIfElseAssign(Node $node, string $propertyName) : bool
+    {
+        if (!$node instanceof If_ || $node->elseifs !== [] || !$node->else instanceof Else_) {
+            return \false;
+        }
+        return $this->isAssignedInStmts($node->stmts, $propertyName) && $this->isAssignedInStmts($node->else->stmts, $propertyName);
     }
     private function matchAssignExprToPropertyName(Node $node, string $propertyName) : ?Expr
     {
