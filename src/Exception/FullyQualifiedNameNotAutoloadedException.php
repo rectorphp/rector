@@ -5,7 +5,7 @@ namespace Rector\Core\Exception;
 
 use PhpParser\Node\Name;
 use RuntimeException;
-class FullyQualifiedNameNotAutoloadedException extends RuntimeException
+final class FullyQualifiedNameNotAutoloadedException extends RuntimeException
 {
     /**
      * @var \PhpParser\Node\Name
