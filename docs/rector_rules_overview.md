@@ -1,4 +1,4 @@
-# 351 Rules Overview
+# 353 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [Php82](#php82) (4)
 
-- [Php83](#php83) (1)
+- [Php83](#php83) (2)
 
 - [Privatization](#privatization) (4)
 
@@ -5258,6 +5258,22 @@ Add override attribute to overridden methods
      public function foo()
      {
      }
+ }
+```
+
+<br>
+
+### AddTypeToConstRector
+
+Add const to type
+
+- class: [`Rector\Php83\Rector\ClassConst\AddTypeToConstRector`](../rules/Php83/Rector/ClassConst/AddTypeToConstRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public const TYPE = 'some_type';
++    public const string TYPE = 'some_type';
  }
 ```
 
