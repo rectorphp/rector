@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -131,14 +131,12 @@ final class DeadReturnTagValueNodeAnalyzer
      */
     private function hasUsefullPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType) : bool
     {
-        if ($this->isVoidReturnType($returnType)) {
-            if (!$returnTagValueNode->type instanceof IdentifierTypeNode || (string) $returnTagValueNode->type !== 'never') {
-                return \false;
-            }
+        if (!$this->isVoidReturnType($returnType)) {
+            return !$this->isNeverReturnType($returnType);
         }
-        if ($this->isNeverReturnType($returnType)) {
+        if (!$returnTagValueNode->type instanceof IdentifierTypeNode || (string) $returnTagValueNode->type !== 'never') {
             return \false;
         }
-        return \true;
+        return !$this->isNeverReturnType($returnType);
     }
 }

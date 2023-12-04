@@ -1,4 +1,4 @@
-# 353 Rules Overview
+# 351 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (27)
 
@@ -30,7 +30,7 @@
 
 - [Php70](#php70) (19)
 
-- [Php71](#php71) (8)
+- [Php71](#php71) (7)
 
 - [Php72](#php72) (9)
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (40)
+- [TypeDeclaration](#typedeclaration) (39)
 
 - [Visibility](#visibility) (3)
 
@@ -938,6 +938,19 @@ Remove `sprintf()` wrapper if not needed
 +        $value = $welcome;
      }
  }
+```
+
+<br>
+
+### RemoveUselessIsObjectCheckRector
+
+Remove useless `is_object()` check on combine with instanceof check
+
+- class: [`Rector\CodeQuality\Rector\BooleanAnd\RemoveUselessIsObjectCheckRector`](../rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php)
+
+```diff
+-is_object($obj) && $obj instanceof DateTime
++$obj instanceof DateTime
 ```
 
 <br>
@@ -3818,7 +3831,7 @@ Changes PHP 4 style constructor to __construct.
 
 ### RandomFunctionRector
 
-Changes rand, srand, mt_rand and getrandmax to newer alternatives.
+Changes rand, srand, and getrandmax to newer alternatives
 
 - class: [`Rector\Php70\Rector\FuncCall\RandomFunctionRector`](../rules/Php70/Rector/FuncCall/RandomFunctionRector.php)
 
@@ -4001,20 +4014,6 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
 +        $value = 5.0 + 0;
      }
  }
-```
-
-<br>
-
-### CountOnNullRector
-
-Changes `count()` on null to safe ternary check
-
-- class: [`Rector\Php71\Rector\FuncCall\CountOnNullRector`](../rules/Php71/Rector/FuncCall/CountOnNullRector.php)
-
-```diff
- $values = null;
--$count = count($values);
-+$count = $values === null ? 0 : count($values);
 ```
 
 <br>
@@ -6984,27 +6983,6 @@ Add typed properties based only on strict constructor types
      public function __construct(string $name)
      {
          $this->name = $name;
-     }
- }
-```
-
-<br>
-
-### TypedPropertyFromStrictGetterMethodReturnTypeRector
-
-Complete property type based on getter strict types
-
-- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php)
-
-```diff
- final class SomeClass
- {
--    public $name;
-+    public ?string $name = null;
-
-     public function getName(): string|null
-     {
-         return $this->name;
      }
  }
 ```
