@@ -66,7 +66,7 @@ final class DeadReturnTagValueNodeAnalyzer
         }
         // in case of void, there is no added value in @return tag
         if ($returnType instanceof Identifier && $returnType->toString() === 'void') {
-            return \true;
+            return !$returnTagValueNode->type instanceof IdentifierTypeNode || (string) $returnTagValueNode->type !== 'never';
         }
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $classMethod)) {
             return $returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void';
