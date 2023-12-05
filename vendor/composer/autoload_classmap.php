@@ -2331,6 +2331,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Class_\\MergeDateTimePropertyTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/MergeDateTimePropertyTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
