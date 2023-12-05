@@ -6,6 +6,7 @@ namespace Rector\DeadCode\PhpDoc;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -61,24 +62,27 @@ final class DeadReturnTagValueNodeAnalyzer
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function isDead(ReturnTagValueNode $returnTagValueNode, ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function isDead(ReturnTagValueNode $returnTagValueNode, $functionLike) : bool
     {
-        $returnType = $classMethod->getReturnType();
+        $returnType = $functionLike->getReturnType();
         if ($returnType === null) {
             return \false;
         }
         if ($returnTagValueNode->description !== '') {
             return \false;
         }
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope && $scope->isInTrait() && $returnTagValueNode->type instanceof ThisTypeNode) {
             return \false;
         }
         if (!$this->hasUsefullPhpdocType($returnTagValueNode, $returnType)) {
             return \true;
         }
-        if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $classMethod)) {
-            return $this->isDeadNotEqual($returnTagValueNode, $returnType, $classMethod);
+        if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $functionLike)) {
+            return $this->isDeadNotEqual($returnTagValueNode, $returnType, $functionLike);
         }
         if ($this->phpDocTypeChanger->isAllowed($returnTagValueNode->type)) {
             return \false;
@@ -102,13 +106,16 @@ final class DeadReturnTagValueNodeAnalyzer
     {
         return $node instanceof Identifier && $node->toString() === 'never';
     }
-    private function isDeadNotEqual(ReturnTagValueNode $returnTagValueNode, Node $node, ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function isDeadNotEqual(ReturnTagValueNode $returnTagValueNode, Node $node, $functionLike) : bool
     {
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void') {
             return \true;
         }
         $nodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
-        $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $classMethod);
+        $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $functionLike);
         return $docType instanceof UnionType && $this->typeComparator->areTypesEqual(TypeCombinator::removeNull($docType), $nodeType);
     }
     private function hasTrueFalsePseudoType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
