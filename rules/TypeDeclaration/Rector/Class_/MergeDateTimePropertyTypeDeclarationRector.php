@@ -89,6 +89,7 @@ CODE_SAMPLE
             if ($varType instanceof FullyQualifiedObjectType && $varType->getClassName() === 'DateTimeInterface') {
                 $phpDocInfo->removeByType(VarTagValueNode::class);
                 $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
+                $property->type = new FullyQualified('DateTimeInterface');
                 $hasChanged = \true;
             }
         }
