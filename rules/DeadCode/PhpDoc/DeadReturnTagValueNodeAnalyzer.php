@@ -78,9 +78,6 @@ final class DeadReturnTagValueNodeAnalyzer
         if ($scope instanceof Scope && $scope->isInTrait() && $returnTagValueNode->type instanceof ThisTypeNode) {
             return \false;
         }
-        if (!$this->hasUsefullPhpdocType($returnTagValueNode, $returnType)) {
-            return \true;
-        }
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $functionLike)) {
             return $this->isDeadNotEqual($returnTagValueNode, $returnType, $functionLike);
         }
@@ -114,6 +111,9 @@ final class DeadReturnTagValueNodeAnalyzer
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void') {
             return \true;
         }
+        if (!$this->hasUsefullPhpdocType($returnTagValueNode, $node)) {
+            return \true;
+        }
         $nodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $functionLike);
         return $docType instanceof UnionType && $this->typeComparator->areTypesEqual(TypeCombinator::removeNull($docType), $nodeType);
@@ -133,11 +133,14 @@ final class DeadReturnTagValueNodeAnalyzer
         return \false;
     }
     /**
-     * in case of void,never there is no added value in "@return tag"
+     * exact different between @return and node return type
      * @param mixed $returnType
      */
     private function hasUsefullPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType) : bool
     {
+        if ($returnTagValueNode->type instanceof IdentifierTypeNode && $returnTagValueNode->type->name === 'mixed') {
+            return \false;
+        }
         if (!$this->isVoidReturnType($returnType)) {
             return !$this->isNeverReturnType($returnType);
         }
