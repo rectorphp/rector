@@ -53,6 +53,9 @@ final class ClassMethodManipulator
             if ($parentClassReflection->hasMethod($methodName)) {
                 return \true;
             }
+            if ($parentClassReflection->hasMethod(MethodName::CALL)) {
+                return \true;
+            }
         }
         foreach ($classReflection->getInterfaces() as $interfaceReflection) {
             if ($interfaceReflection->hasMethod($methodName)) {
