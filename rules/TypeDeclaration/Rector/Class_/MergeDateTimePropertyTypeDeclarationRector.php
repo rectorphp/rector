@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
-use PHPStan\Type\TypeWithClassName;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
