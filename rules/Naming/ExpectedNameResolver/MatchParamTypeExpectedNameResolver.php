@@ -39,12 +39,12 @@ final class MatchParamTypeExpectedNameResolver
         if ($param->type === null) {
             return null;
         }
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        // include nullabgitle too
+        // include nullable too
         // skip date time + date time interface, as should be kept
         if ($this->nodeTypeResolver->isObjectType($param->type, new ObjectType('DateTimeInterface'))) {
             return null;
         }
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
         if (!$expectedName instanceof ExpectedName) {
             return null;
