@@ -70,7 +70,7 @@ final class ClassMethodReturnTypeOverrideGuard
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        if ($classReflection->isAbstract()) {
+        if ($classMethod->isAbstract()) {
             return \true;
         }
         if ($classReflection->isInterface()) {
