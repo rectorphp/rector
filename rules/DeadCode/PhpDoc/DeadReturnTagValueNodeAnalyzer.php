@@ -68,10 +68,6 @@ final class DeadReturnTagValueNodeAnalyzer
     public function isDead(ReturnTagValueNode $returnTagValueNode, $functionLike) : bool
     {
         $returnType = $functionLike->getReturnType();
-        if ($this->isNullTagValueNode($returnTagValueNode)) {
-            // return null is always unused
-            return \true;
-        }
         if ($returnType === null) {
             return \false;
         }
@@ -152,12 +148,5 @@ final class DeadReturnTagValueNodeAnalyzer
             return \false;
         }
         return !$this->isNeverReturnType($returnType);
-    }
-    private function isNullTagValueNode(ReturnTagValueNode $returnTagValueNode) : bool
-    {
-        if (!$returnTagValueNode->type instanceof IdentifierTypeNode) {
-            return \false;
-        }
-        return (string) $returnTagValueNode->type === 'null';
     }
 }
