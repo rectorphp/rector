@@ -1,4 +1,4 @@
-# 351 Rules Overview
+# 352 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (39)
+- [TypeDeclaration](#typedeclaration) (40)
 
 - [Visibility](#visibility) (3)
 
@@ -6511,6 +6511,25 @@ Change `empty()` on nullable object to instanceof check
 
          return true;
      }
+ }
+```
+
+<br>
+
+### MergeDateTimePropertyTypeDeclarationRector
+
+Set DateTime to DateTimeInterface for DateTime property with DateTimeInterface docblock
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector`](../rules/TypeDeclaration/Rector/Class_/MergeDateTimePropertyTypeDeclarationRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    /**
+-     * @var DateTimeInterface
+-     */
+-    private DateTime $dateTime;
++    private DateTimeInterface $dateTime;
  }
 ```
 
