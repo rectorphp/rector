@@ -5,7 +5,6 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node\Param;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
