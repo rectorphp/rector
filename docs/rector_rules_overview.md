@@ -1,4 +1,4 @@
-# 352 Rules Overview
+# 353 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (27)
 
-- [DeadCode](#deadcode) (42)
+- [DeadCode](#deadcode) (43)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -2504,6 +2504,27 @@ Remove initialization with null value from property declarations
  {
 -    private $myVar = null;
 +    private $myVar;
+ }
+```
+
+<br>
+
+### RemoveNullTagValueNodeRector
+
+Remove `@var/@param/@return` null docblock
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector`](../rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php)
+
+```diff
+ class SomeClass
+ {
+-    /**
+-     * @return null
+-     */
+     public function foo()
+     {
+         return null;
+     }
  }
 ```
 
