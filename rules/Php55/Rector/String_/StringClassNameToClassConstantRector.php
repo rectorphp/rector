@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php55\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -38,6 +39,14 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @var string[]
      */
     private $classesToSkip = [];
+    /**
+     * @var bool
+     */
+    private $shouldKeepPreslash = \false;
+    /**
+     * @var string
+     */
+    public const SHOULD_KEEP_PRE_SLASH = 'should_keep_pre_slash';
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -70,7 +79,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['ClassName', 'AnotherClassName'])]);
+, ['ClassName', 'AnotherClassName', \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::SHOULD_KEEP_PRE_SLASH => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -81,7 +90,7 @@ CODE_SAMPLE
     }
     /**
      * @param String_|FuncCall|ClassConst $node
-     * @return \PhpParser\Node\Expr\ClassConstFetch|null|int
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Expr\ClassConstFetch|null|int
      */
     public function refactor(Node $node)
     {
@@ -115,6 +124,12 @@ CODE_SAMPLE
             return null;
         }
         $fullyQualified = new FullyQualified($classLikeName);
+        if ($this->shouldKeepPreslash && $classLikeName !== $node->value) {
+            $preSlashCount = \strlen($node->value) - \strlen($classLikeName);
+            $preSlash = \str_repeat('\\', $preSlashCount);
+            $string = new String_($preSlash);
+            return new Concat($string, new ClassConstFetch($fullyQualified, 'class'));
+        }
         return new ClassConstFetch($fullyQualified, 'class');
     }
     /**
@@ -122,6 +137,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
+        if (isset($configuration[self::SHOULD_KEEP_PRE_SLASH]) && \is_bool($configuration[self::SHOULD_KEEP_PRE_SLASH])) {
+            $this->shouldKeepPreslash = $configuration[self::SHOULD_KEEP_PRE_SLASH];
+            unset($configuration[self::SHOULD_KEEP_PRE_SLASH]);
+        }
         Assert::allString($configuration);
         $this->classesToSkip = $configuration;
     }

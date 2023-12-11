@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace PhpParser;
 
+use PhpParser\Lexer\Emulative;
+use PhpParser\Parser\Php7;
 class ParserFactory
 {
     const PREFER_PHP7 = 1;
@@ -35,5 +37,32 @@ class ParserFactory
             default:
                 throw new \LogicException('Kind must be one of ::PREFER_PHP7, ::PREFER_PHP5, ::ONLY_PHP7 or ::ONLY_PHP5');
         }
+    }
+    /**
+     * Create a parser targeting the newest version supported by this library. Code for older
+     * versions will be accepted if there have been no relevant backwards-compatibility breaks in
+     * PHP.
+     *
+     * All supported lexer attributes (comments, startLine, endLine, startTokenPos, endTokenPos,
+     * startFilePos, endFilePos) will be enabled.
+     */
+    public function createForNewestSupportedVersion() : \PhpParser\Parser
+    {
+        return new Php7(new Emulative($this->getLexerOptions()));
+    }
+    /**
+     * Create a parser targeting the host PHP version, that is the PHP version we're currently
+     * running on. This parser will not use any token emulation.
+     *
+     * All supported lexer attributes (comments, startLine, endLine, startTokenPos, endTokenPos,
+     * startFilePos, endFilePos) will be enabled.
+     */
+    public function createForHostVersion() : \PhpParser\Parser
+    {
+        return new Php7(new \PhpParser\Lexer($this->getLexerOptions()));
+    }
+    private function getLexerOptions() : array
+    {
+        return ['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos', 'startFilePos', 'endFilePos']];
     }
 }

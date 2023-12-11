@@ -110,6 +110,9 @@ class NameResolver extends NodeVisitorAbstract
             }
         } else {
             if ($node instanceof Stmt\ClassConst) {
+                if (null !== $node->type) {
+                    $node->type = $this->resolveType($node->type);
+                }
                 $this->resolveAttrGroups($node);
             } else {
                 if ($node instanceof Stmt\EnumCase) {

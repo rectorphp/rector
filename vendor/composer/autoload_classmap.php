@@ -1500,6 +1500,7 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
     'Rector\\DowngradePhp81\\Rector\\StmtsAwareInterface\\DowngradeSetAccessibleReflectionPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/StmtsAwareInterface/DowngradeSetAccessibleReflectionPropertyRector.php',
     'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
+    'Rector\\DowngradePhp82\\Rector\\FunctionLike\\DowngradeStandaloneNullTrueFalseReturnTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FunctionLike/DowngradeStandaloneNullTrueFalseReturnTypeRector.php',
     'Rector\\EarlyReturn\\NodeAnalyzer\\IfAndAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/IfAndAnalyzer.php',
     'Rector\\EarlyReturn\\NodeAnalyzer\\SimpleScalarAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/SimpleScalarAnalyzer.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',

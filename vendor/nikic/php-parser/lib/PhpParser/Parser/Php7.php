@@ -832,6 +832,8 @@ class Php7 extends \PhpParser\ParserAbstract
             if ($this->semStack[$stackPos - (2 - 2)] !== null) {
                 $this->semStack[$stackPos - (2 - 1)][] = $this->semStack[$stackPos - (2 - 2)];
                 $this->semValue = $this->semStack[$stackPos - (2 - 1)];
+            } else {
+                $this->semValue = $this->semStack[$stackPos - (2 - 1)];
             }
         }, 341 => function ($stackPos) {
             $this->semValue = array();
