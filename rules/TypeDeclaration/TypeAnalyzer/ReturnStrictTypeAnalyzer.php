@@ -117,10 +117,7 @@ final class ReturnStrictTypeAnalyzer
     private function normalizeStaticType($call, Type $type) : Type
     {
         $reflectionClass = $this->reflectionResolver->resolveClassReflection($call);
-        if (!$reflectionClass instanceof ClassReflection) {
-            return $type;
-        }
-        $currentClassName = $reflectionClass->getName();
+        $currentClassName = $reflectionClass instanceof ClassReflection ? $reflectionClass->getName() : null;
         return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) use($currentClassName) : Type {
             if ($currentType instanceof StaticType && $currentClassName !== $currentType->getClassName()) {
                 return new FullyQualifiedObjectType($currentType->getClassName());
