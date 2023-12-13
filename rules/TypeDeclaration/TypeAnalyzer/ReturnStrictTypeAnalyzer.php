@@ -19,11 +19,16 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StaticType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 final class ReturnStrictTypeAnalyzer
 {
@@ -103,7 +108,25 @@ final class ReturnStrictTypeAnalyzer
         if ($returnType instanceof MixedType) {
             return null;
         }
+        $returnType = $this->normalizeStaticType($call, $returnType);
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     */
+    private function normalizeStaticType($call, Type $type) : Type
+    {
+        $reflectionClass = $this->reflectionResolver->resolveClassReflection($call);
+        if (!$reflectionClass instanceof ClassReflection) {
+            return $type;
+        }
+        $currentClassName = $reflectionClass->getName();
+        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) use($currentClassName) : Type {
+            if ($currentType instanceof StaticType && $currentClassName !== $currentType->getClassName()) {
+                return new FullyQualifiedObjectType($currentType->getClassName());
+            }
+            return $traverseCallback($currentType);
+        });
     }
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Scalar $returnedExpr
