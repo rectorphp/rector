@@ -13,8 +13,6 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector;
-use Rector\Symfony\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
-use Rector\Symfony\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector;
 use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -61,21 +59,5 @@ return static function (RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration('Symfony\\Component\\Form\\DataMapperInterface', 'mapDataToForms', 1, new ObjectType(\Traversable::class)),
     ]);
-    $rectorConfig->rules([
-        KernelTestCaseContainerPropertyDeprecationRector::class,
-        CommandDescriptionToPropertyRector::class,
-        // @see https://symfony.com/blog/the-end-of-swiftmailer
-        SwiftCreateMessageToNewEmailRector::class,
-        SwiftSetBodyToHtmlPlainMethodCallRector::class,
-    ]);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        'Swift_Mailer' => 'Symfony\\Component\\Mailer\\MailerInterface',
-        'Swift_Message' => 'Symfony\\Component\\Mime\\Email',
-        // message
-        'Swift_Mime_SimpleMessage' => 'Symfony\\Component\\Mime\\RawMessage',
-        // transport
-        'Swift_SmtpTransport' => 'Symfony\\Component\\Mailer\\Transport\\Smtp\\EsmtpTransport',
-        'Swift_FailoverTransport' => 'Symfony\\Component\\Mailer\\Transport\\FailoverTransport',
-        'Swift_SendmailTransport' => 'Symfony\\Component\\Mailer\\Transport\\SendmailTransport',
-    ]);
+    $rectorConfig->rules([KernelTestCaseContainerPropertyDeprecationRector::class, CommandDescriptionToPropertyRector::class]);
 };

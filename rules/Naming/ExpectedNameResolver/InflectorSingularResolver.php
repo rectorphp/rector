@@ -80,7 +80,7 @@ final class InflectorSingularResolver
         $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
-            if (\in_array($camelCase[self::CAMELCASE], ['is', 'has', 'cms'], \true)) {
+            if (\in_array($camelCase[self::CAMELCASE], ['is', 'has', 'cms', 'this'], \true)) {
                 $value = $camelCase[self::CAMELCASE];
             } else {
                 $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);
