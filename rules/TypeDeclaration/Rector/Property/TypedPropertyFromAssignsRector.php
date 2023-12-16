@@ -126,7 +126,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::INLINE_PUBLIC => \false])]);
+, [\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector::INLINE_PUBLIC => \false])]);
     }
     /**
      * @return array<class-string<Node>>

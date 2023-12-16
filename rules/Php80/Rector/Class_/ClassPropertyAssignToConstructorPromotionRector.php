@@ -144,7 +144,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::INLINE_PUBLIC => \false])]);
+, [\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => \false])]);
     }
     public function configure(array $configuration) : void
     {

@@ -78,7 +78,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::SENSITIVE_PARAMETERS => ['password']])]);
+, [\Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector::SENSITIVE_PARAMETERS => ['password']])]);
     }
     public function provideMinPhpVersion() : int
     {

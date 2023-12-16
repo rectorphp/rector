@@ -58,7 +58,7 @@ final class SomeEmptyArray
     }
 }
 CODE_SAMPLE
-, [self::TREAT_AS_NON_EMPTY => \false])]);
+, [\Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>

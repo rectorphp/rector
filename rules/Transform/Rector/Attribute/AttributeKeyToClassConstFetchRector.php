@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Transform\Rector\Attribute;
 
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -123,7 +125,7 @@ CODE_SAMPLE
         }
         return $hasChanged;
     }
-    private function processArg(Node\Arg $arg, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch) : bool
+    private function processArg(Arg $arg, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch) : bool
     {
         $value = $this->valueResolver->getValue($arg->value);
         $constName = $attributeKeyToClassConstFetch->getValuesToConstantsMap()[$value] ?? null;
@@ -131,7 +133,7 @@ CODE_SAMPLE
             return \false;
         }
         $newValue = $this->nodeFactory->createClassConstFetch($attributeKeyToClassConstFetch->getConstantClass(), $constName);
-        if ($arg->value instanceof Node\Expr\ClassConstFetch && $this->getName($arg->value) === $this->getName($newValue)) {
+        if ($arg->value instanceof ClassConstFetch && $this->getName($arg->value) === $this->getName($newValue)) {
             return \false;
         }
         $arg->value = $newValue;

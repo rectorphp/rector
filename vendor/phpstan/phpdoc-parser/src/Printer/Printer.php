@@ -609,6 +609,9 @@ final class Printer
             if ($subStartPos < 0 || $subEndPos < 0) {
                 throw new LogicException();
             }
+            if ($subEndPos < $subStartPos) {
+                return $this->print($node);
+            }
             if ($subNode === null) {
                 return $this->print($node);
             }
