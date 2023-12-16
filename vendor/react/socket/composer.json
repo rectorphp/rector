@@ -40,19 +40,19 @@
         "react\/stream": "^1.2"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35",
+        "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36",
         "react\/async": "^4 || ^3 || ^2",
         "react\/promise-stream": "^1.4",
         "react\/promise-timer": "^1.10"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202312\\React\\Socket\\": "src"
+            "RectorPrefix202312\\React\\Socket\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202312\\React\\Tests\\Socket\\": "tests"
+            "RectorPrefix202312\\React\\Tests\\Socket\\": "tests\/"
         }
     }
 }

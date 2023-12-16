@@ -1457,17 +1457,17 @@
         },
         {
             "name": "react\/socket",
-            "version": "v1.14.0",
-            "version_normalized": "1.14.0.0",
+            "version": "v1.15.0",
+            "version_normalized": "1.15.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/socket.git",
-                "reference": "21591111d3ea62e31f2254280ca0656bc2b1bda6"
+                "reference": "216d3aec0b87f04a40ca04f481e6af01bdd1d038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/21591111d3ea62e31f2254280ca0656bc2b1bda6",
-                "reference": "21591111d3ea62e31f2254280ca0656bc2b1bda6",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/216d3aec0b87f04a40ca04f481e6af01bdd1d038",
+                "reference": "216d3aec0b87f04a40ca04f481e6af01bdd1d038",
                 "shasum": ""
             },
             "require": {
@@ -1479,17 +1479,17 @@
                 "react\/stream": "^1.2"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35",
+                "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36",
                 "react\/async": "^4 || ^3 || ^2",
                 "react\/promise-stream": "^1.4",
                 "react\/promise-timer": "^1.10"
             },
-            "time": "2023-08-25T13:48:09+00:00",
+            "time": "2023-12-15T11:02:10+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202312\\React\\Socket\\": "src"
+                    "RectorPrefix202312\\React\\Socket\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1528,7 +1528,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/socket\/issues",
-                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.14.0"
+                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.15.0"
             },
             "funding": [
                 {
