@@ -74,6 +74,40 @@ CODE_SAMPLE
         return [ClassMethod::class, Function_::class, Expression::class, Property::class];
     }
     /**
+     * @param ClassMethod|Function_|Expression|Property $node
+     */
+    public function refactor(Node $node) : ?Node
+    {
+        if ($node instanceof Expression || $node instanceof Property) {
+            return $this->processVarTagNull($node);
+        }
+        $phpdocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $removedParamNames = [];
+        foreach ($node->params as $param) {
+            $paramName = $this->getName($param);
+            $paramTagValueNode = $phpdocInfo->getParamTagValueByName($paramName);
+            if ($paramTagValueNode instanceof ParamTagValueNode && $this->isNull($paramTagValueNode)) {
+                $removedParamNames[] = $paramTagValueNode->parameterName;
+            }
+        }
+        $hasRemoved = \false;
+        if ($removedParamNames !== []) {
+            $this->removeParamNullTag($phpdocInfo, $removedParamNames);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+            $hasRemoved = \true;
+        }
+        $returnTagValueNode = $phpdocInfo->getReturnTagValue();
+        if ($returnTagValueNode instanceof ReturnTagValueNode && $this->isNull($returnTagValueNode)) {
+            $phpdocInfo->removeByType(ReturnTagValueNode::class);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+            $hasRemoved = \true;
+        }
+        if (!$hasRemoved) {
+            return null;
+        }
+        return $node;
+    }
+    /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tag
      */
     private function isNull($tag) : bool
@@ -112,39 +146,5 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    /**
-     * @param ClassMethod|Function_|Expression|Property $node
-     */
-    public function refactor(Node $node) : ?Node
-    {
-        if ($node instanceof Expression || $node instanceof Property) {
-            return $this->processVarTagNull($node);
-        }
-        $phpdocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $removedParamNames = [];
-        foreach ($node->params as $param) {
-            $paramName = $this->getName($param);
-            $paramTagValueNode = $phpdocInfo->getParamTagValueByName($paramName);
-            if ($paramTagValueNode instanceof ParamTagValueNode && $this->isNull($paramTagValueNode)) {
-                $removedParamNames[] = $paramTagValueNode->parameterName;
-            }
-        }
-        $hasRemoved = \false;
-        if ($removedParamNames !== []) {
-            $this->removeParamNullTag($phpdocInfo, $removedParamNames);
-            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-            $hasRemoved = \true;
-        }
-        $returnTagValueNode = $phpdocInfo->getReturnTagValue();
-        if ($returnTagValueNode instanceof ReturnTagValueNode && $this->isNull($returnTagValueNode)) {
-            $phpdocInfo->removeByType(ReturnTagValueNode::class);
-            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-            $hasRemoved = \true;
-        }
-        if (!$hasRemoved) {
-            return null;
-        }
-        return $node;
     }
 }

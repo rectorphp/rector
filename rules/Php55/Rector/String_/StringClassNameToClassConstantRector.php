@@ -34,6 +34,10 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     /**
      * @var string
      */
+    public const SHOULD_KEEP_PRE_SLASH = 'should_keep_pre_slash';
+    /**
+     * @var string
+     */
     private const IS_UNDER_CLASS_CONST = 'is_under_class_const';
     /**
      * @var string[]
@@ -43,10 +47,6 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @var bool
      */
     private $shouldKeepPreslash = \false;
-    /**
-     * @var string
-     */
-    public const SHOULD_KEEP_PRE_SLASH = 'should_keep_pre_slash';
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
