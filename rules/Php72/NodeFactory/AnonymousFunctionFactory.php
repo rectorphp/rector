@@ -38,13 +38,11 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use ReflectionParameter;
 final class AnonymousFunctionFactory
 {
     /**
@@ -84,11 +82,6 @@ final class AnonymousFunctionFactory
     private $astResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
-     */
-    private $privatesAccessor;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
@@ -97,7 +90,7 @@ final class AnonymousFunctionFactory
      * @see https://regex101.com/r/jkLLlM/2
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, AstResolver $astResolver, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, AstResolver $astResolver, InlineCodeParser $inlineCodeParser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -106,7 +99,6 @@ final class AnonymousFunctionFactory
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->simplePhpParser = $simplePhpParser;
         $this->astResolver = $astResolver;
-        $this->privatesAccessor = $privatesAccessor;
         $this->inlineCodeParser = $inlineCodeParser;
     }
     /**
@@ -245,7 +237,7 @@ final class AnonymousFunctionFactory
             $variable = new Variable($parameterReflection->getName());
             $defaultExpr = $this->resolveParamDefaultExpr($parameterReflection, $key, $classMethod);
             $type = $this->resolveParamType($parameterReflection);
-            $byRef = $this->isParamByReference($parameterReflection);
+            $byRef = $parameterReflection->passedByReference()->yes();
             $params[] = new Param($variable, $defaultExpr, $type, $byRef);
         }
         return $params;
@@ -259,12 +251,6 @@ final class AnonymousFunctionFactory
             return null;
         }
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), TypeKind::PARAM);
-    }
-    private function isParamByReference(ParameterReflection $parameterReflection) : bool
-    {
-        /** @var ReflectionParameter $reflection */
-        $reflection = $this->privatesAccessor->getPrivateProperty($parameterReflection, 'reflection');
-        return $reflection->isPassedByReference();
     }
     private function resolveParamDefaultExpr(ParameterReflection $parameterReflection, int $key, ClassMethod $classMethod) : ?Expr
     {
