@@ -20,6 +20,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -51,12 +52,18 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRecto
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
      */
     private $allAssignNodePropertyTypeInferer;
-    public function __construct(ExprAnalyzer $exprAnalyzer, ReflectionResolver $reflectionResolver, AstResolver $astResolver, AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+    public function __construct(ExprAnalyzer $exprAnalyzer, ReflectionResolver $reflectionResolver, AstResolver $astResolver, AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->exprAnalyzer = $exprAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->astResolver = $astResolver;
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -97,13 +104,20 @@ CODE_SAMPLE
         }
         return new Identical($node->expr, new Array_());
     }
+    private function isAllowedVariable(Variable $variable) : bool
+    {
+        if (\is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
+            return \false;
+        }
+        return !$this->exprAnalyzer->isNonTypedFromParam($variable);
+    }
     private function isAllowedExpr(Expr $expr, Scope $scope) : bool
     {
         if (!$scope->getType($expr) instanceof ArrayType) {
             return \false;
         }
         if ($expr instanceof Variable) {
-            return !$this->exprAnalyzer->isNonTypedFromParam($expr);
+            return $this->isAllowedVariable($expr);
         }
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;
