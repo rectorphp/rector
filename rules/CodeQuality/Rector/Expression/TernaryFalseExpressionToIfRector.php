@@ -70,7 +70,7 @@ CODE_SAMPLE
         if (!$ternary->if instanceof Expr) {
             return null;
         }
-        if ($this->sideEffectNodeDetector->detect($ternary->else, $scope)) {
+        if ($this->sideEffectNodeDetector->detect($ternary->else, $scope) || $this->sideEffectNodeDetector->detectCallExpr($ternary->else, $scope)) {
             return null;
         }
         return new If_($ternary->cond, ['stmts' => [new Expression($ternary->if)]]);
