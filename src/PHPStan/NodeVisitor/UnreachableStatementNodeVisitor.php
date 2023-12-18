@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\PHPStan\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -47,6 +49,10 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
         $mutatingScope = $node->getAttribute(AttributeKey::SCOPE);
         $mutatingScope = $mutatingScope instanceof MutatingScope ? $mutatingScope : $this->scopeFactory->createFromFile($this->filePath);
         foreach ($node->stmts as $stmt) {
+            if ($stmt instanceof Expression && $stmt->expr instanceof Exit_) {
+                $isPassedUnreachableStmt = \true;
+                continue;
+            }
             if ($stmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
                 $isPassedUnreachableStmt = \true;
                 continue;
