@@ -354,7 +354,7 @@ Complete `@var` annotations or types based on @ORM\*toMany annotations or attrib
  {
      /**
       * @ORM\OneToMany(targetEntity="App\Product")
-+     * @var \Doctrine\Common\Collections\Collection<\App\Product>
++     * @var \Doctrine\Common\Collections\Collection<int, \App\Product>
       */
 -    private $products;
 +    private \Doctrine\Common\Collections\Collection $products;

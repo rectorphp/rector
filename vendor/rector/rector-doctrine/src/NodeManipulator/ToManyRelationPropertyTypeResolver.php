@@ -5,7 +5,6 @@ namespace Rector\Doctrine\NodeManipulator;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -14,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
+use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ToManyRelationPropertyTypeResolver
 {
@@ -38,6 +38,11 @@ final class ToManyRelationPropertyTypeResolver
      */
     private $valueResolver;
     /**
+     * @readonly
+     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
+     */
+    private $collectionTypeFactory;
+    /**
      * @var string
      */
     private const COLLECTION_TYPE = 'Doctrine\\Common\\Collections\\Collection';
@@ -45,12 +50,13 @@ final class ToManyRelationPropertyTypeResolver
      * @var class-string[]
      */
     private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->shortClassExpander = $shortClassExpander;
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
+        $this->collectionTypeFactory = $collectionTypeFactory;
     }
     public function resolve(Property $property) : ?Type
     {
@@ -93,6 +99,6 @@ final class ToManyRelationPropertyTypeResolver
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($entityFullyQualifiedClass);
-        return new GenericObjectType(self::COLLECTION_TYPE, [$fullyQualifiedObjectType]);
+        return $this->collectionTypeFactory->createGenericObjectType($fullyQualifiedObjectType);
     }
 }

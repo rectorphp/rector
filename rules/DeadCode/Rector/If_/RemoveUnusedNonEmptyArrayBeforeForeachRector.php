@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Foreach_;
@@ -164,6 +165,17 @@ CODE_SAMPLE
                 continue;
             }
             if (!$this->uselessIfCondBeforeForeachDetector->isMatchingEmptyAndForeachedExpr($previousStmt, $stmt->expr)) {
+                continue;
+            }
+            /** @var Empty_ $empty */
+            $empty = $previousStmt->cond;
+            // scope need to be pulled from Empty_ node to ensure it get correct type
+            $scope = $empty->getAttribute(AttributeKey::SCOPE);
+            if (!$scope instanceof Scope) {
+                continue;
+            }
+            $ifType = $scope->getNativeType($empty->expr);
+            if (!$ifType->isArray()->yes()) {
                 continue;
             }
             unset($stmtsAware->stmts[$key - 1]);
