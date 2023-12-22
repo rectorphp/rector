@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -37,11 +38,17 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer
+     */
+    private $magicClassMethodAnalyzer;
+    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ReflectionResolver $reflectionResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -106,7 +113,7 @@ CODE_SAMPLE
         if (!$functionLike instanceof ClassMethod) {
             return \false;
         }
-        if ($functionLike->isMagic()) {
+        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($functionLike)) {
             return \true;
         }
         if ($functionLike->isAbstract()) {

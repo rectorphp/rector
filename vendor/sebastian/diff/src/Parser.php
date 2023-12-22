@@ -12,6 +12,7 @@ declare (strict_types=1);
 namespace RectorPrefix202312\SebastianBergmann\Diff;
 
 use function array_pop;
+use function assert;
 use function count;
 use function max;
 use function preg_match;
@@ -41,6 +42,8 @@ final class Parser
                     $diffs[] = $diff;
                     $collected = [];
                 }
+                assert(!empty($fromMatch['file']));
+                assert(!empty($toMatch['file']));
                 $diff = new Diff($fromMatch['file'], $toMatch['file']);
                 $i++;
             } else {

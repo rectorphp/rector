@@ -50,7 +50,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "5.0-dev"
+            "dev-main": "5.1-dev"
         }
     }
 }

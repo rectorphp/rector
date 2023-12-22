@@ -2,6 +2,26 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [5.1.0] - 2023-12-22
+
+### Added
+
+* `SebastianBergmann\Diff\Chunk::start()`, `SebastianBergmann\Diff\Chunk::startRange()`, `SebastianBergmann\Diff\Chunk::end()`, `SebastianBergmann\Diff\Chunk::endRange()`, and `SebastianBergmann\Diff\Chunk::lines()`
+* `SebastianBergmann\Diff\Diff::from()`, `SebastianBergmann\Diff\Diff::to()`, and `SebastianBergmann\Diff\Diff::chunks()`
+* `SebastianBergmann\Diff\Line::content()` and `SebastianBergmann\Diff\Diff::type()`
+* `SebastianBergmann\Diff\Line::isAdded()`,`SebastianBergmann\Diff\Line::isRemoved()`, and `SebastianBergmann\Diff\Line::isUnchanged()`
+
+### Changed
+
+* `SebastianBergmann\Diff\Diff` now implements `IteratorAggregate`, iterating over it yields the aggregated `SebastianBergmann\Diff\Chunk` objects
+* `SebastianBergmann\Diff\Chunk` now implements `IteratorAggregate`, iterating over it yields the aggregated `SebastianBergmann\Diff\Line` objects
+
+### Deprecated
+
+* `SebastianBergmann\Diff\Chunk::getStart()`, `SebastianBergmann\Diff\Chunk::getStartRange()`, `SebastianBergmann\Diff\Chunk::getEnd()`, `SebastianBergmann\Diff\Chunk::getEndRange()`, and `SebastianBergmann\Diff\Chunk::getLines()`
+* `SebastianBergmann\Diff\Diff::getFrom()`, `SebastianBergmann\Diff\Diff::getTo()`, and `SebastianBergmann\Diff\Diff::getChunks()`
+* `SebastianBergmann\Diff\Line::getContent()` and `SebastianBergmann\Diff\Diff::getType()`
+
 ## [5.0.3] - 2023-05-01
 
 ### Changed
@@ -104,6 +124,7 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * This component is no longer supported on PHP 5.6
 
+[5.1.0]: https://github.com/sebastianbergmann/diff/compare/5.0.3...5.1.0
 [5.0.3]: https://github.com/sebastianbergmann/diff/compare/5.0.2...5.0.3
 [5.0.2]: https://github.com/sebastianbergmann/diff/compare/5.0.1...5.0.2
 [5.0.1]: https://github.com/sebastianbergmann/diff/compare/5.0.0...5.0.1
