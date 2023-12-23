@@ -19,6 +19,7 @@ use PHPStan\Type\Type;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -55,7 +56,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private $staticTypeMapper;
     /**
-     * @var ArgumentAdder[]
+     * @var ArgumentAdder[]|ArgumentAdderWithoutDefaultValue[]
      */
     private $addedArguments = [];
     /**
@@ -126,7 +127,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, ArgumentAdder::class);
+        Assert::allIsAnyOf($configuration, [ArgumentAdder::class, ArgumentAdderWithoutDefaultValue::class]);
         $this->addedArguments = $configuration;
     }
     /**
@@ -141,30 +142,34 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
      */
-    private function processPositionWithDefaultValues($node, ArgumentAdder $argumentAdder) : void
+    private function processPositionWithDefaultValues($node, $argumentAdder) : void
     {
         if ($this->shouldSkipParameter($node, $argumentAdder)) {
             return;
         }
-        $defaultValue = $argumentAdder->getArgumentDefaultValue();
         $argumentType = $argumentAdder->getArgumentType();
         $position = $argumentAdder->getPosition();
         if ($node instanceof ClassMethod) {
-            $this->addClassMethodParam($node, $argumentAdder, $defaultValue, $argumentType, $position);
+            $this->addClassMethodParam($node, $argumentAdder, $argumentType, $position);
             return;
         }
         if ($node instanceof StaticCall) {
             $this->processStaticCall($node, $position, $argumentAdder);
             return;
         }
-        $this->processMethodCall($node, $defaultValue, $position);
+        $this->processMethodCall($node, $argumentAdder, $position);
     }
     /**
-     * @param mixed $defaultValue
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
      */
-    private function processMethodCall(MethodCall $methodCall, $defaultValue, int $position) : void
+    private function processMethodCall(MethodCall $methodCall, $argumentAdder, int $position) : void
     {
+        if ($argumentAdder instanceof ArgumentAdderWithoutDefaultValue) {
+            return;
+        }
+        $defaultValue = $argumentAdder->getArgumentDefaultValue();
         $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
         if (isset($methodCall->args[$position])) {
             return;
@@ -199,8 +204,9 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
      */
-    private function shouldSkipParameter($node, ArgumentAdder $argumentAdder) : bool
+    private function shouldSkipParameter($node, $argumentAdder) : bool
     {
         $position = $argumentAdder->getPosition();
         $argumentName = $argumentAdder->getArgumentName();
@@ -218,7 +224,7 @@ CODE_SAMPLE
                 return \true;
             }
             // argument added and default has been changed
-            if ($this->changedArgumentsDetector->isDefaultValueChanged($param, $argumentAdder->getArgumentDefaultValue())) {
+            if ($this->isDefaultValueChanged($argumentAdder, $node, $position)) {
                 return \true;
             }
             // argument added and type has been changed
@@ -237,30 +243,47 @@ CODE_SAMPLE
             // is correct scope?
             return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
         }
-        if ($this->changedArgumentsDetector->isDefaultValueChanged($classMethod->params[$position], $argumentAdder->getArgumentDefaultValue())) {
+        if ($this->isDefaultValueChanged($argumentAdder, $classMethod, $position)) {
             // is correct scope?
             return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
         }
         return \true;
     }
     /**
-     * @param mixed $defaultValue
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
      */
-    private function addClassMethodParam(ClassMethod $classMethod, ArgumentAdder $argumentAdder, $defaultValue, ?Type $type, int $position) : void
+    private function isDefaultValueChanged($argumentAdder, ClassMethod $classMethod, int $position) : bool
+    {
+        return $argumentAdder instanceof ArgumentAdder && $this->changedArgumentsDetector->isDefaultValueChanged($classMethod->params[$position], $argumentAdder->getArgumentDefaultValue());
+    }
+    /**
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
+     */
+    private function addClassMethodParam(ClassMethod $classMethod, $argumentAdder, ?Type $type, int $position) : void
     {
         $argumentName = $argumentAdder->getArgumentName();
         if ($argumentName === null) {
             throw new ShouldNotHappenException();
         }
-        $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
+        if ($argumentAdder instanceof ArgumentAdder) {
+            $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($argumentAdder->getArgumentDefaultValue()));
+        } else {
+            $param = new Param(new Variable($argumentName));
+        }
         if ($type instanceof Type) {
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         }
         $classMethod->params[$position] = $param;
         $this->hasChanged = \true;
     }
-    private function processStaticCall(StaticCall $staticCall, int $position, ArgumentAdder $argumentAdder) : void
+    /**
+     * @param \Rector\Arguments\ValueObject\ArgumentAdder|\Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
+     */
+    private function processStaticCall(StaticCall $staticCall, int $position, $argumentAdder) : void
     {
+        if ($argumentAdder instanceof ArgumentAdderWithoutDefaultValue) {
+            return;
+        }
         $argumentName = $argumentAdder->getArgumentName();
         if ($argumentName === null) {
             throw new ShouldNotHappenException();

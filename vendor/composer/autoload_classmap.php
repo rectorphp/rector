@@ -951,6 +951,7 @@ return array(
     'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => $baseDir . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
     'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => $baseDir . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
     'Rector\\Arguments\\ValueObject\\ArgumentAdder' => $baseDir . '/rules/Arguments/ValueObject/ArgumentAdder.php',
+    'Rector\\Arguments\\ValueObject\\ArgumentAdderWithoutDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ArgumentAdderWithoutDefaultValue.php',
     'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => $baseDir . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
     'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
     'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',

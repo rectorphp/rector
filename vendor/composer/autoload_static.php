@@ -1169,6 +1169,7 @@ class ComposerStaticInit8339caf294dd12447c06647e5d0dc118
         'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
         'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
         'Rector\\Arguments\\ValueObject\\ArgumentAdder' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdder.php',
+        'Rector\\Arguments\\ValueObject\\ArgumentAdderWithoutDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdderWithoutDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
