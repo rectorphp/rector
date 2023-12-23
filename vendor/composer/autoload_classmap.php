@@ -2291,6 +2291,7 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\CallerParamMatcher' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallerParamMatcher.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
+    'Rector\\TypeDeclaration\\NodeAnalyzer\\NeverFuncCallAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/NeverFuncCallAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ParamAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ParamAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnFilter\\ExclusiveNativeCallLikeReturnMatcher' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnFilter/ExclusiveNativeCallLikeReturnMatcher.php',
