@@ -23,6 +23,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
@@ -149,6 +150,9 @@ final class AstResolver
     }
     public function resolveFunctionFromFunctionReflection(FunctionReflection $functionReflection) : ?Function_
     {
+        if (!$functionReflection instanceof PhpFunctionReflection) {
+            return null;
+        }
         $fileName = $functionReflection->getFileName();
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
         $functionName = $functionReflection->getName();
