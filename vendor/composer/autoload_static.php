@@ -1495,6 +1495,7 @@ class ComposerStaticInit8339caf294dd12447c06647e5d0dc118
         'Rector\\Core\\Rector\\AbstractCollectorRector' => __DIR__ . '/../..' . '/src/Rector/AbstractCollectorRector.php',
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
         'Rector\\Core\\Rector\\AbstractScopeAwareRector' => __DIR__ . '/../..' . '/src/Rector/AbstractScopeAwareRector.php',
+        'Rector\\Core\\Reflection\\ClassModifierChecker' => __DIR__ . '/../..' . '/src/Reflection/ClassModifierChecker.php',
         'Rector\\Core\\Reflection\\ClassReflectionAnalyzer' => __DIR__ . '/../..' . '/src/Reflection/ClassReflectionAnalyzer.php',
         'Rector\\Core\\Reflection\\MethodReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/MethodReflectionResolver.php',
         'Rector\\Core\\Reflection\\ReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/ReflectionResolver.php',

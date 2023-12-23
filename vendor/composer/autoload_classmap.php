@@ -1277,6 +1277,7 @@ return array(
     'Rector\\Core\\Rector\\AbstractCollectorRector' => $baseDir . '/src/Rector/AbstractCollectorRector.php',
     'Rector\\Core\\Rector\\AbstractRector' => $baseDir . '/src/Rector/AbstractRector.php',
     'Rector\\Core\\Rector\\AbstractScopeAwareRector' => $baseDir . '/src/Rector/AbstractScopeAwareRector.php',
+    'Rector\\Core\\Reflection\\ClassModifierChecker' => $baseDir . '/src/Reflection/ClassModifierChecker.php',
     'Rector\\Core\\Reflection\\ClassReflectionAnalyzer' => $baseDir . '/src/Reflection/ClassReflectionAnalyzer.php',
     'Rector\\Core\\Reflection\\MethodReflectionResolver' => $baseDir . '/src/Reflection/MethodReflectionResolver.php',
     'Rector\\Core\\Reflection\\ReflectionResolver' => $baseDir . '/src/Reflection/ReflectionResolver.php',
