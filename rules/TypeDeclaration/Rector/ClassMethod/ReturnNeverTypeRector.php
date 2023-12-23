@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Reflection\ClassModifierChecker;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
@@ -44,11 +44,17 @@ final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements Mi
      * @var \Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer
      */
     private $neverFuncCallAnalyzer;
-    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, BetterNodeFinder $betterNodeFinder, NeverFuncCallAnalyzer $neverFuncCallAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ClassModifierChecker
+     */
+    private $classModifierChecker;
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, BetterNodeFinder $betterNodeFinder, NeverFuncCallAnalyzer $neverFuncCallAnalyzer, ClassModifierChecker $classModifierChecker)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->neverFuncCallAnalyzer = $neverFuncCallAnalyzer;
+        $this->classModifierChecker = $classModifierChecker;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -115,8 +121,7 @@ CODE_SAMPLE
             return \false;
         }
         // skip as most likely intentional
-        $classReflection = $scope->getClassReflection();
-        if ($classReflection instanceof ClassReflection && !$classReflection->isFinalByKeyword() && $this->isName($node->returnType, 'void')) {
+        if (!$this->classModifierChecker->isInsideFinalClass($node) && $this->isName($node->returnType, 'void')) {
             return \true;
         }
         return $this->isName($node->returnType, 'never');

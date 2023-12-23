@@ -31,7 +31,7 @@ final class StrictBoolReturnTypeAnalyzer
     public function hasAlwaysStrictBoolReturn($functionLike) : bool
     {
         $returns = $this->alwaysStrictReturnAnalyzer->matchAlwaysStrictReturns($functionLike);
-        if ($returns === null) {
+        if ($returns === []) {
             return \false;
         }
         foreach ($returns as $return) {

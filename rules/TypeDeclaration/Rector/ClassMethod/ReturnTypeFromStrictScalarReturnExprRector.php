@@ -87,10 +87,11 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($node->returnType !== null) {
+        // already added → skip
+        if ($node->returnType instanceof Node) {
             return null;
         }
-        $scalarReturnType = $this->strictScalarReturnTypeAnalyzer->matchAlwaysScalarReturnType($node, $scope);
+        $scalarReturnType = $this->strictScalarReturnTypeAnalyzer->matchAlwaysScalarReturnType($node);
         if (!$scalarReturnType instanceof Type) {
             return null;
         }

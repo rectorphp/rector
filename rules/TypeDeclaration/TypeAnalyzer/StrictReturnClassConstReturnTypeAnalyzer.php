@@ -35,7 +35,7 @@ final class StrictReturnClassConstReturnTypeAnalyzer
     public function matchAlwaysReturnConstFetch(ClassMethod $classMethod) : ?Type
     {
         $returns = $this->alwaysStrictReturnAnalyzer->matchAlwaysStrictReturns($classMethod);
-        if ($returns === null) {
+        if ($returns === []) {
             return null;
         }
         $classConstFetchTypes = [];
