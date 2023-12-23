@@ -118,6 +118,9 @@ CODE_SAMPLE
             if (!$node instanceof ArrayDimFetch) {
                 return null;
             }
+            if (!$node->dim instanceof Expr) {
+                return null;
+            }
             if (!$node->var instanceof Variable) {
                 return null;
             }
@@ -127,6 +130,11 @@ CODE_SAMPLE
             // skip possible strings
             $variableType = $this->getType($node->var);
             if ($variableType->isString()->yes()) {
+                return null;
+            }
+            // skip integer in possibly string type as string can be accessed via int
+            $dimType = $this->getType($node->dim);
+            if ($dimType->isInteger()->yes() && $variableType->isString()->maybe()) {
                 return null;
             }
             $isParamAccessedArrayDimFetch = \true;
