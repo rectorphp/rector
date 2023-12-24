@@ -100,7 +100,7 @@ CODE_SAMPLE
         $match = null;
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $subNode) use($node, &$match, &$hasChanged, $scope) {
-            if ($subNode instanceof ArrayItem && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
+            if (($subNode instanceof ArrayItem || $subNode instanceof Arg) && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
                 $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value, \true);
                 $switch = new Switch_($subNode->value->cond, $switchCases);
                 $subNode->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
