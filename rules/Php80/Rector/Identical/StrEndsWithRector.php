@@ -21,7 +21,9 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\FuncCallAndExpr;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\StrEndsWithRectorTest
  */
-final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInterface
+final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
 {
     /**
      * @readonly
@@ -111,6 +113,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         return $this->refactorSubstr($node) ?? $this->refactorSubstrCompare($node);
+    }
+    public function providePolyfillPackage() : string
+    {
+        return PolyfillPackage::PHP_80;
     }
     /**
      * Covers:

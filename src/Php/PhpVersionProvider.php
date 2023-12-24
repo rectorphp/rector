@@ -55,6 +55,7 @@ final class PhpVersionProvider
                 return $phpVersion;
             }
         }
+        // fallback to current PHP runtime version
         return \PHP_VERSION_ID;
     }
     public function isAtLeastPhpVersion(int $phpVersion) : bool

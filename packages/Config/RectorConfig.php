@@ -14,6 +14,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Core\ValueObject\PolyfillPackage;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use RectorPrefix202312\Webmozart\Assert\Assert;
 /**
@@ -220,6 +221,14 @@ final class RectorConfig extends Container
     public function phpVersion(int $phpVersion) : void
     {
         SimpleParameterProvider::setParameter(Option::PHP_VERSION_FEATURES, $phpVersion);
+    }
+    /**
+     * @api only for testing. It is parsed from composer.json "require" packages by default
+     * @param array<PolyfillPackage::*> $polyfillPackages
+     */
+    public function polyfillPackages(array $polyfillPackages) : void
+    {
+        SimpleParameterProvider::setParameter(Option::POLYFILL_PACKAGES, $polyfillPackages);
     }
     /**
      * @param string[] $autoloadPaths
