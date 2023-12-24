@@ -148,7 +148,7 @@ CODE_SAMPLE
         if (!$property instanceof Property) {
             return \false;
         }
-        $type = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection);
+        $type = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection, $this->file);
         return $type instanceof ArrayType;
     }
 }
