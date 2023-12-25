@@ -1,4 +1,4 @@
-# 15 Rules Overview
+# 16 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -136,6 +136,32 @@ Initialize collection property in Entity constructor
 +    {
 +        $this->marketingEvents = new ArrayCollection();
 +    }
+ }
+```
+
+<br>
+
+## IterateToToIterableRector
+
+Change `iterate()` => `toIterable()`
+
+- class: [`Rector\Doctrine\Orm28\Rector\MethodCall\IterateToToIterableRector`](../rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php)
+
+```diff
+ use Doctrine\ORM\EntityRepository;
+ use Doctrine\ORM\Internal\Hydration\IterableResult;
+
+ class SomeRepository extends EntityRepository
+ {
+-    public function run(): IterateResult
++    public function run(): iterable
+     {
+         /** @var \Doctrine\ORM\AbstractQuery $query */
+         $query = $this->getEntityManager()->select('e')->from('entity')->getQuery();
+
+-        return $query->iterate();
++        return $query->toIterable();
+     }
  }
 ```
 

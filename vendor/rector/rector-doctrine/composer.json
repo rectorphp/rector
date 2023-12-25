@@ -19,12 +19,11 @@
         "doctrine\/orm": "^2.16",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "symplify\/vendor-patches": "^11.2",
-        "rector\/rector-generator": "^0.7",
-        "symplify\/easy-ci": "^11.2",
+        "rector\/rector-generator": "^0.7.5",
         "tomasvotruba\/unused-public": "^0.3",
         "tomasvotruba\/type-coverage": "^0.2",
-        "tomasvotruba\/class-leak": "^0.1",
-        "doctrine\/doctrine-bundle": "^2.10"
+        "tomasvotruba\/class-leak": "^0.2",
+        "tracy\/tracy": "^2.10"
     },
     "autoload": {
         "psr-4": {
@@ -43,6 +42,9 @@
         },
         "classmap": [
             "stubs"
+        ],
+        "files": [
+            "tests\/debug_functions.php"
         ]
     },
     "scripts": {

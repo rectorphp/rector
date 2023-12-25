@@ -1407,6 +1407,7 @@ return array(
     'Rector\\Doctrine\\NodeManipulator\\ToManyRelationPropertyTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/ToManyRelationPropertyTypeResolver.php',
     'Rector\\Doctrine\\NodeManipulator\\ToOneRelationPropertyTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/ToOneRelationPropertyTypeResolver.php',
     'Rector\\Doctrine\\Orm214\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm214/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
+    'Rector\\Doctrine\\Orm28\\Rector\\MethodCall\\IterateToToIterableRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php',
     'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => $vendorDir . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
     'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => $vendorDir . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
     'Rector\\Doctrine\\Set\\DoctrineSetList' => $vendorDir . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
