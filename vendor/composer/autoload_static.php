@@ -1368,6 +1368,7 @@ class ComposerStaticInit8339caf294dd12447c06647e5d0dc118
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
+        'Rector\\CodingStyle\\Rector\\Stmt\\RemoveUselessAliasInUseStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/RemoveUselessAliasInUseStatementRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
         'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',

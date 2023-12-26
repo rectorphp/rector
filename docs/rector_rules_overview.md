@@ -1,4 +1,4 @@
-# 353 Rules Overview
+# 354 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (73)
 
-- [CodingStyle](#codingstyle) (27)
+- [CodingStyle](#codingstyle) (28)
 
 - [DeadCode](#deadcode) (43)
 
@@ -1863,6 +1863,19 @@ Remove final from constants in classes defined as final
 -    final public const NAME = 'value';
 +    public const NAME = 'value';
  }
+```
+
+<br>
+
+### RemoveUselessAliasInUseStatementRector
+
+Remove useless alias in use statement as same name with last use statement name
+
+- class: [`Rector\CodingStyle\Rector\Stmt\RemoveUselessAliasInUseStatementRector`](../rules/CodingStyle/Rector/Stmt/RemoveUselessAliasInUseStatementRector.php)
+
+```diff
+-use App\Bar as Bar;
++use App\Bar;
 ```
 
 <br>
@@ -4765,13 +4778,13 @@ Change simple property init and assign to constructor promotion
 ```diff
  class SomeClass
  {
--    public float $someVariable;
+-    public float $price;
 -
      public function __construct(
--        float $someVariable = 0.0
-+        public float $someVariable = 0.0
+-        float $price = 0.0
++        public float $price = 0.0
      ) {
--        $this->someVariable = $someVariable;
+-        $this->price = $price;
      }
  }
 ```
