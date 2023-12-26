@@ -1,4 +1,4 @@
-# 17 Rules Overview
+# 18 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -421,6 +421,38 @@ Complete `@var` annotations or types based on @ORM\*toOne annotations or attribu
       */
 -    private $company;
 +    private ?\App\Company\Entity\Company $company = null;
+ }
+```
+
+<br>
+
+## YamlToAnnotationsDoctrineMappingRector
+
+Converts YAML Doctrine Entity mapping to particular annotation mapping
+
+:wrench: **configure it!**
+
+- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\YamlToAnnotationsDoctrineMappingRector`](../rules/CodeQuality/Rector/Class_/YamlToAnnotationsDoctrineMappingRector.php)
+
+```diff
++use Doctrine\ORM\Mapping as ORM;
++
++/**
++ * @ORM\Entity
++ */
+ class SomeEntity
+ {
++    /**
++     * @ORM\Id
++     * @ORM\GeneratedValue
++     * @ORM\Column(type="integer")
++     */
+     private $id;
+
++    /**
++     * @ORM\Column(type="string")
++     */
+     private $name;
  }
 ```
 
