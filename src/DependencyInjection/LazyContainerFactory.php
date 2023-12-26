@@ -262,15 +262,16 @@ final class LazyContainerFactory
             $inflectorFactory = new InflectorFactory();
             return $inflectorFactory->build();
         });
-        $rectorConfig->tag(ProcessCommand::class, Command::class);
-        $rectorConfig->tag(WorkerCommand::class, Command::class);
-        $rectorConfig->tag(SetupCICommand::class, Command::class);
-        $rectorConfig->tag(ListRulesCommand::class, Command::class);
+        $rectorConfig->autotagInterface(Command::class);
+        $rectorConfig->singleton(ProcessCommand::class);
+        $rectorConfig->singleton(WorkerCommand::class);
+        $rectorConfig->singleton(SetupCICommand::class);
+        $rectorConfig->singleton(ListRulesCommand::class);
         $rectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         // dev
         if (\class_exists(MissingInSetCommand::class)) {
-            $rectorConfig->tag(MissingInSetCommand::class, Command::class);
-            $rectorConfig->tag(OutsideAnySetCommand::class, Command::class);
+            $rectorConfig->singleton(MissingInSetCommand::class);
+            $rectorConfig->singleton(OutsideAnySetCommand::class);
         }
         $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->singleton(FileProcessor::class);
