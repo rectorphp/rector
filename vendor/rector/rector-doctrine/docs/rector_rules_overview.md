@@ -1,4 +1,4 @@
-# 16 Rules Overview
+# 17 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -82,6 +82,22 @@ Replace EventSubscriberInterface with AsDoctrineListener attribute(s)
      {
          // ...
      }
+ }
+```
+
+<br>
+
+## ExtractArrayArgOnQueryBuilderSelectRector
+
+Extract array arg on QueryBuilder select, addSelect, groupBy, addGroupBy
+
+- class: [`Rector\Doctrine\Dbal211\Rector\MethodCall\ExtractArrayArgOnQueryBuilderSelectRector`](../rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php)
+
+```diff
+ function query(\Doctrine\DBAL\Query\QueryBuilder $queryBuilder)
+ {
+-    $query = $queryBuilder->select(['u.id', 'p.id']);
++    $query = $queryBuilder->select('u.id', 'p.id');
  }
 ```
 
