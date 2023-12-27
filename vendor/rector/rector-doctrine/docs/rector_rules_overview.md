@@ -1,4 +1,4 @@
-# 18 Rules Overview
+# 17 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -206,36 +206,6 @@ Make maker bundle generate DateTime property accept DateTimeInterface too
      public function setBornAt(DateTimeInterface $bornAt)
      {
          $this->bornAt = $bornAt;
-     }
- }
-```
-
-<br>
-
-## MakeEntitySetterNullabilityInSyncWithPropertyRector
-
-Make nullability in setter class method with respect to property
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector`](../rules/CodeQuality/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity()
-  */
- class Product
- {
-     /**
-      * @ORM\ManyToOne(targetEntity="AnotherEntity")
-      * @ORM\JoinColumn(nullable=false)
-      */
-     private $anotherEntity;
-
--    public function setAnotherEntity(?AnotherEntity $anotherEntity)
-+    public function setAnotherEntity(AnotherEntity $anotherEntity)
-     {
-         $this->anotherEntity = $anotherEntity;
      }
  }
 ```

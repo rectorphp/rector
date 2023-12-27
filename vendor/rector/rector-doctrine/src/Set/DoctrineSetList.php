@@ -18,11 +18,6 @@ final class DoctrineSetList implements SetListInterface
      */
     public const DOCTRINE_COMMON_20 = __DIR__ . '/../../config/sets/doctrine-common-20.php';
     /**
-     * @deprecated Use self::DOCTRINE_DBAL_211 instead
-     * @var string
-     */
-    public const DOCTRINE_DBAL_210 = __DIR__ . '/../../config/sets/doctrine-dbal-210.php';
-    /**
      * @var string
      */
     public const DOCTRINE_DBAL_211 = __DIR__ . '/../../config/sets/doctrine-dbal-211.php';
@@ -34,16 +29,6 @@ final class DoctrineSetList implements SetListInterface
      * @var string
      */
     public const DOCTRINE_DBAL_40 = __DIR__ . '/../../config/sets/doctrine-dbal-40.php';
-    /**
-     * @deprecated Removed as not supporting the framework native approach and rather experimental
-     * @var string
-     */
-    public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../config/sets/doctrine-repository-as-service.php';
-    /**
-     * @deprecated Use self::DOCTRINE_ORM_25 instead
-     * @var string
-     */
-    public const DOCTRINE_25 = self::DOCTRINE_ORM_25;
     /**
      * @var string
      */

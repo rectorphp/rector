@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Doctrine\CodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\Doctrine\CodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
 use Rector\Doctrine\CodeQuality\Rector\Class_\RemoveEmptyTableAttributeRector;
-use Rector\Doctrine\CodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector;
@@ -21,7 +20,6 @@ use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
         InitializeDefaultEntityCollectionRector::class,
-        MakeEntitySetterNullabilityInSyncWithPropertyRector::class,
         MakeEntityDateTimePropertyDateTimeInterfaceRector::class,
         MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
         CorrectDefaultTypesOnEntityPropertyRector::class,

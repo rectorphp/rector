@@ -48,7 +48,6 @@ final class AttributeFinder
         return $this->findArgByName($attribute, $argName);
     }
     /**
-     * @param class-string $attributeClass
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
     public function findAttributeByClass($node, string $attributeClass) : ?Attribute
@@ -67,7 +66,7 @@ final class AttributeFinder
         return null;
     }
     /**
-     * @param class-string[] $attributeClasses
+     * @param string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
     public function findAttributeByClasses($node, array $attributeClasses) : ?Attribute

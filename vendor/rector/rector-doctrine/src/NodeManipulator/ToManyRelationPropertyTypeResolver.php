@@ -99,6 +99,6 @@ final class ToManyRelationPropertyTypeResolver
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($entityFullyQualifiedClass);
-        return $this->collectionTypeFactory->createGenericObjectType($fullyQualifiedObjectType);
+        return $this->collectionTypeFactory->createType($fullyQualifiedObjectType);
     }
 }

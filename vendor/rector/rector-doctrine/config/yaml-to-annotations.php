@@ -6,6 +6,7 @@ namespace RectorPrefix202312;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer\EmbeddableClassAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer\EntityClassAnnotationTransformer;
+use Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer\InheritanceClassAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer\SoftDeletableClassAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer\TableClassAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\ColumnAnnotationTransformer;
@@ -27,6 +28,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->singleton(SoftDeletableClassAnnotationTransformer::class);
     $rectorConfig->singleton(TableClassAnnotationTransformer::class);
     $rectorConfig->singleton(EmbeddableClassAnnotationTransformer::class);
+    $rectorConfig->singleton(InheritanceClassAnnotationTransformer::class);
     $rectorConfig->singleton(ColumnAnnotationTransformer::class);
     $rectorConfig->singleton(EmbeddedPropertyAnnotationTransformer::class);
     $rectorConfig->singleton(GedmoTimestampableAnnotationTransformer::class);
