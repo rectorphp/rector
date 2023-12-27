@@ -5,6 +5,7 @@ namespace Rector\Doctrine\CodeQuality\NodeFactory;
 
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use RectorPrefix202312\Webmozart\Assert\Assert;
 final class ArrayItemNodeFactory
@@ -31,6 +32,14 @@ final class ArrayItemNodeFactory
         $arrayItemNodes = [];
         foreach ($propertyMapping as $fieldKey => $fieldValue) {
             if (\in_array($fieldKey, self::EXTENSION_KEYS, \true)) {
+                continue;
+            }
+            if (\is_array($fieldValue)) {
+                $fieldValueArrayItemNodes = [];
+                foreach ($fieldValue as $fieldSingleValue) {
+                    $fieldValueArrayItemNodes[] = new ArrayItemNode(new StringNode($fieldSingleValue));
+                }
+                $arrayItemNodes[] = new ArrayItemNode(new CurlyListNode($fieldValueArrayItemNodes), $fieldKey);
                 continue;
             }
             if ($quotedFields === [self::QUOTE_ALL]) {

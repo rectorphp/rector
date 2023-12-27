@@ -27,7 +27,7 @@ final class GedmoTimestampableAnnotationTransformer implements PropertyAnnotatio
         if (!\is_array($timestampableMapping)) {
             return;
         }
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($timestampableMapping, ['on']);
+        $arrayItemNodes = $this->arrayItemNodeFactory->create($timestampableMapping, ['on', 'field']);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }

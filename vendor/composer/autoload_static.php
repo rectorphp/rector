@@ -2163,6 +2163,7 @@ class ComposerStaticInit8339caf294dd12447c06647e5d0dc118
         'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',
         'Rector\\Php83\\Rector\\ClassConst\\AddTypeToConstRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassConst/AddTypeToConstRector.php',
         'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
+        'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',
