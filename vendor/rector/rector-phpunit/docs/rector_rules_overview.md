@@ -1,4 +1,4 @@
-# 51 Rules Overview
+# 52 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -708,6 +708,34 @@ Turns PHPUnit TestCase assertObjectHasAttribute into `property_exists` compariso
 -$this->assertClassNotHasAttribute("property", "Class");
 +$this->assertFalse(property_exists(new Class, "property"));
 +$this->assertTrue(property_exists(new Class, "property"));
+```
+
+<br>
+
+## PublicDataProviderClassMethodRector
+
+Change data provider methods to public
+
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\Class_\PublicDataProviderClassMethodRector`](../rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     /**
+      * @dataProvider provideData()
+      */
+     public function test()
+     {
+     }
+
+-    protected static function provideData()
++    public static function provideData()
+     {
+         yield [1];
+     }
+ }
 ```
 
 <br>

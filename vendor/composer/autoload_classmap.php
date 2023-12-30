@@ -1761,6 +1761,7 @@ return array(
     'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => $vendorDir . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
     'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => $vendorDir . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
+    'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\PropertyExistsWithoutAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/PropertyExistsWithoutAssertRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',

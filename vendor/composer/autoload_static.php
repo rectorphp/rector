@@ -1979,6 +1979,7 @@ class ComposerStaticInit8f2270509893f1162053010eaa6e09a5
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
         'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
+        'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\PropertyExistsWithoutAssertRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/PropertyExistsWithoutAssertRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',

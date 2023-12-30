@@ -1,4 +1,4 @@
-# 354 Rules Overview
+# 355 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [Php82](#php82) (4)
 
-- [Php83](#php83) (2)
+- [Php83](#php83) (3)
 
 - [Privatization](#privatization) (4)
 
@@ -5312,6 +5312,19 @@ Add const to type
 
 <br>
 
+### CombineHostPortLdapUriRector
+
+Combine separated host and port on `ldap_connect()` args
+
+- class: [`Rector\Php83\Rector\FuncCall\CombineHostPortLdapUriRector`](../rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php)
+
+```diff
+-ldap_connect('ldap://ldap.example.com', 389);
++ldap_connect('ldap://ldap.example.com:389');
+```
+
+<br>
+
 ## Privatization
 
 ### FinalizeClassesWithoutChildrenRector
@@ -6850,19 +6863,27 @@ Add return type based on strict parameter type
 
 Change return type based on strict scalar returns - string, int, float or bool
 
+:wrench: **configure it!**
+
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php)
 
 ```diff
  final class SomeClass
  {
--    public function run($value)
-+    public function run($value): string
+-    public function foo($value)
++    public function foo($value): string
      {
          if ($value) {
              return 'yes';
          }
 
          return 'no';
+     }
+
+-    public function bar(string $value)
++    public function bar(string $value): int
+     {
+         return strlen($value);
      }
  }
 ```
