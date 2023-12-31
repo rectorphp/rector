@@ -2617,6 +2617,7 @@ class ComposerStaticInit8f2270509893f1162053010eaa6e09a5
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
+        'Rector\\Validation\\RectorConfigValidator' => __DIR__ . '/../..' . '/packages/Validation/RectorConfigValidator.php',
         'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
         'Rector\\VendorLocker\\Exception\\UnresolvableClassException' => __DIR__ . '/../..' . '/packages/VendorLocker/Exception/UnresolvableClassException.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',

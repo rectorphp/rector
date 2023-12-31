@@ -16,6 +16,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\PolyfillPackage;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use Rector\Validation\RectorConfigValidator;
 use RectorPrefix202312\Webmozart\Assert\Assert;
 /**
  * @api
@@ -36,6 +37,7 @@ final class RectorConfig extends Container
     public function paths(array $paths) : void
     {
         Assert::allString($paths);
+        // ensure paths exist
         foreach ($paths as $path) {
             if (\strpos($path, '*') !== \false) {
                 continue;
@@ -68,10 +70,14 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::COLLECTORS, \true);
     }
-    public function parallel(int $seconds = 120, int $maxNumberOfProcess = 16, int $jobSize = 15) : void
+    /**
+     * Defaults in sync with https://phpstan.org/config-reference#parallel-processing
+     * as we run PHPStan as well
+     */
+    public function parallel(int $processTimeout = 60, int $maxNumberOfProcess = 32, int $jobSize = 20) : void
     {
         SimpleParameterProvider::setParameter(Option::PARALLEL, \true);
-        SimpleParameterProvider::setParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS, $seconds);
+        SimpleParameterProvider::setParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS, $processTimeout);
         SimpleParameterProvider::setParameter(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, $maxNumberOfProcess);
         SimpleParameterProvider::setParameter(Option::PARALLEL_JOB_SIZE, $jobSize);
     }
@@ -84,42 +90,13 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::MEMORY_LIMIT, $memoryLimit);
     }
     /**
-     * @param array<int|string, mixed> $criteria
+     * @see https://getrector.com/documentation/ignoring-rules-or-paths
+     * @param array<int|string, mixed> $skip
      */
-    public function skip(array $criteria) : void
+    public function skip(array $skip) : void
     {
-        $notExistsRules = [];
-        foreach ($criteria as $key => $value) {
-            /**
-             * Cover define rule then list of files
-             *
-             * $rectorConfig->skip([
-             *      RenameVariableToMatchMethodCallReturnTypeRector::class => [
-             *          __DIR__ . '/packages/Config/RectorConfig.php'
-             *      ],
-             * ]);
-             */
-            if ($this->isRuleNoLongerExists($key)) {
-                $notExistsRules[] = $key;
-            }
-            if (!\is_string($value)) {
-                continue;
-            }
-            /**
-             * Cover direct value without array list of files, eg:
-             *
-             * $rectorConfig->skip([
-             *      StringClassNameToClassConstantRector::class,
-             * ]);
-             */
-            if ($this->isRuleNoLongerExists($value)) {
-                $notExistsRules[] = $value;
-            }
-        }
-        if ($notExistsRules !== []) {
-            throw new ShouldNotHappenException('Following rules on $rectorConfig->skip() do no longer exist or changed to different namespace: ' . \implode(', ', $notExistsRules));
-        }
-        SimpleParameterProvider::addParameter(Option::SKIP, $criteria);
+        RectorConfigValidator::ensureRectorRulesExist($skip);
+        SimpleParameterProvider::addParameter(Option::SKIP, $skip);
     }
     public function removeUnusedImports(bool $removeUnusedImports = \true) : void
     {
@@ -189,6 +166,15 @@ final class RectorConfig extends Container
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
     }
     /**
+     * @param array<class-string<Collector>> $collectorClasses
+     */
+    public function collectors(array $collectorClasses) : void
+    {
+        foreach ($collectorClasses as $collectorClass) {
+            $this->collector($collectorClass);
+        }
+    }
+    /**
      * @param class-string<Collector> $collectorClass
      */
     public function collector(string $collectorClass) : void
@@ -214,7 +200,7 @@ final class RectorConfig extends Container
     public function rules(array $rectorClasses) : void
     {
         Assert::allString($rectorClasses);
-        $this->ensureNotDuplicatedClasses($rectorClasses);
+        RectorConfigValidator::ensureNoDuplicatedClasses($rectorClasses);
         foreach ($rectorClasses as $rectorClass) {
             $this->rule($rectorClass);
         }
@@ -295,12 +281,9 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::INDENT_SIZE, $count);
     }
     /**
-     * @api deprecated, just for BC layer warning
+     * @internal
+     * @api used only in tests
      */
-    public function services() : void
-    {
-        \trigger_error('The services() method is deprecated. Use $rectorConfig->singleton(ServiceType::class) instead', \E_USER_ERROR);
-    }
     public function resetRuleConfigurations() : void
     {
         $this->ruleConfigurations = [];
@@ -347,38 +330,5 @@ final class RectorConfig extends Container
             }
             $this->tag($abstract, $autotagInterface);
         }
-    }
-    /**
-     * @param mixed $skipRule
-     */
-    private function isRuleNoLongerExists($skipRule) : bool
-    {
-        return \is_string($skipRule) && \strpos($skipRule, '*') === \false && \substr_compare($skipRule, 'Rector', -\strlen('Rector')) === 0 && !\is_dir($skipRule) && !\is_file($skipRule) && !\class_exists($skipRule);
-    }
-    /**
-     * @param string[] $values
-     * @return string[]
-     */
-    private function resolveDuplicatedValues(array $values) : array
-    {
-        $counted = \array_count_values($values);
-        $duplicates = [];
-        foreach ($counted as $value => $count) {
-            if ($count > 1) {
-                $duplicates[] = $value;
-            }
-        }
-        return \array_unique($duplicates);
-    }
-    /**
-     * @param string[] $rectorClasses
-     */
-    private function ensureNotDuplicatedClasses(array $rectorClasses) : void
-    {
-        $duplicatedRectorClasses = $this->resolveDuplicatedValues($rectorClasses);
-        if ($duplicatedRectorClasses === []) {
-            return;
-        }
-        throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
     }
 }
