@@ -7,7 +7,7 @@ use RectorPrefix202312\Doctrine\Inflector\Inflector;
 use RectorPrefix202312\Nette\Utils\Strings;
 use Rector\Core\Util\StringUtils;
 /**
- * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
+ * @see \Rector\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
  */
 final class InflectorSingularResolver
 {
