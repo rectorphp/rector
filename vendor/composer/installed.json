@@ -2014,17 +2014,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.1",
-            "version_normalized": "6.4.1.0",
+            "version": "v6.4.2",
+            "version_normalized": "6.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "a550a7c99daeedef3f9d23fb82e3531525ff11fd"
+                "reference": "0254811a143e6bc6c8deea08b589a7e68a37f625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a550a7c99daeedef3f9d23fb82e3531525ff11fd",
-                "reference": "a550a7c99daeedef3f9d23fb82e3531525ff11fd",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/0254811a143e6bc6c8deea08b589a7e68a37f625",
+                "reference": "0254811a143e6bc6c8deea08b589a7e68a37f625",
                 "shasum": ""
             },
             "require": {
@@ -2057,7 +2057,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2023-11-30T10:54:28+00:00",
+            "time": "2023-12-10T16:15:48+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2096,7 +2096,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.1"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.2"
             },
             "funding": [
                 {
@@ -2335,23 +2335,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.4.0",
-            "version_normalized": "6.4.0.0",
+            "version": "v6.4.2",
+            "version_normalized": "6.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "191703b1566d97a5425dc969e4350d32b8ef17aa"
+                "reference": "c4b1ef0bc80533d87a2e969806172f1c2a980241"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/191703b1566d97a5425dc969e4350d32b8ef17aa",
-                "reference": "191703b1566d97a5425dc969e4350d32b8ef17aa",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/c4b1ef0bc80533d87a2e969806172f1c2a980241",
+                "reference": "c4b1ef0bc80533d87a2e969806172f1c2a980241",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2023-11-17T21:06:49+00:00",
+            "time": "2023-12-22T16:42:54+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2379,7 +2379,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.0"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.2"
             },
             "funding": [
                 {

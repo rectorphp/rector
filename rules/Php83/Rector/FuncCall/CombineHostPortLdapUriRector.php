@@ -5,8 +5,11 @@ namespace Rector\Php83\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -18,6 +21,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CombineHostPortLdapUriRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(ExprAnalyzer $exprAnalyzer)
+    {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Combine separated host and port on ldap_connect() args', [new CodeSample(<<<'CODE_SAMPLE'
@@ -54,11 +66,14 @@ CODE_SAMPLE
         $secondArg = $args[1]->value;
         if ($firstArg instanceof String_ && $secondArg instanceof LNumber) {
             $args[0]->value = new String_($firstArg->value . ':' . $secondArg->value);
-            unset($args[1]);
-            $node->args = $args;
-            return $node;
+        } elseif ($this->exprAnalyzer->isDynamicExpr($firstArg) && $this->exprAnalyzer->isDynamicExpr($secondArg)) {
+            $args[0]->value = new Encapsed([$firstArg, new EncapsedStringPart(':'), $secondArg]);
+        } else {
+            return null;
         }
-        return null;
+        unset($args[1]);
+        $node->args = $args;
+        return $node;
     }
     public function provideMinPhpVersion() : int
     {
