@@ -9,17 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\MissingConstantFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Exception\FullyQualifiedNameNotAutoloadedException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -62,36 +58,32 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Class_
+    public function refactor(Node $node) : ?Class_
     {
+        $className = $this->getName($node);
+        if (!\is_string($className)) {
+            return null;
+        }
         if ($node->isAbstract()) {
             return null;
         }
-        $consts = \array_filter($node->stmts, static function (Node $node) : bool {
-            return $node instanceof ClassConst;
-        });
-        if ($consts === []) {
+        $classConsts = $node->getConstants();
+        if ($classConsts === []) {
             return null;
         }
-        try {
-            $parents = $this->getParents($node);
-            $implementations = $this->getImplementations($node);
-            $traits = $this->getTraits($node);
-        } catch (FullyQualifiedNameNotAutoloadedException $exception) {
-            return null;
-        }
-        $changes = \false;
-        foreach ($consts as $const) {
+        $parentClassReflections = $this->getParentReflections($className);
+        $hasChanged = \false;
+        foreach ($classConsts as $classConst) {
             $valueType = null;
             // If a type is set, skip
-            if ($const->type !== null) {
+            if ($classConst->type !== null) {
                 continue;
             }
-            foreach ($const->consts as $constNode) {
-                if ($this->shouldSkipDueToInheritance($constNode, $parents, $implementations, $traits)) {
+            foreach ($classConst->consts as $constNode) {
+                if ($this->isConstGuardedByParents($constNode, $parentClassReflections)) {
                     continue;
                 }
-                if ($this->canBeInheritied($const, $node)) {
+                if ($this->canBeInherited($classConst, $node)) {
                     continue;
                 }
                 $valueType = $this->findValueType($constNode->value);
@@ -99,10 +91,10 @@ CODE_SAMPLE
             if (!($valueType ?? null) instanceof Identifier) {
                 continue;
             }
-            $const->type = $valueType;
-            $changes = \true;
+            $classConst->type = $valueType;
+            $hasChanged = \true;
         }
-        if (!$changes) {
+        if (!$hasChanged) {
             return null;
         }
         return $node;
@@ -112,22 +104,14 @@ CODE_SAMPLE
         return PhpVersionFeature::TYPED_CLASS_CONSTANTS;
     }
     /**
-     * @param ClassReflection[] $parents
-     * @param ClassReflection[] $implementations
-     * @param ClassReflection[] $traits
+     * @param ClassReflection[] $parentClassReflections
      */
-    public function shouldSkipDueToInheritance(Const_ $const, array $parents, array $implementations, array $traits) : bool
+    public function isConstGuardedByParents(Const_ $const, array $parentClassReflections) : bool
     {
-        foreach ([$parents, $implementations, $traits] as $inheritance) {
-            foreach ($inheritance as $inheritanceItem) {
-                if ($const->name->name === '') {
-                    continue;
-                }
-                try {
-                    $inheritanceItem->getConstant($const->name->name);
-                    return \true;
-                } catch (MissingConstantFromReflectionException $exception) {
-                }
+        $constantName = $this->getName($const);
+        foreach ($parentClassReflections as $parentClassReflection) {
+            if ($parentClassReflection->hasConstant($constantName)) {
+                return \true;
             }
         }
         return \false;
@@ -157,54 +141,17 @@ CODE_SAMPLE
     /**
      * @return ClassReflection[]
      */
-    private function getParents(Class_ $class) : array
+    private function getParentReflections(string $className) : array
     {
-        $parents = \array_filter([$class->extends]);
-        return \array_map(function (Name $name) : ClassReflection {
-            if (!$name instanceof FullyQualified) {
-                throw new FullyQualifiedNameNotAutoloadedException($name);
-            }
-            if ($this->reflectionProvider->hasClass($name->toString())) {
-                return $this->reflectionProvider->getClass($name->toString());
-            }
-            throw new FullyQualifiedNameNotAutoloadedException($name);
-        }, $parents);
-    }
-    /**
-     * @return ClassReflection[]
-     */
-    private function getImplementations(Class_ $class) : array
-    {
-        return \array_map(function (Name $name) : ClassReflection {
-            if (!$name instanceof FullyQualified) {
-                throw new FullyQualifiedNameNotAutoloadedException($name);
-            }
-            if ($this->reflectionProvider->hasClass($name->toString())) {
-                return $this->reflectionProvider->getClass($name->toString());
-            }
-            throw new FullyQualifiedNameNotAutoloadedException($name);
-        }, $class->implements);
-    }
-    /**
-     * @return ClassReflection[]
-     */
-    private function getTraits(Class_ $class) : array
-    {
-        $traits = [];
-        foreach ($class->getTraitUses() as $traitUse) {
-            $traits = \array_merge($traits, $traitUse->traits);
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return [];
         }
-        return \array_map(function (Name $name) : ClassReflection {
-            if (!$name instanceof FullyQualified) {
-                throw new FullyQualifiedNameNotAutoloadedException($name);
-            }
-            if ($this->reflectionProvider->hasClass($name->toString())) {
-                return $this->reflectionProvider->getClass($name->toString());
-            }
-            throw new FullyQualifiedNameNotAutoloadedException($name);
-        }, $traits);
+        $currentClassReflection = $this->reflectionProvider->getClass($className);
+        return \array_filter($currentClassReflection->getAncestors(), static function (ClassReflection $classReflection) use($currentClassReflection) : bool {
+            return $currentClassReflection !== $classReflection;
+        });
     }
-    private function canBeInheritied(ClassConst $classConst, Class_ $class) : bool
+    private function canBeInherited(ClassConst $classConst, Class_ $class) : bool
     {
         return !$class->isFinal() && !$classConst->isPrivate();
     }

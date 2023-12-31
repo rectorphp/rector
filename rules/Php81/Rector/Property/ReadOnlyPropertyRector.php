@@ -112,14 +112,10 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
         $hasChanged = \false;
-        if ($node->isReadonly()) {
-            return null;
-        }
-        // skip "clone $this" cases, as can create unexpected write to local constructor property
-        if ($this->hasCloneThis($node)) {
-            return null;
-        }
         foreach ($node->getMethods() as $classMethod) {
             foreach ($classMethod->params as $param) {
                 $justChanged = $this->refactorParam($node, $classMethod, $param, $scope);
@@ -221,6 +217,14 @@ CODE_SAMPLE
             return null;
         });
         return $isAssigned;
+    }
+    private function shouldSkip(Class_ $class) : bool
+    {
+        if ($class->isReadonly()) {
+            return \true;
+        }
+        // skip "clone $this" cases, as can create unexpected write to local constructor property
+        return $this->hasCloneThis($class);
     }
     private function hasCloneThis(Class_ $class) : bool
     {

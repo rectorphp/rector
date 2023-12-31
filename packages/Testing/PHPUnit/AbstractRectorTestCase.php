@@ -64,7 +64,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     protected function setUp() : void
     {
         $this->includePreloadFilesAndScoperAutoload();
-        @\ini_set('memory_limit', '-1');
         $configFile = $this->provideConfigFilePath();
         // cleanup all registered rectors, so you can use only the new ones
         $rectorConfig = self::getContainer();
@@ -109,9 +108,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             FileSystem::delete($this->inputFilePath);
         }
     }
-    /**
-     * @return Iterator<<string>>
-     */
     protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
