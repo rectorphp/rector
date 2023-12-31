@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer;
 
-use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
