@@ -29,7 +29,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use TypeError;
 /**
- * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
+ * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
  * @todo make use of constant type of $scope->getType()
  */
 final class ValueResolver

@@ -8,7 +8,7 @@ use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Json;
 use Rector\Core\Util\PhpVersionFactory;
 /**
- * @see \Rector\Core\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
+ * @see \Rector\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
  */
 final class ProjectComposerJsonPhpVersionResolver
 {

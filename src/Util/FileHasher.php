@@ -5,7 +5,7 @@ namespace Rector\Core\Util;
 
 use Rector\Core\Exception\ShouldNotHappenException;
 /**
- * @see \Rector\Core\Tests\Util\FileHasherTest
+ * @see \Rector\Tests\Util\FileHasherTest
  */
 final class FileHasher
 {

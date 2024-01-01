@@ -9,7 +9,7 @@ use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use RectorPrefix202401\Symfony\Component\Finder\Finder;
 use RectorPrefix202401\Symfony\Component\Finder\SplFileInfo;
 /**
- * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
+ * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
  */
 final class FilesFinder
 {

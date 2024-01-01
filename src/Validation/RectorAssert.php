@@ -6,7 +6,7 @@ namespace Rector\Core\Validation;
 use Rector\Core\Util\StringUtils;
 use RectorPrefix202401\Webmozart\Assert\InvalidArgumentException;
 /**
- * @see \Rector\Core\Tests\Validation\RectorAssertTest
+ * @see \Rector\Tests\Validation\RectorAssertTest
  */
 final class RectorAssert
 {

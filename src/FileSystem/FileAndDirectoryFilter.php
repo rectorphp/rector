@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
 /**
- * @see \Rector\Core\Tests\FileSystem\FileAndDirectoryFilter\FileAndDirectoryFilterTest
+ * @see \Rector\Tests\FileSystem\FileAndDirectoryFilter\FileAndDirectoryFilterTest
  */
 final class FileAndDirectoryFilter
 {

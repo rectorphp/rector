@@ -7,7 +7,7 @@ use RectorPrefix202401\Nette\Utils\Strings;
 use RectorPrefix202401\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Core\Tests\FileSystem\FilePathHelperTest
+ * @see \Rector\Tests\FileSystem\FilePathHelperTest
  */
 final class FilePathHelper
 {

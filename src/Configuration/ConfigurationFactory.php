@@ -9,7 +9,7 @@ use Rector\Core\ValueObject\Configuration;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202401\Symfony\Component\Console\Style\SymfonyStyle;
 /**
- * @see \Rector\Core\Tests\Configuration\ConfigurationFactoryTest
+ * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
  */
 final class ConfigurationFactory
 {

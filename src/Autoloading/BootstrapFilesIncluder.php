@@ -11,7 +11,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Core\Tests\Autoloading\BootstrapFilesIncluderTest
+ * @see \Rector\Tests\Autoloading\BootstrapFilesIncluderTest
  */
 final class BootstrapFilesIncluder
 {

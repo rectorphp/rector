@@ -18,7 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
+ * @see \Rector\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */
 final class BetterNodeFinder
 {

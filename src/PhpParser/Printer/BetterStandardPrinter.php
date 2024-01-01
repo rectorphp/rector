@@ -31,7 +31,7 @@ use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
- * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  *
  * @property array<string, array{string, bool, string, null}> $insertionMap
  */

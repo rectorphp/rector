@@ -11,7 +11,7 @@ use Rector\Core\Exception\VersionException;
  * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
  * See https://github.com/composer/composer/blob/6587715d0f8cae0cd39073b3bc5f018d0e6b84fe/src/Composer/Compiler.php#L208
  *
- * @see \Rector\Core\Tests\Application\VersionResolverTest
+ * @see \Rector\Tests\Application\VersionResolverTest
  */
 final class VersionResolver
 {
@@ -19,12 +19,12 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const PACKAGE_VERSION = 'f4257afb3c05217b13513c4708228a6a976bab88';
+    public const PACKAGE_VERSION = '595086559f9ed5196d53c6dbea907043153bda61';
     /**
      * @api
      * @var string
      */
-    public const RELEASE_DATE = '2024-01-01 00:20:06';
+    public const RELEASE_DATE = '2024-01-01 09:02:58';
     /**
      * @var int
      */

@@ -6,7 +6,7 @@ namespace Rector\Core\FileSystem;
 use RectorPrefix202401\Symfony\Component\Finder\Finder;
 use RectorPrefix202401\Symfony\Component\Finder\SplFileInfo;
 /**
- * @see \Rector\Core\Tests\FileSystem\InitFilePathsResolver\InitFilePathsResolverTest
+ * @see \Rector\Tests\FileSystem\InitFilePathsResolver\InitFilePathsResolverTest
  */
 final class InitFilePathsResolver
 {
