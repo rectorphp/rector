@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202312\Psr\Container;
+namespace RectorPrefix202401\Psr\Container;
 
 /**
  * No entry was found in the container.

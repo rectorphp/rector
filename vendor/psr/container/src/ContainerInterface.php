@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202312\Psr\Container;
+namespace RectorPrefix202401\Psr\Container;
 
 /**
  * Describes the interface of a container that exposes methods to read its entries.

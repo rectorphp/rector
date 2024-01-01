@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
+/**
+ * @deprecated Use AbstractLazyTestCase instead
+ */
 abstract class AbstractTestCase extends \Rector\Testing\PHPUnit\AbstractLazyTestCase
 {
     /**

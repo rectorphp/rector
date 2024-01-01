@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202312\React\Stream;
+namespace RectorPrefix202401\React\Stream;
 
 /**
  * The `DuplexStreamInterface` is responsible for providing an interface for

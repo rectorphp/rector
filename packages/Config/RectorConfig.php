@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Config;
 
-use RectorPrefix202312\Illuminate\Container\Container;
+use RectorPrefix202401\Illuminate\Container\Container;
 use PHPStan\Collectors\Collector;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
@@ -17,7 +17,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\PolyfillPackage;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Validation\RectorConfigValidator;
-use RectorPrefix202312\Webmozart\Assert\Assert;
+use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
  * @api
  */

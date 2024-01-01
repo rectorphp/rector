@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix202312\Illuminate\Container\RewindableGenerator;
+use RectorPrefix202401\Illuminate\Container\RewindableGenerator;
 use Iterator;
-use RectorPrefix202312\Nette\Utils\FileSystem;
-use RectorPrefix202312\Nette\Utils\Strings;
+use RectorPrefix202401\Nette\Utils\FileSystem;
+use RectorPrefix202401\Nette\Utils\Strings;
 use PHPStan\Collectors\Collector;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Core\Application\ApplicationFileProcessor;
@@ -29,6 +29,9 @@ use Rector\Testing\Fixture\FixtureFileFinder;
 use Rector\Testing\Fixture\FixtureFileUpdater;
 use Rector\Testing\Fixture\FixtureSplitter;
 use Rector\Testing\PHPUnit\ValueObject\RectorTestResult;
+/**
+ * @api used by public
+ */
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLazyTestCase implements RectorTestInterface
 {
     /**

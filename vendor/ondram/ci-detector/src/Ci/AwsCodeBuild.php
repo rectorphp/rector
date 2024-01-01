@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202312\OndraM\CiDetector\Ci;
+namespace RectorPrefix202401\OndraM\CiDetector\Ci;
 
-use RectorPrefix202312\OndraM\CiDetector\CiDetector;
-use RectorPrefix202312\OndraM\CiDetector\Env;
-use RectorPrefix202312\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202401\OndraM\CiDetector\CiDetector;
+use RectorPrefix202401\OndraM\CiDetector\Env;
+use RectorPrefix202401\OndraM\CiDetector\TrinaryLogic;
 class AwsCodeBuild extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

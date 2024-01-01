@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202312\Illuminate\Contracts\Database\Eloquent;
+namespace RectorPrefix202401\Illuminate\Contracts\Database\Eloquent;
 
-use RectorPrefix202312\Illuminate\Database\Eloquent\Model;
+use RectorPrefix202401\Illuminate\Database\Eloquent\Model;
 interface CastsInboundAttributes
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202312\Illuminate\Contracts\Bus;
+namespace RectorPrefix202401\Illuminate\Contracts\Bus;
 
 interface Dispatcher
 {
