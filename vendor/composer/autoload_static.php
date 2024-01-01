@@ -2299,6 +2299,7 @@ class ComposerStaticInit3f1c613015ba4b47f7f73b50cb66fb68
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/SimpleStaticType.php',
+        'Rector\\Strict\\NodeAnalyzer\\UnitializedPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/Strict/NodeAnalyzer/UnitializedPropertyAnalyzer.php',
         'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => __DIR__ . '/../..' . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
         'Rector\\Strict\\Rector\\AbstractFalsyScalarRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php',
         'Rector\\Strict\\Rector\\BooleanNot\\BooleanInBooleanNotRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php',

@@ -2081,6 +2081,7 @@ return array(
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/SimpleStaticType.php',
+    'Rector\\Strict\\NodeAnalyzer\\UnitializedPropertyAnalyzer' => $baseDir . '/rules/Strict/NodeAnalyzer/UnitializedPropertyAnalyzer.php',
     'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => $baseDir . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
     'Rector\\Strict\\Rector\\AbstractFalsyScalarRuleFixerRector' => $baseDir . '/rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php',
     'Rector\\Strict\\Rector\\BooleanNot\\BooleanInBooleanNotRuleFixerRector' => $baseDir . '/rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php',

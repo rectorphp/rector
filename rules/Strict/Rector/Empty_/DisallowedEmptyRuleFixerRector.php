@@ -7,12 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Strict\NodeAnalyzer\UnitializedPropertyAnalyzer;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -32,10 +34,16 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(ExactCompareFactory $exactCompareFactory, ExprAnalyzer $exprAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Strict\NodeAnalyzer\UnitializedPropertyAnalyzer
+     */
+    private $unitializedPropertyAnalyzer;
+    public function __construct(ExactCompareFactory $exactCompareFactory, ExprAnalyzer $exprAnalyzer, UnitializedPropertyAnalyzer $unitializedPropertyAnalyzer)
     {
         $this->exactCompareFactory = $exactCompareFactory;
         $this->exprAnalyzer = $exprAnalyzer;
+        $this->unitializedPropertyAnalyzer = $unitializedPropertyAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -93,7 +101,11 @@ CODE_SAMPLE
             return null;
         }
         $emptyExprType = $scope->getNativeType($empty->expr);
-        return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
+        $result = $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
+        if ($this->unitializedPropertyAnalyzer->isUnitialized($empty->expr)) {
+            return new BooleanAnd(new Isset_([$empty->expr]), $result);
+        }
+        return $result;
     }
     private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty) : ?\PhpParser\Node\Expr
     {
@@ -101,7 +113,11 @@ CODE_SAMPLE
             return null;
         }
         $exprType = $scope->getNativeType($empty->expr);
-        return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
+        $result = $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
+        if ($this->unitializedPropertyAnalyzer->isUnitialized($empty->expr)) {
+            return new BooleanOr(new BooleanNot(new Isset_([$empty->expr])), $result);
+        }
+        return $result;
     }
     private function createDimFetchBooleanAnd(ArrayDimFetch $arrayDimFetch) : ?BooleanAnd
     {
