@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (28)
 
-- [DeadCode](#deadcode) (43)
+- [DeadCode](#deadcode) (42)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -46,7 +46,7 @@
 
 - [Php83](#php83) (3)
 
-- [Privatization](#privatization) (4)
+- [Privatization](#privatization) (5)
 
 - [Removing](#removing) (5)
 
@@ -2459,29 +2459,6 @@ Remove empty class methods not required by parents
 -    public function __construct()
 -    {
 -    }
- }
-```
-
-<br>
-
-### RemoveJustPropertyFetchForAssignRector
-
-Remove assign of property, just for value assign
-
-- class: [`Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector`](../rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php)
-
-```diff
- class SomeClass
- {
-     private $items = [];
-
-     public function run()
-     {
--        $items = $this->items;
--        $items[] = 1000;
--        $this->items = $items ;
-+        $this->items[] = 1000;
-     }
  }
 ```
 
@@ -5327,6 +5304,25 @@ Combine separated host and port on `ldap_connect()` args
 
 ## Privatization
 
+### FinalizeClassesWithoutChildrenCollectorRector
+
+Finalize classes without children using collectors
+
+- class: [`Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenCollectorRector`](../rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenCollectorRector.php)
+
+```diff
+-class FirstClass extends SecondClass
++final class FirstClass extends SecondClass
+ {
+ }
+
+ class SecondClass
+ {
+ }
+```
+
+<br>
+
 ### FinalizeClassesWithoutChildrenRector
 
 Finalize every class that has no children
@@ -5334,17 +5330,12 @@ Finalize every class that has no children
 - class: [`Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`](../rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php)
 
 ```diff
--class FirstClass
-+final class FirstClass
+-class FirstClass extends SecondClass
++final class FirstClass extends SecondClass
  {
  }
 
  class SecondClass
- {
- }
-
--class ThirdClass extends SecondClass
-+final class ThirdClass extends SecondClass
  {
  }
 ```

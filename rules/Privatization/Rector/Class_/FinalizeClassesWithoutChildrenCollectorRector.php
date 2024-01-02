@@ -15,6 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractCollectorRector;
 use Rector\Reflection\ReflectionResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenCollectorRector\FinalizeClassesWithoutChildrenCollectorRectorTest
@@ -87,7 +88,25 @@ final class FinalizeClassesWithoutChildrenCollectorRector extends AbstractCollec
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('...', []);
+        return new RuleDefinition('Finalize classes without children using collectors', [new CodeSample(<<<'CODE_SAMPLE'
+class FirstClass extends SecondClass
+{
+}
+
+class SecondClass
+{
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class FirstClass extends SecondClass
+{
+}
+
+class SecondClass
+{
+}
+CODE_SAMPLE
+)]);
     }
     private function shouldSkipClass(Class_ $class) : bool
     {
