@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PhpParser\Node\BetterNodeFinder;
 final class OverridenExistingNamesResolver
 {
     /**
@@ -21,7 +21,7 @@ final class OverridenExistingNamesResolver
     private $arrayFilter;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**

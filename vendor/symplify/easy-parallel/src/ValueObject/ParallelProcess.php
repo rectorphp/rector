@@ -141,7 +141,7 @@ final class ParallelProcess
     }
     private function cancelTimer() : void
     {
-        if ($this->timer === null) {
+        if (!$this->timer instanceof TimerInterface) {
             return;
         }
         $this->loop->cancelTimer($this->timer);

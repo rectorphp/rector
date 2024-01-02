@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\Parser;
+namespace Rector\PhpParser\Parser;
 
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
 use PHPStan\Parser\Parser;
-use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
+use Rector\PhpParser\ValueObject\StmtsAndTokens;
 final class RectorParser
 {
     /**

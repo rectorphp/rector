@@ -9,12 +9,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Reflection\ReflectionResolver;
 final class ExclusiveNativeCallLikeReturnMatcher
 {
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     public function __construct(ReflectionResolver $reflectionResolver)

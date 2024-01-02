@@ -9,15 +9,15 @@ use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
-use Rector\Core\NodeManipulator\BinaryOpManipulator;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\NodeManipulator\BinaryOpManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php71\ValueObject\TwoNodeMatch;
+use Rector\PhpParser\Comparing\NodeComparator;
 final class IsArrayAndDualCheckToAble
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
+     * @var \Rector\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
     /**
@@ -27,7 +27,7 @@ final class IsArrayAndDualCheckToAble
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(BinaryOpManipulator $binaryOpManipulator, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)

@@ -6,13 +6,13 @@ namespace Rector\Privatization\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\NodeAnalyzer\DoctrineEntityAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeAnalyzer\DoctrineEntityAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,7 +22,7 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
@@ -37,12 +37,12 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
     private $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\DoctrineEntityAnalyzer
+     * @var \Rector\NodeAnalyzer\DoctrineEntityAnalyzer
      */
     private $doctrineEntityAnalyzer;
     public function __construct(ClassAnalyzer $classAnalyzer, FamilyRelationsAnalyzer $familyRelationsAnalyzer, VisibilityManipulator $visibilityManipulator, ReflectionResolver $reflectionResolver, DoctrineEntityAnalyzer $doctrineEntityAnalyzer)

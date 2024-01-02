@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application\Collector;
+namespace Rector\Application\Collector;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
@@ -16,13 +16,13 @@ final class CollectorProcessor
     private $nodeTraverser;
     /**
      * @readonly
-     * @var \Rector\Core\Application\Collector\CollectorNodeVisitor
+     * @var \Rector\Application\Collector\CollectorNodeVisitor
      */
     private $collectorNodeVisitor;
     public function __construct(Registry $collectorRegistry)
     {
         $nodeTraverser = new NodeTraverser();
-        $this->collectorNodeVisitor = new \Rector\Core\Application\Collector\CollectorNodeVisitor($collectorRegistry);
+        $this->collectorNodeVisitor = new \Rector\Application\Collector\CollectorNodeVisitor($collectorRegistry);
         $nodeTraverser->addVisitor($this->collectorNodeVisitor);
         $this->nodeTraverser = $nodeTraverser;
     }

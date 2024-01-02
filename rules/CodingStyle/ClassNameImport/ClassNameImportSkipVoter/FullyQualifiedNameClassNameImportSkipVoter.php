@@ -7,9 +7,9 @@ use RectorPrefix202401\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
-use Rector\Core\ValueObject\Application\File;
+use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\ValueObject\Application\File;
 /**
  * Prevents adding:
  *
@@ -28,7 +28,7 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
     private $shortNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     public function __construct(ShortNameResolver $shortNameResolver, RenamedClassesDataCollector $renamedClassesDataCollector)

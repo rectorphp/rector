@@ -5,7 +5,7 @@ namespace Rector\Naming\AssignVariableNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Exception\NotImplementedYetException;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 /**

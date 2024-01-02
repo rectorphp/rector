@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject\Error;
+namespace Rector\ValueObject\Error;
 
 use Rector\Parallel\ValueObject\BridgeItem;
 use RectorPrefix202401\Symplify\EasyParallel\Contract\SerializableInterface;

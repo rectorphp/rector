@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Rector\AbstractRector;
 use RectorPrefix202401\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use RectorPrefix202401\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Rector;
+namespace Rector\Rector;
 
 use PHPStan\Node\CollectedDataNode;
-use Rector\Core\Contract\Rector\CollectorRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Contract\Rector\CollectorRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use RectorPrefix202401\Webmozart\Assert\Assert;
-abstract class AbstractCollectorRector extends \Rector\Core\Rector\AbstractRector implements CollectorRectorInterface
+abstract class AbstractCollectorRector extends \Rector\Rector\AbstractRector implements CollectorRectorInterface
 {
     /**
      * @var \PHPStan\Node\CollectedDataNode|null

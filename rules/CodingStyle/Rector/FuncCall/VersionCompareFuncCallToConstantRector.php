@@ -17,8 +17,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\PhpVersionFactory;
+use Rector\Rector\AbstractRector;
+use Rector\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -28,7 +28,7 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\Util\PhpVersionFactory
+     * @var \Rector\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
     /**

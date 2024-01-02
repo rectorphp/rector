@@ -12,11 +12,11 @@ use PhpParser\Node\UnionType;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\MethodName;
+use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\ValueObject\MethodName;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -36,12 +36,12 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
     private $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**

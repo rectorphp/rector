@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Style;
+namespace Rector\Console\Style;
 
 use RectorPrefix202401\OndraM\CiDetector\CiDetector;
 use RectorPrefix202401\Symfony\Component\Console\Exception\RuntimeException;

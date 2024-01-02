@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\Printer;
+namespace Rector\PhpParser\Printer;
 
 use RectorPrefix202401\Nette\Utils\Strings;
 use PhpParser\Comment;
@@ -26,10 +26,10 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Node\Expr\AlwaysRememberedExpr;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  *

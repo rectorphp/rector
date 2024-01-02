@@ -13,13 +13,13 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Parser\InlineCodeParser;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Parser\InlineCodeParser;
+use Rector\Rector\AbstractScopeAwareRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,7 +31,7 @@ final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
+     * @var \Rector\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
     /**

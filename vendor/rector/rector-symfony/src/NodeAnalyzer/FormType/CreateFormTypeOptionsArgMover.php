@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\PhpParser\Node\NodeFactory;
 use ReflectionMethod;
 final class CreateFormTypeOptionsArgMover
 {
@@ -20,7 +20,7 @@ final class CreateFormTypeOptionsArgMover
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     public function __construct(ReflectionProvider $reflectionProvider, NodeFactory $nodeFactory)

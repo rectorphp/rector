@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
 use Rector\Renaming\Contract\RenameClassConstFetchInterface;
+use Rector\Validation\RectorAssert;
 final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
 {
     /**

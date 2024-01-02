@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Formatter;
+namespace Rector\Console\Formatter;
 
 use RectorPrefix202401\SebastianBergmann\Diff\Differ;
 use RectorPrefix202401\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
@@ -9,7 +9,7 @@ final class ConsoleDiffer
 {
     /**
      * @readonly
-     * @var \Rector\Core\Console\Formatter\ColorConsoleDiffFormatter
+     * @var \Rector\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;
     /**
@@ -17,7 +17,7 @@ final class ConsoleDiffer
      * @var \SebastianBergmann\Diff\Differ
      */
     private $differ;
-    public function __construct(\Rector\Core\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
+    public function __construct(\Rector\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
     {
         $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;
         // @see https://github.com/sebastianbergmann/diff#strictunifieddiffoutputbuilder

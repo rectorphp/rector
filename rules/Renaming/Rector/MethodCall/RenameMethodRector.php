@@ -15,10 +15,10 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeManipulator\ClassManipulator;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\NodeManipulator\ClassManipulator;
+use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -32,12 +32,12 @@ final class RenameMethodRector extends AbstractScopeAwareRector implements Confi
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
+     * @var \Rector\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**

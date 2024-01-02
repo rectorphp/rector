@@ -6,14 +6,14 @@ namespace Rector\Symfony\NodeAnalyzer\Annotations;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
 use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndAnnotation;
 final class MethodCallAnnotationAssertResolver
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**

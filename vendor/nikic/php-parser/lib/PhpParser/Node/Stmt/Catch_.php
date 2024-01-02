@@ -5,7 +5,7 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 class Catch_ extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Name[] Types of exceptions to catch */

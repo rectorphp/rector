@@ -5,8 +5,8 @@ namespace Rector\DowngradePhp81\Rector\LNumber;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

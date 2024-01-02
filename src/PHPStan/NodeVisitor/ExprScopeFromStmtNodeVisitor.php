@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PHPStan\NodeVisitor;
+namespace Rector\PHPStan\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,9 +14,9 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Node\VirtualNode;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
 {
     /**

@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
+use Rector\Validation\RectorAssert;
 final class StaticCallToMethodCall
 {
     /**

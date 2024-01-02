@@ -12,11 +12,11 @@ use PHPStan\Type\Type;
 use Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer;
 use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
-use Rector\Core\Rector\AbstractRector;
+use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -50,12 +50,12 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
+     * @var \Rector\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
     /**

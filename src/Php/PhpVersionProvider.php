@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Php;
+namespace Rector\Php;
 
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Exception\Configuration\InvalidConfigurationException;
-use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
-use Rector\Core\Util\StringUtils;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Util\StringUtils;
+use Rector\ValueObject\PhpVersion;
 use ReflectionClass;
 /**
  * @see \Rector\Tests\Php\PhpVersionProviderTest
@@ -18,7 +18,7 @@ final class PhpVersionProvider
 {
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
+     * @var \Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
     /**

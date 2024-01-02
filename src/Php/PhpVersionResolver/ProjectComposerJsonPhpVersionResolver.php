@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Php\PhpVersionResolver;
+namespace Rector\Php\PhpVersionResolver;
 
 use RectorPrefix202401\Composer\Semver\VersionParser;
 use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Json;
-use Rector\Core\Util\PhpVersionFactory;
+use Rector\Util\PhpVersionFactory;
 /**
  * @see \Rector\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
  */
@@ -19,7 +19,7 @@ final class ProjectComposerJsonPhpVersionResolver
     private $versionParser;
     /**
      * @readonly
-     * @var \Rector\Core\Util\PhpVersionFactory
+     * @var \Rector\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
     /**

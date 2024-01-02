@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\Printer;
+namespace Rector\PhpParser\Printer;
 
 use PhpParser\Node;
-use Rector\Core\ValueObject\Application\File;
+use Rector\ValueObject\Application\File;
 use RectorPrefix202401\Symfony\Component\Filesystem\Filesystem;
 /**
  * @see \Rector\Tests\PhpParser\Printer\FormatPerservingPrinterTest
@@ -13,7 +13,7 @@ final class FormatPerservingPrinter
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
@@ -21,7 +21,7 @@ final class FormatPerservingPrinter
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, Filesystem $filesystem)
+    public function __construct(\Rector\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, Filesystem $filesystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->filesystem = $filesystem;

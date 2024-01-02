@@ -12,10 +12,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\NodeManipulator\ClassMethodManipulator;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Enum\ObjectReference;
+use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeManipulator\ClassMethodManipulator;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,12 +25,12 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
+     * @var \Rector\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**

@@ -8,12 +8,12 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\PhpParser\Comparing\NodeComparator;
 final class ForeachAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(NodeComparator $nodeComparator)

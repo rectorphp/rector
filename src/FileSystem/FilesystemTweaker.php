@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\FileSystem;
+namespace Rector\FileSystem;
 
 final class FilesystemTweaker
 {

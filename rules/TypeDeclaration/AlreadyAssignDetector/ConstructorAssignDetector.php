@@ -17,12 +17,12 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\ValueObject\MethodName;
+use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
+use Rector\ValueObject\MethodName;
 final class ConstructorAssignDetector
 {
     /**
@@ -47,7 +47,7 @@ final class ConstructorAssignDetector
     private $autowiredClassMethodOrPropertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**

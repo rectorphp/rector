@@ -6,10 +6,10 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
+use Rector\NodeManipulator\ClassDependencyManipulator;
+use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,7 +22,7 @@ final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
+     * @var \Rector\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**

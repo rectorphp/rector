@@ -12,8 +12,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Configuration\RenamedClassesDataCollector;
+use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,7 +38,7 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
     private $phpDocTagRemover;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**

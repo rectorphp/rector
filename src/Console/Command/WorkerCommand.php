@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Command;
+namespace Rector\Console\Command;
 
 use RectorPrefix202401\Clue\React\NDJson\Decoder;
 use RectorPrefix202401\Clue\React\NDJson\Encoder;
@@ -9,14 +9,14 @@ use PHPStan\Collectors\CollectedData;
 use RectorPrefix202401\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202401\React\Socket\ConnectionInterface;
 use RectorPrefix202401\React\Socket\TcpConnector;
-use Rector\Core\Application\ApplicationFileProcessor;
-use Rector\Core\Configuration\ConfigurationFactory;
-use Rector\Core\Console\ProcessConfigureDecorator;
-use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
-use Rector\Core\Util\MemoryLimiter;
-use Rector\Core\ValueObject\Configuration;
-use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Application\ApplicationFileProcessor;
+use Rector\Configuration\ConfigurationFactory;
+use Rector\Console\ProcessConfigureDecorator;
 use Rector\Parallel\ValueObject\Bridge;
+use Rector\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Util\MemoryLimiter;
+use Rector\ValueObject\Configuration;
+use Rector\ValueObject\Error\SystemError;
 use RectorPrefix202401\Symfony\Component\Console\Command\Command;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202401\Symfony\Component\Console\Output\OutputInterface;
@@ -36,22 +36,22 @@ final class WorkerCommand extends Command
 {
     /**
      * @readonly
-     * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
+     * @var \Rector\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     /**
      * @readonly
-     * @var \Rector\Core\Application\ApplicationFileProcessor
+     * @var \Rector\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\Util\MemoryLimiter
+     * @var \Rector\Util\MemoryLimiter
      */
     private $memoryLimiter;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\ConfigurationFactory
+     * @var \Rector\Configuration\ConfigurationFactory
      */
     private $configurationFactory;
     /**

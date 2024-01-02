@@ -6,12 +6,12 @@ namespace Rector\Symfony\NodeFinder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 final class EmptyReturnNodeFinder
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     public function __construct(BetterNodeFinder $betterNodeFinder)

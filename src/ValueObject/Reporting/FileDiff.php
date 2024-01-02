@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject\Reporting;
+namespace Rector\ValueObject\Reporting;
 
 use RectorPrefix202401\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
 use RectorPrefix202401\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202401\Webmozart\Assert\Assert;

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Php;
+namespace Rector\Php;
 
 use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Json;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\ValueObject\PolyfillPackage;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\ValueObject\PolyfillPackage;
 final class PolyfillPackagesProvider
 {
     /**

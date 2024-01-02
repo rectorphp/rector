@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application\Collector;
+namespace Rector\Application\Collector;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

@@ -5,7 +5,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use RectorPrefix202401\Doctrine\Inflector\Inflector;
 use RectorPrefix202401\Nette\Utils\Strings;
-use Rector\Core\Util\StringUtils;
+use Rector\Util\StringUtils;
 /**
  * @see \Rector\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
  */

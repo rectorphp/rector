@@ -1,39 +1,39 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application;
+namespace Rector\Application;
 
 use PHPStan\AnalysedCodeException;
+use Rector\Application\Collector\CollectorProcessor;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use Rector\Core\Application\Collector\CollectorProcessor;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\FilePathHelper;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Core\PhpParser\Parser\RectorParser;
-use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
-use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Configuration;
-use Rector\Core\ValueObject\Error\SystemError;
-use Rector\Core\ValueObject\FileProcessResult;
-use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\FileSystem\FilePathHelper;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\Parser\RectorParser;
+use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\ValueObject\Application\File;
+use Rector\ValueObject\Configuration;
+use Rector\ValueObject\Error\SystemError;
+use Rector\ValueObject\FileProcessResult;
+use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202401\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
+     * @var \Rector\PhpParser\Printer\FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser
+     * @var \Rector\PhpParser\NodeTraverser\RectorNodeTraverser
      */
     private $rectorNodeTraverser;
     /**
@@ -58,12 +58,12 @@ final class FileProcessor
     private $errorFactory;
     /**
      * @readonly
-     * @var \Rector\Core\FileSystem\FilePathHelper
+     * @var \Rector\FileSystem\FilePathHelper
      */
     private $filePathHelper;
     /**
      * @readonly
-     * @var \Rector\Core\Application\Collector\CollectorProcessor
+     * @var \Rector\Application\Collector\CollectorProcessor
      */
     private $collectorProcessor;
     /**
@@ -73,7 +73,7 @@ final class FileProcessor
     private $postFileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Parser\RectorParser
+     * @var \Rector\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
     /**

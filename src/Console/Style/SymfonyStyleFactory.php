@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Style;
+namespace Rector\Console\Style;
 
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202401\Symfony\Component\Console\Application;
 use RectorPrefix202401\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202401\Symfony\Component\Console\Output\ConsoleOutput;
@@ -13,7 +13,7 @@ final class SymfonyStyleFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(PrivatesAccessor $privatesAccessor)
@@ -41,7 +41,7 @@ final class SymfonyStyleFactory
         if ($this->isPHPUnitRun()) {
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
-        return new \Rector\Core\Console\Style\RectorStyle($argvInput, $consoleOutput);
+        return new \Rector\Console\Style\RectorStyle($argvInput, $consoleOutput);
     }
     /**
      * Never ever used static methods if not neccesary, this is just handy for tests + src to prevent duplication.

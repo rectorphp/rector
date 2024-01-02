@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Validation;
+namespace Rector\Validation;
 
-use Rector\Core\Util\StringUtils;
+use Rector\Util\StringUtils;
 use RectorPrefix202401\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Rector\Tests\Validation\RectorAssertTest

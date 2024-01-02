@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject;
+namespace Rector\ValueObject;
 
 use PHPStan\Collectors\CollectedData;
-use Rector\Core\ValueObject\Error\SystemError;
-use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\ValueObject\Error\SystemError;
+use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 final class FileProcessResult
 {
@@ -16,7 +16,7 @@ final class FileProcessResult
     private $systemErrors;
     /**
      * @readonly
-     * @var \Rector\Core\ValueObject\Reporting\FileDiff|null
+     * @var \Rector\ValueObject\Reporting\FileDiff|null
      */
     private $fileDiff;
     /**

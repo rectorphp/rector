@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application;
+namespace Rector\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -21,8 +21,8 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\MutatingScope;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
@@ -36,7 +36,7 @@ final class ChangedNodeScopeRefresher
     private $phpStanNodeScopeResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer
+     * @var \Rector\NodeAnalyzer\ScopeAnalyzer
      */
     private $scopeAnalyzer;
     public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer)

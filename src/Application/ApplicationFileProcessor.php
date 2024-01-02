@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application;
+namespace Rector\Application;
 
 use RectorPrefix202401\Nette\Utils\FileSystem as UtilsFileSystem;
 use PHPStan\Collectors\CollectedData;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\Util\ArrayParametersMerger;
-use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Configuration;
-use Rector\Core\ValueObject\Error\SystemError;
-use Rector\Core\ValueObject\FileProcessResult;
-use Rector\Core\ValueObject\ProcessResult;
-use Rector\Core\ValueObject\Reporting\FileDiff;
-use Rector\Core\ValueObjectFactory\Application\FileFactory;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Parallel\Application\ParallelFileProcessor;
+use Rector\Provider\CurrentFileProvider;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Util\ArrayParametersMerger;
+use Rector\ValueObject\Application\File;
+use Rector\ValueObject\Configuration;
+use Rector\ValueObject\Error\SystemError;
+use Rector\ValueObject\FileProcessResult;
+use Rector\ValueObject\ProcessResult;
+use Rector\ValueObject\Reporting\FileDiff;
+use Rector\ValueObjectFactory\Application\FileFactory;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202401\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202401\Symplify\EasyParallel\CpuCoreCountProvider;
@@ -34,7 +34,7 @@ final class ApplicationFileProcessor
     private $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
+     * @var \Rector\ValueObjectFactory\Application\FileFactory
      */
     private $fileFactory;
     /**
@@ -59,17 +59,17 @@ final class ApplicationFileProcessor
     private $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
+     * @var \Rector\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Core\Application\FileProcessor
+     * @var \Rector\Application\FileProcessor
      */
     private $fileProcessor;
     /**
      * @readonly
-     * @var \Rector\Core\Util\ArrayParametersMerger
+     * @var \Rector\Util\ArrayParametersMerger
      */
     private $arrayParametersMerger;
     /**
@@ -80,7 +80,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;

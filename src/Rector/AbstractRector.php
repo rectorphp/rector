@@ -1,30 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Rector;
+namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\InlineHTML;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Core\Application\ChangedNodeScopeRefresher;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\ValueObject\Application\File;
+use Rector\Contract\Rector\RectorInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeDecorator\CreatedByRuleDecorator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\Comparing\NodeComparator;
+use Rector\PhpParser\Node\NodeFactory;
+use Rector\Provider\CurrentFileProvider;
 use Rector\Skipper\Skipper\Skipper;
+use Rector\ValueObject\Application\File;
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
@@ -50,15 +54,15 @@ CODE_SAMPLE;
      */
     protected $nodeTypeResolver;
     /**
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
     protected $nodeFactory;
     /**
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
     protected $nodeComparator;
     /**
-     * @var \Rector\Core\ValueObject\Application\File
+     * @var \Rector\ValueObject\Application\File
      */
     protected $file;
     /**
@@ -66,7 +70,7 @@ CODE_SAMPLE;
      */
     protected $skipper;
     /**
-     * @var \Rector\Core\Application\ChangedNodeScopeRefresher
+     * @var \Rector\Application\ChangedNodeScopeRefresher
      */
     private $changedNodeScopeRefresher;
     /**
@@ -74,7 +78,7 @@ CODE_SAMPLE;
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var \Rector\Core\Provider\CurrentFileProvider
+     * @var \Rector\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
@@ -82,7 +86,7 @@ CODE_SAMPLE;
      */
     private $nodesToReturn = [];
     /**
-     * @var \Rector\Core\NodeDecorator\CreatedByRuleDecorator
+     * @var \Rector\NodeDecorator\CreatedByRuleDecorator
      */
     private $createdByRuleDecorator;
     /**
@@ -187,6 +191,21 @@ CODE_SAMPLE;
     {
         return $this->nodeNameResolver->isNames($node, $names);
     }
+    /**
+     * Some nodes have always-known string name. This makes PHPStan smarter.
+     * @see https://phpstan.org/writing-php-code/phpdoc-types#conditional-return-types
+     *
+     * @return ($node is Node\Param ? string :
+     *  ($node is Node\Stmt\ClassMethod ? string :
+     *  ($node is Node\Stmt\Property ? string :
+     *  ($node is Node\Stmt\PropertyProperty ? string :
+     *  ($node is Trait_ ? string :
+     *  ($node is Interface_ ? string :
+     *  ($node is Const_ ? string :
+     *  ($node is Node\Const_ ? string :
+     *  ($node is Name ? string :
+     *      string|null )))))))))
+     */
     protected function getName(Node $node) : ?string
     {
         return $this->nodeNameResolver->getName($node);

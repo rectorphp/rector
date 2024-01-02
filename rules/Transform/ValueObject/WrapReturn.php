@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
+use Rector\Validation\RectorAssert;
 final class WrapReturn
 {
     /**

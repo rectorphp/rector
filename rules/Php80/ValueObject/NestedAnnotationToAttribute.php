@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php80\ValueObject;
 
-use Rector\Core\Validation\RectorAssert;
 use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
+use Rector\Validation\RectorAssert;
 final class NestedAnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**

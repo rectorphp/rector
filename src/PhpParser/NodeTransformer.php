@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser;
+namespace Rector\PhpParser;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
@@ -13,10 +13,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\StringUtils;
-use Rector\Core\ValueObject\SprintfStringAndArgs;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Util\StringUtils;
+use Rector\ValueObject\SprintfStringAndArgs;
 /**
  * @api used in phpunit
  */

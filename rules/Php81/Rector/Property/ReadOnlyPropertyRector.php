@@ -15,16 +15,16 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
-use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Core\ValueObject\Visibility;
+use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\NodeManipulator\PropertyFetchAssignManipulator;
+use Rector\NodeManipulator\PropertyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use Rector\Rector\AbstractScopeAwareRector;
+use Rector\ValueObject\MethodName;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\Visibility;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,17 +37,17 @@ final class ReadOnlyPropertyRector extends AbstractScopeAwareRector implements M
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     * @var \Rector\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\PropertyFetchAssignManipulator
+     * @var \Rector\NodeManipulator\PropertyFetchAssignManipulator
      */
     private $propertyFetchAssignManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
@@ -57,7 +57,7 @@ final class ReadOnlyPropertyRector extends AbstractScopeAwareRector implements M
     private $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator, BetterNodeFinder $betterNodeFinder)

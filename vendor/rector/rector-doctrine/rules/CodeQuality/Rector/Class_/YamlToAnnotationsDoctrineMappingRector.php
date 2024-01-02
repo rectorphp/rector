@@ -5,12 +5,12 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\YamlToAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\EntityMappingResolver;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202401\Webmozart\Assert\Assert;

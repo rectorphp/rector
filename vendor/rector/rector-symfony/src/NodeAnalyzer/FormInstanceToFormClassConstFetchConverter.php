@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PhpParser\Node\NodeFactory;
 use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
 use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 use ReflectionMethod;
@@ -23,7 +23,7 @@ final class FormInstanceToFormClassConstFetchConverter
     private $createFormTypeOptionsArgMover;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**

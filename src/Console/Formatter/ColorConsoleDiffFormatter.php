@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Formatter;
+namespace Rector\Console\Formatter;
 
 use RectorPrefix202401\Nette\Utils\Strings;
 use RectorPrefix202401\Symfony\Component\Console\Formatter\OutputFormatter;

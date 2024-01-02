@@ -16,12 +16,12 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeAnalyzer\BinaryOpAnalyzer;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\FuncCallAndExpr;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Core\ValueObject\PolyfillPackage;
+use Rector\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\FuncCallAndExpr;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,12 +35,12 @@ final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInt
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\BinaryOpAnalyzer
+     * @var \Rector\NodeAnalyzer\BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer, ValueResolver $valueResolver)

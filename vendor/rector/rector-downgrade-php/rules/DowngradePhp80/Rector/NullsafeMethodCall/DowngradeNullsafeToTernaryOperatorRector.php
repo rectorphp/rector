@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\Application\File;
+use Rector\Provider\CurrentFileProvider;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\Application\File;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,7 +23,7 @@ final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
+     * @var \Rector\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**

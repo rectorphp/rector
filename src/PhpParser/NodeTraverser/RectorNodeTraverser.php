@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\NodeTraverser;
+namespace Rector\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PHPStan\Node\CollectedDataNode;
-use Rector\Core\Contract\Rector\CollectorRectorInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\ValueObject\Configuration;
+use Rector\Contract\Rector\CollectorRectorInterface;
+use Rector\Contract\Rector\RectorInterface;
+use Rector\ValueObject\Configuration;
 use Rector\VersionBonding\PhpVersionedFilter;
 final class RectorNodeTraverser extends NodeTraverser
 {

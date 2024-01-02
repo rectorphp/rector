@@ -276,7 +276,7 @@ function _checkTypehint(callable $callback, $object)
     }
     $expectedException = $parameters[0];
     // PHP before v8 used an easy API:
-    if (\PHP_VERSION_ID < 70100 || \defined('RectorPrefix202401\\HHVM_VERSION')) {
+    if (\PHP_VERSION_ID < 70100 || \defined('HHVM_VERSION')) {
         if (!$expectedException->getClass()) {
             return \true;
         }

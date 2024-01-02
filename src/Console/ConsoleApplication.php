@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console;
+namespace Rector\Console;
 
 use RectorPrefix202401\Composer\XdebugHandler\XdebugHandler;
+use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Application\VersionResolver;
-use Rector\Core\Configuration\Option;
+use Rector\Configuration\Option;
 use RectorPrefix202401\Symfony\Component\Console\Application;
 use RectorPrefix202401\Symfony\Component\Console\Command\Command;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputDefinition;

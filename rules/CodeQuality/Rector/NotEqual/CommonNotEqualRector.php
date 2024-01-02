@@ -5,8 +5,8 @@ namespace Rector\CodeQuality\Rector\NotEqual;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

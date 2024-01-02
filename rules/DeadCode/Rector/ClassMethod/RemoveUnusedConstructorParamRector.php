@@ -6,10 +6,10 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
+use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\Rector\AbstractRector;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,7 +19,7 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**

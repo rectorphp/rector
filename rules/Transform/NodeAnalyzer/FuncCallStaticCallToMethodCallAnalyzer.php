@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PhpParser\Node\NodeFactory;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
@@ -37,7 +37,7 @@ final class FuncCallStaticCallToMethodCallAnalyzer
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
@@ -47,7 +47,7 @@ final class FuncCallStaticCallToMethodCallAnalyzer
     private $propertyFetchFactory;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
+     * @var \Rector\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     public function __construct(TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, PropertyNaming $propertyNaming, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory, PropertyFetchFactory $propertyFetchFactory, ClassDependencyManipulator $classDependencyManipulator)

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\FileSystem;
+namespace Rector\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
-use Rector\Core\Util\StringUtils;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+use Rector\Util\StringUtils;
 use RectorPrefix202401\Symfony\Component\Finder\Finder;
 use RectorPrefix202401\Symfony\Component\Finder\SplFileInfo;
 /**
@@ -15,7 +15,7 @@ final class FilesFinder
 {
     /**
      * @readonly
-     * @var \Rector\Core\FileSystem\FilesystemTweaker
+     * @var \Rector\FileSystem\FilesystemTweaker
      */
     private $filesystemTweaker;
     /**
@@ -30,10 +30,10 @@ final class FilesFinder
     private $unchangedFilesFilter;
     /**
      * @readonly
-     * @var \Rector\Core\FileSystem\FileAndDirectoryFilter
+     * @var \Rector\FileSystem\FileAndDirectoryFilter
      */
     private $fileAndDirectoryFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter, \Rector\Core\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter)
+    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->skippedPathsResolver = $skippedPathsResolver;

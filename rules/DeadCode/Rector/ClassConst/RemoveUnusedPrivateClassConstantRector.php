@@ -8,9 +8,9 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\NodeManipulator\ClassConstManipulator;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeManipulator\ClassConstManipulator;
+use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,12 +20,12 @@ final class RemoveUnusedPrivateClassConstantRector extends AbstractScopeAwareRec
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassConstManipulator
+     * @var \Rector\NodeManipulator\ClassConstManipulator
      */
     private $classConstManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     public function __construct(ClassConstManipulator $classConstManipulator, ReflectionResolver $reflectionResolver)

@@ -115,7 +115,7 @@ class Command
         if ($class !== $r->class || null === static::$defaultName) {
             return null;
         }
-        // \trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
         return static::$defaultName;
     }
     public static function getDefaultDescription() : ?string
@@ -129,7 +129,7 @@ class Command
         if ($class !== $r->class || null === static::$defaultDescription) {
             return null;
         }
-        // \trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultDescription" for setting a command description is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
+        trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultDescription" for setting a command description is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
         return static::$defaultDescription;
     }
     /**
@@ -173,7 +173,7 @@ class Command
     public function setApplication(Application $application = null)
     {
         if (1 > \func_num_args()) {
-            // \trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+            trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
         }
         $this->application = $application;
         if ($application) {
@@ -305,8 +305,8 @@ class Command
                         \cli_set_process_title($this->processTitle);
                     }
                 }
-            } elseif (\function_exists('RectorPrefix202401\\setproctitle')) {
-                setproctitle($this->processTitle);
+            } elseif (\function_exists('setproctitle')) {
+                \setproctitle($this->processTitle);
             } elseif (OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');
             }

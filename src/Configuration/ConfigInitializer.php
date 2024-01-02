@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Configuration;
+namespace Rector\Configuration;
 
 use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Strings;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\FileSystem\InitFilePathsResolver;
-use Rector\Core\Php\PhpVersionProvider;
+use Rector\Contract\Rector\RectorInterface;
+use Rector\FileSystem\InitFilePathsResolver;
+use Rector\Php\PhpVersionProvider;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix202401\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConfigInitializer
@@ -19,7 +19,7 @@ final class ConfigInitializer
     private $rectors;
     /**
      * @readonly
-     * @var \Rector\Core\FileSystem\InitFilePathsResolver
+     * @var \Rector\FileSystem\InitFilePathsResolver
      */
     private $initFilePathsResolver;
     /**
@@ -29,7 +29,7 @@ final class ConfigInitializer
     private $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
+     * @var \Rector\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**

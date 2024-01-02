@@ -11,13 +11,13 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     public function __construct(ReflectionResolver $reflectionResolver)

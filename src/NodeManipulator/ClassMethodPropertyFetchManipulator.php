@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeManipulator;
+namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -30,10 +30,10 @@ final class ClassMethodPropertyFetchManipulator
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
+     * @var \Rector\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, \Rector\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;

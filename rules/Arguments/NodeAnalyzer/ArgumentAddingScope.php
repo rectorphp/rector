@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue;
-use Rector\Core\Enum\ObjectReference;
+use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ArgumentAddingScope
 {

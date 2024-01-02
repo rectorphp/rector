@@ -5,8 +5,8 @@ namespace Rector\Php74\Guard;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
-use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\NodeAnalyzer\PropertyAnalyzer;
+use Rector\NodeManipulator\PropertyManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 final class PropertyTypeChangeGuard
@@ -18,12 +18,12 @@ final class PropertyTypeChangeGuard
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
+     * @var \Rector\NodeAnalyzer\PropertyAnalyzer
      */
     private $propertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     * @var \Rector\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\DependencyInjection\Laravel;
+namespace Rector\DependencyInjection\Laravel;
 
 use RectorPrefix202401\Illuminate\Container\Container;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Util\Reflection\PrivatesAccessor;
 /**
  * Helper service to modify Laravel container
  */

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Formatter;
+namespace Rector\Console\Formatter;
 
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202401\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 /**
  * @api
@@ -13,7 +13,7 @@ final class CompleteUnifiedDiffOutputBuilderFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(PrivatesAccessor $privatesAccessor)

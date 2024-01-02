@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
-use Rector\Core\ValueObject\Visibility;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\ValueObject\Visibility;
 final class ClassFromEnumFactory
 {
     /**

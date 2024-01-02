@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\FileSystem;
+namespace Rector\FileSystem;
 
 use RectorPrefix202401\Symfony\Component\Finder\Finder;
 use RectorPrefix202401\Symfony\Component\Finder\SplFileInfo;

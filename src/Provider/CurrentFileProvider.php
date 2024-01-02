@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Provider;
+namespace Rector\Provider;
 
-use Rector\Core\ValueObject\Application\File;
+use Rector\ValueObject\Application\File;
 final class CurrentFileProvider
 {
     /**
-     * @var \Rector\Core\ValueObject\Application\File|null
+     * @var \Rector\ValueObject\Application\File|null
      */
     private $file;
     public function setFile(File $file) : void

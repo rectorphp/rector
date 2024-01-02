@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\Comparing;
+namespace Rector\PhpParser\Comparing;
 
 use PhpParser\Node;
 use Rector\Comments\CommentRemover;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 final class NodeComparator
 {
     /**
@@ -15,7 +15,7 @@ final class NodeComparator
     private $commentRemover;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     public function __construct(CommentRemover $commentRemover, BetterStandardPrinter $betterStandardPrinter)

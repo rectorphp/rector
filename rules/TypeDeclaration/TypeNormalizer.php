@@ -10,8 +10,8 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
+use Rector\Util\Reflection\PrivatesAccessor;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -19,7 +19,7 @@ final class TypeNormalizer
 {
     /**
      * @readonly
-     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     * @var \Rector\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**

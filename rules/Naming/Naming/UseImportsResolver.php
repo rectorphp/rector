@@ -8,14 +8,14 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\ValueObject\Application\File;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Provider\CurrentFileProvider;
+use Rector\ValueObject\Application\File;
 final class UseImportsResolver
 {
     /**
      * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
+     * @var \Rector\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(CurrentFileProvider $currentFileProvider)
@@ -57,7 +57,7 @@ final class UseImportsResolver
         return $use instanceof GroupUse ? $use->prefix . '\\' : '';
     }
     /**
-     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|null
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|null
      */
     private function resolveNamespace()
     {

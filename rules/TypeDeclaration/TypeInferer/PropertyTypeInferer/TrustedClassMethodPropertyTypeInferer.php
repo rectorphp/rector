@@ -21,8 +21,8 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
+use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -40,7 +40,7 @@ final class TrustedClassMethodPropertyTypeInferer
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator
+     * @var \Rector\NodeManipulator\ClassMethodPropertyFetchManipulator
      */
     private $classMethodPropertyFetchManipulator;
     /**
@@ -75,7 +75,7 @@ final class TrustedClassMethodPropertyTypeInferer
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**

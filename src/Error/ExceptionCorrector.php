@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Error;
+namespace Rector\Error;
 
 use PHPStan\AnalysedCodeException;
 final class ExceptionCorrector

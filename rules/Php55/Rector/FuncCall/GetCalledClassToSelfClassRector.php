@@ -6,11 +6,11 @@ namespace Rector\Php55\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ClassModifierChecker;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Rector\AbstractRector;
+use Rector\Reflection\ClassModifierChecker;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,7 +23,7 @@ final class GetCalledClassToSelfClassRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ClassModifierChecker
+     * @var \Rector\Reflection\ClassModifierChecker
      */
     private $classModifierChecker;
     public function __construct(ClassModifierChecker $classModifierChecker)

@@ -10,11 +10,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\Core\NodeManipulator\ClassMethodManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator;
+use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\NodeManipulator\ClassMethodManipulator;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,7 +24,7 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
+     * @var \Rector\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;
     /**
@@ -34,7 +34,7 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
     private $controllerClassMethodManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**

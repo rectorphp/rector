@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console;
+namespace Rector\Console;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Option;
+use Rector\Configuration\Option;
 use RectorPrefix202401\Symfony\Component\Console\Command\Command;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputOption;

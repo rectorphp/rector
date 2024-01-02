@@ -5,9 +5,9 @@ namespace Rector\PHPUnit\NodeAnalyzer;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\ValueObject\MethodName;
+use Rector\PhpParser\AstResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\ValueObject\MethodName;
 /**
  * Decorate setUp() and tearDown() with "void" when local TestClass class uses them
  */
@@ -15,7 +15,7 @@ final class SetUpMethodDecorator
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
+     * @var \Rector\PhpParser\AstResolver
      */
     private $astResolver;
     public function __construct(AstResolver $astResolver)

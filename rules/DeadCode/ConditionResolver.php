@@ -10,13 +10,13 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Util\PhpVersionFactory;
 use Rector\DeadCode\Contract\ConditionInterface;
 use Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition;
 use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php\PhpVersionProvider;
+use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Util\PhpVersionFactory;
 final class ConditionResolver
 {
     /**
@@ -26,17 +26,17 @@ final class ConditionResolver
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
+     * @var \Rector\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Util\PhpVersionFactory
+     * @var \Rector\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
     public function __construct(NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, ValueResolver $valueResolver, PhpVersionFactory $phpVersionFactory)

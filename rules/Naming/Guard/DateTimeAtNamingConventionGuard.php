@@ -5,10 +5,10 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Util\StringUtils;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\Util\StringUtils;
 final class DateTimeAtNamingConventionGuard
 {
     /**

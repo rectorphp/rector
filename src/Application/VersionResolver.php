@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Application;
+namespace Rector\Application;
 
 use DateTime;
-use Rector\Core\Exception\VersionException;
+use Rector\Exception\VersionException;
 /**
  * @api
  *
@@ -19,12 +19,12 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const PACKAGE_VERSION = '9f937086898498f37d71977895312cbdb7fdbc6a';
+    public const PACKAGE_VERSION = '476cfb00cb6a94cb64badf9472ee78f33bdf44b3';
     /**
      * @api
      * @var string
      */
-    public const RELEASE_DATE = '2024-01-01 14:24:13';
+    public const RELEASE_DATE = '2024-01-02 02:38:22';
     /**
      * @var int
      */

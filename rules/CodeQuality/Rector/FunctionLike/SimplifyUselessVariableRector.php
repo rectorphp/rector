@@ -13,12 +13,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\NodeAnalyzer\CallAnalyzer;
-use Rector\Core\NodeAnalyzer\VariableAnalyzer;
-use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\AssignAndBinaryMap;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -28,17 +28,17 @@ final class SimplifyUselessVariableRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
+     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
+     * @var \Rector\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     * @var \Rector\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
     /**

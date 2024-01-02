@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Rector;
+namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Contract\Rector\ScopeAwareRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Contract\Rector\ScopeAwareRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwareRectorInterface
+abstract class AbstractScopeAwareRector extends \Rector\Rector\AbstractRector implements ScopeAwareRectorInterface
 {
     /**
      * Process Node of matched type with its PHPStan scope

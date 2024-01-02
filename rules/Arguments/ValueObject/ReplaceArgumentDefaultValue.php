@@ -5,7 +5,7 @@ namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
-use Rector\Core\Validation\RectorAssert;
+use Rector\Validation\RectorAssert;
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**

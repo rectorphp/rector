@@ -17,9 +17,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php\PhpVersionProvider;
+use Rector\PhpParser\Node\NodeFactory;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 use Rector\Symfony\Contract\Tag\TagInterface;
@@ -28,11 +27,12 @@ use Rector\Symfony\ValueObject\EventReferenceToMethodNameWithPriority;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
+use Rector\ValueObject\PhpVersionFeature;
 final class GetSubscribedEventsClassMethodFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
@@ -42,7 +42,7 @@ final class GetSubscribedEventsClassMethodFactory
     private $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
+     * @var \Rector\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**

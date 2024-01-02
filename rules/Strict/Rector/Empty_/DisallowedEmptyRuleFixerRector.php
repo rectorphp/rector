@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Strict\NodeAnalyzer\UnitializedPropertyAnalyzer;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
@@ -31,7 +31,7 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
     private $exactCompareFactory;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
     /**
@@ -102,6 +102,9 @@ CODE_SAMPLE
         }
         $emptyExprType = $scope->getNativeType($empty->expr);
         $result = $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
+        if (!$result instanceof Expr) {
+            return null;
+        }
         if ($this->unitializedPropertyAnalyzer->isUnitialized($empty->expr)) {
             return new BooleanAnd(new Isset_([$empty->expr]), $result);
         }
@@ -114,6 +117,9 @@ CODE_SAMPLE
         }
         $exprType = $scope->getNativeType($empty->expr);
         $result = $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
+        if (!$result instanceof Expr) {
+            return null;
+        }
         if ($this->unitializedPropertyAnalyzer->isUnitialized($empty->expr)) {
             return new BooleanOr(new BooleanNot(new Isset_([$empty->expr])), $result);
         }

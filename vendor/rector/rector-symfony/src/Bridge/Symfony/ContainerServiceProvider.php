@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Bridge\Symfony;
 
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Exception\ShouldNotHappenException;
 use RectorPrefix202401\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 final class ContainerServiceProvider

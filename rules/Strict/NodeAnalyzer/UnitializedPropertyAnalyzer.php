@@ -5,7 +5,6 @@ namespace Rector\Strict\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ThisType;
@@ -45,7 +44,7 @@ final class UnitializedPropertyAnalyzer
     }
     public function isUnitialized(Expr $expr) : bool
     {
-        if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
         $varType = $this->nodeTypeResolver->getType($expr->var);

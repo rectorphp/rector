@@ -157,7 +157,7 @@ dump_node($node, 1);
 
 * Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), built on technology called an *abstract syntax tree* (AST). An AST doesn't know about spaces and when written to a file it produces poorly formatted code in both PHP and docblock annotations.
 
-* Rector in parallel mode will work most of the times for most OS. On Windows, you may encounter issues unresolvable despite of following the [Troubleshooting Parallel](https://getrector.com/documentation/troubleshooting-parallel) guide. In such case, check if you are using Powershell 7 (pwsh). Change your terminal to command prompt (cmd) or bash for Windows. 
+* Rector in parallel mode will work most of the times for most OS. On Windows, you may encounter issues unresolvable despite of following the [Troubleshooting Parallel](https://getrector.com/documentation/troubleshooting-parallel) guide. In such case, check if you are using Powershell 7 (pwsh). Change your terminal to command prompt (cmd) or bash for Windows.
 
 ### How to Apply Coding Standards?
 

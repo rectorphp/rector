@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\DependencyInjection;
+namespace Rector\DependencyInjection;
 
 use RectorPrefix202401\Illuminate\Container\Container;
+use Rector\Autoloading\BootstrapFilesIncluder;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
+use Rector\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {
     public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : Container
@@ -28,7 +28,7 @@ final class RectorContainerFactory
      */
     private function createFromConfigs(array $configFiles) : Container
     {
-        $lazyContainerFactory = new \Rector\Core\DependencyInjection\LazyContainerFactory();
+        $lazyContainerFactory = new \Rector\DependencyInjection\LazyContainerFactory();
         $container = $lazyContainerFactory->create();
         foreach ($configFiles as $configFile) {
             $container->import($configFile);

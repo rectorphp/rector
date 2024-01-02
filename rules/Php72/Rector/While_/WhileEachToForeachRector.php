@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
-use Rector\Core\NodeManipulator\AssignManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeManipulator\AssignManipulator;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +25,7 @@ final class WhileEachToForeachRector extends AbstractRector implements MinPhpVer
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\AssignManipulator
+     * @var \Rector\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     public function __construct(AssignManipulator $assignManipulator)

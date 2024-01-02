@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Autoloading;
+namespace Rector\Autoloading;
 
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use RectorPrefix202401\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
@@ -15,7 +15,7 @@ final class AdditionalAutoloader
 {
     /**
      * @readonly
-     * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
+     * @var \Rector\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)

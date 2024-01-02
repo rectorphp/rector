@@ -8,12 +8,12 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 final class ComplexNewAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
     public function __construct(ExprAnalyzer $exprAnalyzer)

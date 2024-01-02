@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Console\Command;
+namespace Rector\Console\Command;
 
 use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Strings;

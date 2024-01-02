@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ValueObject\Bootstrap;
+namespace Rector\ValueObject\Bootstrap;
 
 final class BootstrapConfigs
 {

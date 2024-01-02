@@ -6,7 +6,6 @@ namespace RectorPrefix202401;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertContainsRector;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertInternalTypeRector;
@@ -15,6 +14,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Rector\ValueObject\MethodName;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([SpecificAssertInternalTypeRector::class, AssertEqualsParameterToSpecificMethodsTypeRector::class, SpecificAssertContainsRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [

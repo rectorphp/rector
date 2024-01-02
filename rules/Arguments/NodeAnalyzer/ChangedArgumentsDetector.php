@@ -6,14 +6,14 @@ namespace Rector\Arguments\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ChangedArgumentsDetector
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**

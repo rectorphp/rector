@@ -1,16 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser\NodeTraverser;
+namespace Rector\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
 {
     /**
      * @template TNode as Node
+     *
      * @param TNode[] $nodes
      * @return TNode[]|FileWithoutNamespace[]
      */

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\PhpParser;
+namespace Rector\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -27,14 +27,14 @@ use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Reflection\MethodReflectionResolver;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Reflection\MethodReflectionResolver;
+use Rector\ValueObject\MethodName;
 use Throwable;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
@@ -74,12 +74,12 @@ final class AstResolver
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\MethodReflectionResolver
+     * @var \Rector\Reflection\MethodReflectionResolver
      */
     private $methodReflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**

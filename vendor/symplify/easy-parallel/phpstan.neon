@@ -6,13 +6,8 @@ parameters:
         - tests
 
     excludePaths:
-        - '*/tests/**/Source/*'
-        - '*/tests/**/Fixture/*'
-
-    unused_public:
-        methods: true
-        properties: true
-        constants: true
+        - '*/Source/*'
+        - '*/Fixture/*'
 
     ignoreErrors:
         -

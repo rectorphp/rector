@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\ProcessAnalyzer;
+namespace Rector\ProcessAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * This service verify if the Node:

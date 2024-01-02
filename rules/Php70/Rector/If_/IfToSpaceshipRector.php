@@ -12,13 +12,13 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Php70\Enum\BattleshipCompareOrder;
 use Rector\Php70\NodeAnalyzer\BattleshipTernaryAnalyzer;
 use Rector\Php70\ValueObject\ComparedExprs;
+use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,7 +36,7 @@ final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionI
     private $battleshipTernaryAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     public function __construct(BattleshipTernaryAnalyzer $battleshipTernaryAnalyzer, ValueResolver $valueResolver)

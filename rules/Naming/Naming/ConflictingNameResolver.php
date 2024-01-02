@@ -8,10 +8,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\NodeManipulator\FunctionLikeManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
+use Rector\NodeManipulator\FunctionLikeManipulator;
+use Rector\PhpParser\Node\BetterNodeFinder;
 final class ConflictingNameResolver
 {
     /**
@@ -21,7 +21,7 @@ final class ConflictingNameResolver
     private $arrayFilter;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
@@ -36,7 +36,7 @@ final class ConflictingNameResolver
     private $matchParamTypeExpectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
+     * @var \Rector\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;
     /**

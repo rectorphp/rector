@@ -9,11 +9,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
-use Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ClassModifierChecker;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
+use Rector\Rector\AbstractRector;
+use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,12 +35,12 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
     private $classMethodReturnVendorLockResolver;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer
+     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
      */
     private $magicClassMethodAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ClassModifierChecker
+     * @var \Rector\Reflection\ClassModifierChecker
      */
     private $classModifierChecker;
     public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer, ClassModifierChecker $classModifierChecker)

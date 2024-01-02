@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Contract\PhpParser\Node;
+namespace Rector\Contract\PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;

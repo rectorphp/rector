@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeAnalyzer\CompactFuncCallAnalyzer;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 final class ExprUsedInNodeAnalyzer
 {
     /**
@@ -18,12 +18,12 @@ final class ExprUsedInNodeAnalyzer
     private $usedVariableNameAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer
+     * @var \Rector\NodeAnalyzer\CompactFuncCallAnalyzer
      */
     private $compactFuncCallAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     public function __construct(\Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, CompactFuncCallAnalyzer $compactFuncCallAnalyzer, BetterStandardPrinter $betterStandardPrinter)

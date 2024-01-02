@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Exception;
+namespace Rector\Exception;
 
 use Exception;
 final class VersionException extends Exception

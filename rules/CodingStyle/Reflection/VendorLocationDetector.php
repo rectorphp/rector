@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Reflection;
 
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\FileSystem\FilePathHelper;
+use Rector\FileSystem\FilePathHelper;
 final class VendorLocationDetector
 {
     /**
      * @readonly
-     * @var \Rector\Core\FileSystem\FilePathHelper
+     * @var \Rector\FileSystem\FilePathHelper
      */
     private $filePathHelper;
     public function __construct(FilePathHelper $filePathHelper)

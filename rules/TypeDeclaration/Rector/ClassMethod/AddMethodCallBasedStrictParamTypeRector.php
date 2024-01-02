@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
-use Rector\Core\Rector\AbstractRector;
+use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
+use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,7 +32,7 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
     private $classMethodParamTypeCompleter;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder
+     * @var \Rector\PhpParser\NodeFinder\LocalMethodCallFinder
      */
     private $localMethodCallFinder;
     /**

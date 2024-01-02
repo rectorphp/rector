@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace RectorPrefix202401;
 
 use RectorPrefix202401\Nette\Utils\Json;
+use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
-use Rector\Core\Bootstrap\RectorConfigsResolver;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Style\SymfonyStyleFactory;
-use Rector\Core\DependencyInjection\LazyContainerFactory;
-use Rector\Core\DependencyInjection\RectorContainerFactory;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Configuration\Option;
+use Rector\Console\Style\SymfonyStyleFactory;
+use Rector\DependencyInjection\LazyContainerFactory;
+use Rector\DependencyInjection\RectorContainerFactory;
+use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202401\Symfony\Component\Console\Application;
 use RectorPrefix202401\Symfony\Component\Console\Command\Command;
 use RectorPrefix202401\Symfony\Component\Console\Input\ArgvInput;
@@ -93,6 +93,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
+\class_alias('RectorPrefix202401\\AutoloadIncluder', 'AutoloadIncluder', \false);
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }

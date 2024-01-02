@@ -12,12 +12,12 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\Reflection\ClassModifierChecker;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,7 +36,7 @@ final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements Mi
     private $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
@@ -46,7 +46,7 @@ final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements Mi
     private $neverFuncCallAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ClassModifierChecker
+     * @var \Rector\Reflection\ClassModifierChecker
      */
     private $classModifierChecker;
     public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, BetterNodeFinder $betterNodeFinder, NeverFuncCallAnalyzer $neverFuncCallAnalyzer, ClassModifierChecker $classModifierChecker)

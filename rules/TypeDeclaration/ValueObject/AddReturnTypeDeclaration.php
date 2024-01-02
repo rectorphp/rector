@@ -5,7 +5,7 @@ namespace Rector\TypeDeclaration\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Core\Validation\RectorAssert;
+use Rector\Validation\RectorAssert;
 /**
  * @api
  */

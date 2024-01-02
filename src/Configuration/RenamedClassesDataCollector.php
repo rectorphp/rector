@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\Configuration;
+namespace Rector\Configuration;
 
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\DependencyInjection\ResetableInterface;
+use Rector\Contract\DependencyInjection\ResetableInterface;
 final class RenamedClassesDataCollector implements ResetableInterface
 {
     /**

@@ -8,14 +8,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
+use Rector\PhpParser\Comparing\NodeComparator;
 final class JustPropertyFetchVariableAssignMatcher
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(NodeComparator $nodeComparator)

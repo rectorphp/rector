@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Symfony\ApplicationMetadata;
 
-use Rector\Core\Util\StringUtils;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
+use Rector\Util\StringUtils;
 final class ListenerServiceDefinitionProvider
 {
     /**
