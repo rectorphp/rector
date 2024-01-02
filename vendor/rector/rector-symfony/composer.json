@@ -17,6 +17,7 @@
         "rector\/rector-src": "dev-main",
         "symfony\/config": "^6.3",
         "symfony\/dependency-injection": "^6.3",
+        "symfony\/http-kernel": "~6.2.0",
         "symfony\/routing": "^6.2",
         "symfony\/security-core": "^6.2",
         "symfony\/security-http": "^6.1",
