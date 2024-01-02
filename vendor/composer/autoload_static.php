@@ -9,7 +9,6 @@ class ComposerStaticInit2fdc7c7f797f8932ea301a2c0d66580a
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
     );
 
@@ -1417,7 +1416,6 @@ class ComposerStaticInit2fdc7c7f797f8932ea301a2c0d66580a
         'Rector\\DeadCode\\NodeAnalyzer\\CallCollectionAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/CallCollectionAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\IsClassMethodUsedAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/IsClassMethodUsedAnalyzer.php',
-        'Rector\\DeadCode\\NodeAnalyzer\\JustPropertyFetchVariableAssignMatcher' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/JustPropertyFetchVariableAssignMatcher.php',
         'Rector\\DeadCode\\NodeAnalyzer\\PropertyWriteonlyAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/PropertyWriteonlyAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
         'Rector\\DeadCode\\NodeCollector\\UnusedParameterResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/UnusedParameterResolver.php',
@@ -1471,7 +1469,6 @@ class ComposerStaticInit2fdc7c7f797f8932ea301a2c0d66580a
         'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
         'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
         'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
-        'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchForAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php',
         'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
         'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
         'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
@@ -1481,7 +1478,6 @@ class ComposerStaticInit2fdc7c7f797f8932ea301a2c0d66580a
         'Rector\\DeadCode\\TypeNodeAnalyzer\\MixedArrayTypeNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/TypeNodeAnalyzer/MixedArrayTypeNodeAnalyzer.php',
         'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => __DIR__ . '/../..' . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
-        'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\DependencyInjection\\Laravel\\ContainerMemento' => __DIR__ . '/../..' . '/src/DependencyInjection/Laravel/ContainerMemento.php',
         'Rector\\DependencyInjection\\LazyContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/LazyContainerFactory.php',
