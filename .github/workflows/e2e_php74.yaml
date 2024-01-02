@@ -23,7 +23,7 @@ jobs:
                     coverage: none
 
             -
-                run: composer require rector/rector --dev
+                run: composer require rector/rector:dev-main --dev
                 working-directory: e2e/parse-match-class-on-php74
 
             -

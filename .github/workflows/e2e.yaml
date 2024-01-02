@@ -32,7 +32,7 @@ jobs:
                     coverage: none
 
             -
-                run: composer require rector/rector --dev
+                run: composer require rector/rector:dev-main --dev
                 working-directory: ${{ matrix.directory }}
 
             -
