@@ -84,7 +84,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
         if ($this->silentVoidResolver->hasSilentVoid($functionLike)) {
             $types[] = new VoidType();
         }
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
+        return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($types);
     }
     /**
      * @return Return_[]
