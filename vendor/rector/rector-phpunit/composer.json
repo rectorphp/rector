@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Rector upgrades rules for PHPUnit",
     "require": {
-        "php": ">=8.1"
+        "php": ">=8.2"
     },
     "require-dev": {
         "rector\/rector-src": "dev-main",

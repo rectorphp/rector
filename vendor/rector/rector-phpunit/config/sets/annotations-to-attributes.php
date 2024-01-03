@@ -38,7 +38,9 @@ return static function (RectorConfig $rectorConfig) : void {
         new AnnotationToAttribute('afterClass', 'PHPUnit\\Framework\\Attributes\\AfterClass'),
         new AnnotationToAttribute('before', 'PHPUnit\\Framework\\Attributes\\Before'),
         new AnnotationToAttribute('beforeClass', 'PHPUnit\\Framework\\Attributes\\BeforeClass'),
-        new AnnotationToAttribute('codeCoverageIgnore', 'PHPUnit\\Framework\\Attributes\\CodeCoverageIgnore'),
+        // CodeCoverageIgnore attribute is deprecated.
+        // @see https://github.com/rectorphp/rector-phpunit/pull/304
+        // new AnnotationToAttribute('codeCoverageIgnore', 'PHPUnit\Framework\Attributes\CodeCoverageIgnore'),
         new AnnotationToAttribute('coversNothing', 'PHPUnit\\Framework\\Attributes\\CoversNothing'),
         new AnnotationToAttribute('doesNotPerformAssertions', 'PHPUnit\\Framework\\Attributes\\DoesNotPerformAssertions'),
         new AnnotationToAttribute('large', 'PHPUnit\\Framework\\Attributes\\Large'),
