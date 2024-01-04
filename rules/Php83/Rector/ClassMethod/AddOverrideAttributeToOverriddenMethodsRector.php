@@ -8,6 +8,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
@@ -37,6 +38,10 @@ final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -90,33 +95,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        // Detect if class extends a parent class
-        if ($this->shouldSkipClass($node)) {
+        $this->hasChanged = \false;
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
-        // Fetch the parent class reflection
-        $parentClassReflection = $this->reflectionProvider->getClass((string) $node->extends);
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            if ($classMethod->name->toString() === '__construct') {
-                continue;
-            }
-            // Private methods should be ignored
-            if ($parentClassReflection->hasNativeMethod($classMethod->name->toString())) {
-                // ignore if it is a private method on the parent
-                $parentMethod = $parentClassReflection->getNativeMethod($classMethod->name->toString());
-                if ($parentMethod->isPrivate()) {
-                    continue;
-                }
-                // ignore if it already uses the attribute
-                if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Override')) {
-                    continue;
-                }
-                $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Override'))]);
-                $hasChanged = \true;
-            }
+        $className = (string) $this->getName($node);
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return null;
         }
-        if (!$hasChanged) {
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $this->processAddOverrideAttribute($node, $parentClassReflections);
+        if (!$this->hasChanged) {
             return null;
         }
         return $node;
@@ -125,14 +115,36 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::OVERRIDE_ATTRIBUTE;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    /**
+     * @param ClassReflection[] $parentClassReflections
+     */
+    private function processAddOverrideAttribute(Class_ $class, array $parentClassReflections) : void
     {
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
-            return \true;
+        if ($parentClassReflections === []) {
+            return;
         }
-        if (!$class->extends instanceof FullyQualified) {
-            return \true;
+        foreach ($class->getMethods() as $classMethod) {
+            if ($classMethod->name->toString() === '__construct') {
+                continue;
+            }
+            // ignore if it already uses the attribute
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Override')) {
+                continue;
+            }
+            // Private methods should be ignored
+            foreach ($parentClassReflections as $parentClassReflection) {
+                if (!$parentClassReflection->hasNativeMethod($classMethod->name->toString())) {
+                    continue;
+                }
+                // ignore if it is a private method on the parent
+                $parentMethod = $parentClassReflection->getNativeMethod($classMethod->name->toString());
+                if ($parentMethod->isPrivate()) {
+                    continue;
+                }
+                $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Override'))]);
+                $this->hasChanged = \true;
+                continue 2;
+            }
         }
-        return !$this->reflectionProvider->hasClass($class->extends->toString());
     }
 }

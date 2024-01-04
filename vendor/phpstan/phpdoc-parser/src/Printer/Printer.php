@@ -29,6 +29,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\RequireExtendsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\RequireImplementsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\SelfOutTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -207,6 +209,14 @@ final class Printer
             return "{$static}{$returnType}{$node->methodName}{$templateTypes}({$parameters}){$description}";
         }
         if ($node instanceof MixinTagValueNode) {
+            $type = $this->printType($node->type);
+            return trim("{$type} {$node->description}");
+        }
+        if ($node instanceof RequireExtendsTagValueNode) {
+            $type = $this->printType($node->type);
+            return trim("{$type} {$node->description}");
+        }
+        if ($node instanceof RequireImplementsTagValueNode) {
             $type = $this->printType($node->type);
             return trim("{$type} {$node->description}");
         }

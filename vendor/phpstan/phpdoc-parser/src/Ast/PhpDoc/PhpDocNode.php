@@ -130,6 +130,24 @@ class PhpDocNode implements Node
         });
     }
     /**
+     * @return RequireExtendsTagValueNode[]
+     */
+    public function getRequireExtendsTagValues(string $tagName = '@phpstan-require-extends') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\RequireExtendsTagValueNode;
+        });
+    }
+    /**
+     * @return RequireImplementsTagValueNode[]
+     */
+    public function getRequireImplementsTagValues(string $tagName = '@phpstan-require-implements') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\RequireImplementsTagValueNode;
+        });
+    }
+    /**
      * @return DeprecatedTagValueNode[]
      */
     public function getDeprecatedTagValues() : array
