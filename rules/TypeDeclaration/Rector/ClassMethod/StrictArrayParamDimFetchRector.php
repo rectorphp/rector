@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\AssignOp\Coalesce as AssignOpCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -135,7 +136,9 @@ CODE_SAMPLE
             // skip integer in possibly string type as string can be accessed via int
             $dimType = $this->getType($node->dim);
             if ($dimType->isInteger()->yes() && $variableType->isString()->maybe()) {
-                return null;
+                // force set to false to avoid too early replaced
+                $isParamAccessedArrayDimFetch = \false;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             $isParamAccessedArrayDimFetch = \true;
             return null;
@@ -176,10 +179,13 @@ CODE_SAMPLE
         if ($nodeToCheck instanceof Variable && $this->isName($nodeToCheck, $paramName)) {
             return \true;
         }
-        return $this->isEchoedOrCasted($node, $paramName);
+        return $this->isEmptyOrEchoedOrCasted($node, $paramName);
     }
-    private function isEchoedOrCasted(Node $node, string $paramName) : bool
+    private function isEmptyOrEchoedOrCasted(Node $node, string $paramName) : bool
     {
+        if ($node instanceof Empty_ && $node->expr instanceof Variable && $this->isName($node->expr, $paramName)) {
+            return \true;
+        }
         if ($this->isEchoed($node, $paramName)) {
             return \true;
         }
