@@ -131,14 +131,14 @@ CODE_SAMPLE
             // skip possible strings
             $variableType = $this->getType($node->var);
             if ($variableType->isString()->yes()) {
-                return null;
+                // force set to false to avoid too early replaced
+                $isParamAccessedArrayDimFetch = \false;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             // skip integer in possibly string type as string can be accessed via int
             $dimType = $this->getType($node->dim);
             if ($dimType->isInteger()->yes() && $variableType->isString()->maybe()) {
-                // force set to false to avoid too early replaced
-                $isParamAccessedArrayDimFetch = \false;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return null;
             }
             $isParamAccessedArrayDimFetch = \true;
             return null;
