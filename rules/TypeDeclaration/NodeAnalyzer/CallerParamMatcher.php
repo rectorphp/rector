@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PHPStan\Type\NullType;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ComplexType;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -62,19 +64,32 @@ final class CallerParamMatcher
         if (!$callParam instanceof Param) {
             return null;
         }
-        if (!$param->default instanceof Expr) {
+        if (!$param->default instanceof Expr && !$callParam->default instanceof Expr) {
             return $callParam->type;
         }
         if (!$callParam->type instanceof Node) {
             return null;
         }
+        $default = $param->default ?? $callParam->default;
+        if (!$default instanceof Expr) {
+            return null;
+        }
         $callParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($callParam->type);
-        $defaultType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->default);
+        $defaultType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($default);
         if ($this->typeComparator->areTypesEqual($callParamType, $defaultType)) {
             return $callParam->type;
         }
         if ($this->typeComparator->isSubtype($defaultType, $callParamType)) {
             return $callParam->type;
+        }
+        if (!$defaultType instanceof NullType) {
+            return null;
+        }
+        if ($callParam->type instanceof Name || $callParam->type instanceof Identifier) {
+            return new NullableType($callParam->type);
+        }
+        if ($callParam->type instanceof IntersectionType || $callParam->type instanceof UnionType) {
+            return new UnionType(\array_merge($callParam->type->types, [new Identifier('null')]));
         }
         return null;
     }
