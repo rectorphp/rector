@@ -89,6 +89,9 @@ CODE_SAMPLE
                 }
                 $nextStmt = $node->stmts[$key + 1] ?? null;
                 $return = $this->processForeachNodeWithReturnInside($foreach, $foreachReturnOrAssign, $nextStmt);
+                if (!$return instanceof Return_) {
+                    continue;
+                }
                 $node->stmts[$key] = $return;
                 // cleanup next return
                 if ($nextStmt instanceof Return_) {
