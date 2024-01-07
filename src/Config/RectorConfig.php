@@ -25,13 +25,13 @@ use RectorPrefix202401\Webmozart\Assert\Assert;
 final class RectorConfig extends Container
 {
     /**
-     * @var string[]
-     */
-    private const AUTOTAG_INTERFACES = [Command::class];
-    /**
      * @var array<class-string<RectorInterface>, mixed[]>>
      */
     private $ruleConfigurations = [];
+    /**
+     * @var string[]
+     */
+    private $autotagInterfaces = [Command::class];
     /**
      * @param string[] $paths
      */
@@ -312,13 +312,20 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::COLLECTORS, \false);
     }
     /**
+     * @internal Use to add tag on service registrations
+     */
+    public function autotagInterface(string $interface) : void
+    {
+        $this->autotagInterfaces[] = $interface;
+    }
+    /**
      * @param string $abstract
      * @param mixed $concrete
      */
     public function singleton($abstract, $concrete = null) : void
     {
         parent::singleton($abstract, $concrete);
-        foreach (self::AUTOTAG_INTERFACES as $autotagInterface) {
+        foreach ($this->autotagInterfaces as $autotagInterface) {
             if (!\is_a($abstract, $autotagInterface, \true)) {
                 continue;
             }
