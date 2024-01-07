@@ -183,6 +183,14 @@ final class RectorConfig extends Container
         $this->singleton($collectorClass);
         $this->tag($collectorClass, Collector::class);
     }
+    /**
+     * @param class-string<Command> $commandClass
+     */
+    public function command(string $commandClass) : void
+    {
+        $this->singleton($commandClass);
+        $this->tag($commandClass, Command::class);
+    }
     public function import(string $filePath) : void
     {
         if (\strpos($filePath, '*') !== \false) {
