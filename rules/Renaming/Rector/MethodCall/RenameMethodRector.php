@@ -7,6 +7,7 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
@@ -72,10 +73,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, Class_::class, Interface_::class];
+        return [MethodCall::class, NullsafeMethodCall::class, StaticCall::class, Class_::class, Interface_::class];
     }
     /**
-     * @param MethodCall|StaticCall|Class_|Interface_ $node
+     * @param MethodCall|NullsafeMethodCall|StaticCall|Class_|Interface_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
@@ -93,7 +94,7 @@ CODE_SAMPLE
         $this->methodCallRenames = $configuration;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function shouldSkipClassMethod($call, MethodCallRenameInterface $methodCallRename) : bool
     {
@@ -179,8 +180,8 @@ CODE_SAMPLE
         return $this->hasClassNewClassMethod($classOrInterface, $methodCallRename);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
-     * @return \PhpParser\Node\Expr\ArrayDimFetch|null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
+     * @return \PhpParser\Node\Expr\ArrayDimFetch|null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall
      */
     private function refactorMethodCallAndStaticCall($call)
     {

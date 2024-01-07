@@ -280,7 +280,7 @@ final class NodeTypeResolver
     }
     public function isMethodStaticCallOrClassMethodObjectType(Node $node, ObjectType $objectType) : bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof MethodCall || $node instanceof Expr\NullsafeMethodCall) {
             // method call is variable return
             return $this->isObjectType($node->var, $objectType);
         }
