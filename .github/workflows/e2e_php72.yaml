@@ -23,7 +23,7 @@ jobs:
             -   run: sleep 40
 
             -
-                run: composer require rector/rector --ansi
+                run: composer require rector/rector:dev-main --ansi
                 working-directory: e2e/reflection-union-php72
 
             -
