@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use RectorPrefix202401\Nette\Utils\Strings;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -41,6 +43,11 @@ final class BetterPhpDocParser extends PhpDocParser
      * @var \Rector\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
+    /**
+     * @var string
+     * @see https://regex101.com/r/JOKSmr/1
+     */
+    private const MULTI_NEW_LINES_REGEX = '#(\\n\\r|\\n){2,}#';
     /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
      */
@@ -109,6 +116,9 @@ final class BetterPhpDocParser extends PhpDocParser
         }
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+        if ($phpDocTagValueNode instanceof GenericTagValueNode) {
+            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, "\n");
+        }
         return $phpDocTagValueNode;
     }
     /**
