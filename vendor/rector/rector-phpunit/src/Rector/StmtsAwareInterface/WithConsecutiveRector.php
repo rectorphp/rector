@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\MatchArm;
@@ -68,6 +69,13 @@ final class SomeTest extends TestCase
                 [1, 2],
                 [3, 4],
             );
+
+        $this->userServiceMock->expects(self::exactly(2))
+            ->method('prepare')
+            ->withConsecutive(
+                [1, 2],
+                [3, 4],
+            );
     }
 }
 CODE_SAMPLE
@@ -81,6 +89,17 @@ final class SomeTest extends TestCase
         $matcher = $this->exactly(2);
 
         $this->personServiceMock->expects($matcher)
+            ->method('prepare')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->numberOfInvocations()) {
+                    1 => [1, 2],
+                    2 => [3, 4]
+                };
+        });
+
+        $matcher = self::exactly(2);
+
+        $this->userServiceMock->expects($matcher)
             ->method('prepare')
             ->willReturnCallback(function () use ($matcher) {
                 return match ($matcher->numberOfInvocations()) {
@@ -112,14 +131,14 @@ CODE_SAMPLE
         if (!$withConsecutiveMethodCall instanceof MethodCall) {
             return null;
         }
-        $expectsMethodCall = $this->matchAndRefactorExpectsMethodCall($node);
-        if (!$expectsMethodCall instanceof MethodCall) {
+        $expectsCall = $this->matchAndRefactorExpectsMethodCall($node);
+        if (!$expectsCall instanceof MethodCall && !$expectsCall instanceof StaticCall) {
             return null;
         }
         // 2. rename and replace withConsecutive()
         $withConsecutiveMethodCall->name = new Identifier('willReturnCallback');
         $withConsecutiveMethodCall->args = [new Arg($this->createClosure($withConsecutiveMethodCall))];
-        $matcherAssign = new Assign(new Variable('matcher'), $expectsMethodCall);
+        $matcherAssign = new Assign(new Variable('matcher'), $expectsCall);
         return [new Expression($matcherAssign), $node];
     }
     public function provideMinPhpVersion() : int
@@ -171,12 +190,13 @@ CODE_SAMPLE
      * Replace $this->expects(...)
      *
      * @param Expression<MethodCall> $expression
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function matchAndRefactorExpectsMethodCall(Expression $expression) : ?MethodCall
+    private function matchAndRefactorExpectsMethodCall(Expression $expression)
     {
-        /** @var MethodCall|null $exactlyMethodCall */
-        $exactlyMethodCall = null;
-        $this->traverseNodesWithCallable($expression, function (Node $node) use(&$exactlyMethodCall) : ?MethodCall {
+        /** @var MethodCall|StaticCall|null $exactlyCall */
+        $exactlyCall = null;
+        $this->traverseNodesWithCallable($expression, function (Node $node) use(&$exactlyCall) : ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -184,14 +204,14 @@ CODE_SAMPLE
                 return null;
             }
             $firstArg = $node->getArgs()[0];
-            if (!$firstArg->value instanceof MethodCall) {
+            if (!$firstArg->value instanceof MethodCall && !$firstArg->value instanceof StaticCall) {
                 return null;
             }
-            $exactlyMethodCall = $firstArg->value;
+            $exactlyCall = $firstArg->value;
             $node->args = [new Arg(new Variable('matcher'))];
             return $node;
         });
-        return $exactlyMethodCall;
+        return $exactlyCall;
     }
     private function findWithConsecutiveMethodCall(Expression $expression) : ?MethodCall
     {

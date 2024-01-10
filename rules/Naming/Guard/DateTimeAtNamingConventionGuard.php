@@ -36,6 +36,6 @@ final class DateTimeAtNamingConventionGuard
         if (!\is_a($type->getClassName(), DateTimeInterface::class, \true)) {
             return \false;
         }
-        return StringUtils::isMatch($propertyRename->getCurrentName(), \Rector\Naming\Guard\BreakingVariableRenameGuard::AT_NAMING_REGEX . '');
+        return StringUtils::isMatch($propertyRename->getCurrentName(), \Rector\Naming\Guard\BreakingVariableRenameGuard::AT_NAMING_REGEX);
     }
 }

@@ -183,7 +183,7 @@ final class BreakingVariableRenameGuard
         }
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
-        return StringUtils::isMatch($currentName, self::AT_NAMING_REGEX . '');
+        return StringUtils::isMatch($currentName, self::AT_NAMING_REGEX);
     }
     private function isGenerator(Param $param) : bool
     {

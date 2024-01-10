@@ -1182,6 +1182,22 @@ Refactor deprecated `withConsecutive()` to `willReturnCallback()` structure
 +                    2 => [3, 4]
 +                };
 +        });
+
+-        $this->userServiceMock->expects(self::exactly(2))
++        $matcher = self::exactly(2);
++
++        $this->userServiceMock->expects($matcher)
+             ->method('prepare')
+-            ->withConsecutive(
+-                [1, 2],
+-                [3, 4],
+-            );
++            ->willReturnCallback(function () use ($matcher) {
++                return match ($matcher->numberOfInvocations()) {
++                    1 => [1, 2],
++                    2 => [3, 4]
++                };
++        });
      }
  }
 ```
