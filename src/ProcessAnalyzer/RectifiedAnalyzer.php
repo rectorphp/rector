@@ -67,7 +67,7 @@ final class RectifiedAnalyzer
             return \true;
         }
         if ($node instanceof Stmt) {
-            return \array_keys($node->getAttributes()) === [AttributeKey::STMT_KEY];
+            return !\in_array(AttributeKey::SCOPE, \array_keys($node->getAttributes()), \true);
         }
         return $node->getAttributes() === [];
     }
