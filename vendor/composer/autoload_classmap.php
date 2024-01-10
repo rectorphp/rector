@@ -2022,7 +2022,7 @@ return array(
     'Rector\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => $baseDir . '/src/Skipper/SkipCriteriaResolver/SkippedClassResolver.php',
     'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => $baseDir . '/src/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
     'Rector\\Skipper\\SkipVoter\\ClassSkipVoter' => $baseDir . '/src/Skipper/SkipVoter/ClassSkipVoter.php',
-    'Rector\\Skipper\\SkipVoter\\PathSkipVoter' => $baseDir . '/src/Skipper/SkipVoter/PathSkipVoter.php',
+    'Rector\\Skipper\\Skipper\\PathSkipper' => $baseDir . '/src/Skipper/Skipper/PathSkipper.php',
     'Rector\\Skipper\\Skipper\\SkipSkipper' => $baseDir . '/src/Skipper/Skipper/SkipSkipper.php',
     'Rector\\Skipper\\Skipper\\Skipper' => $baseDir . '/src/Skipper/Skipper/Skipper.php',
     'Rector\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',

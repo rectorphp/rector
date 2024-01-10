@@ -2236,7 +2236,7 @@ class ComposerStaticInit09ed4d3982dd982ef2d6920cb3d0f560
         'Rector\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => __DIR__ . '/../..' . '/src/Skipper/SkipCriteriaResolver/SkippedClassResolver.php',
         'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => __DIR__ . '/../..' . '/src/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
         'Rector\\Skipper\\SkipVoter\\ClassSkipVoter' => __DIR__ . '/../..' . '/src/Skipper/SkipVoter/ClassSkipVoter.php',
-        'Rector\\Skipper\\SkipVoter\\PathSkipVoter' => __DIR__ . '/../..' . '/src/Skipper/SkipVoter/PathSkipVoter.php',
+        'Rector\\Skipper\\Skipper\\PathSkipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/PathSkipper.php',
         'Rector\\Skipper\\Skipper\\SkipSkipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/SkipSkipper.php',
         'Rector\\Skipper\\Skipper\\Skipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/Skipper.php',
         'Rector\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',

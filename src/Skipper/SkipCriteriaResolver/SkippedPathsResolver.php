@@ -18,9 +18,9 @@ final class SkippedPathsResolver
      */
     private $filePathHelper;
     /**
-     * @var string[]
+     * @var null|string[]
      */
-    private $skippedPaths = [];
+    private $skippedPaths = null;
     public function __construct(FilePathHelper $filePathHelper)
     {
         $this->filePathHelper = $filePathHelper;
@@ -30,15 +30,16 @@ final class SkippedPathsResolver
      */
     public function resolve() : array
     {
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            // disable cache in tests
-            $this->skippedPaths = [];
-        }
         // disable cache in tests
-        if ($this->skippedPaths !== []) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $this->skippedPaths = null;
+        }
+        // already filled, even empty array
+        if ($this->skippedPaths !== null) {
             return $this->skippedPaths;
         }
         $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);
+        $this->skippedPaths = [];
         foreach ($skip as $key => $value) {
             if (!\is_int($key)) {
                 continue;

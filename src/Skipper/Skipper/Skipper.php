@@ -25,16 +25,18 @@ final class Skipper
      */
     private $skipVoters;
     /**
-     * @var string
+     * @readonly
+     * @var \Rector\Skipper\Skipper\PathSkipper
      */
-    private const FILE_ELEMENT = 'file_elements';
+    private $pathSkipper;
     /**
      * @param array<SkipVoterInterface> $skipVoters
      */
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, array $skipVoters)
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, array $skipVoters, \Rector\Skipper\Skipper\PathSkipper $pathSkipper)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->skipVoters = $skipVoters;
+        $this->pathSkipper = $pathSkipper;
         Assert::allIsInstanceOf($this->skipVoters, SkipVoterInterface::class);
     }
     /**
@@ -46,7 +48,7 @@ final class Skipper
     }
     public function shouldSkipFilePath(string $filePath) : bool
     {
-        return $this->shouldSkipElementAndFilePath(self::FILE_ELEMENT, $filePath);
+        return $this->pathSkipper->shouldSkip($filePath);
     }
     /**
      * @param string|object $element

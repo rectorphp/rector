@@ -10,6 +10,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Provider\CurrentFileProvider;
+use Rector\Skipper\Skipper\PathSkipper;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -73,6 +74,11 @@ final class ApplicationFileProcessor
      */
     private $arrayParametersMerger;
     /**
+     * @readonly
+     * @var \Rector\Skipper\Skipper\PathSkipper
+     */
+    private $pathSkipper;
+    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -80,7 +86,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, PathSkipper $pathSkipper)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -91,6 +97,7 @@ final class ApplicationFileProcessor
         $this->currentFileProvider = $currentFileProvider;
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
+        $this->pathSkipper = $pathSkipper;
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
@@ -145,6 +152,9 @@ final class ApplicationFileProcessor
         /** @var CollectedData[] $collectedData */
         $collectedData = [];
         foreach ($filePaths as $filePath) {
+            if ($this->pathSkipper->shouldSkip($filePath)) {
+                continue;
+            }
             if ($preFileCallback !== null) {
                 $preFileCallback($filePath);
             }
