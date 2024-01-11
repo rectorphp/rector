@@ -100,6 +100,11 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     public const INLINE_PUBLIC = 'inline_public';
     /**
+     * @api
+     * @var string
+     */
+    public const RENAME_PROPERTY = 'rename_property';
+    /**
      * Default to false, which only apply changes:
      *
      *  – private modifier property
@@ -109,6 +114,11 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * @var bool
      */
     private $inlinePublic = \false;
+    /**
+     * Set to false will skip property promotion when parameter and property have different names.
+     * @var bool
+     */
+    private $renameProperty = \true;
     public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver, PropertyPromotionRenamer $propertyPromotionRenamer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
@@ -145,11 +155,12 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => \false])]);
+, [\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => \false, \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::RENAME_PROPERTY => \true])]);
     }
     public function configure(array $configuration) : void
     {
-        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
+        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? \false;
+        $this->renameProperty = $configuration[self::RENAME_PROPERTY] ?? \true;
     }
     /**
      * @return array<class-string<Node>>
@@ -185,15 +196,18 @@ CODE_SAMPLE
             if (!$this->makePropertyPromotionGuard->isLegal($node, $classReflection, $property, $param, $this->inlinePublic)) {
                 continue;
             }
+            $paramName = $this->getName($param);
+            // rename also following calls
+            $propertyName = $this->getName($property->props[0]);
+            if (!$this->renameProperty && $paramName !== $propertyName) {
+                continue;
+            }
             // remove property from class
             $propertyStmtKey = $property->getAttribute(AttributeKey::STMT_KEY);
             unset($node->stmts[$propertyStmtKey]);
             // remove assign in constructor
             $assignStmtPosition = $promotionCandidate->getStmtPosition();
             unset($constructClassMethod->stmts[$assignStmtPosition]);
-            $paramName = $this->getName($param);
-            // rename also following calls
-            $propertyName = $this->getName($property->props[0]);
             /** @var string $oldName */
             $oldName = $this->getName($param->var);
             $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, $oldName, $propertyName, null);
