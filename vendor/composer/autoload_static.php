@@ -1506,6 +1506,7 @@ class ComposerStaticInit0d7ac37abdc3277d2804c7296dfa0f13
         'Rector\\Doctrine\\CodeQuality\\DocTagNodeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/DocTagNodeFactory.php',
         'Rector\\Doctrine\\CodeQuality\\EntityMappingResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/EntityMappingResolver.php',
         'Rector\\Doctrine\\CodeQuality\\Enum\\EntityMappingKey' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/EntityMappingKey.php',
+        'Rector\\Doctrine\\CodeQuality\\Enum\\ToManyMappings' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/ToManyMappings.php',
         'Rector\\Doctrine\\CodeQuality\\NodeFactory\\ArrayItemNodeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/NodeFactory/ArrayItemNodeFactory.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',

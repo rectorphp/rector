@@ -121,7 +121,7 @@ Improve @var, `@param` and `@return` types for Doctrine collections to make them
      /**
       * @ORM\OneToMany(targetEntity=Trainer::class, mappedBy="trainer")
 -     * @var Collection|Trainer[]
-+     * @var Collection<int, Trainer>|Trainer[]
++     * @var Collection<int, Trainer>
       */
      private $trainings = [];
  }

@@ -1292,6 +1292,7 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\DocTagNodeFactory' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/DocTagNodeFactory.php',
     'Rector\\Doctrine\\CodeQuality\\EntityMappingResolver' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/EntityMappingResolver.php',
     'Rector\\Doctrine\\CodeQuality\\Enum\\EntityMappingKey' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/EntityMappingKey.php',
+    'Rector\\Doctrine\\CodeQuality\\Enum\\ToManyMappings' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/ToManyMappings.php',
     'Rector\\Doctrine\\CodeQuality\\NodeFactory\\ArrayItemNodeFactory' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/NodeFactory/ArrayItemNodeFactory.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',

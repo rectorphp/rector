@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\CodeQuality\Enum\ToManyMappings;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -56,10 +57,10 @@ final class CollectionTypeResolver
         }
         return null;
     }
-    public function resolveFromOneToManyProperty(Property $property) : ?FullyQualifiedObjectType
+    public function resolveFromToManyProperties(Property $property) : ?FullyQualifiedObjectType
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(ToManyMappings::TO_MANY_CLASSES);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
