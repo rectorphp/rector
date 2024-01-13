@@ -19,7 +19,7 @@ final class PolyfillPackagesProvider
      */
     public function provide() : array
     {
-        // used in tests mostly
+        // disable cache in tests
         if (SimpleParameterProvider::hasParameter(Option::POLYFILL_PACKAGES)) {
             return SimpleParameterProvider::provideArrayParameter(Option::POLYFILL_PACKAGES);
         }
