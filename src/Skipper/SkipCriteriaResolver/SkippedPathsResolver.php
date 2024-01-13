@@ -34,7 +34,7 @@ final class SkippedPathsResolver
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             $this->skippedPaths = null;
         }
-        // already filled, even empty array
+        // already cached, even only empty array
         if ($this->skippedPaths !== null) {
             return $this->skippedPaths;
         }
