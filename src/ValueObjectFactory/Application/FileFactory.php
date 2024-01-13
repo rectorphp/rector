@@ -36,11 +36,6 @@ final class FileFactory
             $this->changedFilesDetector->clear();
         }
         $supportedFileExtensions = $configuration->getFileExtensions();
-        $filePaths = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
-        $fileWithExtensionsFilter = static function (string $filePath) use($supportedFileExtensions) : bool {
-            $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
-            return \in_array($filePathExtension, $supportedFileExtensions, \true);
-        };
-        return \array_filter($filePaths, $fileWithExtensionsFilter);
+        return $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
     }
 }

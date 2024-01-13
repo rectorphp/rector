@@ -50,6 +50,13 @@ final class FilesFinder
         $filePaths = \array_filter($filePaths, function (string $filePath) : bool {
             return !$this->pathSkipper->shouldSkip($filePath);
         });
+        if ($suffixes !== []) {
+            $fileWithExtensionsFilter = static function (string $filePath) use($suffixes) : bool {
+                $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
+                return \in_array($filePathExtension, $suffixes, \true);
+            };
+            $filePaths = \array_filter($filePaths, $fileWithExtensionsFilter);
+        }
         $currentAndDependentFilePaths = $this->unchangedFilesFilter->filterFileInfos($filePaths);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         return \array_merge($currentAndDependentFilePaths, $this->findInDirectories($directories, $suffixes, $sortByName));
