@@ -46,8 +46,8 @@ final class FilesFinder
     public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
-        $filePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filePaths = \array_filter($filePaths, function (string $filePath) : bool {
+        $files = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
+        $filteredFilePaths = \array_filter($files, function (string $filePath) : bool {
             return !$this->pathSkipper->shouldSkip($filePath);
         });
         if ($suffixes !== []) {
@@ -55,11 +55,12 @@ final class FilesFinder
                 $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
                 return \in_array($filePathExtension, $suffixes, \true);
             };
-            $filePaths = \array_filter($filePaths, $fileWithExtensionsFilter);
+            $filteredFilePaths = \array_filter($filteredFilePaths, $fileWithExtensionsFilter);
         }
-        $currentAndDependentFilePaths = $this->unchangedFilesFilter->filterFileInfos($filePaths);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
-        return \array_merge($currentAndDependentFilePaths, $this->findInDirectories($directories, $suffixes, $sortByName));
+        $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $sortByName);
+        $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
+        return $this->unchangedFilesFilter->filterFileInfos($filePaths);
     }
     /**
      * @param string[] $directories
@@ -93,7 +94,7 @@ final class FilesFinder
             }
             $filePaths[] = $path;
         }
-        return $this->unchangedFilesFilter->filterFileInfos($filePaths);
+        return $filePaths;
     }
     /**
      * @param string[] $suffixes
