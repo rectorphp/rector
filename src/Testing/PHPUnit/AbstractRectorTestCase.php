@@ -61,7 +61,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         SimpleParameterProvider::setParameter(Option::IMPORT_SHORT_CLASSES, \true);
         SimpleParameterProvider::setParameter(Option::INDENT_CHAR, ' ');
         SimpleParameterProvider::setParameter(Option::INDENT_SIZE, 4);
-        SimpleParameterProvider::setParameter(Option::COLLECTORS, \false);
         SimpleParameterProvider::setParameter(Option::POLYFILL_PACKAGES, []);
     }
     protected function setUp() : void
@@ -212,14 +211,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $configurationFactory = $this->make(ConfigurationFactory::class);
         $configuration = $configurationFactory->createForTests([$filePath]);
         $processResult = $this->applicationFileProcessor->processFiles([$filePath], $configuration);
-        if ($processResult->getCollectedData() !== [] && $configuration->isCollectors()) {
-            // second run with collected data
-            $configuration->setCollectedData($processResult->getCollectedData());
-            $configuration->enableSecondRun();
-            $rectorNodeTraverser = $this->make(RectorNodeTraverser::class);
-            $rectorNodeTraverser->prepareCollectorRectorsRun($configuration);
-            $this->applicationFileProcessor->processFiles([$filePath], $configuration);
-        }
         // return changed file contents
         $changedFileContents = FileSystem::read($filePath);
         return new RectorTestResult($changedFileContents, $processResult);

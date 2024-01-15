@@ -195,9 +195,4 @@ final class Option
      * @var string
      */
     public const REGISTERED_RECTOR_SETS = 'registered_rector_sets';
-    /**
-     * @internal
-     * @var string
-     */
-    public const COLLECTORS = 'collectors';
 }

@@ -5,10 +5,8 @@ namespace Rector\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use PHPStan\Node\CollectedDataNode;
 use Rector\Contract\Rector\CollectorRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\ValueObject\Configuration;
 use Rector\VersionBonding\PhpVersionedFilter;
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -16,10 +14,6 @@ final class RectorNodeTraverser extends NodeTraverser
      * @var RectorInterface[]
      */
     private $rectors;
-    /**
-     * @var CollectorRectorInterface[]
-     */
-    private $collectorRectors;
     /**
      * @readonly
      * @var \Rector\VersionBonding\PhpVersionedFilter
@@ -31,12 +25,10 @@ final class RectorNodeTraverser extends NodeTraverser
     private $areNodeVisitorsPrepared = \false;
     /**
      * @param RectorInterface[] $rectors
-     * @param CollectorRectorInterface[] $collectorRectors
      */
-    public function __construct(array $rectors, array $collectorRectors, PhpVersionedFilter $phpVersionedFilter)
+    public function __construct(array $rectors, PhpVersionedFilter $phpVersionedFilter)
     {
         $this->rectors = $rectors;
-        $this->collectorRectors = $collectorRectors;
         $this->phpVersionedFilter = $phpVersionedFilter;
         parent::__construct();
     }
@@ -58,19 +50,6 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->rectors = $rectors;
         $this->visitors = [];
         $this->areNodeVisitorsPrepared = \false;
-    }
-    public function prepareCollectorRectorsRun(Configuration $configuration) : void
-    {
-        if ($this->collectorRectors === []) {
-            return;
-        }
-        $collectedDataNode = new CollectedDataNode($configuration->getCollectedData(), \false);
-        // hydrate abstract collector rector with configuration
-        foreach ($this->collectorRectors as $collectorRector) {
-            $collectorRector->setCollectedDataNode($collectedDataNode);
-        }
-        $this->visitors = $this->collectorRectors;
-        $this->areNodeVisitorsPrepared = \true;
     }
     /**
      * This must happen after $this->configuration is set after ProcessCommand::execute() is run,

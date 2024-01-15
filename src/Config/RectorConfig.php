@@ -65,13 +65,6 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::PARALLEL, \false);
     }
     /**
-     * @experimental since Rector 0.18.x
-     */
-    public function enableCollectors() : void
-    {
-        SimpleParameterProvider::setParameter(Option::COLLECTORS, \true);
-    }
-    /**
      * Defaults in sync with https://phpstan.org/config-reference#parallel-processing
      * as we run PHPStan as well
      */
@@ -180,8 +173,7 @@ final class RectorConfig extends Container
      */
     public function collector(string $collectorClass) : void
     {
-        $this->singleton($collectorClass);
-        $this->tag($collectorClass, Collector::class);
+        \trigger_error('collector have been deprecated as performance costly and not valuable');
     }
     /**
      * @param class-string<Command> $commandClass
@@ -311,13 +303,6 @@ final class RectorConfig extends Container
             // completely forget the Rector rule only when no path specified
             ContainerMemento::forgetService($this, $skippedClass);
         }
-    }
-    /**
-     * @experimental since Rector 0.18.x
-     */
-    public function disableCollectors() : void
-    {
-        SimpleParameterProvider::setParameter(Option::COLLECTORS, \false);
     }
     /**
      * @internal Use to add tag on service registrations

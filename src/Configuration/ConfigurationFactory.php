@@ -29,8 +29,7 @@ final class ConfigurationFactory
     public function createForTests(array $paths) : Configuration
     {
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
-        $isCollectors = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::COLLECTORS, \false);
-        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, $isCollectors);
+        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false);
     }
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -49,8 +48,7 @@ final class ConfigurationFactory
         $parallelIdentifier = (string) $input->getOption(\Rector\Configuration\Option::PARALLEL_IDENTIFIER);
         $isDebug = (bool) $input->getOption(\Rector\Configuration\Option::DEBUG);
         $memoryLimit = $this->resolveMemoryLimit($input);
-        $isCollectors = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::COLLECTORS);
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isCollectors);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat) : bool
     {

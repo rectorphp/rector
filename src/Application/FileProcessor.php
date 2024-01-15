@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use PHPStan\AnalysedCodeException;
-use Rector\Application\Collector\CollectorProcessor;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
@@ -63,11 +62,6 @@ final class FileProcessor
     private $filePathHelper;
     /**
      * @readonly
-     * @var \Rector\Application\Collector\CollectorProcessor
-     */
-    private $collectorProcessor;
-    /**
-     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
@@ -81,7 +75,7 @@ final class FileProcessor
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, CollectorProcessor $collectorProcessor, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
@@ -90,22 +84,17 @@ final class FileProcessor
         $this->changedFilesDetector = $changedFilesDetector;
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
-        $this->collectorProcessor = $collectorProcessor;
         $this->postFileProcessor = $postFileProcessor;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
     public function processFile(File $file, Configuration $configuration) : FileProcessResult
     {
-        if ($configuration->isSecondRun() && $configuration->isCollectors()) {
-            // 2nd run
-            $this->rectorNodeTraverser->prepareCollectorRectorsRun($configuration);
-        }
         // 1. parse files to nodes
         $parsingSystemError = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemError instanceof SystemError) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            return new FileProcessResult([$parsingSystemError], null, []);
+            return new FileProcessResult([$parsingSystemError], null);
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
@@ -114,8 +103,6 @@ final class FileProcessor
         do {
             $file->changeHasChanged(\false);
             $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
-            // collect data
-            $fileCollectedData = $configuration->isCollectors() ? $this->collectorProcessor->process($newStmts) : [];
             // apply post rectors
             $postNewStmts = $this->postFileProcessor->traverse($newStmts, $filePath);
             // this is needed for new tokens added in "afterTraverse()"
@@ -138,7 +125,7 @@ final class FileProcessor
             $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges);
             $file->setFileDiff($currentFileDiff);
         }
-        return new FileProcessResult([], $file->getFileDiff(), $fileCollectedData);
+        return new FileProcessResult([], $file->getFileDiff());
     }
     private function parseFileAndDecorateNodes(File $file) : ?SystemError
     {
