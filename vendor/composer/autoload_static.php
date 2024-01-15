@@ -2308,6 +2308,7 @@ class ComposerStaticInit0d7ac37abdc3277d2804c7296dfa0f13
         'Rector\\Symfony\\Contract\\Tag\\TagInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
         'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
         'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
+        'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
         'Rector\\Symfony\\Enum\\SymfonyClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyClass.php',

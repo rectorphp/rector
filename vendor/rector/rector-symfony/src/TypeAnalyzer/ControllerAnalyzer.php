@@ -11,8 +11,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Reflection\ReflectionResolver;
 final class ControllerAnalyzer
 {
     /**

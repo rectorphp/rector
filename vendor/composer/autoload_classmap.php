@@ -2094,6 +2094,7 @@ return array(
     'Rector\\Symfony\\Contract\\Tag\\TagInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
     'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
     'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
+    'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
     'Rector\\Symfony\\Enum\\SensioAttribute' => $vendorDir . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
     'Rector\\Symfony\\Enum\\SymfonyAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
     'Rector\\Symfony\\Enum\\SymfonyClass' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyClass.php',
