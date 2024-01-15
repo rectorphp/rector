@@ -103,10 +103,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const ARGUMENT_POSITION = 'argument_position';
-    /**
-     * @var string
-     */
     public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
     /**
      * Helps with infinite loop detection

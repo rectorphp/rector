@@ -1581,7 +1581,7 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ScalarTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\StaticCallMethodCallTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/StaticCallMethodCallTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
-    'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamArgPositionNodeVisitor' => $baseDir . '/src/NodeTypeResolver/NodeVisitor/FunctionLikeParamArgPositionNodeVisitor.php',
+    'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamPositionNodeVisitor' => $baseDir . '/src/NodeTypeResolver/NodeVisitor/FunctionLikeParamPositionNodeVisitor.php',
     'Rector\\NodeTypeResolver\\Node\\AttributeKey' => $baseDir . '/src/NodeTypeResolver/Node/AttributeKey.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => $baseDir . '/src/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => $baseDir . '/src/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',

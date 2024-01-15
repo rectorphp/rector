@@ -6,7 +6,7 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamPositionNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use Rector\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
@@ -33,7 +33,7 @@ final class NodeScopeAndMetadataDecorator
      * @var \PhpParser\NodeTraverser
      */
     private $nodeTraverser;
-    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor, ScopeFactory $scopeFactory, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, FunctionLikeParamPositionNodeVisitor $functionLikeParamPositionNodeVisitor, ScopeFactory $scopeFactory, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeFactory = $scopeFactory;
@@ -41,7 +41,7 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeTraverser = new NodeTraverser();
         // needed for format preserving printing
         $this->nodeTraverser->addVisitor($cloningVisitor);
-        $this->nodeTraverser->addVisitor($functionLikeParamArgPositionNodeVisitor);
+        $this->nodeTraverser->addVisitor($functionLikeParamPositionNodeVisitor);
     }
     /**
      * @param Stmt[] $stmts
