@@ -1,4 +1,4 @@
-# 83 Rules Overview
+# 84 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -424,6 +424,27 @@ Migrates from deprecated `Definition/Alias->setPrivate()` to `Definition/Alias->
 +        $alias->setPublic(true);
      }
  }
+```
+
+<br>
+
+## DowngradeSymfonyCommandAttributeRector
+
+Downgrade Symfony Command Attribute
+
+- class: [`Rector\Symfony\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRector`](../rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php)
+
+```diff
+ #[AsCommand(name: 'app:create-user', description: 'some description')]
+ class CreateUserCommand extends Command
+-{}
++{
++    protected function configure(): void
++    {
++        $this->setName('app:create-user');
++        $this->setDescription('some description');
++    }
++}
 ```
 
 <br>
@@ -1632,15 +1653,14 @@ Add config builder classes
 -                'security' => false,
 -            ],
 -        ],
+-    ]);
 +return static function (SecurityConfig $securityConfig): void {
-+    $securityConfig->provider('webservice', [
-+        'id' => LoginServiceUserProvider::class,
-+    ]);
++    $securityConfig->provider('webservice')
++        ->id(LoginServiceUserProvider::class);
 +
-+    $securityConfig->firewall('dev', [
-+        'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
-+        'security' => false,
-     ]);
++    $securityConfig->firewall('dev')
++        ->pattern('^/(_(profiler|wdt)|css|images|js)/')
++        ->security(false);
  };
 ```
 
@@ -1678,7 +1698,7 @@ Changes Process string argument to an array
 
 Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
-- class: [`Rector\Symfony\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../rules/Symfony53/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
+- class: [`Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../rules/SwiftMailer/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
 
 ```diff
 -$email = $this->swift->createMessage('message');
@@ -1691,7 +1711,7 @@ Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
 Changes `setBody()` method call on Swift_Message into a `html()` or `plain()` based on second argument
 
-- class: [`Rector\Symfony\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector`](../rules/Symfony53/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php)
+- class: [`Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector`](../rules/SwiftMailer/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php)
 
 ```diff
  $message = new Swift_Message();
