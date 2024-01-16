@@ -87,11 +87,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('security', [
-        'providers' => [
-            'webservice' => [
-                'id' => LoginServiceUserProvider::class,
-            ],
-        ],
         'firewalls' => [
             'dev' => [
                 'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
@@ -105,9 +100,6 @@ CODE_SAMPLE
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $securityConfig): void {
-    $securityConfig->provider('webservice')
-        ->id(LoginServiceUserProvider::class);
-
     $securityConfig->firewall('dev')
         ->pattern('^/(_(profiler|wdt)|css|images|js)/')
         ->security(false);
