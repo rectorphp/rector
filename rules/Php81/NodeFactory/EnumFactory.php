@@ -58,6 +58,11 @@ final class EnumFactory
      * @see https://regex101.com/r/Zv4JhD/1 for changing needsReview to needs_Review
      */
     private const PASCAL_CASE_TO_UNDERSCORE_REGEX = '/(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])/';
+    /**
+     * @var string
+     * @see https://regex101.com/r/FneU33/1
+     */
+    private const MULTI_UNDERSCORES_REGEX = '#_{2,}#';
     public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BuilderFactory $builderFactory, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -121,6 +126,7 @@ final class EnumFactory
         $enumValue = $mapping[$nodeValue->methodName] ?? $nodeValue->methodName;
         if ($enumNameInSnakeCase) {
             $enumName = \strtoupper(Strings::replace($nodeValue->methodName, self::PASCAL_CASE_TO_UNDERSCORE_REGEX, '_$0'));
+            $enumName = Strings::replace($enumName, self::MULTI_UNDERSCORES_REGEX, '_');
         } else {
             $enumName = \strtoupper($nodeValue->methodName);
         }

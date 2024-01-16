@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 354 Rules Overview
 
 <br>
 
@@ -46,7 +46,7 @@
 
 - [Php83](#php83) (3)
 
-- [Privatization](#privatization) (5)
+- [Privatization](#privatization) (4)
 
 - [Removing](#removing) (5)
 
@@ -5136,6 +5136,8 @@ Decorate read-only property with `readonly` attribute
 
 Refactor Spatie enum class to native Enum
 
+:wrench: **configure it!**
+
 - class: [`Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector`](../rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php)
 
 ```diff
@@ -5303,25 +5305,6 @@ Combine separated host and port on `ldap_connect()` args
 <br>
 
 ## Privatization
-
-### FinalizeClassesWithoutChildrenCollectorRector
-
-Finalize classes without children using collectors
-
-- class: [`Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenCollectorRector`](../rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenCollectorRector.php)
-
-```diff
--class FirstClass extends SecondClass
-+final class FirstClass extends SecondClass
- {
- }
-
- class SecondClass
- {
- }
-```
-
-<br>
 
 ### FinalizeClassesWithoutChildrenRector
 

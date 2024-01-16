@@ -12,7 +12,7 @@ use Rector\Php81\NodeFactory\EnumFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/enumerations
@@ -31,6 +31,10 @@ final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhp
      * @var bool
      */
     private $toUpperSnakeCase = \false;
+    /**
+     * @var string
+     */
+    public const TO_UPPER_SNAKE_CASE = 'toUpperSnakeCase';
     public function __construct(EnumFactory $enumFactory)
     {
         $this->enumFactory = $enumFactory;
@@ -41,7 +45,7 @@ final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhp
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Refactor Spatie enum class to native Enum', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor Spatie enum class to native Enum', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use \Spatie\Enum\Enum;
 
 /**
@@ -61,7 +65,7 @@ enum StatusEnum : string
     case ARCHIVED = 'archived';
 }
 CODE_SAMPLE
-)]);
+, [\Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector::TO_UPPER_SNAKE_CASE => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -85,6 +89,6 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->toUpperSnakeCase = \true === ($configuration['toUpperSnakeCase'] ?? \false);
+        $this->toUpperSnakeCase = $configuration[self::TO_UPPER_SNAKE_CASE] ?? \false;
     }
 }

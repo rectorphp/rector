@@ -7,7 +7,6 @@ use RectorPrefix202401\Illuminate\Container\RewindableGenerator;
 use Iterator;
 use RectorPrefix202401\Nette\Utils\FileSystem;
 use RectorPrefix202401\Nette\Utils\Strings;
-use PHPStan\Collectors\Collector;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
@@ -16,7 +15,6 @@ use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Contract\DependencyInjection\ResetableInterface;
-use Rector\Contract\Rector\CollectorRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Exception\ShouldNotHappenException;
@@ -83,8 +81,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $rectorConfig->resetRuleConfigurations();
             // this has to be always empty, so we can add new rules with their configuration
             $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
-            $this->assertEmpty($rectorConfig->tagged(CollectorRectorInterface::class));
-            $this->assertEmpty($rectorConfig->tagged(Collector::class));
             $this->bootFromConfigFiles([$configFile]);
             $rectorsGenerator = $rectorConfig->tagged(RectorInterface::class);
             $rectors = $rectorsGenerator instanceof RewindableGenerator ? \iterator_to_array($rectorsGenerator->getIterator()) : [];
@@ -145,8 +141,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $rectorConfig = self::getContainer();
         // 1. forget tagged services
         ContainerMemento::forgetTag($rectorConfig, RectorInterface::class);
-        ContainerMemento::forgetTag($rectorConfig, Collector::class);
-        ContainerMemento::forgetTag($rectorConfig, CollectorRectorInterface::class);
         // 2. remove after binding too, to avoid setting configuration over and over again
         $privatesAccessor = new PrivatesAccessor();
         $privatesAccessor->propertyClosure($rectorConfig, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks) : array {
