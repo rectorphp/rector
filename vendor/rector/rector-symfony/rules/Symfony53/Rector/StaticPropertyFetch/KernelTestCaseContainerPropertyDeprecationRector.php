@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\KernelTestCaseContainerPropertyDeprecationRectorTest
  */
-class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector
+final class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector
 {
     /**
      * @readonly

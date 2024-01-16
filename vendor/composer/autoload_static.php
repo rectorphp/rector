@@ -1405,7 +1405,6 @@ class ComposerStaticInit3aa8fc9c37eb79c784df0b556be25aa0
         'Rector\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
         'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
-        'Rector\\Contract\\Rector\\CollectorRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/CollectorRectorInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
         'Rector\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',

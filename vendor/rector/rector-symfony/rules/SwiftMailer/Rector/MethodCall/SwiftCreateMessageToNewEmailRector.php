@@ -42,7 +42,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $subNode) use($node, &$hasChanged) {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $subNode) use($node, &$hasChanged) : ?New_ {
             if (!$subNode instanceof MethodCall) {
                 return null;
             }

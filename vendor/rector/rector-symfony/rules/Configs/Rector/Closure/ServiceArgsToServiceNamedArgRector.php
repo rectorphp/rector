@@ -87,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) : ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }

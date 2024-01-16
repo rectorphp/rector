@@ -107,7 +107,7 @@ CODE_SAMPLE
      */
     private function handleSetServices(Closure $closure, array $serviceNamesToSkip) : void
     {
-        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) use($serviceNamesToSkip) {
+        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) use($serviceNamesToSkip) : ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }

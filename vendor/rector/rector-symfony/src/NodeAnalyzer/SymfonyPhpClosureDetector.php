@@ -49,7 +49,7 @@ final class SymfonyPhpClosureDetector
     {
         $hasDefaultsAutoconfigure = \false;
         // has defaults autoconfigure?
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use(&$hasDefaultsAutoconfigure) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use(&$hasDefaultsAutoconfigure) : ?int {
             if (!$node instanceof MethodCall) {
                 return null;
             }

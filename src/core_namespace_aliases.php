@@ -6,7 +6,6 @@ namespace RectorPrefix202401;
 // BC layer for "Rector\\Core\\" to "Rector\\" rename
 \class_alias('Rector\\Application\\ApplicationFileProcessor', 'Rector\\Core\\Application\\ApplicationFileProcessor');
 \class_alias('Rector\\Application\\ChangedNodeScopeRefresher', 'Rector\\Core\\Application\\ChangedNodeScopeRefresher');
-\class_alias('Rector\\Application\\Collector\\CollectorNodeVisitor', 'Rector\\Core\\Application\\Collector\\CollectorNodeVisitor');
 \class_alias('Rector\\Application\\FileProcessor', 'Rector\\Core\\Application\\FileProcessor');
 \class_alias('Rector\\Application\\VersionResolver', 'Rector\\Core\\Application\\VersionResolver');
 \class_alias('Rector\\Autoloading\\AdditionalAutoloader', 'Rector\\Core\\Autoloading\\AdditionalAutoloader');
@@ -32,7 +31,6 @@ namespace RectorPrefix202401;
 \class_alias('Rector\\Console\\Style\\SymfonyStyleFactory', 'Rector\\Core\\Console\\Style\\SymfonyStyleFactory');
 \class_alias('Rector\\Contract\\DependencyInjection\\ResetableInterface', 'Rector\\Core\\Contract\\DependencyInjection\\ResetableInterface');
 \class_alias('Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface', 'Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface');
-\class_alias('Rector\\Contract\\Rector\\CollectorRectorInterface', 'Rector\\Core\\Contract\\Rector\\CollectorRectorInterface');
 \class_alias('Rector\\Contract\\Rector\\ConfigurableRectorInterface', 'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface');
 \class_alias('Rector\\Contract\\Rector\\RectorInterface', 'Rector\\Core\\Contract\\Rector\\RectorInterface');
 \class_alias('Rector\\Contract\\Rector\\ScopeAwareRectorInterface', 'Rector\\Core\\Contract\\Rector\\ScopeAwareRectorInterface');

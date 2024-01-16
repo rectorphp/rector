@@ -108,11 +108,11 @@ CODE_SAMPLE
     /**
      * @return array{name: ?Expr, description: ?Expr}
      */
-    private function resolveNameAndDescription(Class_ $node) : array
+    private function resolveNameAndDescription(Class_ $class) : array
     {
         $name = null;
         $description = null;
-        foreach ($node->attrGroups as $attrGroup) {
+        foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
                 if ($attr->name->toString() !== 'Symfony\\Component\\Console\\Attribute\\AsCommand') {
                     continue;

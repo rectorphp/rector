@@ -70,7 +70,7 @@ CODE_SAMPLE
         }
         $serviceNamesToType = $this->serviceNameToTypeUniqueProvider->provide();
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($serviceNamesToType, &$hasChanged) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($serviceNamesToType, &$hasChanged) : ?String_ {
             if (!$node instanceof String_) {
                 return null;
             }
