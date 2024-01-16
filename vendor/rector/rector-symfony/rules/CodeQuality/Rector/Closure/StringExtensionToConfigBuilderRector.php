@@ -143,7 +143,13 @@ CODE_SAMPLE
         $configurationValues = $this->valueResolver->getValue($configurationArray);
         foreach ($configurationValues as $key => $value) {
             $splitMany = \false;
-            if ($key === 'providers') {
+            $nested = \false;
+            // doctrine
+            if (\in_array($key, ['dbal', 'orm'], \true)) {
+                $methodCallName = $key;
+                $splitMany = \true;
+                $nested = \true;
+            } elseif ($key === 'providers') {
                 $methodCallName = 'provider';
                 $splitMany = \true;
             } elseif ($key === 'firewalls') {
@@ -164,7 +170,21 @@ CODE_SAMPLE
                 }
             }
             if ($splitMany) {
+                if ($nested) {
+                    $configVariable = new MethodCall($configVariable, $methodCallName);
+                }
                 foreach ($value as $itemName => $itemConfiguration) {
+                    if ($nested && \is_array($itemConfiguration)) {
+                        $methodCallName = $itemName;
+                    }
+                    if (!\is_array($itemConfiguration)) {
+                        // simple call
+                        $args = $this->nodeFactory->createArgs([$itemConfiguration]);
+                        $itemName = StringUtils::underscoreToCamelCase($itemName);
+                        $methodCall = new MethodCall($configVariable, $itemName, $args);
+                        $methodCallStmts[] = new Expression($methodCall);
+                        continue;
+                    }
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create([$itemName, $itemConfiguration], $configVariable, $methodCallName);
                     $methodCallStmts = \array_merge($methodCallStmts, $nextMethodCallExpressions);
                 }
