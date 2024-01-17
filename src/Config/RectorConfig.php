@@ -17,6 +17,9 @@ use Rector\Validation\RectorConfigValidator;
 use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use RectorPrefix202401\Symfony\Component\Console\Command\Command;
+use RectorPrefix202401\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix202401\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202401\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
  * @api
@@ -55,6 +58,20 @@ final class RectorConfig extends Container
         foreach ($sets as $set) {
             Assert::fileExists($set);
             $this->import($set);
+        }
+        // notify about deprecated sets
+        foreach ($sets as $set) {
+            if (\strpos($set, 'deprecated-level-set') === \false) {
+                continue;
+            }
+            // display only on main command run, skip spamming in workers
+            $commandArguments = $_SERVER['argv'];
+            if (!\in_array('worker', $commandArguments, \true)) {
+                // show warning, to avoid confusion
+                $symfonyStyle = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
+                $symfonyStyle->warning("The Symfony/Twig/PHPUnit level sets have been deprecated since Rector 0.19.2 due to heavy performance loads and conflicting overrides. Instead, please use the latest major set.\n\nFor more information, visit https://getrector.com/blog/5-common-mistakes-in-rector-config-and-how-to-avoid-them");
+                break;
+            }
         }
         // for cache invalidation in case of sets change
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_SETS, $sets);
