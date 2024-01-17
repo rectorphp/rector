@@ -17,6 +17,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\CodeQuality\NodeFactory\SymfonyClosureFactory;
 use Rector\Symfony\Configs\ConfigArrayHandler\NestedConfigCallsFactory;
 use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessDecisionManagerConfigArrayHandler;
+use Rector\Symfony\Configs\Enum\DoctrineConfigKey;
 use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
@@ -145,15 +146,15 @@ CODE_SAMPLE
             $splitMany = \false;
             $nested = \false;
             // doctrine
-            if (\in_array($key, ['dbal', 'orm'], \true)) {
+            if (\in_array($key, [DoctrineConfigKey::DBAL, DoctrineConfigKey::ORM], \true)) {
                 $methodCallName = $key;
                 $splitMany = \true;
                 $nested = \true;
-            } elseif ($key === 'providers') {
-                $methodCallName = 'provider';
+            } elseif ($key === SecurityConfigKey::PROVIDERS) {
+                $methodCallName = SecurityConfigKey::PROVIDER;
                 $splitMany = \true;
-            } elseif ($key === 'firewalls') {
-                $methodCallName = 'firewall';
+            } elseif ($key === SecurityConfigKey::FIREWALLS) {
+                $methodCallName = SecurityConfigKey::FIREWALL;
                 $splitMany = \true;
             } elseif ($key === SecurityConfigKey::ACCESS_CONTROL) {
                 $splitMany = \true;
@@ -171,7 +172,9 @@ CODE_SAMPLE
             }
             if ($splitMany) {
                 if ($nested) {
-                    $configVariable = new MethodCall($configVariable, $methodCallName);
+                    $currentConfigCaller = new MethodCall($configVariable, $methodCallName);
+                } else {
+                    $currentConfigCaller = $configVariable;
                 }
                 foreach ($value as $itemName => $itemConfiguration) {
                     if ($nested && \is_array($itemConfiguration)) {
@@ -181,11 +184,11 @@ CODE_SAMPLE
                         // simple call
                         $args = $this->nodeFactory->createArgs([$itemConfiguration]);
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
-                        $methodCall = new MethodCall($configVariable, $itemName, $args);
+                        $methodCall = new MethodCall($currentConfigCaller, $itemName, $args);
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
                     }
-                    $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create([$itemName, $itemConfiguration], $configVariable, $methodCallName);
+                    $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create([$itemConfiguration], $currentConfigCaller, $methodCallName);
                     $methodCallStmts = \array_merge($methodCallStmts, $nextMethodCallExpressions);
                 }
             } else {

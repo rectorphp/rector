@@ -2293,6 +2293,8 @@ class ComposerStaticInit3aa8fc9c37eb79c784df0b556be25aa0
         'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
         'Rector\\Symfony\\Configs\\ConfigArrayHandler\\NestedConfigCallsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/NestedConfigCallsFactory.php',
         'Rector\\Symfony\\Configs\\ConfigArrayHandler\\SecurityAccessDecisionManagerConfigArrayHandler' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/SecurityAccessDecisionManagerConfigArrayHandler.php',
+        'Rector\\Symfony\\Configs\\Enum\\DoctrineConfigKey' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Enum/DoctrineConfigKey.php',
+        'Rector\\Symfony\\Configs\\Enum\\GroupingMethods' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Enum/GroupingMethods.php',
         'Rector\\Symfony\\Configs\\Enum\\SecurityConfigKey' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Enum/SecurityConfigKey.php',
         'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
