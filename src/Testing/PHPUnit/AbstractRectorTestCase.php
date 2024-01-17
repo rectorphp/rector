@@ -168,9 +168,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
         }
-        if (\file_exists(__DIR__ . '/../../core_namespace_aliases.php')) {
-            require_once __DIR__ . '/../../core_namespace_aliases.php';
-        }
     }
     private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFileContents, string $fixtureFilePath) : void
     {

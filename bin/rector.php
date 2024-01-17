@@ -105,7 +105,6 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
 $autoloadIncluder->autoloadFromCommandLine();
-$autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../src/core_namespace_aliases.php');
 $rectorConfigsResolver = new RectorConfigsResolver();
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
