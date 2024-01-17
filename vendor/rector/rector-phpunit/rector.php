@@ -18,7 +18,7 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Fixture/*',
         '*/Expected/*',
         // object types
-        StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/config'],
+        StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/config', __DIR__ . '/src/NodeFinder/DataProviderClassMethodFinder.php'],
     ]);
     $rectorConfig->sets([LevelSetList::UP_TO_PHP_82, SetList::DEAD_CODE, PHPUnitSetList::PHPUNIT_100, PHPUnitSetList::PHPUNIT_CODE_QUALITY, SetList::CODE_QUALITY, SetList::CODING_STYLE, SetList::EARLY_RETURN, SetList::NAMING, SetList::TYPE_DECLARATION, SetList::PRIVATIZATION]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
