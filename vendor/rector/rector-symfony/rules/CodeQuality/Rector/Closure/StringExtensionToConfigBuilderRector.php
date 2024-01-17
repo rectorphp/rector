@@ -162,7 +162,7 @@ CODE_SAMPLE
             } else {
                 $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
-            if (\in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY])) {
+            if (\in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], \true)) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
                 $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle($configurationArray, $configVariable, $mainMethodName);
                 if ($accessDecisionManagerMethodCalls !== []) {
