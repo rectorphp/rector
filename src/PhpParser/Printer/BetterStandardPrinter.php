@@ -161,8 +161,8 @@ final class BetterStandardPrinter extends Standard
     {
         if ($this->getIndentCharacter() === ' ') {
             // - 4 spaces
-            \assert($this->indentLevel >= 4);
-            $this->indentLevel -= 4;
+            \assert($this->indentLevel >= $this->getIndentLevel());
+            $this->indentLevel -= $this->getIndentLevel();
         } else {
             // - 1 tab
             \assert($this->indentLevel >= 1);
@@ -377,6 +377,13 @@ final class BetterStandardPrinter extends Standard
     private function getIndentCharacter() : string
     {
         return SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
+    }
+    /**
+     * Must be a method to be able to react to changed parameter in tests
+     */
+    private function getIndentLevel() : int
+    {
+        return SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
