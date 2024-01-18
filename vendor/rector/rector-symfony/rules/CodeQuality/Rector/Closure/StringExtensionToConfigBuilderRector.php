@@ -70,7 +70,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const EXTENSION_KEY_TO_CLASS_MAP = ['security' => 'Symfony\\Config\\SecurityConfig', 'framework' => 'Symfony\\Config\\FrameworkConfig', 'monolog' => 'Symfony\\Config\\MonologConfig', 'twig' => 'Symfony\\Config\\TwigConfig', 'doctrine' => 'Symfony\\Config\\DoctrineConfig'];
+    private const EXTENSION_KEY_TO_CLASS_MAP = ['security' => 'Symfony\\Config\\SecurityConfig', 'framework' => 'Symfony\\Config\\FrameworkConfig', 'monolog' => 'Symfony\\Config\\MonologConfig', 'twig' => 'Symfony\\Config\\TwigConfig', 'doctrine' => 'Symfony\\Config\\DoctrineConfig', 'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig', 'sentry' => 'Symfony\\Config\\DoctrineMigrationsConfig'];
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher, PropertyNaming $propertyNaming, ValueResolver $valueResolver, NestedConfigCallsFactory $nestedConfigCallsFactory, SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler, SymfonyClosureFactory $symfonyClosureFactory)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
