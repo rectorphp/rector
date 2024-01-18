@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @api
  */
@@ -35,7 +34,6 @@ final class AliasedObjectType extends ObjectType
     public function getUseNode(int $useType) : Use_
     {
         $name = new Name($this->fullyQualifiedClass);
-        $name->setAttribute(AttributeKey::IS_USEUSE_NAME, \true);
         $useUse = new UseUse($name, $this->getClassName());
         $use = new Use_([$useUse]);
         $use->type = $useType;

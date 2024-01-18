@@ -208,10 +208,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_USEUSE_NAME = 'is_useuse_name';
-    /**
-     * @var string
-     */
     public const IS_STATICCALL_CLASS_NAME = 'is_staticcall_class_name';
     /**
      * @var string

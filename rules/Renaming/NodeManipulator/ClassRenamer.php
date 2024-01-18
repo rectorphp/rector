@@ -174,12 +174,6 @@ final class ClassRenamer
         if (!$this->isClassToInterfaceValidChange($fullyQualified, $newName)) {
             return null;
         }
-        // no need to preslash "use \SomeNamespace" of imported namespace
-        if ($fullyQualified->getAttribute(AttributeKey::IS_USEUSE_NAME) === \true) {
-            // no need to rename imports, they will be handled by autoimport and coding standard
-            // also they might cause some rename
-            return null;
-        }
         if ($this->shouldSkip($newName, $fullyQualified)) {
             return null;
         }

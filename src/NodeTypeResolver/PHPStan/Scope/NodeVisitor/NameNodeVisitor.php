@@ -9,8 +9,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
@@ -18,10 +16,6 @@ final class NameNodeVisitor extends NodeVisitorAbstract implements ScopeResolver
 {
     public function enterNode(Node $node) : ?Node
     {
-        if ($node instanceof UseUse && ($node->type === Use_::TYPE_NORMAL || $node->type === Use_::TYPE_UNKNOWN)) {
-            $node->name->setAttribute(AttributeKey::IS_USEUSE_NAME, \true);
-            return null;
-        }
         if ($node instanceof FuncCall && $node->name instanceof Name) {
             $node->name->setAttribute(AttributeKey::IS_FUNCCALL_NAME, \true);
             return null;

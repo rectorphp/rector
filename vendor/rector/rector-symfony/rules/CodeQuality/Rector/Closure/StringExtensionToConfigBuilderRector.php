@@ -25,6 +25,7 @@ use Rector\Symfony\Utils\StringUtils;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix202401\Webmozart\Assert\Assert;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-5-3-config-builder-classes
  *
@@ -70,7 +71,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const EXTENSION_KEY_TO_CLASS_MAP = ['security' => 'Symfony\\Config\\SecurityConfig', 'framework' => 'Symfony\\Config\\FrameworkConfig', 'monolog' => 'Symfony\\Config\\MonologConfig', 'twig' => 'Symfony\\Config\\TwigConfig', 'doctrine' => 'Symfony\\Config\\DoctrineConfig', 'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig', 'sentry' => 'Symfony\\Config\\DoctrineMigrationsConfig'];
+    private const EXTENSION_KEY_TO_CLASS_MAP = ['security' => 'Symfony\\Config\\SecurityConfig', 'framework' => 'Symfony\\Config\\FrameworkConfig', 'monolog' => 'Symfony\\Config\\MonologConfig', 'twig' => 'Symfony\\Config\\TwigConfig', 'doctrine' => 'Symfony\\Config\\DoctrineConfig', 'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig', 'sentry' => 'Symfony\\Config\\SentryConfig'];
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher, PropertyNaming $propertyNaming, ValueResolver $valueResolver, NestedConfigCallsFactory $nestedConfigCallsFactory, SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler, SymfonyClosureFactory $symfonyClosureFactory)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
@@ -123,13 +124,16 @@ CODE_SAMPLE
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
+        // make sure to avoid duplicates
+        Assert::uniqueValues(self::EXTENSION_KEY_TO_CLASS_MAP);
+        Assert::uniqueValues(\array_keys(self::EXTENSION_KEY_TO_CLASS_MAP));
         $extensionKeyAndConfiguration = $this->symfonyClosureExtensionMatcher->match($node);
         if (!$extensionKeyAndConfiguration instanceof ExtensionKeyAndConfiguration) {
             return null;
         }
         $configClass = self::EXTENSION_KEY_TO_CLASS_MAP[$extensionKeyAndConfiguration->getKey()] ?? null;
         if ($configClass === null) {
-            throw new NotImplementedYetException($extensionKeyAndConfiguration->getKey());
+            throw new NotImplementedYetException(\sprintf('The extensions "%s" is not supported yet. Check the rule and add keyword.', $extensionKeyAndConfiguration->getKey()));
         }
         $configVariable = $this->createConfigVariable($configClass);
         $stmts = $this->createMethodCallStmts($extensionKeyAndConfiguration->getArray(), $configVariable);
@@ -197,9 +201,14 @@ CODE_SAMPLE
                     continue;
                 }
                 $simpleMethodName = StringUtils::underscoreToCamelCase($key);
-                $args = $this->nodeFactory->createArgs([$value]);
-                $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
-                $methodCallStmts[] = new Expression($methodCall);
+                if (\is_array($value)) {
+                    $simpleMethodCallStmts = $this->nestedConfigCallsFactory->create([$value], $configVariable, $simpleMethodName);
+                    $methodCallStmts = \array_merge($methodCallStmts, $simpleMethodCallStmts);
+                } else {
+                    $args = $this->nodeFactory->createArgs([$value]);
+                    $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
+                    $methodCallStmts[] = new Expression($methodCall);
+                }
             }
         }
         return $methodCallStmts;
