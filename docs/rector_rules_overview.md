@@ -14,7 +14,7 @@
 
 - [EarlyReturn](#earlyreturn) (9)
 
-- [Instanceof_](#instanceof) (1)
+- [Instanceof_](#instanceof_) (1)
 
 - [Naming](#naming) (6)
 
