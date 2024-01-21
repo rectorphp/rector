@@ -148,7 +148,26 @@ final class ClassRenamer
     private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
         // rename interfaces
-        if ($this->renameClassImplements($classLike, $oldToNewClasses, $scope)) {
+        if (!$classLike instanceof Class_) {
+            return null;
+        }
+        $hasChanged = \false;
+        $classLike->implements = \array_unique($classLike->implements);
+        foreach ($classLike->implements as $key => $implementName) {
+            $virtualNode = (bool) $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
+            if (!$virtualNode) {
+                continue;
+            }
+            $namespaceName = $scope instanceof Scope ? $scope->getNamespace() : null;
+            $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
+            $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;
+            if ($newName === null) {
+                continue;
+            }
+            $classLike->implements[$key] = new FullyQualified($newName);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
             return $classLike;
         }
         return null;
@@ -179,32 +198,6 @@ final class ClassRenamer
             return $this->isValidClassNameChange($fullyQualified, $classReflection);
         }
         return \false;
-    }
-    /**
-     * @param string[] $oldToNewClasses
-     */
-    private function renameClassImplements(ClassLike $classLike, array $oldToNewClasses, ?Scope $scope) : bool
-    {
-        if (!$classLike instanceof Class_) {
-            return \false;
-        }
-        $hasChanged = \false;
-        $classLike->implements = \array_unique($classLike->implements);
-        foreach ($classLike->implements as $key => $implementName) {
-            $virtualNode = (bool) $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
-            if (!$virtualNode) {
-                continue;
-            }
-            $namespaceName = $scope instanceof Scope ? $scope->getNamespace() : null;
-            $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
-            $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;
-            if ($newName === null) {
-                continue;
-            }
-            $classLike->implements[$key] = new FullyQualified($newName);
-            $hasChanged = \true;
-        }
-        return $hasChanged;
     }
     private function isValidClassNameChange(FullyQualified $fullyQualified, ClassReflection $classReflection) : bool
     {
