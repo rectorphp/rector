@@ -1790,7 +1790,6 @@ class ComposerStaticInit3aa8fc9c37eb79c784df0b556be25aa0
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\ScalarTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\StaticCallMethodCallTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/StaticCallMethodCallTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
-        'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamPositionNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeVisitor/FunctionLikeParamPositionNodeVisitor.php',
         'Rector\\NodeTypeResolver\\Node\\AttributeKey' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Node/AttributeKey.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
