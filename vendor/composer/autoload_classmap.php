@@ -2208,6 +2208,7 @@ return array(
     'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
     'Rector\\Symfony\\Symfony62\\Rector\\MethodCall\\SimplifyFormRenderingRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony62/Rector/MethodCall/SimplifyFormRenderingRector.php',
     'Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php',
+    'Rector\\Symfony\\Symfony64\\Rector\\Class_\\ChangeRouteAttributeFromAnnotationSubnamespaceRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php',
     'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => $vendorDir . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
     'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
     'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',

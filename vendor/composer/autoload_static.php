@@ -2422,6 +2422,7 @@ class ComposerStaticInit3aa8fc9c37eb79c784df0b556be25aa0
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\MethodCall\\SimplifyFormRenderingRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/MethodCall/SimplifyFormRenderingRector.php',
         'Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php',
+        'Rector\\Symfony\\Symfony64\\Rector\\Class_\\ChangeRouteAttributeFromAnnotationSubnamespaceRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php',
         'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
