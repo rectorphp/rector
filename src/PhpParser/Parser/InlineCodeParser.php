@@ -86,6 +86,8 @@ final class InlineCodeParser
         return $this->parseCode($content);
     }
     /**
+     * @api downgrade
+     *
      * @return Stmt[]
      */
     public function parseFile(string $fileName) : array

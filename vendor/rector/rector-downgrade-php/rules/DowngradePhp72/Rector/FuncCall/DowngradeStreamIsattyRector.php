@@ -136,7 +136,7 @@ CODE_SAMPLE
         if ($this->cachedClosure instanceof Closure) {
             return clone $this->cachedClosure;
         }
-        $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/isatty_closure.php.inc');
+        $stmts = $this->inlineCodeParser->parseFile(__DIR__ . '/../../snippet/isatty_closure.php.inc');
         /** @var Expression $expression */
         $expression = $stmts[0];
         $expr = $expression->expr;
