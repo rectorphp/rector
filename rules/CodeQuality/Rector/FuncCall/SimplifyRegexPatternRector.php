@@ -73,8 +73,7 @@ CODE_SAMPLE
             if ($originalValue === $simplifiedValue) {
                 continue;
             }
-            $countSqureOpenBracket = \substr_count($simplifiedValue, '[');
-            if ($countSqureOpenBracket % 2 === 1) {
+            if (\strpos($originalValue, '[^' . $complexPattern) !== \false) {
                 continue;
             }
             $node->value = $simplifiedValue;
