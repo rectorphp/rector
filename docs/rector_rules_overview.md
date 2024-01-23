@@ -14,7 +14,7 @@
 
 - [EarlyReturn](#earlyreturn) (9)
 
-- [Instanceof_](#instanceof) (1)
+- [Instanceof](#instanceof) (1)
 
 - [Naming](#naming) (6)
 
@@ -3209,7 +3209,7 @@ Replace if conditioned variable override with direct return
 
 <br>
 
-## Instanceof_
+## Instanceof
 
 ### FlipNegatedTernaryInstanceofRector
 
