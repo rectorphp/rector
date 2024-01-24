@@ -1448,6 +1448,7 @@ return array(
     'Rector\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',
     'Rector\\FileSystem\\InitFilePathsResolver' => $baseDir . '/src/FileSystem/InitFilePathsResolver.php',
     'Rector\\FileSystem\\JsonFileSystem' => $baseDir . '/src/FileSystem/JsonFileSystem.php',
+    'Rector\\Git\\RepositoryHelper' => $baseDir . '/src/Git/RepositoryHelper.php',
     'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => $baseDir . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
     'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => $baseDir . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
     'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => $baseDir . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',

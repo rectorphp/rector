@@ -1662,6 +1662,7 @@ class ComposerStaticInit0408599c96f445821212bfb9798860ca
         'Rector\\FileSystem\\FilesystemTweaker' => __DIR__ . '/../..' . '/src/FileSystem/FilesystemTweaker.php',
         'Rector\\FileSystem\\InitFilePathsResolver' => __DIR__ . '/../..' . '/src/FileSystem/InitFilePathsResolver.php',
         'Rector\\FileSystem\\JsonFileSystem' => __DIR__ . '/../..' . '/src/FileSystem/JsonFileSystem.php',
+        'Rector\\Git\\RepositoryHelper' => __DIR__ . '/../..' . '/src/Git/RepositoryHelper.php',
         'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
         'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
