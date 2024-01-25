@@ -10,6 +10,6 @@ namespace Utils\Rector\Tests\Rector\__Name__Test\Fixture;
 
 namespace Utils\Rector\Tests\Rector\__Name__Test\Fixture;
 
-// @todo fill code before
+// @todo fill code after
 
 ?>
