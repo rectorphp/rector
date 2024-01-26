@@ -6,6 +6,7 @@ namespace Rector\Configuration;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Config\RectorConfig;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Set\ValueObject\SetList;
 use Rector\ValueObject\PhpVersion;
 use RectorPrefix202401\Symfony\Component\Finder\Finder;
 /**
@@ -210,6 +211,37 @@ final class RectorConfigBuilder
     public function withSets(array $sets) : self
     {
         $this->sets = $sets;
+        return $this;
+    }
+    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false) : self
+    {
+        if ($deadCode) {
+            $this->sets[] = SetList::DEAD_CODE;
+        }
+        if ($codeQuality) {
+            $this->sets[] = SetList::CODE_QUALITY;
+        }
+        if ($codingStyle) {
+            $this->sets[] = SetList::CODING_STYLE;
+        }
+        if ($typeDeclarations) {
+            $this->sets[] = SetList::TYPE_DECLARATION;
+        }
+        if ($privatization) {
+            $this->sets[] = SetList::PRIVATIZATION;
+        }
+        if ($naming) {
+            $this->sets[] = SetList::NAMING;
+        }
+        if ($instanceOf) {
+            $this->sets[] = SetList::INSTANCEOF;
+        }
+        if ($earlyReturn) {
+            $this->sets[] = SetList::EARLY_RETURN;
+        }
+        if ($strictBooleans) {
+            $this->sets[] = SetList::STRICT_BOOLEANS;
+        }
         return $this;
     }
     /**

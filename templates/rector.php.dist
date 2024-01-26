@@ -6,16 +6,15 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withPaths([
 __PATHS__
+    ])
+    ->withRules([
+        InlineConstructorDefaultToPropertyRector::class,
+    ])
+    ->withSets([
+        // define sets of rules
+        // LevelSetList::UP_TO_PHP_XY
     ]);
-
-    // register a single rule
-    $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-
-    // define sets of rules
-    //    $rectorConfig->sets([
-    //        LevelSetList::UP_TO_PHP_XY
-    //    ]);
 };
