@@ -210,7 +210,7 @@ final class RectorConfigBuilder
      */
     public function withSets(array $sets) : self
     {
-        $this->sets = $sets;
+        $this->sets = \array_merge($this->sets, $sets);
         return $this;
     }
     public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false) : self
