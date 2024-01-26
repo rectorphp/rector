@@ -1,6 +1,6 @@
 <?php
 
-namespace Utils\Rector\Tests\Rector\__Name__Test\Fixture;
+namespace Utils\Rector\Tests\Rector\__Name__\Fixture;
 
 // @todo fill code before
 
@@ -8,7 +8,7 @@ namespace Utils\Rector\Tests\Rector\__Name__Test\Fixture;
 -----
 <?php
 
-namespace Utils\Rector\Tests\Rector\__Name__Test\Fixture;
+namespace Utils\Rector\Tests\Rector\__Name__\Fixture;
 
 // @todo fill code after
 
