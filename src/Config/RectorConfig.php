@@ -7,6 +7,7 @@ use RectorPrefix202401\Illuminate\Container\Container;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Configuration\RectorConfigBuilder;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\Laravel\ContainerMemento;
@@ -33,6 +34,10 @@ final class RectorConfig extends Container
      * @var string[]
      */
     private $autotagInterfaces = [Command::class];
+    public static function configure() : RectorConfigBuilder
+    {
+        return new RectorConfigBuilder();
+    }
     /**
      * @param string[] $paths
      */
