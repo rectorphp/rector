@@ -18,9 +18,14 @@ final class __Name__ extends AbstractRector
     {
         return new RuleDefinition('// @todo fill the description', [
             new CodeSample(
-                '// @todo fill code before',
-                '// @todo fill code after'
-            )
+                <<<'CODE_SAMPLE'
+// @todo fill code before
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+// @todo fill code after
+CODE_SAMPLE
+            ),
         ]);
     }
 
