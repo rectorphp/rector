@@ -3,12 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
-use Rector\Set\Contract\SetListInterface;
 /**
  * @deprecated Instead of too bloated and overriding level sets, use only latest Symfony set
  * @api
  */
-final class SymfonyLevelSetList implements SetListInterface
+final class SymfonyLevelSetList
 {
     /**
      * @deprecated Instead of too bloated and overriding level sets, use only latest Symfony set

@@ -1185,7 +1185,6 @@ return array(
     'Rector\\Console\\ConsoleApplication' => $baseDir . '/src/Console/ConsoleApplication.php',
     'Rector\\Console\\ExitCode' => $baseDir . '/src/Console/ExitCode.php',
     'Rector\\Console\\Formatter\\ColorConsoleDiffFormatter' => $baseDir . '/src/Console/Formatter/ColorConsoleDiffFormatter.php',
-    'Rector\\Console\\Formatter\\CompleteUnifiedDiffOutputBuilderFactory' => $baseDir . '/src/Console/Formatter/CompleteUnifiedDiffOutputBuilderFactory.php',
     'Rector\\Console\\Formatter\\ConsoleDiffer' => $baseDir . '/src/Console/Formatter/ConsoleDiffer.php',
     'Rector\\Console\\Output\\OutputFormatterCollector' => $baseDir . '/src/Console/Output/OutputFormatterCollector.php',
     'Rector\\Console\\ProcessConfigureDecorator' => $baseDir . '/src/Console/ProcessConfigureDecorator.php',
