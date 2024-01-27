@@ -10,7 +10,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \rector\tests\Rector\__Name__\__Name__Test
+ * @see \Utils\Rector\Tests\Rector\__Name__\__Name__Test
  */
 final class __Name__ extends AbstractRector
 {
