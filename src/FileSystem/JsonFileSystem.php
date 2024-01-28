@@ -21,6 +21,6 @@ final class JsonFileSystem
     public static function writeFile(string $filePath, array $data) : void
     {
         $json = Json::encode($data, Json::PRETTY);
-        FileSystem::write($filePath, $json);
+        FileSystem::write($filePath, $json, null);
     }
 }

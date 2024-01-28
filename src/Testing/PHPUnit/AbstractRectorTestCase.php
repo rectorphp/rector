@@ -133,7 +133,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             throw new ShouldNotHappenException('Fixture file and input file cannot be the same: ' . $fixtureFilePath);
         }
         // write temp file
-        FileSystem::write($inputFilePath, $inputFileContents);
+        FileSystem::write($inputFilePath, $inputFileContents, null);
         $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
     }
     protected function forgetRectorsRulesAndCollectors() : void

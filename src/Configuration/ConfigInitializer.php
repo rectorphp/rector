@@ -57,7 +57,7 @@ final class ConfigInitializer
         $configContents = FileSystem::read(__DIR__ . '/../../templates/rector.php.dist');
         $configContents = $this->replacePhpLevelContents($configContents);
         $configContents = $this->replacePathsContents($configContents, $projectDirectory);
-        FileSystem::write($commonRectorConfigPath, $configContents);
+        FileSystem::write($commonRectorConfigPath, $configContents, null);
         $this->symfonyStyle->success('The config is added now. Re-run command to make Rector do the work!');
     }
     public function areSomeRectorsLoaded() : bool

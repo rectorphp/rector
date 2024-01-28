@@ -66,7 +66,7 @@ final class CustomRuleCommand extends Command
             // replace __Name__ with $rectorName
             $newContent = $this->replaceNameVariable($rectorName, $fileInfo->getContents());
             $newFilePath = $this->replaceNameVariable($rectorName, $fileInfo->getRelativePathname());
-            FileSystem::write(\getcwd() . '/' . $newFilePath, $newContent);
+            FileSystem::write(\getcwd() . '/' . $newFilePath, $newContent, null);
             $generatedFilePaths[] = $newFilePath;
         }
         $this->symfonyStyle->title('Generated files');
