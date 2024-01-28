@@ -134,7 +134,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         }
         // write temp file
         FileSystem::write($inputFilePath, $inputFileContents);
-        $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFileContents, $fixtureFilePath);
+        $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
     }
     protected function forgetRectorsRulesAndCollectors() : void
     {
@@ -169,11 +169,9 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
         }
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFileContents, string $fixtureFilePath) : void
+    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
     {
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
-        // the original file content must be loaded first
-        $originalFileContent = FileSystem::read($originalFilePath);
         // the file is now changed (if any rule matches)
         $rectorTestResult = $this->processFilePath($originalFilePath);
         $changedContents = $rectorTestResult->getChangedContents();
@@ -190,7 +188,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         try {
             $this->assertSame($expectedFileContents, $changedContents, $failureMessage);
         } catch (ExpectationFailedException $exception) {
-            FixtureFileUpdater::updateFixtureContent($originalFileContent, $changedContents, $fixtureFilePath);
+            FixtureFileUpdater::updateFixtureContent($inputFileContents, $changedContents, $fixtureFilePath);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($expectedFileContents, $changedContents, $failureMessage);
         }
