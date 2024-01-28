@@ -17,4 +17,3 @@ __PATHS__
         // define sets of rules
         // LevelSetList::UP_TO_PHP_XY
     ]);
-};
