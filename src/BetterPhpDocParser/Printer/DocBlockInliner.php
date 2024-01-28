@@ -8,14 +8,14 @@ final class DocBlockInliner
 {
     /**
      * @var string
-     * @see https://regex101.com/r/Mjb0qi/1
+     * @see https://regex101.com/r/Mjb0qi/3
      */
-    private const NEWLINE_CLOSING_DOC_REGEX = "#\n \\*\\/\$#";
+    private const NEWLINE_CLOSING_DOC_REGEX = "#(?:\r\n|\n) \\*\\/\$#";
     /**
      * @var string
-     * @see https://regex101.com/r/U5OUV4/2
+     * @see https://regex101.com/r/U5OUV4/4
      */
-    private const NEWLINE_MIDDLE_DOC_REGEX = "#\n \\* #";
+    private const NEWLINE_MIDDLE_DOC_REGEX = "#(?:\r\n|\n) \\* #";
     public function inline(string $docContent) : string
     {
         $docContent = Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
