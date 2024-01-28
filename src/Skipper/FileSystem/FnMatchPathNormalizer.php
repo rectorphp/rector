@@ -14,11 +14,12 @@ final class FnMatchPathNormalizer
             return '*' . \trim($path, '*') . '*';
         }
         if (\strpos($path, '..') !== \false) {
-            /** @var string|false $path */
-            $path = \realpath($path);
-            if ($path === \false) {
+            /** @var string|false $realPath */
+            $realPath = \realpath($path);
+            if ($realPath === \false) {
                 return '';
             }
+            return \Rector\Skipper\FileSystem\PathNormalizer::normalize($realPath);
         }
         return $path;
     }

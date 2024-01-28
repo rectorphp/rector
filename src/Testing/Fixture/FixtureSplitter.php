@@ -26,10 +26,7 @@ final class FixtureSplitter
      */
     public static function splitFixtureFileContents(string $fixtureFileContents) : array
     {
-        $posixContents = \explode("-----\n", $fixtureFileContents);
-        if (isset($posixContents[1])) {
-            return $posixContents;
-        }
-        return \explode("-----\r\n", $fixtureFileContents);
+        $fixtureFileContents = \str_replace("\r\n", "\n", $fixtureFileContents);
+        return \explode("-----\n", $fixtureFileContents);
     }
 }

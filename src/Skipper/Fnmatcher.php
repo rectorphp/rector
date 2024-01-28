@@ -7,16 +7,10 @@ final class Fnmatcher
 {
     public function match(string $matchingPath, string $filePath) : bool
     {
-        $normalizedMatchingPath = $this->normalizePath($matchingPath);
-        $normalizedFilePath = $this->normalizePath($filePath);
-        if (\fnmatch($normalizedMatchingPath, $normalizedFilePath)) {
+        if (\fnmatch($matchingPath, $filePath)) {
             return \true;
         }
         // in case of relative compare
-        return \fnmatch('*/' . $normalizedMatchingPath, $normalizedFilePath);
-    }
-    private function normalizePath(string $path) : string
-    {
-        return \str_replace('\\', '/', $path);
+        return \fnmatch('*/' . $matchingPath, $filePath);
     }
 }

@@ -2011,6 +2011,7 @@ return array(
     'Rector\\Set\\ValueObject\\SetList' => $baseDir . '/src/Set/ValueObject/SetList.php',
     'Rector\\Skipper\\Contract\\SkipVoterInterface' => $baseDir . '/src/Skipper/Contract/SkipVoterInterface.php',
     'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => $baseDir . '/src/Skipper/FileSystem/FnMatchPathNormalizer.php',
+    'Rector\\Skipper\\FileSystem\\PathNormalizer' => $baseDir . '/src/Skipper/FileSystem/PathNormalizer.php',
     'Rector\\Skipper\\Fnmatcher' => $baseDir . '/src/Skipper/Fnmatcher.php',
     'Rector\\Skipper\\Matcher\\FileInfoMatcher' => $baseDir . '/src/Skipper/Matcher/FileInfoMatcher.php',
     'Rector\\Skipper\\RealpathMatcher' => $baseDir . '/src/Skipper/RealpathMatcher.php',

@@ -66,6 +66,11 @@ final class PhpDocInfoPrinter
      */
     private const NEWLINE_WITH_ASTERISK = "\n" . ' *';
     /**
+     * @var string
+     * @see https://regex101.com/r/ME5Fcn/1
+     */
+    private const NEW_LINE_WITH_SPACE_REGEX = "# (?<new_line>\r\n|\n)#";
+    /**
      * @var int
      */
     private $tokenCount = 0;
@@ -174,7 +179,9 @@ final class PhpDocInfoPrinter
         if (\strncmp($output, '/**', \strlen('/**')) === 0 && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
-        return \str_replace(" \n", "\n", $output);
+        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static function (array $match) {
+            return $match['new_line'];
+        });
     }
     private function hasDocblockStart(string $output) : bool
     {
@@ -238,7 +245,7 @@ final class PhpDocInfoPrinter
             --$from;
         }
         // skip extra empty lines above if this is the last one
-        if ($shouldSkipEmptyLinesAbove && \strpos((string) $this->tokens[$from][0], \PHP_EOL) !== \false && \strpos((string) $this->tokens[$from + 1][0], \PHP_EOL) !== \false) {
+        if ($shouldSkipEmptyLinesAbove && \strpos((string) $this->tokens[$from][0], "\n") !== \false && \strpos((string) $this->tokens[$from + 1][0], "\n") !== \false) {
             ++$from;
         }
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);

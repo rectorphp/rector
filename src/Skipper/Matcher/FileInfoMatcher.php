@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Skipper\Matcher;
 
 use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
+use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\Skipper\Fnmatcher;
 use Rector\Skipper\RealpathMatcher;
 final class FileInfoMatcher
@@ -34,7 +35,9 @@ final class FileInfoMatcher
      */
     public function doesFileInfoMatchPatterns(string $filePath, array $filePatterns) : bool
     {
+        $filePath = PathNormalizer::normalize($filePath);
         foreach ($filePatterns as $filePattern) {
+            $filePattern = PathNormalizer::normalize($filePattern);
             if ($this->doesFileMatchPattern($filePath, $filePattern)) {
                 return \true;
             }
@@ -46,7 +49,7 @@ final class FileInfoMatcher
      */
     private function doesFileMatchPattern(string $filePath, string $ignoredPath) : bool
     {
-        // in ecs.php, the path can be absolute
+        // in rector.php, the path can be absolute
         if ($filePath === $ignoredPath) {
             return \true;
         }
