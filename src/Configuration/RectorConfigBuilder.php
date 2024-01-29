@@ -8,7 +8,10 @@ use Rector\Config\RectorConfig;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
+use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\FOSRestSetList;
 use Rector\Symfony\Set\JMSSetList;
@@ -243,6 +246,56 @@ final class RectorConfigBuilder
         }
         if ($sensiolabs) {
             $this->sets[] = SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES;
+        }
+        return $this;
+    }
+    /**
+     * What PHP sets should be applied? By default the same version
+     * as composer.json has is used
+     */
+    public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false) : self
+    {
+        $pickedArguments = \array_filter(\func_get_args());
+        if (\count($pickedArguments) > 1) {
+            throw new InvalidConfigurationException(\sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
+        }
+        if ($pickedArguments === []) {
+            // use composer.json PHP version
+            $projectComposerJsonFilePath = \getcwd() . '/composer.json';
+            if (\file_exists($projectComposerJsonFilePath)) {
+                $projectPhpVersion = ProjectComposerJsonPhpVersionResolver::resolve($projectComposerJsonFilePath);
+                if (\is_int($projectPhpVersion)) {
+                    $this->sets[] = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
+                    return $this;
+                }
+            }
+            throw new InvalidConfigurationException(\sprintf('We could not find local "composer.json" to determine your PHP version.%sPlease, fill the PHP version set in withPhpSets() manually.', \PHP_EOL));
+        } elseif ($php53) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_53;
+        } elseif ($php54) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_54;
+        } elseif ($php55) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_55;
+        } elseif ($php56) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_56;
+        } elseif ($php70) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_70;
+        } elseif ($php71) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_71;
+        } elseif ($php72) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_72;
+        } elseif ($php73) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_73;
+        } elseif ($php74) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_74;
+        } elseif ($php80) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_80;
+        } elseif ($php81) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_81;
+        } elseif ($php82) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_82;
+        } elseif ($php83) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_83;
         }
         return $this;
     }

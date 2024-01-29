@@ -34,17 +34,11 @@ final class ConditionResolver
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    /**
-     * @readonly
-     * @var \Rector\Util\PhpVersionFactory
-     */
-    private $phpVersionFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, ValueResolver $valueResolver, PhpVersionFactory $phpVersionFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, ValueResolver $valueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->valueResolver = $valueResolver;
-        $this->phpVersionFactory = $phpVersionFactory;
     }
     public function resolveFromExpr(Expr $expr) : ?ConditionInterface
     {
@@ -121,7 +115,7 @@ final class ConditionResolver
             return $this->phpVersionProvider->provide();
         }
         if (\is_string($version)) {
-            return $this->phpVersionFactory->createIntVersion($version);
+            return PhpVersionFactory::createIntVersion($version);
         }
         return $version;
     }

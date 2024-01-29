@@ -1389,6 +1389,7 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
         'Rector\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
         'Rector\\Configuration\\Parameter\\SimpleParameterProvider' => __DIR__ . '/../..' . '/src/Configuration/Parameter/SimpleParameterProvider.php',
+        'Rector\\Configuration\\PhpLevelSetResolver' => __DIR__ . '/../..' . '/src/Configuration/PhpLevelSetResolver.php',
         'Rector\\Configuration\\RectorConfigBuilder' => __DIR__ . '/../..' . '/src/Configuration/RectorConfigBuilder.php',
         'Rector\\Configuration\\RenamedClassesDataCollector' => __DIR__ . '/../..' . '/src/Configuration/RenamedClassesDataCollector.php',
         'Rector\\Console\\Command\\CustomRuleCommand' => __DIR__ . '/../..' . '/src/Console/Command/CustomRuleCommand.php',

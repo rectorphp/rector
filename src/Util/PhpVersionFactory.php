@@ -5,7 +5,7 @@ namespace Rector\Util;
 
 final class PhpVersionFactory
 {
-    public function createIntVersion(string $version) : int
+    public static function createIntVersion(string $version) : int
     {
         $explodeDash = \explode('-', $version);
         if (\count($explodeDash) > 1) {

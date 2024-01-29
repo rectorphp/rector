@@ -1175,6 +1175,7 @@ return array(
     'Rector\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
     'Rector\\Configuration\\Option' => $baseDir . '/src/Configuration/Option.php',
     'Rector\\Configuration\\Parameter\\SimpleParameterProvider' => $baseDir . '/src/Configuration/Parameter/SimpleParameterProvider.php',
+    'Rector\\Configuration\\PhpLevelSetResolver' => $baseDir . '/src/Configuration/PhpLevelSetResolver.php',
     'Rector\\Configuration\\RectorConfigBuilder' => $baseDir . '/src/Configuration/RectorConfigBuilder.php',
     'Rector\\Configuration\\RenamedClassesDataCollector' => $baseDir . '/src/Configuration/RenamedClassesDataCollector.php',
     'Rector\\Console\\Command\\CustomRuleCommand' => $baseDir . '/src/Console/Command/CustomRuleCommand.php',

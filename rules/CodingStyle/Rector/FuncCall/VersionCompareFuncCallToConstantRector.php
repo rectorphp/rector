@@ -27,18 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
     /**
-     * @readonly
-     * @var \Rector\Util\PhpVersionFactory
-     */
-    private $phpVersionFactory;
-    /**
      * @var array<string, class-string<BinaryOp>>
      */
     private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
-    public function __construct(PhpVersionFactory $phpVersionFactory)
-    {
-        $this->phpVersionFactory = $phpVersionFactory;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new CodeSample(<<<'CODE_SAMPLE'
@@ -121,7 +112,7 @@ CODE_SAMPLE
         if (!$expr instanceof String_) {
             return null;
         }
-        $value = $this->phpVersionFactory->createIntVersion($expr->value);
+        $value = PhpVersionFactory::createIntVersion($expr->value);
         return new LNumber($value);
     }
 }

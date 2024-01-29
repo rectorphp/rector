@@ -17,11 +17,6 @@ use ReflectionClass;
 final class PhpVersionProvider
 {
     /**
-     * @readonly
-     * @var \Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
-     */
-    private $projectComposerJsonPhpVersionResolver;
-    /**
      * @var string
      * @see https://regex101.com/r/qBMnbl/1
      */
@@ -30,10 +25,6 @@ final class PhpVersionProvider
      * @var int|null
      */
     private $phpVersionFeatures = null;
-    public function __construct(ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
-    {
-        $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
-    }
     /**
      * @return PhpVersion::*
      */
@@ -53,7 +44,7 @@ final class PhpVersionProvider
         }
         $projectComposerJson = \getcwd() . '/composer.json';
         if (\file_exists($projectComposerJson)) {
-            $phpVersion = $this->projectComposerJsonPhpVersionResolver->resolve($projectComposerJson);
+            $phpVersion = ProjectComposerJsonPhpVersionResolver::resolve($projectComposerJson);
             if ($phpVersion !== null) {
                 return $this->phpVersionFeatures = $phpVersion;
             }
