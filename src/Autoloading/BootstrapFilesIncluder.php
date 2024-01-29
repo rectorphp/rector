@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Autoloading;
 
+use Phar;
 use FilesystemIterator;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -28,6 +29,11 @@ final class BootstrapFilesIncluder
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
                 throw new ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
+            }
+            // load phar file
+            if (\substr_compare($bootstrapFile, '.phar', -\strlen('.phar')) === 0) {
+                Phar::loadPhar($bootstrapFile);
+                continue;
             }
             require $bootstrapFile;
         }
