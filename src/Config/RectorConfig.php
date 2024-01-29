@@ -141,7 +141,7 @@ final class RectorConfig extends Container
         SimpleParameterProvider::addParameter(Option::PHPSTAN_FOR_RECTOR_PATHS, $filePaths);
     }
     /**
-     * @param class-string<ConfigurableRectorInterface&RectorInterface> $rectorClass
+     * @param class-string<ConfigurableRectorInterface> $rectorClass
      * @param mixed[] $configuration
      */
     public function ruleWithConfiguration(string $rectorClass, array $configuration) : void

@@ -5,6 +5,7 @@ namespace Rector\Configuration;
 
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Config\RectorConfig;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -37,9 +38,9 @@ final class RectorConfigBuilder
      */
     private $rules = [];
     /**
-     * @var array<class-string<RectorInterface>, mixed[]>
+     * @var array<class-string<ConfigurableRectorInterface>, mixed[]>
      */
-    private $rulesWithConfiguration = [];
+    private $rulesWithConfigurations = [];
     /**
      * @var string[]
      */
@@ -127,8 +128,10 @@ final class RectorConfigBuilder
         $rectorConfig->paths($this->paths);
         $rectorConfig->skip($this->skip);
         $rectorConfig->rules($this->rules);
-        foreach ($this->rulesWithConfiguration as $ruleWithConfiguration) {
-            $rectorConfig->ruleWithConfiguration($ruleWithConfiguration[0], $ruleWithConfiguration[1]);
+        foreach ($this->rulesWithConfigurations as $rectorClass => $configurations) {
+            foreach ($configurations as $configuration) {
+                $rectorConfig->ruleWithConfiguration($rectorClass, $configuration);
+            }
         }
         if ($this->fileExtensions !== []) {
             $rectorConfig->fileExtensions($this->fileExtensions);
@@ -301,12 +304,12 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @param class-string<(RectorInterface)> $rectorClass
+     * @param class-string<ConfigurableRectorInterface> $rectorClass
      * @param mixed[] $configuration
      */
     public function withConfiguredRule(string $rectorClass, array $configuration) : self
     {
-        $this->rulesWithConfiguration[$rectorClass] = $configuration;
+        $this->rulesWithConfigurations[$rectorClass][] = $configuration;
         return $this;
     }
     public function withParallel(?int $timeoutSeconds = null, ?int $maxNumberOfProcess = null, ?int $jobSize = null) : self
