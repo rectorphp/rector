@@ -7,9 +7,9 @@ use RectorPrefix202401\Nette\Utils\FileSystem as UtilsFileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Configuration\VendorMissAnalyseGuard;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Provider\CurrentFileProvider;
-use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -73,6 +73,11 @@ final class ApplicationFileProcessor
      */
     private $arrayParametersMerger;
     /**
+     * @readonly
+     * @var \Rector\Configuration\VendorMissAnalyseGuard
+     */
+    private $vendorMissAnalyseGuard;
+    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -80,7 +85,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, VendorMissAnalyseGuard $vendorMissAnalyseGuard)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -91,11 +96,12 @@ final class ApplicationFileProcessor
         $this->currentFileProvider = $currentFileProvider;
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
+        $this->vendorMissAnalyseGuard = $vendorMissAnalyseGuard;
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
-        if ($this->containsVendorPath($filePaths)) {
+        if ($this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
             $this->symfonyStyle->warning(\sprintf('Rector is running on your "/vendor" directory. This is not necessary, as Rector access /vendor by composer autoload. It will cause Rector tu run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
             \sleep(3);
         }
@@ -244,17 +250,5 @@ final class ApplicationFileProcessor
             return null;
         }
         return $potentialRectorBinaryPath;
-    }
-    /**
-     * @param string[] $filePaths
-     */
-    private function containsVendorPath(array $filePaths) : bool
-    {
-        foreach ($filePaths as $filePath) {
-            if (\strpos(PathNormalizer::normalize($filePath), '/vendor/') !== \false) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }
