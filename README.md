@@ -144,12 +144,6 @@ $node = new String_('hello world!');
 
 // prints node to string, as PHP code displays it
 print_node($node);
-
-// dump nested node object with nested properties
-dump_node($node);
-
-// 2nd argument is how deep the nesting is - this makes sure the dump is short and useful
-dump_node($node, 1);
 ```
 
 <br>

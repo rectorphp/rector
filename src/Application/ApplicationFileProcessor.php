@@ -9,6 +9,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Provider\CurrentFileProvider;
+use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -94,6 +95,10 @@ final class ApplicationFileProcessor
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
+        if ($this->containsVendorPath($filePaths)) {
+            $this->symfonyStyle->warning(\sprintf('Rector is running on your "/vendor" directory. This is not necessary, as Rector access /vendor by composer autoload. It will cause Rector tu run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
+            \sleep(3);
+        }
         // no files found
         if ($filePaths === []) {
             return new ProcessResult([], []);
@@ -239,5 +244,17 @@ final class ApplicationFileProcessor
             return null;
         }
         return $potentialRectorBinaryPath;
+    }
+    /**
+     * @param string[] $filePaths
+     */
+    private function containsVendorPath(array $filePaths) : bool
+    {
+        foreach ($filePaths as $filePath) {
+            if (\strpos(PathNormalizer::normalize($filePath), '/vendor/') !== \false) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
