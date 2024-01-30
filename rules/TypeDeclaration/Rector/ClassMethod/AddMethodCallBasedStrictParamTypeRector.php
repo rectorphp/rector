@@ -47,7 +47,7 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change private method param type to strict type, based on passed strict types', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change private classMethod param type to strict type, based on passed strict types', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(int $value)
@@ -88,20 +88,19 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
-        foreach ($node->getMethods() as $method) {
-            if ($method->params === []) {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->params === []) {
                 continue;
             }
-            $isPrivate = $node->isFinal() && !$node->extends instanceof Name && $node->implements === [] && $method->isProtected() || $method->isFinal() && !$node->extends instanceof Name && $node->implements === [] || $method->isPrivate();
-            if (!$isPrivate) {
+            if (!$this->isClassMethodPrivate($node, $classMethod)) {
                 continue;
             }
-            if ($method->isPublic()) {
+            if ($classMethod->isPublic()) {
                 continue;
             }
-            $methodCalls = $this->localMethodCallFinder->match($node, $method);
+            $methodCalls = $this->localMethodCallFinder->match($node, $classMethod);
             $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
-            $classMethod = $this->classMethodParamTypeCompleter->complete($method, $classMethodParameterTypes, self::MAX_UNION_TYPES);
+            $classMethod = $this->classMethodParamTypeCompleter->complete($classMethod, $classMethodParameterTypes, self::MAX_UNION_TYPES);
             if ($classMethod instanceof ClassMethod) {
                 $hasChanged = \true;
             }
@@ -110,5 +109,15 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function isClassMethodPrivate(Class_ $class, ClassMethod $classMethod) : bool
+    {
+        if ($classMethod->isPrivate()) {
+            return \true;
+        }
+        if ($classMethod->isFinal() && !$class->extends instanceof Name && $class->implements === []) {
+            return \true;
+        }
+        return $class->isFinal() && !$class->extends instanceof Name && $class->implements === [] && $classMethod->isProtected();
     }
 }

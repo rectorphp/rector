@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -67,6 +68,10 @@ final class ClassMethodParamTypeCompleter
             // check default override
             $param = $classMethod->params[$position];
             if (!$this->isAcceptedByDefault($param, $argumentStaticType)) {
+                continue;
+            }
+            // skip if param type already filled
+            if ($param->type instanceof Identifier) {
                 continue;
             }
             if ($param->type instanceof Name && $param->type->getAttribute(AttributeKey::VIRTUAL_NODE) === \true) {
