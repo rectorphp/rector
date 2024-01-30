@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Autoloading;
 
-use Phar;
 use FilesystemIterator;
+use Phar;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;

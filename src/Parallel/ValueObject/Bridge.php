@@ -28,12 +28,4 @@ final class Bridge
      * @var string
      */
     public const FILES_COUNT = 'files_count';
-    /**
-     * @var string
-     */
-    public const COLLECTED_DATA = 'collected_data';
-    /**
-     * @var string
-     */
-    public const PREVIOUSLY_COLLECTED_DATA = 'previously_collected_data';
 }

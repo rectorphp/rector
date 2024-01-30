@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202401\Nette\Utils\FileSystem as UtilsFileSystem;
-use PHPStan\Collectors\CollectedData;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -97,7 +96,7 @@ final class ApplicationFileProcessor
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
         // no files found
         if ($filePaths === []) {
-            return new ProcessResult([], [], []);
+            return new ProcessResult([], []);
         }
         $this->configureCustomErrorHandler();
         /**
@@ -142,8 +141,6 @@ final class ApplicationFileProcessor
         $systemErrors = [];
         /** @var FileDiff[] $fileDiffs */
         $fileDiffs = [];
-        /** @var CollectedData[] $collectedData */
-        $collectedData = [];
         foreach ($filePaths as $filePath) {
             if ($preFileCallback !== null) {
                 $preFileCallback($filePath);
@@ -168,7 +165,7 @@ final class ApplicationFileProcessor
                 $systemErrors[] = $this->resolveSystemError($throwable, $filePath);
             }
         }
-        return new ProcessResult($systemErrors, $fileDiffs, $collectedData);
+        return new ProcessResult($systemErrors, $fileDiffs);
     }
     private function processFile(File $file, Configuration $configuration) : FileProcessResult
     {

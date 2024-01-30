@@ -5,7 +5,6 @@ namespace Rector\Console\Command;
 
 use RectorPrefix202401\Clue\React\NDJson\Decoder;
 use RectorPrefix202401\Clue\React\NDJson\Encoder;
-use PHPStan\Collectors\CollectedData;
 use RectorPrefix202401\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202401\React\Socket\ConnectionInterface;
 use RectorPrefix202401\React\Socket\TcpConnector;
@@ -113,19 +112,6 @@ final class WorkerCommand extends Command
             if ($action !== Action::MAIN) {
                 return;
             }
-            $previouslyCollectedDataItems = $json[Bridge::PREVIOUSLY_COLLECTED_DATA] ?? [];
-            if ($previouslyCollectedDataItems !== []) {
-                // turn to value objects
-                $previouslyCollectedDatas = [];
-                foreach ($previouslyCollectedDataItems as $previouslyCollectedDataItem) {
-                    Assert::keyExists($previouslyCollectedDataItem, 'data');
-                    Assert::keyExists($previouslyCollectedDataItem, 'filePath');
-                    Assert::keyExists($previouslyCollectedDataItem, 'collectorType');
-                    $previouslyCollectedDatas[] = CollectedData::decode($previouslyCollectedDataItem);
-                }
-                $configuration->setCollectedData($previouslyCollectedDatas);
-                $configuration->enableSecondRun();
-            }
             /** @var string[] $filePaths */
             $filePaths = $json[Bridge::FILES] ?? [];
             Assert::notEmpty($filePaths);
@@ -133,7 +119,7 @@ final class WorkerCommand extends Command
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
-            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs(), Bridge::FILES_COUNT => \count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => \count($processResult->getSystemErrors()), Bridge::COLLECTED_DATA => $processResult->getCollectedData()]]);
+            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs(), Bridge::FILES_COUNT => \count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => \count($processResult->getSystemErrors())]]);
         });
         $decoder->on(ReactEvent::ERROR, $handleErrorCallback);
     }

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\ValueObject;
 
-use PHPStan\Collectors\CollectedData;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use RectorPrefix202401\Webmozart\Assert\Assert;
 final class Configuration
@@ -68,14 +67,6 @@ final class Configuration
      * @var bool
      */
     private $isDebug = \false;
-    /**
-     * @var bool
-     */
-    private $isSecondRun = \false;
-    /**
-     * @var CollectedData[]
-     */
-    private $collectedData = [];
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths
@@ -149,40 +140,5 @@ final class Configuration
     public function isDebug() : bool
     {
         return $this->isDebug;
-    }
-    /**
-     * @param CollectedData[] $collectedData
-     */
-    public function setCollectedData(array $collectedData) : void
-    {
-        $this->collectedData = $collectedData;
-    }
-    /**
-     * @return CollectedData[]
-     */
-    public function getCollectedData() : array
-    {
-        return $this->collectedData;
-    }
-    /**
-     * @api
-     */
-    public function enableSecondRun() : void
-    {
-        $this->isSecondRun = \true;
-    }
-    /**
-     * @api
-     */
-    public function isSecondRun() : bool
-    {
-        return $this->isSecondRun;
-    }
-    /**
-     * @api used in tests
-     */
-    public function reset() : void
-    {
-        $this->isSecondRun = \false;
     }
 }
