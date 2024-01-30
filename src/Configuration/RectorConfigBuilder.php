@@ -135,7 +135,8 @@ final class RectorConfigBuilder
     private $symfonyContainerPhpFile;
     public function __invoke(RectorConfig $rectorConfig) : void
     {
-        $rectorConfig->sets($this->sets);
+        $uniqueSets = \array_unique($this->sets);
+        $rectorConfig->sets($uniqueSets);
         $rectorConfig->paths($this->paths);
         $rectorConfig->skip($this->skip);
         $rectorConfig->rules($this->rules);
