@@ -25,6 +25,7 @@ final class BootstrapFilesIncluder
     {
         $bootstrapFiles = SimpleParameterProvider::provideArrayParameter(Option::BOOTSTRAP_FILES);
         Assert::allString($bootstrapFiles);
+        $isLoadPHPUnitPhar = \false;
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
@@ -33,13 +34,16 @@ final class BootstrapFilesIncluder
             // load phar file
             if (\substr_compare($bootstrapFile, '.phar', -\strlen('.phar')) === 0) {
                 Phar::loadPhar($bootstrapFile);
+                if (\substr_compare($bootstrapFile, 'phpunit.phar', -\strlen('phpunit.phar')) === 0) {
+                    $isLoadPHPUnitPhar = \true;
+                }
                 continue;
             }
             require $bootstrapFile;
         }
-        $this->requireRectorStubs();
+        $this->requireRectorStubs($isLoadPHPUnitPhar);
     }
-    private function requireRectorStubs() : void
+    private function requireRectorStubs(bool $isLoadPHPUnitPhar) : void
     {
         /** @var false|string $stubsRectorDirectory */
         $stubsRectorDirectory = \realpath(__DIR__ . '/../../stubs-rector');
@@ -50,7 +54,11 @@ final class BootstrapFilesIncluder
         /** @var SplFileInfo[] $stubs */
         $stubs = new RecursiveIteratorIterator($dir);
         foreach ($stubs as $stub) {
-            require_once $stub->getRealPath();
+            $realPath = $stub->getRealPath();
+            if ($isLoadPHPUnitPhar && \substr_compare($realPath, 'TestCase.php', -\strlen('TestCase.php')) === 0) {
+                continue;
+            }
+            require_once $realPath;
         }
     }
 }
