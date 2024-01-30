@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Autoloading;
 
 use FilesystemIterator;
-use Phar;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;
@@ -31,19 +30,11 @@ final class BootstrapFilesIncluder
             if (!\is_file($bootstrapFile)) {
                 throw new ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
-            // load phar file
-            if (\substr_compare($bootstrapFile, '.phar', -\strlen('.phar')) === 0) {
-                Phar::loadPhar($bootstrapFile);
-                if (\substr_compare($bootstrapFile, 'phpunit.phar', -\strlen('phpunit.phar')) === 0) {
-                    $isLoadPHPUnitPhar = \true;
-                }
-                continue;
-            }
             require $bootstrapFile;
         }
-        $this->requireRectorStubs($isLoadPHPUnitPhar);
+        $this->requireRectorStubs();
     }
-    private function requireRectorStubs(bool $isLoadPHPUnitPhar) : void
+    private function requireRectorStubs() : void
     {
         /** @var false|string $stubsRectorDirectory */
         $stubsRectorDirectory = \realpath(__DIR__ . '/../../stubs-rector');
@@ -54,11 +45,7 @@ final class BootstrapFilesIncluder
         /** @var SplFileInfo[] $stubs */
         $stubs = new RecursiveIteratorIterator($dir);
         foreach ($stubs as $stub) {
-            $realPath = $stub->getRealPath();
-            if ($isLoadPHPUnitPhar && \substr_compare($realPath, 'TestCase.php', -\strlen('TestCase.php')) === 0) {
-                continue;
-            }
-            require_once $realPath;
+            require_once $stub->getRealPath();
         }
     }
 }
