@@ -67,21 +67,7 @@ CODE_SAMPLE
             return null;
         }
         if ($node->elseifs !== []) {
-            $originalNode = clone $node;
-            $if = new If_($node->cond);
-            $if->stmts = $node->stmts;
-            $this->mirrorComments($if, $node);
-            /** @var ElseIf_ $firstElseIf */
-            $firstElseIf = \array_shift($node->elseifs);
-            $node->cond = $firstElseIf->cond;
-            $node->stmts = $firstElseIf->stmts;
-            $this->mirrorComments($node, $firstElseIf);
-            $nodesToReturnAfterNode = $this->getStatementsElseIfs($node);
-            if ($originalNode->else instanceof Else_) {
-                $node->else = null;
-                $nodesToReturnAfterNode = \array_merge($nodesToReturnAfterNode, [$originalNode->else]);
-            }
-            return \array_merge([$if, $node], $nodesToReturnAfterNode);
+            return $this->handleElseIfs($node);
         }
         if ($node->else instanceof Else_) {
             $stmts = $node->else->stmts;
@@ -89,6 +75,39 @@ CODE_SAMPLE
             return \array_merge([$node], $stmts);
         }
         return null;
+    }
+    /**
+     * @return Node[]
+     */
+    private function handleElseIfs(If_ $if) : array
+    {
+        $nodesToReturn = [];
+        $originalIf = clone $if;
+        $firstIf = $this->createIfFromNode($if);
+        $nodesToReturn[] = $firstIf;
+        while ($if->elseifs !== []) {
+            /** @var ElseIf_ $currentElseIf */
+            $currentElseIf = \array_shift($if->elseifs);
+            // If the last statement in the `elseif` breaks flow, merge it into the original `if` and stop processing
+            if ($this->doesLastStatementBreakFlow($currentElseIf)) {
+                $this->updateIfWithElseIf($if, $currentElseIf);
+                $nodesToReturn = \array_merge(\is_array($nodesToReturn) ? $nodesToReturn : \iterator_to_array($nodesToReturn), [$if], $this->getStatementsElseIfs($if));
+                break;
+            }
+            $isLastElseIf = $if->elseifs === [];
+            // If it's the last `elseif`, merge it with the original `if` to keep the formatting
+            if ($isLastElseIf) {
+                $this->updateIfWithElseIf($if, $currentElseIf);
+                $nodesToReturn[] = $if;
+                break;
+            }
+            // Otherwise, create a separate `if` node for `elseif`
+            $nodesToReturn[] = $this->createIfFromNode($currentElseIf);
+        }
+        if ($originalIf->else instanceof Else_) {
+            $nodesToReturn[] = $originalIf->else;
+        }
+        return $nodesToReturn;
     }
     /**
      * @return ElseIf_[]
@@ -123,5 +142,22 @@ CODE_SAMPLE
             return \false;
         }
         return !($lastStmt instanceof Return_ || $lastStmt instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
+     */
+    private function createIfFromNode($node) : If_
+    {
+        $if = new If_($node->cond);
+        $if->stmts = $node->stmts;
+        $this->mirrorComments($if, $node);
+        return $if;
+    }
+    private function updateIfWithElseIf(If_ $if, ElseIf_ $elseIf) : void
+    {
+        $if->cond = $elseIf->cond;
+        $if->stmts = $elseIf->stmts;
+        $this->mirrorComments($if, $elseIf);
+        $if->else = null;
     }
 }
