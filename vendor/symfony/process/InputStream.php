@@ -37,7 +37,7 @@ class InputStream implements \IteratorAggregate
      *
      * @return void
      */
-    public function onEmpty(callable $onEmpty = null)
+    public function onEmpty(?callable $onEmpty = null)
     {
         $this->onEmpty = null !== $onEmpty ? \Closure::fromCallable($onEmpty) : null;
     }

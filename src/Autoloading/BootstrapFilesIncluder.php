@@ -24,7 +24,6 @@ final class BootstrapFilesIncluder
     {
         $bootstrapFiles = SimpleParameterProvider::provideArrayParameter(Option::BOOTSTRAP_FILES);
         Assert::allString($bootstrapFiles);
-        $isLoadPHPUnitPhar = \false;
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {

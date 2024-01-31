@@ -146,7 +146,7 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
         $this->command->ignoreValidationErrors();
         parent::ignoreValidationErrors();
     }
-    public function setApplication(Application $application = null) : void
+    public function setApplication(?Application $application = null) : void
     {
         $this->command->setApplication($application);
     }
@@ -215,18 +215,18 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
      * @param mixed $default
      * @return static
      */
-    public function addArgument(string $name, int $mode = null, string $description = '', $default = null, $suggestedValues = [])
+    public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null, $suggestedValues = [])
     {
         $this->command->addArgument($name, $mode, $description, $default, $suggestedValues);
         return $this;
     }
     /**
-     * @param string|mixed[] $shortcut
+     * @param string|mixed[]|null $shortcut
      * @param mixed[]|\Closure $suggestedValues
      * @param mixed $default
      * @return static
      */
-    public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null, $suggestedValues = [])
+    public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null, $suggestedValues = [])
     {
         $this->command->addOption($name, $shortcut, $mode, $description, $default, $suggestedValues);
         return $this;

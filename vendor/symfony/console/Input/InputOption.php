@@ -75,7 +75,7 @@ class InputOption
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
-    public function __construct(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null, $suggestedValues = [])
+    public function __construct(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null, $suggestedValues = [])
     {
         if (\strncmp($name, '--', \strlen('--')) === 0) {
             $name = \substr($name, 2);
@@ -83,7 +83,7 @@ class InputOption
         if (empty($name)) {
             throw new InvalidArgumentException('An option name cannot be empty.');
         }
-        if (empty($shortcut)) {
+        if ('' === $shortcut || [] === $shortcut) {
             $shortcut = null;
         }
         if (null !== $shortcut) {
@@ -91,9 +91,9 @@ class InputOption
                 $shortcut = \implode('|', $shortcut);
             }
             $shortcuts = \preg_split('{(\\|)-?}', \ltrim($shortcut, '-'));
-            $shortcuts = \array_filter($shortcuts);
+            $shortcuts = \array_filter($shortcuts, 'strlen');
             $shortcut = \implode('|', $shortcuts);
-            if (empty($shortcut)) {
+            if ('' === $shortcut) {
                 throw new InvalidArgumentException('An option shortcut cannot be empty.');
             }
         }
@@ -174,7 +174,7 @@ class InputOption
     }
     /**
      * @return void
-     * @param string|bool|int|float|mixed[] $default
+     * @param string|bool|int|float|mixed[]|null $default
      */
     public function setDefault($default = null)
     {

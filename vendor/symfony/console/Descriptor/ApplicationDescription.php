@@ -45,7 +45,7 @@ class ApplicationDescription
      * @var array<string, Command>
      */
     private $aliases = [];
-    public function __construct(Application $application, string $namespace = null, bool $showHidden = \false)
+    public function __construct(Application $application, ?string $namespace = null, bool $showHidden = \false)
     {
         $this->application = $application;
         $this->namespace = $namespace;

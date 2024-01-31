@@ -72,7 +72,7 @@ class ConsoleSectionOutput extends StreamOutput
      *
      * @return void
      */
-    public function clear(int $lines = null)
+    public function clear(?int $lines = null)
     {
         if (empty($this->content) || !$this->isDecorated()) {
             return;

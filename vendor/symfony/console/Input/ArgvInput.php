@@ -46,7 +46,7 @@ class ArgvInput extends Input
      * @var mixed[]
      */
     private $parsed;
-    public function __construct(array $argv = null, InputDefinition $definition = null)
+    public function __construct(?array $argv = null, ?InputDefinition $definition = null)
     {
         $argv = $argv ?? $_SERVER['argv'] ?? [];
         // strip the application name
