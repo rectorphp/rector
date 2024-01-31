@@ -5,7 +5,6 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\FileSystem\FilePathHelper;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
@@ -18,11 +17,6 @@ final class ClassMethodParamVendorLockResolver
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
@@ -31,10 +25,9 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\FileSystem\FilePathHelper
      */
     private $filePathHelper;
-    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionResolver $reflectionResolver, FilePathHelper $filePathHelper)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->filePathHelper = $filePathHelper;
     }
@@ -49,27 +42,11 @@ final class ClassMethodParamVendorLockResolver
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($this->hasTraitMethodVendorLock($classReflection, $methodName)) {
-            return \true;
-        }
         // has interface vendor lock? → better skip it, as PHPStan has access only to just analyzed classes
         if ($this->hasParentInterfaceMethod($classReflection, $methodName)) {
             return \true;
         }
         return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '/vendor/');
-    }
-    private function hasTraitMethodVendorLock(ClassReflection $classReflection, string $methodName) : bool
-    {
-        $relatedReflectionClasses = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-        foreach ($relatedReflectionClasses as $relatedReflectionClass) {
-            foreach ($relatedReflectionClass->getTraits() as $traitReflectionClass) {
-                /** @var ClassReflection $traitReflectionClass */
-                if ($traitReflectionClass->hasMethod($methodName)) {
-                    return \true;
-                }
-            }
-        }
-        return \false;
     }
     /**
      * Has interface even in our project?
