@@ -6,7 +6,6 @@ namespace Rector\NodeManipulator;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassManipulator
 {
@@ -20,16 +19,10 @@ final class ClassManipulator
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @readonly
-     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
-     */
-    private $classChildAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->classChildAnalyzer = $classChildAnalyzer;
     }
     public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod, string $newMethod) : bool
     {
@@ -40,9 +33,6 @@ final class ClassManipulator
         $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             if (!$ancestorClassReflection->hasMethod($oldMethod)) {
-                continue;
-            }
-            if ($this->classChildAnalyzer->hasChildClassMethod($ancestorClassReflection, $newMethod)) {
                 continue;
             }
             return \true;

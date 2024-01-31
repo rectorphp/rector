@@ -120,9 +120,6 @@ CODE_SAMPLE
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($this->classChildAnalyzer->hasChildClassMethod($classReflection, $methodName)) {
-            return \true;
-        }
         return $this->classChildAnalyzer->hasParentClassMethod($classReflection, $methodName);
     }
     /**

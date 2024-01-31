@@ -35,6 +35,7 @@ final class FamilyRelationsAnalyzer
     }
     /**
      * @return ClassReflection[]
+     * @deprecated as not reliable
      */
     public function getChildrenOfClassReflection(ClassReflection $desiredClassReflection) : array
     {
