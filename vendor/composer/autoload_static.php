@@ -2173,6 +2173,7 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
+        'Rector\\Privatization\\Rector\\Class_\\FinalizeTestCaseClassRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
