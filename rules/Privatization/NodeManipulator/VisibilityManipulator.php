@@ -53,6 +53,7 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_ABSTRACT;
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function makeFinal($node) : void
