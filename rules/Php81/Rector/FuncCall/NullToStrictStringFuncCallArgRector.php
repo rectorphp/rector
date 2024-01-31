@@ -20,12 +20,14 @@ use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php81\Enum\NameNullToStrictNullFunctionMap;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
@@ -57,12 +59,18 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver, UnionTypeAnalyzer $unionTypeAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -168,7 +176,7 @@ CODE_SAMPLE
         if ($type->isString()->yes()) {
             return null;
         }
-        if (!$type instanceof MixedType && !$type instanceof NullType) {
+        if (!$type instanceof MixedType && !$type instanceof NullType && !($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type))) {
             return null;
         }
         if ($argValue instanceof Encapsed) {

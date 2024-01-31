@@ -1311,6 +1311,7 @@ return array(
     'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
     'Rector\\Doctrine\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php',
+    'Rector\\Doctrine\\NodeAnalyzer\\DoctrineEntityDetector' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/DoctrineEntityDetector.php',
     'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
     'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => $vendorDir . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
     'Rector\\Doctrine\\NodeFactory\\ValueAssignFactory' => $vendorDir . '/rector/rector-doctrine/src/NodeFactory/ValueAssignFactory.php',
