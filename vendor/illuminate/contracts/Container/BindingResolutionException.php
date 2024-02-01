@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202401\Illuminate\Contracts\Container;
+namespace RectorPrefix202402\Illuminate\Contracts\Container;
 
 use Exception;
-use RectorPrefix202401\Psr\Container\ContainerExceptionInterface;
+use RectorPrefix202402\Psr\Container\ContainerExceptionInterface;
 class BindingResolutionException extends Exception implements ContainerExceptionInterface
 {
     //

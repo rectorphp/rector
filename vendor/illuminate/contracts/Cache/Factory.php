@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202401\Illuminate\Contracts\Cache;
+namespace RectorPrefix202402\Illuminate\Contracts\Cache;
 
 interface Factory
 {

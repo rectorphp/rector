@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202401\Illuminate\Contracts\Database;
+namespace RectorPrefix202402\Illuminate\Contracts\Database;
 
 class ModelIdentifier
 {

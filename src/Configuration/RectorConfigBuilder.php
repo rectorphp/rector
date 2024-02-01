@@ -18,7 +18,7 @@ use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202401\Symfony\Component\Finder\Finder;
+use RectorPrefix202402\Symfony\Component\Finder\Finder;
 /**
  * @api
  */

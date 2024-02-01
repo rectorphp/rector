@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\ValueObject;
 
 use PhpParser\Node\Stmt\Property;
-use RectorPrefix202401\Webmozart\Assert\Assert;
+use RectorPrefix202402\Webmozart\Assert\Assert;
 final class EntityMapping
 {
     /**

@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Bootstrap;
 
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix202401\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202401\Webmozart\Assert\Assert;
+use RectorPrefix202402\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202402\Webmozart\Assert\Assert;
 final class RectorConfigsResolver
 {
     public function provide() : BootstrapConfigs

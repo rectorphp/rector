@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Util;
 
-use RectorPrefix202401\Nette\Utils\Strings;
+use RectorPrefix202402\Nette\Utils\Strings;
 use Rector\RectorGenerator\Exception\ConfigurationException;
 use Rector\ValueObject\Configuration;
 /**

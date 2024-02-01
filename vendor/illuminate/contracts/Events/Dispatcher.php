@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202401\Illuminate\Contracts\Events;
+namespace RectorPrefix202402\Illuminate\Contracts\Events;
 
 interface Dispatcher
 {

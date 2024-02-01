@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php\PhpVersionResolver;
 
-use RectorPrefix202401\Composer\Semver\VersionParser;
-use RectorPrefix202401\Nette\Utils\FileSystem;
-use RectorPrefix202401\Nette\Utils\Json;
+use RectorPrefix202402\Composer\Semver\VersionParser;
+use RectorPrefix202402\Nette\Utils\FileSystem;
+use RectorPrefix202402\Nette\Utils\Json;
 use Rector\Util\PhpVersionFactory;
 /**
  * @see \Rector\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
@@ -13,12 +13,12 @@ use Rector\Util\PhpVersionFactory;
 final class ProjectComposerJsonPhpVersionResolver
 {
     /**
-     * @var array<string, int>
+     * @var array<string, int|null>
      */
     private static $cachedPhpVersions = [];
     public static function resolve(string $composerJson) : ?int
     {
-        if (isset(self::$cachedPhpVersions[$composerJson])) {
+        if (\array_key_exists($composerJson, self::$cachedPhpVersions)) {
             return self::$cachedPhpVersions[$composerJson];
         }
         $composerJsonContents = FileSystem::read($composerJson);
@@ -31,7 +31,7 @@ final class ProjectComposerJsonPhpVersionResolver
         }
         $requirePhpVersion = $projectComposerJson['require']['php'] ?? null;
         if ($requirePhpVersion === null) {
-            return null;
+            return self::$cachedPhpVersions[$composerJson] = null;
         }
         self::$cachedPhpVersions[$composerJson] = self::createIntVersionFromComposerVersion($requirePhpVersion);
         return self::$cachedPhpVersions[$composerJson];

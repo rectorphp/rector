@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202401\Psr\Log;
+namespace RectorPrefix202402\Psr\Log;
 
 /**
  * This Logger can be used to avoid conditional log calls.

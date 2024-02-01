@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202401;
+namespace RectorPrefix202402;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\PHPUnit50\Rector\StaticCall\GetMockRector;

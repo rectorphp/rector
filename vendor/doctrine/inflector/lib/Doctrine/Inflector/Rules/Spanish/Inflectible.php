@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202401\Doctrine\Inflector\Rules\Spanish;
+namespace RectorPrefix202402\Doctrine\Inflector\Rules\Spanish;
 
-use RectorPrefix202401\Doctrine\Inflector\Rules\Pattern;
-use RectorPrefix202401\Doctrine\Inflector\Rules\Substitution;
-use RectorPrefix202401\Doctrine\Inflector\Rules\Transformation;
-use RectorPrefix202401\Doctrine\Inflector\Rules\Word;
+use RectorPrefix202402\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202402\Doctrine\Inflector\Rules\Substitution;
+use RectorPrefix202402\Doctrine\Inflector\Rules\Transformation;
+use RectorPrefix202402\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /** @return Transformation[] */
@@ -21,11 +21,11 @@ class Inflectible
     /** @return Transformation[] */
     public static function getPlural() : iterable
     {
-        (yield new Transformation(new Pattern('/ú([sn])$/i'), 'RectorPrefix202401\\u\\1es'));
-        (yield new Transformation(new Pattern('/ó([sn])$/i'), 'RectorPrefix202401\\o\\1es'));
-        (yield new Transformation(new Pattern('/í([sn])$/i'), 'RectorPrefix202401\\i\\1es'));
-        (yield new Transformation(new Pattern('/é([sn])$/i'), 'RectorPrefix202401\\e\\1es'));
-        (yield new Transformation(new Pattern('/á([sn])$/i'), 'RectorPrefix202401\\a\\1es'));
+        (yield new Transformation(new Pattern('/ú([sn])$/i'), 'RectorPrefix202402\\u\\1es'));
+        (yield new Transformation(new Pattern('/ó([sn])$/i'), 'RectorPrefix202402\\o\\1es'));
+        (yield new Transformation(new Pattern('/í([sn])$/i'), 'RectorPrefix202402\\i\\1es'));
+        (yield new Transformation(new Pattern('/é([sn])$/i'), 'RectorPrefix202402\\e\\1es'));
+        (yield new Transformation(new Pattern('/á([sn])$/i'), 'RectorPrefix202402\\a\\1es'));
         (yield new Transformation(new Pattern('/z$/i'), 'ces'));
         (yield new Transformation(new Pattern('/([aeiou]s)$/i'), '\\1'));
         (yield new Transformation(new Pattern('/([^aeéiou])$/i'), '\\1es'));

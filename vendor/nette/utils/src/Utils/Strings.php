@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202401\Nette\Utils;
+namespace RectorPrefix202402\Nette\Utils;
 
-use RectorPrefix202401\JetBrains\PhpStorm\Language;
-use RectorPrefix202401\Nette;
+use RectorPrefix202402\JetBrains\PhpStorm\Language;
+use RectorPrefix202402\Nette;
 use function is_array, is_object, strlen;
 /**
  * String tools library.

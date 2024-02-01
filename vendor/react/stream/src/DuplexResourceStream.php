@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202401\React\Stream;
+namespace RectorPrefix202402\React\Stream;
 
-use RectorPrefix202401\Evenement\EventEmitter;
-use RectorPrefix202401\React\EventLoop\Loop;
-use RectorPrefix202401\React\EventLoop\LoopInterface;
+use RectorPrefix202402\Evenement\EventEmitter;
+use RectorPrefix202402\React\EventLoop\Loop;
+use RectorPrefix202402\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
 final class DuplexResourceStream extends EventEmitter implements DuplexStreamInterface
 {
