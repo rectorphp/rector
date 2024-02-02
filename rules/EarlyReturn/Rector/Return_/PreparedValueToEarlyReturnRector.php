@@ -93,19 +93,20 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        /** @var BareSingleAssignIf[] $bareSingleAssignIfs */
-        $bareSingleAssignIfs = [];
+        /** @var If_[] $ifs */
+        $ifs = [];
         $initialAssign = null;
         $initialAssignPosition = null;
         foreach ($node->stmts as $key => $stmt) {
-            $bareSingleAssignIf = $this->matchBareSingleAssignIf($stmt, $key, $node);
-            if ($bareSingleAssignIf instanceof BareSingleAssignIf) {
-                $bareSingleAssignIfs[] = $bareSingleAssignIf;
+            if ($stmt instanceof If_) {
+                $ifs[$key] = $stmt;
                 continue;
             }
             if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
                 $initialAssign = $stmt->expr;
                 $initialAssignPosition = $key;
+                $ifs = [];
+                continue;
             }
             if (!$stmt instanceof Return_) {
                 continue;
@@ -121,15 +122,32 @@ CODE_SAMPLE
             if (!$initialAssign instanceof Assign) {
                 return null;
             }
-            if ($bareSingleAssignIfs === []) {
+            $matchingBareSingleAssignIfs = $this->getMatchingBareSingleAssignIfs($ifs, $node);
+            if ($matchingBareSingleAssignIfs === []) {
                 return null;
             }
-            if (!$this->isVariableSharedInAssignIfsAndReturn($bareSingleAssignIfs, $return->expr, $initialAssign)) {
+            if (!$this->isVariableSharedInAssignIfsAndReturn($matchingBareSingleAssignIfs, $return->expr, $initialAssign)) {
                 return null;
             }
-            return $this->refactorToDirectReturns($node, $initialAssignPosition, $bareSingleAssignIfs, $initialAssign, $return);
+            return $this->refactorToDirectReturns($node, $initialAssignPosition, $matchingBareSingleAssignIfs, $initialAssign, $return);
         }
         return null;
+    }
+    /**
+     * @param If_[] $ifs
+     * @return BareSingleAssignIf[]
+     */
+    private function getMatchingBareSingleAssignIfs(array $ifs, StmtsAwareInterface $stmtsAware) : array
+    {
+        $bareSingleAssignIfs = [];
+        foreach ($ifs as $key => $if) {
+            $bareSingleAssignIf = $this->matchBareSingleAssignIf($if, $key, $stmtsAware);
+            if (!$bareSingleAssignIf instanceof BareSingleAssignIf) {
+                return [];
+            }
+            $bareSingleAssignIfs[] = $bareSingleAssignIf;
+        }
+        return $bareSingleAssignIfs;
     }
     /**
      * @param BareSingleAssignIf[] $bareSingleAssignIfs
