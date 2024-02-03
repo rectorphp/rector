@@ -223,6 +223,10 @@ CODE_SAMPLE
         if ($class->isReadonly()) {
             return \true;
         }
+        // not safe
+        if ($class->getTraitUses() !== []) {
+            return \true;
+        }
         // skip "clone $this" cases, as can create unexpected write to local constructor property
         return $this->hasCloneThis($class);
     }
