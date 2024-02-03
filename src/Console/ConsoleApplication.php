@@ -34,10 +34,10 @@ final class ConsoleApplication extends Application
     }
     public function doRun(InputInterface $input, OutputInterface $output) : int
     {
-        // @fixes https://github.com/rectorphp/rector/issues/2205
         $isXdebugAllowed = $input->hasParameterOption('--xdebug');
-        if ($isXdebugAllowed) {
+        if (!$isXdebugAllowed) {
             $xdebugHandler = new XdebugHandler('rector');
+            $xdebugHandler->setPersistent();
             $xdebugHandler->check();
             unset($xdebugHandler);
         }
