@@ -1,4 +1,4 @@
-# 354 Rules Overview
+# 355 Rules Overview
 
 <br>
 
@@ -46,7 +46,7 @@
 
 - [Php83](#php83) (3)
 
-- [Privatization](#privatization) (4)
+- [Privatization](#privatization) (5)
 
 - [Removing](#removing) (5)
 
@@ -5319,6 +5319,23 @@ Finalize every class that has no children
  }
 
  class SecondClass
+ {
+ }
+```
+
+<br>
+
+### FinalizeTestCaseClassRector
+
+PHPUnit test case will be finalized
+
+- class: [`Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector`](../rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php)
+
+```diff
+-use PHPUnit\Framework\TestCase;
++final use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
  {
  }
 ```
