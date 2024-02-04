@@ -2476,6 +2476,7 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
         'Rector\\Transform\\Rector\\Class_\\AddInterfaceByTraitRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/AddInterfaceByTraitRector.php',
         'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
         'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
+        'Rector\\Transform\\Rector\\FileWithoutNamespace\\RectorConfigBuilderRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FileWithoutNamespace/RectorConfigBuilderRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToNewRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToNewRector.php',
