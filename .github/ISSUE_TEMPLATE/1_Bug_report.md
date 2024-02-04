@@ -10,7 +10,7 @@ about: Report errors and problems
 
 | Subject        | Details                                                         |
 | :------------- | :---------------------------------------------------------------|
-| Rector version | e.g. v0.11.5 (invoke `vendor/bin/rector --version`)             |
+| Rector version | e.g. v0.19.5 (invoke `vendor/bin/rector --version`)             |
 
 <!-- Please describe your problem here. -->
 
