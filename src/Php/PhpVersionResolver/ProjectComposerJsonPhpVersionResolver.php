@@ -35,7 +35,7 @@ final class ProjectComposerJsonPhpVersionResolver
             self::$cachedPhpVersions[$composerJson] = PhpVersionFactory::createIntVersion($platformPhp);
             return self::$cachedPhpVersions[$composerJson];
         }
-        return null;
+        return self::$cachedPhpVersions[$composerJson] = null;
     }
     private static function createIntVersionFromComposerVersion(string $projectPhpVersion) : int
     {
