@@ -20,6 +20,7 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -51,16 +52,22 @@ final class ConstructorAssignDetector
      */
     private $propertyFetchAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    /**
      * @var string
      */
     private const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->nodeComparator = $nodeComparator;
     }
     public function isPropertyAssigned(ClassLike $classLike, string $propertyName) : bool
     {
@@ -179,14 +186,18 @@ final class ConstructorAssignDetector
     private function isPropertyUsedInAssign(Assign $assign, string $propertyName) : bool
     {
         $nodeFinder = new NodeFinder();
-        return (bool) $nodeFinder->findFirst($assign->expr, static function (Node $node) use($propertyName) : ?bool {
+        $var = $assign->var;
+        return (bool) $nodeFinder->findFirst($assign->expr, function (Node $node) use($propertyName, $var) : ?bool {
             if (!$node instanceof PropertyFetch) {
                 return null;
             }
             if (!$node->name instanceof Identifier) {
                 return null;
             }
-            return $node->name->toString() === $propertyName;
+            if ($node->name->toString() !== $propertyName) {
+                return null;
+            }
+            return $this->nodeComparator->areNodesEqual($node, $var);
         });
     }
 }
