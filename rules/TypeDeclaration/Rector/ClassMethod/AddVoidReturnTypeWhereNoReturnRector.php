@@ -4,10 +4,8 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -79,10 +77,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -96,7 +94,7 @@ CODE_SAMPLE
         if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
             return null;
         }
-        if ($node instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
+        if ($this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
         $node->returnType = new Identifier('void');
@@ -106,32 +104,26 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::VOID_TYPE;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     */
-    private function shouldSkipClassMethod($functionLike) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
-        if (!$functionLike instanceof ClassMethod) {
-            return \false;
-        }
-        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($functionLike)) {
+        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
             return \true;
         }
-        if ($functionLike->isAbstract()) {
+        if ($classMethod->isAbstract()) {
             return \true;
         }
         // is not final and has only exception? possibly implemented by child
-        if ($this->isNotFinalAndHasExceptionOnly($functionLike)) {
+        if ($this->isNotFinalAndHasExceptionOnly($classMethod)) {
             return \true;
         }
         // possibly required by child implementation
-        if ($this->isNotFinalAndEmpty($functionLike)) {
+        if ($this->isNotFinalAndEmpty($classMethod)) {
             return \true;
         }
-        if ($functionLike->isProtected()) {
-            return !$this->classModifierChecker->isInsideFinalClass($functionLike);
+        if ($classMethod->isProtected()) {
+            return !$this->classModifierChecker->isInsideFinalClass($classMethod);
         }
-        return $this->classModifierChecker->isInsideAbstractClass($functionLike) && $functionLike->getStmts() === [];
+        return $this->classModifierChecker->isInsideAbstractClass($classMethod) && $classMethod->getStmts() === [];
     }
     private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod) : bool
     {
