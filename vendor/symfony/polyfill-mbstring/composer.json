@@ -40,9 +40,6 @@
     },
     "minimum-stability": "dev",
     "extra": {
-        "branch-alias": {
-            "dev-main": "1.28-dev"
-        },
         "thanks": {
             "name": "symfony\/polyfill",
             "url": "https:\/\/github.com\/symfony\/polyfill"

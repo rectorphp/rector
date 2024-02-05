@@ -26,6 +26,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRecto
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYieldsRector;
@@ -51,6 +52,9 @@ final class TypeCoverageLevel
      */
     public const RULE_LIST = [
         // php 7.0
+        // start with closure first, as safest
+        AddClosureVoidReturnTypeWhereNoReturnRector::class,
+        // @todo continue with functions
         AddVoidReturnTypeWhereNoReturnRector::class,
         // php 7.4
         AddArrowFunctionReturnTypeRector::class,
