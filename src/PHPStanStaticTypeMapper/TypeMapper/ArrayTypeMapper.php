@@ -85,13 +85,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
         // this cannot be handled by PHPStan $type->toPhpDocNode() as requires space removal around "|" in union type
         // then e.g. "int" instead of explicit number, and nice arrays
         $itemType = $type->getItemType();
-        if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType) {
+        $isGenericArray = $this->isGenericArrayCandidate($type);
+        if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType && !$isGenericArray) {
             return $this->createArrayTypeNodeFromUnionType($itemType);
         }
         if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
             return $this->createGenericArrayType($type, \true);
         }
-        if ($this->isGenericArrayCandidate($type)) {
+        if ($isGenericArray) {
             return $this->createGenericArrayType($type, \true);
         }
         $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
