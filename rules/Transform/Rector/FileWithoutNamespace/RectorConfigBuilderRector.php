@@ -18,6 +18,7 @@ use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix202402\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FileWithoutNamespace\RectorConfigBuilderRector\RectorConfigBuilderRectorTest
  */
@@ -89,6 +90,9 @@ CODE_SAMPLE
                 }
                 if ($this->isName($rectorConfigStmt->expr->name, 'rule')) {
                     $rules->items[] = new ArrayItem($rectorConfigStmt->expr->getArgs()[0]->value);
+                } elseif ($this->isName($rectorConfigStmt->expr->name, 'rules')) {
+                    Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
+                    $rules->items = \array_merge($rules->items, $rectorConfigStmt->expr->getArgs()[0]->value->items);
                 } else {
                     // implementing method by method
                     return null;
