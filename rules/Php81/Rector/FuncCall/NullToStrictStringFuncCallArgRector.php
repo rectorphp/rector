@@ -176,7 +176,11 @@ CODE_SAMPLE
         if ($type->isString()->yes()) {
             return null;
         }
-        if (!$type instanceof MixedType && !$type instanceof NullType && !($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type))) {
+        $nativeType = $this->nodeTypeResolver->getNativeType($argValue);
+        if ($nativeType->isString()->yes()) {
+            return null;
+        }
+        if ($this->shouldSkipType($type)) {
             return null;
         }
         if ($argValue instanceof Encapsed) {
@@ -191,6 +195,10 @@ CODE_SAMPLE
         $args[$position]->value = new CastString_($argValue);
         $funcCall->args = $args;
         return $funcCall;
+    }
+    private function shouldSkipType(Type $type) : bool
+    {
+        return !$type instanceof MixedType && !$type instanceof NullType && !($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type));
     }
     private function shouldSkipTrait(Expr $expr, Type $type, bool $isTrait) : bool
     {
