@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use Throwable;
 use RectorPrefix202402\Nette\Utils\Strings;
 use Rector\CustomRules\SimpleNodeDumper;
 use Rector\PhpParser\Parser\SimplePhpParser;
@@ -13,6 +12,7 @@ use RectorPrefix202402\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202402\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202402\Symfony\Component\Console\Question\Question;
 use RectorPrefix202402\Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 final class DetectNodeCommand extends Command
 {
     /**
