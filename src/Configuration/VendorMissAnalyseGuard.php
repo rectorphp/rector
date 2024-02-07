@@ -35,7 +35,7 @@ final class VendorMissAnalyseGuard
         $cwd = PathNormalizer::normalize(\getcwd());
         foreach ($filePaths as $filePath) {
             $normalizedPath = PathNormalizer::normalize(\realpath($filePath));
-            if (\strncmp(\substr($normalizedPath, \strlen($cwd)), '/vendor', \strlen('/vendor')) === 0) {
+            if (\strncmp(\substr($normalizedPath, \strlen($cwd)), '/vendor/', \strlen('/vendor/')) === 0) {
                 return \true;
             }
         }
