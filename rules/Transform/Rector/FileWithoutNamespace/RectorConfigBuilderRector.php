@@ -73,6 +73,7 @@ CODE_SAMPLE
             $newExpr = new StaticCall(new FullyQualified('Rector\\Config\\RectorConfig'), 'configure');
             $rules = new Array_();
             $paths = new Array_();
+            $skips = new Array_();
             foreach ($stmts as $rectorConfigStmt) {
                 // complex stmts should be skipped, eg: with if else
                 if (!$rectorConfigStmt instanceof Expression) {
@@ -97,6 +98,9 @@ CODE_SAMPLE
                 } elseif ($this->isName($rectorConfigStmt->expr->name, 'paths')) {
                     Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
                     $paths = $rectorConfigStmt->expr->getArgs()[0]->value;
+                } elseif ($this->isName($rectorConfigStmt->expr->name, 'skip')) {
+                    Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
+                    $skips = $rectorConfigStmt->expr->getArgs()[0]->value;
                 } else {
                     // implementing method by method
                     return null;
@@ -104,6 +108,10 @@ CODE_SAMPLE
             }
             if ($paths->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withPaths', [$paths]);
+                $hasChanged = \true;
+            }
+            if ($skips->items !== []) {
+                $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withSkip', [$skips]);
                 $hasChanged = \true;
             }
             if ($rules->items !== []) {
