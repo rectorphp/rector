@@ -1450,7 +1450,6 @@ return array(
     'Rector\\Exception\\VersionException' => $baseDir . '/src/Exception/VersionException.php',
     'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => $baseDir . '/src/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
     'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => $baseDir . '/src/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
-    'Rector\\FileSystemRector\\Parser\\FileInfoParser' => $baseDir . '/src/FileSystemRector/Parser/FileInfoParser.php',
     'Rector\\FileSystem\\FileAndDirectoryFilter' => $baseDir . '/src/FileSystem/FileAndDirectoryFilter.php',
     'Rector\\FileSystem\\FilePathHelper' => $baseDir . '/src/FileSystem/FilePathHelper.php',
     'Rector\\FileSystem\\FilesFinder' => $baseDir . '/src/FileSystem/FilesFinder.php',

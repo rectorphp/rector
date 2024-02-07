@@ -1664,7 +1664,6 @@ class ComposerStaticInite7277bc9955b8320d8e3feecf0919422
         'Rector\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/src/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/src/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
-        'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/src/FileSystemRector/Parser/FileInfoParser.php',
         'Rector\\FileSystem\\FileAndDirectoryFilter' => __DIR__ . '/../..' . '/src/FileSystem/FileAndDirectoryFilter.php',
         'Rector\\FileSystem\\FilePathHelper' => __DIR__ . '/../..' . '/src/FileSystem/FilePathHelper.php',
         'Rector\\FileSystem\\FilesFinder' => __DIR__ . '/../..' . '/src/FileSystem/FilesFinder.php',
