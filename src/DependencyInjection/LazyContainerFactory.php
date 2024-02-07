@@ -49,6 +49,7 @@ use Rector\Config\RectorConfig;
 use Rector\Configuration\ConfigInitializer;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Console\Command\CustomRuleCommand;
+use Rector\Console\Command\DetectNodeCommand;
 use Rector\Console\Command\ListRulesCommand;
 use Rector\Console\Command\ProcessCommand;
 use Rector\Console\Command\SetupCICommand;
@@ -259,13 +260,13 @@ final class LazyContainerFactory
         $rectorConfig->singleton(SetupCICommand::class);
         $rectorConfig->singleton(ListRulesCommand::class);
         $rectorConfig->singleton(CustomRuleCommand::class);
+        $rectorConfig->singleton(DetectNodeCommand::class);
         $rectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         // dev
         if (\class_exists(MissingInSetCommand::class)) {
             $rectorConfig->singleton(MissingInSetCommand::class);
             $rectorConfig->singleton(OutsideAnySetCommand::class);
         }
-        $rectorConfig->alias(TypeParser::class, BetterTypeParser::class);
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
         // phpdoc-parser
@@ -308,6 +309,8 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
         $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
+        // PHP 8.0 attributes
+        $this->registerTagged($rectorConfig, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
@@ -320,10 +323,9 @@ final class LazyContainerFactory
             $symfonyStyleFactory = $container->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();
         });
-        $this->registerTagged($rectorConfig, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
         $rectorConfig->when(AnnotationToAttributeMapper::class)->needs('$annotationToAttributeMappers')->giveTagged(AnnotationToAttributeMapperInterface::class);
         $rectorConfig->when(OutputFormatterCollector::class)->needs('$outputFormatters')->giveTagged(OutputFormatterInterface::class);
-        // #[Required]-like setter
+        // required-like setter
         $rectorConfig->afterResolving(ArrayAnnotationToAttributeMapper::class, static function (ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper, Container $container) : void {
             $annotationToAttributesMapper = $container->make(AnnotationToAttributeMapper::class);
             $arrayAnnotationToAttributeMapper->autowire($annotationToAttributesMapper);
@@ -344,10 +346,6 @@ final class LazyContainerFactory
         $rectorConfig->afterResolving(\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper::class, static function (\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper $unionTypeMapper, Container $container) : void {
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $unionTypeMapper->autowire($phpStanStaticTypeMapper);
-        });
-        $rectorConfig->singleton(Parser::class, static function (Container $container) {
-            $phpstanServiceFactory = $container->make(PHPStanServicesFactory::class);
-            return $phpstanServiceFactory->createPHPStanParser();
         });
         $rectorConfig->afterResolving(CurlyListNodeAnnotationToAttributeMapper::class, static function (CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper, Container $container) : void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);

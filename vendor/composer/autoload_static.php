@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
+class ComposerStaticInitd8a5ed51c42e9e1b169fafa71fcb8ab3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1397,6 +1397,7 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
         'Rector\\Configuration\\RenamedClassesDataCollector' => __DIR__ . '/../..' . '/src/Configuration/RenamedClassesDataCollector.php',
         'Rector\\Configuration\\VendorMissAnalyseGuard' => __DIR__ . '/../..' . '/src/Configuration/VendorMissAnalyseGuard.php',
         'Rector\\Console\\Command\\CustomRuleCommand' => __DIR__ . '/../..' . '/src/Console/Command/CustomRuleCommand.php',
+        'Rector\\Console\\Command\\DetectNodeCommand' => __DIR__ . '/../..' . '/src/Console/Command/DetectNodeCommand.php',
         'Rector\\Console\\Command\\ListRulesCommand' => __DIR__ . '/../..' . '/src/Console/Command/ListRulesCommand.php',
         'Rector\\Console\\Command\\ProcessCommand' => __DIR__ . '/../..' . '/src/Console/Command/ProcessCommand.php',
         'Rector\\Console\\Command\\SetupCICommand' => __DIR__ . '/../..' . '/src/Console/Command/SetupCICommand.php',
@@ -1414,6 +1415,7 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
         'Rector\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
+        'Rector\\CustomRules\\SimpleNodeDumper' => __DIR__ . '/../..' . '/src/CustomRules/SimpleNodeDumper.php',
         'Rector\\DeadCode\\ConditionEvaluator' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionEvaluator.php',
         'Rector\\DeadCode\\ConditionResolver' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionResolver.php',
         'Rector\\DeadCode\\Contract\\ConditionInterface' => __DIR__ . '/../..' . '/rules/DeadCode/Contract/ConditionInterface.php',
@@ -2661,9 +2663,9 @@ class ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf637847380e2ddf55dcae18dded1d2b3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd8a5ed51c42e9e1b169fafa71fcb8ab3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd8a5ed51c42e9e1b169fafa71fcb8ab3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd8a5ed51c42e9e1b169fafa71fcb8ab3::$classMap;
 
         }, null, ClassLoader::class);
     }

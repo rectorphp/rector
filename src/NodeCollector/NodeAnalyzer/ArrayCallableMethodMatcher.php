@@ -84,7 +84,7 @@ final class ArrayCallableMethodMatcher
         $className = $callerType->getClassName();
         $secondItemValue = $items[1]->value;
         if ($values === null) {
-            return new ArrayCallableDynamicMethod($firstItemValue, $className, $secondItemValue);
+            return new ArrayCallableDynamicMethod();
         }
         if ($this->shouldSkipAssociativeArray($values)) {
             return null;

@@ -6,9 +6,9 @@ namespace Rector\DeadCode\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\NodeFinder;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\StmtsManipulator;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,17 +19,17 @@ final class RemoveUnusedForeachKeyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
+     * @var \PhpParser\NodeFinder
      */
-    private $betterNodeFinder;
+    private $nodeFinder;
     /**
      * @readonly
      * @var \Rector\NodeManipulator\StmtsManipulator
      */
     private $stmtsManipulator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, StmtsManipulator $stmtsManipulator)
+    public function __construct(NodeFinder $nodeFinder, StmtsManipulator $stmtsManipulator)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeFinder = $nodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -72,7 +72,7 @@ CODE_SAMPLE
                 continue;
             }
             $keyVar = $stmt->keyVar;
-            $isNodeUsed = (bool) $this->betterNodeFinder->findFirst($stmt->stmts, function (Node $node) use($keyVar) : bool {
+            $isNodeUsed = (bool) $this->nodeFinder->findFirst($stmt->stmts, function (Node $node) use($keyVar) : bool {
                 return $this->nodeComparator->areNodesEqual($node, $keyVar);
             });
             if ($isNodeUsed) {
