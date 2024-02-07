@@ -102,7 +102,7 @@ final class ApplicationFileProcessor
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
         if ($this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
-            $this->symfonyStyle->warning(\sprintf('Rector is running on your "/vendor" directory. This is not necessary, as Rector access /vendor by composer autoload. It will cause Rector tu run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
+            $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
             \sleep(3);
         }
         // no files found
