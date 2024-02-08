@@ -1,8 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Configuration\Levels;
+namespace Rector\Config\Level;
 
+use Rector\Contract\Rector\RectorInterface;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
@@ -10,19 +11,24 @@ use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromPropertyTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictFluentReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictParamRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
@@ -31,27 +37,18 @@ use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector
 use Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYieldsRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
-/**
- * Key 0 = level 0
- * Key 50 = level 50
- *
- * Start at 0, go slowly higher, one level per PR, and improve your type coverage
- *
- * From the safest rules to more changing ones.
- * @experimental Since 0.19.7 This list can change in time, based on community feedback,
- * what rules are safer than other. The safest rules will be always in the top.
- */
-final class TypeCoverageLevel
+final class TypeDeclarationLevel
 {
     /**
-     * Mind that return type declarations are the safest to add,
-     * followed by property, then params
+     * The rule order matters, as its used in withTypeCoverageLevel() method
+     * Place the safest rules first, follow by more complex ones
      *
-     * @var array<class-string>
+     * @var array<class-string<RectorInterface>>
      */
-    public const RULE_LIST = [
+    public const RULES = [
         // php 7.0
         // start with closure first, as safest
         AddClosureVoidReturnTypeWhereNoReturnRector::class,
@@ -69,6 +66,7 @@ final class TypeCoverageLevel
         // php 7.4
         TypedPropertyFromStrictConstructorRector::class,
         ReturnTypeFromReturnDirectArrayRector::class,
+        ReturnTypeFromStrictTypedPropertyRector::class,
         AddParamTypeSplFixedArrayRector::class,
         AddReturnTypeDeclarationFromYieldsRector::class,
         AddParamTypeBasedOnPHPUnitDataProviderRector::class,
@@ -89,5 +87,10 @@ final class TypeCoverageLevel
         PropertyTypeFromStrictSetterGetterRector::class,
         StrictArrayParamDimFetchRector::class,
         StrictStringParamConcatRector::class,
+        ParamTypeByMethodCallTypeRector::class,
+        TypedPropertyFromAssignsRector::class,
+        AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
+        ReturnTypeFromStrictFluentReturnRector::class,
+        ReturnNeverTypeRector::class,
     ];
 }

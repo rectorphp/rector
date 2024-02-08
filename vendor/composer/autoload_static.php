@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc583cd9db12694da4a6881390cc7f232
+class ComposerStaticInit1b339dc0499cd68a8f6303eceabc7478
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -631,6 +631,8 @@ class ComposerStaticInitc583cd9db12694da4a6881390cc7f232
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Diagnoser' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Diagnoser.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Executor/ProcOpenExecutor.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Executor\\ProcessExecutor' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Executor/ProcessExecutor.php',
+        'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\CmiCmdletLogicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/CmiCmdletLogicalFinder.php',
+        'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\CmiCmdletPhysicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/CmiCmdletPhysicalFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\CpuCoreFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/CpuCoreFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\CpuInfoFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/CpuInfoFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\DummyCpuCoreFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/DummyCpuCoreFinder.php',
@@ -642,9 +644,11 @@ class ComposerStaticInitc583cd9db12694da4a6881390cc7f232
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\NProcFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/NProcFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\NProcessorFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/NProcessorFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\NullCpuCoreFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/NullCpuCoreFinder.php',
+        'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\OnlyInPowerShellFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/OnlyInPowerShellFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\OnlyOnOSFamilyFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/OnlyOnOSFamilyFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\ProcOpenBasedFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/ProcOpenBasedFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\SkipOnOSFamilyFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/SkipOnOSFamilyFinder.php',
+        'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\WindowsRegistryLogicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/WindowsRegistryLogicalFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\WmicLogicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/WmicLogicalFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\WmicPhysicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/WmicPhysicalFinder.php',
         'RectorPrefix202402\\Fidry\\CpuCoreCounter\\Finder\\_NProcessorFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/_NProcessorFinder.php',
@@ -1384,12 +1388,12 @@ class ComposerStaticInitc583cd9db12694da4a6881390cc7f232
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/src/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
         'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => __DIR__ . '/../..' . '/src/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+        'Rector\\Config\\Level\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Config/Level/DeadCodeLevel.php',
+        'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',
         'Rector\\Configuration\\ConfigInitializer' => __DIR__ . '/../..' . '/src/Configuration/ConfigInitializer.php',
         'Rector\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
-        'Rector\\Configuration\\Levels\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Configuration/Levels/DeadCodeLevel.php',
         'Rector\\Configuration\\Levels\\LevelRulesResolver' => __DIR__ . '/../..' . '/src/Configuration/Levels/LevelRulesResolver.php',
-        'Rector\\Configuration\\Levels\\TypeCoverageLevel' => __DIR__ . '/../..' . '/src/Configuration/Levels/TypeCoverageLevel.php',
         'Rector\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
         'Rector\\Configuration\\Parameter\\SimpleParameterProvider' => __DIR__ . '/../..' . '/src/Configuration/Parameter/SimpleParameterProvider.php',
         'Rector\\Configuration\\PhpLevelSetResolver' => __DIR__ . '/../..' . '/src/Configuration/PhpLevelSetResolver.php',
@@ -2662,9 +2666,9 @@ class ComposerStaticInitc583cd9db12694da4a6881390cc7f232
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc583cd9db12694da4a6881390cc7f232::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc583cd9db12694da4a6881390cc7f232::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc583cd9db12694da4a6881390cc7f232::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1b339dc0499cd68a8f6303eceabc7478::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1b339dc0499cd68a8f6303eceabc7478::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1b339dc0499cd68a8f6303eceabc7478::$classMap;
 
         }, null, ClassLoader::class);
     }

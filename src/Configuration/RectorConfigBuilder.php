@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
+use Rector\Config\Level\DeadCodeLevel;
+use Rector\Config\Level\TypeDeclarationLevel;
 use Rector\Config\RectorConfig;
-use Rector\Configuration\Levels\DeadCodeLevel;
 use Rector\Configuration\Levels\LevelRulesResolver;
-use Rector\Configuration\Levels\TypeCoverageLevel;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
@@ -494,7 +494,7 @@ final class RectorConfigBuilder
     public function withDeadCodeLevel(int $level) : self
     {
         $this->isDeadCodeLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, DeadCodeLevel::RULE_LIST, 'RectorConfig::withDeadCodeLevel()');
+        $levelRules = LevelRulesResolver::resolve($level, DeadCodeLevel::RULES, 'RectorConfig::withDeadCodeLevel()');
         $this->rules = \array_merge($this->rules, $levelRules);
         return $this;
     }
@@ -505,7 +505,7 @@ final class RectorConfigBuilder
     public function withTypeCoverageLevel(int $level) : self
     {
         $this->isTypeCoverageLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, TypeCoverageLevel::RULE_LIST, 'RectorConfig::withTypeCoverageLevel()');
+        $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, 'RectorConfig::withTypeCoverageLevel()');
         $this->rules = \array_merge($this->rules, $levelRules);
         return $this;
     }

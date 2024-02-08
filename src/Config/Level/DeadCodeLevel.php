@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Configuration\Levels;
+namespace Rector\Config\Level;
 
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\Contract\Rector\RectorInterface;
@@ -64,7 +64,7 @@ final class DeadCodeLevel
      *
      * @var array<class-string<RectorInterface>>
      */
-    public const RULE_LIST = [
+    public const RULES = [
         // easy picks
         RemoveUnusedForeachKeyRector::class,
         RemoveDuplicatedArrayKeyRector::class,
