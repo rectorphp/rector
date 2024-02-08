@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use Throwable;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -143,7 +144,7 @@ final class PHPStanNodeScopeResolver
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $filePath) : void {
             if ($node instanceof FileWithoutNamespace) {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $this->nodeScopeResolver->processNodes($node->stmts, $mutatingScope, $nodeCallback);
+                $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast) && $node->expr instanceof Expr) {
@@ -208,12 +209,26 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         };
-        $this->nodeScopeResolver->processNodes($stmts, $scope, $nodeCallback);
+        $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
         $nodeTraverser->addVisitor(new ExprScopeFromStmtNodeVisitor($this, $filePath, $scope));
         $nodeTraverser->traverse($stmts);
         return $stmts;
+    }
+    /**
+     * @param Stmt[] $stmts
+     * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
+     */
+    private function nodeScopeResolverProcessNodes(array $stmts, MutatingScope $mutatingScope, callable $nodeCallback) : void
+    {
+        try {
+            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
+        } catch (Throwable $throwable) {
+            if ($throwable->getMessage() !== 'Internal error.') {
+                throw $throwable;
+            }
+        }
     }
     public function hasUnreachableStatementNode() : bool
     {
@@ -377,7 +392,7 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitClassReflection);
         $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
         $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
-        $this->nodeScopeResolver->processNodes($trait->stmts, $traitScope, $nodeCallback);
+        $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
         $this->decorateTraitAttrGroups($trait, $traitScope);
     }
 }
