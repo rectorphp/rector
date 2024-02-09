@@ -27,7 +27,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php81\Enum\NameNullToStrictNullFunctionMap;
 use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
@@ -59,18 +58,12 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    /**
-     * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
-     */
-    private $unionTypeAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver, UnionTypeAnalyzer $unionTypeAnalyzer)
+    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->valueResolver = $valueResolver;
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -196,9 +189,25 @@ CODE_SAMPLE
         $funcCall->args = $args;
         return $funcCall;
     }
+    private function isValidUnionType(Type $type) : bool
+    {
+        if (!$type instanceof UnionType) {
+            return \false;
+        }
+        foreach ($type->getTypes() as $childType) {
+            if ($childType->isString()->yes()) {
+                continue;
+            }
+            if ($childType->isNull()->yes()) {
+                continue;
+            }
+            return \false;
+        }
+        return \true;
+    }
     private function shouldSkipType(Type $type) : bool
     {
-        return !$type instanceof MixedType && !$type instanceof NullType && !($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type, \true));
+        return !$type instanceof MixedType && !$type instanceof NullType && !$this->isValidUnionType($type);
     }
     private function shouldSkipTrait(Expr $expr, Type $type, bool $isTrait) : bool
     {
