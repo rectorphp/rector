@@ -9,7 +9,7 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.3",
-        "phpstan\/phpstan": "^1.10.28",
+        "phpstan\/phpstan": "^1.10.57",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^10.5",
         "rector\/rector-generator": "^0.7",

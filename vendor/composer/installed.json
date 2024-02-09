@@ -1864,12 +1864,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "92f8dec13005239b2f05236538ab252a698dc8b2"
+                "reference": "5a62f1739e6feb5463d95ed02063aae860d358e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/92f8dec13005239b2f05236538ab252a698dc8b2",
-                "reference": "92f8dec13005239b2f05236538ab252a698dc8b2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5a62f1739e6feb5463d95ed02063aae860d358e4",
+                "reference": "5a62f1739e6feb5463d95ed02063aae860d358e4",
                 "shasum": ""
             },
             "require": {
@@ -1878,7 +1878,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.3",
-                "phpstan\/phpstan": "^1.10.28",
+                "phpstan\/phpstan": "^1.10.57",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-generator": "^0.7",
@@ -1898,7 +1898,7 @@
                 "tomasvotruba\/class-leak": "^0.2.6",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-01-31T23:46:18+00:00",
+            "time": "2024-02-09T12:04:30+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1920,7 +1920,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/1.0.0"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
