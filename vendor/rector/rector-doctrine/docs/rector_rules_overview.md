@@ -1,4 +1,4 @@
-# 17 Rules Overview
+# 18 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -279,6 +279,27 @@ Remove empty Table attribute on entities because it's useless
  #[ORM\Entity]
  class Product
  {
+ }
+```
+
+<br>
+
+## ReplaceFetchAllMethodCallRector
+
+Change `Doctrine\DBAL\Connection` `->fetchAll()` to `->fetchAllAssociative()` and other replacements
+
+- class: [`Rector\Doctrine\Dbal211\Rector\MethodCall\ReplaceFetchAllMethodCallRector`](../rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php)
+
+```diff
+ use Doctrine\DBAL\Connection;
+
+ class SomeClass
+ {
+     public function run(Connection $connection)
+     {
+-        return $connection->fetchAll();
++        return $connection->fetchAllAssociative();
+     }
  }
 ```
 

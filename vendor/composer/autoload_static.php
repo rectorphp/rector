@@ -1530,6 +1530,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\Doctrine\\CodeQuality\\Utils\\CaseStringHelper' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Utils/CaseStringHelper.php',
         'Rector\\Doctrine\\CodeQuality\\ValueObject\\EntityMapping' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/ValueObject/EntityMapping.php',
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
+        'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',
         'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',

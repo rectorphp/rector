@@ -1316,6 +1316,7 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\Utils\\CaseStringHelper' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Utils/CaseStringHelper.php',
     'Rector\\Doctrine\\CodeQuality\\ValueObject\\EntityMapping' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/ValueObject/EntityMapping.php',
     'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
+    'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',
     'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
