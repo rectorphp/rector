@@ -1391,6 +1391,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\Config\\Level\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Config/Level/DeadCodeLevel.php',
         'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',
+        'Rector\\Config\\RegisteredService' => __DIR__ . '/../..' . '/src/Config/RegisteredService.php',
         'Rector\\Configuration\\ConfigInitializer' => __DIR__ . '/../..' . '/src/Configuration/ConfigInitializer.php',
         'Rector\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Configuration\\Levels\\LevelRulesResolver' => __DIR__ . '/../..' . '/src/Configuration/Levels/LevelRulesResolver.php',

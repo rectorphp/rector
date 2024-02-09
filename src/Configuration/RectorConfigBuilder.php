@@ -7,6 +7,7 @@ use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Config\Level\DeadCodeLevel;
 use Rector\Config\Level\TypeDeclarationLevel;
 use Rector\Config\RectorConfig;
+use Rector\Config\RegisteredService;
 use Rector\Configuration\Levels\LevelRulesResolver;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
@@ -146,6 +147,10 @@ final class RectorConfigBuilder
      * @var bool
      */
     private $isDeadCodeLevelUsed = \false;
+    /**
+     * @var RegisteredService[]
+     */
+    private $registerServices = [];
     public function __invoke(RectorConfig $rectorConfig) : void
     {
         $uniqueSets = \array_unique($this->sets);
@@ -158,6 +163,16 @@ final class RectorConfigBuilder
         $rectorConfig->sets($uniqueSets);
         if ($this->paths !== []) {
             $rectorConfig->paths($this->paths);
+        }
+        // must be in upper part, as these services might be used by rule registered bellow
+        foreach ($this->registerServices as $registerService) {
+            $rectorConfig->singleton($registerService->getClassName());
+            if ($registerService->getAlias()) {
+                $rectorConfig->alias($registerService->getClassName(), $registerService->getAlias());
+            }
+            if ($registerService->getTag()) {
+                $rectorConfig->tag($registerService->getClassName(), $registerService->getTag());
+            }
         }
         $rectorConfig->skip($this->skip);
         $rectorConfig->rules($this->rules);
@@ -507,6 +522,11 @@ final class RectorConfigBuilder
         $this->isTypeCoverageLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, 'RectorConfig::withTypeCoverageLevel()');
         $this->rules = \array_merge($this->rules, $levelRules);
+        return $this;
+    }
+    public function registerService(string $className, ?string $alias = null, ?string $tag = null) : self
+    {
+        $this->registerServices[] = new RegisteredService($className, $alias, $tag);
         return $this;
     }
 }

@@ -1177,6 +1177,7 @@ return array(
     'Rector\\Config\\Level\\DeadCodeLevel' => $baseDir . '/src/Config/Level/DeadCodeLevel.php',
     'Rector\\Config\\Level\\TypeDeclarationLevel' => $baseDir . '/src/Config/Level/TypeDeclarationLevel.php',
     'Rector\\Config\\RectorConfig' => $baseDir . '/src/Config/RectorConfig.php',
+    'Rector\\Config\\RegisteredService' => $baseDir . '/src/Config/RegisteredService.php',
     'Rector\\Configuration\\ConfigInitializer' => $baseDir . '/src/Configuration/ConfigInitializer.php',
     'Rector\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
     'Rector\\Configuration\\Levels\\LevelRulesResolver' => $baseDir . '/src/Configuration/Levels/LevelRulesResolver.php',
