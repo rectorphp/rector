@@ -2535,17 +2535,17 @@
         },
         {
             "name": "symplify\/easy-parallel",
-            "version": "11.2.1",
-            "version_normalized": "11.2.1.0",
+            "version": "11.2.2",
+            "version_normalized": "11.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-parallel.git",
-                "reference": "ebc9ec259500af0147178f97720ea67a6c81cbd9"
+                "reference": "8586c18bb8efb31cd192a4e5cc94ae7813f72ed9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-parallel\/zipball\/ebc9ec259500af0147178f97720ea67a6c81cbd9",
-                "reference": "ebc9ec259500af0147178f97720ea67a6c81cbd9",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-parallel\/zipball\/8586c18bb8efb31cd192a4e5cc94ae7813f72ed9",
+                "reference": "8586c18bb8efb31cd192a4e5cc94ae7813f72ed9",
                 "shasum": ""
             },
             "require": {
@@ -2564,7 +2564,7 @@
                 "symplify\/easy-coding-standard": "^12.1",
                 "tomasvotruba\/class-leak": "^0.2.6"
             },
-            "time": "2024-02-07T23:35:00+00:00",
+            "time": "2024-02-08T04:56:53+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2579,7 +2579,7 @@
             "description": "Helper package for easier CLI project parallelization",
             "support": {
                 "issues": "https:\/\/github.com\/symplify\/easy-parallel\/issues",
-                "source": "https:\/\/github.com\/symplify\/easy-parallel\/tree\/11.2.1"
+                "source": "https:\/\/github.com\/symplify\/easy-parallel\/tree\/11.2.2"
             },
             "funding": [
                 {
