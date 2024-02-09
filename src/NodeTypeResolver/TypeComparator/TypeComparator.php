@@ -104,6 +104,9 @@ final class TypeComparator
     {
         $phpParserNodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($phpParserNode);
         $phpStanDocType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($phpStanDocTypeNode, $node);
+        if (!$this->areTypesEqual($phpParserNodeType, $phpStanDocType) && $this->isSubtype($phpStanDocType, $phpParserNodeType)) {
+            return \false;
+        }
         // normalize bool union types
         $phpParserNodeType = $this->normalizeConstantBooleanType($phpParserNodeType);
         $phpStanDocType = $this->normalizeConstantBooleanType($phpStanDocType);
