@@ -90,31 +90,37 @@ CODE_SAMPLE
                 if ($rectorConfigStmt->expr->isFirstClassCallable()) {
                     return null;
                 }
-                if ($this->isName($rectorConfigStmt->expr->name, 'rule')) {
+                $args = $rectorConfigStmt->expr->getArgs();
+                $value = $args[0]->value;
+                $name = $this->getName($rectorConfigStmt->expr->name);
+                if ($name === 'rule') {
+                    Assert::isAOf($rules, Array_::class);
                     $rules->items[] = new ArrayItem($rectorConfigStmt->expr->getArgs()[0]->value);
-                } elseif ($this->isName($rectorConfigStmt->expr->name, 'rules')) {
-                    Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
-                    $rules->items = \array_merge($rules->items, $rectorConfigStmt->expr->getArgs()[0]->value->items);
-                } elseif ($this->isName($rectorConfigStmt->expr->name, 'paths')) {
-                    Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
-                    $paths = $rectorConfigStmt->expr->getArgs()[0]->value;
-                } elseif ($this->isName($rectorConfigStmt->expr->name, 'skip')) {
-                    Assert::isAOf($rectorConfigStmt->expr->getArgs()[0]->value, Array_::class);
-                    $skips = $rectorConfigStmt->expr->getArgs()[0]->value;
+                } elseif ($name === 'rules') {
+                    if ($value instanceof Array_) {
+                        Assert::isAOf($rules, Array_::class);
+                        $rules->items = \array_merge($rules->items, $value->items);
+                    } else {
+                        $rules = $value;
+                    }
+                } elseif ($name === 'paths') {
+                    $paths = $value;
+                } elseif ($name === 'skip') {
+                    $skips = $value;
                 } else {
                     // implementing method by method
                     return null;
                 }
             }
-            if ($paths->items !== []) {
+            if (!$paths instanceof Array_ || $paths->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withPaths', [$paths]);
                 $hasChanged = \true;
             }
-            if ($skips->items !== []) {
+            if (!$skips instanceof Array_ || $skips->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withSkip', [$skips]);
                 $hasChanged = \true;
             }
-            if ($rules->items !== []) {
+            if (!$rules instanceof Array_ || $rules->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withRules', [$rules]);
                 $hasChanged = \true;
             }
