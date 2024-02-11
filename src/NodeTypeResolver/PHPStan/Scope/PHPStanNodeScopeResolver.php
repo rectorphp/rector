@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use Throwable;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -61,6 +60,7 @@ use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PHPStan\NodeVisitor\ExprScopeFromStmtNodeVisitor;
 use Rector\PHPStan\NodeVisitor\WrappedNodeRestoringNodeVisitor;
 use Rector\Util\Reflection\PrivatesAccessor;
+use Throwable;
 use RectorPrefix202402\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -216,6 +216,14 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($stmts);
         return $stmts;
     }
+    public function hasUnreachableStatementNode() : bool
+    {
+        return $this->hasUnreachableStatementNode;
+    }
+    public function resetHasUnreachableStatementNode() : void
+    {
+        $this->hasUnreachableStatementNode = \false;
+    }
     /**
      * @param Stmt[] $stmts
      * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
@@ -229,14 +237,6 @@ final class PHPStanNodeScopeResolver
                 throw $throwable;
             }
         }
-    }
-    public function hasUnreachableStatementNode() : bool
-    {
-        return $this->hasUnreachableStatementNode;
-    }
-    public function resetHasUnreachableStatementNode() : void
-    {
-        $this->hasUnreachableStatementNode = \false;
     }
     private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
     {
