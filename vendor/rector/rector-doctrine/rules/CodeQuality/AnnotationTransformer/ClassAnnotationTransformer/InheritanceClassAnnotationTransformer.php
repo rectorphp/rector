@@ -38,6 +38,10 @@ final class InheritanceClassAnnotationTransformer implements ClassAnnotationTran
             $this->addDiscriminatorMap($classMapping['discriminatorMap'], $classPhpDocInfo);
         }
     }
+    public function getClassName() : string
+    {
+        return 'Doctrine\\ORM\\Mapping\\DiscriminatorMap';
+    }
     /**
      * @param array<string, mixed> $discriminatorColumn
      */
@@ -54,7 +58,7 @@ final class InheritanceClassAnnotationTransformer implements ClassAnnotationTran
     {
         $arrayItemNodes = $this->arrayItemNodeFactory->create($discriminatorMap, [ArrayItemNodeFactory::QUOTE_ALL]);
         $curlyListNode = new CurlyListNode($arrayItemNodes);
-        $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode([$curlyListNode], 'Doctrine\\ORM\\Mapping\\DiscriminatorMap');
+        $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode([$curlyListNode], $this->getClassName());
         $classPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 }

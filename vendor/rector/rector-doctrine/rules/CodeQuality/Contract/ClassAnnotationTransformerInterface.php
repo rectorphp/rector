@@ -7,5 +7,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 interface ClassAnnotationTransformerInterface
 {
+    public function getClassName() : string;
     public function transform(EntityMapping $entityMapping, PhpDocInfo $propertyPhpDocInfo) : void;
 }

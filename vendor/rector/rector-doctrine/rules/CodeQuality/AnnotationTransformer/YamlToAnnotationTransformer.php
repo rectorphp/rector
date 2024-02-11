@@ -51,6 +51,10 @@ final class YamlToAnnotationTransformer
     {
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         foreach ($this->classAnnotationTransformers as $classAnnotationTransformer) {
+            // already added
+            if ($classPhpDocInfo->hasByAnnotationClass($classAnnotationTransformer->getClassName())) {
+                continue;
+            }
             $classAnnotationTransformer->transform($entityMapping, $classPhpDocInfo);
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
@@ -60,6 +64,10 @@ final class YamlToAnnotationTransformer
         foreach ($class->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             foreach ($this->propertyAnnotationTransformers as $propertyAnnotationTransformer) {
+                // already added
+                if ($propertyPhpDocInfo->hasByAnnotationClass($propertyAnnotationTransformer->getClassName())) {
+                    continue;
+                }
                 $propertyAnnotationTransformer->transform($entityMapping, $propertyPhpDocInfo, $property);
             }
             $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
