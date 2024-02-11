@@ -1,4 +1,4 @@
-# 355 Rules Overview
+# 358 Rules Overview
 
 <br>
 
@@ -54,9 +54,9 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (22)
+- [Transform](#transform) (23)
 
-- [TypeDeclaration](#typedeclaration) (40)
+- [TypeDeclaration](#typedeclaration) (42)
 
 - [Visibility](#visibility) (3)
 
@@ -6085,6 +6085,21 @@ Replaces properties assign calls be defined methods.
 
 <br>
 
+### RectorConfigBuilderRector
+
+Change RectorConfig to RectorConfigBuilder
+
+- class: [`Rector\Transform\Rector\FileWithoutNamespace\RectorConfigBuilderRector`](../rules/Transform/Rector/FileWithoutNamespace/RectorConfigBuilderRector.php)
+
+```diff
+-return static function (RectorConfig $rectorConfig): void {
+-    $rectorConfig->rule(SomeRector::class);
+-};
++return RectorConfig::configure()->rules([SomeRector::class]);
+```
+
+<br>
+
 ### ReplaceParentCallByPropertyCallRector
 
 Changes method calls in child of specific types to defined property method call
@@ -6249,6 +6264,34 @@ Add known return type to arrow function
 ```diff
 -fn () => [];
 +fn (): array => [];
+```
+
+<br>
+
+### AddClosureVoidReturnTypeWhereNoReturnRector
+
+Add closure return type void if there is no return
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php)
+
+```diff
+-function () {
++function (): void {
+ }
+```
+
+<br>
+
+### AddFunctionVoidReturnTypeWhereNoReturnRector
+
+Add function return type void if there is no return
+
+- class: [`Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector`](../rules/TypeDeclaration/Rector/Function_/AddFunctionVoidReturnTypeWhereNoReturnRector.php)
+
+```diff
+-function restore() {
++function restore(): void {
+ }
 ```
 
 <br>
