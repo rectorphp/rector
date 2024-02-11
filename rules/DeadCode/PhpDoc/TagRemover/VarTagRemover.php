@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 final class VarTagRemover
 {
@@ -42,13 +43,19 @@ final class VarTagRemover
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, DocBlockUpdater $docBlockUpdater, TypeComparator $typeComparator)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->typeComparator = $typeComparator;
     }
     public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property) : bool
     {
@@ -92,7 +99,15 @@ final class VarTagRemover
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return;
         }
+        // keep subtypes like positive-int
+        if ($this->shouldKeepSubtypes($type, $phpDocInfo->getVarType())) {
+            return;
+        }
         $phpDocInfo->removeByType(VarTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+    }
+    private function shouldKeepSubtypes(Type $type, Type $varType) : bool
+    {
+        return !$this->typeComparator->areTypesEqual($type, $varType) && $this->typeComparator->isSubtype($varType, $type);
     }
 }
