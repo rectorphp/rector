@@ -1679,16 +1679,17 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "9057680e74d0243c60b9f6fb89c1fe448d363505"
+                "reference": "4eb75185edb27fd390328303f8996ccf34a73e70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/9057680e74d0243c60b9f6fb89c1fe448d363505",
-                "reference": "9057680e74d0243c60b9f6fb89c1fe448d363505",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4eb75185edb27fd390328303f8996ccf34a73e70",
+                "reference": "4eb75185edb27fd390328303f8996ccf34a73e70",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2"
+                "php": ">=8.2",
+                "symfony\/yaml": "^6.4"
             },
             "require-dev": {
                 "doctrine\/orm": "^2.18",
@@ -1707,7 +1708,7 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-02-09T11:41:38+00:00",
+            "time": "2024-02-11T20:31:00+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2530,6 +2531,81 @@
                 }
             ],
             "install-path": "..\/symfony\/service-contracts"
+        },
+        {
+            "name": "symfony\/yaml",
+            "version": "v6.4.3",
+            "version_normalized": "6.4.3.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symfony\/yaml.git",
+                "reference": "d75715985f0f94f978e3a8fa42533e10db921b90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/d75715985f0f94f978e3a8fa42533e10db921b90",
+                "reference": "d75715985f0f94f978e3a8fa42533e10db921b90",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony\/deprecation-contracts": "^2.5|^3",
+                "symfony\/polyfill-ctype": "^1.8"
+            },
+            "conflict": {
+                "symfony\/console": "<5.4"
+            },
+            "require-dev": {
+                "symfony\/console": "^5.4|^6.0|^7.0"
+            },
+            "time": "2024-01-23T14:51:35+00:00",
+            "bin": [
+                "Resources\/bin\/yaml-lint"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202402\\Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "\/Tests\/"
+                ]
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https:\/\/symfony.com\/contributors"
+                }
+            ],
+            "description": "Loads and dumps YAML files",
+            "homepage": "https:\/\/symfony.com",
+            "support": {
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v6.4.3"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/symfony.com\/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "..\/symfony\/yaml"
         },
         {
             "name": "symplify\/easy-parallel",

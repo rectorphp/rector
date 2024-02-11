@@ -17,6 +17,7 @@ return array(
     'RectorPrefix202402\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix202402\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202402\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
+    'RectorPrefix202402\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix202402\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix202402\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix202402\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),

@@ -4,7 +4,8 @@
     "license": "MIT",
     "description": "Rector upgrades rules for Doctrine",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "symfony\/yaml": "^6.4"
     },
     "require-dev": {
         "doctrine\/orm": "^2.18",
