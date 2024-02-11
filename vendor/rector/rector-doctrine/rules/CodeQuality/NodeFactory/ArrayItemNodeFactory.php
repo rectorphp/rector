@@ -46,12 +46,12 @@ final class ArrayItemNodeFactory
                 $arrayItemNodes[] = new ArrayItemNode(new StringNode($fieldValue), new StringNode($fieldKey));
                 continue;
             }
-            if (\in_array($fieldKey, $quotedFields, \true)) {
-                $arrayItemNodes[] = new ArrayItemNode(new StringNode($fieldValue), $fieldKey);
+            if (\in_array($fieldKey, [EntityMappingKey::NULLABLE, EntityMappingKey::COLUMN_PREFIX], \true) && \is_bool($fieldValue)) {
+                $arrayItemNodes[] = new ArrayItemNode($fieldValue ? 'true' : 'false', $fieldKey);
                 continue;
             }
-            if ($fieldKey === EntityMappingKey::NULLABLE) {
-                $arrayItemNodes[] = new ArrayItemNode($fieldValue === \true ? 'true' : 'false', $fieldKey);
+            if (\in_array($fieldKey, $quotedFields, \true)) {
+                $arrayItemNodes[] = new ArrayItemNode(new StringNode($fieldValue), $fieldKey);
                 continue;
             }
             $arrayItemNodes[] = new ArrayItemNode($fieldValue, $fieldKey);

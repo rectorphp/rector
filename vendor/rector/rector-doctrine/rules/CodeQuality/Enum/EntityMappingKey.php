@@ -9,4 +9,8 @@ final class EntityMappingKey
      * @var string
      */
     public const NULLABLE = 'nullable';
+    /**
+     * @var string
+     */
+    public const COLUMN_PREFIX = 'columnPrefix';
 }

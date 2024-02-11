@@ -16,6 +16,10 @@ final class DoctrineSetList implements SetListInterface
     /**
      * @var string
      */
+    public const YAML_TO_ANNOTATIONS = __DIR__ . '/../../config/yaml-to-annotations.php';
+    /**
+     * @var string
+     */
     public const DOCTRINE_COMMON_20 = __DIR__ . '/../../config/sets/doctrine-common-20.php';
     /**
      * @var string
