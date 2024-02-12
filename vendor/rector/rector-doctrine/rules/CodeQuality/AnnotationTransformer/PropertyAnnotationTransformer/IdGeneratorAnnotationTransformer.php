@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransformerInterface
@@ -26,16 +27,29 @@ final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransf
         if (!\is_array($idMapping)) {
             return;
         }
-        $generator = $idMapping['generator'] ?? null;
+        $generator = $idMapping[EntityMappingKey::GENERATOR] ?? null;
         if (!\is_array($generator)) {
             return;
         }
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($generator, ['strategy']);
+        // make sure strategy is uppercase as constant value
+        $generator = $this->normalizeStrategy($generator);
+        $arrayItemNodes = $this->arrayItemNodeFactory->create($generator, [EntityMappingKey::STRATEGY]);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
     public function getClassName() : string
     {
         return 'Doctrine\\ORM\\Mapping\\GeneratedValue';
+    }
+    /**
+     * @param array<string, mixed> $generator
+     * @return array<string, mixed>
+     */
+    private function normalizeStrategy(array $generator) : array
+    {
+        if (isset($generator[EntityMappingKey::STRATEGY]) && $generator[EntityMappingKey::STRATEGY] === 'auto') {
+            $generator[EntityMappingKey::STRATEGY] = 'AUTO';
+        }
+        return $generator;
     }
 }

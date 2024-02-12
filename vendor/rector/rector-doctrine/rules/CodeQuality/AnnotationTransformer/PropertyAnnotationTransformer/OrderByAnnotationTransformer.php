@@ -5,12 +5,13 @@ namespace Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTr
 
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
-final class OneToManyAnnotationTransformer implements PropertyAnnotationTransformerInterface
+final class OrderByAnnotationTransformer implements PropertyAnnotationTransformerInterface
 {
     /**
      * @readonly
@@ -27,14 +28,17 @@ final class OneToManyAnnotationTransformer implements PropertyAnnotationTransfor
         if (!\is_array($oneToManyMapping)) {
             return;
         }
-        // handled by OrderBy mapping rule as standalone entity class
-        unset($oneToManyMapping[EntityMappingKey::ORDER_BY]);
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($oneToManyMapping, ['targetEntity', 'mappedBy']);
-        $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
+        // we handle OrderBy here only
+        if (!isset($oneToManyMapping[EntityMappingKey::ORDER_BY])) {
+            return;
+        }
+        $orderBy = $oneToManyMapping[EntityMappingKey::ORDER_BY];
+        $arrayItemNodes = $this->arrayItemNodeFactory->createWithQuotes($orderBy);
+        $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode([new CurlyListNode($arrayItemNodes)], $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
     public function getClassName() : string
     {
-        return 'Doctrine\\ORM\\Mapping\\OneToMany';
+        return 'Doctrine\\ORM\\Mapping\\OrderBy';
     }
 }

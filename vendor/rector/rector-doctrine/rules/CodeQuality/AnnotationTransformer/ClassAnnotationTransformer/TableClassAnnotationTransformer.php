@@ -27,7 +27,7 @@ final class TableClassAnnotationTransformer implements ClassAnnotationTransforme
         }
         $arrayItemNodes = [];
         if (\is_string($table)) {
-            $arrayItemNodes[] = new ArrayItemNode(new StringNode($table), self::TABLE_KEY);
+            $arrayItemNodes[] = new ArrayItemNode(new StringNode($table), 'name');
         }
         $uniqueConstraints = $classMapping['uniqueConstraints'] ?? null;
         if ($uniqueConstraints) {

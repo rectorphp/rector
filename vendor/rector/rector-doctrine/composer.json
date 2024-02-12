@@ -48,6 +48,7 @@
     },
     "scripts": {
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
+        "rector": "vendor\/bin\/rector --ansi",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "docs": [
