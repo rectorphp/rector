@@ -5,10 +5,12 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Contract\DependencyInjection\RelatedConfigInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\YamlToAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\EntityMappingResolver;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -17,7 +19,7 @@ use RectorPrefix202402\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\YamlToAnnotationsDoctrineMappingRector\YamlToAnnotationsDoctrineMappingRectorTest
  */
-final class YamlToAnnotationsDoctrineMappingRector extends AbstractRector implements ConfigurableRectorInterface
+final class YamlToAnnotationsDoctrineMappingRector extends AbstractRector implements ConfigurableRectorInterface, RelatedConfigInterface
 {
     /**
      * @readonly
@@ -99,6 +101,10 @@ CODE_SAMPLE
         Assert::allString($configuration);
         Assert::allFileExists($configuration);
         $this->yamlMappingDirectories = $configuration;
+    }
+    public static function getConfigFile() : string
+    {
+        return DoctrineSetList::YAML_TO_ANNOTATIONS;
     }
     private function findEntityMapping(Class_ $class) : ?EntityMapping
     {

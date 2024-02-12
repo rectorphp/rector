@@ -34,6 +34,10 @@ final class ArrayItemNodeFactory
             if (\in_array($fieldKey, self::EXTENSION_KEYS, \true)) {
                 continue;
             }
+            // special case for separate entity
+            if ($fieldKey === 'joinColumns') {
+                continue;
+            }
             if (\is_array($fieldValue)) {
                 $fieldValueArrayItemNodes = [];
                 foreach ($fieldValue as $fieldSingleValue) {

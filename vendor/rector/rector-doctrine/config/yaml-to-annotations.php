@@ -15,6 +15,7 @@ use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransfor
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\IdAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\IdColumnAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\IdGeneratorAnnotationTransformer;
+use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\JoinColumnsTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\ManyToOneAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer\OneToManyAnnotationTransformer;
 use Rector\Doctrine\CodeQuality\AnnotationTransformer\YamlToAnnotationTransformer;
@@ -37,6 +38,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->singleton(IdGeneratorAnnotationTransformer::class);
     $rectorConfig->singleton(ManyToOneAnnotationTransformer::class);
     $rectorConfig->singleton(OneToManyAnnotationTransformer::class);
+    $rectorConfig->singleton(JoinColumnsTransformer::class);
     $rectorConfig->when(YamlToAnnotationTransformer::class)->needs('$classAnnotationTransformers')->giveTagged(ClassAnnotationTransformerInterface::class);
     $rectorConfig->when(YamlToAnnotationTransformer::class)->needs('$propertyAnnotationTransformers')->giveTagged(PropertyAnnotationTransformerInterface::class);
 };
