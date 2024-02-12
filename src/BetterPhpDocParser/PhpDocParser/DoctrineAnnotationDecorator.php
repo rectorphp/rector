@@ -50,10 +50,10 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
      */
     private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
     /**
-     * @see https://regex101.com/r/bGp2V0/1
+     * @see https://regex101.com/r/bGp2V0/2
      * @var string
      */
-    private const LONG_ANNOTATION_REGEX = '#@\\\\(?<class_name>.*?)(?<annotation_content>\\(.*?\\)|,|\\n|$)#';
+    private const LONG_ANNOTATION_REGEX = '#@\\\\(?<class_name>.*?)(?<annotation_content>\\(.*?\\)|,|\\r?\\n|$)#';
     /**
      * @see https://regex101.com/r/xWaLOz/1
      * @var string
