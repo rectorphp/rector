@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
@@ -141,8 +142,8 @@ CODE_SAMPLE
     }
     private function removePropertyAssigns(Class_ $class, string $propertyName) : void
     {
-        $this->traverseNodesWithCallable($class, function (Node $node) use($class, $propertyName) : ?int {
-            if (!$node instanceof Expression) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use($class, $propertyName) {
+            if (!$node instanceof Expression && !$node instanceof Return_) {
                 return null;
             }
             if (!$node->expr instanceof Assign) {
@@ -152,7 +153,11 @@ CODE_SAMPLE
             if (!$this->propertyFetchFinder->isLocalPropertyFetchByName($assign->var, $class, $propertyName)) {
                 return null;
             }
-            return NodeTraverser::REMOVE_NODE;
+            if ($node instanceof Expression) {
+                return NodeTraverser::REMOVE_NODE;
+            }
+            $node->expr = $node->expr->expr;
+            return $node;
         });
     }
 }

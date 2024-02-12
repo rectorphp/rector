@@ -1679,12 +1679,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "0666cb118332cda97b9ab5bd55bc26885854a2c2"
+                "reference": "99da1d590539a3913594f5faea8e250255d2aa53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/0666cb118332cda97b9ab5bd55bc26885854a2c2",
-                "reference": "0666cb118332cda97b9ab5bd55bc26885854a2c2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/99da1d590539a3913594f5faea8e250255d2aa53",
+                "reference": "99da1d590539a3913594f5faea8e250255d2aa53",
                 "shasum": ""
             },
             "require": {
@@ -1708,7 +1708,7 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-02-12T13:13:37+00:00",
+            "time": "2024-02-12T14:26:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1801,12 +1801,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "f091938e0b34c64acab524c2acff911cea769b57"
+                "reference": "cdbe3907cd64fe07de118b0b722d7d84802988d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/f091938e0b34c64acab524c2acff911cea769b57",
-                "reference": "f091938e0b34c64acab524c2acff911cea769b57",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/cdbe3907cd64fe07de118b0b722d7d84802988d1",
+                "reference": "cdbe3907cd64fe07de118b0b722d7d84802988d1",
                 "shasum": ""
             },
             "require": {
@@ -1829,7 +1829,7 @@
                 "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-01-17T15:05:41+00:00",
+            "time": "2024-02-12T14:24:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1854,7 +1854,7 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.19.1"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/main"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },
@@ -1865,12 +1865,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5a62f1739e6feb5463d95ed02063aae860d358e4"
+                "reference": "59edb6245e7fbdbe4913c354b6803da3eb7254ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5a62f1739e6feb5463d95ed02063aae860d358e4",
-                "reference": "5a62f1739e6feb5463d95ed02063aae860d358e4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/59edb6245e7fbdbe4913c354b6803da3eb7254ac",
+                "reference": "59edb6245e7fbdbe4913c354b6803da3eb7254ac",
                 "shasum": ""
             },
             "require": {
@@ -1899,7 +1899,7 @@
                 "tomasvotruba\/class-leak": "^0.2.6",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-02-09T12:04:30+00:00",
+            "time": "2024-02-12T14:24:35+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1921,7 +1921,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/1.0.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

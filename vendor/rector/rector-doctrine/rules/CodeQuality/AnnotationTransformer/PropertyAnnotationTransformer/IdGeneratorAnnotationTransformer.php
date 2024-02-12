@@ -17,6 +17,11 @@ final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransf
      * @var \Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory
      */
     private $arrayItemNodeFactory;
+    /**
+     * @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.0/reference/basic-mapping.html#identifier-generation-strategies
+     * @var string[]
+     */
+    private const AVAILABLE_STRATEGIES = ['auto', 'sequence', 'identity', 'none', 'custom'];
     public function __construct(ArrayItemNodeFactory $arrayItemNodeFactory)
     {
         $this->arrayItemNodeFactory = $arrayItemNodeFactory;
@@ -47,8 +52,8 @@ final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransf
      */
     private function normalizeStrategy(array $generator) : array
     {
-        if (isset($generator[EntityMappingKey::STRATEGY]) && $generator[EntityMappingKey::STRATEGY] === 'auto') {
-            $generator[EntityMappingKey::STRATEGY] = 'AUTO';
+        if (isset($generator[EntityMappingKey::STRATEGY]) && \in_array($generator[EntityMappingKey::STRATEGY], self::AVAILABLE_STRATEGIES, \true)) {
+            $generator[EntityMappingKey::STRATEGY] = \strtoupper($generator[EntityMappingKey::STRATEGY]);
         }
         return $generator;
     }
