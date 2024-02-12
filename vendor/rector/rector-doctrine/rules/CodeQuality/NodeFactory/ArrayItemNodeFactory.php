@@ -49,7 +49,10 @@ final class ArrayItemNodeFactory
             if (\is_array($fieldValue)) {
                 $fieldValueArrayItemNodes = [];
                 foreach ($fieldValue as $fieldSingleKey => $fieldSingleValue) {
-                    if (\is_bool($fieldSingleValue)) {
+                    if (\is_numeric($fieldSingleValue)) {
+                        $fieldSingleValue = (string) $fieldSingleValue;
+                        $fieldArrayItemNode = new ArrayItemNode($fieldSingleValue, new StringNode($fieldSingleKey));
+                    } elseif (\is_bool($fieldSingleValue)) {
                         $fieldSingleValue = $fieldSingleValue ? 'true' : 'false';
                         $fieldArrayItemNode = new ArrayItemNode($fieldSingleValue, new StringNode($fieldSingleKey));
                     } elseif (\is_string($fieldSingleKey)) {
