@@ -1,4 +1,4 @@
-# 358 Rules Overview
+# 359 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (23)
 
-- [TypeDeclaration](#typedeclaration) (42)
+- [TypeDeclaration](#typedeclaration) (43)
 
 - [Visibility](#visibility) (3)
 
@@ -6488,6 +6488,26 @@ Changes defined return typehint of method and class.
  {
 -    public function getData()
 +    public function getData(): array
+     {
+     }
+ }
+```
+
+<br>
+
+### AddTestsVoidReturnTypeWhereNoReturnRector
+
+Add void to PHPUnit test methods
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector`](../rules/TypeDeclaration/Rector/Class_/AddTestsVoidReturnTypeWhereNoReturnRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+-    public function testSomething()
++    public function testSomething(): void
      {
      }
  }
