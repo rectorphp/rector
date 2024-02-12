@@ -1213,6 +1213,7 @@ return array(
     'Rector\\Console\\ProcessConfigureDecorator' => $baseDir . '/src/Console/ProcessConfigureDecorator.php',
     'Rector\\Console\\Style\\RectorStyle' => $baseDir . '/src/Console/Style/RectorStyle.php',
     'Rector\\Console\\Style\\SymfonyStyleFactory' => $baseDir . '/src/Console/Style/SymfonyStyleFactory.php',
+    'Rector\\Contract\\DependencyInjection\\RelatedConfigInterface' => $baseDir . '/src/Contract/DependencyInjection/RelatedConfigInterface.php',
     'Rector\\Contract\\DependencyInjection\\ResetableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResetableInterface.php',
     'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => $baseDir . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
     'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',

@@ -1432,6 +1432,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\Console\\ProcessConfigureDecorator' => __DIR__ . '/../..' . '/src/Console/ProcessConfigureDecorator.php',
         'Rector\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
         'Rector\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
+        'Rector\\Contract\\DependencyInjection\\RelatedConfigInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/RelatedConfigInterface.php',
         'Rector\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
         'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
