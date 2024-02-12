@@ -48,8 +48,16 @@ final class ArrayItemNodeFactory
             }
             if (\is_array($fieldValue)) {
                 $fieldValueArrayItemNodes = [];
-                foreach ($fieldValue as $fieldSingleValue) {
-                    $fieldValueArrayItemNodes[] = new ArrayItemNode(new StringNode($fieldSingleValue));
+                foreach ($fieldValue as $fieldSingleKey => $fieldSingleValue) {
+                    if (\is_bool($fieldSingleValue)) {
+                        $fieldSingleValue = $fieldSingleValue ? 'true' : 'false';
+                        $fieldArrayItemNode = new ArrayItemNode($fieldSingleValue, new StringNode($fieldSingleKey));
+                    } elseif (\is_string($fieldSingleKey)) {
+                        $fieldArrayItemNode = new ArrayItemNode(new StringNode($fieldSingleValue), new StringNode($fieldSingleKey));
+                    } else {
+                        $fieldArrayItemNode = new ArrayItemNode(new StringNode($fieldSingleValue));
+                    }
+                    $fieldValueArrayItemNodes[] = $fieldArrayItemNode;
                 }
                 $arrayItemNodes[] = new ArrayItemNode(new CurlyListNode($fieldValueArrayItemNodes), $fieldKey);
                 continue;
