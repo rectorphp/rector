@@ -172,6 +172,13 @@ final class RectorConfig extends Container
         $this->tag($rectorClass, RectorInterface::class);
         // for cache invalidation in case of change
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
+        // for cache invalidation in case of change
+        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
+        if (\is_a($rectorClass, RelatedConfigInterface::class, \true)) {
+            $configFile = $rectorClass::getConfigFile();
+            Assert::file($configFile, \sprintf('The config path "%s" in "%s::getConfigFile()" could not be found', $configFile, $rectorClass));
+            $this->import($configFile);
+        }
     }
     /**
      * @param class-string<Command> $commandClass
@@ -202,12 +209,6 @@ final class RectorConfig extends Container
         RectorConfigValidator::ensureNoDuplicatedClasses($rectorClasses);
         foreach ($rectorClasses as $rectorClass) {
             $this->rule($rectorClass);
-            if (\is_a($rectorClass, RelatedConfigInterface::class, \true)) {
-                /** @var RelatedConfigInterface $rector */
-                $rector = $this->make($rectorClass);
-                Assert::file($rector->getConfigFile(), \sprintf('The config path "%s" in "%s::getConfigFile()" could not be found', $rector->getConfigFile(), \get_class($rector)));
-                $this->import($rector->getConfigFile());
-            }
         }
     }
     /**
