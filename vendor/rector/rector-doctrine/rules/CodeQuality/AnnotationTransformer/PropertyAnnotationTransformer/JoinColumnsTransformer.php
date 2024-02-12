@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer;
 
-use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;

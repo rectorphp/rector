@@ -32,6 +32,6 @@ final class OneToManyAnnotationTransformer implements PropertyAnnotationTransfor
     }
     public function getClassName() : string
     {
-        return 'Doctrine\\ORM\\Mapping\\ManyToOne';
+        return 'Doctrine\\ORM\\Mapping\\OneToMany';
     }
 }
