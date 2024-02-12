@@ -8,6 +8,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\CodeQuality\Contract\ClassAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 final class InheritanceClassAnnotationTransformer implements ClassAnnotationTransformerInterface
@@ -47,7 +48,7 @@ final class InheritanceClassAnnotationTransformer implements ClassAnnotationTran
      */
     private function addDisriminatorColumn(array $discriminatorColumn, PhpDocInfo $classPhpDocInfo) : void
     {
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($discriminatorColumn, ['name', 'type']);
+        $arrayItemNodes = $this->arrayItemNodeFactory->create($discriminatorColumn, [EntityMappingKey::NAME, EntityMappingKey::TYPE]);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, 'Doctrine\\ORM\\Mapping\\DiscriminatorColumn');
         $classPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }

@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 final class ColumnAnnotationTransformer implements PropertyAnnotationTransformerInterface
@@ -26,7 +27,12 @@ final class ColumnAnnotationTransformer implements PropertyAnnotationTransformer
         if ($propertyMapping === null) {
             return;
         }
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($propertyMapping, ['type']);
+        // rename to "name"
+        if (isset($propertyMapping[EntityMappingKey::COLUMN])) {
+            $propertyMapping[EntityMappingKey::NAME] = $propertyMapping[EntityMappingKey::COLUMN];
+            unset($propertyMapping[EntityMappingKey::COLUMN]);
+        }
+        $arrayItemNodes = $this->arrayItemNodeFactory->create($propertyMapping, [EntityMappingKey::TYPE, EntityMappingKey::NAME]);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }

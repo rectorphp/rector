@@ -16,6 +16,10 @@ final class EntityMappingKey
     /**
      * @var string
      */
+    public const COLUMN = 'column';
+    /**
+     * @var string
+     */
     public const STRATEGY = 'strategy';
     /**
      * @var string
@@ -25,4 +29,20 @@ final class EntityMappingKey
      * @var string
      */
     public const ORDER_BY = 'orderBy';
+    /**
+     * @var string
+     */
+    public const NAME = 'name';
+    /**
+     * @var string
+     */
+    public const TYPE = 'type';
+    /**
+     * @var string
+     */
+    public const INVERSED_BY = 'inversedBy';
+    /**
+     * @var string
+     */
+    public const TARGET_ENTITY = 'targetEntity';
 }

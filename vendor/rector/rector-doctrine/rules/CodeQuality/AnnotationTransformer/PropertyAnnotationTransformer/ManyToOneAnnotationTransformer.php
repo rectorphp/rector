@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 final class ManyToOneAnnotationTransformer implements PropertyAnnotationTransformerInterface
@@ -26,7 +27,7 @@ final class ManyToOneAnnotationTransformer implements PropertyAnnotationTransfor
         if (!\is_array($manyToOneMapping)) {
             return;
         }
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($manyToOneMapping, ['targetEntity', 'inversedBy']);
+        $arrayItemNodes = $this->arrayItemNodeFactory->create($manyToOneMapping, [EntityMappingKey::TARGET_ENTITY, EntityMappingKey::INVERSED_BY]);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
