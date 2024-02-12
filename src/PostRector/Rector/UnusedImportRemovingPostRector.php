@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use RectorPrefix202402\Nette\Utils\Strings;
+use PhpParser\Comment;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -101,15 +103,29 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
     {
         $names = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace, function (Node $node) use(&$names) {
-            if (!$node->hasAttribute(AttributeKey::COMMENTS)) {
+            $comments = $node->getComments();
+            if ($comments === []) {
                 return null;
             }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $names = \array_merge($names, $phpDocInfo->getAnnotationClassNames());
-            $constFetchNodeNames = $phpDocInfo->getConstFetchNodeClassNames();
-            $names = \array_merge($names, $constFetchNodeNames);
-            $genericTagClassNames = $phpDocInfo->getGenericTagClassNames();
-            $names = \array_merge($names, $genericTagClassNames);
+            $docs = \array_filter($comments, static function (Comment $comment) : bool {
+                return $comment instanceof Doc;
+            });
+            if ($docs === []) {
+                return null;
+            }
+            $totalDocs = \count($docs);
+            foreach ($docs as $doc) {
+                $nodeToCheck = $totalDocs === 1 ? $node : clone $node;
+                if ($totalDocs > 1) {
+                    $nodeToCheck->setDocComment($doc);
+                }
+                $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($nodeToCheck);
+                $names = \array_merge($names, $phpDocInfo->getAnnotationClassNames());
+                $constFetchNodeNames = $phpDocInfo->getConstFetchNodeClassNames();
+                $names = \array_merge($names, $constFetchNodeNames);
+                $genericTagClassNames = $phpDocInfo->getGenericTagClassNames();
+                $names = \array_merge($names, $genericTagClassNames);
+            }
         });
         return $names;
     }
