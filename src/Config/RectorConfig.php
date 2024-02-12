@@ -172,8 +172,6 @@ final class RectorConfig extends Container
         $this->tag($rectorClass, RectorInterface::class);
         // for cache invalidation in case of change
         SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
-        // for cache invalidation in case of change
-        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
         if (\is_a($rectorClass, RelatedConfigInterface::class, \true)) {
             $configFile = $rectorClass::getConfigFile();
             Assert::file($configFile, \sprintf('The config path "%s" in "%s::getConfigFile()" could not be found', $configFile, $rectorClass));
