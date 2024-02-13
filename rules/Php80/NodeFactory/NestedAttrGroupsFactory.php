@@ -37,6 +37,6 @@ final class NestedAttrGroupsFactory
             $nestedAttributeGroups = $this->phpNestedAttributeGroupFactory->createNested($doctrineAnnotationTagValueNode, $nestedDoctrineTagAndAnnotationToAttribute->getNestedAnnotationToAttribute());
             $attributeGroups = \array_merge($attributeGroups, $nestedAttributeGroups);
         }
-        return $attributeGroups;
+        return \array_unique($attributeGroups, \SORT_REGULAR);
     }
 }

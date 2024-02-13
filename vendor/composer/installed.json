@@ -1679,12 +1679,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "40da7a94030e86caaa3b03feb6e98bae301833e5"
+                "reference": "5adacdc712df484155a4b28968fcc5f54cdb77c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/40da7a94030e86caaa3b03feb6e98bae301833e5",
-                "reference": "40da7a94030e86caaa3b03feb6e98bae301833e5",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/5adacdc712df484155a4b28968fcc5f54cdb77c8",
+                "reference": "5adacdc712df484155a4b28968fcc5f54cdb77c8",
                 "shasum": ""
             },
             "require": {
@@ -1698,7 +1698,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-generator": "^0.7.10",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-tv-nested-attribute",
                 "symplify\/easy-coding-standard": "^12.1",
                 "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^11.4",
@@ -1708,7 +1708,7 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-02-13T00:25:55+00:00",
+            "time": "2024-02-13T14:37:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
