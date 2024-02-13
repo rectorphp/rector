@@ -150,10 +150,10 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         if (\strncmp($otherText, '@\\', \strlen('@\\')) !== 0 && \trim($otherText) !== '') {
             $phpDocNode->children[$key] = new PhpDocTextNode($otherText);
             \array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
-        } else {
-            unset($phpDocNode->children[$key]);
-            \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
+            return;
         }
+        unset($phpDocNode->children[$key]);
+        \array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
     }
     private function transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes(PhpDocNode $phpDocNode, Node $currentPhpNode) : void
     {
@@ -300,14 +300,25 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             }
             $nestedAnnotationOpen = \explode('(', (string) $fullyQualifiedAnnotationClass);
             $fullyQualifiedAnnotationClass = $nestedAnnotationOpen[0];
-            $annotationContent = $match['annotation_content'] ?? null;
             $tagName = '@\\' . $fullyQualifiedAnnotationClass;
             $formerStartEnd = $phpDocTextNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-            if (isset($nestedAnnotationOpen[1])) {
-                $annotationContent = '("' . \trim($nestedAnnotationOpen[1], '"\'') . '")';
-            }
+            $annotationContent = $this->resolveAnnotationContent($match['annotation_content'] ?? '', $nestedAnnotationOpen);
             $spacelessPhpDocTagNodes[] = $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
         }
         return $spacelessPhpDocTagNodes;
+    }
+    /**
+     * @param string[]|null[] $nestedAnnotationOpen
+     */
+    private function resolveAnnotationContent(string $annotationContent, array $nestedAnnotationOpen) : string
+    {
+        if (!isset($nestedAnnotationOpen[1])) {
+            return $annotationContent;
+        }
+        $trimmedNestedAnnotationOpen = \trim($nestedAnnotationOpen[1]);
+        if (\substr_compare($trimmedNestedAnnotationOpen, '{', -\strlen('{')) === 0) {
+            return $annotationContent;
+        }
+        return '("' . \trim($trimmedNestedAnnotationOpen, '"\'') . '")';
     }
 }

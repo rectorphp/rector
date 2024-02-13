@@ -26,6 +26,7 @@ final class EmbeddedPropertyAnnotationTransformer implements PropertyAnnotationT
         if ($propertyMapping === null) {
             return;
         }
+        unset($propertyMapping['nullable']);
         $arrayItemNodes = $this->arrayItemNodeFactory->create($propertyMapping, ['class', 'columnPrefix']);
         $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
         $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);

@@ -150,7 +150,7 @@ CODE_SAMPLE
             return null;
         }
         $uses = $this->useImportsResolver->resolveBareUses();
-        // 1. bare tags without annotation class, e.g. "@inject"
+        // 1. bare tags without annotation class, e.g. "@require"
         $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
         // 2. Doctrine annotation classes
         $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo, $uses);
