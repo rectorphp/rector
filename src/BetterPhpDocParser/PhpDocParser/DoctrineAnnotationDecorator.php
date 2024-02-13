@@ -319,6 +319,9 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         if (\substr_compare($trimmedNestedAnnotationOpen, '{', -\strlen('{')) === 0) {
             return $annotationContent;
         }
+        if ($trimmedNestedAnnotationOpen === '') {
+            return $annotationContent;
+        }
         return '("' . \trim($trimmedNestedAnnotationOpen, '"\'') . '")';
     }
 }
