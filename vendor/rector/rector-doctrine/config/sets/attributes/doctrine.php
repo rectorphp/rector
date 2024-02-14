@@ -19,7 +19,7 @@ return static function (RectorConfig $rectorConfig) : void {
     ]);
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
         // class
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Entity'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Entity', null, ['repositoryClass']),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Column'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\UniqueConstraint'),
         // id
@@ -27,20 +27,20 @@ return static function (RectorConfig $rectorConfig) : void {
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\GeneratedValue'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\SequenceGenerator'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Index'),
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\CustomIdGenerator'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\CustomIdGenerator', null, ['class']),
         // relations
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\OneToOne'),
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\OneToMany'),
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\ManyToMany'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\OneToOne', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\OneToMany', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\ManyToMany', null, ['targetEntity']),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinTable'),
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\ManyToOne'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\ManyToOne', null, ['targetEntity']),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\OrderBy'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinColumn'),
         // embed
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Embeddable'),
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Embedded'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Embedded', null, ['class']),
         // inheritance
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\MappedSuperclass'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\MappedSuperclass', null, ['repositoryClass']),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\InheritanceType'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\DiscriminatorColumn'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\DiscriminatorMap'),
