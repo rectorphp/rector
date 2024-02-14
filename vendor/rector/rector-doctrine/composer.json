@@ -13,7 +13,7 @@
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpstan\/phpstan": "^1.10.57",
         "phpunit\/phpunit": "^10.5",
-        "rector\/rector-src": "dev-tv-nested-attribute",
+        "rector\/rector-src": "dev-main",
         "symplify\/phpstan-rules": "^11.4",
         "symplify\/phpstan-extensions": "^11.4",
         "symplify\/easy-coding-standard": "^12.1",

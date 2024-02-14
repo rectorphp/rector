@@ -45,15 +45,15 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
      */
     private $attributeMirrorer;
     /**
-     * Special short annotations, that are resolved as FQN by Doctrine annotation parser
-     * @var string[]
-     */
-    private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
-    /**
      * @see https://regex101.com/r/bGp2V0/2
      * @var string
      */
     public const LONG_ANNOTATION_REGEX = '#@\\\\(?<class_name>.*?)(?<annotation_content>\\(.*?\\)|,|\\r?\\n|$)#';
+    /**
+     * Special short annotations, that are resolved as FQN by Doctrine annotation parser
+     * @var string[]
+     */
+    private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
     /**
      * @see https://regex101.com/r/xWaLOz/1
      * @var string
