@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\Enum\MappingClass;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 final class NullabilityColumnPropertyTypeResolver
@@ -44,7 +45,7 @@ final class NullabilityColumnPropertyTypeResolver
     }
     public function isNullable(Property $property) : bool
     {
-        $nullableExpr = $this->attributeFinder->findAttributeByClassArgByName($property, self::COLUMN_CLASS, 'nullable');
+        $nullableExpr = $this->attributeFinder->findAttributeByClassArgByName($property, MappingClass::COLUMN, 'nullable');
         if ($nullableExpr instanceof Expr) {
             return $this->valueResolver->isTrue($nullableExpr);
         }

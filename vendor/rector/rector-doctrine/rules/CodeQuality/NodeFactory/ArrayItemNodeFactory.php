@@ -7,6 +7,7 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
+use Rector\Doctrine\CodeQuality\Helper\NodeValueNormalizer;
 use RectorPrefix202402\Webmozart\Assert\Assert;
 final class ArrayItemNodeFactory
 {
@@ -19,7 +20,7 @@ final class ArrayItemNodeFactory
      *
      * @var string[]
      */
-    private const EXTENSION_KEYS = ['gedmo'];
+    private const EXTENSION_KEYS = ['gedmo', 'joinColumns'];
     /**
      * @param array<string, mixed> $propertyMapping
      * @return ArrayItemNode[]
@@ -42,24 +43,11 @@ final class ArrayItemNodeFactory
             if (\in_array($fieldKey, self::EXTENSION_KEYS, \true)) {
                 continue;
             }
-            // special case for separate entity
-            if ($fieldKey === 'joinColumns') {
-                continue;
-            }
             if (\is_array($fieldValue)) {
                 $fieldValueArrayItemNodes = [];
                 foreach ($fieldValue as $fieldSingleKey => $fieldSingleValue) {
-                    if (\is_numeric($fieldSingleValue)) {
-                        $fieldSingleValue = (string) $fieldSingleValue;
-                        $fieldArrayItemNode = new ArrayItemNode($fieldSingleValue, new StringNode($fieldSingleKey));
-                    } elseif (\is_bool($fieldSingleValue)) {
-                        $fieldSingleValue = $fieldSingleValue ? 'true' : 'false';
-                        $fieldArrayItemNode = new ArrayItemNode($fieldSingleValue, new StringNode($fieldSingleKey));
-                    } elseif (\is_string($fieldSingleKey)) {
-                        $fieldArrayItemNode = new ArrayItemNode(new StringNode($fieldSingleValue), new StringNode($fieldSingleKey));
-                    } else {
-                        $fieldArrayItemNode = new ArrayItemNode(new StringNode($fieldSingleValue));
-                    }
+                    $fieldSingleNode = NodeValueNormalizer::normalize($fieldSingleValue);
+                    $fieldArrayItemNode = new ArrayItemNode($fieldSingleNode, \is_string($fieldSingleKey) ? new StringNode($fieldSingleKey) : null);
                     $fieldValueArrayItemNodes[] = $fieldArrayItemNode;
                 }
                 $arrayItemNodes[] = new ArrayItemNode(new CurlyListNode($fieldValueArrayItemNodes), $fieldKey);
@@ -77,6 +65,7 @@ final class ArrayItemNodeFactory
                 $arrayItemNodes[] = new ArrayItemNode(new StringNode($fieldValue), $fieldKey);
                 continue;
             }
+            $fieldValue = NodeValueNormalizer::normalize($fieldValue);
             $arrayItemNodes[] = new ArrayItemNode($fieldValue, $fieldKey);
         }
         return $arrayItemNodes;

@@ -10,6 +10,7 @@ use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
+use Rector\Doctrine\Enum\MappingClass;
 final class ColumnAnnotationTransformer implements PropertyAnnotationTransformerInterface
 {
     /**
@@ -38,6 +39,6 @@ final class ColumnAnnotationTransformer implements PropertyAnnotationTransformer
     }
     public function getClassName() : string
     {
-        return 'Doctrine\\ORM\\Mapping\\Column';
+        return MappingClass::COLUMN;
     }
 }

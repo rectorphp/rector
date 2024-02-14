@@ -7,7 +7,7 @@ use RectorPrefix202402\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Nop;
@@ -26,7 +26,6 @@ use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
 use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
-use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 use RectorPrefix202402\Webmozart\Assert\Assert;
 final class PhpNestedAttributeGroupFactory
 {
@@ -47,11 +46,6 @@ final class PhpNestedAttributeGroupFactory
     private $namedArgsFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector
-     */
-    private $exprParameterReflectionTypeCorrector;
-    /**
-     * @readonly
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
@@ -65,12 +59,11 @@ final class PhpNestedAttributeGroupFactory
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
      */
     private $staticDoctrineAnnotationParser;
-    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector, AttributeArrayNameInliner $attributeArrayNameInliner, TokenIteratorFactory $tokenIteratorFactory, StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser)
+    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, AttributeArrayNameInliner $attributeArrayNameInliner, TokenIteratorFactory $tokenIteratorFactory, StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
         $this->namedArgsFactory = $namedArgsFactory;
-        $this->exprParameterReflectionTypeCorrector = $exprParameterReflectionTypeCorrector;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
@@ -82,7 +75,7 @@ final class PhpNestedAttributeGroupFactory
     {
         $values = $doctrineAnnotationTagValueNode->getValues();
         $values = $this->removeItems($values, $nestedAnnotationToAttribute);
-        $args = $this->createArgsFromItems($values, $nestedAnnotationToAttribute);
+        $args = $this->createArgsFromItems($values);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $attributeName = $this->attributeNameFactory->create($nestedAnnotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
         $attribute = new Attribute($attributeName, $args);
@@ -107,7 +100,7 @@ final class PhpNestedAttributeGroupFactory
                 if (!$nestedArrayItemNode->value instanceof DoctrineAnnotationTagValueNode) {
                     continue;
                 }
-                $attributeArgs = $this->createAttributeArgs($nestedArrayItemNode->value, $nestedAnnotationToAttribute);
+                $attributeArgs = $this->createAttributeArgs($nestedArrayItemNode->value);
                 $originalIdentifier = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
                 $attributeName = $this->resolveAliasedAttributeName($originalIdentifier, $nestedAnnotationPropertyToAttributeClass);
                 $attribute = new Attribute($attributeName, $attributeArgs);
@@ -119,21 +112,20 @@ final class PhpNestedAttributeGroupFactory
     /**
      * @return Arg[]
      */
-    private function createAttributeArgs(DoctrineAnnotationTagValueNode $nestedDoctrineAnnotationTagValueNode, NestedAnnotationToAttribute $nestedAnnotationToAttribute) : array
+    private function createAttributeArgs(DoctrineAnnotationTagValueNode $nestedDoctrineAnnotationTagValueNode) : array
     {
-        $args = $this->createArgsFromItems($nestedDoctrineAnnotationTagValueNode->getValues(), $nestedAnnotationToAttribute);
+        $args = $this->createArgsFromItems($nestedDoctrineAnnotationTagValueNode->getValues());
         return $this->attributeArrayNameInliner->inlineArrayToArgs($args);
     }
     /**
      * @param ArrayItemNode[] $arrayItemNodes
      * @return Arg[]
      */
-    private function createArgsFromItems(array $arrayItemNodes, NestedAnnotationToAttribute $nestedAnnotationToAttribute) : array
+    private function createArgsFromItems(array $arrayItemNodes) : array
     {
-        /** @var Expr[]|Expr\Array_ $arrayItemNodes */
         $arrayItemNodes = $this->annotationToAttributeMapper->map($arrayItemNodes);
-        $arrayItemNodes = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($arrayItemNodes, $nestedAnnotationToAttribute->getTag());
-        return $this->namedArgsFactory->createFromValues($arrayItemNodes);
+        $values = $arrayItemNodes instanceof Array_ ? $arrayItemNodes->items : $arrayItemNodes;
+        return $this->namedArgsFactory->createFromValues($values);
     }
     /**
      * @todo improve this hardcoded approach later
@@ -202,7 +194,7 @@ final class PhpNestedAttributeGroupFactory
                     $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator, new Nop());
                     $nestedDoctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode($identifierTypeNode, $match['annotation_content'] ?? '', $values);
                 }
-                $attributeArgs = $this->createAttributeArgs($nestedDoctrineAnnotationTagValueNode, $nestedAnnotationToAttribute);
+                $attributeArgs = $this->createAttributeArgs($nestedDoctrineAnnotationTagValueNode);
                 $originalIdentifier = $nestedDoctrineAnnotationTagValueNode->identifierTypeNode->name;
                 $attributeName = $this->resolveAliasedAttributeName($originalIdentifier, $annotationPropertyToAttributeClass);
                 if ($annotationPropertyToAttributeClass->doesNeedNewImport() && \count($attributeName->getParts()) === 1) {

@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
+use Rector\Doctrine\Enum\MappingClass;
 final class IdColumnAnnotationTransformer implements PropertyAnnotationTransformerInterface
 {
     public function transform(EntityMapping $entityMapping, PhpDocInfo $propertyPhpDocInfo, Property $property) : void
@@ -28,6 +29,6 @@ final class IdColumnAnnotationTransformer implements PropertyAnnotationTransform
     }
     public function getClassName() : string
     {
-        return 'Doctrine\\ORM\\Mapping\\Column';
+        return MappingClass::COLUMN;
     }
 }

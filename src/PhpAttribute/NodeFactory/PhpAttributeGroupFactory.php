@@ -7,7 +7,11 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -15,7 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
-use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
  */
@@ -38,20 +41,14 @@ final class PhpAttributeGroupFactory
     private $namedArgsFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector
-     */
-    private $exprParameterReflectionTypeCorrector;
-    /**
-     * @readonly
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
-    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector, AttributeArrayNameInliner $attributeArrayNameInliner)
+    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
         $this->namedArgsFactory = $namedArgsFactory;
-        $this->exprParameterReflectionTypeCorrector = $exprParameterReflectionTypeCorrector;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
     }
     public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute) : AttributeGroup
@@ -81,7 +78,7 @@ final class PhpAttributeGroupFactory
     public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses) : AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithSilentKey();
-        $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
+        $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass(), $annotationToAttribute->getClassReferenceFields());
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
         // keep FQN in the attribute, so it can be easily detected later
@@ -93,14 +90,43 @@ final class PhpAttributeGroupFactory
      * @api tests
      *
      * @param ArrayItemNode[]|mixed[] $items
+     * @param string[] $classReferencedFields
      * @return Arg[]
      */
-    public function createArgsFromItems(array $items, string $attributeClass) : array
+    public function createArgsFromItems(array $items, string $attributeClass, array $classReferencedFields = []) : array
     {
-        /** @var Expr[]|Expr\Array_ $mappedItems */
         $mappedItems = $this->annotationToAttributeMapper->map($items);
-        $mappedItems = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($mappedItems, $attributeClass);
+        $this->mapClassReferences($mappedItems, $classReferencedFields);
+        $values = $mappedItems instanceof Array_ ? $mappedItems->items : $mappedItems;
         // the key here should contain the named argument
-        return $this->namedArgsFactory->createFromValues($mappedItems);
+        return $this->namedArgsFactory->createFromValues($values);
+    }
+    /**
+     * @param string[] $classReferencedFields
+     * @param \PhpParser\Node\Expr|string $expr
+     */
+    private function mapClassReferences($expr, array $classReferencedFields) : void
+    {
+        if (!$expr instanceof Array_) {
+            return;
+        }
+        foreach ($expr->items as $arrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
+                continue;
+            }
+            if (!$arrayItem->key instanceof String_) {
+                continue;
+            }
+            if (!\in_array($arrayItem->key->value, $classReferencedFields)) {
+                continue;
+            }
+            if ($arrayItem->value instanceof ClassConstFetch) {
+                continue;
+            }
+            if (!$arrayItem->value instanceof String_) {
+                continue;
+            }
+            $arrayItem->value = new ClassConstFetch(new FullyQualified($arrayItem->value->value), 'class');
+        }
     }
 }

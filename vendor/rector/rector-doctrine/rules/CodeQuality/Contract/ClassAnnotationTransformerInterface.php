@@ -8,5 +8,5 @@ use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 interface ClassAnnotationTransformerInterface
 {
     public function getClassName() : string;
-    public function transform(EntityMapping $entityMapping, PhpDocInfo $propertyPhpDocInfo) : void;
+    public function transform(EntityMapping $entityMapping, PhpDocInfo $classPhpDocInfo) : void;
 }

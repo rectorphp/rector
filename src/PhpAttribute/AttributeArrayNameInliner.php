@@ -16,9 +16,10 @@ final class AttributeArrayNameInliner
 {
     /**
      * @param Array_|Arg[] $array
+     * @param string[] $classReferenceFields
      * @return Arg[]
      */
-    public function inlineArrayToArgs($array) : array
+    public function inlineArrayToArgs($array, array $classReferenceFields = []) : array
     {
         if (\is_array($array)) {
             return $this->inlineArray($array);

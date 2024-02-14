@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AnnotationTransformer\ClassAnnotationTransformer;
 
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\CodeQuality\Contract\ClassAnnotationTransformerInterface;
 use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Helper\NodeValueNormalizer;
 use Rector\Doctrine\CodeQuality\Utils\CaseStringHelper;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 final class SoftDeletableClassAnnotationTransformer implements ClassAnnotationTransformerInterface
@@ -38,9 +38,10 @@ final class SoftDeletableClassAnnotationTransformer implements ClassAnnotationTr
     private function createArrayItemNodes(array $softDeletableMapping) : array
     {
         $arrayItemNodes = [];
-        foreach ($softDeletableMapping as $fieldKey => $fieldValue) {
-            $camelCaseFieldKey = CaseStringHelper::camelCase($fieldKey);
-            $arrayItemNodes[] = new ArrayItemNode(new StringNode($fieldValue), $camelCaseFieldKey);
+        foreach ($softDeletableMapping as $fieldKey => $fieldValueNode) {
+            $fieldKey = CaseStringHelper::camelCase($fieldKey);
+            $fieldValueNode = NodeValueNormalizer::normalize($fieldValueNode);
+            $arrayItemNodes[] = new ArrayItemNode($fieldValueNode, $fieldKey);
         }
         return $arrayItemNodes;
     }

@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\Enum\MappingClass;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class ColumnPropertyTypeResolver
@@ -46,10 +47,6 @@ final class ColumnPropertyTypeResolver
      * @var string
      */
     private const DATE_TIME_INTERFACE = 'DateTimeInterface';
-    /**
-     * @var string
-     */
-    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
     /**
      * @param array<string, Type> $doctrineTypeToScalarType
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
@@ -100,7 +97,7 @@ final class ColumnPropertyTypeResolver
     }
     public function resolve(Property $property, bool $isNullable) : ?Type
     {
-        $expr = $this->attributeFinder->findAttributeByClassArgByName($property, self::COLUMN_CLASS, 'type');
+        $expr = $this->attributeFinder->findAttributeByClassArgByName($property, MappingClass::COLUMN, 'type');
         if ($expr instanceof String_) {
             return $this->createPHPStanTypeFromDoctrineStringType($expr->value, $isNullable);
         }
@@ -109,7 +106,7 @@ final class ColumnPropertyTypeResolver
     }
     private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable) : ?\PHPStan\Type\Type
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(MappingClass::COLUMN);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
