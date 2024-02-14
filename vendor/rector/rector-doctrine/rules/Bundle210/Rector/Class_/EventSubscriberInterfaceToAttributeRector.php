@@ -100,7 +100,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->hasImplements($node, 'Doctrine\\Common\\EventSubscriber')) {
+        if (!$this->hasImplements($node, 'Doctrine\\Common\\EventSubscriber') && !$this->hasImplements($node, 'Doctrine\\Bundle\\DoctrineBundle\\EventSubscriber\\EventSubscriberInterface')) {
             return null;
         }
         $this->subscriberClass = $node;
@@ -115,7 +115,7 @@ CODE_SAMPLE
         if ($stmts[0] instanceof Return_ && $stmts[0]->expr instanceof Array_) {
             $this->handleArray($stmts);
         }
-        $this->removeImplements($node, ['Doctrine\\Common\\EventSubscriber']);
+        $this->removeImplements($node, ['Doctrine\\Common\\EventSubscriber', 'Doctrine\\Bundle\\DoctrineBundle\\EventSubscriber\\EventSubscriberInterface']);
         unset($node->stmts[$getSubscribedEventsClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
         return $node;
     }
