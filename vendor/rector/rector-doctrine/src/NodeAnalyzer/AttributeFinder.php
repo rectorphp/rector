@@ -37,7 +37,7 @@ final class AttributeFinder
         return $this->findAttributeByClassesArgByName($node, [$attributeClass], $argName);
     }
     /**
-     * @param class-string[] $attributeClasses
+     * @param string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
     public function findAttributeByClassesArgByName($node, array $attributeClasses, string $argName) : ?Expr

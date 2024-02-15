@@ -286,7 +286,7 @@ Remove empty Table attribute on entities because it's useless
 
 ## ReplaceFetchAllMethodCallRector
 
-Change `Doctrine\DBAL\Connection` `->fetchAll()` to `->fetchAllAssociative()` and other replacements
+Change `Doctrine\DBAL\Connection` and `Doctrine\DBAL\Driver\ResultStatement` `->fetchAll()` to `->fetchAllAssociative()` and other replacements
 
 - class: [`Rector\Doctrine\Dbal211\Rector\MethodCall\ReplaceFetchAllMethodCallRector`](../rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php)
 
@@ -417,32 +417,26 @@ Complete `@var` annotations or types based on @ORM\*toOne annotations or attribu
 
 <br>
 
-## YamlToAnnotationsDoctrineMappingRector
+## YamlToAttributeDoctrineMappingRector
 
 Converts YAML Doctrine Entity mapping to particular annotation mapping
 
 :wrench: **configure it!**
 
-- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\YamlToAnnotationsDoctrineMappingRector`](../rules/CodeQuality/Rector/Class_/YamlToAnnotationsDoctrineMappingRector.php)
+- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\YamlToAttributeDoctrineMappingRector`](../rules/CodeQuality/Rector/Class_/YamlToAttributeDoctrineMappingRector.php)
 
 ```diff
 +use Doctrine\ORM\Mapping as ORM;
 +
-+/**
-+ * @ORM\Entity
-+ */
++#[ORM\Entity]
  class SomeEntity
  {
-+    /**
-+     * @ORM\Id
-+     * @ORM\GeneratedValue
-+     * @ORM\Column(type="integer")
-+     */
++    #[ORM\Id]
++    #[ORM\GeneratedValue]
++    #[ORM\Column(type: 'integer')]
      private $id;
 
-+    /**
-+     * @ORM\Column(type="string")
-+     */
++    #[ORM\Column(type: 'string')]
      private $name;
  }
 ```

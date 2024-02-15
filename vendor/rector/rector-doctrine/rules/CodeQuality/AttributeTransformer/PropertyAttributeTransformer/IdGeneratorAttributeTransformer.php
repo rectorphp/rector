@@ -1,32 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\CodeQuality\AnnotationTransformer\PropertyAnnotationTransformer;
+namespace Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Doctrine\CodeQuality\Contract\PropertyAnnotationTransformerInterface;
-use Rector\Doctrine\CodeQuality\DocTagNodeFactory;
+use Rector\Doctrine\CodeQuality\Contract\PropertyAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
-use Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory;
+use Rector\Doctrine\CodeQuality\NodeFactory\AttributeFactory;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
-final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransformerInterface
+use Rector\Doctrine\Enum\MappingClass;
+use Rector\PhpParser\Node\NodeFactory;
+final class IdGeneratorAttributeTransformer implements PropertyAttributeTransformerInterface
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\CodeQuality\NodeFactory\ArrayItemNodeFactory
+     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $arrayItemNodeFactory;
+    private $nodeFactory;
     /**
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.0/reference/basic-mapping.html#identifier-generation-strategies
      * @var string[]
      */
     private const AVAILABLE_STRATEGIES = ['auto', 'sequence', 'identity', 'none', 'custom'];
-    public function __construct(ArrayItemNodeFactory $arrayItemNodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
-        $this->arrayItemNodeFactory = $arrayItemNodeFactory;
+        //        private ArrayItemNodeFactory $arrayItemNodeFactory
+        $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, PhpDocInfo $propertyPhpDocInfo, Property $property) : void
+    public function transform(EntityMapping $entityMapping, Property $property) : void
     {
         $idMapping = $entityMapping->matchIdPropertyMapping($property);
         if (!\is_array($idMapping)) {
@@ -38,13 +39,12 @@ final class IdGeneratorAnnotationTransformer implements PropertyAnnotationTransf
         }
         // make sure strategy is uppercase as constant value
         $generator = $this->normalizeStrategy($generator);
-        $arrayItemNodes = $this->arrayItemNodeFactory->create($generator, [EntityMappingKey::STRATEGY]);
-        $spacelessPhpDocTagNode = DocTagNodeFactory::createSpacelessPhpDocTagNode($arrayItemNodes, $this->getClassName());
-        $propertyPhpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
+        $args = $this->nodeFactory->createArgs($generator);
+        $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
     }
     public function getClassName() : string
     {
-        return 'Doctrine\\ORM\\Mapping\\GeneratedValue';
+        return MappingClass::GENERATED_VALUE;
     }
     /**
      * @param array<string, mixed> $generator

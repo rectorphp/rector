@@ -121,7 +121,7 @@ CODE_SAMPLE
             if (!$node instanceof StaticCall) {
                 return null;
             }
-            if (!$this->isName($node->class, 'self')) {
+            if (!$this->isNames($node->class, ['self', 'static'])) {
                 return null;
             }
             if (!$this->isName($node->name, $classMethodName)) {
@@ -151,7 +151,7 @@ CODE_SAMPLE
                 if (!$node instanceof StaticCall) {
                     return null;
                 }
-                if (!$this->isName($node->class, 'self')) {
+                if (!$this->isNames($node->class, ['self', 'static'])) {
                     return null;
                 }
                 if (!$this->isName($node->name, $currentClassMethodName)) {

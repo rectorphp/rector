@@ -7,19 +7,21 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Contract\DependencyInjection\RelatedConfigInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Doctrine\CodeQuality\AnnotationTransformer\YamlToAnnotationTransformer;
+use Rector\Doctrine\CodeQuality\AttributeTransformer\YamlToAttributeTransformer;
 use Rector\Doctrine\CodeQuality\EntityMappingResolver;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersion;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202402\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\YamlToAnnotationsDoctrineMappingRector\YamlToAnnotationsDoctrineMappingRectorTest
+ * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\YamlToAttributeDoctrineMappingRector\YamlToAttributeDoctrineMappingRectorTest
  */
-final class YamlToAnnotationsDoctrineMappingRector extends AbstractRector implements ConfigurableRectorInterface, RelatedConfigInterface
+final class YamlToAttributeDoctrineMappingRector extends AbstractRector implements ConfigurableRectorInterface, RelatedConfigInterface, MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -28,17 +30,17 @@ final class YamlToAnnotationsDoctrineMappingRector extends AbstractRector implem
     private $entityMappingResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\CodeQuality\AnnotationTransformer\YamlToAnnotationTransformer
+     * @var \Rector\Doctrine\CodeQuality\AttributeTransformer\YamlToAttributeTransformer
      */
-    private $yamlToAnnotationTransformer;
+    private $yamlToAttributeTransformer;
     /**
      * @var string[]
      */
     private $yamlMappingDirectories = [];
-    public function __construct(EntityMappingResolver $entityMappingResolver, YamlToAnnotationTransformer $yamlToAnnotationTransformer)
+    public function __construct(EntityMappingResolver $entityMappingResolver, YamlToAttributeTransformer $yamlToAttributeTransformer)
     {
         $this->entityMappingResolver = $entityMappingResolver;
-        $this->yamlToAnnotationTransformer = $yamlToAnnotationTransformer;
+        $this->yamlToAttributeTransformer = $yamlToAttributeTransformer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -53,21 +55,15 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class SomeEntity
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private $name;
 }
 
@@ -90,7 +86,7 @@ CODE_SAMPLE
         if (!$entityMapping instanceof EntityMapping) {
             return null;
         }
-        $this->yamlToAnnotationTransformer->transform($node, $entityMapping);
+        $this->yamlToAttributeTransformer->transform($node, $entityMapping);
         return $node;
     }
     /**
@@ -105,6 +101,11 @@ CODE_SAMPLE
     public static function getConfigFile() : string
     {
         return DoctrineSetList::YAML_TO_ANNOTATIONS;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        // required by Doctrine nested attributes
+        return PhpVersion::PHP_81;
     }
     private function findEntityMapping(Class_ $class) : ?EntityMapping
     {
