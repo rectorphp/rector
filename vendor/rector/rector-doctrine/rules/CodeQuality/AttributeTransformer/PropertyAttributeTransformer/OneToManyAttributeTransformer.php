@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
@@ -22,7 +23,10 @@ final class OneToManyAttributeTransformer implements PropertyAttributeTransforme
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, Property $property) : void
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     */
+    public function transform(EntityMapping $entityMapping, $property) : void
     {
         $oneToManyMapping = $entityMapping->matchOneToManyPropertyMapping($property);
         if (!\is_array($oneToManyMapping)) {

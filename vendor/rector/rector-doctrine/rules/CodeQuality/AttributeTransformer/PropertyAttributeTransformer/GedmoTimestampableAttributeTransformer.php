@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\NodeFactory\AttributeFactory;
@@ -20,7 +21,10 @@ final class GedmoTimestampableAttributeTransformer implements PropertyAttributeT
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, Property $property) : void
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     */
+    public function transform(EntityMapping $entityMapping, $property) : void
     {
         $fieldPropertyMapping = $entityMapping->matchFieldPropertyMapping($property);
         $timestampableMapping = $fieldPropertyMapping['gedmo']['timestampable'] ?? null;

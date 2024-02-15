@@ -3,11 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AttributeTransformer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\CodeQuality\Contract\ClassAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
+use Rector\ValueObject\MethodName;
 final class YamlToAttributeTransformer
 {
     /**
@@ -53,9 +56,26 @@ final class YamlToAttributeTransformer
                 $propertyAttributeTransformer->transform($entityMapping, $property);
             }
         }
+        // handle promoted properties
+        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructorClassMethod instanceof ClassMethod) {
+            return;
+        }
+        foreach ($constructorClassMethod->getParams() as $param) {
+            // is promoted property?
+            if ($param->flags === 0) {
+                continue;
+            }
+            foreach ($this->propertyAttributeTransformers as $propertyAttributeTransformer) {
+                if ($this->hasAttribute($param, $propertyAttributeTransformer->getClassName())) {
+                    continue;
+                }
+                $propertyAttributeTransformer->transform($entityMapping, $param);
+            }
+        }
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property $stmt
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $stmt
      */
     private function hasAttribute($stmt, string $attributeClassName) : bool
     {

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\CodeQuality\Contract\PropertyAttributeTransformerInterface;
 use Rector\Doctrine\CodeQuality\Helper\NodeValueNormalizer;
@@ -21,7 +22,10 @@ final class EmbeddedPropertyAttributeTransformer implements PropertyAttributeTra
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, Property $property) : void
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     */
+    public function transform(EntityMapping $entityMapping, $property) : void
     {
         $propertyMapping = $entityMapping->matchEmbeddedPropertyMapping($property);
         if ($propertyMapping === null) {
