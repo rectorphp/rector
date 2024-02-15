@@ -1290,6 +1290,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
+        'Rector\\CodeQuality\\Rector\\Class_\\StaticToSelfStaticMethodCallOnFinalClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/StaticToSelfStaticMethodCallOnFinalClassRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
         'Rector\\CodeQuality\\Rector\\Empty_\\SimplifyEmptyCheckOnEmptyArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php',
         'Rector\\CodeQuality\\Rector\\Equal\\UseIdenticalOverEqualWithSameTypeRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Equal/UseIdenticalOverEqualWithSameTypeRector.php',
