@@ -11,7 +11,7 @@ git clone git@github.com:<your-name>/rector-src.git
 cd rector-src
 ```
 
-2. We use PHP 8.1 and composer
+2. We use PHP 8.2 and composer
 
 Install dependencies and verify your local environment:
 
