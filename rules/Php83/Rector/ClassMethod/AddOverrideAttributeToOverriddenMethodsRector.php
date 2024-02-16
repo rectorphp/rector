@@ -127,6 +127,9 @@ CODE_SAMPLE
             if ($classMethod->name->toString() === '__construct') {
                 continue;
             }
+            if ($classMethod->isPrivate()) {
+                continue;
+            }
             // ignore if it already uses the attribute
             if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Override')) {
                 continue;
