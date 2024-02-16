@@ -249,6 +249,10 @@ final class RectorConfigBuilder
         $this->skip = \array_merge($this->skip, $skip);
         return $this;
     }
+    public function withSkipPath(string $skipPath) : self
+    {
+        return $this->withSkip([$skipPath]);
+    }
     /**
      * Include PHP files from the root directory,
      * typically ecs.php, rector.php etc.
