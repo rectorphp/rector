@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
-use PhpParser\Node\Param;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
