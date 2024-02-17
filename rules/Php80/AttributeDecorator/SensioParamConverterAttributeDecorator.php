@@ -4,7 +4,8 @@ declare (strict_types=1);
 namespace Rector\Php80\AttributeDecorator;
 
 use PhpParser\Node\Attribute;
-final class SensioParamConverterAttributeDecorator
+use Rector\Php80\Contract\ConverterAttributeDecoratorInterface;
+final class SensioParamConverterAttributeDecorator implements ConverterAttributeDecoratorInterface
 {
     public function getAttributeName() : string
     {
