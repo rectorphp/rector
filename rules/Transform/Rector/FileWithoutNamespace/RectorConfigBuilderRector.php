@@ -74,6 +74,7 @@ CODE_SAMPLE
             $rules = new Array_();
             $paths = new Array_();
             $skips = new Array_();
+            $autoloadPaths = new Array_();
             foreach ($stmts as $rectorConfigStmt) {
                 // complex stmts should be skipped, eg: with if else
                 if (!$rectorConfigStmt instanceof Expression) {
@@ -95,7 +96,7 @@ CODE_SAMPLE
                 $name = $this->getName($rectorConfigStmt->expr->name);
                 if ($name === 'rule') {
                     Assert::isAOf($rules, Array_::class);
-                    $rules->items[] = new ArrayItem($rectorConfigStmt->expr->getArgs()[0]->value);
+                    $rules->items[] = new ArrayItem($value);
                 } elseif ($name === 'rules') {
                     if ($value instanceof Array_) {
                         Assert::isAOf($rules, Array_::class);
@@ -107,6 +108,9 @@ CODE_SAMPLE
                     $paths = $value;
                 } elseif ($name === 'skip') {
                     $skips = $value;
+                } elseif ($name === 'autoloadPaths') {
+                    Assert::isAOf($value, Array_::class);
+                    $autoloadPaths = $value;
                 } else {
                     // implementing method by method
                     return null;
@@ -122,6 +126,10 @@ CODE_SAMPLE
             }
             if (!$rules instanceof Array_ || $rules->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withRules', [$rules]);
+                $hasChanged = \true;
+            }
+            if ($autoloadPaths->items !== []) {
+                $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withAutoloadPaths', [$autoloadPaths]);
                 $hasChanged = \true;
             }
             if ($hasChanged) {
