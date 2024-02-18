@@ -7,14 +7,17 @@ use Rector\Validation\RectorAssert;
 final class ConstFetchToClassConstFetch
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldConstName;
     /**
+     * @readonly
      * @var string
      */
     private $newClassName;
     /**
+     * @readonly
      * @var string
      */
     private $newConstName;
@@ -23,9 +26,9 @@ final class ConstFetchToClassConstFetch
         $this->oldConstName = $oldConstName;
         $this->newClassName = $newClassName;
         $this->newConstName = $newConstName;
-        RectorAssert::constantName($oldConstName);
-        RectorAssert::className($newClassName);
-        RectorAssert::constantName($newConstName);
+        RectorAssert::constantName($this->oldConstName);
+        RectorAssert::className($this->newClassName);
+        RectorAssert::constantName($this->newConstName);
     }
     public function getOldConstName() : string
     {
