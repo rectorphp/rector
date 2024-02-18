@@ -75,6 +75,7 @@ CODE_SAMPLE
             $paths = new Array_();
             $skips = new Array_();
             $autoloadPaths = new Array_();
+            $bootstrapFiles = new Array_();
             foreach ($stmts as $rectorConfigStmt) {
                 // complex stmts should be skipped, eg: with if else
                 if (!$rectorConfigStmt instanceof Expression) {
@@ -111,6 +112,9 @@ CODE_SAMPLE
                 } elseif ($name === 'autoloadPaths') {
                     Assert::isAOf($value, Array_::class);
                     $autoloadPaths = $value;
+                } elseif ($name === 'bootstrapFiles') {
+                    Assert::isAOf($value, Array_::class);
+                    $bootstrapFiles = $value;
                 } else {
                     // implementing method by method
                     return null;
@@ -130,6 +134,10 @@ CODE_SAMPLE
             }
             if ($autoloadPaths->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withAutoloadPaths', [$autoloadPaths]);
+                $hasChanged = \true;
+            }
+            if ($bootstrapFiles->items !== []) {
+                $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withBootstrapFiles', [$bootstrapFiles]);
                 $hasChanged = \true;
             }
             if ($hasChanged) {
