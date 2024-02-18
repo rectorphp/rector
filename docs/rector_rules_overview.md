@@ -1,4 +1,4 @@
-# 359 Rules Overview
+# 360 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (74)
 
 - [CodingStyle](#codingstyle) (28)
 
@@ -1346,6 +1346,30 @@ Change switch with only 1 check to if
          }
 
          return $result;
+     }
+ }
+```
+
+<br>
+
+### StaticToSelfStaticMethodCallOnFinalClassRector
+
+Change `static::methodCall()` to `self::methodCall()` on final class
+
+- class: [`Rector\CodeQuality\Rector\Class_\StaticToSelfStaticMethodCallOnFinalClassRector`](../rules/CodeQuality/Rector/Class_/StaticToSelfStaticMethodCallOnFinalClassRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function d()
+     {
+-        echo static::run();
++        echo self::run();
+     }
+
+     private static function run()
+     {
+         echo 'test';
      }
  }
 ```
