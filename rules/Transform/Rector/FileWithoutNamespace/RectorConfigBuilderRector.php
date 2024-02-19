@@ -115,6 +115,9 @@ CODE_SAMPLE
                 } elseif ($name === 'bootstrapFiles') {
                     Assert::isAOf($value, Array_::class);
                     $bootstrapFiles = $value;
+                } elseif ($name === 'ruleWithConfiguration') {
+                    $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withConfiguredRule', [$value, $args[1]->value]);
+                    $hasChanged = \true;
                 } else {
                     // implementing method by method
                     return null;

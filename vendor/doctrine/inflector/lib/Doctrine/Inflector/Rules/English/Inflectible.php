@@ -45,7 +45,7 @@ class Inflectible
         (yield new Transformation(new Pattern('(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$'), 'RectorPrefix202402\\1\\2sis'));
         (yield new Transformation(new Pattern('(tax)a$'), '\\1on'));
         (yield new Transformation(new Pattern('(c)riteria$'), '\\1riterion'));
-        (yield new Transformation(new Pattern('([ti])a$'), '\\1um'));
+        (yield new Transformation(new Pattern('([ti])a(?<!regatta)$'), '\\1um'));
         (yield new Transformation(new Pattern('(p)eople$'), 'RectorPrefix202402\\1\\2erson'));
         (yield new Transformation(new Pattern('(m)en$'), '\\1an'));
         (yield new Transformation(new Pattern('(c)hildren$'), 'RectorPrefix202402\\1\\2hild'));
