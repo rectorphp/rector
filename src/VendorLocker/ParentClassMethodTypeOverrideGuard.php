@@ -53,6 +53,10 @@ final class ParentClassMethodTypeOverrideGuard
      */
     public function hasParentClassMethod($classMethod) : bool
     {
+        // early got false on private method
+        if ($classMethod->isPrivate()) {
+            return \false;
+        }
         try {
             $parentClassMethod = $this->resolveParentClassMethod($classMethod);
             return $parentClassMethod instanceof MethodReflection;
