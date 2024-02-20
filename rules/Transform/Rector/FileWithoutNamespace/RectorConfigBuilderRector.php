@@ -104,33 +104,53 @@ CODE_SAMPLE
                 if ($name === 'rule') {
                     Assert::isAOf($rules, Array_::class);
                     $rules->items[] = new ArrayItem($value);
-                } elseif ($name === 'rules') {
+                    continue;
+                }
+                if ($name === 'rules') {
                     if ($value instanceof Array_) {
                         Assert::isAOf($rules, Array_::class);
                         $rules->items = \array_merge($rules->items, $value->items);
                     } else {
                         $rules = $value;
                     }
-                } elseif ($name === 'paths') {
+                    continue;
+                }
+                if ($name === 'paths') {
                     $paths = $value;
-                } elseif ($name === 'skip') {
+                    continue;
+                }
+                if ($name === 'skip') {
                     $skips = $value;
-                } elseif ($name === 'autoloadPaths') {
+                    continue;
+                }
+                if ($name === 'autoloadPaths') {
                     Assert::isAOf($value, Array_::class);
                     $autoloadPaths = $value;
-                } elseif ($name === 'bootstrapFiles') {
+                    continue;
+                }
+                if ($name === 'bootstrapFiles') {
                     Assert::isAOf($value, Array_::class);
                     $bootstrapFiles = $value;
-                } elseif ($name === 'ruleWithConfiguration') {
+                    continue;
+                }
+                if ($name === 'ruleWithConfiguration') {
                     $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withConfiguredRule', [$value, $args[1]->value]);
                     $hasChanged = \true;
-                } elseif ($name === 'sets') {
+                    continue;
+                }
+                if ($name === 'sets') {
                     Assert::isAOf($value, Array_::class);
                     $sets->items = \array_merge($sets->items, $value->items);
-                } else {
-                    // implementing method by method
-                    return null;
+                    continue;
                 }
+                if ($name === 'fileExtensions') {
+                    Assert::isAOf($value, Array_::class);
+                    $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withFileExtensions', [$value]);
+                    $hasChanged = \true;
+                    continue;
+                }
+                // implementing method by method
+                return null;
             }
             if (!$paths instanceof Array_ || $paths->items !== []) {
                 $newExpr = $this->nodeFactory->createMethodCall($newExpr, 'withPaths', [$paths]);
