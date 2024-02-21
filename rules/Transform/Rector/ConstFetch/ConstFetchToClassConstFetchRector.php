@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Transform\Rector\ConstFetch;
 
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ConstFetchToClassConstFetch;

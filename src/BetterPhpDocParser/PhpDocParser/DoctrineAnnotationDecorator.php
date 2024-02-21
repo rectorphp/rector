@@ -277,9 +277,10 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         // mimics doctrine behavior just in phpdoc-parser syntax :)
         // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
         $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator, $currentPhpNode);
+        $comment = $this->staticDoctrineAnnotationParser->getCommentFromRestOfAnnotation($nestedTokenIterator, $annotationContent);
         $identifierTypeNode = new IdentifierTypeNode($tagName);
         $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
-        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationContent, $values, SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null);
+        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationContent, $values, SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null, $comment);
         $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         return new SpacelessPhpDocTagNode($tagName, $doctrineAnnotationTagValueNode);
     }

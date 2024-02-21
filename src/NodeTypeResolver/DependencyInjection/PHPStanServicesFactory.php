@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
-use Throwable;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -19,6 +18,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use RectorPrefix202402\Symfony\Component\Console\Input\ArrayInput;
 use RectorPrefix202402\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202402\Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use RectorPrefix202402\Webmozart\Assert\Assert;
 /**
  * Factory so Symfony app can use services from PHPStan container
@@ -27,11 +27,6 @@ use RectorPrefix202402\Webmozart\Assert\Assert;
  */
 final class PHPStanServicesFactory
 {
-    /**
-     * @readonly
-     * @var \PHPStan\DependencyInjection\Container
-     */
-    private $container;
     /**
      * @var string
      */
@@ -44,6 +39,11 @@ includes:
 in your included phpstan configuration.
 
 MESSAGE_ERROR;
+    /**
+     * @readonly
+     * @var \PHPStan\DependencyInjection\Container
+     */
+    private $container;
     public function __construct()
     {
         $containerFactory = new ContainerFactory(\getcwd());
