@@ -2422,6 +2422,7 @@ return array(
     'Rector\\Util\\ArrayParametersMerger' => $baseDir . '/src/Util/ArrayParametersMerger.php',
     'Rector\\Util\\FileHasher' => $baseDir . '/src/Util/FileHasher.php',
     'Rector\\Util\\MemoryLimiter' => $baseDir . '/src/Util/MemoryLimiter.php',
+    'Rector\\Util\\NewLineSplitter' => $baseDir . '/src/Util/NewLineSplitter.php',
     'Rector\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
     'Rector\\Util\\Reflection\\PrivatesAccessor' => $baseDir . '/src/Util/Reflection/PrivatesAccessor.php',
     'Rector\\Util\\StringUtils' => $baseDir . '/src/Util/StringUtils.php',
