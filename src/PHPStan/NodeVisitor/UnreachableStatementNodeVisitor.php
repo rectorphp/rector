@@ -47,7 +47,9 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
         $isPassedUnreachableStmt = \false;
         $mutatingScope = $this->resolveScope($node->getAttribute(AttributeKey::SCOPE));
         foreach ($node->stmts as $stmt) {
-            if (!$stmt->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
+            $hasMutatingScope = $stmt->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope;
+            if (!$hasMutatingScope) {
+                $stmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 $this->phpStanNodeScopeResolver->processNodes([$stmt], $this->filePath, $mutatingScope);
             }
             if ($stmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
@@ -56,7 +58,6 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
             }
             if ($isPassedUnreachableStmt) {
                 $stmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
-                $stmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         }
         return null;
