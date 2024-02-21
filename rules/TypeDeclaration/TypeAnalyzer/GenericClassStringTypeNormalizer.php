@@ -104,12 +104,12 @@ final class GenericClassStringTypeNormalizer
             }
             $keyType = $unionType->getKeyType();
             $itemType = $unionType->getItemType();
+            if (!$keyType instanceof MixedType && !$keyType instanceof ConstantIntegerType) {
+                return $type;
+            }
             if ($itemType instanceof ArrayType) {
                 $arrayType = new ArrayType(new MixedType(), new MixedType());
                 return new ArrayType($keyType, $arrayType);
-            }
-            if (!$keyType instanceof MixedType && !$keyType instanceof ConstantIntegerType) {
-                return $type;
             }
             if (!$itemType instanceof ClassStringType) {
                 return $type;
