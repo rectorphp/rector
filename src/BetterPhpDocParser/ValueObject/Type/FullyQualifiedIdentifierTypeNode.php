@@ -9,6 +9,6 @@ final class FullyQualifiedIdentifierTypeNode extends IdentifierTypeNode
 {
     public function __toString() : string
     {
-        return '\\' . $this->name;
+        return '\\' . \ltrim($this->name, '\\');
     }
 }

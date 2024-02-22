@@ -55,7 +55,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($typeNode, '', static function (AstNode $astNode) : ?IdentifierTypeNode {
             if ($astNode instanceof IdentifierTypeNode) {
-                $astNode->name = '\\' . $astNode->name;
+                $astNode->name = '\\' . \ltrim($astNode->name, '\\');
                 return $astNode;
             }
             return null;
