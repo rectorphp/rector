@@ -999,6 +999,7 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\IntersectionTypeNodePhpDocNodeVisitor' => $baseDir . '/src/BetterPhpDocParser/PhpDocNodeVisitor/IntersectionTypeNodePhpDocNodeVisitor.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\TemplatePhpDocNodeVisitor' => $baseDir . '/src/BetterPhpDocParser/PhpDocNodeVisitor/TemplatePhpDocNodeVisitor.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\UnionTypeNodePhpDocNodeVisitor' => $baseDir . '/src/BetterPhpDocParser/PhpDocNodeVisitor/UnionTypeNodePhpDocNodeVisitor.php',
+    'Rector\\BetterPhpDocParser\\PhpDocParser\\ArrayItemClassNameDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ArrayItemClassNameDecorator.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterTypeParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',

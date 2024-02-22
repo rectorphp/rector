@@ -1218,6 +1218,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\IntersectionTypeNodePhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocNodeVisitor/IntersectionTypeNodePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\TemplatePhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocNodeVisitor/TemplatePhpDocNodeVisitor.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\UnionTypeNodePhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocNodeVisitor/UnionTypeNodePhpDocNodeVisitor.php',
+        'Rector\\BetterPhpDocParser\\PhpDocParser\\ArrayItemClassNameDecorator' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/ArrayItemClassNameDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterTypeParser' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
