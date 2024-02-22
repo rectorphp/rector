@@ -1,4 +1,4 @@
-# 360 Rules Overview
+# 361 Rules Overview
 
 <br>
 
@@ -50,7 +50,7 @@
 
 - [Removing](#removing) (5)
 
-- [Renaming](#renaming) (9)
+- [Renaming](#renaming) (10)
 
 - [Strict](#strict) (5)
 
@@ -5597,6 +5597,21 @@ Replace constant by new ones
 +        return MYSQLI_ASSOC;
      }
  }
+```
+
+<br>
+
+### RenameFunctionLikeParamWithinCallLikeArgRector
+
+Rename param within closures and arrow functions based on use with specified method calls
+
+:wrench: **configure it!**
+
+- class: [`Rector\Renaming\Rector\FunctionLike\RenameFunctionLikeParamWithinCallLikeArgRector`](../rules/Renaming/Rector/FunctionLike/RenameFunctionLikeParamWithinCallLikeArgRector.php)
+
+```diff
+-(new SomeClass)->process(function ($param) {});
++(new SomeClass)->process(function ($parameter) {});
 ```
 
 <br>

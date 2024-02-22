@@ -73,7 +73,7 @@ final class BreakingVariableRenameGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, Variable $variable) : bool
     {
@@ -85,7 +85,7 @@ final class BreakingVariableRenameGuard
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
             return \true;
         }
-        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
+        if (!$functionLike instanceof ArrowFunction && $this->overridenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
@@ -94,7 +94,7 @@ final class BreakingVariableRenameGuard
         if ($this->hasConflictVariable($functionLike, $expectedName)) {
             return \true;
         }
-        return $this->isUsedInClosureUsesName($expectedName, $functionLike);
+        return $functionLike instanceof Closure && $this->isUsedInClosureUsesName($expectedName, $functionLike);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
@@ -151,11 +151,14 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     private function hasConflictVariable($functionLike, string $newName) : bool
     {
-        return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
+        if ($functionLike instanceof ArrowFunction) {
+            return $this->betterNodeFinder->hasInstanceOfName(\array_merge([$functionLike->expr], $functionLike->params), Variable::class, $newName);
+        }
+        return $this->betterNodeFinder->hasInstanceOfName(\array_merge((array) $functionLike->stmts, $functionLike->params), Variable::class, $newName);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
