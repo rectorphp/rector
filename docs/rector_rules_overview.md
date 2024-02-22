@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (23)
 
-- [TypeDeclaration](#typedeclaration) (43)
+- [TypeDeclaration](#typedeclaration) (44)
 
 - [Visibility](#visibility) (3)
 
@@ -6402,6 +6402,21 @@ Add param types where needed
      {
      }
  }
+```
+
+<br>
+
+### AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector
+
+Add param types where needed
+
+:wrench: **configure it!**
+
+- class: [`Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector`](../rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector.php)
+
+```diff
+-(new SomeClass)->process(function ($parameter) {});
++(new SomeClass)->process(function (string $parameter) {});
 ```
 
 <br>
