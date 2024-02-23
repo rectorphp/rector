@@ -90,7 +90,7 @@ final class Printer
      *
      * @var array<string, string>
      */
-    private $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', ', DoctrineArray::class . '->items' => ', ', DoctrineAnnotation::class . '->arguments' => ', '];
+    private $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', CallableTypeNode::class . '->templateTypes' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', ', DoctrineArray::class . '->items' => ', ', DoctrineAnnotation::class . '->arguments' => ', '];
     /**
      * [$find, $extraLeft, $extraRight]
      *
@@ -294,10 +294,13 @@ final class Printer
             } else {
                 $returnType = $this->printType($node->returnType);
             }
+            $template = $node->templateTypes !== [] ? '<' . implode(', ', array_map(function (TemplateTagValueNode $templateNode) : string {
+                return $this->print($templateNode);
+            }, $node->templateTypes)) . '>' : '';
             $parameters = implode(', ', array_map(function (CallableTypeParameterNode $parameterNode) : string {
                 return $this->print($parameterNode);
             }, $node->parameters));
-            return "{$node->identifier}({$parameters}): {$returnType}";
+            return "{$node->identifier}{$template}({$parameters}): {$returnType}";
         }
         if ($node instanceof ConditionalTypeForParameterNode) {
             return sprintf('(%s %s %s ? %s : %s)', $node->parameterName, $node->negated ? 'is not' : 'is', $this->printType($node->targetType), $this->printType($node->if), $this->printType($node->else));
