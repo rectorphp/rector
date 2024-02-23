@@ -69,6 +69,9 @@ CODE_SAMPLE
         if (!\is_string($className)) {
             return null;
         }
+        if (\substr_compare($className, 'TestCase', -\strlen('TestCase')) === 0) {
+            return null;
+        }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
