@@ -180,10 +180,13 @@ CODE_SAMPLE
      */
     private function refactorAssign(Assign $assign, $node) : ?Assign
     {
+        if (!$assign->var instanceof Variable) {
+            return null;
+        }
         if (!$this->isEmptyString($assign->expr)) {
             return null;
         }
-        if (!$assign->var instanceof Variable) {
+        if ($this->nodeTypeResolver->getNativeType($assign->var)->isArray()->yes()) {
             return null;
         }
         $variableAssignArrayDimFetches = $this->findSameNamedVariableAssigns($assign->var, $node);
