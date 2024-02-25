@@ -1,4 +1,4 @@
-# 71 Rules Overview
+# 74 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -399,6 +399,25 @@ Changes `fread()` or `fwrite()` compare to false to negation check
 -fwrite($fp, '1') === false;
 +!fread($handle, $length);
 +!fwrite($fp, '1');
+```
+
+<br>
+
+## DowngradeHashAlgorithmXxHashRector
+
+Downgrade hash algorithm xxh32, xxh64, xxh3 or xxh128 by default to md5. You can configure the algorithm to downgrade.
+
+- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeHashAlgorithmXxHashRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeHashAlgorithmXxHashRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return hash('xxh128', 'some-data-to-hash');
++        return hash('md5', 'some-data-to-hash');
+     }
+ }
 ```
 
 <br>
@@ -1144,6 +1163,25 @@ Add `setAccessible()` on ReflectionProperty to allow reading private properties 
 
 <br>
 
+## DowngradeStandaloneNullTrueFalseReturnTypeRector
+
+Downgrade standalone return null, true, or false
+
+- class: [`Rector\DowngradePhp82\Rector\FunctionLike\DowngradeStandaloneNullTrueFalseReturnTypeRector`](../rules/DowngradePhp82/Rector/FunctionLike/DowngradeStandaloneNullTrueFalseReturnTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run(): null
++    public function run(): mixed
+     {
+         return null;
+     }
+ }
+```
+
+<br>
+
 ## DowngradeStaticTypeDeclarationRector
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
@@ -1382,6 +1420,25 @@ Remove trailing commas in unset
 -	$y,
 +	$y
  );
+```
+
+<br>
+
+## DowngradeTypedClassConstRector
+
+Remove typed class constant
+
+- class: [`Rector\DowngradePhp83\Rector\ClassConst\DowngradeTypedClassConstRector`](../rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public string FOO = 'test';
++    /**
++     * @var string
++     */
++    public FOO = 'test';
+ }
 ```
 
 <br>

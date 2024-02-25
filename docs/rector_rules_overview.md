@@ -1,4 +1,4 @@
-# 361 Rules Overview
+# 363 Rules Overview
 
 <br>
 
@@ -54,7 +54,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (23)
+- [Transform](#transform) (24)
 
 - [TypeDeclaration](#typedeclaration) (44)
 
@@ -4693,9 +4693,9 @@ Change annotation to attribute
  class SymfonyRoute
  {
 -    /**
--     * @Route("/path", name="action")
+-     * @Route("/path", name="action") api route
 -     */
-+    #[Route(path: '/path', name: 'action')]
++    #[Route(path: '/path', name: 'action')] // api route
      public function action()
      {
      }
@@ -5870,6 +5870,21 @@ Replace key value on specific attribute to class constant
 +    #[Column(type: Types::STRING)]
      public $name;
  }
+```
+
+<br>
+
+### ConstFetchToClassConstFetchRector
+
+Change const fetch to class const fetch
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\ConstFetch\ConstFetchToClassConstFetchRector`](../rules/Transform/Rector/ConstFetch/ConstFetchToClassConstFetchRector.php)
+
+```diff
+-$x = CONTEXT_COURSE
++$x = course::LEVEL
 ```
 
 <br>

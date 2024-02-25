@@ -1668,6 +1668,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\DowngradePhp81\\Rector\\StmtsAwareInterface\\DowngradeSetAccessibleReflectionPropertyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/StmtsAwareInterface/DowngradeSetAccessibleReflectionPropertyRector.php',
         'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
         'Rector\\DowngradePhp82\\Rector\\FunctionLike\\DowngradeStandaloneNullTrueFalseReturnTypeRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FunctionLike/DowngradeStandaloneNullTrueFalseReturnTypeRector.php',
+        'Rector\\DowngradePhp83\\Rector\\ClassConst\\DowngradeTypedClassConstRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php',
         'Rector\\EarlyReturn\\NodeAnalyzer\\IfAndAnalyzer' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeAnalyzer/IfAndAnalyzer.php',
         'Rector\\EarlyReturn\\NodeAnalyzer\\SimpleScalarAnalyzer' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeAnalyzer/SimpleScalarAnalyzer.php',
         'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
