@@ -35,6 +35,10 @@ return static function (RectorConfig $rectorConfig) : void {
         new MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchAssoc', 'fetchAssociative'),
         new MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchColumn', 'fetchOne'),
         new MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchAll', 'fetchAllAssociative'),
+        new MethodCallRename('Doctrine\\DBAL\\Result', 'fetchAssoc', 'fetchAssociative'),
+        new MethodCallRename('Doctrine\\DBAL\\Result', 'fetchArray', 'fetchNumeric'),
+        new MethodCallRename('Doctrine\\DBAL\\Result', 'fetchColumn', 'fetchOne'),
+        new MethodCallRename('Doctrine\\DBAL\\Result', 'fetchAll', 'fetchAllAssociative'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#pdo-related-classes-outside-of-the-pdo-namespace-are-deprecated
