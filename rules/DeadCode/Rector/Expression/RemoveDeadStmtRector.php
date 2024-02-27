@@ -84,12 +84,13 @@ CODE_SAMPLE
         if ($livingCode === [$node->expr]) {
             return null;
         }
-        $node->expr = \array_shift($livingCode);
+        $newNode = clone $node;
+        $newNode->expr = \array_shift($livingCode);
         $newNodes = [];
         foreach ($livingCode as $singleLivingCode) {
             $newNodes[] = new Expression($singleLivingCode);
         }
-        $newNodes[] = $node;
+        $newNodes[] = $newNode;
         return $newNodes;
     }
     private function hasGetMagic(Expression $expression) : bool
