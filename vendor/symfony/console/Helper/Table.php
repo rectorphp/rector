@@ -361,7 +361,8 @@ class Table
                 $maxRows = \max(\count($headers), \count($row));
                 for ($i = 0; $i < $maxRows; ++$i) {
                     $cell = (string) ($row[$i] ?? '');
-                    $parts = \explode("\n", $cell);
+                    $eol = \strpos($cell, "\r\n") !== \false ? "\r\n" : "\n";
+                    $parts = \explode($eol, $cell);
                     foreach ($parts as $idx => $part) {
                         if ($headers && !$containsColspan) {
                             if (0 === $idx) {
@@ -577,9 +578,10 @@ class Table
                 if (\strpos($cell ?? '', "\n") === \false) {
                     continue;
                 }
-                $escaped = \implode("\n", \array_map(\Closure::fromCallable([OutputFormatter::class, 'escapeTrailingBackslash']), \explode("\n", $cell)));
+                $eol = \strpos($cell ?? '', "\r\n") !== \false ? "\r\n" : "\n";
+                $escaped = \implode($eol, \array_map(\Closure::fromCallable([OutputFormatter::class, 'escapeTrailingBackslash']), \explode($eol, $cell)));
                 $cell = $cell instanceof TableCell ? new TableCell($escaped, ['colspan' => $cell->getColspan()]) : $escaped;
-                $lines = \explode("\n", \str_replace("\n", "<fg=default;bg=default></>\n", $cell));
+                $lines = \explode($eol, \str_replace($eol, '<fg=default;bg=default></>' . $eol, $cell));
                 foreach ($lines as $lineKey => $line) {
                     if ($colspan > 1) {
                         $line = new TableCell($line, ['colspan' => $colspan]);
@@ -636,8 +638,9 @@ class Table
                 $nbLines = $cell->getRowspan() - 1;
                 $lines = [$cell];
                 if (\strpos($cell, "\n") !== \false) {
-                    $lines = \explode("\n", \str_replace("\n", "<fg=default;bg=default>\n</>", $cell));
-                    $nbLines = \count($lines) > $nbLines ? \substr_count($cell, "\n") : $nbLines;
+                    $eol = \strpos($cell, "\r\n") !== \false ? "\r\n" : "\n";
+                    $lines = \explode($eol, \str_replace($eol, '<fg=default;bg=default>' . $eol . '</>', $cell));
+                    $nbLines = \count($lines) > $nbLines ? \substr_count($cell, $eol) : $nbLines;
                     $rows[$line][$column] = new TableCell($lines[0], ['colspan' => $cell->getColspan(), 'style' => $cell->getStyle()]);
                     unset($lines[0]);
                 }

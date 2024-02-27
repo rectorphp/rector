@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -81,10 +82,15 @@ CODE_SAMPLE
             return null;
         }
         $callArgs = $node->getArgs();
-        if (!$callArgs[0]->value instanceof MethodCall) {
+        $firstArg = $callArgs[0];
+        // special case for new map
+        if ($firstArg->value instanceof New_) {
+            return $this->refactorNew($firstArg->value, $node);
+        }
+        if (!$firstArg->value instanceof MethodCall) {
             return null;
         }
-        $nestedMethodCall = $callArgs[0]->value;
+        $nestedMethodCall = $firstArg->value;
         foreach (self::NESTED_METHOD_TO_RENAME_MAP as $oldMethodName => $newParentMethodName) {
             if (!$this->isName($nestedMethodCall->name, $oldMethodName)) {
                 continue;
@@ -95,5 +101,18 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @return null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     */
+    private function refactorNew(New_ $new, $call)
+    {
+        if (!$this->isName($new->class, 'PHPUnit\\Framework\\MockObject\\Stub\\ReturnValueMap')) {
+            return null;
+        }
+        $call->name = new Identifier('willReturnMap');
+        $call->args = $new->args;
+        return $call;
     }
 }

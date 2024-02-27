@@ -422,16 +422,7 @@ class QuestionHelper extends Helper
         if (isset(self::$stdinIsInteractive)) {
             return self::$stdinIsInteractive;
         }
-        if (\function_exists('stream_isatty')) {
-            return self::$stdinIsInteractive = @\stream_isatty(\fopen('php://stdin', 'r'));
-        }
-        if (\function_exists('posix_isatty')) {
-            return self::$stdinIsInteractive = @\posix_isatty(\fopen('php://stdin', 'r'));
-        }
-        if (!\function_exists('shell_exec')) {
-            return self::$stdinIsInteractive = \true;
-        }
-        return self::$stdinIsInteractive = (bool) \shell_exec('stty 2> ' . ('\\' === \DIRECTORY_SEPARATOR ? 'NUL' : '/dev/null'));
+        return self::$stdinIsInteractive = @\stream_isatty(\fopen('php://stdin', 'r'));
     }
     /**
      * Reads one or more lines of input and returns what is read.
