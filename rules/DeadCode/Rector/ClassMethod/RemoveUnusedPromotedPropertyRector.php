@@ -109,6 +109,9 @@ CODE_SAMPLE
         if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
+        if ($constructClassMethod->params === []) {
+            return null;
+        }
         if ($this->shouldSkipClass($node)) {
             return null;
         }
