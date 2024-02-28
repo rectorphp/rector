@@ -56,7 +56,10 @@ final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
         if ($node instanceof VirtualNode) {
             return null;
         }
-        if (!$node instanceof Expr || $node->getAttribute(AttributeKey::EXPRESSION_DEPTH) < 2) {
+        if (!$node instanceof Expr) {
+            return null;
+        }
+        if ($node->getAttribute(AttributeKey::EXPRESSION_DEPTH) < 2 && $node->getAttribute(AttributeKey::IS_ARG_VALUE) !== \true) {
             return null;
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
