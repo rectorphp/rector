@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix202402\Webmozart\Assert\InvalidArgumentException;
 final class PropertyRenameFactory
 {
     /**
@@ -22,6 +23,10 @@ final class PropertyRenameFactory
     {
         $currentName = $this->nodeNameResolver->getName($property);
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        return new PropertyRename($property, $expectedName, $currentName, $classLike, $className, $property->props[0]);
+        try {
+            return new PropertyRename($property, $expectedName, $currentName, $classLike, $className, $property->props[0]);
+        } catch (InvalidArgumentException $exception) {
+        }
+        return null;
     }
 }
