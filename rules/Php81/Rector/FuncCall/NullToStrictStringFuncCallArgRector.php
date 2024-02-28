@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
@@ -161,9 +160,6 @@ CODE_SAMPLE
             return null;
         }
         $argValue = $args[$position]->value;
-        if ($argValue instanceof ShellExec) {
-            return null;
-        }
         if ($argValue instanceof ConstFetch && $this->valueResolver->isNull($argValue)) {
             $args[$position]->value = new String_('');
             $funcCall->args = $args;
