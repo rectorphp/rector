@@ -9,11 +9,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\ValueObject\Visibility;
@@ -45,12 +47,18 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractScopeAwareRector 
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(PropertyFetchFinder $propertyFetchFinder, VisibilityManipulator $visibilityManipulator, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(PropertyFetchFinder $propertyFetchFinder, VisibilityManipulator $visibilityManipulator, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -149,6 +157,15 @@ CODE_SAMPLE
         foreach ($class->stmts as $stmt) {
             if ($stmt instanceof TraitUse) {
                 return \true;
+            }
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if ($classReflection instanceof ClassReflection) {
+            $interfaces = $classReflection->getInterfaces();
+            foreach ($interfaces as $interface) {
+                if ($interface->hasNativeMethod(MethodName::CONSTRUCT)) {
+                    return \true;
+                }
             }
         }
         return \false;
