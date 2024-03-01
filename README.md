@@ -46,16 +46,16 @@ use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
-return static function (RectorConfig $rectorConfig): void {
+return RectorConfig::configure()
     // register single rule
-    $rectorConfig->rule(TypedPropertyFromStrictConstructorRector::class);
-
+    ->withRules([
+        TypedPropertyFromStrictConstructorRector::class
+    ])
     // here we can define, what sets of rules will be applied
     // tip: use "SetList" class to autocomplete sets with your IDE
-    $rectorConfig->sets([
+    ->withSets([
         SetList::CODE_QUALITY
     ]);
-};
 ```
 
 Then dry run Rector:
