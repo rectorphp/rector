@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202402\Symfony\Component\Console\Completion;
+namespace RectorPrefix202403\Symfony\Component\Console\Completion;
 
-use RectorPrefix202402\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202402\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202402\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202402\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202403\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202403\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202403\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202403\Symfony\Component\Console\Input\InputOption;
 /**
  * An input specialized for shell completion.
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202402\Illuminate\Contracts\Validation;
+namespace RectorPrefix202403\Illuminate\Contracts\Validation;
 
 use Closure;
 /**

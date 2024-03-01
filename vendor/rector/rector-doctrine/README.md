@@ -17,14 +17,13 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\Doctrine\Set\DoctrineSetList` class and pick one of constants:
 
 ```php
-use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Config\RectorConfig;
+use Rector\Doctrine\Set\DoctrineSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([
+return RectorConfig::configure()
+    ->withSets([
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
     ]);
-};
 ```
 
 <br>

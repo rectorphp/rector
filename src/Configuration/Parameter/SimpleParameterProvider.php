@@ -5,7 +5,7 @@ namespace Rector\Configuration\Parameter;
 
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202402\Webmozart\Assert\Assert;
+use RectorPrefix202403\Webmozart\Assert\Assert;
 /**
  * @api
  */

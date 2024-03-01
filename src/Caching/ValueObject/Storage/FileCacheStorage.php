@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use FilesystemIterator;
-use RectorPrefix202402\Nette\Utils\FileSystem;
-use RectorPrefix202402\Nette\Utils\Random;
+use RectorPrefix202403\Nette\Utils\FileSystem;
+use RectorPrefix202403\Nette\Utils\Random;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
@@ -26,7 +26,7 @@ final class FileCacheStorage implements CacheStorageInterface
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
-    public function __construct(string $directory, \RectorPrefix202402\Symfony\Component\Filesystem\Filesystem $filesystem)
+    public function __construct(string $directory, \RectorPrefix202403\Symfony\Component\Filesystem\Filesystem $filesystem)
     {
         $this->directory = $directory;
         $this->filesystem = $filesystem;

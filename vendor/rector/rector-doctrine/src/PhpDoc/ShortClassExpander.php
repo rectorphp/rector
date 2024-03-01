@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\PhpDoc;
 
-use RectorPrefix202402\Nette\Utils\Strings;
+use RectorPrefix202403\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;

@@ -12,7 +12,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix202402\Spatie\Enum\Enum;
+use RectorPrefix202403\Spatie\Enum\Enum;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

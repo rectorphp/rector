@@ -22,14 +22,14 @@ jobs:
                     php-version: 8.2
                     coverage: none
 
-            -   uses: "ramsey/composer-install@v2"
+            -   uses: "ramsey/composer-install@v3"
 
             -   run: vendor/bin/rector --ansi
             # @todo apply coding standard if used
 
             -
                 # commit only to core contributors who have repository access
-                uses: stefanzweifel/git-auto-commit-action@v4
+                uses: stefanzweifel/git-auto-commit-action@v5
                 with:
                     commit_message: '[rector] Rector fixes'
                     commit_author: 'GitHub Action <actions@github.com>'

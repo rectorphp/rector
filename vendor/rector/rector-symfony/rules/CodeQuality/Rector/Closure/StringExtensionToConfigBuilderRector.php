@@ -25,7 +25,7 @@ use Rector\Symfony\Utils\StringUtils;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202402\Webmozart\Assert\Assert;
+use RectorPrefix202403\Webmozart\Assert\Assert;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-5-3-config-builder-classes
  *

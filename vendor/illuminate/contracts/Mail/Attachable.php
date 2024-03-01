@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202402\Illuminate\Contracts\Mail;
+namespace RectorPrefix202403\Illuminate\Contracts\Mail;
 
 interface Attachable
 {

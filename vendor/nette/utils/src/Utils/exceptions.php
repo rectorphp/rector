@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202402\Nette\Utils;
+namespace RectorPrefix202403\Nette\Utils;
 
 /**
  * The exception that is thrown when an image error occurs.

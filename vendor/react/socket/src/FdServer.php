@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202402\React\Socket;
+namespace RectorPrefix202403\React\Socket;
 
-use RectorPrefix202402\Evenement\EventEmitter;
-use RectorPrefix202402\React\EventLoop\Loop;
-use RectorPrefix202402\React\EventLoop\LoopInterface;
+use RectorPrefix202403\Evenement\EventEmitter;
+use RectorPrefix202403\React\EventLoop\Loop;
+use RectorPrefix202403\React\EventLoop\LoopInterface;
 /**
  * [Internal] The `FdServer` class implements the `ServerInterface` and
  * is responsible for accepting connections from an existing file descriptor.

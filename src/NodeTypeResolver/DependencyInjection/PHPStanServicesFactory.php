@@ -15,11 +15,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix202402\Symfony\Component\Console\Input\ArrayInput;
-use RectorPrefix202402\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202402\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202403\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix202403\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202403\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use RectorPrefix202402\Webmozart\Assert\Assert;
+use RectorPrefix202403\Webmozart\Assert\Assert;
 /**
  * Factory so Symfony app can use services from PHPStan container
  *

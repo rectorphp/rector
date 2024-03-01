@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix202402\Illuminate\Container;
+namespace RectorPrefix202403\Illuminate\Container;
 
 use ArrayAccess;
 use Closure;
 use Exception;
-use RectorPrefix202402\Illuminate\Contracts\Container\BindingResolutionException;
-use RectorPrefix202402\Illuminate\Contracts\Container\CircularDependencyException;
-use RectorPrefix202402\Illuminate\Contracts\Container\Container as ContainerContract;
+use RectorPrefix202403\Illuminate\Contracts\Container\BindingResolutionException;
+use RectorPrefix202403\Illuminate\Contracts\Container\CircularDependencyException;
+use RectorPrefix202403\Illuminate\Contracts\Container\Container as ContainerContract;
 use LogicException;
 use ReflectionClass;
 use ReflectionException;

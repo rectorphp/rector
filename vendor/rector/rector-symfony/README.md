@@ -17,18 +17,17 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\Symfony\Set\SymfonySetList` class and pick one of constants:
 
 ```php
-use Rector\Symfony\Set\SymfonySetList;
+
 use Rector\Config\RectorConfig;
+use Rector\Symfony\Set\SymfonySetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
-
-    $rectorConfig->sets([
+return RectorConfig::configure()
+    ->withSymfonyContainerXml((__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml')
+    ->withSets([
         SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
-};
 ```
 
 <br>
@@ -44,9 +43,8 @@ How to add it? Check your `var/cache/` directory and find the XML file for your 
 ```php
 use Rector\Config\RectorConfig;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/test/App_KernelTestDebugContainer.xml');
-};
+return RectorConfig::configure()
+    ->withSymfonyContainerXml((__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
 ```
 
 That's it! Now you can run the `StringFormTypeToClassRector` and get your form classes converted safely.
@@ -59,16 +57,13 @@ Some rules like `AddRouteAnnotationRector` require additional access to your Sym
 
 ```php
 use Rector\Config\RectorConfig;
-
+use Rector\Symfony\Bridge\Symfony\Routing\SymfonyRoutesProvider;
 use Rector\Symfony\Configs\Rector\ClassMethod\AddRouteAnnotationRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->symfonyContainerPhp(__DIR__ . '/tests/symfony-container.php');
-
-    $rectorConfig->singleton(SymfonyRoutesProvider::class);
-    $rectorConfig->alias(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
-};
+return RectorConfig::configure()
+    ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
+    ->registerService(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
 ```
 
 The `tests/symfony-container.php` should provide your dependency injection container. The way you create the container is up to you. It can be as simple as:

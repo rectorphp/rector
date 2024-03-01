@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202402;
+namespace RectorPrefix202403;
 
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeHashAlgorithmXxHashRector;
 use Rector\DowngradePhp81\Rector\LNumber\DowngradeOctalNumberRector;

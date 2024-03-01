@@ -5,7 +5,7 @@ namespace Rector\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Skipper\Skipper\PathSkipper;
-use RectorPrefix202402\Symfony\Component\Finder\Finder;
+use RectorPrefix202403\Symfony\Component\Finder\Finder;
 /**
  * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

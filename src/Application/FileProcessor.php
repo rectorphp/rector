@@ -21,7 +21,7 @@ use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202402\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202403\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {

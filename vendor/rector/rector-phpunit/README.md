@@ -17,14 +17,13 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\PHPUnit\Set\PHPUnitSetList` class and pick one of constants:
 
 ```php
-use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([
+return RectorConfig::configure()
+    ->withSets([
         PHPUnitSetList::PHPUNIT_90,
     ]);
-};
 ```
 
 <br>

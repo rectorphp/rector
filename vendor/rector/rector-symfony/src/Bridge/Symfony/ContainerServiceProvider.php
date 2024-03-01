@@ -6,8 +6,8 @@ namespace Rector\Symfony\Bridge\Symfony;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202402\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202402\Webmozart\Assert\Assert;
+use RectorPrefix202403\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202403\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     /**

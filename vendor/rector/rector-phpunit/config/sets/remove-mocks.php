@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202402;
+namespace RectorPrefix202403;
 
 use Rector\Config\RectorConfig;
 /** @deprecated Use CodeQuality set instead, as related to code-quality */

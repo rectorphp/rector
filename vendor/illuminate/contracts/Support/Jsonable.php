@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202402\Illuminate\Contracts\Support;
+namespace RectorPrefix202403\Illuminate\Contracts\Support;
 
 interface Jsonable
 {

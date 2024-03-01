@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202402\Symfony\Component\Console\Messenger;
+namespace RectorPrefix202403\Symfony\Component\Console\Messenger;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202402\Doctrine\Inflector;
+namespace RectorPrefix202403\Doctrine\Inflector;
 
 use RuntimeException;
 use function chr;
@@ -168,7 +168,7 @@ class Inflector
         } else {
             $lowered = strtolower($unaccented);
         }
-        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'RectorPrefix202402\\1_\\2', '/([a-z\\d])([A-Z])/' => 'RectorPrefix202402\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
+        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'RectorPrefix202403\\1_\\2', '/([a-z\\d])([A-Z])/' => 'RectorPrefix202403\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
         $urlized = $lowered;
         foreach ($replacements as $pattern => $replacement) {
             $replaced = preg_replace($pattern, $replacement, $urlized);

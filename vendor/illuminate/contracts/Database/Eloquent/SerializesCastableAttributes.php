@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202402\Illuminate\Contracts\Database\Eloquent;
+namespace RectorPrefix202403\Illuminate\Contracts\Database\Eloquent;
 
-use RectorPrefix202402\Illuminate\Database\Eloquent\Model;
+use RectorPrefix202403\Illuminate\Database\Eloquent\Model;
 interface SerializesCastableAttributes
 {
     /**
