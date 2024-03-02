@@ -230,11 +230,11 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
                 $this->changed = \true;
                 fwrite($output, $diff[$i][0]);
             }
-            //} elseif ($diff[$i][1] === Differ::DIFF_LINE_END_WARNING) { // custom comment inserted by PHPUnit/diff package
+            // } elseif ($diff[$i][1] === Differ::DIFF_LINE_END_WARNING) { // custom comment inserted by PHPUnit/diff package
             //  skip
-            //} else {
+            // } else {
             //  unknown/invalid
-            //}
+            // }
         }
     }
     private function assertString(array $options, string $option) : void

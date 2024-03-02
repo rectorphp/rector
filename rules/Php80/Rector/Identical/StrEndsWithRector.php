@@ -163,12 +163,18 @@ CODE_SAMPLE
             return null;
         }
         $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
-        if (\count($substrCompareFuncCall->getArgs()) < 2) {
+        $args = $substrCompareFuncCall->getArgs();
+        if (\count($args) < 2) {
             return null;
         }
-        $haystack = $substrCompareFuncCall->getArgs()[0]->value;
-        $needle = $substrCompareFuncCall->getArgs()[1]->value;
-        $thirdArgValue = $substrCompareFuncCall->getArgs()[2]->value;
+        $haystack = $args[0]->value;
+        $needle = $args[1]->value;
+        $thirdArgValue = $args[2]->value;
+        $isCaseInsensitiveValue = isset($args[4]) ? $this->valueResolver->getValue($args[4]->value) : null;
+        // is case insensitive → not valid replacement
+        if ($isCaseInsensitiveValue === \true) {
+            return null;
+        }
         if (!$this->isUnaryMinusStrlenFuncCallArgValue($thirdArgValue, $needle) && !$this->isHardCodedLNumberAndString($thirdArgValue, $needle)) {
             return null;
         }
