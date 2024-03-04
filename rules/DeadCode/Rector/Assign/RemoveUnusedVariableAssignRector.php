@@ -95,10 +95,7 @@ CODE_SAMPLE
             return null;
         }
         // we cannot be sure here
-        if ($this->containsCompactFuncCall($node)) {
-            return null;
-        }
-        if ($this->containsFileIncludes($node)) {
+        if ($this->shouldSkip($stmts)) {
             return null;
         }
         $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
@@ -165,24 +162,19 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param Stmt[] $stmts
      */
-    private function containsCompactFuncCall($functionLike) : bool
+    private function shouldSkip(array $stmts) : bool
     {
-        $compactFuncCall = $this->betterNodeFinder->findFirst($functionLike, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) : bool {
+            if ($node instanceof Include_) {
+                return \true;
+            }
             if (!$node instanceof FuncCall) {
                 return \false;
             }
             return $this->isName($node, 'compact');
         });
-        return $compactFuncCall instanceof FuncCall;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    private function containsFileIncludes($functionLike) : bool
-    {
-        return (bool) $this->betterNodeFinder->findInstancesOf($functionLike, [Include_::class]);
     }
     /**
      * @param array<int, Stmt> $stmts
