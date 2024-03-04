@@ -85,6 +85,9 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
+        if ($classReflection->isAnonymous()) {
+            return null;
+        }
         $parentClassReflections = $classReflection->getParents();
         if ($parentClassReflections === []) {
             return null;
