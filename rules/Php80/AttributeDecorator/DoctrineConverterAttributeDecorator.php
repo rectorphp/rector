@@ -9,7 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Php80\Contract\ConverterAttributeDecoratorInterface;
-final class DoctrineCoverterterAttributeDecorator implements ConverterAttributeDecoratorInterface
+final class DoctrineConverterAttributeDecorator implements ConverterAttributeDecoratorInterface
 {
     public function getAttributeName() : string
     {

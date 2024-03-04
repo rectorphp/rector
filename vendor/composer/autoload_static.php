@@ -2068,7 +2068,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
         'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
-        'Rector\\Php80\\AttributeDecorator\\DoctrineCoverterterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/DoctrineCoverterterAttributeDecorator.php',
+        'Rector\\Php80\\AttributeDecorator\\DoctrineConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/DoctrineConverterAttributeDecorator.php',
         'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
         'Rector\\Php80\\Contract\\ConverterAttributeDecoratorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/ConverterAttributeDecoratorInterface.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
