@@ -82,10 +82,17 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->hasDynamicMethodCallOnFetchThis($node)) {
+        $classMethods = $node->getMethods();
+        if ($classMethods === []) {
             return null;
         }
-        if ($node->getMethods() === []) {
+        $filter = static function (ClassMethod $classMethod) : bool {
+            return $classMethod->isPrivate();
+        };
+        if (\array_filter($classMethods, $filter) === []) {
+            return null;
+        }
+        if ($this->hasDynamicMethodCallOnFetchThis($classMethods)) {
             return null;
         }
         $hasChanged = \false;
@@ -113,7 +120,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        // unreliable to detect trait, interface doesn't make sense
+        // unreliable to detect trait, interface, anonymous class: doesn't make sense
         if ($classReflection->isTrait()) {
             return \true;
         }
@@ -123,7 +130,6 @@ CODE_SAMPLE
         if ($classReflection->isAnonymous()) {
             return \true;
         }
-        // skips interfaces by default too
         if (!$classMethod->isPrivate()) {
             return \true;
         }
@@ -133,9 +139,12 @@ CODE_SAMPLE
         }
         return $classReflection->hasMethod(MethodName::CALL);
     }
-    private function hasDynamicMethodCallOnFetchThis(Class_ $class) : bool
+    /**
+     * @param ClassMethod[] $classMethods
+     */
+    private function hasDynamicMethodCallOnFetchThis(array $classMethods) : bool
     {
-        foreach ($class->getMethods() as $classMethod) {
+        foreach ($classMethods as $classMethod) {
             $isFound = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $subNode) : bool {
                 if (!$subNode instanceof MethodCall) {
                     return \false;
