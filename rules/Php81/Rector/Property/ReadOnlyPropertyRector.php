@@ -192,6 +192,9 @@ CODE_SAMPLE
         if ($this->isPromotedPropertyAssigned($class, $param)) {
             return null;
         }
+        if ($param->attrGroups !== []) {
+            $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
         $this->visibilityManipulator->makeReadonly($param);
         return $param;
     }
