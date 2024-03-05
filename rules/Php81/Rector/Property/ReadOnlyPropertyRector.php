@@ -116,7 +116,8 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
+        $classMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if ($classMethod instanceof ClassMethod) {
             foreach ($classMethod->params as $param) {
                 $justChanged = $this->refactorParam($node, $classMethod, $param, $scope);
                 // different variable to ensure $hasRemoved not replaced
