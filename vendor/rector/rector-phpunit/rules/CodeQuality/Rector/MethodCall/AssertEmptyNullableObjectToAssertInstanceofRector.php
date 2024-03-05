@@ -78,7 +78,13 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['assertNotEmpty', 'assertEmpty'])) {
             return null;
         }
-        $firstArg = $node->getArgs()[0];
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        $firstArg = $node->getArgs()[0] ?? null;
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         $firstArgType = $this->getType($firstArg->value);
         if (!$firstArgType instanceof UnionType) {
             return null;
