@@ -9,6 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -119,6 +121,9 @@ CODE_SAMPLE
     }
     private function findValueType(Expr $expr) : ?Identifier
     {
+        if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
+            return $this->findValueType($expr->expr);
+        }
         if ($expr instanceof String_) {
             return new Identifier('string');
         }
