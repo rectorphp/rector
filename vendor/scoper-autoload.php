@@ -35,6 +35,7 @@ humbug_phpscoper_expose_class('Product', 'RectorPrefix202403\Product');
 
 // Function aliases. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md#function-aliases
+if (!function_exists('dump_node')) { function dump_node() { return \RectorPrefix202403\dump_node(...func_get_args()); } }
 if (!function_exists('formatErrorMessage')) { function formatErrorMessage() { return \RectorPrefix202403\formatErrorMessage(...func_get_args()); } }
 if (!function_exists('includeIfExists')) { function includeIfExists() { return \RectorPrefix202403\includeIfExists(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \RectorPrefix202403\mb_check_encoding(...func_get_args()); } }

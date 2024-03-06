@@ -2649,6 +2649,7 @@ class ComposerStaticInit2d887a2f87c676eb32b3e04612865e54
         'Rector\\Util\\FileHasher' => __DIR__ . '/../..' . '/src/Util/FileHasher.php',
         'Rector\\Util\\MemoryLimiter' => __DIR__ . '/../..' . '/src/Util/MemoryLimiter.php',
         'Rector\\Util\\NewLineSplitter' => __DIR__ . '/../..' . '/src/Util/NewLineSplitter.php',
+        'Rector\\Util\\NodePrinter' => __DIR__ . '/../..' . '/src/Util/NodePrinter.php',
         'Rector\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
         'Rector\\Util\\Reflection\\PrivatesAccessor' => __DIR__ . '/../..' . '/src/Util/Reflection/PrivatesAccessor.php',
         'Rector\\Util\\StringUtils' => __DIR__ . '/../..' . '/src/Util/StringUtils.php',
