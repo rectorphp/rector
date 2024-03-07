@@ -63,6 +63,9 @@ CODE_SAMPLE
             return null;
         }
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
+        if ($leftStaticType->isString()->yes() && $rightStaticType->isString()->yes()) {
+            return $this->processIdenticalOrNotIdentical($node);
+        }
         if ($rightStaticType instanceof MixedType) {
             return null;
         }
@@ -70,6 +73,14 @@ CODE_SAMPLE
         if (!$leftStaticType->equals($rightStaticType)) {
             return null;
         }
+        return $this->processIdenticalOrNotIdentical($node);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $node
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
+     */
+    private function processIdenticalOrNotIdentical($node)
+    {
         if ($node instanceof Equal) {
             return new Identical($node->left, $node->right);
         }
