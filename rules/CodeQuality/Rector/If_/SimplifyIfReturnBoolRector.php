@@ -5,7 +5,9 @@ namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Else_;
@@ -140,7 +142,7 @@ CODE_SAMPLE
         if (\strpos($condString, '!=') === \false) {
             return !$this->valueResolver->isTrueOrFalse($return->expr);
         }
-        return !$if->cond instanceof NotIdentical;
+        return !$if->cond instanceof NotIdentical && !$if->cond instanceof NotEqual;
     }
     private function processReturnTrue(If_ $if, Return_ $nextReturn) : Return_
     {
@@ -153,6 +155,10 @@ CODE_SAMPLE
     {
         if ($if->cond instanceof Identical) {
             $notIdentical = new NotIdentical($if->cond->left, $if->cond->right);
+            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
+        }
+        if ($if->cond instanceof Equal) {
+            $notIdentical = new NotEqual($if->cond->left, $if->cond->right);
             return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
         }
         if (!$nextReturn->expr instanceof Expr) {
@@ -205,6 +211,10 @@ CODE_SAMPLE
             $expr = $return->expr;
             if ($if->cond instanceof NotIdentical && $this->valueResolver->isTrue($expr)) {
                 $if->cond = new Identical($if->cond->left, $if->cond->right);
+                return $this->processReturnTrue($if, $return);
+            }
+            if ($if->cond instanceof NotEqual && $this->valueResolver->isTrue($expr)) {
+                $if->cond = new Equal($if->cond->left, $if->cond->right);
                 return $this->processReturnTrue($if, $return);
             }
             return $this->processReturnFalse($if, $return);
