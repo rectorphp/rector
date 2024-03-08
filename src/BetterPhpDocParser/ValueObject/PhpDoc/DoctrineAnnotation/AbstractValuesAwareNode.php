@@ -105,6 +105,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         $itemContents = '';
         \end($values);
         $lastItemKey = \key($values);
+        \reset($values);
         foreach ($values as $key => $value) {
             if (\is_int($key)) {
                 $itemContents .= $this->stringifyValue($value);

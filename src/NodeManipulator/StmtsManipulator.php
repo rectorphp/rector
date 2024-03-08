@@ -41,6 +41,7 @@ final class StmtsManipulator
     {
         \end($stmts);
         $lastStmtKey = \key($stmts);
+        \reset($stmts);
         $lastStmt = $stmts[$lastStmtKey];
         if ($lastStmt instanceof Expression) {
             return $lastStmt->expr;

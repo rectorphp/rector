@@ -137,6 +137,7 @@ final class TerminatedNodeAnalyzer
         }
         \end($stmts);
         $lastKey = \key($stmts);
+        \reset($stmts);
         $lastNode = $stmts[$lastKey];
         if (isset($stmts[$lastKey - 1]) && $this->isTerminatedNode($stmts[$lastKey - 1], $node)) {
             return \false;

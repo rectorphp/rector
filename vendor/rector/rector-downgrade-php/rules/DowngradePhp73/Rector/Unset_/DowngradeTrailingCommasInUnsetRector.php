@@ -55,6 +55,7 @@ CODE_SAMPLE
         if ($node->vars !== []) {
             \end($node->vars);
             $lastArgumentPosition = \key($node->vars);
+            \reset($node->vars);
             $last = $node->vars[$lastArgumentPosition];
             if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
                 return null;

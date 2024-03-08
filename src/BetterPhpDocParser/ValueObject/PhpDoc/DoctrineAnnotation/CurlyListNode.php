@@ -35,6 +35,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
         $itemContents = '';
         \end($array);
         $lastItemKey = \key($array);
+        \reset($array);
         foreach ($array as $key => $value) {
             if (\is_int($key)) {
                 $itemContents .= (string) $value;

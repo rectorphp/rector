@@ -152,6 +152,7 @@ CODE_SAMPLE
     {
         \end($stmts);
         $lastKey = \key($stmts);
+        \reset($stmts);
         foreach ($stmts as $key => $stmt) {
             if ($key === $lastKey) {
                 // skip last item

@@ -59,6 +59,7 @@ CODE_SAMPLE
         }
         \end($stmtsAware->stmts);
         $totalKeys = \key($stmtsAware->stmts);
+        \reset($stmtsAware->stmts);
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
             if (!isset($stmtsAware->stmts[$key], $stmtsAware->stmts[$key + 1])) {
                 break;

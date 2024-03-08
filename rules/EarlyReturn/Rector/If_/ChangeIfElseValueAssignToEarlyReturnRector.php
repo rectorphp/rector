@@ -101,6 +101,7 @@ CODE_SAMPLE
             }
             \end($if->stmts);
             $lastIfStmtKey = \key($if->stmts);
+            \reset($if->stmts);
             /** @var Assign $assign */
             $assign = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
             $returnLastIf = new Return_($assign->expr);

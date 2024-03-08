@@ -108,6 +108,7 @@ CODE_SAMPLE
     {
         \end($array);
         $lastPosition = \key($array);
+        \reset($array);
         $last = $array[$lastPosition];
         if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
             return null;

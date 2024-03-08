@@ -63,6 +63,7 @@ CODE_SAMPLE
         }
         \end($stmts);
         $lastKey = \key($stmts);
+        \reset($stmts);
         $lastStmt = $stmts[$lastKey];
         return $this->isRemovable($lastStmt);
     }

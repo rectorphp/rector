@@ -68,6 +68,7 @@ CODE_SAMPLE
         }
         \end($node->stmts);
         $lastStmtKey = \key($node->stmts);
+        \reset($node->stmts);
         $lastStmt = $node->stmts[$lastStmtKey];
         if ($lastStmt instanceof If_) {
             if (!$this->isBareIfWithOnlyStmtEmptyReturn($lastStmt)) {

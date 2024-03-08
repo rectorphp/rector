@@ -160,6 +160,7 @@ CODE_SAMPLE
         $stmts = (array) $classMethod->stmts;
         \end($stmts);
         $lastKey = \key($stmts);
+        \reset($stmts);
         $return = new Return_(new LNumber(0));
         if ($lastKey !== null && (isset($classMethod->stmts[$lastKey]) && $this->terminatedNodeAnalyzer->isAlwaysTerminated($classMethod, $classMethod->stmts[$lastKey], $return))) {
             return;

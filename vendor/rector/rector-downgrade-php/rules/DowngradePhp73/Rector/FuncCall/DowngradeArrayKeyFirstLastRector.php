@@ -180,6 +180,13 @@ CODE_SAMPLE
             $firstArg->value = $array;
         }
         $newStmts[] = $stmt;
+        $resetExpression = new Expression($this->nodeFactory->createFuncCall('reset', [$array]));
+        if (!$stmt instanceof StmtsAwareInterface && !$stmt instanceof Return_) {
+            $newStmts[] = new Expression($this->nodeFactory->createFuncCall('reset', [$array]));
+        }
+        if ($stmt instanceof StmtsAwareInterface) {
+            $stmt->stmts = \array_merge([$resetExpression], $stmt->stmts);
+        }
         return $newStmts;
     }
     /**
