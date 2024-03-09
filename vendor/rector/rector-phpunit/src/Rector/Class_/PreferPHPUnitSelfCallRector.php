@@ -76,13 +76,13 @@ CODE_SAMPLE
             if (!\is_string($methodName)) {
                 return null;
             }
+            if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0) {
+                return null;
+            }
             if (!$this->isName($node->var, 'this')) {
                 return null;
             }
             if (!$this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
-                return null;
-            }
-            if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0) {
                 return null;
             }
             $hasChanged = \true;

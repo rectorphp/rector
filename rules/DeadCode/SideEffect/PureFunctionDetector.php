@@ -233,6 +233,8 @@ final class PureFunctionDetector
         'array_splice',
         'next',
         'prev',
+        'sort',
+        'ksort',
         // stream
         'stream_filter_append',
     ];
