@@ -23,6 +23,7 @@ use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202403\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
+use RectorPrefix202403\Nette\Utils\Strings;
 final class FileProcessor
 {
     /**
@@ -75,6 +76,11 @@ final class FileProcessor
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
+    /**
+     * @var string
+     * @see https://regex101.com/r/llm7XZ/1
+     */
+    private const OPEN_TAG_SPACED_REGEX = '#^[ \\t]+<\\?php#m';
     public function __construct(FormatPerservingPrinter $formatPerservingPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
@@ -162,9 +168,14 @@ final class FileProcessor
              * Handle new line or space before <?php or InlineHTML node wiped on print format preserving
              * On very first content level
              */
-            $originalFileContent = $file->getOriginalFileContent();
-            $ltrimOriginalFileContent = \ltrim($originalFileContent);
+            $ltrimOriginalFileContent = \ltrim($file->getOriginalFileContent());
             if ($ltrimOriginalFileContent === $newContent) {
+                return;
+            }
+            // handle space before <?php
+            $ltrimNewContent = Strings::replace($newContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
+            $ltrimOriginalFileContent = Strings::replace($ltrimOriginalFileContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
+            if ($ltrimOriginalFileContent === $ltrimNewContent) {
                 return;
             }
         }
