@@ -1,4 +1,4 @@
-# 363 Rules Overview
+# 364 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (24)
 
-- [TypeDeclaration](#typedeclaration) (44)
+- [TypeDeclaration](#typedeclaration) (45)
 
 - [Visibility](#visibility) (3)
 
@@ -6641,6 +6641,32 @@ Change return type based on strict returns type operations
          }
 
          return $first > $second;
+     }
+ }
+```
+
+<br>
+
+### ChildDoctrineRepositoryClassTypeRector
+
+Add return type to classes that extend `Doctrine\ORM\EntityRepository`
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector`](../rules/TypeDeclaration/Rector/Class_/ChildDoctrineRepositoryClassTypeRector.php)
+
+```diff
+ use Doctrine\ORM\EntityRepository;
+
+ /**
+  * @extends EntityRepository<SomeType>
+  */
+ final class SomeRepository extends EntityRepository
+ {
+-    public function getActiveItem()
++    public function getActiveItem(): ?SomeType
+     {
+         return $this->findOneBy([
+             'something'
+         ]);
      }
  }
 ```
