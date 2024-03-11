@@ -42,14 +42,13 @@ final class IfAndAnalyzer
             return \false;
         }
         $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
-        foreach ($ifExprs as $ifExpr) {
-            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use($ifExpr) : bool {
-                return $this->nodeComparator->areNodesEqual($node, $ifExpr);
-            });
-            if ($isExprFoundInReturn) {
-                return \true;
+        return (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use($ifExprs) : bool {
+            foreach ($ifExprs as $ifExpr) {
+                if ($this->nodeComparator->areNodesEqual($node, $ifExpr)) {
+                    return \true;
+                }
             }
-        }
-        return \false;
+            return \false;
+        });
     }
 }
