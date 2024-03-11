@@ -43,12 +43,7 @@ final class IfAndAnalyzer
         }
         $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
         return (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use($ifExprs) : bool {
-            foreach ($ifExprs as $ifExpr) {
-                if ($this->nodeComparator->areNodesEqual($node, $ifExpr)) {
-                    return \true;
-                }
-            }
-            return \false;
+            return $this->nodeComparator->isNodeEqual($node, $ifExprs);
         });
     }
 }
