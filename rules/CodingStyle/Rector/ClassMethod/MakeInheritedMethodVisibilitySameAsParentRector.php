@@ -100,9 +100,11 @@ CODE_SAMPLE
             }
             /** @var string $methodName */
             $methodName = $this->getName($classMethod->name);
-            foreach ($interfaces as $interface) {
-                if ($interface->hasNativeMethod($methodName)) {
-                    continue 2;
+            if ($classMethod->isPublic()) {
+                foreach ($interfaces as $interface) {
+                    if ($interface->hasNativeMethod($methodName)) {
+                        continue 2;
+                    }
                 }
             }
             foreach ($parentClassReflections as $parentClassReflection) {
