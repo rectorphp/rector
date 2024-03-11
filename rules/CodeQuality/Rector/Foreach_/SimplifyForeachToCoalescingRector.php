@@ -88,15 +88,16 @@ CODE_SAMPLE
                     return null;
                 }
                 $nextStmt = $node->stmts[$key + 1] ?? null;
+                if (!$nextStmt instanceof Return_) {
+                    continue;
+                }
                 $return = $this->processForeachNodeWithReturnInside($foreach, $foreachReturnOrAssign, $nextStmt);
                 if (!$return instanceof Return_) {
                     continue;
                 }
                 $node->stmts[$key] = $return;
                 // cleanup next return
-                if ($nextStmt instanceof Return_) {
-                    unset($node->stmts[$key + 1]);
-                }
+                unset($node->stmts[$key + 1]);
                 $hasChanged = \true;
             }
         }
