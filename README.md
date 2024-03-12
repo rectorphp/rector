@@ -87,7 +87,7 @@ Read [Rector - The Power of Automated Refactoring](https://leanpub.com/rector-th
 
 The Rector community is powerful thanks to active maintainers who take care of Rector sets for particular projects.
 
-Among there projects belong:
+Among their projects belong:
 
 * [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector)
 * [craftcms/rector](https://github.com/craftcms/rector)
