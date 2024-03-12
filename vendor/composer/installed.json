@@ -504,8 +504,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v10.47.0",
-            "version_normalized": "10.47.0.0",
+            "version": "v10.48.1",
+            "version_normalized": "10.48.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -561,8 +561,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v10.47.0",
-            "version_normalized": "10.47.0.0",
+            "version": "v10.48.1",
+            "version_normalized": "10.48.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -777,32 +777,32 @@
         },
         {
             "name": "ondram\/ci-detector",
-            "version": "4.1.0",
-            "version_normalized": "4.1.0.0",
+            "version": "4.2.0",
+            "version_normalized": "4.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/OndraM\/ci-detector.git",
-                "reference": "8a4b664e916df82ff26a44709942dfd593fa6f30"
+                "reference": "8b0223b5ed235fd377c75fdd1bfcad05c0f168b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/OndraM\/ci-detector\/zipball\/8a4b664e916df82ff26a44709942dfd593fa6f30",
-                "reference": "8a4b664e916df82ff26a44709942dfd593fa6f30",
+                "url": "https:\/\/api.github.com\/repos\/OndraM\/ci-detector\/zipball\/8b0223b5ed235fd377c75fdd1bfcad05c0f168b8",
+                "reference": "8b0223b5ed235fd377c75fdd1bfcad05c0f168b8",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "ergebnis\/composer-normalize": "^2.2",
-                "lmc\/coding-standard": "^1.3 || ^2.1",
+                "ergebnis\/composer-normalize": "^2.13.2",
+                "lmc\/coding-standard": "^3.0.0",
                 "php-parallel-lint\/php-parallel-lint": "^1.2",
-                "phpstan\/extension-installer": "^1.0.5",
-                "phpstan\/phpstan": "^0.12.58",
-                "phpstan\/phpstan-phpunit": "^0.12.16",
-                "phpunit\/phpunit": "^7.1 || ^8.0 || ^9.0"
+                "phpstan\/extension-installer": "^1.1.0",
+                "phpstan\/phpstan": "^1.2.0",
+                "phpstan\/phpstan-phpunit": "^1.0.0",
+                "phpunit\/phpunit": "^9.6.13"
             },
-            "time": "2021-04-14T09:16:52+00:00",
+            "time": "2024-03-12T13:22:30+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -852,7 +852,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/OndraM\/ci-detector\/issues",
-                "source": "https:\/\/github.com\/OndraM\/ci-detector\/tree\/4.1.0"
+                "source": "https:\/\/github.com\/OndraM\/ci-detector\/tree\/4.2.0"
             },
             "install-path": "..\/ondram\/ci-detector"
         },
@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5ce789ddc9f145d4d93496db165ef9daa9be4424"
+                "reference": "c8b64135bdaaec629f2abd81387485cf3a627a3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5ce789ddc9f145d4d93496db165ef9daa9be4424",
-                "reference": "5ce789ddc9f145d4d93496db165ef9daa9be4424",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/c8b64135bdaaec629f2abd81387485cf3a627a3f",
+                "reference": "c8b64135bdaaec629f2abd81387485cf3a627a3f",
                 "shasum": ""
             },
             "require": {
@@ -1900,7 +1900,7 @@
                 "tomasvotruba\/class-leak": "^0.2.6",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-03-05T20:50:16+00:00",
+            "time": "2024-03-12T11:45:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

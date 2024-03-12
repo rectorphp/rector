@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+## 4.2.0 - 2024-03-12
+- Require PHP ^7.4.
+- Deprecate Wercker, which ceased to exist.
+
 ## 4.1.0 - 2021-04-14
 - Add SourceHut detection support.
 

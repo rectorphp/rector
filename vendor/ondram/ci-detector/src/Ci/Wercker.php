@@ -6,6 +6,9 @@ namespace RectorPrefix202403\OndraM\CiDetector\Ci;
 use RectorPrefix202403\OndraM\CiDetector\CiDetector;
 use RectorPrefix202403\OndraM\CiDetector\Env;
 use RectorPrefix202403\OndraM\CiDetector\TrinaryLogic;
+/**
+ * @deprecated Will be removed in next major version
+ */
 class Wercker extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

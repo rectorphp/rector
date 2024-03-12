@@ -44,7 +44,7 @@ How to add it? Check your `var/cache/` directory and find the XML file for your 
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
-    ->withSymfonyContainerXml((__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
+    ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
 ```
 
 That's it! Now you can run the `StringFormTypeToClassRector` and get your form classes converted safely.

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Application;
 
+use RectorPrefix202403\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
@@ -23,7 +24,6 @@ use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202403\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use RectorPrefix202403\Nette\Utils\Strings;
 final class FileProcessor
 {
     /**
