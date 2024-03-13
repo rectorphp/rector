@@ -5301,7 +5301,7 @@ Add override attribute to overridden methods
 
 ### AddTypeToConstRector
 
-Add const to type
+Add type to const
 
 - class: [`Rector\Php83\Rector\ClassConst\AddTypeToConstRector`](../rules/Php83/Rector/ClassConst/AddTypeToConstRector.php)
 
