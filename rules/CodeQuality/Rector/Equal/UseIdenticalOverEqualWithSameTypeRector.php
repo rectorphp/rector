@@ -55,19 +55,16 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $leftStaticType = $this->nodeTypeResolver->getNativeType($node->left);
-        // objects can be different by content
-        if ($leftStaticType instanceof ObjectType) {
-            return null;
-        }
-        if ($leftStaticType instanceof MixedType) {
-            return null;
-        }
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
+        // objects can be different by content
+        if ($leftStaticType instanceof ObjectType || $rightStaticType instanceof ObjectType) {
+            return null;
+        }
+        if ($leftStaticType instanceof MixedType || $rightStaticType instanceof MixedType) {
+            return null;
+        }
         if ($leftStaticType->isString()->yes() && $rightStaticType->isString()->yes()) {
             return $this->processIdenticalOrNotIdentical($node);
-        }
-        if ($rightStaticType instanceof MixedType) {
-            return null;
         }
         // different types
         if (!$leftStaticType->equals($rightStaticType)) {
