@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
@@ -101,6 +102,9 @@ CODE_SAMPLE
                 continue;
             }
             $isReturn = $this->matchSwitchAnalyzer->isReturnCondsAndExprs($condAndExprs);
+            if ($this->nodeTypeResolver->getType($stmt->cond) instanceof ObjectType) {
+                continue;
+            }
             $matchResult = $this->matchFactory->createFromCondAndExprs($stmt->cond, $condAndExprs, $nextStmt);
             if (!$matchResult instanceof MatchResult) {
                 continue;
