@@ -1921,6 +1921,7 @@ return array(
     'Rector\\Php83\\Rector\\ClassConst\\AddTypeToConstRector' => $baseDir . '/rules/Php83/Rector/ClassConst/AddTypeToConstRector.php',
     'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => $baseDir . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
     'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => $baseDir . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
+    'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => $baseDir . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

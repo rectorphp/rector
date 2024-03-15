@@ -1,4 +1,4 @@
-# 364 Rules Overview
+# 365 Rules Overview
 
 <br>
 
@@ -45,6 +45,8 @@
 - [Php82](#php82) (4)
 
 - [Php83](#php83) (3)
+
+- [Php84](#php84) (1)
 
 - [Privatization](#privatization) (5)
 
@@ -5324,6 +5326,21 @@ Combine separated host and port on `ldap_connect()` args
 ```diff
 -ldap_connect('ldap://ldap.example.com', 389);
 +ldap_connect('ldap://ldap.example.com:389');
+```
+
+<br>
+
+## Php84
+
+### ExplicitNullableParamTypeRector
+
+Make implicit nullable param to explicit
+
+- class: [`Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector`](../rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php)
+
+```diff
+-function foo(string $param = null) {}
++function foo(?string $param = null) {}
 ```
 
 <br>

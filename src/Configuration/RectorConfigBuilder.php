@@ -313,7 +313,7 @@ final class RectorConfigBuilder
      * What PHP sets should be applied? By default the same version
      * as composer.json has is used
      */
-    public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false) : self
+    public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false, bool $php84 = \false) : self
     {
         $pickedArguments = \array_filter(\func_get_args());
         if (\count($pickedArguments) > 1) {
@@ -357,6 +357,8 @@ final class RectorConfigBuilder
             $this->sets[] = LevelSetList::UP_TO_PHP_82;
         } elseif ($php83) {
             $this->sets[] = LevelSetList::UP_TO_PHP_83;
+        } elseif ($php84) {
+            $this->sets[] = LevelSetList::UP_TO_PHP_84;
         }
         return $this;
     }
