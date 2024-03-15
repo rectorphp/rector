@@ -532,7 +532,7 @@
                     "dev-master": "10.x-dev"
                 },
                 "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/\/illuminate-container-container-php.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/illuminate-container-container-php.patch"
                 ]
             },
             "installation-source": "dist",
