@@ -46,12 +46,12 @@ CODE_SAMPLE
         if (!$node->var instanceof Variable) {
             return null;
         }
+        if (!$node->dim instanceof Node) {
+            return null;
+        }
         foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
-            if (!$node->dim instanceof Node) {
-                return null;
-            }
             if (!$this->isObjectType($node->var, new ObjectType($arrayDimFetchToMethodCall->getClass()))) {
-                return null;
+                continue;
             }
             return new MethodCall($node->var, $arrayDimFetchToMethodCall->getMethod(), [new Arg($node->dim)]);
         }
