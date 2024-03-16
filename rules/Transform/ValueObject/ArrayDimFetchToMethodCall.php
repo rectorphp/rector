@@ -3,26 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
 class ArrayDimFetchToMethodCall
 {
     /**
      * @readonly
-     * @var string
+     * @var \PHPStan\Type\ObjectType
      */
-    private $class;
+    private $objectType;
     /**
      * @readonly
      * @var string
      */
     private $method;
-    public function __construct(string $class, string $method)
+    public function __construct(ObjectType $objectType, string $method)
     {
-        $this->class = $class;
+        $this->objectType = $objectType;
         $this->method = $method;
     }
-    public function getClass() : string
+    public function getObjectType() : ObjectType
     {
-        return $this->class;
+        return $this->objectType;
     }
     public function getMethod() : string
     {

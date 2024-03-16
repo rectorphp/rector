@@ -32,7 +32,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $app->make('someService');
 CODE_SAMPLE
-, [new ArrayDimFetchToMethodCall('SomeClass', 'make')])]);
+, [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'make')])]);
     }
     public function getNodeTypes() : array
     {
@@ -50,7 +50,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
-            if (!$this->isObjectType($node->var, new ObjectType($arrayDimFetchToMethodCall->getClass()))) {
+            if (!$this->isObjectType($node->var, $arrayDimFetchToMethodCall->getObjectType())) {
                 continue;
             }
             return new MethodCall($node->var, $arrayDimFetchToMethodCall->getMethod(), [new Arg($node->dim)]);
