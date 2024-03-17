@@ -160,7 +160,9 @@ final class RectorConfigBuilder
         if (\in_array(SetList::DEAD_CODE, $uniqueSets, \true) && $this->isDeadCodeLevelUsed) {
             throw new InvalidConfigurationException(\sprintf('Your config already enables dead code set.%sRemove "->withDeadCodeLevel()" as it only duplicates it, or remove dead code set.', \PHP_EOL));
         }
-        $rectorConfig->sets($uniqueSets);
+        if ($uniqueSets !== []) {
+            $rectorConfig->sets($uniqueSets);
+        }
         if ($this->paths !== []) {
             $rectorConfig->paths($this->paths);
         }
@@ -174,8 +176,12 @@ final class RectorConfigBuilder
                 $rectorConfig->tag($registerService->getClassName(), $registerService->getTag());
             }
         }
-        $rectorConfig->skip($this->skip);
-        $rectorConfig->rules($this->rules);
+        if ($this->skip !== []) {
+            $rectorConfig->skip($this->skip);
+        }
+        if ($this->rules !== []) {
+            $rectorConfig->rules($this->rules);
+        }
         foreach ($this->rulesWithConfigurations as $rectorClass => $configurations) {
             foreach ($configurations as $configuration) {
                 $rectorConfig->ruleWithConfiguration($rectorClass, $configuration);
