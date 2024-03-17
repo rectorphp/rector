@@ -217,6 +217,9 @@ CODE_SAMPLE
         if (!$isTrait) {
             return \false;
         }
+        if ($type instanceof ErrorType) {
+            return \true;
+        }
         if ($type->isExplicitMixed()) {
             return \false;
         }
