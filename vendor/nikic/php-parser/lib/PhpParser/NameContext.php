@@ -32,7 +32,7 @@ class NameContext
      *
      * @param Name|null $namespace Null is the global namespace
      */
-    public function startNamespace(Name $namespace = null)
+    public function startNamespace(?Name $namespace = null)
     {
         $this->namespace = $namespace;
         $this->origAliases = $this->aliases = [Stmt\Use_::TYPE_NORMAL => [], Stmt\Use_::TYPE_FUNCTION => [], Stmt\Use_::TYPE_CONSTANT => []];

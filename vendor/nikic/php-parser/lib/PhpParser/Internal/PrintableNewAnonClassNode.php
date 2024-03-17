@@ -29,7 +29,7 @@ class PrintableNewAnonClassNode extends Expr
     public $implements;
     /** @var Node\Stmt[] Statements */
     public $stmts;
-    public function __construct(array $attrGroups, int $flags, array $args, Node\Name $extends = null, array $implements, array $stmts, array $attributes)
+    public function __construct(array $attrGroups, int $flags, array $args, ?Node\Name $extends, array $implements, array $stmts, array $attributes)
     {
         parent::__construct($attributes);
         $this->attrGroups = $attrGroups;

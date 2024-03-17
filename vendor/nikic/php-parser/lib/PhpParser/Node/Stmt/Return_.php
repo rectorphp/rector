@@ -14,7 +14,7 @@ class Return_ extends Node\Stmt
      * @param null|Node\Expr $expr       Expression
      * @param array          $attributes Additional attributes
      */
-    public function __construct(Node\Expr $expr = null, array $attributes = [])
+    public function __construct(?Node\Expr $expr = null, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->expr = $expr;

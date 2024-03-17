@@ -139,7 +139,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      * @return Node\Stmt[]|null Array of statements (or null non-throwing error handler is used and
      *                          the parser was unable to recover from an error).
      */
-    public function parse(string $code, \PhpParser\ErrorHandler $errorHandler = null)
+    public function parse(string $code, ?\PhpParser\ErrorHandler $errorHandler = null)
     {
         $this->errorHandler = $errorHandler ?: new \PhpParser\ErrorHandler\Throwing();
         $this->lexer->startLexing($code, $this->errorHandler);

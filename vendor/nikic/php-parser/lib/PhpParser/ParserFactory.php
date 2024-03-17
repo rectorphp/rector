@@ -20,7 +20,7 @@ class ParserFactory
      *
      * @return Parser The parser instance
      */
-    public function create(int $kind, \PhpParser\Lexer $lexer = null, array $parserOptions = []) : \PhpParser\Parser
+    public function create(int $kind, ?\PhpParser\Lexer $lexer = null, array $parserOptions = []) : \PhpParser\Parser
     {
         if (null === $lexer) {
             $lexer = new \PhpParser\Lexer\Emulative();

@@ -24,7 +24,7 @@ class Arg extends NodeAbstract
      * @param array $attributes Additional attributes
      * @param Identifier|null $name Parameter name (for named parameters)
      */
-    public function __construct(\PhpParser\Node\Expr $value, bool $byRef = \false, bool $unpack = \false, array $attributes = [], \PhpParser\Node\Identifier $name = null)
+    public function __construct(\PhpParser\Node\Expr $value, bool $byRef = \false, bool $unpack = \false, array $attributes = [], ?\PhpParser\Node\Identifier $name = null)
     {
         $this->attributes = $attributes;
         $this->name = $name;

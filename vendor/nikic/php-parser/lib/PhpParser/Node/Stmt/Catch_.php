@@ -22,7 +22,7 @@ class Catch_ extends Node\Stmt implements StmtsAwareInterface
      * @param Node\Stmt[]           $stmts      Statements
      * @param array                 $attributes Additional attributes
      */
-    public function __construct(array $types, Expr\Variable $var = null, array $stmts = [], array $attributes = [])
+    public function __construct(array $types, ?Expr\Variable $var = null, array $stmts = [], array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->types = $types;
