@@ -38,7 +38,7 @@ class Helpers
     }
     /**
      * Converts false to null, does not change other values.
-     * @param  mixed  $value
+     * @param mixed $value
      * @return mixed
      */
     public static function falseToNull($value)
@@ -47,9 +47,9 @@ class Helpers
     }
     /**
      * Returns value clamped to the inclusive range of min and max.
-     * @param  int|float  $value
-     * @param  int|float  $min
-     * @param  int|float  $max
+     * @param int|float $value
+     * @param int|float $min
+     * @param int|float $max
      * @return int|float
      */
     public static function clamp($value, $min, $max)
@@ -74,5 +74,35 @@ class Helpers
             }
         }
         return $best;
+    }
+    /**
+     * Compares two values in the same way that PHP does. Recognizes operators: >, >=, <, <=, =, ==, ===, !=, !==, <>
+     * @param mixed $left
+     * @param mixed $right
+     */
+    public static function compare($left, string $operator, $right) : bool
+    {
+        switch ($operator) {
+            case '>':
+                return $left > $right;
+            case '>=':
+                return $left >= $right;
+            case '<':
+                return $left < $right;
+            case '<=':
+                return $left <= $right;
+            case '=':
+            case '==':
+                return $left == $right;
+            case '===':
+                return $left === $right;
+            case '!=':
+            case '<>':
+                return $left != $right;
+            case '!==':
+                return $left !== $right;
+            default:
+                throw new Nette\InvalidArgumentException("Unknown operator '{$operator}'");
+        }
     }
 }

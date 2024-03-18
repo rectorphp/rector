@@ -14,9 +14,10 @@ interface Translator
 {
     /**
      * Translates the given string.
-     * @param  mixed  $message
-     * @param  mixed  ...$parameters
+     * @param string|\Stringable $message
+     * @return string|\Stringable
+     * @param mixed ...$parameters
      */
-    function translate($message, ...$parameters) : string;
+    function translate($message, ...$parameters);
 }
 \interface_exists(ITranslator::class);

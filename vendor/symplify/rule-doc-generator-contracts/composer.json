@@ -3,8 +3,7 @@
     "description": "Contracts for production code of RuleDocGenerator",
     "license": "MIT",
     "require": {
-        "php": ">=8.1",
-        "nette\/utils": "^3.2"
+        "php": ">=8.1"
     },
     "require-dev": {
         "php-parallel-lint\/php-parallel-lint": "^1.3",

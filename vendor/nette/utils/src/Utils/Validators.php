@@ -64,8 +64,8 @@ class Validators
     protected static $counters = ['string' => 'strlen', 'unicode' => [Strings::class, 'length'], 'array' => 'count', 'list' => 'count', 'alnum' => 'strlen', 'alpha' => 'strlen', 'digit' => 'strlen', 'lower' => 'strlen', 'space' => 'strlen', 'upper' => 'strlen', 'xdigit' => 'strlen'];
     /**
      * Verifies that the value is of expected types separated by pipe.
-     * @param  mixed  $value
      * @throws AssertionException
+     * @param mixed $value
      */
     public static function assert($value, string $expected, string $label = 'variable') : void
     {
@@ -84,7 +84,6 @@ class Validators
     /**
      * Verifies that element $key in array is of expected types separated by pipe.
      * @param  mixed[]  $array
-     * @param  int|string  $key
      * @throws AssertionException
      */
     public static function assertField(array $array, $key, ?string $expected = null, string $label = "item '%' in array") : void
@@ -97,17 +96,17 @@ class Validators
     }
     /**
      * Verifies that the value is of expected types separated by pipe.
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public static function is($value, string $expected) : bool
     {
         foreach (\explode('|', $expected) as $item) {
-            if (\substr($item, -2) === '[]') {
+            if (\substr_compare($item, '[]', -\strlen('[]')) === 0) {
                 if (\is_iterable($value) && self::everyIs($value, \substr($item, 0, -2))) {
                     return \true;
                 }
                 continue;
-            } elseif (\substr($item, 0, 1) === '?') {
+            } elseif (\strncmp($item, '?', \strlen('?')) === 0) {
                 $item = \substr($item, 1);
                 if ($value === null) {
                     return \true;
@@ -162,7 +161,8 @@ class Validators
     }
     /**
      * Checks if the value is an integer or a float.
-     * @param  mixed  $value
+     * @return ($value is int|float ? true : false)
+     * @param mixed $value
      */
     public static function isNumber($value) : bool
     {
@@ -170,7 +170,8 @@ class Validators
     }
     /**
      * Checks if the value is an integer or a integer written in a string.
-     * @param  mixed  $value
+     * @return ($value is non-empty-string ? bool : ($value is int ? true : false))
+     * @param mixed $value
      */
     public static function isNumericInt($value) : bool
     {
@@ -178,7 +179,8 @@ class Validators
     }
     /**
      * Checks if the value is a number or a number written in a string.
-     * @param  mixed  $value
+     * @return ($value is non-empty-string ? bool : ($value is int|float ? true : false))
+     * @param mixed $value
      */
     public static function isNumeric($value) : bool
     {
@@ -186,7 +188,7 @@ class Validators
     }
     /**
      * Checks if the value is a syntactically correct callback.
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public static function isCallable($value) : bool
     {
@@ -194,7 +196,7 @@ class Validators
     }
     /**
      * Checks if the value is a valid UTF-8 string.
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public static function isUnicode($value) : bool
     {
@@ -202,7 +204,8 @@ class Validators
     }
     /**
      * Checks if the value is 0, '', false or null.
-     * @param  mixed  $value
+     * @return ($value is 0|''|false|null ? true : false)
+     * @param mixed $value
      */
     public static function isNone($value) : bool
     {
@@ -216,9 +219,9 @@ class Validators
     }
     /**
      * Checks if a variable is a zero-based integer indexed array.
-     * @param  mixed  $value
      * @deprecated  use Nette\Utils\Arrays::isList
      * @return ($value is list ? true : false)
+     * @param mixed $value
      */
     public static function isList($value) : bool
     {
@@ -227,7 +230,7 @@ class Validators
     /**
      * Checks if the value is in the given range [min, max], where the upper or lower limit can be omitted (null).
      * Numbers, strings and DateTime objects can be compared.
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public static function isInRange($value, array $range) : bool
     {
@@ -258,12 +261,12 @@ class Validators
         $alpha = "a-z\x80-\xff";
         // superset of IDN
         return (bool) \preg_match(<<<XX
-\t\t(^
-\t\t\t("([ !#-[\\]-~]*|\\\\[ -~])+"|{$atom}+(\\.{$atom}+)*)  # quoted or unquoted
-\t\t\t@
-\t\t\t([0-9{$alpha}]([-0-9{$alpha}]{0,61}[0-9{$alpha}])?\\.)+  # domain - RFC 1034
-\t\t\t[{$alpha}]([-0-9{$alpha}]{0,17}[{$alpha}])?              # top domain
-\t\t\$)Dix
+(^(?n)
+\t("([ !#-[\\]-~]*|\\\\[ -~])+"|{$atom}+(\\.{$atom}+)*)  # quoted or unquoted
+\t@
+\t([0-9{$alpha}]([-0-9{$alpha}]{0,61}[0-9{$alpha}])?\\.)+  # domain - RFC 1034
+\t[{$alpha}]([-0-9{$alpha}]{0,17}[{$alpha}])?              # top domain
+\$)Dix
 XX
 , $value);
     }
@@ -274,18 +277,18 @@ XX
     {
         $alpha = "a-z\x80-\xff";
         return (bool) \preg_match(<<<XX
-\t\t(^
-\t\t\thttps?://(
-\t\t\t\t(([-_0-9{$alpha}]+\\.)*                       # subdomain
-\t\t\t\t\t[0-9{$alpha}]([-0-9{$alpha}]{0,61}[0-9{$alpha}])?\\.)?  # domain
-\t\t\t\t\t[{$alpha}]([-0-9{$alpha}]{0,17}[{$alpha}])?   # top domain
-\t\t\t\t|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}  # IPv4
-\t\t\t\t|\\[[0-9a-f:]{3,39}\\]                      # IPv6
-\t\t\t)(:\\d{1,5})?                                   # port
-\t\t\t(/\\S*)?                                        # path
-\t\t\t(\\?\\S*)?                                      # query
-\t\t\t(\\#\\S*)?                                      # fragment
-\t\t\$)Dix
+(^(?n)
+\thttps?://(
+\t\t(([-_0-9{$alpha}]+\\.)*                       # subdomain
+\t\t\t[0-9{$alpha}]([-0-9{$alpha}]{0,61}[0-9{$alpha}])?\\.)?  # domain
+\t\t\t[{$alpha}]([-0-9{$alpha}]{0,17}[{$alpha}])?   # top domain
+\t\t|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}  # IPv4
+\t\t|\\[[0-9a-f:]{3,39}\\]                      # IPv6
+\t)(:\\d{1,5})?                                   # port
+\t(/\\S*)?                                        # path
+\t(\\?\\S*)?                                      # query
+\t(\\#\\S*)?                                      # fragment
+\$)Dix
 XX
 , $value);
     }
@@ -298,6 +301,7 @@ XX
     }
     /**
      * Checks whether the input is a class, interface or trait.
+     * @deprecated
      */
     public static function isType(string $type) : bool
     {
@@ -330,11 +334,11 @@ XX
     public static function isTypeDeclaration(string $type) : bool
     {
         return (bool) \preg_match(<<<'XX'
-		~(
-			\?? (?<type> \\? (?<name> [a-zA-Z_\x7f-\xff][\w\x7f-\xff]*) (\\ (?&name))* ) |
-			(?<intersection> (?&type) (& (?&type))+ ) |
-			(?<upart> (?&type) | \( (?&intersection) \) )  (\| (?&upart))+
-		)$~xAD
+~((?n)
+	\?? (?<type> \\? (?<name> [a-zA-Z_\x7f-\xff][\w\x7f-\xff]*) (\\ (?&name))* ) |
+	(?<intersection> (?&type) (& (?&type))+ ) |
+	(?<upart> (?&type) | \( (?&intersection) \) )  (\| (?&upart))+
+)$~xAD
 XX
 , $type);
     }

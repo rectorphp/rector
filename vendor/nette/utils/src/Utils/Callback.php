@@ -16,41 +16,6 @@ final class Callback
 {
     use Nette\StaticClass;
     /**
-     * @param  string|object|callable  $callable  class, object, callable
-     * @deprecated use Closure::fromCallable()
-     */
-    public static function closure($callable, ?string $method = null) : \Closure
-    {
-        \trigger_error(__METHOD__ . '() is deprecated, use Closure::fromCallable().', \E_USER_DEPRECATED);
-        try {
-            return \Closure::fromCallable($method === null ? $callable : [$callable, $method]);
-        } catch (\TypeError $e) {
-            throw new Nette\InvalidArgumentException($e->getMessage());
-        }
-    }
-    /**
-     * Invokes callback.
-     * @return mixed
-     * @deprecated
-     */
-    public static function invoke($callable, ...$args)
-    {
-        \trigger_error(__METHOD__ . '() is deprecated, use native invoking.', \E_USER_DEPRECATED);
-        self::check($callable);
-        return $callable(...$args);
-    }
-    /**
-     * Invokes callback with an array of parameters.
-     * @return mixed
-     * @deprecated
-     */
-    public static function invokeArgs($callable, array $args = [])
-    {
-        \trigger_error(__METHOD__ . '() is deprecated, use native invoking.', \E_USER_DEPRECATED);
-        self::check($callable);
-        return $callable(...$args);
-    }
-    /**
      * Invokes internal PHP function with own error handler.
      * @return mixed
      */
@@ -75,9 +40,9 @@ final class Callback
     /**
      * Checks that $callable is valid PHP callback. Otherwise throws exception. If the $syntax is set to true, only verifies
      * that $callable has a valid structure to be used as a callback, but does not verify if the class or method actually exists.
-     * @param  mixed  $callable
      * @return callable
      * @throws Nette\InvalidArgumentException
+     * @param mixed $callable
      */
     public static function check($callable, bool $syntax = \false)
     {
@@ -88,15 +53,13 @@ final class Callback
     }
     /**
      * Converts PHP callback to textual form. Class or method may not exists.
-     * @param  mixed  $callable
+     * @param mixed $callable
      */
     public static function toString($callable) : string
     {
         if ($callable instanceof \Closure) {
             $inner = self::unwrap($callable);
             return '{closure' . ($inner instanceof \Closure ? '}' : ' ' . self::toString($inner) . '}');
-        } elseif (is_string($callable) && $callable[0] === "\x00") {
-            return '{lambda}';
         } else {
             \is_callable(is_object($callable) ? [$callable, '__invoke'] : $callable, \true, $textual);
             return $textual;
@@ -105,20 +68,20 @@ final class Callback
     /**
      * Returns reflection for method or function used in PHP callback.
      * @param  callable  $callable  type check is escalated to ReflectionException
-     * @return \ReflectionMethod|\ReflectionFunction
      * @throws \ReflectionException  if callback is not valid
+     * @return \ReflectionMethod|\ReflectionFunction
      */
-    public static function toReflection($callable) : \ReflectionFunctionAbstract
+    public static function toReflection($callable)
     {
         if ($callable instanceof \Closure) {
             $callable = self::unwrap($callable);
         }
-        if (is_string($callable) && \strpos($callable, '::')) {
-            return new \ReflectionMethod($callable);
+        if (is_string($callable) && \strpos($callable, '::') !== \false) {
+            return new ReflectionMethod($callable);
         } elseif (is_array($callable)) {
-            return new \ReflectionMethod($callable[0], $callable[1]);
+            return new ReflectionMethod($callable[0], $callable[1]);
         } elseif (is_object($callable) && !$callable instanceof \Closure) {
-            return new \ReflectionMethod($callable, '__invoke');
+            return new ReflectionMethod($callable, '__invoke');
         } else {
             return new \ReflectionFunction($callable);
         }
@@ -132,18 +95,18 @@ final class Callback
     }
     /**
      * Unwraps closure created by Closure::fromCallable().
-     * @return callable|array
+     * @return callable|mixed[]
      */
     public static function unwrap(\Closure $closure)
     {
         $r = new \ReflectionFunction($closure);
-        $class = $r->getClosureScopeClass();
-        if (\substr($r->name, -1) === '}') {
+        $class = ($nullsafeVariable1 = $r->getClosureScopeClass()) ? $nullsafeVariable1->name : null;
+        if (\substr_compare($r->name, '}', -\strlen('}')) === 0) {
             return $closure;
-        } elseif (($obj = $r->getClosureThis()) && $class && \get_class($obj) === $class->name) {
+        } elseif (($obj = $r->getClosureThis()) && \get_class($obj) === $class) {
             return [$obj, $r->name];
         } elseif ($class) {
-            return [$class->name, $r->name];
+            return [$class, $r->name];
         } else {
             return $r->name;
         }

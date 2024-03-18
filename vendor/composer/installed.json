@@ -612,30 +612,31 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v3.2.10",
-            "version_normalized": "3.2.10.0",
+            "version": "v4.0.4",
+            "version_normalized": "4.0.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "a4175c62652f2300c8017fb7e640f9ccb11648d2"
+                "reference": "d3ad0aa3b9f934602cb3e3902ebccf10be34d218"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/a4175c62652f2300c8017fb7e640f9ccb11648d2",
-                "reference": "a4175c62652f2300c8017fb7e640f9ccb11648d2",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/d3ad0aa3b9f934602cb3e3902ebccf10be34d218",
+                "reference": "d3ad0aa3b9f934602cb3e3902ebccf10be34d218",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.4"
+                "php": ">=8.0 <8.4"
             },
             "conflict": {
-                "nette\/di": "<3.0.6"
+                "nette\/finder": "<3",
+                "nette\/schema": "<1.2.2"
             },
             "require-dev": {
                 "jetbrains\/phpstorm-attributes": "dev-master",
-                "nette\/tester": "~2.0",
+                "nette\/tester": "^2.5",
                 "phpstan\/phpstan": "^1.0",
-                "tracy\/tracy": "^2.3"
+                "tracy\/tracy": "^2.9"
             },
             "suggest": {
                 "ext-gd": "to use Image",
@@ -643,14 +644,13 @@
                 "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
                 "ext-json": "to use Nette\\Utils\\Json",
                 "ext-mbstring": "to use Strings::lower() etc...",
-                "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
-                "ext-xml": "to use Strings::length() etc. when mbstring is not available"
+                "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2023-07-30T15:38:18+00:00",
+            "time": "2024-01-17T16:50:36+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "4.0-dev"
                 }
             },
             "installation-source": "dist",
@@ -695,7 +695,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v3.2.10"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.0.4"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -2670,21 +2670,20 @@
         },
         {
             "name": "symplify\/rule-doc-generator-contracts",
-            "version": "11.1.26",
-            "version_normalized": "11.1.26.0",
+            "version": "11.2.0",
+            "version_normalized": "11.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts.git",
-                "reference": "3e66b3fec678b74a076395ec629d535fb95293b5"
+                "reference": "479cfcfd46047f80624aba931d9789e50475b5c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/rule-doc-generator-contracts\/zipball\/3e66b3fec678b74a076395ec629d535fb95293b5",
-                "reference": "3e66b3fec678b74a076395ec629d535fb95293b5",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/rule-doc-generator-contracts\/zipball\/479cfcfd46047f80624aba931d9789e50475b5c6",
+                "reference": "479cfcfd46047f80624aba931d9789e50475b5c6",
                 "shasum": ""
             },
             "require": {
-                "nette\/utils": "^3.2",
                 "php": ">=8.1"
             },
             "require-dev": {
@@ -2698,7 +2697,7 @@
                 "symplify\/phpstan-rules": "11.2.3.72",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-07T07:16:13+00:00",
+            "time": "2024-03-18T22:02:54+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2717,7 +2716,7 @@
             ],
             "description": "Contracts for production code of RuleDocGenerator",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts\/tree\/11.1.26"
+                "source": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts\/tree\/11.2.0"
             },
             "funding": [
                 {

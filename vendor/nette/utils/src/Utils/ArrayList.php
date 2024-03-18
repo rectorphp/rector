@@ -17,7 +17,9 @@ use RectorPrefix202403\Nette;
 class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     use Nette\SmartObject;
-    /** @var mixed[] */
+    /**
+     * @var mixed[]
+     */
     private $list = [];
     /**
      * Transforms array to ArrayList.
@@ -35,11 +37,13 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     }
     /**
      * Returns an iterator over all items.
-     * @return \ArrayIterator<int, T>
+     * @return \Iterator<int, T>
      */
-    public function getIterator() : \ArrayIterator
+    public function &getIterator() : \Iterator
     {
-        return new \ArrayIterator($this->list);
+        foreach ($this->list as &$item) {
+            (yield $item);
+        }
     }
     /**
      * Returns items count.
@@ -100,7 +104,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     }
     /**
      * Prepends a item.
-     * @param  T  $value
+     * @param mixed $value
      */
     public function prepend($value) : void
     {

@@ -14,18 +14,28 @@ use RectorPrefix202403\Nette;
 final class Json
 {
     use Nette\StaticClass;
+    /** @deprecated use Json::decode(..., forceArrays: true) */
     public const FORCE_ARRAY = \JSON_OBJECT_AS_ARRAY;
+    /** @deprecated use Json::encode(..., pretty: true) */
     public const PRETTY = \JSON_PRETTY_PRINT;
+    /** @deprecated use Json::encode(..., asciiSafe: true) */
     public const ESCAPE_UNICODE = 1 << 19;
     /**
-     * Converts value to JSON format. The flag can be Json::PRETTY, which formats JSON for easier reading and clarity,
-     * and Json::ESCAPE_UNICODE for ASCII output.
-     * @param  mixed  $value
+     * Converts value to JSON format. Use $pretty for easier reading and clarity, $asciiSafe for ASCII output
+     * and $htmlSafe for HTML escaping, $forceObjects enforces the encoding of non-associateve arrays as objects.
      * @throws JsonException
+     * @param bool|int $pretty
+     * @param mixed $value
      */
-    public static function encode($value, int $flags = 0) : string
+    public static function encode($value, $pretty = \false, bool $asciiSafe = \false, bool $htmlSafe = \false, bool $forceObjects = \false) : string
     {
-        $flags = ($flags & self::ESCAPE_UNICODE ? 0 : \JSON_UNESCAPED_UNICODE) | \JSON_UNESCAPED_SLASHES | $flags & ~self::ESCAPE_UNICODE | (\defined('JSON_PRESERVE_ZERO_FRACTION') ? \JSON_PRESERVE_ZERO_FRACTION : 0);
+        if (\is_int($pretty)) {
+            // back compatibility
+            $flags = ($pretty & self::ESCAPE_UNICODE ? 0 : \JSON_UNESCAPED_UNICODE) | $pretty & ~self::ESCAPE_UNICODE;
+        } else {
+            $flags = ($asciiSafe ? 0 : \JSON_UNESCAPED_UNICODE) | ($pretty ? \JSON_PRETTY_PRINT : 0) | ($forceObjects ? \JSON_FORCE_OBJECT : 0) | ($htmlSafe ? \JSON_HEX_AMP | \JSON_HEX_APOS | \JSON_HEX_QUOT | \JSON_HEX_TAG : 0);
+        }
+        $flags |= \JSON_UNESCAPED_SLASHES | (\defined('JSON_PRESERVE_ZERO_FRACTION') ? \JSON_PRESERVE_ZERO_FRACTION : 0);
         // since PHP 5.6.6 & PECL JSON-C 1.3.7
         $json = \json_encode($value, $flags);
         if ($error = \json_last_error()) {
@@ -34,13 +44,16 @@ final class Json
         return $json;
     }
     /**
-     * Parses JSON to PHP value. The flag can be Json::FORCE_ARRAY, which forces an array instead of an object as the return value.
-     * @return mixed
+     * Parses JSON to PHP value. The $forceArrays enforces the decoding of objects as arrays.
      * @throws JsonException
+     * @param bool|int $forceArrays
+     * @return mixed
      */
-    public static function decode(string $json, int $flags = 0)
+    public static function decode(string $json, $forceArrays = \false)
     {
-        $value = \json_decode($json, null, 512, $flags | \JSON_BIGINT_AS_STRING);
+        $flags = \is_int($forceArrays) ? $forceArrays : ($forceArrays ? \JSON_OBJECT_AS_ARRAY : 0);
+        $flags |= \JSON_BIGINT_AS_STRING;
+        $value = \json_decode($json, null, 512, $flags);
         if ($error = \json_last_error()) {
             throw new JsonException(\json_last_error_msg(), $error);
         }

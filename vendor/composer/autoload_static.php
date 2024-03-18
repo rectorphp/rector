@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082
+class ComposerStaticInit67be42e0079886f0083b7116ae1de531
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -826,20 +826,25 @@ class ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082
         'RectorPrefix202403\\Nette\\Utils\\AssertionException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202403\\Nette\\Utils\\Callback' => __DIR__ . '/..' . '/nette/utils/src/Utils/Callback.php',
         'RectorPrefix202403\\Nette\\Utils\\DateTime' => __DIR__ . '/..' . '/nette/utils/src/Utils/DateTime.php',
+        'RectorPrefix202403\\Nette\\Utils\\FileInfo' => __DIR__ . '/..' . '/nette/utils/src/Utils/FileInfo.php',
         'RectorPrefix202403\\Nette\\Utils\\FileSystem' => __DIR__ . '/..' . '/nette/utils/src/Utils/FileSystem.php',
+        'RectorPrefix202403\\Nette\\Utils\\Finder' => __DIR__ . '/..' . '/nette/utils/src/Utils/Finder.php',
         'RectorPrefix202403\\Nette\\Utils\\Floats' => __DIR__ . '/..' . '/nette/utils/src/Utils/Floats.php',
         'RectorPrefix202403\\Nette\\Utils\\Helpers' => __DIR__ . '/..' . '/nette/utils/src/Utils/Helpers.php',
         'RectorPrefix202403\\Nette\\Utils\\Html' => __DIR__ . '/..' . '/nette/utils/src/Utils/Html.php',
         'RectorPrefix202403\\Nette\\Utils\\IHtmlString' => __DIR__ . '/..' . '/nette/utils/src/compatibility.php',
         'RectorPrefix202403\\Nette\\Utils\\Image' => __DIR__ . '/..' . '/nette/utils/src/Utils/Image.php',
+        'RectorPrefix202403\\Nette\\Utils\\ImageColor' => __DIR__ . '/..' . '/nette/utils/src/Utils/ImageColor.php',
         'RectorPrefix202403\\Nette\\Utils\\ImageException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
+        'RectorPrefix202403\\Nette\\Utils\\ImageType' => __DIR__ . '/..' . '/nette/utils/src/Utils/ImageType.php',
+        'RectorPrefix202403\\Nette\\Utils\\Iterables' => __DIR__ . '/..' . '/nette/utils/src/Utils/Iterables.php',
         'RectorPrefix202403\\Nette\\Utils\\Json' => __DIR__ . '/..' . '/nette/utils/src/Utils/Json.php',
         'RectorPrefix202403\\Nette\\Utils\\JsonException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202403\\Nette\\Utils\\ObjectHelpers' => __DIR__ . '/..' . '/nette/utils/src/Utils/ObjectHelpers.php',
-        'RectorPrefix202403\\Nette\\Utils\\ObjectMixin' => __DIR__ . '/..' . '/nette/utils/src/Utils/ObjectMixin.php',
         'RectorPrefix202403\\Nette\\Utils\\Paginator' => __DIR__ . '/..' . '/nette/utils/src/Utils/Paginator.php',
         'RectorPrefix202403\\Nette\\Utils\\Random' => __DIR__ . '/..' . '/nette/utils/src/Utils/Random.php',
         'RectorPrefix202403\\Nette\\Utils\\Reflection' => __DIR__ . '/..' . '/nette/utils/src/Utils/Reflection.php',
+        'RectorPrefix202403\\Nette\\Utils\\ReflectionMethod' => __DIR__ . '/..' . '/nette/utils/src/Utils/ReflectionMethod.php',
         'RectorPrefix202403\\Nette\\Utils\\RegexpException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202403\\Nette\\Utils\\Strings' => __DIR__ . '/..' . '/nette/utils/src/Utils/Strings.php',
         'RectorPrefix202403\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
@@ -2706,9 +2711,9 @@ class ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1a5f2ab6c5d7fa473cb6ef1c69de9082::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit67be42e0079886f0083b7116ae1de531::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit67be42e0079886f0083b7116ae1de531::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit67be42e0079886f0083b7116ae1de531::$classMap;
 
         }, null, ClassLoader::class);
     }

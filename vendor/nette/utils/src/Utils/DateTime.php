@@ -28,9 +28,9 @@ class DateTime extends \DateTime implements \JsonSerializable
     public const YEAR = 31557600;
     /**
      * Creates a DateTime object from a string, UNIX timestamp, or other DateTimeInterface object.
-     * @param  string|int|\DateTimeInterface  $time
-     * @return static
      * @throws \Exception if the date and time are not valid.
+     * @param string|int|\DateTimeInterface|null $time
+     * @return static
      */
     public static function from($time)
     {
@@ -40,7 +40,7 @@ class DateTime extends \DateTime implements \JsonSerializable
             if ($time <= self::YEAR) {
                 $time += \time();
             }
-            return (new static('@' . $time))->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
+            return (new static())->setTimestamp((int) $time);
         } else {
             // textual or null
             return new static((string) $time);
@@ -48,8 +48,8 @@ class DateTime extends \DateTime implements \JsonSerializable
     }
     /**
      * Creates DateTime object.
-     * @return static
      * @throws Nette\InvalidArgumentException if the date and time are not valid.
+     * @return static
      */
     public static function fromParts(int $year, int $month, int $day, int $hour = 0, int $minute = 0, float $second = 0.0)
     {
@@ -61,20 +61,15 @@ class DateTime extends \DateTime implements \JsonSerializable
     }
     /**
      * Returns new DateTime object formatted according to the specified format.
-     * @param  string  $format  The format the $time parameter should be in
-     * @param  string  $time
-     * @param  string|\DateTimeZone  $timezone (default timezone is used if null is passed)
+     * @param string|\DateTimeZone|null $timezone
      * @return static|false
      */
-    #[\ReturnTypeWillChange]
-    public static function createFromFormat($format, $time, $timezone = null)
+    public static function createFromFormat(string $format, string $time, $timezone = null)
     {
         if ($timezone === null) {
             $timezone = new \DateTimeZone(\date_default_timezone_get());
         } elseif (\is_string($timezone)) {
             $timezone = new \DateTimeZone($timezone);
-        } elseif (!$timezone instanceof \DateTimeZone) {
-            throw new Nette\InvalidArgumentException('Invalid timezone given');
         }
         $date = parent::createFromFormat($format, $time, $timezone);
         return $date ? static::from($date) : \false;
@@ -94,7 +89,7 @@ class DateTime extends \DateTime implements \JsonSerializable
         return $this->format('Y-m-d H:i:s');
     }
     /**
-     * Creates a copy with a modified time.
+     * You'd better use: (clone $dt)->modify(...)
      * @return static
      */
     public function modifyClone(string $modify = '')

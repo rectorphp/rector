@@ -34,23 +34,23 @@
         }
     ],
     "require": {
-        "php": ">=7.2 <8.4"
+        "php": ">=8.0 <8.4"
     },
     "require-dev": {
-        "nette\/tester": "~2.0",
-        "tracy\/tracy": "^2.3",
+        "nette\/tester": "^2.5",
+        "tracy\/tracy": "^2.9",
         "phpstan\/phpstan": "^1.0",
         "jetbrains\/phpstorm-attributes": "dev-master"
     },
     "conflict": {
-        "nette\/di": "<3.0.6"
+        "nette\/finder": "<3",
+        "nette\/schema": "<1.2.2"
     },
     "suggest": {
         "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
         "ext-json": "to use Nette\\Utils\\Json",
         "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
         "ext-mbstring": "to use Strings::lower() etc...",
-        "ext-xml": "to use Strings::length() etc. when mbstring is not available",
         "ext-gd": "to use Image",
         "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
     },
@@ -66,7 +66,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.2-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }

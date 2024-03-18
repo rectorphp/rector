@@ -13,17 +13,15 @@ namespace RectorPrefix202403\Nette;
 trait StaticClass
 {
     /**
-     * @return never
-     * @throws \Error
+     * Class is static and cannot be instantiated.
      */
-    public final function __construct()
+    private function __construct()
     {
-        throw new \Error('Class ' . static::class . ' is static and cannot be instantiated.');
     }
     /**
      * Call to undefined static method.
-     * @return void
      * @throws MemberAccessException
+     * @return mixed
      */
     public static function __callStatic(string $name, array $args)
     {
