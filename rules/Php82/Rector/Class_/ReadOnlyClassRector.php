@@ -101,10 +101,18 @@ CODE_SAMPLE
         if ($constructClassMethod instanceof ClassMethod) {
             foreach ($constructClassMethod->getParams() as $param) {
                 $this->visibilityManipulator->removeReadonly($param);
+                if ($param->attrGroups !== []) {
+                    // invoke reprint with correct newline
+                    $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                }
             }
         }
         foreach ($node->getProperties() as $property) {
             $this->visibilityManipulator->removeReadonly($property);
+            if ($property->attrGroups !== []) {
+                // invoke reprint with correct newline
+                $property->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
         }
         if ($node->attrGroups !== []) {
             // invoke reprint with correct readonly newline
