@@ -91,14 +91,15 @@ CODE_SAMPLE
     }
     private function refactorPropertyFetch(PropertyFetch $propertyFetch) : ?Ternary
     {
-        if (!$this->isName($propertyFetch->name, 'text')) {
+        $propertyFetchName = $this->getName($propertyFetch->name);
+        if (!\in_array($propertyFetchName, ['id', 'text'], \true)) {
             return null;
         }
         if (!$this->isObjectType($propertyFetch->var, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($propertyFetch->var)]);
-        $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, new LNumber(1));
+        $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, $propertyFetchName === 'id' ? new LNumber(0) : new LNumber(1));
         return new Ternary($isArrayFuncCall, $arrayDimFetch, $propertyFetch->var);
     }
 }
