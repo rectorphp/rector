@@ -67,6 +67,9 @@ final class PromotedPropertyCandidateResolver
     }
     private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod) : ?PropertyPromotionCandidate
     {
+        if ($property->flags == 0) {
+            return null;
+        }
         $onlyProperty = $property->props[0];
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
