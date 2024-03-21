@@ -155,6 +155,10 @@ CODE_SAMPLE
         if (!$entityGenericType instanceof IdentifierTypeNode) {
             return null;
         }
+        // skip if value is used in generics
+        if (\in_array($entityGenericType->name, $classPhpDocInfo->getTemplateNames(), \true)) {
+            return null;
+        }
         return $entityGenericType->name;
     }
     private function containsMethodCallNamed(ClassMethod $classMethod, string $desiredMethodName) : bool

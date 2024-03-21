@@ -330,6 +330,17 @@ final class PhpDocInfo
         return null;
     }
     /**
+     * @return string[]
+     */
+    public function getTemplateNames() : array
+    {
+        $templateNames = [];
+        foreach ($this->phpDocNode->getTemplateTagValues() as $templateTagValueNode) {
+            $templateNames[] = $templateTagValueNode->name;
+        }
+        return $templateNames;
+    }
+    /**
      * @return TemplateTagValueNode[]
      */
     public function getTemplateTagValueNodes() : array
