@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -84,10 +85,13 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return int|null|Stmt[]
+     * @return int|null|Stmt[]|If_
      */
     public function refactor(Node $node)
     {
+        if ($node->cond instanceof BooleanAnd) {
+            return $this->refactorIfWithBooleanAnd($node);
+        }
         if ($node->else instanceof Else_) {
             return null;
         }
@@ -148,5 +152,21 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function refactorIfWithBooleanAnd(If_ $if) : ?If_
+    {
+        if (!$if->cond instanceof BooleanAnd) {
+            return null;
+        }
+        $booleanAnd = $if->cond;
+        $leftType = $this->getType($booleanAnd->left);
+        if (!$leftType instanceof ConstantBooleanType) {
+            return null;
+        }
+        if (!$leftType->getValue()) {
+            return null;
+        }
+        $if->cond = $booleanAnd->right;
+        return $if;
     }
 }
