@@ -1457,6 +1457,7 @@ class ComposerStaticInit67be42e0079886f0083b7116ae1de531
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\IsClassMethodUsedAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/IsClassMethodUsedAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\PropertyWriteonlyAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/PropertyWriteonlyAnalyzer.php',
+        'Rector\\DeadCode\\NodeAnalyzer\\SafeLeftTypeBooleanAndOrAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/SafeLeftTypeBooleanAndOrAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
         'Rector\\DeadCode\\NodeCollector\\UnusedParameterResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/UnusedParameterResolver.php',
         'Rector\\DeadCode\\NodeManipulator\\ControllerClassMethodManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/ControllerClassMethodManipulator.php',

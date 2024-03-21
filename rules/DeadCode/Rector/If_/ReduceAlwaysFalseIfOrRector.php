@@ -5,11 +5,9 @@ namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\Constant\ConstantBooleanType;
-use Rector\NodeAnalyzer\ExprAnalyzer;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,18 +18,12 @@ final class ReduceAlwaysFalseIfOrRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer
      */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeAnalyzer\ExprAnalyzer
-     */
-    private $exprAnalyzer;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ExprAnalyzer $exprAnalyzer)
+    private $safeLeftTypeBooleanAndOrAnalyzer;
+    public function __construct(SafeLeftTypeBooleanAndOrAnalyzer $safeLeftTypeBooleanAndOrAnalyzer)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->exprAnalyzer = $exprAnalyzer;
+        $this->safeLeftTypeBooleanAndOrAnalyzer = $safeLeftTypeBooleanAndOrAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -86,10 +78,7 @@ CODE_SAMPLE
         if ($conditionStaticType->getValue()) {
             return null;
         }
-        $hasNonTypedFromParam = $this->betterNodeFinder->findFirst($booleanOr->left, function (Node $node) : bool {
-            return $node instanceof Variable && $this->exprAnalyzer->isNonTypedFromParam($node);
-        });
-        if ($hasNonTypedFromParam instanceof Node) {
+        if (!$this->safeLeftTypeBooleanAndOrAnalyzer->isSafe($booleanOr)) {
             return null;
         }
         $node->cond = $booleanOr->right;

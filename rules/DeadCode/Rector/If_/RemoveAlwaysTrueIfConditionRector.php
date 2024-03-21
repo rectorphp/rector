@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -42,11 +43,17 @@ final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ReflectionResolver $reflectionResolver, ExprAnalyzer $exprAnalyzer, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer
+     */
+    private $safeLeftTypeBooleanAndOrAnalyzer;
+    public function __construct(ReflectionResolver $reflectionResolver, ExprAnalyzer $exprAnalyzer, BetterNodeFinder $betterNodeFinder, SafeLeftTypeBooleanAndOrAnalyzer $safeLeftTypeBooleanAndOrAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->exprAnalyzer = $exprAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->safeLeftTypeBooleanAndOrAnalyzer = $safeLeftTypeBooleanAndOrAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -164,6 +171,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$leftType->getValue()) {
+            return null;
+        }
+        if (!$this->safeLeftTypeBooleanAndOrAnalyzer->isSafe($booleanAnd)) {
             return null;
         }
         $if->cond = $booleanAnd->right;

@@ -1238,6 +1238,7 @@ return array(
     'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
     'Rector\\DeadCode\\NodeAnalyzer\\IsClassMethodUsedAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/IsClassMethodUsedAnalyzer.php',
     'Rector\\DeadCode\\NodeAnalyzer\\PropertyWriteonlyAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/PropertyWriteonlyAnalyzer.php',
+    'Rector\\DeadCode\\NodeAnalyzer\\SafeLeftTypeBooleanAndOrAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/SafeLeftTypeBooleanAndOrAnalyzer.php',
     'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
     'Rector\\DeadCode\\NodeCollector\\UnusedParameterResolver' => $baseDir . '/rules/DeadCode/NodeCollector/UnusedParameterResolver.php',
     'Rector\\DeadCode\\NodeManipulator\\ControllerClassMethodManipulator' => $baseDir . '/rules/DeadCode/NodeManipulator/ControllerClassMethodManipulator.php',
