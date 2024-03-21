@@ -67,6 +67,33 @@ class PhpDocNode implements Node
         });
     }
     /**
+     * @return ParamImmediatelyInvokedCallableTagValueNode[]
+     */
+    public function getParamImmediatelyInvokedCallableTagValues(string $tagName = '@param-immediately-invoked-callable') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamImmediatelyInvokedCallableTagValueNode;
+        });
+    }
+    /**
+     * @return ParamLaterInvokedCallableTagValueNode[]
+     */
+    public function getParamLaterInvokedCallableTagValues(string $tagName = '@param-later-invoked-callable') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamLaterInvokedCallableTagValueNode;
+        });
+    }
+    /**
+     * @return ParamClosureThisTagValueNode[]
+     */
+    public function getParamClosureThisTagValues(string $tagName = '@param-closure-this') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamClosureThisTagValueNode;
+        });
+    }
+    /**
      * @return TemplateTagValueNode[]
      */
     public function getTemplateTagValues(string $tagName = '@template') : array

@@ -284,6 +284,18 @@ class PhpDocParser
                 case '@psalm-param':
                     $tagValue = $this->parseParamTagValue($tokens);
                     break;
+                case '@param-immediately-invoked-callable':
+                case '@phpstan-param-immediately-invoked-callable':
+                    $tagValue = $this->parseParamImmediatelyInvokedCallableTagValue($tokens);
+                    break;
+                case '@param-later-invoked-callable':
+                case '@phpstan-param-later-invoked-callable':
+                    $tagValue = $this->parseParamLaterInvokedCallableTagValue($tokens);
+                    break;
+                case '@param-closure-this':
+                case '@phpstan-param-closure-this':
+                    $tagValue = $this->parseParamClosureThisTagValue($tokens);
+                    break;
                 case '@var':
                 case '@phpstan-var':
                 case '@psalm-var':
@@ -588,6 +600,25 @@ class PhpDocParser
             return new Ast\PhpDoc\ParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
         }
         return new Ast\PhpDoc\TypelessParamTagValueNode($isVariadic, $parameterName, $description, $isReference);
+    }
+    private function parseParamImmediatelyInvokedCallableTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\ParamImmediatelyInvokedCallableTagValueNode
+    {
+        $parameterName = $this->parseRequiredVariableName($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new Ast\PhpDoc\ParamImmediatelyInvokedCallableTagValueNode($parameterName, $description);
+    }
+    private function parseParamLaterInvokedCallableTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\ParamLaterInvokedCallableTagValueNode
+    {
+        $parameterName = $this->parseRequiredVariableName($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new Ast\PhpDoc\ParamLaterInvokedCallableTagValueNode($parameterName, $description);
+    }
+    private function parseParamClosureThisTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\ParamClosureThisTagValueNode
+    {
+        $type = $this->typeParser->parse($tokens);
+        $parameterName = $this->parseRequiredVariableName($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new Ast\PhpDoc\ParamClosureThisTagValueNode($type, $parameterName, $description);
     }
     private function parseVarTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\VarTagValueNode
     {

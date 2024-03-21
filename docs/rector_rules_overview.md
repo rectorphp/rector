@@ -1,4 +1,4 @@
-# 366 Rules Overview
+# 368 Rules Overview
 
 <br>
 
@@ -6,11 +6,11 @@
 
 - [Arguments](#arguments) (4)
 
-- [CodeQuality](#codequality) (74)
+- [CodeQuality](#codequality) (75)
 
 - [CodingStyle](#codingstyle) (28)
 
-- [DeadCode](#deadcode) (42)
+- [DeadCode](#deadcode) (43)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -543,6 +543,28 @@ Make if conditions more explicit
 +        if (count($items) === 0) {
              return 'no items';
          }
+     }
+ }
+```
+
+<br>
+
+### ExplicitReturnNullRector
+
+Add explicit return null to method/function that returns a value, but missed main return
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector`](../rules/CodeQuality/Rector/ClassMethod/ExplicitReturnNullRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(int $number)
+     {
+         if ($number > 50) {
+             return 'yes';
+         }
++
++        return null;
      }
  }
 ```
@@ -2153,6 +2175,29 @@ Removes recasting of the same type
  $array = [];
 -$array = (array) $array;
 +$array = $array;
+```
+
+<br>
+
+### ReduceAlwaysFalseIfOrRector
+
+Reduce always false in a if ( || ) condition
+
+- class: [`Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector`](../rules/DeadCode/Rector/If_/ReduceAlwaysFalseIfOrRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(int $number)
+     {
+-        if (! is_int($number) || $number > 50) {
++        if ($number > 50) {
+             return 'yes';
+         }
+
+         return 'no';
+     }
+ }
 ```
 
 <br>
@@ -6681,7 +6726,7 @@ Change return type based on strict returns type operations
 
 ### ChildDoctrineRepositoryClassTypeRector
 
-Add return type to classes that extend `Doctrine\ORM\EntityRepository`
+Add return type to classes that extend `Doctrine\ORM\EntityRepository` based on return Doctrine method names
 
 - class: [`Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector`](../rules/TypeDeclaration/Rector/Class_/ChildDoctrineRepositoryClassTypeRector.php)
 
