@@ -1272,6 +1272,7 @@ return array(
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
     'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => $baseDir . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
     'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
+    'Rector\\DeadCode\\Rector\\If_\\ReduceAlwaysFalseIfOrRector' => $baseDir . '/rules/DeadCode/Rector/If_/ReduceAlwaysFalseIfOrRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveAlwaysTrueIfConditionRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveAlwaysTrueIfConditionRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveDeadInstanceOfRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveTypedPropertyDeadInstanceOfRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveTypedPropertyDeadInstanceOfRector.php',
