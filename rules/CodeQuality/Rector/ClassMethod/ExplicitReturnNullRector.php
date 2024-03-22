@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -108,6 +109,9 @@ CODE_SAMPLE
     {
         // known return type, nothing to improve
         if ($node->returnType instanceof Node) {
+            return null;
+        }
+        if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
         if ($this->containsYieldOrThrow($node)) {
