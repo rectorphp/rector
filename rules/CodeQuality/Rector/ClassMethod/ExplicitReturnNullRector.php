@@ -11,6 +11,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
+use PHPStan\Type\NullType;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -31,16 +37,37 @@ final class ExplicitReturnNullRector extends AbstractRector
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
     private $silentVoidResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, SilentVoidResolver $silentVoidResolver)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(BetterNodeFinder $betterNodeFinder, SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->silentVoidResolver = $silentVoidResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->typeFactory = $typeFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add explicit return null to method/function that returns a value, but missed main return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
+    /**
+     * @return string|void
+     */
     public function run(int $number)
     {
         if ($number > 50) {
@@ -52,6 +79,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
+    /**
+     * @return string|null
+     */
     public function run(int $number)
     {
         if ($number > 50) {
@@ -91,7 +121,28 @@ CODE_SAMPLE
             return null;
         }
         $node->stmts[] = new Return_(new ConstFetch(new Name('null')));
+        $this->transformDocUnionVoidToUnionNull($node);
         return $node;
+    }
+    private function transformDocUnionVoidToUnionNull(ClassMethod $classMethod) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $returnType = $phpDocInfo->getReturnType();
+        if (!$returnType instanceof UnionType) {
+            return;
+        }
+        $newTypes = [];
+        foreach ($returnType->getTypes() as $type) {
+            if ($type instanceof VoidType) {
+                $type = new NullType();
+            }
+            $newTypes[] = $type;
+        }
+        $type = $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($newTypes);
+        if (!$type instanceof UnionType) {
+            return;
+        }
+        $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
     }
     private function containsYieldOrThrow(ClassMethod $classMethod) : bool
     {

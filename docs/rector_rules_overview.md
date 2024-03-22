@@ -558,6 +558,10 @@ Add explicit return null to method/function that returns a value, but missed mai
 ```diff
  class SomeClass
  {
+     /**
+-     * @return string|void
++     * @return string|null
+      */
      public function run(int $number)
      {
          if ($number > 50) {
