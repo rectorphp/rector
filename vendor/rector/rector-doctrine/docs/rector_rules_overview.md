@@ -1,4 +1,4 @@
-# 18 Rules Overview
+# 19 Rules Overview
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
@@ -82,6 +82,35 @@ Replace EventSubscriberInterface with AsDoctrineListener attribute(s)
      {
          // ...
      }
+ }
+```
+
+<br>
+
+## ExplicitRelationCollectionRector
+
+Use explicit collection in one-to-many relations of Doctrine entity
+
+- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector`](../rules/CodeQuality/Rector/Class_/ExplicitRelationCollectionRector.php)
+
+```diff
++use Doctrine\ORM\Mapping\Entity;
+ use Doctrine\ORM\Mapping\OneToMany;
+-use Doctrine\ORM\Mapping\Entity;
++use Doctrine\Common\Collections\ArrayCollection;
++use Doctrine\Common\Collections\Collection;
+
+ #[Entity]
+ class SomeClass
+ {
+     #[OneToMany(targetEntity: 'SomeClass')]
+-    private $items = [];
++    private Collection $items;
++
++    public function __construct()
++    {
++        $this->items = new ArrayCollection();
++    }
  }
 ```
 

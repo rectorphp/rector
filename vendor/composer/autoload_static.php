@@ -1549,6 +1549,7 @@ class ComposerStaticInit67be42e0079886f0083b7116ae1de531
         'Rector\\Doctrine\\CodeQuality\\Enum\\ToManyMappings' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/ToManyMappings.php',
         'Rector\\Doctrine\\CodeQuality\\Helper\\NodeValueNormalizer' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Helper/NodeValueNormalizer.php',
         'Rector\\Doctrine\\CodeQuality\\NodeFactory\\AttributeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/NodeFactory/AttributeFactory.php',
+        'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\ExplicitRelationCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/ExplicitRelationCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/RemoveEmptyTableAttributeRector.php',

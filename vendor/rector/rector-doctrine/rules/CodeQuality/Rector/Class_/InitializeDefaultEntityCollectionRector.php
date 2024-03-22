@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
  *
  * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector\InitializeDefaultEntityCollectionRectorTest
+ *
+ * @deprecated This rule can create incomplete assign of object to an array. Use the @see \Rector\Doctrine\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector instead.
  */
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
@@ -41,7 +43,7 @@ final class InitializeDefaultEntityCollectionRector extends AbstractRector
      */
     private $constructorAssignDetector;
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
     public function __construct(ClassDependencyManipulator $classDependencyManipulator, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector)
@@ -103,7 +105,13 @@ CODE_SAMPLE
         if (!$this->attrinationFinder->hasByOne($node, 'Doctrine\\ORM\\Mapping\\Entity')) {
             return null;
         }
-        return $this->refactorClass($node);
+        $toManyPropertyNames = $this->resolveToManyPropertyNames($node);
+        if ($toManyPropertyNames === []) {
+            return null;
+        }
+        $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
+        $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $assigns);
+        return $node;
     }
     /**
      * @return string[]
@@ -138,15 +146,5 @@ CODE_SAMPLE
             $assigns[] = $this->arrayCollectionAssignFactory->createFromPropertyName($propertyName);
         }
         return $assigns;
-    }
-    private function refactorClass(Class_ $class) : ?\PhpParser\Node\Stmt\Class_
-    {
-        $toManyPropertyNames = $this->resolveToManyPropertyNames($class);
-        if ($toManyPropertyNames === []) {
-            return null;
-        }
-        $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
-        $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($class, $assigns);
-        return $class;
     }
 }

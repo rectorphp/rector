@@ -1330,6 +1330,7 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\Enum\\ToManyMappings' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/ToManyMappings.php',
     'Rector\\Doctrine\\CodeQuality\\Helper\\NodeValueNormalizer' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Helper/NodeValueNormalizer.php',
     'Rector\\Doctrine\\CodeQuality\\NodeFactory\\AttributeFactory' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/NodeFactory/AttributeFactory.php',
+    'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\ExplicitRelationCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/ExplicitRelationCollectionRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/RemoveEmptyTableAttributeRector.php',
