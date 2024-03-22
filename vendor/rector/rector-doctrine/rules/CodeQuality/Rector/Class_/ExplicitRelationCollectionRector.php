@@ -12,6 +12,8 @@ use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
  */
-final class ExplicitRelationCollectionRector extends AbstractRector
+final class ExplicitRelationCollectionRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -122,5 +124,9 @@ CODE_SAMPLE
         }
         $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $arrayCollectionAssigns);
         return $node;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }

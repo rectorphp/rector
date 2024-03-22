@@ -7,13 +7,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
@@ -60,39 +64,61 @@ final class SilentVoidResolver
         if ($functionLike instanceof ArrowFunction) {
             return \false;
         }
-        if ($this->hasStmtsAlwaysReturn((array) $functionLike->getStmts())) {
-            return \false;
-        }
-        foreach ((array) $functionLike->getStmts() as $stmt) {
-            // has switch with always return
-            if ($stmt instanceof Switch_ && $this->isSwitchWithAlwaysReturn($stmt)) {
-                return \false;
-            }
-            // is part of try/catch
-            if ($stmt instanceof TryCatch && $this->isTryCatchAlwaysReturn($stmt)) {
-                return \false;
-            }
-            if ($stmt instanceof Throw_) {
-                return \false;
-            }
-        }
-        return \true;
+        $stmts = (array) $functionLike->getStmts();
+        return !$this->hasStmtsAlwaysReturnOrExit($stmts);
     }
     /**
      * @param Stmt[]|Expression[] $stmts
      */
-    private function hasStmtsAlwaysReturn(array $stmts) : bool
+    private function hasStmtsAlwaysReturnOrExit(array $stmts) : bool
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
-            // is 1st level return
-            if ($stmt instanceof Return_) {
+            if ($this->isStopped($stmt)) {
+                return \true;
+            }
+            // has switch with always return
+            if ($stmt instanceof Switch_ && $this->isSwitchWithAlwaysReturn($stmt)) {
+                return \true;
+            }
+            if ($stmt instanceof TryCatch && $this->isTryCatchAlwaysReturn($stmt)) {
+                return \true;
+            }
+            if ($this->isIfReturn($stmt)) {
                 return \true;
             }
         }
         return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
+     */
+    private function isIfReturn($stmt) : bool
+    {
+        if (!$stmt instanceof If_) {
+            return \false;
+        }
+        foreach ($stmt->elseifs as $elseIf) {
+            if (!$this->hasStmtsAlwaysReturnOrExit($elseIf->stmts)) {
+                return \false;
+            }
+        }
+        if (!$stmt->else instanceof Else_) {
+            return \false;
+        }
+        if (!$this->hasStmtsAlwaysReturnOrExit($stmt->stmts)) {
+            return \false;
+        }
+        return $this->hasStmtsAlwaysReturnOrExit($stmt->else->stmts);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
+     */
+    private function isStopped($stmt) : bool
+    {
+        return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_;
     }
     private function isSwitchWithAlwaysReturn(Switch_ $switch) : bool
     {
@@ -112,13 +138,15 @@ final class SilentVoidResolver
     }
     private function isTryCatchAlwaysReturn(TryCatch $tryCatch) : bool
     {
-        if (!$this->hasStmtsAlwaysReturn($tryCatch->stmts)) {
+        if (!$this->hasStmtsAlwaysReturnOrExit($tryCatch->stmts)) {
             return \false;
         }
         foreach ($tryCatch->catches as $catch) {
-            return $this->hasStmtsAlwaysReturn($catch->stmts);
+            if (!$this->hasStmtsAlwaysReturnOrExit($catch->stmts)) {
+                return \false;
+            }
         }
-        return \true;
+        return !($tryCatch->finally instanceof Finally_ && !$this->hasStmtsAlwaysReturnOrExit($tryCatch->finally->stmts));
     }
     private function resolveReturnCount(Switch_ $switch) : int
     {

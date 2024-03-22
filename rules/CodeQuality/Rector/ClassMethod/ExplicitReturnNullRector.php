@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,9 +26,15 @@ final class ExplicitReturnNullRector extends AbstractRector
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
+     */
+    private $silentVoidResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, SilentVoidResolver $silentVoidResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->silentVoidResolver = $silentVoidResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -73,9 +80,6 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        if ($this->hasRootLevelReturn($node)) {
-            return null;
-        }
         if ($this->containsYieldOrThrow($node)) {
             return null;
         }
@@ -83,17 +87,11 @@ CODE_SAMPLE
         if (!$this->hasReturnsWithValues($node)) {
             return null;
         }
+        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
+            return null;
+        }
         $node->stmts[] = new Return_(new ConstFetch(new Name('null')));
         return $node;
-    }
-    private function hasRootLevelReturn(ClassMethod $classMethod) : bool
-    {
-        foreach ((array) $classMethod->stmts as $stmt) {
-            if ($stmt instanceof Return_) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function containsYieldOrThrow(ClassMethod $classMethod) : bool
     {
