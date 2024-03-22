@@ -5,12 +5,9 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\NullType;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
@@ -114,14 +111,11 @@ CODE_SAMPLE
         if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
-        if ($this->containsYieldOrThrow($node)) {
+        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
             return null;
         }
         // it has at least some return value in it
         if (!$this->hasReturnsWithValues($node)) {
-            return null;
-        }
-        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
             return null;
         }
         $node->stmts[] = new Return_(new ConstFetch(new Name('null')));
@@ -152,10 +146,6 @@ CODE_SAMPLE
             return;
         }
         $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
-    }
-    private function containsYieldOrThrow(ClassMethod $classMethod) : bool
-    {
-        return (bool) $this->betterNodeFinder->findInstancesOf($classMethod, [Yield_::class, Throw_::class, Node\Expr\Throw_::class, YieldFrom::class]);
     }
     private function hasReturnsWithValues(ClassMethod $classMethod) : bool
     {
