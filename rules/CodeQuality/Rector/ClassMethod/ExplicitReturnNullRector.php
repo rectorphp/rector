@@ -102,10 +102,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -113,7 +113,7 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        if ($this->isName($node, MethodName::CONSTRUCT)) {
+        if ($node instanceof ClassMethod && $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($node);
@@ -143,9 +143,12 @@ CODE_SAMPLE
         $this->transformDocUnionVoidToUnionNull($node);
         return $node;
     }
-    private function transformDocUnionVoidToUnionNull(ClassMethod $classMethod) : void
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     */
+    private function transformDocUnionVoidToUnionNull($node) : void
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $returnType = $phpDocInfo->getReturnType();
         if (!$returnType instanceof UnionType) {
             return;
@@ -166,6 +169,6 @@ CODE_SAMPLE
         if (!$type instanceof UnionType) {
             return;
         }
-        $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
+        $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $type);
     }
 }
