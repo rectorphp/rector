@@ -4,18 +4,23 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\NullType;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,11 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ExplicitReturnNullRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
@@ -50,13 +50,18 @@ final class ExplicitReturnNullRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(BetterNodeFinder $betterNodeFinder, SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, ReturnTypeInferer $returnTypeInferer)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->silentVoidResolver = $silentVoidResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -111,11 +116,27 @@ CODE_SAMPLE
         if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
-        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
+        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if (!$returnType instanceof UnionType) {
             return null;
         }
-        // it has at least some return value in it
-        if (!$this->hasReturnsWithValues($node)) {
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable((array) $node->stmts, static function (Node $node) use(&$hasChanged) {
+            if ($node instanceof Class_ || $node instanceof Function_ || $node instanceof Closure) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($node instanceof Return_ && !$node->expr instanceof Expr) {
+                $hasChanged = \true;
+                $node->expr = new ConstFetch(new Name('null'));
+                return $node;
+            }
+            return null;
+        });
+        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
+            if ($hasChanged) {
+                $this->transformDocUnionVoidToUnionNull($node);
+                return $node;
+            }
             return null;
         }
         $node->stmts[] = new Return_(new ConstFetch(new Name('null')));
@@ -146,16 +167,5 @@ CODE_SAMPLE
             return;
         }
         $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
-    }
-    private function hasReturnsWithValues(ClassMethod $classMethod) : bool
-    {
-        /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-        foreach ($returns as $return) {
-            if (!$return->expr instanceof Node) {
-                return \false;
-            }
-        }
-        return $returns !== [];
     }
 }
