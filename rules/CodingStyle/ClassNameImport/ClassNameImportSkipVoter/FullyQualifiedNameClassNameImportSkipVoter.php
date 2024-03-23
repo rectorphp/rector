@@ -7,7 +7,6 @@ use RectorPrefix202403\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
 /**
@@ -26,15 +25,9 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
      * @var \Rector\CodingStyle\ClassNameImport\ShortNameResolver
      */
     private $shortNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-    public function __construct(ShortNameResolver $shortNameResolver, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
@@ -43,7 +36,6 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
         $fullyQualifiedObjectTypeShortName = $fullyQualifiedObjectType->getShortName();
         $className = $fullyQualifiedObjectType->getClassName();
-        $removedUses = $this->renamedClassesDataCollector->getOldClasses();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
             if ($fullyQualifiedObjectTypeShortName !== $shortName) {
                 $shortName = $this->cleanShortName($shortName);
@@ -52,10 +44,7 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
                 continue;
             }
             $fullyQualifiedName = \ltrim($fullyQualifiedName, '\\');
-            if ($className === $fullyQualifiedName) {
-                return \false;
-            }
-            return !\in_array($fullyQualifiedName, $removedUses, \true);
+            return $className !== $fullyQualifiedName;
         }
         return \false;
     }
