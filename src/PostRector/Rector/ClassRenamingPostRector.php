@@ -110,11 +110,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     {
         $phpAttributeName = $name->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
         if (\is_string($phpAttributeName)) {
-            $result = $this->classRenamer->renameNode(new FullyQualified($phpAttributeName, $name->getAttributes()), $oldToNewClasses, $scope);
-            if ($result instanceof FullyQualified) {
-                $result->setAttribute(AttributeKey::ORIGINAL_NAME, $name);
-            }
-            return $result;
+            return $this->classRenamer->renameNode(new FullyQualified($phpAttributeName, $name->getAttributes()), $oldToNewClasses, $scope);
         }
         return null;
     }

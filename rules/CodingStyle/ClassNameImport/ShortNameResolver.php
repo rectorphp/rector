@@ -177,8 +177,10 @@ final class ShortNameResolver
         $shortNamesToFullyQualifiedNames = [];
         foreach ($shortNames as $shortName) {
             $stmtsMatchedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts);
-            $fullyQualifiedName = \is_string($stmtsMatchedName) ? $stmtsMatchedName : $shortName;
-            $shortNamesToFullyQualifiedNames[$shortName] = $fullyQualifiedName;
+            if ($stmtsMatchedName == null) {
+                continue;
+            }
+            $shortNamesToFullyQualifiedNames[$shortName] = $stmtsMatchedName;
         }
         return $shortNamesToFullyQualifiedNames;
     }
