@@ -12,7 +12,9 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
@@ -90,11 +92,20 @@ final class SilentVoidResolver
             if ($this->isIfReturn($stmt)) {
                 return \true;
             }
-            if ($stmt instanceof Do_ && $this->hasStmtsAlwaysReturnOrExit($stmt->stmts)) {
+            if ($stmt instanceof Do_ && $this->isDoWithAlwaysReturnOrExit($stmt)) {
                 return \true;
             }
         }
         return \false;
+    }
+    private function isDoWithAlwaysReturnOrExit(Do_ $do) : bool
+    {
+        if (!$this->hasStmtsAlwaysReturnOrExit($do->stmts)) {
+            return \false;
+        }
+        return !(bool) $this->betterNodeFinder->findFirst($do->stmts, static function (Node $node) : bool {
+            return $node instanceof Break_ || $node instanceof Continue_;
+        });
     }
     /**
      * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
