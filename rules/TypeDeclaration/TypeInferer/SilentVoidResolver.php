@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
@@ -87,6 +88,9 @@ final class SilentVoidResolver
                 return \true;
             }
             if ($this->isIfReturn($stmt)) {
+                return \true;
+            }
+            if ($stmt instanceof Do_ && $this->hasStmtsAlwaysReturnOrExit($stmt->stmts)) {
                 return \true;
             }
         }
