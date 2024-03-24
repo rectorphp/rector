@@ -134,11 +134,12 @@ final class IsClassMethodUsedAnalyzer
     {
         /** @var Array_[] $arrays */
         $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
+        $classMethodName = $this->nodeNameResolver->getName($classMethod);
         foreach ($arrays as $array) {
             if ($this->isInArrayMap($class, $array)) {
                 return \true;
             }
-            $arrayCallable = $this->arrayCallableMethodMatcher->match($array, $scope);
+            $arrayCallable = $this->arrayCallableMethodMatcher->match($array, $scope, $classMethodName);
             if ($arrayCallable instanceof ArrayCallableDynamicMethod) {
                 return \true;
             }

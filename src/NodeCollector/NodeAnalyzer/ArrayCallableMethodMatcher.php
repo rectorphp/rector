@@ -61,7 +61,7 @@ final class ArrayCallableMethodMatcher
      * @see https://github.com/rectorphp/rector-src/pull/909
      * @return null|\Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod|\Rector\NodeCollector\ValueObject\ArrayCallable
      */
-    public function match(Array_ $array, Scope $scope)
+    public function match(Array_ $array, Scope $scope, ?string $classMethodName = null)
     {
         if (\count($array->items) !== 2) {
             return null;
@@ -73,7 +73,7 @@ final class ArrayCallableMethodMatcher
         $items = $array->items;
         // $this, self, static, FQN
         $firstItemValue = $items[0]->value;
-        $callerType = $this->resolveCallerType($firstItemValue, $scope);
+        $callerType = $this->resolveCallerType($firstItemValue, $scope, $classMethodName);
         if (!$callerType instanceof TypeWithClassName) {
             return null;
         }
@@ -137,7 +137,7 @@ final class ArrayCallableMethodMatcher
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType
      */
-    private function resolveClassConstFetchType(ClassConstFetch $classConstFetch, Scope $scope)
+    private function resolveClassConstFetchType(ClassConstFetch $classConstFetch, Scope $scope, ?string $classMethodName)
     {
         $classConstantReference = $this->valueResolver->getValue($classConstFetch);
         if ($classConstantReference === ObjectReference::STATIC) {
@@ -159,6 +159,9 @@ final class ArrayCallableMethodMatcher
         if (!$hasConstruct) {
             return new ObjectType($classConstantReference, null, $classReflection);
         }
+        if (\is_string($classMethodName) && $classReflection->hasNativeMethod($classMethodName)) {
+            return new ObjectType($classConstantReference, null, $classReflection);
+        }
         $extendedMethodReflection = $classReflection->getMethod(MethodName::CONSTRUCT, $scope);
         $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
         foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflectionWithPhpDoc) {
@@ -168,11 +171,11 @@ final class ArrayCallableMethodMatcher
         }
         return new ObjectType($classConstantReference, null, $classReflection);
     }
-    private function resolveCallerType(Expr $expr, Scope $scope) : Type
+    private function resolveCallerType(Expr $expr, Scope $scope, ?string $classMethodName) : Type
     {
         if ($expr instanceof ClassConstFetch) {
             // static ::class reference?
-            $callerType = $this->resolveClassConstFetchType($expr, $scope);
+            $callerType = $this->resolveClassConstFetchType($expr, $scope, $classMethodName);
         } else {
             $callerType = $this->nodeTypeResolver->getType($expr);
         }
