@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -104,7 +105,7 @@ final class SilentVoidResolver
             return \false;
         }
         return !(bool) $this->betterNodeFinder->findFirst($do->stmts, static function (Node $node) : bool {
-            return $node instanceof Break_ || $node instanceof Continue_;
+            return $node instanceof Break_ || $node instanceof Continue_ || $node instanceof Goto_;
         });
     }
     /**
