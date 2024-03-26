@@ -123,7 +123,7 @@ final class CustomRuleCommand extends Command
             $this->symfonyStyle->warning('No <testsuites> element found in ' . $phpunitFilePath . '. Rector could not add the rector test suite to it');
             return;
         }
-        $phpunitXML = $this->updatePHPUnitXMLFile($domDocument, $testsuitesElement, $phpunitFilePath);
+        $phpunitXML = $this->updatePHPUnitXMLFile($domDocument, $testsuitesElement);
         FileSystem::write($phpunitFilePath, $phpunitXML, null);
         $this->symfonyStyle->success('We also update ' . $phpunitFilePath . ", to add a rector test suite.\n You can run the rector tests by running: phpunit --testsuite rector");
     }
@@ -146,7 +146,7 @@ final class CustomRuleCommand extends Command
         }
         return \false;
     }
-    private function updatePHPUnitXMLFile(DOMDocument $domDocument, DOMElement $testsuitesElement, string $phpunitFilePath) : string
+    private function updatePHPUnitXMLFile(DOMDocument $domDocument, DOMElement $testsuitesElement) : string
     {
         $domElement = $domDocument->createElement('testsuite');
         $domElement->setAttribute('name', 'rector');

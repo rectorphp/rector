@@ -59,7 +59,7 @@ final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
         if (!$node instanceof Expr) {
             return null;
         }
-        if ($node->getAttribute(AttributeKey::EXPRESSION_DEPTH) < 2 && $node->getAttribute(AttributeKey::IS_ARG_VALUE) !== \true) {
+        if ($this->shouldSkipExpr($node)) {
             return null;
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
@@ -74,5 +74,9 @@ final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
             $this->phpStanNodeScopeResolver->processNodes($node->stmts, $this->filePath, $scope);
         }
         return null;
+    }
+    private function shouldSkipExpr(Expr $expr) : bool
+    {
+        return $expr->getAttribute(AttributeKey::EXPRESSION_DEPTH) < 2 && $expr->getAttribute(AttributeKey::IS_ARG_VALUE) !== \true && $expr->getAttribute(AttributeKey::IS_PARAM_VAR) === \true;
     }
 }

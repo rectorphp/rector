@@ -51,6 +51,7 @@ The constructor takes a single parameter, `$envPrefix`, which is upper-cased and
 * [Process configuration](#process-configuration)
 * [Troubleshooting](#troubleshooting)
 * [Extending the library](#extending-the-library)
+* [Examples](#examples)
 
 ### How it works
 
@@ -64,6 +65,8 @@ A temporary ini file is created from the loaded (and scanned) ini files, with an
     * The application runs and exits.
 * The main process exits with the exit code from the restarted process.
 
+See [Examples](#examples) for further information.
+
 #### Signal handling
 Asynchronous signal handling is automatically enabled if the pcntl extension is loaded. `SIGINT` is set to `SIG_IGN` in the parent
 process and restored to `SIG_DFL` in the restarted process (if no other handler has been set).
@@ -74,7 +77,7 @@ From PHP 7.4 on Windows, `CTRL+C` and `CTRL+BREAK` handling is automatically ena
 There are a few things to be aware of when running inside a restarted process.
 
 * Extensions set on the command-line will not be loaded.
-* Ini file locations will be reported as per the restart - see [getAllIniFiles()](#getallinifiles).
+* Ini file locations will be reported as per the restart - see [getAllIniFiles()](#getallinifiles-array).
 * Php sub-processes may be loaded with Xdebug enabled - see [Process configuration](#process-configuration).
 
 ### Helper methods
@@ -200,12 +203,12 @@ Uses environment variables to remove Xdebug from the new process and persist the
 
 >_If the new process calls a PHP sub-process, Xdebug will not be loaded in that sub-process._
 
-This strategy can be used in the restart by calling [setPersistent()](#setpersistent).
+This strategy can be used in the restart by calling [setPersistent()](#setpersistent-self).
 
 #### Sub-processes
 The `PhpConfig` helper class makes it easy to invoke a PHP sub-process (with or without Xdebug loaded), regardless of whether there has been a restart.
 
-Each of its methods returns an array of PHP options (to add to the command-line) and sets up the environment for the required strategy. The [getRestartSettings()](#getrestartsettings) method is used internally.
+Each of its methods returns an array of PHP options (to add to the command-line) and sets up the environment for the required strategy. The [getRestartSettings()](#getrestartsettings-array) method is used internally.
 
 * `useOriginal()` - Xdebug will be loaded in the new process.
 * `useStandard()` - Xdebug will **not** be loaded in the new process - see [standard settings](#standard-settings).
@@ -245,7 +248,7 @@ The API is defined by classes and their accessible elements that are not annotat
 By default the process will restart if Xdebug is loaded and not running with `xdebug.mode=off`. Extending this method allows an application to decide, by returning a boolean (or equivalent) value.
 It is only called if `MYAPP_ALLOW_XDEBUG` is empty, so it will not be called in the restarted process (where this variable contains internal data), or if the restart has been overridden.
 
-Note that the [setMainScript()](#setmainscriptscript) and [setPersistent()](#setpersistent) setters can be used here, if required.
+Note that the [setMainScript()](#setmainscriptstring-script-self) and [setPersistent()](#setpersistent-self) setters can be used here, if required.
 
 #### _restart(array $command): void_
 An application can extend this to modify the temporary ini file, its location given in the `tmpIni` property. New settings can be safely appended to the end of the data, which is `PHP_EOL` terminated.
@@ -293,6 +296,10 @@ class MyRestarter extends XdebugHandler
     }
 }
 ```
+
+### Examples
+The `tests\App` directory contains command-line scripts that demonstrate the internal workings in a variety of scenarios.
+See [Functional Test Scripts](./tests/App/README.md).
 
 ## License
 composer/xdebug-handler is licensed under the MIT License, see the LICENSE file for details.

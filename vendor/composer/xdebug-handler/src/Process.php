@@ -36,6 +36,7 @@ class Process
         }
         $quote = \strpbrk($arg, " \t") !== \false || $arg === '';
         $arg = Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
+        $dquotes = (bool) $dquotes;
         if ($meta) {
             $meta = $dquotes || Preg::isMatch('/%[^%]+%/', $arg);
             if (!$meta) {
