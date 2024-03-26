@@ -22,5 +22,8 @@
         "rector/rector-downgrade-php": "*"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "suggest": {
+        "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
+    }
 }
