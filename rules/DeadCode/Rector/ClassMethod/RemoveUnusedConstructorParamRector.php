@@ -6,8 +6,10 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,10 +29,16 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
      * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
     private $complexNodeRemover;
-    public function __construct(ParamAnalyzer $paramAnalyzer, ComplexNodeRemover $complexNodeRemover)
+    /**
+     * @readonly
+     * @var \Rector\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(ParamAnalyzer $paramAnalyzer, ComplexNodeRemover $complexNodeRemover, ReflectionResolver $reflectionResolver)
     {
         $this->paramAnalyzer = $paramAnalyzer;
         $this->complexNodeRemover = $complexNodeRemover;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -82,6 +90,16 @@ CODE_SAMPLE
         }
         if ($constructorClassMethod->isAbstract()) {
             return null;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $interfaces = $classReflection->getInterfaces();
+        foreach ($interfaces as $interface) {
+            if ($interface->hasNativeMethod(MethodName::CONSTRUCT)) {
+                return null;
+            }
         }
         $changedConstructorClassMethod = $this->processRemoveParams($constructorClassMethod);
         if (!$changedConstructorClassMethod instanceof ClassMethod) {
