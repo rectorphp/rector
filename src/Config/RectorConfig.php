@@ -247,6 +247,10 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER, $filePath);
     }
+    public function newLineOnFluentCall(bool $enabled = \true) : void
+    {
+        SimpleParameterProvider::setParameter(Option::NEW_LINE_ON_FLUENT_CALL, $enabled);
+    }
     /**
      * @param string[] $extensions
      */

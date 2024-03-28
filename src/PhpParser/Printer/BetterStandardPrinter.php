@@ -6,11 +6,14 @@ namespace Rector\PhpParser\Printer;
 use RectorPrefix202403\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Param;
@@ -134,8 +137,7 @@ final class BetterStandardPrinter extends Standard
         if ($comments === []) {
             return parent::pExpr_ArrowFunction($arrowFunction);
         }
-        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
-        $indent = \str_repeat($this->getIndentCharacter(), $this->indentLevel) . \str_repeat($this->getIndentCharacter(), $indentSize);
+        $indent = $this->resolveIndentSpaces();
         $text = "\n" . $indent;
         foreach ($comments as $key => $comment) {
             $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
@@ -354,6 +356,27 @@ final class BetterStandardPrinter extends Standard
             return (string) $lNumber->getAttribute(AttributeKey::RAW_VALUE);
         }
         return parent::pScalar_LNumber($lNumber);
+    }
+    private function resolveIndentSpaces() : string
+    {
+        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
+        return \str_repeat($this->getIndentCharacter(), $this->indentLevel) . \str_repeat($this->getIndentCharacter(), $indentSize);
+    }
+    protected function pExpr_MethodCall(MethodCall $methodCall) : string
+    {
+        if (SimpleParameterProvider::provideBoolParameter(Option::NEW_LINE_ON_FLUENT_CALL) === \false) {
+            return parent::pExpr_MethodCall($methodCall);
+        }
+        if ($methodCall->var instanceof CallLike) {
+            foreach ($methodCall->args as $arg) {
+                if (!$arg instanceof Arg) {
+                    continue;
+                }
+                $arg->value->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
+            return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . "->" . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
+        }
+        return parent::pExpr_MethodCall($methodCall);
     }
     /**
      * Keep attributes on newlines

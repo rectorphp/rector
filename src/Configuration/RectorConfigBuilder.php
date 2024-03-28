@@ -140,13 +140,17 @@ final class RectorConfigBuilder
     /**
      * To make sure type declarations set and level are not duplicated,
      * as both contain same rules
-     * @var bool
+     * @var bool|null
      */
-    private $isTypeCoverageLevelUsed = \false;
+    private $isTypeCoverageLevelUsed;
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $isDeadCodeLevelUsed = \false;
+    private $isDeadCodeLevelUsed;
+    /**
+     * @var bool|null
+     */
+    private $isFluentNewLine;
     /**
      * @var RegisteredService[]
      */
@@ -154,10 +158,10 @@ final class RectorConfigBuilder
     public function __invoke(RectorConfig $rectorConfig) : void
     {
         $uniqueSets = \array_unique($this->sets);
-        if (\in_array(SetList::TYPE_DECLARATION, $uniqueSets, \true) && $this->isTypeCoverageLevelUsed) {
+        if (\in_array(SetList::TYPE_DECLARATION, $uniqueSets, \true) && $this->isTypeCoverageLevelUsed === \true) {
             throw new InvalidConfigurationException(\sprintf('Your config already enables type declarations set.%sRemove "->withTypeCoverageLevel()" as it only duplicates it, or remove type declaration set.', \PHP_EOL));
         }
-        if (\in_array(SetList::DEAD_CODE, $uniqueSets, \true) && $this->isDeadCodeLevelUsed) {
+        if (\in_array(SetList::DEAD_CODE, $uniqueSets, \true) && $this->isDeadCodeLevelUsed === \true) {
             throw new InvalidConfigurationException(\sprintf('Your config already enables dead code set.%sRemove "->withDeadCodeLevel()" as it only duplicates it, or remove dead code set.', \PHP_EOL));
         }
         if ($uniqueSets !== []) {
@@ -239,6 +243,9 @@ final class RectorConfigBuilder
         }
         if ($this->symfonyContainerPhpFile !== null) {
             $rectorConfig->symfonyContainerPhp($this->symfonyContainerPhpFile);
+        }
+        if ($this->isFluentNewLine !== null) {
+            $rectorConfig->newLineOnFluentCall($this->isFluentNewLine);
         }
     }
     /**
@@ -539,6 +546,11 @@ final class RectorConfigBuilder
         $this->isTypeCoverageLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, 'RectorConfig::withTypeCoverageLevel()');
         $this->rules = \array_merge($this->rules, $levelRules);
+        return $this;
+    }
+    public function withFluentCallNewLine(bool $isFluentNewLine = \true) : self
+    {
+        $this->isFluentNewLine = $isFluentNewLine;
         return $this;
     }
     public function registerService(string $className, ?string $alias = null, ?string $tag = null) : self

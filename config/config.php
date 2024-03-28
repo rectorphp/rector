@@ -31,4 +31,6 @@ return static function (RectorConfig $rectorConfig) : void {
     foreach ($extensionConfigResolver->provide() as $extensionConfigFile) {
         $rectorConfig->import($extensionConfigFile);
     }
+    // use original php-parser printer to avoid BC break on fluent call
+    $rectorConfig->newLineOnFluentCall(\false);
 };
