@@ -142,16 +142,16 @@ final class ArrayCallableMethodMatcher
     private function resolveClassContextType($classContext, Scope $scope, ?string $classMethodName)
     {
         $classConstantReference = $this->valueResolver->getValue($classContext);
+        // non-class value
+        if (!\is_string($classConstantReference)) {
+            return new MixedType();
+        }
         if ($this->isRequiredClassReflectionResolution($classConstantReference)) {
             $classReflection = $this->reflectionResolver->resolveClassReflection($classContext);
             if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
                 return new MixedType();
             }
             $classConstantReference = $classReflection->getName();
-        }
-        // non-class value
-        if (!\is_string($classConstantReference)) {
-            return new MixedType();
         }
         if (!$this->reflectionProvider->hasClass($classConstantReference)) {
             return new MixedType();
@@ -191,9 +191,6 @@ final class ArrayCallableMethodMatcher
         if ($classConstantReference === ObjectReference::STATIC) {
             return \true;
         }
-        if ($classConstantReference === '__CLASS__') {
-            return \true;
-        }
-        return \false;
+        return $classConstantReference === '__CLASS__';
     }
 }
