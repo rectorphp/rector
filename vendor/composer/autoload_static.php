@@ -2146,6 +2146,7 @@ class ComposerStaticInit67be42e0079886f0083b7116ae1de531
         'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
+        'Rector\\Php82\\Rector\\Encapsed\\VariableInStringInterpolationFixerRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Encapsed/VariableInStringInterpolationFixerRector.php',
         'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
         'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
         'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',

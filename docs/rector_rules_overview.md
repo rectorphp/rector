@@ -1,4 +1,4 @@
-# 368 Rules Overview
+# 369 Rules Overview
 
 <br>
 
@@ -42,7 +42,7 @@
 
 - [Php81](#php81) (9)
 
-- [Php82](#php82) (4)
+- [Php82](#php82) (5)
 
 - [Php83](#php83) (3)
 
@@ -5319,6 +5319,20 @@ Change deprecated utf8_decode and utf8_encode to mb_convert_encoding
 -utf8_encode($value);
 +mb_convert_encoding($value, 'ISO-8859-1');
 +mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+```
+
+<br>
+
+### VariableInStringInterpolationFixerRector
+
+Replace deprecated "${var}" to "{$var}"
+
+- class: [`Rector\Php82\Rector\Encapsed\VariableInStringInterpolationFixerRector`](../rules/Php82/Rector/Encapsed/VariableInStringInterpolationFixerRector.php)
+
+```diff
+ $c = "football";
+-echo "I like playing ${c}";
++echo "I like playing {$c}";
 ```
 
 <br>
