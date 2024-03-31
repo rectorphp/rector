@@ -149,7 +149,7 @@ CODE_SAMPLE
             if ($phpPropertyReflection->getNativeType() instanceof MixedType) {
                 return [];
             }
-            $propertyTypes[] = $phpPropertyReflection->getNativeType();
+            $propertyTypes[] = $this->nodeTypeResolver->getNativeType($return->expr);
         }
         return $propertyTypes;
     }
