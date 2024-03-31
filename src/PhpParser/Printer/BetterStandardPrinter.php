@@ -357,11 +357,6 @@ final class BetterStandardPrinter extends Standard
         }
         return parent::pScalar_LNumber($lNumber);
     }
-    private function resolveIndentSpaces() : string
-    {
-        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
-        return \str_repeat($this->getIndentCharacter(), $this->indentLevel) . \str_repeat($this->getIndentCharacter(), $indentSize);
-    }
     protected function pExpr_MethodCall(MethodCall $methodCall) : string
     {
         if (SimpleParameterProvider::provideBoolParameter(Option::NEW_LINE_ON_FLUENT_CALL) === \false) {
@@ -374,7 +369,7 @@ final class BetterStandardPrinter extends Standard
                 }
                 $arg->value->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
-            return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . "->" . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
+            return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . '->' . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
         }
         return parent::pExpr_MethodCall($methodCall);
     }
@@ -384,6 +379,11 @@ final class BetterStandardPrinter extends Standard
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    private function resolveIndentSpaces() : string
+    {
+        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
+        return \str_repeat($this->getIndentCharacter(), $this->indentLevel) . \str_repeat($this->getIndentCharacter(), $indentSize);
     }
     /**
      * Must be a method to be able to react to changed parameter in tests
