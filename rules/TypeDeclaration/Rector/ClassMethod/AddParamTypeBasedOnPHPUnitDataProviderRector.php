@@ -166,12 +166,12 @@ CODE_SAMPLE
             return new MixedType();
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $dataProviderClassMethod->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($dataProviderClassMethod, Return_::class);
         if ($returns !== []) {
             return $this->resolveReturnStaticArrayTypeByParameterPosition($returns, $parameterPosition);
         }
         /** @var Yield_[] $yields */
-        $yields = $this->betterNodeFinder->findInstanceOf((array) $dataProviderClassMethod->stmts, Yield_::class);
+        $yields = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($dataProviderClassMethod, Yield_::class);
         return $this->resolveYieldStaticArrayTypeByParameterPosition($yields, $parameterPosition);
     }
     /**
