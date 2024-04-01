@@ -101,6 +101,7 @@ Among there projects belong:
 * [cakephp/upgrade](https://github.com/cakephp/upgrade)
 * [driftingly/rector-laravel](https://github.com/driftingly/rector-laravel)
 * [contao/contao-rector](https://github.com/contao/contao-rector)
+* [php-static-analysis/rector-rule](https://github.com/php-static-analysis/rector-rule)
 
 <br>
 

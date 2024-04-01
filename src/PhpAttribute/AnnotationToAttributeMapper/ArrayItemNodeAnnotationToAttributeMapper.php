@@ -14,7 +14,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use Rector\Validation\RectorAssert;
-use RectorPrefix202403\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202404\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
  */

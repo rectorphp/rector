@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202403\Illuminate\Contracts\Foundation;
+namespace RectorPrefix202404\Illuminate\Contracts\Foundation;
 
 interface ExceptionRenderer
 {
