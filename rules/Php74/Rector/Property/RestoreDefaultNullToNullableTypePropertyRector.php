@@ -113,8 +113,7 @@ CODE_SAMPLE
         }
         // @readonly annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $tags = $phpDocInfo->getTagsByName('@readonly');
-        return $tags !== [];
+        return $phpDocInfo->hasByName('@readonly');
     }
     private function isReadonlyClass(Class_ $class) : bool
     {
@@ -124,7 +123,6 @@ CODE_SAMPLE
         }
         // @immutable annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $tags = $phpDocInfo->getTagsByName('@immutable');
-        return $tags !== [];
+        return $phpDocInfo->hasByName('@immutable');
     }
 }
