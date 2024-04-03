@@ -1742,12 +1742,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "eadea252dae87d8703ce171ec8fb2682f455c5b9"
+                "reference": "1fc03517141811339be88a19bc4d2bd860c02a79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/eadea252dae87d8703ce171ec8fb2682f455c5b9",
-                "reference": "eadea252dae87d8703ce171ec8fb2682f455c5b9",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/1fc03517141811339be88a19bc4d2bd860c02a79",
+                "reference": "1fc03517141811339be88a19bc4d2bd860c02a79",
                 "shasum": ""
             },
             "require": {
@@ -1760,7 +1760,7 @@
                 "phpunit\/phpunit": "^10.3",
                 "rector\/phpstan-rules": "^0.7.4",
                 "rector\/rector-generator": "^0.7.3",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-clean-up-type-hasher",
                 "symplify\/easy-coding-standard": "^12.0",
                 "symplify\/phpstan-extensions": "^11.3",
                 "symplify\/phpstan-rules": "^12.4",
@@ -1769,7 +1769,7 @@
                 "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-03-19T09:23:20+00:00",
+            "time": "2024-04-03T06:16:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1998,17 +1998,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.4",
-            "version_normalized": "6.4.4.0",
+            "version": "v6.4.6",
+            "version_normalized": "6.4.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "0d9e4eb5ad413075624378f474c4167ea202de78"
+                "reference": "a2708a5da5c87d1d0d52937bdeac625df659e11f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/0d9e4eb5ad413075624378f474c4167ea202de78",
-                "reference": "0d9e4eb5ad413075624378f474c4167ea202de78",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a2708a5da5c87d1d0d52937bdeac625df659e11f",
+                "reference": "a2708a5da5c87d1d0d52937bdeac625df659e11f",
                 "shasum": ""
             },
             "require": {
@@ -2041,7 +2041,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2024-02-22T20:27:10+00:00",
+            "time": "2024-03-29T19:07:53+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2080,7 +2080,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.4"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.6"
             },
             "funding": [
                 {
@@ -2170,17 +2170,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v6.4.3",
-            "version_normalized": "6.4.3.0",
+            "version": "v6.4.6",
+            "version_normalized": "6.4.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "7f3b1755eb49297a0827a7575d5d2b2fd11cc9fb"
+                "reference": "9919b5509ada52cc7f66f9a35c86a4a29955c9d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/7f3b1755eb49297a0827a7575d5d2b2fd11cc9fb",
-                "reference": "7f3b1755eb49297a0827a7575d5d2b2fd11cc9fb",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/9919b5509ada52cc7f66f9a35c86a4a29955c9d3",
+                "reference": "9919b5509ada52cc7f66f9a35c86a4a29955c9d3",
                 "shasum": ""
             },
             "require": {
@@ -2188,7 +2188,7 @@
                 "symfony\/polyfill-ctype": "~1.8",
                 "symfony\/polyfill-mbstring": "~1.8"
             },
-            "time": "2024-01-23T14:51:35+00:00",
+            "time": "2024-03-21T19:36:20+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2216,7 +2216,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.3"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.6"
             },
             "funding": [
                 {

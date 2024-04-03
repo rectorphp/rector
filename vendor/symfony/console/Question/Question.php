@@ -44,7 +44,7 @@ class Question
      */
     private $validator;
     /**
-     * @var string|int|bool|null|float
+     * @var bool|float|int|string|null
      */
     private $default;
     /**
@@ -77,7 +77,7 @@ class Question
     }
     /**
      * Returns the default answer.
-     * @return string|bool|int|float|null
+     * @return bool|float|int|string|null
      */
     public function getDefault()
     {

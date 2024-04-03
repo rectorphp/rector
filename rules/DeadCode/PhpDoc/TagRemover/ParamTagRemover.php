@@ -7,7 +7,6 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;

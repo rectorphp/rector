@@ -123,7 +123,7 @@ CODE_SAMPLE
     }
     /**
      * @param int|float $rangeLine
-     * @return int|float
+     * @return float|int
      */
     private function resolveRangeLineFromComment($rangeLine, int $line, int $endLine, Stmt $nextStmt)
     {

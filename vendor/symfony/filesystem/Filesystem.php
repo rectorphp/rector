@@ -66,6 +66,8 @@ class Filesystem
             if ($originIsLocal) {
                 // Like `cp`, preserve executable permission bits
                 self::box('chmod', $targetFile, \fileperms($targetFile) | \fileperms($originFile) & 0111);
+                // Like `cp`, preserve the file modification time
+                self::box('touch', $targetFile, \filemtime($originFile));
                 if ($bytesCopied !== ($bytesOrigin = \filesize($originFile))) {
                     throw new IOException(\sprintf('Failed to copy the whole content of "%s" to "%s" (%g of %g bytes copied).', $originFile, $targetFile, $bytesCopied, $bytesOrigin), 0, null, $originFile);
                 }
@@ -178,7 +180,7 @@ class Filesystem
                     }
                     throw new IOException(\sprintf('Failed to remove directory "%s": ', $file) . $lastError);
                 }
-            } elseif (!self::box('unlink', $file) && (\strpos(self::$lastError, 'Permission denied') !== \false || \file_exists($file))) {
+            } elseif (!self::box('unlink', $file) && (self::$lastError && \strpos(self::$lastError, 'Permission denied') !== \false || \file_exists($file))) {
                 throw new IOException(\sprintf('Failed to remove file "%s": ', $file) . self::$lastError);
             }
         }

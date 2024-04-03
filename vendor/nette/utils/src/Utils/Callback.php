@@ -95,7 +95,7 @@ final class Callback
     }
     /**
      * Unwraps closure created by Closure::fromCallable().
-     * @return callable|mixed[]
+     * @return mixed[]|callable
      */
     public static function unwrap(\Closure $closure)
     {

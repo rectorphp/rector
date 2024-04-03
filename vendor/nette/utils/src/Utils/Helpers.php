@@ -50,7 +50,7 @@ class Helpers
      * @param int|float $value
      * @param int|float $min
      * @param int|float $max
-     * @return int|float
+     * @return float|int
      */
     public static function clamp($value, $min, $max)
     {

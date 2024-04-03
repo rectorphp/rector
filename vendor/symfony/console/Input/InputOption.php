@@ -48,7 +48,7 @@ class InputOption
      */
     private $name;
     /**
-     * @var string|mixed[]|null
+     * @var mixed[]|string|null
      */
     private $shortcut;
     /**
@@ -56,7 +56,7 @@ class InputOption
      */
     private $mode;
     /**
-     * @var string|int|bool|mixed[]|null|float
+     * @var mixed[]|bool|float|int|string|null
      */
     private $default;
     /**
@@ -195,7 +195,7 @@ class InputOption
     }
     /**
      * Returns the default value.
-     * @return string|bool|int|float|mixed[]|null
+     * @return mixed[]|bool|float|int|string|null
      */
     public function getDefault()
     {

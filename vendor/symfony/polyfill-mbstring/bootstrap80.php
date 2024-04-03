@@ -36,13 +36,13 @@ if (!function_exists('mb_convert_case')) {
 }
 if (!function_exists('mb_internal_encoding')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_internal_encoding(?string $encoding = null) { return p\Mbstring::mb_internal_encoding($encoding); }
 }
 if (!function_exists('mb_language')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_language(?string $language = null) { return p\Mbstring::mb_language($language); }
 }
@@ -93,7 +93,7 @@ if (!function_exists('mb_strtoupper')) {
 if (!function_exists('mb_substitute_character')) {
     /**
      * @param string|int|null $substitute_character
-     * @return string|int|bool
+     * @return bool|int|string
      */
     function mb_substitute_character($substitute_character = null) { return p\Mbstring::mb_substitute_character($substitute_character); }
 }
@@ -144,13 +144,13 @@ if (!function_exists('mb_strstr')) {
 }
 if (!function_exists('mb_get_info')) {
     /**
-     * @return mixed[]|string|int|false
+     * @return mixed[]|int|string|false
      */
     function mb_get_info(?string $type = 'all') { return p\Mbstring::mb_get_info((string) $type); }
 }
 if (!function_exists('mb_http_output')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_http_output(?string $encoding = null) { return p\Mbstring::mb_http_output($encoding); }
 }

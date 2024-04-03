@@ -348,7 +348,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * Invoke re-print even if only raw value was changed.
      * That allows PHPStan to use int strict types, while changing the value with literal "_"
-     * @return string|int
+     * @return int|string
      */
     protected function pScalar_LNumber(LNumber $lNumber)
     {
