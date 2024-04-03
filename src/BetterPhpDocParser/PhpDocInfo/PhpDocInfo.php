@@ -266,6 +266,20 @@ final class PhpDocInfo
         });
         return $hasChanged;
     }
+    public function removeByName(string $tagName) : bool
+    {
+        $tagName = '@' . \ltrim($tagName, '@');
+        $hasChanged = \false;
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', static function (Node $node) use($tagName, &$hasChanged) : ?int {
+            if ($node instanceof PhpDocTagNode && $node->name === $tagName) {
+                $hasChanged = \true;
+                return PhpDocNodeTraverser::NODE_REMOVE;
+            }
+            return null;
+        });
+        return $hasChanged;
+    }
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : void
     {
         if ($phpDocTagValueNode instanceof DoctrineAnnotationTagValueNode) {
