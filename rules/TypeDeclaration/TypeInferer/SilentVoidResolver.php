@@ -142,7 +142,7 @@ final class SilentVoidResolver
         $hasDefault = \false;
         foreach ($switch->cases as $case) {
             if (!$case->cond instanceof Expr) {
-                $hasDefault = \true;
+                $hasDefault = $case->stmts !== [];
                 break;
             }
         }
