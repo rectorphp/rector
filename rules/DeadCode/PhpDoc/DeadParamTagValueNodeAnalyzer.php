@@ -3,10 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -68,9 +66,6 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if ($paramTagValueNode->description !== '') {
-            return \false;
-        }
-        if ($paramTagValueNode->type instanceof UnionTypeNode && $param->type instanceof FullyQualified) {
             return \false;
         }
         if ($param->type instanceof Name && $this->nodeNameResolver->isName($param->type, 'object')) {
