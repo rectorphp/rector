@@ -75,7 +75,7 @@ final class TypeHasher
         }
         $normalizedUnionType = clone $unionType;
         // change alias to non-alias
-        $normalizedUnionType = TypeTraverser::map($normalizedUnionType, static function (Type $type, callable $callable) : Type {
+        TypeTraverser::map($normalizedUnionType, static function (Type $type, callable $callable) : Type {
             if (!$type instanceof AliasedObjectType && !$type instanceof ShortenedObjectType) {
                 return $callable($type);
             }
