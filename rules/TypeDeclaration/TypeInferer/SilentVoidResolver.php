@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
@@ -149,8 +150,11 @@ final class SilentVoidResolver
             return \false;
         }
         $casesWithReturnOrExitCount = $this->resolveReturnOrExitCount($switch);
+        $cases = \array_filter($switch->cases, static function (Case_ $case) : bool {
+            return $case->stmts !== [];
+        });
         // has same amount of first return or exit nodes as switches
-        return \count($switch->cases) === $casesWithReturnOrExitCount;
+        return \count($cases) === $casesWithReturnOrExitCount;
     }
     private function isTryCatchAlwaysReturnOrExit(TryCatch $tryCatch) : bool
     {
