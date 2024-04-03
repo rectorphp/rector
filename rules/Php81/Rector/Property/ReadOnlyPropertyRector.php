@@ -180,11 +180,11 @@ CODE_SAMPLE
         if ($param->type === null) {
             return null;
         }
-        // promoted property?
-        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
+        // early check not property promotion and already readonly
+        if ($param->flags === 0 || $this->visibilityManipulator->isReadonly($param)) {
             return null;
         }
-        if ($this->visibilityManipulator->isReadonly($param)) {
+        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
             return null;
         }
         if ($this->paramAnalyzer->isParamReassign($classMethod, $param)) {
