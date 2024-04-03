@@ -1507,6 +1507,7 @@ class ComposerStaticInit67be42e0079886f0083b7116ae1de531
         'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
         'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php',
+        'Rector\\DeadCode\\Rector\\Property\\RemoveUselessReadOnlyTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessReadOnlyTagRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',
         'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
         'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',

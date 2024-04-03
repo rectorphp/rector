@@ -1,4 +1,4 @@
-# 369 Rules Overview
+# 370 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (28)
 
-- [DeadCode](#deadcode) (43)
+- [DeadCode](#deadcode) (44)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -2880,6 +2880,29 @@ Remove `@param` docblock with same type as parameter type
       */
      public function foo(string $a, string $b)
      {
+     }
+ }
+```
+
+<br>
+
+### RemoveUselessReadOnlyTagRector
+
+Remove useless `@readonly` annotation on native readonly type
+
+- class: [`Rector\DeadCode\Rector\Property\RemoveUselessReadOnlyTagRector`](../rules/DeadCode/Rector/Property/RemoveUselessReadOnlyTagRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    /**
+-     * @readonly
+-     */
+     private readonly string $name;
+
+     public function __construct(string $name)
+     {
+         $this->name = $name;
      }
  }
 ```

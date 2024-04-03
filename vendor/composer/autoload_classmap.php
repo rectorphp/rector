@@ -1288,6 +1288,7 @@ return array(
     'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => $baseDir . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
     'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => $baseDir . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',
     'Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector' => $baseDir . '/rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php',
+    'Rector\\DeadCode\\Rector\\Property\\RemoveUselessReadOnlyTagRector' => $baseDir . '/rules/DeadCode/Rector/Property/RemoveUselessReadOnlyTagRector.php',
     'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => $baseDir . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',
     'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => $baseDir . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
     'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => $baseDir . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
