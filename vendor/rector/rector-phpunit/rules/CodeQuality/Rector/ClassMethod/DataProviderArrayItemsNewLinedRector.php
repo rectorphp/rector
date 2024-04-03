@@ -31,13 +31,7 @@ final class DataProviderArrayItemsNewLinedRector extends AbstractRector
     private $betterNodeFinder;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
-        /**
-         * @readonly
-         */
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        /**
-         * @readonly
-         */
         $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition

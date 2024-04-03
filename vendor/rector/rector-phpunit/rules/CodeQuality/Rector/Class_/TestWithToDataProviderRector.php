@@ -56,6 +56,10 @@ final class TestWithToDataProviderRector extends AbstractRector
      * @var \Rector\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, ClassInsertManipulator $classInsertManipulator)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -111,11 +115,15 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
+        $this->hasChanged = \false;
         foreach ($node->stmts as $classMethod) {
             if (!$classMethod instanceof ClassMethod) {
                 continue;
             }
             $this->refactorClassMethod($node, $classMethod);
+        }
+        if (!$this->hasChanged) {
+            return null;
         }
         return $node;
     }
@@ -123,7 +131,6 @@ CODE_SAMPLE
     {
         $arrayItemsSingleLine = [];
         $arrayMultiLine = null;
-        $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return;
@@ -144,9 +151,11 @@ CODE_SAMPLE
                 $arrayItemsSingleLine[] = new ArrayItem($this->createArrayItem($values[0]));
             }
             //cleanup
-            $hasChanged = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $testWithPhpDocTagNode);
+            if ($this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $testWithPhpDocTagNode)) {
+                $this->hasChanged = \true;
+            }
         }
-        if (!$hasChanged) {
+        if (!$this->hasChanged) {
             return;
         }
         $dataProviderName = $this->generateDataProviderName($classMethod);
