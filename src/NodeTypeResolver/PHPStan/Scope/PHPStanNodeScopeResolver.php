@@ -264,7 +264,7 @@ final class PHPStanNodeScopeResolver
     {
         foreach ($array->items as $arrayItem) {
             if ($arrayItem instanceof ArrayItem) {
-                $arrayItem->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $this->processArrayItem($arrayItem, $mutatingScope);
             }
         }
     }
