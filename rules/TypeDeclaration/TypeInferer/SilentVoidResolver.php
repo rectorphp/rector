@@ -158,15 +158,20 @@ final class SilentVoidResolver
     }
     private function isTryCatchAlwaysReturnOrExit(TryCatch $tryCatch) : bool
     {
+        $hasReturnOrExitInFinally = $tryCatch->finally instanceof Finally_ && $this->hasStmtsAlwaysReturnOrExit($tryCatch->finally->stmts);
         if (!$this->hasStmtsAlwaysReturnOrExit($tryCatch->stmts)) {
-            return \false;
+            return $hasReturnOrExitInFinally;
         }
         foreach ($tryCatch->catches as $catch) {
-            if (!$this->hasStmtsAlwaysReturnOrExit($catch->stmts)) {
-                return \false;
+            if ($this->hasStmtsAlwaysReturnOrExit($catch->stmts)) {
+                continue;
             }
+            if ($hasReturnOrExitInFinally) {
+                continue;
+            }
+            return \false;
         }
-        return !($tryCatch->finally instanceof Finally_ && !$this->hasStmtsAlwaysReturnOrExit($tryCatch->finally->stmts));
+        return \true;
     }
     private function resolveReturnOrExitCount(Switch_ $switch) : int
     {
