@@ -30,6 +30,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ReflectionResolver;
+use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
 final class SilentVoidResolver
 {
     /**
@@ -42,10 +43,16 @@ final class SilentVoidResolver
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer
+     */
+    private $neverFuncCallAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NeverFuncCallAnalyzer $neverFuncCallAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
+        $this->neverFuncCallAnalyzer = $neverFuncCallAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -98,7 +105,7 @@ final class SilentVoidResolver
                 return \true;
             }
         }
-        return \false;
+        return $this->neverFuncCallAnalyzer->hasNeverFuncCall($stmts);
     }
     private function isDoWithAlwaysReturnOrExit(Do_ $do) : bool
     {

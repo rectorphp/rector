@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -22,12 +23,13 @@ final class NeverFuncCallAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param ClassMethod|Closure|Function_|Stmt[] $functionLike
      */
     public function hasNeverFuncCall($functionLike) : bool
     {
         $hasNeverType = \false;
-        foreach ((array) $functionLike->stmts as $stmt) {
+        $stmts = $functionLike instanceof FunctionLike ? (array) $functionLike->stmts : $functionLike;
+        foreach ($stmts as $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }

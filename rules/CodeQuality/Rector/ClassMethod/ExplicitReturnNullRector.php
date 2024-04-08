@@ -20,7 +20,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\ValueObject\MethodName;
@@ -53,21 +52,15 @@ final class ExplicitReturnNullRector extends AbstractRector
     private $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer
-     */
-    private $neverFuncCallAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, NeverFuncCallAnalyzer $neverFuncCallAnalyzer, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, ReturnTypeInferer $returnTypeInferer)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->neverFuncCallAnalyzer = $neverFuncCallAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -139,7 +132,7 @@ CODE_SAMPLE
             }
             return null;
         });
-        if (!$this->silentVoidResolver->hasSilentVoid($node) || $this->neverFuncCallAnalyzer->hasNeverFuncCall($node)) {
+        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
             if ($hasChanged) {
                 $this->transformDocUnionVoidToUnionNull($node);
                 return $node;
