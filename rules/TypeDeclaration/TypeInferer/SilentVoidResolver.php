@@ -14,6 +14,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
@@ -27,8 +28,12 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
 final class SilentVoidResolver
@@ -48,11 +53,23 @@ final class SilentVoidResolver
      * @var \Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer
      */
     private $neverFuncCallAnalyzer;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NeverFuncCallAnalyzer $neverFuncCallAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
+     * @readonly
+     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NeverFuncCallAnalyzer $neverFuncCallAnalyzer, ValueResolver $valueResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->neverFuncCallAnalyzer = $neverFuncCallAnalyzer;
+        $this->valueResolver = $valueResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -101,20 +118,42 @@ final class SilentVoidResolver
             if ($this->isIfReturn($stmt)) {
                 return \true;
             }
-            if ($stmt instanceof Do_ && $this->isDoWithAlwaysReturnOrExit($stmt)) {
-                return \true;
+            if (!$this->isDoOrWhileWithAlwaysReturnOrExit($stmt)) {
+                continue;
             }
+            return \true;
         }
         return \false;
     }
-    private function isDoWithAlwaysReturnOrExit(Do_ $do) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\While_ $node
+     */
+    private function isFoundLoopControl($node) : bool
     {
-        if (!$this->hasStmtsAlwaysReturnOrExit($do->stmts)) {
+        $isFoundLoopControl = \false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node->stmts, static function (Node $subNode) use(&$isFoundLoopControl) {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($subNode instanceof Break_ || $subNode instanceof Continue_ || $subNode instanceof Goto_) {
+                $isFoundLoopControl = \true;
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+        });
+        return $isFoundLoopControl;
+    }
+    private function isDoOrWhileWithAlwaysReturnOrExit(Stmt $stmt) : bool
+    {
+        if (!$stmt instanceof Do_ && !$stmt instanceof While_) {
             return \false;
         }
-        return !(bool) $this->betterNodeFinder->findFirst($do->stmts, static function (Node $node) : bool {
-            return $node instanceof Break_ || $node instanceof Continue_ || $node instanceof Goto_;
-        });
+        if ($this->valueResolver->isTrue($stmt->cond)) {
+            return !$this->isFoundLoopControl($stmt);
+        }
+        if (!$this->hasStmtsAlwaysReturnOrExit($stmt->stmts)) {
+            return \false;
+        }
+        return !$this->isFoundLoopControl($stmt);
     }
     /**
      * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
