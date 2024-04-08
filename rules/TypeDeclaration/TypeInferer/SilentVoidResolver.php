@@ -85,8 +85,8 @@ final class SilentVoidResolver
     private function hasStmtsAlwaysReturnOrExit(array $stmts) : bool
     {
         foreach ($stmts as $stmt) {
-            if ($stmt instanceof Expression) {
-                $stmt = $stmt->expr;
+            if ($this->neverFuncCallAnalyzer->isWithNeverTypeExpr($stmt)) {
+                return \true;
             }
             if ($this->isStopped($stmt)) {
                 return \true;
@@ -105,7 +105,7 @@ final class SilentVoidResolver
                 return \true;
             }
         }
-        return $this->neverFuncCallAnalyzer->hasNeverFuncCall($stmts);
+        return \false;
     }
     private function isDoWithAlwaysReturnOrExit(Do_ $do) : bool
     {
@@ -137,11 +137,11 @@ final class SilentVoidResolver
         }
         return $this->hasStmtsAlwaysReturnOrExit($stmt->else->stmts);
     }
-    /**
-     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
-     */
-    private function isStopped($stmt) : bool
+    private function isStopped(Stmt $stmt) : bool
     {
+        if ($stmt instanceof Expression) {
+            $stmt = $stmt->expr;
+        }
         return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_ && $stmt->expr instanceof Expr || $stmt instanceof Yield_ || $stmt instanceof YieldFrom;
     }
     private function isSwitchWithAlwaysReturnOrExit(Switch_ $switch) : bool
