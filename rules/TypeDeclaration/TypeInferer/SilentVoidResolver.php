@@ -153,7 +153,7 @@ final class SilentVoidResolver
         if (!$this->hasStmtsAlwaysReturnOrExit($stmt->stmts)) {
             return \false;
         }
-        return !$this->isFoundLoopControl($stmt);
+        return $stmt instanceof Do_ && !$this->isFoundLoopControl($stmt);
     }
     /**
      * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
