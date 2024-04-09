@@ -83,7 +83,7 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
         $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
-        $action = Strings::replace($action, self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
+        $action = Strings::replace($action, self::SMALL_LETTER_BIG_LETTER_REGEX, '$1_$2');
         $fullPath = '';
         if ($bundle !== '') {
             $fullPath .= $bundle . '/';
@@ -109,7 +109,7 @@ final class TemplateGuesser
         if ($match === null) {
             return '';
         }
-        $controller = Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
+        $controller = Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '$1_$2');
         return \str_replace('\\', '/', $controller);
     }
 }
