@@ -40,6 +40,14 @@
         ]
     },
     "scripts": {
+        "complete-check": [
+            "@check-cs",
+            "@class-leak",
+            "@phpstan",
+            "@rector",
+            "@docs",
+            "phpunit"
+        ],
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "class-leak": "vendor\/bin\/class-leak check config src rules",

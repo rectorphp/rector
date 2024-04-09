@@ -47,7 +47,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
         }
-        $json = Json::encode($errorsJson, Json::PRETTY);
+        $json = Json::encode($errorsJson, \true);
         echo $json . \PHP_EOL;
     }
     /**

@@ -55,7 +55,7 @@ final class ListRulesCommand extends Command
         $outputFormat = $input->getOption(Option::OUTPUT_FORMAT);
         if ($outputFormat === 'json') {
             $data = ['rectors' => $rectorClasses, 'skipped-rectors' => $skippedClasses];
-            echo Json::encode($data, Json::PRETTY) . \PHP_EOL;
+            echo Json::encode($data, \true) . \PHP_EOL;
             return Command::SUCCESS;
         }
         $this->symfonyStyle->title('Loaded Rector rules');
