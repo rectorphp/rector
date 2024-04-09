@@ -83,14 +83,15 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
         $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
+        $action = Strings::replace($action, self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
         $fullPath = '';
         if ($bundle !== '') {
             $fullPath .= $bundle . '/';
         }
         if ($controller !== '') {
-            $fullPath .= $controller . '/';
+            $fullPath .= \strtolower($controller) . '/';
         }
-        return $fullPath . $action . '.html.twig';
+        return $fullPath . \strtolower($action) . '.html.twig';
     }
     private function resolveBundle(string $class, string $namespace) : string
     {
