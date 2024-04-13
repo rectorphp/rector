@@ -1,4 +1,26 @@
-# 52 Rules Overview
+# 53 Rules Overview
+
+## AddCoversClassAttributeRector
+
+Adds `#[CoversClass(...)]` attribute to test files guessing source class name.
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\AddCoversClassAttributeRector`](../rules/CodeQuality/Rector/Class_/AddCoversClassAttributeRector.php)
+
+```diff
+ class SomeService
+ {
+ }
+
+ use PHPUnit\Framework\TestCase;
++use PHPUnit\Framework\Attributes\CoversClass;
+
++#[CoversClass(SomeService::class)]
+ class SomeServiceTest extends TestCase
+ {
+ }
+```
+
+<br>
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 

@@ -1712,6 +1712,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\DataProviderArrayItemsNewLinedRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/DataProviderArrayItemsNewLinedRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddCoversClassAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddCoversClassAttributeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
