@@ -134,6 +134,13 @@ CODE_SAMPLE
             if (!$this->reflectionProvider->hasClass($className)) {
                 continue;
             }
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if ($classReflection->isInterface()) {
+                continue;
+            }
+            if ($classReflection->isTrait()) {
+                continue;
+            }
             return $className;
         }
         return null;
