@@ -179,7 +179,7 @@ CODE_SAMPLE
         if ($argValue instanceof Encapsed) {
             return null;
         }
-        if ($this->isAnErrorTypeFromParentScope($argValue, $scope)) {
+        if ($this->isAnErrorType($argValue, $nativeType, $scope)) {
             return null;
         }
         if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
@@ -217,9 +217,6 @@ CODE_SAMPLE
         if (!$isTrait) {
             return \false;
         }
-        if ($type instanceof ErrorType) {
-            return \true;
-        }
         if ($type->isExplicitMixed()) {
             return \false;
         }
@@ -228,8 +225,11 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isAnErrorTypeFromParentScope(Expr $expr, Scope $scope) : bool
+    private function isAnErrorType(Expr $expr, Type $type, Scope $scope) : bool
     {
+        if ($type instanceof ErrorType) {
+            return \true;
+        }
         $parentScope = $scope->getParentScope();
         if ($parentScope instanceof Scope) {
             return $parentScope->getType($expr) instanceof ErrorType;
