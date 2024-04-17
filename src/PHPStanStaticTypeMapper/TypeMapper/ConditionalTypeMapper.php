@@ -24,9 +24,6 @@ final class ConditionalTypeMapper implements TypeMapperInterface
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    /**
-     * @api used in autowire, @todo add to lazy container or remove
-     */
     public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
