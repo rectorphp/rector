@@ -141,6 +141,9 @@ CODE_SAMPLE
             if ($classReflection->isTrait()) {
                 continue;
             }
+            if ($classReflection->isAbstract()) {
+                continue;
+            }
             return $className;
         }
         return null;
