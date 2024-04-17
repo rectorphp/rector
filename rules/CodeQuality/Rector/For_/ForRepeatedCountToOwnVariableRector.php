@@ -13,13 +13,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use Rector\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Rector\AbstractScopeAwareRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
  */
-final class ForRepeatedCountToOwnVariableRector extends AbstractRector
+final class ForRepeatedCountToOwnVariableRector extends AbstractScopeAwareRector
 {
     /**
      * @var string
@@ -63,8 +64,11 @@ CODE_SAMPLE
      * @param For_ $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
+        if ($scope->hasVariableType(self::COUNTER_NAME)->yes()) {
+            return null;
+        }
         $countInCond = null;
         $counterVariable = new Variable(self::COUNTER_NAME);
         foreach ($node->cond as $condExpr) {
