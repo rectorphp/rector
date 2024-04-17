@@ -7,14 +7,8 @@ use RectorPrefix202404\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
-use Rector\PhpParser\Node\Value\ValueResolver;
 final class RegexMatcher
 {
-    /**
-     * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
-     */
-    private $valueResolver;
     /**
      * @var string
      * @see https://regex101.com/r/Ok4wuE/1
@@ -30,20 +24,13 @@ final class RegexMatcher
      * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const ALL_MODIFIERS_VALUES = ['i', 'm', 's', 'x', 'e', 'A', 'D', 'S', 'U', 'X', 'J', 'u'];
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_|null
      */
     public function resolvePatternExpressionWithoutEIfFound(Expr $expr)
     {
         if ($expr instanceof String_) {
-            $pattern = $this->valueResolver->getValue($expr);
-            if (!\is_string($pattern)) {
-                return null;
-            }
+            $pattern = $expr->value;
             $delimiter = $pattern[0];
             switch ($delimiter) {
                 case '(':
@@ -67,8 +54,8 @@ final class RegexMatcher
             if (\strpos($modifiers, 'e') === \false) {
                 return null;
             }
-            $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
-            return new String_($patternWithoutE);
+            $expr->value = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
+            return $expr;
         }
         if ($expr instanceof Concat) {
             return $this->matchConcat($expr);
