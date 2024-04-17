@@ -348,6 +348,12 @@ final class LazyContainerFactory
         $rectorConfig->afterResolving(NameScopeFactory::class, static function (NameScopeFactory $nameScopeFactory, Container $container) : void {
             $nameScopeFactory->autowire($container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class));
         });
+        $rectorConfig->afterResolving(TypeMapperInterface::class, static function (TypeMapperInterface $typeMapper, Container $container) : void {
+            if (!\method_exists($typeMapper, 'autowire')) {
+                return;
+            }
+            $typeMapper->autowire($container->make(PHPStanStaticTypeMapper::class));
+        });
         $rectorConfig->afterResolving(ArrayTypeMapper::class, static function (ArrayTypeMapper $arrayTypeMapper, Container $container) : void {
             $arrayTypeMapper->autowire($container->make(PHPStanStaticTypeMapper::class));
         });
