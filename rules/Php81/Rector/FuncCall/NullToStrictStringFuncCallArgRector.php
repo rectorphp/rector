@@ -6,7 +6,6 @@ namespace Rector\Php81\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,7 +15,10 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\Native\NativeParameterWithPhpDocsReflection;
+use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -114,9 +116,14 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         $isTrait = $classReflection instanceof ClassReflection && $classReflection->isTrait();
+        $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        if (!$functionReflection instanceof FunctionReflection) {
+            return null;
+        }
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $node, $scope);
         $isChanged = \false;
         foreach ($positions as $position) {
-            $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position, $isTrait, $scope);
+            $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position, $isTrait, $scope, $parametersAcceptor);
             if ($result instanceof Node) {
                 $node = $result;
                 $isChanged = \true;
@@ -155,7 +162,7 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @param int|string $position
      */
-    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position, bool $isTrait, Scope $scope) : ?FuncCall
+    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor) : ?FuncCall
     {
         if (!isset($args[$position])) {
             return null;
@@ -186,8 +193,12 @@ CODE_SAMPLE
         if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
             return null;
         }
-        if ($type instanceof MixedType && $args[$position]->value instanceof ArrayDimFetch) {
-            return null;
+        $parameter = $parametersAcceptor->getParameters()[$position] ?? null;
+        if ($parameter instanceof NativeParameterWithPhpDocsReflection && $parameter->getType() instanceof UnionType) {
+            $parameterType = $parameter->getType();
+            if (!$this->isValidUnionType($parameterType)) {
+                return null;
+            }
         }
         $args[$position]->value = new CastString_($argValue);
         $funcCall->args = $args;
