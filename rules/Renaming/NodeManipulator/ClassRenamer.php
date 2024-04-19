@@ -121,7 +121,7 @@ final class ClassRenamer
             $classReflection = $this->reflectionProvider->getClass($newName);
             return $classReflection->isInterface();
         }
-        return \false;
+        return $fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true;
     }
     /**
      * @param array<string, string> $oldToNewClasses
