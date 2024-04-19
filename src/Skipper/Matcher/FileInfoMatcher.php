@@ -66,10 +66,6 @@ final class FileInfoMatcher
         if ($this->fnmatcher->match($ignoredPath, $filePath)) {
             return \true;
         }
-        // realpathMatcher cannot resolve wildcards -> return early to prevent unnecessary IO
-        if (\strpos($ignoredPath, '*') !== \false) {
-            return \false;
-        }
         return $this->realpathMatcher->match($ignoredPath, $filePath);
     }
 }
