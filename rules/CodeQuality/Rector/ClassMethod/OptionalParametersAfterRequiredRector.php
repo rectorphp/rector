@@ -4,11 +4,14 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
@@ -81,41 +84,49 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, New_::class, MethodCall::class, StaticCall::class];
+        return [ClassMethod::class, Function_::class, New_::class, MethodCall::class, StaticCall::class, FuncCall::class];
     }
     /**
-     * @param ClassMethod|New_|MethodCall|StaticCall $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|null|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @param ClassMethod|Function_|New_|MethodCall|StaticCall|FuncCall $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node, $scope);
+        if ($node instanceof ClassMethod || $node instanceof Function_) {
+            return $this->refactorClassMethodOrFunction($node, $scope);
         }
         if ($node instanceof New_) {
             return $this->refactorNew($node, $scope);
         }
-        return $this->refactorMethodCall($node, $scope);
+        return $this->refactorMethodCallOrFuncCall($node, $scope);
     }
-    private function refactorClassMethod(ClassMethod $classMethod, Scope $scope) : ?ClassMethod
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     */
+    private function refactorClassMethodOrFunction($node, Scope $scope)
     {
-        if ($classMethod->params === []) {
+        if ($node->params === []) {
             return null;
         }
-        if ($classMethod->getAttribute(self::HAS_SWAPPED_PARAMS, \false) === \true) {
+        if ($node->getAttribute(self::HAS_SWAPPED_PARAMS, \false) === \true) {
             return null;
         }
-        $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod, $scope);
-        if (!$classMethodReflection instanceof MethodReflection) {
+        if ($node instanceof ClassMethod) {
+            $reflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($node, $scope);
+        } else {
+            $reflection = $this->reflectionResolver->resolveFunctionReflectionFromFunction($node, $scope);
+        }
+        if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($classMethodReflection, $classMethod, $scope);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($reflection, $node, $scope);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $classMethod->params = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
-        $classMethod->setAttribute(self::HAS_SWAPPED_PARAMS, \true);
-        return $classMethod;
+        $node->params = $this->argumentSorter->sortArgsByExpectedParamOrder($node->params, $expectedArgOrParamOrder);
+        $node->setAttribute(self::HAS_SWAPPED_PARAMS, \true);
+        return $node;
     }
     private function refactorNew(New_ $new, Scope $scope) : ?New_
     {
@@ -137,39 +148,43 @@ CODE_SAMPLE
         return $new;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $methodCall
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall|null
      */
-    private function refactorMethodCall($methodCall, Scope $scope)
+    private function refactorMethodCallOrFuncCall($node, Scope $scope)
     {
-        if ($methodCall->isFirstClassCallable()) {
+        if ($node->isFirstClassCallable()) {
             return null;
         }
-        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
-        if (!$methodReflection instanceof MethodReflection) {
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall, $scope);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($reflection, $node, $scope);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->getArgs(), $expectedArgOrParamOrder);
-        if ($methodCall->args === $newArgs) {
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($node->getArgs(), $expectedArgOrParamOrder);
+        if ($node->args === $newArgs) {
             return null;
         }
-        $methodCall->args = $newArgs;
-        return $methodCall;
+        $node->args = $newArgs;
+        return $node;
     }
     /**
      * @return int[]|null
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
      */
-    private function resolveExpectedArgParamOrderIfDifferent(MethodReflection $methodReflection, $node, Scope $scope) : ?array
+    private function resolveExpectedArgParamOrderIfDifferent($reflection, $node, Scope $scope) : ?array
     {
-        if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
+        if ($reflection instanceof MethodReflection && $this->vendorLocationDetector->detectMethodReflection($reflection)) {
             return null;
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $node, $scope);
+        if ($reflection instanceof FunctionReflection && $this->vendorLocationDetector->detectFunctionReflection($reflection)) {
+            return null;
+        }
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($reflection, $node, $scope);
         $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromParametersAcceptor($parametersAcceptor);
         if ($expectedParameterReflections === $parametersAcceptor->getParameters()) {
             return null;
