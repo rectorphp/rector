@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php80\NodeResolver\ArgumentSorter;
@@ -178,6 +179,9 @@ CODE_SAMPLE
      */
     private function resolveExpectedArgParamOrderIfDifferent($reflection, $node, Scope $scope) : ?array
     {
+        if ($reflection instanceof NativeFunctionReflection) {
+            return null;
+        }
         if ($reflection instanceof MethodReflection && $this->vendorLocationDetector->detectMethodReflection($reflection)) {
             return null;
         }
