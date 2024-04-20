@@ -137,12 +137,15 @@ CODE_SAMPLE
         }
         $configVariable = $this->createConfigVariable($configClass);
         $stmts = $this->createMethodCallStmts($extensionKeyAndConfiguration->getArray(), $configVariable);
+        if ($stmts === null) {
+            return null;
+        }
         return $this->symfonyClosureFactory->create($configClass, $node, $stmts);
     }
     /**
      * @return array<Expression<MethodCall>>
      */
-    private function createMethodCallStmts(Array_ $configurationArray, Variable $configVariable) : array
+    private function createMethodCallStmts(Array_ $configurationArray, Variable $configVariable) : ?array
     {
         $methodCallStmts = [];
         $configurationValues = $this->valueResolver->getValue($configurationArray);
@@ -179,6 +182,9 @@ CODE_SAMPLE
                     $currentConfigCaller = new MethodCall($configVariable, $methodCallName);
                 } else {
                     $currentConfigCaller = $configVariable;
+                }
+                if (!\is_array($value)) {
+                    return null;
                 }
                 foreach ($value as $itemName => $itemConfiguration) {
                     if ($nested && \is_array($itemConfiguration)) {
