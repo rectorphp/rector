@@ -15,7 +15,10 @@ use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransforme
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\IdAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\IdColumnAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\IdGeneratorAttributeTransformer;
+use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\InverseJoinColumnAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\JoinColumnAttributeTransformer;
+use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\JoinTableAttributeTransformer;
+use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\ManyToManyAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\ManyToOneAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\OneToManyAttributeTransformer;
 use Rector\Doctrine\CodeQuality\AttributeTransformer\PropertyAttributeTransformer\OrderByAttributeTransformer;
@@ -38,9 +41,12 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->singleton(IdAttributeTransformer::class);
     $rectorConfig->singleton(IdColumnAttributeTransformer::class);
     $rectorConfig->singleton(IdGeneratorAttributeTransformer::class);
+    $rectorConfig->singleton(ManyToManyAttributeTransformer::class);
     $rectorConfig->singleton(ManyToOneAttributeTransformer::class);
     $rectorConfig->singleton(OneToManyAttributeTransformer::class);
+    $rectorConfig->singleton(JoinTableAttributeTransformer::class);
     $rectorConfig->singleton(JoinColumnAttributeTransformer::class);
+    $rectorConfig->singleton(InverseJoinColumnAttributeTransformer::class);
     $rectorConfig->singleton(OrderByAttributeTransformer::class);
     $rectorConfig->when(YamlToAttributeTransformer::class)->needs('$classAttributeTransformers')->giveTagged(ClassAttributeTransformerInterface::class);
     $rectorConfig->when(YamlToAttributeTransformer::class)->needs('$propertyAttributeTransformers')->giveTagged(PropertyAttributeTransformerInterface::class);

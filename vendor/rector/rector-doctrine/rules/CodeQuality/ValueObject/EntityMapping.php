@@ -54,6 +54,15 @@ final class EntityMapping
      * @return array<string, mixed>|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
+    public function matchManyToManyPropertyMapping($property) : ?array
+    {
+        $propertyName = $this->getPropertyName($property);
+        return $this->entityMapping['manyToMany'][$propertyName] ?? null;
+    }
+    /**
+     * @return array<string, mixed>|null
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     */
     public function matchManyToOnePropertyMapping($property) : ?array
     {
         $propertyName = $this->getPropertyName($property);
