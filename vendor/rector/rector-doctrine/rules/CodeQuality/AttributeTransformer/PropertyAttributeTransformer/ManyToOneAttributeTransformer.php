@@ -33,7 +33,7 @@ final class ManyToOneAttributeTransformer implements PropertyAttributeTransforme
             return;
         }
         // handled by another mapper
-        unset($manyToOneMapping['joinColumns']);
+        unset($manyToOneMapping['joinColumn'], $manyToOneMapping['joinColumns']);
         // non existing
         unset($manyToOneMapping['nullable']);
         $args = $this->nodeFactory->createArgs($manyToOneMapping);
