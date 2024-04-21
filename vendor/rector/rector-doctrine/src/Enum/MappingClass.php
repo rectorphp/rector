@@ -56,6 +56,10 @@ final class MappingClass
     /**
      * @var string
      */
+    public const INDEX = 'Doctrine\\ORM\\Mapping\\Index';
+    /**
+     * @var string
+     */
     public const MANY_TO_ONE = 'Doctrine\\ORM\\Mapping\\ManyToOne';
     /**
      * @var string

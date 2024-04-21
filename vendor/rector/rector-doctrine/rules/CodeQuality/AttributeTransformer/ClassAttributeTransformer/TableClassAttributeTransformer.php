@@ -37,11 +37,19 @@ final class TableClassAttributeTransformer implements ClassAttributeTransformerI
             $args[] = AttributeFactory::createNamedArg(new String_($table), 'name');
         }
         $class->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
-        $uniqueConstraints = $classMapping['uniqueConstraints'] ?? [];
-        foreach ($uniqueConstraints as $name => $uniqueConstraint) {
-            $uniqueConstraint = \array_merge(['name' => $name], $uniqueConstraint);
-            $args = $this->nodeFactory->createArgs($uniqueConstraint);
-            $class->attrGroups[] = AttributeFactory::createGroup(MappingClass::UNIQUE_CONSTRAINT, $args);
+        $this->addIndexes($classMapping['indexes'] ?? [], $class, MappingClass::INDEX);
+        $this->addIndexes($classMapping['uniqueConstraints'] ?? [], $class, MappingClass::UNIQUE_CONSTRAINT);
+    }
+    /**
+     * @param array<string, array<string, mixed>> $mapping
+     * @param MappingClass::* $attribute
+     */
+    private function addIndexes(array $mapping, Class_ $class, string $attribute) : void
+    {
+        foreach ($mapping as $name => $values) {
+            $values = \array_merge(['name' => $name], $values);
+            $args = $this->nodeFactory->createArgs($values);
+            $class->attrGroups[] = AttributeFactory::createGroup($attribute, $args);
         }
     }
     public function getClassName() : string
