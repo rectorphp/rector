@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -29,7 +30,7 @@ final class CallCollectionAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param StaticCall[]|MethodCall[] $calls
+     * @param StaticCall[]|MethodCall[]|NullsafeMethodCall[] $calls
      */
     public function isExists(array $calls, string $classMethodName, string $className) : bool
     {
@@ -52,14 +53,14 @@ final class CallCollectionAnalyzer
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
      */
     private function isSelfStatic($call) : bool
     {
         return $call instanceof StaticCall && $call->class instanceof Name && \in_array($call->class->toString(), [ObjectReference::SELF, ObjectReference::STATIC], \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
      */
     private function shouldSkip($call, string $classMethodName) : bool
     {

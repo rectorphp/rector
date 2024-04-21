@@ -88,11 +88,15 @@ final class IsClassMethodUsedAnalyzer
         if ($this->isClassMethodCalledInLocalMethodCall($class, $classMethodName)) {
             return \true;
         }
-        // 2. direct static calls
+        // 2. direct null-safe calls
+        if ($this->isClassMethodCalledInLocalNullsafeMethodCall($class, $classMethodName)) {
+            return \true;
+        }
+        // 3. direct static calls
         if ($this->isClassMethodUsedInLocalStaticCall($class, $classMethodName)) {
             return \true;
         }
-        // 3. magic array calls!
+        // 4. magic array calls!
         if ($this->isClassMethodCalledInLocalArrayCall($class, $classMethod, $scope)) {
             return \true;
         }
@@ -111,6 +115,13 @@ final class IsClassMethodUsedAnalyzer
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
+        return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
+    }
+    private function isClassMethodCalledInLocalNullsafeMethodCall(Class_ $class, string $classMethodName) : bool
+    {
+        $className = (string) $this->nodeNameResolver->getName($class);
+        /** @var Node\Expr\NullsafeMethodCall[] $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, Node\Expr\NullsafeMethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
     }
     private function isInArrayMap(Class_ $class, Array_ $array) : bool
