@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -96,13 +97,16 @@ final class PropertyFetchFinder
         return $this->findPropertyFetchesInClassLike($class, $nodes, $propertyName, $hasTrait, $scope);
     }
     /**
-     * @return PropertyFetch[]|StaticPropertyFetch[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]|NullsafePropertyFetch[]
      */
     public function findLocalPropertyFetchesByName(Class_ $class, string $paramName) : array
     {
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $foundPropertyFetches */
+        /** @var PropertyFetch[]|StaticPropertyFetch[]|NullsafePropertyFetch[] $foundPropertyFetches */
         $foundPropertyFetches = $this->betterNodeFinder->find($class->getMethods(), function (Node $subNode) use($paramName) : bool {
             if ($subNode instanceof PropertyFetch) {
+                return $this->propertyFetchAnalyzer->isLocalPropertyFetchName($subNode, $paramName);
+            }
+            if ($subNode instanceof NullsafePropertyFetch) {
                 return $this->propertyFetchAnalyzer->isLocalPropertyFetchName($subNode, $paramName);
             }
             if ($subNode instanceof StaticPropertyFetch) {

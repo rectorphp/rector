@@ -6,6 +6,7 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -67,10 +68,10 @@ final class PropertyFetchAnalyzer
     }
     public function isLocalPropertyFetch(Node $node) : bool
     {
-        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch) {
+        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch && !$node instanceof NullsafePropertyFetch) {
             return \false;
         }
-        $variableType = $node instanceof PropertyFetch ? $this->nodeTypeResolver->getType($node->var) : $this->nodeTypeResolver->getType($node->class);
+        $variableType = $node instanceof StaticPropertyFetch ? $this->nodeTypeResolver->getType($node->class) : $this->nodeTypeResolver->getType($node->var);
         if ($variableType instanceof ObjectType) {
             $classReflection = $this->reflectionResolver->resolveClassReflection($node);
             if ($classReflection instanceof ClassReflection) {
@@ -85,7 +86,7 @@ final class PropertyFetchAnalyzer
     }
     public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName) : bool
     {
-        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch) {
+        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch && !$node instanceof NullsafePropertyFetch) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->name, $desiredPropertyName)) {

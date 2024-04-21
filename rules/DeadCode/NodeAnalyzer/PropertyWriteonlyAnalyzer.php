@@ -5,6 +5,7 @@ namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
@@ -24,7 +25,7 @@ final class PropertyWriteonlyAnalyzer
     public function hasClassDynamicPropertyNames(Class_ $class) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($class, static function (Node $node) : bool {
-            if (!$node instanceof PropertyFetch) {
+            if (!$node instanceof PropertyFetch && !$node instanceof NullsafePropertyFetch) {
                 return \false;
             }
             // has dynamic name - could be anything
@@ -34,7 +35,7 @@ final class PropertyWriteonlyAnalyzer
     /**
      * The property fetches are always only assigned to, nothing else
      *
-     * @param array<PropertyFetch|StaticPropertyFetch> $propertyFetches
+     * @param array<PropertyFetch|StaticPropertyFetch|NullsafePropertyFetch> $propertyFetches
      */
     public function arePropertyFetchesExclusivelyBeingAssignedTo(array $propertyFetches) : bool
     {
