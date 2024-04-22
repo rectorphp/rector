@@ -1198,12 +1198,12 @@ Refactor deprecated `withConsecutive()` to `willReturnCallback()` structure
 -                [1, 2],
 -                [3, 4],
 -            );
-+            ->willReturnCallback(function () use ($matcher) {
-+                return match ($matcher->numberOfInvocations()) {
-+                    1 => [1, 2],
-+                    2 => [3, 4]
++            ->willReturnCallback(function ($parameters) use ($matcher) {
++                match ($matcher->numberOfInvocations()) {
++                    1 => self::assertEquals([1, 2], $parameters),
++                    2 => self::assertEquals([3, 4], $parameters),
 +                };
-+        });
++            });
 
 -        $this->userServiceMock->expects(self::exactly(2))
 +        $matcher = self::exactly(2);
@@ -1214,12 +1214,12 @@ Refactor deprecated `withConsecutive()` to `willReturnCallback()` structure
 -                [1, 2],
 -                [3, 4],
 -            );
-+            ->willReturnCallback(function () use ($matcher) {
-+                return match ($matcher->numberOfInvocations()) {
-+                    1 => [1, 2],
-+                    2 => [3, 4]
-+                };
-+        });
++            ->willReturnCallback(function ($parameters) use ($matcher) {
++                match ($matcher->numberOfInvocations()) {
++                    1 => self::assertEquals([1, 2], $parameters),
++                    2 => self::assertEquals([3, 4], $parameters),
++                }
++            });
      }
  }
 ```
