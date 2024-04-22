@@ -93,7 +93,7 @@ CODE_SAMPLE
         if (!isset(self::CAST_CLASS_TO_NODE_TYPE[$nodeClass])) {
             return null;
         }
-        $nodeType = $this->getType($node->expr);
+        $nodeType = $this->nodeTypeResolver->getNativeType($node->expr);
         if ($nodeType instanceof MixedType) {
             return null;
         }
