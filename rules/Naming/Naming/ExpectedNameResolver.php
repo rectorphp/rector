@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
+use DateTimeInterface;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -93,6 +94,9 @@ final class ExpectedNameResolver
         }
         $className = $this->nodeNameResolver->getName($new->class);
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
+        if ($fullyQualifiedObjectType->isInstanceOf(DateTimeInterface::class)->yes()) {
+            return null;
+        }
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
         if (!$expectedName instanceof ExpectedName) {
             return null;
