@@ -2060,6 +2060,7 @@ class ComposerStaticInit005507a96a37a412a8adf9cfaae1e621
         'Rector\\Php72\\Rector\\FuncCall\\StringsAssertNakedRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/FuncCall/StringsAssertNakedRector.php',
         'Rector\\Php72\\Rector\\Unset_\\UnsetCastRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/Unset_/UnsetCastRector.php',
         'Rector\\Php72\\Rector\\While_\\WhileEachToForeachRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/While_/WhileEachToForeachRector.php',
+        'Rector\\Php72\\ValueObject\\ListAndEach' => __DIR__ . '/../..' . '/rules/Php72/ValueObject/ListAndEach.php',
         'Rector\\Php73\\Rector\\BooleanOr\\IsCountableRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/BooleanOr/IsCountableRector.php',
         'Rector\\Php73\\Rector\\ConstFetch\\SensitiveConstantNameRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/ConstFetch/SensitiveConstantNameRector.php',
         'Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/ArrayKeyFirstLastRector.php',

@@ -1841,6 +1841,7 @@ return array(
     'Rector\\Php72\\Rector\\FuncCall\\StringsAssertNakedRector' => $baseDir . '/rules/Php72/Rector/FuncCall/StringsAssertNakedRector.php',
     'Rector\\Php72\\Rector\\Unset_\\UnsetCastRector' => $baseDir . '/rules/Php72/Rector/Unset_/UnsetCastRector.php',
     'Rector\\Php72\\Rector\\While_\\WhileEachToForeachRector' => $baseDir . '/rules/Php72/Rector/While_/WhileEachToForeachRector.php',
+    'Rector\\Php72\\ValueObject\\ListAndEach' => $baseDir . '/rules/Php72/ValueObject/ListAndEach.php',
     'Rector\\Php73\\Rector\\BooleanOr\\IsCountableRector' => $baseDir . '/rules/Php73/Rector/BooleanOr/IsCountableRector.php',
     'Rector\\Php73\\Rector\\ConstFetch\\SensitiveConstantNameRector' => $baseDir . '/rules/Php73/Rector/ConstFetch/SensitiveConstantNameRector.php',
     'Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector' => $baseDir . '/rules/Php73/Rector/FuncCall/ArrayKeyFirstLastRector.php',

@@ -6,11 +6,10 @@ namespace Rector\Php72\Rector\While_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\NodeManipulator\AssignManipulator;
+use Rector\Php72\ValueObject\ListAndEach;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -75,37 +74,31 @@ CODE_SAMPLE
         if (!$node->cond instanceof Assign) {
             return null;
         }
-        /** @var Assign $assignNode */
-        $assignNode = $node->cond;
-        if (!$this->assignManipulator->isListToEachAssign($assignNode)) {
+        $listAndEach = $this->assignManipulator->matchListAndEach($node->cond);
+        if (!$listAndEach instanceof ListAndEach) {
             return null;
         }
-        /** @var FuncCall $eachFuncCall */
-        $eachFuncCall = $assignNode->expr;
-        if ($eachFuncCall->isFirstClassCallable()) {
-            return null;
-        }
-        /** @var List_ $listNode */
-        $listNode = $assignNode->var;
+        $eachFuncCall = $listAndEach->getEachFuncCall();
+        $list = $listAndEach->getList();
         if (!isset($eachFuncCall->getArgs()[0])) {
             return null;
         }
         $firstArg = $eachFuncCall->getArgs()[0];
-        $foreachedExpr = \count($listNode->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$firstArg]) : $firstArg->value;
-        $arrayItem = \array_pop($listNode->items);
+        $foreachedExpr = \count($list->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$firstArg]) : $firstArg->value;
+        $arrayItem = \array_pop($list->items);
         $isTrailingCommaLast = \false;
         if (!$arrayItem instanceof ArrayItem) {
             $foreachedExpr = $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]);
             /** @var ArrayItem $arrayItem */
-            $arrayItem = \current($listNode->items);
+            $arrayItem = \current($list->items);
             $isTrailingCommaLast = \true;
         }
         $foreach = new Foreach_($foreachedExpr, $arrayItem, ['stmts' => $node->stmts]);
         $this->mirrorComments($foreach, $node);
         // is key included? add it to foreach
-        if ($listNode->items !== []) {
+        if ($list->items !== []) {
             /** @var ArrayItem|null $keyItem */
-            $keyItem = \array_pop($listNode->items);
+            $keyItem = \array_pop($list->items);
             if ($keyItem instanceof ArrayItem && !$isTrailingCommaLast) {
                 $foreach->keyVar = $keyItem->value;
             }
