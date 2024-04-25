@@ -3,24 +3,40 @@
 declare (strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\FileSystem\FilePathHelper;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Reflection\ReflectionResolver;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
      * @readonly
+     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+    /**
+     * @readonly
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
     /**
      * @readonly
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
@@ -36,9 +52,11 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
      */
     private $magicClassMethodAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->returnTypeInferer = $returnTypeInferer;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->filePathHelper = $filePathHelper;
         $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
@@ -65,7 +83,37 @@ final class ClassMethodReturnTypeOverrideGuard
         if (!$this->isReturnTypeChangeAllowed($classMethod, $scope)) {
             return \true;
         }
-        return $classMethod->isFinal();
+        if ($classMethod->isFinal()) {
+            return \false;
+        }
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+        if ($childrenClassReflections === []) {
+            return \false;
+        }
+        if ($classMethod->returnType instanceof Node) {
+            return \true;
+        }
+        $returnType = $this->returnTypeInferer->inferFunctionLike($classMethod);
+        return $this->hasChildrenDifferentTypeClassMethod($classMethod, $childrenClassReflections, $returnType);
+    }
+    /**
+     * @param ClassReflection[] $childrenClassReflections
+     */
+    private function hasChildrenDifferentTypeClassMethod(ClassMethod $classMethod, array $childrenClassReflections, Type $returnType) : bool
+    {
+        $methodName = $classMethod->name->toString();
+        foreach ($childrenClassReflections as $childClassReflection) {
+            $methodReflection = $childClassReflection->getNativeMethod($methodName);
+            if (!$methodReflection instanceof PhpMethodReflection) {
+                continue;
+            }
+            $parametersAcceptor = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
+            $childReturnType = $parametersAcceptor->getNativeReturnType();
+            if (!$returnType->isSuperTypeOf($childReturnType)->yes()) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function isReturnTypeChangeAllowed(ClassMethod $classMethod, Scope $scope) : bool
     {

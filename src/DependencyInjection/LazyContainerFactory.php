@@ -289,6 +289,9 @@ final class LazyContainerFactory
             $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();
         });
+        $rectorConfig->afterResolving(DynamicSourceLocatorProvider::class, static function (DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, Container $container) : void {
+            $dynamicSourceLocatorProvider->autowire($container->make(ReflectionProvider::class));
+        });
         // resetables
         $rectorConfig->tag(DynamicSourceLocatorProvider::class, ResetableInterface::class);
         $rectorConfig->tag(RenamedClassesDataCollector::class, ResetableInterface::class);
