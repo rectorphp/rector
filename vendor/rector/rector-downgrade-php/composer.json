@@ -19,7 +19,7 @@
         "symplify\/phpstan-rules": "^12.4",
         "symplify\/rule-doc-generator": "^12.0",
         "symplify\/vendor-patches": "^11.2",
-        "tomasvotruba\/class-leak": "^0.2",
+        "tomasvotruba\/class-leak": "^0.2.13",
         "tracy\/tracy": "^2.10"
     },
     "autoload": {

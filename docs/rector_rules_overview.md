@@ -5459,10 +5459,10 @@ PHPUnit test case will be finalized
 - class: [`Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector`](../rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php)
 
 ```diff
--use PHPUnit\Framework\TestCase;
-+final use PHPUnit\Framework\TestCase;
+ use PHPUnit\Framework\TestCase;
 
- class SomeClass extends TestCase
+-class SomeClass extends TestCase
++final class SomeClass extends TestCase
  {
  }
 ```

@@ -21,7 +21,7 @@
         "symplify\/phpstan-rules": "^11.4",
         "symplify\/rule-doc-generator": "^12.1",
         "symplify\/vendor-patches": "^11.3",
-        "tomasvotruba\/class-leak": "^0.2.8",
+        "tomasvotruba\/class-leak": "^0.2.13",
         "tomasvotruba\/unused-public": "^0.3",
         "tracy\/tracy": "^2.10"
     },

@@ -41,9 +41,9 @@ class SomeClass extends TestCase
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SomeClass extends TestCase
+final class SomeClass extends TestCase
 {
 }
 CODE_SAMPLE

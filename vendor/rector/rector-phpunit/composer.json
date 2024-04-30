@@ -17,7 +17,7 @@
         "phpstan\/extension-installer": "^1.3",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "symplify\/vendor-patches": "^11.2",
-        "tomasvotruba\/class-leak": "^0.2",
+        "tomasvotruba\/class-leak": "^0.2.13",
         "tracy\/tracy": "^2.10"
     },
     "autoload": {
@@ -50,7 +50,7 @@
         ],
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
-        "class-leak": "vendor\/bin\/class-leak check config src rules --skip-type=\"Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddCoversClassAttributeRector\"",
+        "class-leak": "vendor\/bin\/class-leak check config src rules --skip-suffix \"Rector\"",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "rector": "vendor\/bin\/rector process --ansi",
         "docs": "vendor\/bin\/rule-doc-generator generate src rules --output-file docs\/rector_rules_overview.md --ansi"
