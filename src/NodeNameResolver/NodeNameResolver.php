@@ -5,7 +5,10 @@ namespace Rector\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -78,12 +81,6 @@ final class NodeNameResolver
      */
     public function isName($node, string $name) : bool
     {
-        if ($node instanceof MethodCall) {
-            return \false;
-        }
-        if ($node instanceof StaticCall) {
-            return \false;
-        }
         $nodes = \is_array($node) ? $node : [$node];
         foreach ($nodes as $node) {
             if ($this->isSingleName($node, $name)) {
@@ -101,10 +98,7 @@ final class NodeNameResolver
         if ($name === '') {
             return \false;
         }
-        if ($node instanceof MethodCall) {
-            return \false;
-        }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof CallLike && !$node instanceof FuncCall) {
             return \false;
         }
         $resolvedName = $this->getName($node);
@@ -139,7 +133,7 @@ final class NodeNameResolver
         if (\is_string($namespacedName)) {
             return $namespacedName;
         }
-        if (($node instanceof MethodCall || $node instanceof StaticCall) && $this->isCallOrIdentifier($node->name)) {
+        if (($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof NullsafeMethodCall) && $this->isCallOrIdentifier($node->name)) {
             return null;
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
@@ -224,7 +218,7 @@ final class NodeNameResolver
     }
     private function isSingleName(Node $node, string $desiredName) : bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof CallLike && !$node instanceof FuncCall) {
             // method call cannot have a name, only the variable or method name
             return \false;
         }
