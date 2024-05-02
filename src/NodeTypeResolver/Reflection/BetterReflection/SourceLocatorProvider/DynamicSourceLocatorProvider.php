@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
 
-use PHPStan\BetterReflection\Identifier\IdentifierType;
 use PHPStan\BetterReflection\Reflector\DefaultReflector;
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
@@ -118,10 +117,9 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
             return;
         }
         $reflector = new DefaultReflector($aggregateSourceLocator);
-        $identifierClass = new IdentifierType(IdentifierType::IDENTIFIER_CLASS);
         // trigger collect "classes" on get class on locate identifier
         try {
-            $reflections = $aggregateSourceLocator->locateIdentifiersByType($reflector, $identifierClass);
+            $reflections = $reflector->reflectAllClasses();
             foreach ($reflections as $reflection) {
                 // make 'classes' collection
                 try {
