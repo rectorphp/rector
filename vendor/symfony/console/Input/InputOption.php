@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202404\Symfony\Component\Console\Input;
+namespace RectorPrefix202405\Symfony\Component\Console\Input;
 
-use RectorPrefix202404\Symfony\Component\Console\Command\Command;
-use RectorPrefix202404\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202404\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202404\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix202404\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202404\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202405\Symfony\Component\Console\Command\Command;
+use RectorPrefix202405\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202405\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202405\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202405\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202405\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line option.
  *

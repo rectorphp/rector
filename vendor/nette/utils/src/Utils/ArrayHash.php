@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202404\Nette\Utils;
+namespace RectorPrefix202405\Nette\Utils;
 
-use RectorPrefix202404\Nette;
+use RectorPrefix202405\Nette;
 /**
  * Provides objects to work as array.
  * @template T

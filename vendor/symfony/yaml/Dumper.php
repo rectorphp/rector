@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202404\Symfony\Component\Yaml;
+namespace RectorPrefix202405\Symfony\Component\Yaml;
 
-use RectorPrefix202404\Symfony\Component\Yaml\Tag\TaggedValue;
+use RectorPrefix202405\Symfony\Component\Yaml\Tag\TaggedValue;
 /**
  * Dumper dumps PHP variables to YAML strings.
  *

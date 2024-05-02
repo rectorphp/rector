@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202404\Illuminate\Contracts\Pipeline;
+namespace RectorPrefix202405\Illuminate\Contracts\Pipeline;
 
 interface Hub
 {

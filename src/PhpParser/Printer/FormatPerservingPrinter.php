@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Printer;
 
-use RectorPrefix202404\Nette\Utils\FileSystem;
+use RectorPrefix202405\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\ValueObject\Application\File;
 /**

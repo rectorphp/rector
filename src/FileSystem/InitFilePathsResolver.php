@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\FileSystem;
 
-use RectorPrefix202404\Symfony\Component\Finder\Finder;
-use RectorPrefix202404\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202405\Symfony\Component\Finder\Finder;
+use RectorPrefix202405\Symfony\Component\Finder\SplFileInfo;
 /**
  * @see \Rector\Tests\FileSystem\InitFilePathsResolver\InitFilePathsResolverTest
  */

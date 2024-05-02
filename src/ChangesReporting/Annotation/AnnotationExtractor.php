@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Annotation;
 
-use RectorPrefix202404\Nette\Utils\Strings;
+use RectorPrefix202405\Nette\Utils\Strings;
 use Rector\Contract\Rector\RectorInterface;
 use ReflectionClass;
 /**

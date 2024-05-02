@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202404\OndraM\CiDetector\Ci;
+namespace RectorPrefix202405\OndraM\CiDetector\Ci;
 
-use RectorPrefix202404\OndraM\CiDetector\Env;
+use RectorPrefix202405\OndraM\CiDetector\Env;
 /**
  * Unified adapter to retrieve environment variables from current continuous integration server
  */

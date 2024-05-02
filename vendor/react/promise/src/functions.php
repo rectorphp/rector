@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202404\React\Promise;
+namespace RectorPrefix202405\React\Promise;
 
 /**
  * Creates a promise for the supplied `$promiseOrValue`.

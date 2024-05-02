@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Configuration\Levels;
 
 use Rector\Contract\Rector\RectorInterface;
-use RectorPrefix202404\Webmozart\Assert\Assert;
+use RectorPrefix202405\Webmozart\Assert\Assert;
 final class LevelRulesResolver
 {
     /**

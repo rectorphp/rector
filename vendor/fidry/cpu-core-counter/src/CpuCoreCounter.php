@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202404\Fidry\CpuCoreCounter;
+namespace RectorPrefix202405\Fidry\CpuCoreCounter;
 
-use RectorPrefix202404\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
-use RectorPrefix202404\Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use RectorPrefix202405\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use RectorPrefix202405\Fidry\CpuCoreCounter\Finder\FinderRegistry;
 final class CpuCoreCounter
 {
     /**

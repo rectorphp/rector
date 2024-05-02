@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202404\Illuminate\Contracts\Broadcasting;
+namespace RectorPrefix202405\Illuminate\Contracts\Broadcasting;
 
 interface ShouldBeUnique
 {

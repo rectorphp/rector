@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202404\Illuminate\Contracts\View;
+namespace RectorPrefix202405\Illuminate\Contracts\View;
 
 interface Factory
 {

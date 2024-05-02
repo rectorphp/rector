@@ -5,12 +5,12 @@ namespace Rector\Console\Command;
 
 use Rector\PhpParser\Parser\SimplePhpParser;
 use Rector\Util\NodePrinter;
-use RectorPrefix202404\Symfony\Component\Console\Command\Command;
-use RectorPrefix202404\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202404\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202404\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202404\Symfony\Component\Console\Question\Question;
-use RectorPrefix202404\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202405\Symfony\Component\Console\Command\Command;
+use RectorPrefix202405\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202405\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202405\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202405\Symfony\Component\Console\Question\Question;
+use RectorPrefix202405\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class DetectNodeCommand extends Command
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202404\Illuminate\Contracts\Notifications;
+namespace RectorPrefix202405\Illuminate\Contracts\Notifications;
 
 interface Dispatcher
 {
