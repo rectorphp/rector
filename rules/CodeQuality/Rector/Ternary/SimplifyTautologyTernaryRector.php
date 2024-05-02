@@ -53,6 +53,6 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }
-        return $node->if;
+        return $node->cond instanceof NotIdentical ? $node->if : $node->else;
     }
 }
