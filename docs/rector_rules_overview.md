@@ -1,4 +1,4 @@
-# 370 Rules Overview
+# 371 Rules Overview
 
 <br>
 
@@ -58,7 +58,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (45)
+- [TypeDeclaration](#typedeclaration) (46)
 
 - [Visibility](#visibility) (3)
 
@@ -6825,6 +6825,24 @@ Change `empty()` on nullable object to instanceof check
 
          return true;
      }
+ }
+```
+
+<br>
+
+### IncreaseDeclareStrictTypesRector
+
+Add declare strict types to a limited amount of classes at a time, to try out in the wild and increase level gradually
+
+:wrench: **configure it!**
+
+- class: [`Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector`](../rules/TypeDeclaration/Rector/StmtsAwareInterface/IncreaseDeclareStrictTypesRector.php)
+
+```diff
++declare(strict_types=1);
++
+ function someFunction()
+ {
  }
 ```
 
