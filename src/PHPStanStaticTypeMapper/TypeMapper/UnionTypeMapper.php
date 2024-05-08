@@ -248,6 +248,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($phpParserUnionType instanceof PhpParserUnionType) {
             return $this->resolveUnionTypeNode($unionType, $phpParserUnionType, $typeKind);
         }
+        if ($phpParserUnionType instanceof Node) {
+            return $phpParserUnionType;
+        }
         $type = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
         if (!$type instanceof UnionType) {
             return $this->phpStanStaticTypeMapper->mapToPhpParserNode($type, $typeKind);
@@ -271,9 +274,9 @@ final class UnionTypeMapper implements TypeMapperInterface
     }
     /**
      * @param TypeKind::* $typeKind
-     * @return PhpParserUnionType|\PhpParser\Node\NullableType|null
+     * @return Name|FullyQualified|ComplexType|Identifier|null
      */
-    private function matchPhpParserUnionType(UnionType $unionType, string $typeKind)
+    private function matchPhpParserUnionType(UnionType $unionType, string $typeKind) : ?Node
     {
         $phpParserUnionedTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -296,7 +299,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         /** @var Identifier[]|Name[] $phpParserUnionedTypes */
         $phpParserUnionedTypes = \array_unique($phpParserUnionedTypes);
         $countPhpParserUnionedTypes = \count($phpParserUnionedTypes);
-        if ($countPhpParserUnionedTypes < 2) {
+        if ($countPhpParserUnionedTypes === 1) {
+            return $phpParserUnionedTypes[0];
+        }
+        if ($countPhpParserUnionedTypes === 0) {
             return null;
         }
         return $this->resolveTypeWithNullablePHPParserUnionType(new PhpParserUnionType($phpParserUnionedTypes));

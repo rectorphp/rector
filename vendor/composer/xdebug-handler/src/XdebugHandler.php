@@ -471,6 +471,10 @@ class XdebugHandler
             $info = 'proc_open function is disabled';
             return \false;
         }
+        if (!\file_exists(\PHP_BINARY)) {
+            $info = 'PHP_BINARY is not available';
+            return \false;
+        }
         if (\extension_loaded('uopz') && !(bool) \ini_get('uopz.disable')) {
             // uopz works at opcode level and disables exit calls
             if (\function_exists('uopz_allow_exit')) {

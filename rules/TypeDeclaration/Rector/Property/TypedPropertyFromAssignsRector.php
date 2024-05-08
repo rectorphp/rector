@@ -5,8 +5,10 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -174,7 +176,7 @@ CODE_SAMPLE
             }
             $hasChanged = \true;
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if ($inferredType instanceof UnionType) {
+            if ($inferredType instanceof UnionType && ($typeNode instanceof NodeUnionType || $typeNode instanceof NullableType)) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($inferredType, $typeNode, $property, $phpDocInfo, \false);
             } else {
                 $property->type = $typeNode;
