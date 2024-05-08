@@ -25,7 +25,6 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -57,20 +56,14 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private $nodeNameResolver;
     /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
-     */
-    private $typeFactory;
-    /**
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    public function __construct(PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
+    public function __construct(PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, NodeNameResolver $nodeNameResolver)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->typeFactory = $typeFactory;
     }
     public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
@@ -246,7 +239,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $phpParserUnionType;
         }
         if ($phpParserUnionType instanceof PhpParserUnionType) {
-            return $this->resolveUnionTypeNode($unionType, $phpParserUnionType, $typeKind);
+            return $this->resolveUnionTypeNode($phpParserUnionType);
         }
         return $phpParserUnionType;
     }
@@ -358,21 +351,13 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return $typeWithClassName;
     }
-    /**
-     * @param TypeKind::* $typeKind
-     * @return PhpParserUnionType|null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
-     */
-    private function resolveUnionTypeNode(UnionType $unionType, PhpParserUnionType $phpParserUnionType, string $typeKind)
+    private function resolveUnionTypeNode(PhpParserUnionType $phpParserUnionType) : ?PhpParserUnionType
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
         if ($this->hasObjectAndStaticType($phpParserUnionType)) {
             return null;
-        }
-        $unionType = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
-        if (!$unionType instanceof UnionType) {
-            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionType, $typeKind);
         }
         return $phpParserUnionType;
     }
