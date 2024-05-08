@@ -248,14 +248,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($phpParserUnionType instanceof PhpParserUnionType) {
             return $this->resolveUnionTypeNode($unionType, $phpParserUnionType, $typeKind);
         }
-        if ($phpParserUnionType instanceof Node) {
-            return $phpParserUnionType;
-        }
-        $type = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
-        if (!$type instanceof UnionType) {
-            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($type, $typeKind);
-        }
-        return null;
+        return $phpParserUnionType;
     }
     private function processResolveCompatibleObjectCandidates(UnionType $unionType) : ?Node
     {
