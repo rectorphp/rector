@@ -6,23 +6,13 @@ namespace Rector\StaticTypeMapper\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Enum\ObjectReference;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
@@ -33,23 +23,11 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-    /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
-     * @readonly
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getNodeType() : string
@@ -62,22 +40,10 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
     public function mapToPHPStan(Node $node) : Type
     {
         $name = $node->toString();
-        if ($this->isExistingClass($name)) {
-            return new FullyQualifiedObjectType($name);
-        }
-        if (\in_array($name, [ObjectReference::STATIC, ObjectReference::SELF, ObjectReference::PARENT], \true)) {
+        if ($node->isSpecialClassName()) {
             return $this->createClassReferenceType($node, $name);
         }
-        return $this->createScalarType($name);
-    }
-    private function isExistingClass(string $name) : bool
-    {
-        if ($this->reflectionProvider->hasClass($name)) {
-            return \true;
-        }
-        // to be existing class names
-        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        return \in_array($name, $oldToNewClasses, \true);
+        return new MixedType();
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType|\PHPStan\Type\ObjectWithoutClassType
@@ -94,38 +60,10 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         if ($reference === ObjectReference::SELF) {
             return new SelfStaticType($classReflection);
         }
-        if ($reference === ObjectReference::PARENT) {
-            $parentClassReflection = $classReflection->getParentClass();
-            if ($parentClassReflection instanceof ClassReflection) {
-                return new ParentStaticType($parentClassReflection);
-            }
-            return new ParentObjectWithoutClassType();
+        $parentClassReflection = $classReflection->getParentClass();
+        if ($parentClassReflection instanceof ClassReflection) {
+            return new ParentStaticType($parentClassReflection);
         }
-        return new ThisType($classReflection);
-    }
-    /**
-     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\StringType|\PHPStan\Type\Constant\ConstantBooleanType|\PHPStan\Type\BooleanType|\PHPStan\Type\MixedType
-     */
-    private function createScalarType(string $name)
-    {
-        if ($name === 'array') {
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-        if ($name === 'int') {
-            return new IntegerType();
-        }
-        if ($name === 'float') {
-            return new FloatType();
-        }
-        if ($name === 'string') {
-            return new StringType();
-        }
-        if ($name === 'false') {
-            return new ConstantBooleanType(\false);
-        }
-        if ($name === 'bool') {
-            return new BooleanType();
-        }
-        return new MixedType();
+        return new ParentObjectWithoutClassType();
     }
 }
