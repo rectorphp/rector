@@ -17,6 +17,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class CallTypesResolver
 {
     /**
@@ -34,11 +35,17 @@ final class CallTypesResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, TypeComparator $typeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->typeComparator = $typeComparator;
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
@@ -75,6 +82,10 @@ final class CallTypesResolver
         // fix false positive generic type on string
         if (!$this->reflectionProvider->hasClass($argValueType->getClassName())) {
             return new MixedType();
+        }
+        $type = $this->nodeTypeResolver->getType($arg->value);
+        if (!$type->equals($argValueType) && $this->typeComparator->isSubtype($type, $argValueType)) {
+            return $type;
         }
         return $argValueType;
     }
