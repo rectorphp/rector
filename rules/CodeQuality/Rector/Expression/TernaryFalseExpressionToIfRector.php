@@ -6,10 +6,11 @@ namespace Rector\CodeQuality\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
-use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractScopeAwareRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,12 +21,12 @@ final class TernaryFalseExpressionToIfRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
+     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
-    private $sideEffectNodeDetector;
-    public function __construct(SideEffectNodeDetector $sideEffectNodeDetector)
+    private $exprAnalyzer;
+    public function __construct(ExprAnalyzer $exprAnalyzer)
     {
-        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -70,7 +71,7 @@ CODE_SAMPLE
         if (!$ternary->if instanceof Expr) {
             return null;
         }
-        if ($this->sideEffectNodeDetector->detect($ternary->else, $scope) || $this->sideEffectNodeDetector->detectCallExpr($ternary->else, $scope)) {
+        if (!$ternary->else instanceof Variable && $this->exprAnalyzer->isDynamicExpr($ternary->else)) {
             return null;
         }
         return new If_($ternary->cond, ['stmts' => [new Expression($ternary->if)]]);
