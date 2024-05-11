@@ -5,6 +5,9 @@ namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
@@ -89,13 +92,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Array_::class];
+        return [Property::class, ClassConst::class, Array_::class];
     }
     /**
-     * @param Array_ $node
+     * @param Property|ClassConst|Array_ $node
+     * @return null|int|\PhpParser\Node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope)
     {
+        if ($node instanceof Property || $node instanceof ClassConst) {
+            return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        }
         if ($this->shouldSkipTwigExtension($scope)) {
             return null;
         }
