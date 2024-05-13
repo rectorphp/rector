@@ -78,7 +78,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     private function resolveFullyQualifiedName(Name $name) : string
     {
         $nameValue = $name->toString();
-        if (\in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC, 'this'], \true)) {
+        if (\in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
             $classReflection = $this->resolveClassReflection($name);
             if (!$classReflection instanceof ClassReflection || $classReflection->isAnonymous()) {
                 return $name->toString();
