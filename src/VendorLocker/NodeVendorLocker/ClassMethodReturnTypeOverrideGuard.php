@@ -103,10 +103,10 @@ final class ClassMethodReturnTypeOverrideGuard
     {
         $methodName = $classMethod->name->toString();
         foreach ($childrenClassReflections as $childClassReflection) {
-            $methodReflection = $childClassReflection->getNativeMethod($methodName);
-            if (!$methodReflection instanceof PhpMethodReflection) {
+            if (!$childClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
+            $methodReflection = $childClassReflection->getNativeMethod($methodName);
             $parametersAcceptor = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
             $childReturnType = $parametersAcceptor->getNativeReturnType();
             if (!$returnType->isSuperTypeOf($childReturnType)->yes()) {
