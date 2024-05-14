@@ -16,4 +16,8 @@ final class CacheKey
      * @var string
      */
     public const FILE_HASH_KEY = 'file_hash';
+    /**
+     * @var string
+     */
+    public const CLASSNAMES_HASH_KEY = 'classnames_hash';
 }

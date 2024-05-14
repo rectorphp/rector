@@ -13,8 +13,11 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\NewOptimizedDirectorySourc
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Caching\Cache;
+use Rector\Caching\Enum\CacheKey;
 use Rector\Contract\DependencyInjection\ResetableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Util\FileHasher;
 /**
  * @api phpstan external
  */
@@ -46,18 +49,40 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var \Rector\Caching\Cache
+     */
+    private $cache;
+    /**
+     * @var \Rector\Util\FileHasher
+     */
+    private $fileHasher;
     public function __construct(FileNodesFetcher $fileNodesFetcher, OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;
         $this->optimizedDirectorySourceLocatorFactory = $optimizedDirectorySourceLocatorFactory;
     }
-    public function autowire(ReflectionProvider $reflectionProvider) : void
+    public function autowire(ReflectionProvider $reflectionProvider, Cache $cache, FileHasher $fileHasher) : void
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->cache = $cache;
+        $this->fileHasher = $fileHasher;
     }
     public function setFilePath(string $filePath) : void
     {
         $this->filePaths = [$filePath];
+    }
+    public function getCacheClassNameKey() : string
+    {
+        $paths = [];
+        foreach ($this->filePaths as $filePath) {
+            $paths[] = (string) \realpath($filePath);
+        }
+        foreach ($this->directories as $directory) {
+            $paths[] = (string) \realpath($directory);
+        }
+        $paths = \array_filter($paths);
+        return CacheKey::CLASSNAMES_HASH_KEY . '_' . $this->fileHasher->hash((string) \json_encode($paths));
     }
     /**
      * @param string[] $files
@@ -105,6 +130,18 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
         $this->aggregateSourceLocator = null;
     }
     /**
+     * @param class-string[] $classNamesCache
+     */
+    private function locateCachedClassNames(array $classNamesCache) : void
+    {
+        foreach ($classNamesCache as $classNameCache) {
+            try {
+                $this->reflectionProvider->getClass($classNameCache);
+            } catch (ClassNotFoundException $exception) {
+            }
+        }
+    }
+    /**
      * @param OptimizedSingleFileSourceLocator[]|NewOptimizedDirectorySourceLocator[] $sourceLocators
      */
     private function collectClasses(AggregateSourceLocator $aggregateSourceLocator, array $sourceLocators) : void
@@ -116,18 +153,32 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
         if (\count($sourceLocators) === 1 && $sourceLocators[0] instanceof OptimizedSingleFileSourceLocator) {
             return;
         }
+        $key = CacheKey::CLASSNAMES_HASH_KEY . '_' . $this->getCacheClassNameKey();
+        $classNamesCache = $this->cache->load($key, CacheKey::CLASSNAMES_HASH_KEY);
+        if (\is_string($classNamesCache)) {
+            $classNamesCache = \json_decode($classNamesCache);
+            if (\is_array($classNamesCache)) {
+                $this->locateCachedClassNames($classNamesCache);
+                return;
+            }
+        }
         $reflector = new DefaultReflector($aggregateSourceLocator);
+        $classNames = [];
         // trigger collect "classes" on get class on locate identifier
         try {
             $reflections = $reflector->reflectAllClasses();
             foreach ($reflections as $reflection) {
+                $className = $reflection->getName();
                 // make 'classes' collection
                 try {
-                    $this->reflectionProvider->getClass($reflection->getName());
+                    $this->reflectionProvider->getClass($className);
                 } catch (ClassNotFoundException $exception) {
+                    continue;
                 }
+                $classNames[] = $className;
             }
         } catch (CouldNotReadFileException $exception) {
         }
+        $this->cache->save($key, CacheKey::CLASSNAMES_HASH_KEY, \json_encode($classNames));
     }
 }
