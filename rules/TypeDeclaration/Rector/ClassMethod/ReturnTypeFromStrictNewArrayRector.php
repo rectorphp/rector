@@ -117,8 +117,8 @@ CODE_SAMPLE
         if ($stmts === null) {
             return null;
         }
-        $variable = $this->matchArrayAssignedVariable($stmts);
-        if (!$variable instanceof Variable) {
+        $variables = $this->matchArrayAssignedVariable($stmts);
+        if ($variables === []) {
             return null;
         }
         // 2. skip yields
@@ -130,7 +130,8 @@ CODE_SAMPLE
         if ($returns === []) {
             return null;
         }
-        if ($this->isVariableOverriddenWithNonArray($node, $variable)) {
+        $variables = $this->matchVariableNotOverriddenByNonArray($node, $variables);
+        if ($variables === []) {
             return null;
         }
         if (\count($returns) > 1) {
@@ -139,6 +140,9 @@ CODE_SAMPLE
         }
         $onlyReturn = $returns[0];
         if (!$onlyReturn->expr instanceof Variable) {
+            return null;
+        }
+        if (!$this->nodeComparator->isNodeEqual($onlyReturn->expr, $variables)) {
             return null;
         }
         $returnType = $this->nodeTypeResolver->getNativeType($onlyReturn->expr);
@@ -193,9 +197,11 @@ CODE_SAMPLE
         $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $narrowArrayType);
     }
     /**
+     * @param Variable[] $variables
+     * @return Variable[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function isVariableOverriddenWithNonArray($functionLike, Variable $variable) : bool
+    private function matchVariableNotOverriddenByNonArray($functionLike, array $variables) : array
     {
         // is variable overriden?
         /** @var Assign[] $assigns */
@@ -204,24 +210,28 @@ CODE_SAMPLE
             if (!$assign->var instanceof Variable) {
                 continue;
             }
-            if (!$this->nodeNameResolver->areNamesEqual($assign->var, $variable)) {
-                continue;
-            }
-            if ($assign->expr instanceof Array_) {
-                continue;
-            }
-            $nativeType = $this->nodeTypeResolver->getNativeType($assign->expr);
-            if (!$nativeType->isArray()->yes()) {
-                return \true;
+            foreach ($variables as $key => $variable) {
+                if (!$this->nodeNameResolver->areNamesEqual($assign->var, $variable)) {
+                    continue;
+                }
+                if ($assign->expr instanceof Array_) {
+                    continue;
+                }
+                $nativeType = $this->nodeTypeResolver->getNativeType($assign->expr);
+                if (!$nativeType->isArray()->yes()) {
+                    unset($variables[$key]);
+                }
             }
         }
-        return \false;
+        return $variables;
     }
     /**
      * @param Stmt[] $stmts
+     * @return Variable[]
      */
-    private function matchArrayAssignedVariable(array $stmts) : ?\PhpParser\Node\Expr\Variable
+    private function matchArrayAssignedVariable(array $stmts) : array
     {
+        $variables = [];
         foreach ($stmts as $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
@@ -235,10 +245,10 @@ CODE_SAMPLE
             }
             $nativeType = $this->nodeTypeResolver->getNativeType($assign->expr);
             if ($nativeType->isArray()->yes()) {
-                return $assign->var;
+                $variables[] = $assign->var;
             }
         }
-        return null;
+        return $variables;
     }
     private function shouldAddReturnArrayDocType(ArrayType $arrayType) : bool
     {
