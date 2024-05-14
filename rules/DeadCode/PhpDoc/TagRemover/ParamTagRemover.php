@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc\TagRemover;
 
+use PHPStan\Type\Type;
 use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -28,11 +29,11 @@ final class ParamTagRemover
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : bool
+    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike, ?Type $type = null) : bool
     {
         $hasChanged = \false;
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, &$hasChanged) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, &$hasChanged, $type, $phpDocInfo) : ?int {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
@@ -41,6 +42,14 @@ final class ParamTagRemover
             }
             // handle only basic types, keep phpstan/psalm helper ones
             if ($docNode->name !== '@param') {
+                return null;
+            }
+            $paramType = $phpDocInfo->getParamType($docNode->value->parameterName);
+            if ($type instanceof Type) {
+                if ($type->equals($paramType)) {
+                    $hasChanged = \true;
+                    return PhpDocNodeTraverser::NODE_REMOVE;
+                }
                 return null;
             }
             if (!$this->deadParamTagValueNodeAnalyzer->isDead($docNode->value, $functionLike)) {
