@@ -117,7 +117,7 @@ final class FamilyRelationsAnalyzer
         if ($this->hasClassNamesCachedOrLoadOneLocator) {
             return;
         }
-        $key = CacheKey::CLASSNAMES_HASH_KEY . '_' . $this->dynamicSourceLocatorProvider->getCacheClassNameKey();
+        $key = $this->dynamicSourceLocatorProvider->getCacheClassNameKey();
         $classNamesCache = $this->cache->load($key, CacheKey::CLASSNAMES_HASH_KEY);
         if (\is_string($classNamesCache)) {
             $classNamesCache = \json_decode($classNamesCache);

@@ -134,7 +134,7 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
         if (\count($sourceLocators) === 1 && $sourceLocators[0] instanceof OptimizedSingleFileSourceLocator) {
             return;
         }
-        $key = CacheKey::CLASSNAMES_HASH_KEY . '_' . $this->getCacheClassNameKey();
+        $key = $this->getCacheClassNameKey();
         $classNamesCache = $this->cache->load($key, CacheKey::CLASSNAMES_HASH_KEY);
         if (\is_string($classNamesCache)) {
             return;
