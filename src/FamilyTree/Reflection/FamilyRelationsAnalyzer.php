@@ -6,9 +6,13 @@ namespace Rector\FamilyTree\Reflection;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Broker\ClassNotFoundException;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Caching\Cache;
+use Rector\Caching\Enum\CacheKey;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Util\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
@@ -27,11 +31,28 @@ final class FamilyRelationsAnalyzer
      * @var \Rector\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, PrivatesAccessor $privatesAccessor)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
+     */
+    private $dynamicSourceLocatorProvider;
+    /**
+     * @readonly
+     * @var \Rector\Caching\Cache
+     */
+    private $cache;
+    /**
+     * @var bool
+     */
+    private $hasClassNamesCachedOrLoadOneLocator = \false;
+    public function __construct(ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, PrivatesAccessor $privatesAccessor, DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, Cache $cache, bool $hasClassNamesCachedOrLoadOneLocator = \false)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->privatesAccessor = $privatesAccessor;
+        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
+        $this->cache = $cache;
+        $this->hasClassNamesCachedOrLoadOneLocator = $hasClassNamesCachedOrLoadOneLocator;
     }
     /**
      * @return ClassReflection[]
@@ -41,6 +62,7 @@ final class FamilyRelationsAnalyzer
         if ($desiredClassReflection->isFinalByKeyword()) {
             return [];
         }
+        $this->loadClasses();
         /** @var ClassReflection[] $classReflections */
         $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
         $childrenClassReflections = [];
@@ -89,5 +111,25 @@ final class FamilyRelationsAnalyzer
         }
         /** @var string[] $ancestorNames */
         return $ancestorNames;
+    }
+    private function loadClasses() : void
+    {
+        if ($this->hasClassNamesCachedOrLoadOneLocator) {
+            return;
+        }
+        $key = CacheKey::CLASSNAMES_HASH_KEY . '_' . $this->dynamicSourceLocatorProvider->getCacheClassNameKey();
+        $classNamesCache = $this->cache->load($key, CacheKey::CLASSNAMES_HASH_KEY);
+        if (\is_string($classNamesCache)) {
+            $classNamesCache = \json_decode($classNamesCache);
+            if (\is_array($classNamesCache)) {
+                foreach ($classNamesCache as $classNameCache) {
+                    try {
+                        $this->reflectionProvider->getClass($classNameCache);
+                    } catch (ClassNotFoundException $exception) {
+                    }
+                }
+            }
+        }
+        $this->hasClassNamesCachedOrLoadOneLocator = \true;
     }
 }
