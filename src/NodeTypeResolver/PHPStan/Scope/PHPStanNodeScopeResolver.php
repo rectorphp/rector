@@ -112,6 +112,10 @@ final class PHPStanNodeScopeResolver
      */
     private $hasUnreachableStatementNode = \false;
     /**
+     * @var string
+     */
+    private const PHPSTAN_INTERNAL_ERROR_MESSAGE = 'Internal error.';
+    /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
     public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
@@ -233,7 +237,7 @@ final class PHPStanNodeScopeResolver
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         } catch (Throwable $throwable) {
-            if ($throwable->getMessage() !== 'Internal error.') {
+            if ($throwable->getMessage() !== self::PHPSTAN_INTERNAL_ERROR_MESSAGE) {
                 throw $throwable;
             }
         }
@@ -362,7 +366,14 @@ final class PHPStanNodeScopeResolver
         }
         $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
         $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
-        return $mutatingScope->enterClass($classReflection);
+        try {
+            return $mutatingScope->enterClass($classReflection);
+        } catch (Throwable $throwable) {
+            if ($throwable->getMessage() !== self::PHPSTAN_INTERNAL_ERROR_MESSAGE) {
+                throw $throwable;
+            }
+            return $mutatingScope;
+        }
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
