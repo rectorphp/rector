@@ -60,7 +60,6 @@ use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PHPStan\NodeVisitor\ExprScopeFromStmtNodeVisitor;
 use Rector\PHPStan\NodeVisitor\WrappedNodeRestoringNodeVisitor;
 use Rector\Util\Reflection\PrivatesAccessor;
-use Throwable;
 use RectorPrefix202405\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -111,10 +110,6 @@ final class PHPStanNodeScopeResolver
      * @var bool
      */
     private $hasUnreachableStatementNode = \false;
-    /**
-     * @var string
-     */
-    private const PHPSTAN_INTERNAL_ERROR_MESSAGE = 'Internal error.';
     /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
@@ -236,10 +231,7 @@ final class PHPStanNodeScopeResolver
     {
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (Throwable $throwable) {
-            if ($throwable->getMessage() !== self::PHPSTAN_INTERNAL_ERROR_MESSAGE) {
-                throw $throwable;
-            }
+        } catch (\PHPStan\ShouldNotHappenException $exception) {
         }
     }
     private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
@@ -368,12 +360,9 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
         try {
             return $mutatingScope->enterClass($classReflection);
-        } catch (Throwable $throwable) {
-            if ($throwable->getMessage() !== self::PHPSTAN_INTERNAL_ERROR_MESSAGE) {
-                throw $throwable;
-            }
-            return $mutatingScope;
+        } catch (\PHPStan\ShouldNotHappenException $exception) {
         }
+        return $mutatingScope;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
