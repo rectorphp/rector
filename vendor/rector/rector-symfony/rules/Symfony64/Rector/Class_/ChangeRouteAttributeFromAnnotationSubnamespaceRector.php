@@ -5,6 +5,7 @@ namespace Rector\Symfony\Symfony64\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -49,7 +50,7 @@ CODE_SAMPLE
         foreach ($node->attrGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
                 if ($this->isSymfonyRouteAttribute($attribute)) {
-                    $attribute->name = new Node\Name\FullyQualified(self::ATTRIBUTE_ROUTE);
+                    $attribute->name = new FullyQualified(self::ATTRIBUTE_ROUTE);
                     return $node;
                 }
             }

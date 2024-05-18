@@ -12,6 +12,7 @@ use Rector\Naming\Naming\PropertyNaming;
 final class SymfonyClosureFactory
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
