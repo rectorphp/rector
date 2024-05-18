@@ -51,14 +51,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node->class, 'DateTime')) {
-            return null;
+        if ($this->isName($node->class, 'DateTime')) {
+            return $this->refactorWithClass($node, 'Carbon\\Carbon');
         }
+        if ($this->isName($node->class, 'DateTimeImmutable')) {
+            return $this->refactorWithClass($node, 'Carbon\\CarbonImmutable');
+        }
+        return null;
+    }
+    /**
+     * @param New_ $node
+     * @param class-string<\Carbon\Carbon|\Carbon\CarbonImmutable> $className
+     */
+    public function refactorWithClass(Node $node, string $className) : ?Node
+    {
         if ($node->isFirstClassCallable()) {
             return null;
         }
         // no arg? ::now()
-        $carbonFullyQualified = new FullyQualified('Carbon\\Carbon');
+        $carbonFullyQualified = new FullyQualified($className);
         if ($node->args === []) {
             return new StaticCall($carbonFullyQualified, new Identifier('now'));
         }
