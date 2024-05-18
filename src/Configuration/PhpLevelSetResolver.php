@@ -37,6 +37,8 @@ final class PhpLevelSetResolver
                 return LevelSetList::UP_TO_PHP_82;
             case PhpVersion::PHP_83:
                 return LevelSetList::UP_TO_PHP_83;
+            case PhpVersion::PHP_84:
+                return LevelSetList::UP_TO_PHP_84;
             default:
                 throw new InvalidConfigurationException(\sprintf('Could not resolve PHP level set list for "%s"', $phpVersion));
         }
