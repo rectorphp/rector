@@ -71,6 +71,9 @@ CODE_SAMPLE
         if (!$this->isName($new->class, 'DateTime')) {
             return null;
         }
+        if ($new->isFirstClassCallable()) {
+            return null;
+        }
         if (\count($new->getArgs()) !== 1) {
             // @todo handle in separate static call
             return null;

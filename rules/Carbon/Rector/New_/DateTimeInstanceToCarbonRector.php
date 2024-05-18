@@ -54,6 +54,9 @@ CODE_SAMPLE
         if (!$this->isName($node->class, 'DateTime')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // no arg? ::now()
         $carbonFullyQualified = new FullyQualified('Carbon\\Carbon');
         if ($node->args === []) {
