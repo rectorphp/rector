@@ -375,7 +375,7 @@ final class RectorConfigBuilder
         }
         return $this;
     }
-    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false) : self
+    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false, bool $carbon = \false) : self
     {
         if ($deadCode) {
             $this->sets[] = SetList::DEAD_CODE;
@@ -403,6 +403,9 @@ final class RectorConfigBuilder
         }
         if ($strictBooleans) {
             $this->sets[] = SetList::STRICT_BOOLEANS;
+        }
+        if ($carbon) {
+            $this->sets[] = SetList::CARBON;
         }
         return $this;
     }
