@@ -1382,26 +1382,27 @@
         },
         {
             "name": "react\/promise",
-            "version": "v2.11.0",
-            "version_normalized": "2.11.0.0",
+            "version": "v3.1.0",
+            "version_normalized": "3.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/promise.git",
-                "reference": "1a8460931ea36dc5c76838fec5734d55c88c6831"
+                "reference": "e563d55d1641de1dea9f5e84f3cccc66d2bfe02c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/1a8460931ea36dc5c76838fec5734d55c88c6831",
-                "reference": "1a8460931ea36dc5c76838fec5734d55c88c6831",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/e563d55d1641de1dea9f5e84f3cccc66d2bfe02c",
+                "reference": "e563d55d1641de1dea9f5e84f3cccc66d2bfe02c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.1.0"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36"
+                "phpstan\/phpstan": "1.10.39 || 1.4.10",
+                "phpunit\/phpunit": "^9.6 || ^7.5"
             },
-            "time": "2023-11-16T16:16:50+00:00",
+            "time": "2023-11-16T16:21:57+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1445,7 +1446,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/promise\/issues",
-                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v2.11.0"
+                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v3.1.0"
             },
             "funding": [
                 {

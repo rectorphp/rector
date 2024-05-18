@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3
+class ComposerStaticInit6893f914fb2a24b2cce7a9d4ccf3a100
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -932,18 +932,14 @@ class ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3
         'RectorPrefix202405\\React\\EventLoop\\TimerInterface' => __DIR__ . '/..' . '/react/event-loop/src/TimerInterface.php',
         'RectorPrefix202405\\React\\EventLoop\\Timer\\Timer' => __DIR__ . '/..' . '/react/event-loop/src/Timer/Timer.php',
         'RectorPrefix202405\\React\\EventLoop\\Timer\\Timers' => __DIR__ . '/..' . '/react/event-loop/src/Timer/Timers.php',
-        'RectorPrefix202405\\React\\Promise\\CancellablePromiseInterface' => __DIR__ . '/..' . '/react/promise/src/CancellablePromiseInterface.php',
-        'RectorPrefix202405\\React\\Promise\\CancellationQueue' => __DIR__ . '/..' . '/react/promise/src/CancellationQueue.php',
         'RectorPrefix202405\\React\\Promise\\Deferred' => __DIR__ . '/..' . '/react/promise/src/Deferred.php',
+        'RectorPrefix202405\\React\\Promise\\Exception\\CompositeException' => __DIR__ . '/..' . '/react/promise/src/Exception/CompositeException.php',
         'RectorPrefix202405\\React\\Promise\\Exception\\LengthException' => __DIR__ . '/..' . '/react/promise/src/Exception/LengthException.php',
-        'RectorPrefix202405\\React\\Promise\\ExtendedPromiseInterface' => __DIR__ . '/..' . '/react/promise/src/ExtendedPromiseInterface.php',
-        'RectorPrefix202405\\React\\Promise\\FulfilledPromise' => __DIR__ . '/..' . '/react/promise/src/FulfilledPromise.php',
-        'RectorPrefix202405\\React\\Promise\\LazyPromise' => __DIR__ . '/..' . '/react/promise/src/LazyPromise.php',
+        'RectorPrefix202405\\React\\Promise\\Internal\\CancellationQueue' => __DIR__ . '/..' . '/react/promise/src/Internal/CancellationQueue.php',
+        'RectorPrefix202405\\React\\Promise\\Internal\\FulfilledPromise' => __DIR__ . '/..' . '/react/promise/src/Internal/FulfilledPromise.php',
+        'RectorPrefix202405\\React\\Promise\\Internal\\RejectedPromise' => __DIR__ . '/..' . '/react/promise/src/Internal/RejectedPromise.php',
         'RectorPrefix202405\\React\\Promise\\Promise' => __DIR__ . '/..' . '/react/promise/src/Promise.php',
         'RectorPrefix202405\\React\\Promise\\PromiseInterface' => __DIR__ . '/..' . '/react/promise/src/PromiseInterface.php',
-        'RectorPrefix202405\\React\\Promise\\PromisorInterface' => __DIR__ . '/..' . '/react/promise/src/PromisorInterface.php',
-        'RectorPrefix202405\\React\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/react/promise/src/RejectedPromise.php',
-        'RectorPrefix202405\\React\\Promise\\UnhandledRejectionException' => __DIR__ . '/..' . '/react/promise/src/UnhandledRejectionException.php',
         'RectorPrefix202405\\React\\Socket\\Connection' => __DIR__ . '/..' . '/react/socket/src/Connection.php',
         'RectorPrefix202405\\React\\Socket\\ConnectionInterface' => __DIR__ . '/..' . '/react/socket/src/ConnectionInterface.php',
         'RectorPrefix202405\\React\\Socket\\Connector' => __DIR__ . '/..' . '/react/socket/src/Connector.php',
@@ -2733,9 +2729,9 @@ class ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc5b31423e044e1f31bdf2918ae19cbd3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6893f914fb2a24b2cce7a9d4ccf3a100::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6893f914fb2a24b2cce7a9d4ccf3a100::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6893f914fb2a24b2cce7a9d4ccf3a100::$classMap;
 
         }, null, ClassLoader::class);
     }

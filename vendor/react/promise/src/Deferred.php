@@ -2,54 +2,45 @@
 
 namespace RectorPrefix202405\React\Promise;
 
-class Deferred implements PromisorInterface
+/**
+ * @template T
+ */
+final class Deferred
 {
+    /**
+     * @var PromiseInterface<T>
+     */
     private $promise;
+    /** @var callable(T):void */
     private $resolveCallback;
+    /** @var callable(\Throwable):void */
     private $rejectCallback;
-    private $notifyCallback;
-    private $canceller;
+    /**
+     * @param (callable(callable(T):void,callable(\Throwable):void):void)|null $canceller
+     */
     public function __construct(callable $canceller = null)
     {
-        $this->canceller = $canceller;
+        $this->promise = new Promise(function ($resolve, $reject) : void {
+            $this->resolveCallback = $resolve;
+            $this->rejectCallback = $reject;
+        }, $canceller);
     }
-    public function promise()
+    /**
+     * @return PromiseInterface<T>
+     */
+    public function promise() : PromiseInterface
     {
-        if (null === $this->promise) {
-            $this->promise = new Promise(function ($resolve, $reject, $notify) {
-                $this->resolveCallback = $resolve;
-                $this->rejectCallback = $reject;
-                $this->notifyCallback = $notify;
-            }, $this->canceller);
-            $this->canceller = null;
-        }
         return $this->promise;
     }
-    public function resolve($value = null)
-    {
-        $this->promise();
-        \call_user_func($this->resolveCallback, $value);
-    }
-    public function reject($reason = null)
-    {
-        $this->promise();
-        \call_user_func($this->rejectCallback, $reason);
-    }
     /**
-     * @deprecated 2.6.0 Progress support is deprecated and should not be used anymore.
-     * @param mixed $update
+     * @param T $value
      */
-    public function notify($update = null)
+    public function resolve($value) : void
     {
-        $this->promise();
-        \call_user_func($this->notifyCallback, $update);
+        ($this->resolveCallback)($value);
     }
-    /**
-     * @deprecated 2.2.0
-     * @see Deferred::notify()
-     */
-    public function progress($update = null)
+    public function reject(\Throwable $reason) : void
     {
-        $this->notify($update);
+        ($this->rejectCallback)($reason);
     }
 }
