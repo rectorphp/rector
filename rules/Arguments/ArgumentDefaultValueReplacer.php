@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Arguments;
 
 use PhpParser\BuilderHelpers;
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -35,9 +34,12 @@ final class ArgumentDefaultValueReplacer
         $this->valueResolver = $valueResolver;
     }
     /**
+     * @template TCall as (MethodCall|StaticCall|ClassMethod|FuncCall|New_)
+     *
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\New_ $node
+     * @return TCall|null
      */
-    public function processReplaces($node, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?Node
+    public function processReplaces($node, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue)
     {
         if ($node instanceof ClassMethod) {
             if (!isset($node->params[$replaceArgumentDefaultValue->getPosition()])) {
@@ -78,7 +80,10 @@ final class ArgumentDefaultValueReplacer
         return $classMethod;
     }
     /**
+     * @template TCall as (MethodCall|StaticCall|FuncCall|New_)
+     *
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\New_ $expr
+     * @return TCall|null
      */
     private function processArgs($expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?Expr
     {

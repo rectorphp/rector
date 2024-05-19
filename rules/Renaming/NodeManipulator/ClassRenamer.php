@@ -76,6 +76,7 @@ final class ClassRenamer
     }
     /**
      * @param array<string, string> $oldToNewClasses
+     * @return ($node is FullyQualified ? FullyQualified : Node)
      */
     public function renameNode(Node $node, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
