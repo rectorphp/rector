@@ -17,6 +17,7 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php81\Enum\AttributeName;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
 /**
@@ -55,6 +56,9 @@ final class PhpAttributeGroupFactory
     {
         return $this->createFromClass($annotationToAttribute->getAttributeClass());
     }
+    /**
+     * @param AttributeName::*|string $attributeClass
+     */
     public function createFromClass(string $attributeClass) : AttributeGroup
     {
         $fullyQualified = new FullyQualified($attributeClass);
