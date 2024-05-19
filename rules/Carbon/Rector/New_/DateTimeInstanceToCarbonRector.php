@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Carbon\Rector\New_;
 
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -51,19 +52,29 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node->class, 'DateTime')) {
-            return null;
+        if ($this->isName($node->class, 'DateTime')) {
+            return $this->refactorWithClass($node, 'Carbon\\Carbon');
         }
-        if ($node->isFirstClassCallable()) {
+        if ($this->isName($node->class, 'DateTimeImmutable')) {
+            return $this->refactorWithClass($node, 'Carbon\\CarbonImmutable');
+        }
+        return null;
+    }
+    /**
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     */
+    public function refactorWithClass(New_ $new, string $className)
+    {
+        if ($new->isFirstClassCallable()) {
             return null;
         }
         // no arg? ::now()
-        $carbonFullyQualified = new FullyQualified('Carbon\\Carbon');
-        if ($node->args === []) {
+        $carbonFullyQualified = new FullyQualified($className);
+        if ($new->args === []) {
             return new StaticCall($carbonFullyQualified, new Identifier('now'));
         }
-        if (\count($node->getArgs()) === 1) {
-            $firstArg = $node->getArgs()[0];
+        if (\count($new->getArgs()) === 1) {
+            $firstArg = $new->getArgs()[0];
             if ($firstArg->value instanceof String_) {
                 return $this->carbonCallFactory->createFromDateTimeString($carbonFullyQualified, $firstArg->value);
             }
