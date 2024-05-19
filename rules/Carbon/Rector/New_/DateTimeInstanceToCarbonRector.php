@@ -66,7 +66,7 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    public function refactorWithClass(New_ $new, string $className)
+    private function refactorWithClass(New_ $new, string $className)
     {
         // no arg? ::now()
         $carbonFullyQualified = new FullyQualified($className);
