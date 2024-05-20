@@ -20,6 +20,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarR
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector;
@@ -66,6 +67,7 @@ final class TypeDeclarationLevel
         ReturnTypeFromStrictScalarReturnExprRector::class,
         ReturnTypeFromReturnDirectArrayRector::class,
         ReturnTypeFromReturnNewRector::class,
+        ReturnTypeFromReturnCastRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
         // php 7.4
         EmptyOnNullableObjectToInstanceOfRector::class,

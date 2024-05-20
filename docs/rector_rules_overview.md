@@ -1,4 +1,4 @@
-# 374 Rules Overview
+# 376 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (4)
 
-- [Carbon](#carbon) (3)
+- [Carbon](#carbon) (4)
 
 - [CodeQuality](#codequality) (75)
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (46)
+- [TypeDeclaration](#typedeclaration) (47)
 
 - [Visibility](#visibility) (3)
 
@@ -148,7 +148,7 @@ Replaces defined map of arguments in defined methods and their calls.
 
 ### DateFuncCallToCarbonRector
 
-Convert `date()` function call to Carbon::*()
+Convert `date()` function call to `Carbon::now()->format(*)`
 
 - class: [`Rector\Carbon\Rector\FuncCall\DateFuncCallToCarbonRector`](../rules/Carbon/Rector/FuncCall/DateFuncCallToCarbonRector.php)
 
@@ -158,7 +158,7 @@ Convert `date()` function call to Carbon::*()
      public function run()
      {
 -        $date = date('Y-m-d');
-+        $date = \Carbon\Carbon::now()->format('Y-m-d')
++        $date = \Carbon\Carbon::now()->format('Y-m-d');
      }
  }
 ```
@@ -191,6 +191,25 @@ Convert new `DateTime()` with a method call to Carbon::*()
      {
 -        $date = (new \DateTime('today +20 day'))->format('Y-m-d');
 +        $date = \Carbon\Carbon::today()->addDays(20)->format('Y-m-d')
+     }
+ }
+```
+
+<br>
+
+### TimeFuncCallToCarbonRector
+
+Convert `time()` function call to `Carbon::now()->timestamp`
+
+- class: [`Rector\Carbon\Rector\FuncCall\TimeFuncCallToCarbonRector`](../rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $time = time();
++        $time = \Carbon\Carbon::now()->timestamp;
      }
  }
 ```
@@ -7037,6 +7056,30 @@ Add "never" return-type for methods that never return anything
 +    public function run(): never
      {
          throw new InvalidException();
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromReturnCastRector
+
+Add return type to function like with return cast
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnCastRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function action($param)
++    public function action($param): array
+     {
+         try {
+             return (array) $param;
+         } catch (Exception $exception) {
+             // some logging
+             throw $exception;
+         }
      }
  }
 ```
