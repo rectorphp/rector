@@ -1270,6 +1270,7 @@ class ComposerStaticInit8f3085135f9c0dec79e149b0c0400440
         'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/src/Caching/ValueObject/Storage/MemoryCacheStorage.php',
         'Rector\\Carbon\\NodeFactory\\CarbonCallFactory' => __DIR__ . '/../..' . '/rules/Carbon/NodeFactory/CarbonCallFactory.php',
         'Rector\\Carbon\\Rector\\FuncCall\\DateFuncCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/FuncCall/DateFuncCallToCarbonRector.php',
+        'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',
         'Rector\\Carbon\\Rector\\MethodCall\\DateTimeMethodCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/DateTimeMethodCallToCarbonRector.php',
         'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
         'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => __DIR__ . '/../..' . '/src/ChangesReporting/Annotation/AnnotationExtractor.php',

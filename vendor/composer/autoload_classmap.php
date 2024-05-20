@@ -1051,6 +1051,7 @@ return array(
     'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => $baseDir . '/src/Caching/ValueObject/Storage/MemoryCacheStorage.php',
     'Rector\\Carbon\\NodeFactory\\CarbonCallFactory' => $baseDir . '/rules/Carbon/NodeFactory/CarbonCallFactory.php',
     'Rector\\Carbon\\Rector\\FuncCall\\DateFuncCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/FuncCall/DateFuncCallToCarbonRector.php',
+    'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',
     'Rector\\Carbon\\Rector\\MethodCall\\DateTimeMethodCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/MethodCall/DateTimeMethodCallToCarbonRector.php',
     'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => $baseDir . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
     'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => $baseDir . '/src/ChangesReporting/Annotation/AnnotationExtractor.php',
