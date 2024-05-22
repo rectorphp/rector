@@ -81,6 +81,9 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     }
     public function enterNode(Node $node) : ?Node
     {
+        if (!$node instanceof Stmt && !$node instanceof Param && !$node instanceof FullyQualified) {
+            return null;
+        }
         if (!SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
@@ -93,9 +96,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         if ($node instanceof FullyQualified) {
             return $this->processNodeName($node, $file);
-        }
-        if (!$node instanceof Stmt && !$node instanceof Param) {
-            return null;
         }
         $shouldImportDocBlocks = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES);
         if (!$shouldImportDocBlocks) {
