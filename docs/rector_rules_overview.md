@@ -1,4 +1,4 @@
-# 376 Rules Overview
+# 377 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (47)
+- [TypeDeclaration](#typedeclaration) (48)
 
 - [Visibility](#visibility) (3)
 
@@ -7331,6 +7331,27 @@ Add return method return type based on strict typed property
 +    public function getAge(): int
      {
          return $this->age;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromSymfonySerializerRector
+
+Add return type from symfony serializer
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromSymfonySerializerRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromSymfonySerializerRector.php)
+
+```diff
+ final class SomeClass
+ {
+     private \Symfony\Component\Serializer\Serializer $serializer;
+
+-    public function resolveEntity($data)
++    public function resolveEntity($data): SomeType
+     {
+         return $this->serializer->deserialize($data, SomeType::class, 'json');
      }
  }
 ```

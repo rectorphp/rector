@@ -32,6 +32,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictParamRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromSymfonySerializerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
@@ -68,6 +69,7 @@ final class TypeDeclarationLevel
         ReturnTypeFromReturnDirectArrayRector::class,
         ReturnTypeFromReturnNewRector::class,
         ReturnTypeFromReturnCastRector::class,
+        ReturnTypeFromSymfonySerializerRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
         // php 7.4
         EmptyOnNullableObjectToInstanceOfRector::class,

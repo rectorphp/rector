@@ -2627,6 +2627,7 @@ class ComposerStaticInit8f3085135f9c0dec79e149b0c0400440
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictScalarReturnExprRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromSymfonySerializerRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromSymfonySerializerRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',

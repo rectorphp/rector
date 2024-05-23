@@ -2408,6 +2408,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictScalarReturnExprRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromSymfonySerializerRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromSymfonySerializerRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',
