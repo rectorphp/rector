@@ -142,7 +142,7 @@ CODE_SAMPLE
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {

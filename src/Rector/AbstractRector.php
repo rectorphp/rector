@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Rector;
 
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Const_;
@@ -196,9 +199,9 @@ CODE_SAMPLE;
      * @see https://phpstan.org/writing-php-code/phpdoc-types#conditional-return-types
      *
      * @return ($node is Node\Param ? string :
-     *  ($node is Node\Stmt\ClassMethod ? string :
-     *  ($node is Node\Stmt\Property ? string :
-     *  ($node is Node\Stmt\PropertyProperty ? string :
+     *  ($node is ClassMethod ? string :
+     *  ($node is Property ? string :
+     *  ($node is PropertyProperty ? string :
      *  ($node is Trait_ ? string :
      *  ($node is Interface_ ? string :
      *  ($node is Const_ ? string :

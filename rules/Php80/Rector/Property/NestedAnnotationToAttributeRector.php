@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Property;
 
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Param;
@@ -149,7 +150,7 @@ CODE_SAMPLE
         return PhpVersion::PHP_80;
     }
     /**
-     * @param Node\Stmt\Use_[] $uses
+     * @param Use_[] $uses
      * @return AttributeGroup[]
      */
     private function transformDoctrineAnnotationClassesToAttributeGroups(PhpDocInfo $phpDocInfo, array $uses) : array

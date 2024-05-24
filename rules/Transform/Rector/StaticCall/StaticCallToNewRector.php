@@ -54,7 +54,7 @@ CODE_SAMPLE
         return [StaticCall::class];
     }
     /**
-     * @param Node\Expr\StaticCall $node
+     * @param StaticCall $node
      */
     public function refactor(Node $node) : ?Node
     {

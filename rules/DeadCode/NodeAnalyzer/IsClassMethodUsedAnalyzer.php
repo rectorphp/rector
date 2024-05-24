@@ -121,7 +121,7 @@ final class IsClassMethodUsedAnalyzer
     private function isClassMethodCalledInLocalNullsafeMethodCall(Class_ $class, string $classMethodName) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
-        /** @var Node\Expr\NullsafeMethodCall[] $methodCalls */
+        /** @var NullsafeMethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, NullsafeMethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
     }
