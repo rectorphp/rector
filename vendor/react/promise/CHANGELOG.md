@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.2.0 (2024-05-24)
+
+*   Feature: Improve PHP 8.4+ support by avoiding implicitly nullable type declarations.
+    (#260 by @Ayesh)
+
+*   Feature: Include previous exceptions when reporting unhandled promise rejections.
+    (#262 by @clue)
+
+*   Update test suite to improve PHP 8.4+ support.
+    (#261 by @SimonFrings)
+
 ## 3.1.0 (2023-11-16)
 
 *   Feature: Full PHP 8.3 compatibility.

@@ -1,4 +1,4 @@
-# 377 Rules Overview
+# 378 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (48)
+- [TypeDeclaration](#typedeclaration) (49)
 
 - [Visibility](#visibility) (3)
 
@@ -7441,6 +7441,23 @@ Add typed property from assigned types
      {
          $this->name = 'string';
      }
+ }
+```
+
+<br>
+
+### TypedPropertyFromJMSSerializerAttributeTypeRector
+
+Add typed property from JMS Serializer Type attribute
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector`](../rules/TypeDeclaration/Rector/Class_/TypedPropertyFromJMSSerializerAttributeTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+     #[\JMS\Serializer\Annotation\Type('string')]
+-    private $name;
++    private ?string $name = null;
  }
 ```
 

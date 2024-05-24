@@ -18,7 +18,7 @@ final class Deferred
     /**
      * @param (callable(callable(T):void,callable(\Throwable):void):void)|null $canceller
      */
-    public function __construct(callable $canceller = null)
+    public function __construct(?callable $canceller = null)
     {
         $this->promise = new Promise(function ($resolve, $reject) : void {
             $this->resolveCallback = $resolve;
