@@ -46,6 +46,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             return null;
         }
         $hasChanged = \false;
+        $namespaceName = $node instanceof Namespace_ && $node->name instanceof Name ? $node->name : null;
         $names = $this->resolveUsedPhpAndDocNames($node);
         foreach ($node->stmts as $key => $namespaceStmt) {
             if (!$namespaceStmt instanceof Use_) {
@@ -57,7 +58,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
                 continue;
             }
             $useUse = $namespaceStmt->uses[0];
-            if ($this->isUseImportUsed($useUse, $names)) {
+            if ($this->isUseImportUsed($useUse, $names, $namespaceName)) {
                 continue;
             }
             unset($node->stmts[$key]);
@@ -149,7 +150,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
     /**
      * @param string[]  $names
      */
-    private function isUseImportUsed(UseUse $useUse, array $names) : bool
+    private function isUseImportUsed(UseUse $useUse, array $names, ?Name $namespaceName) : bool
     {
         $comparedName = $useUse->name->toString();
         if (\in_array($comparedName, $names, \true)) {
@@ -160,32 +161,44 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             $namespacedPrefix = $comparedName . '\\';
         }
         $alias = $this->resolveAliasName($useUse);
+        $lastName = $useUse->name->getLast();
+        $namespaceName = $namespaceName instanceof Name ? $namespaceName->toString() : null;
         // match partial import
         foreach ($names as $name) {
-            if (\substr_compare($comparedName, '\\' . $name, -\strlen('\\' . $name)) === 0) {
+            if ($this->isSubNamespace($name, $comparedName, $namespacedPrefix)) {
                 return \true;
             }
-            if ($this->isSubNamespace($name, $namespacedPrefix)) {
+            if (\is_string($alias) && $this->isUsedAlias($alias, $name)) {
                 return \true;
             }
-            if (!\is_string($alias)) {
+            if (\strncmp($name, $lastName . '\\', \strlen($lastName . '\\')) !== 0) {
                 continue;
             }
-            if ($alias === $name) {
+            if ($namespaceName === null) {
                 return \true;
             }
-            if (\strpos($name, '\\') === \false) {
-                continue;
-            }
-            $namePrefix = Strings::before($name, '\\', 1);
-            if ($alias === $namePrefix) {
+            if (\strncmp($name, $namespaceName . '\\', \strlen($namespaceName . '\\')) !== 0) {
                 return \true;
             }
         }
         return \false;
     }
-    private function isSubNamespace(string $name, string $namespacedPrefix) : bool
+    private function isUsedAlias(string $alias, string $name) : bool
     {
+        if ($alias === $name) {
+            return \true;
+        }
+        if (\strpos($name, '\\') === \false) {
+            return \false;
+        }
+        $namePrefix = Strings::before($name, '\\', 1);
+        return $alias === $namePrefix;
+    }
+    private function isSubNamespace(string $name, string $comparedName, string $namespacedPrefix) : bool
+    {
+        if (\substr_compare($comparedName, '\\' . $name, -\strlen('\\' . $name)) === 0) {
+            return \true;
+        }
         if (\strncmp($name, $namespacedPrefix, \strlen($namespacedPrefix)) === 0) {
             $subNamespace = \substr($name, \strlen($namespacedPrefix));
             return \strpos($subNamespace, '\\') === \false;
