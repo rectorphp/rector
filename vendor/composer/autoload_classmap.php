@@ -1200,6 +1200,7 @@ return array(
     'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => $baseDir . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
     'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => $baseDir . '/src/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
     'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => $baseDir . '/src/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+    'Rector\\Config\\Level\\CodeQualityLevel' => $baseDir . '/src/Config/Level/CodeQualityLevel.php',
     'Rector\\Config\\Level\\DeadCodeLevel' => $baseDir . '/src/Config/Level/DeadCodeLevel.php',
     'Rector\\Config\\Level\\TypeDeclarationLevel' => $baseDir . '/src/Config/Level/TypeDeclarationLevel.php',
     'Rector\\Config\\RectorConfig' => $baseDir . '/src/Config/RectorConfig.php',

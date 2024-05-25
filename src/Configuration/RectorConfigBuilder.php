@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
+use Rector\Config\Level\CodeQualityLevel;
 use Rector\Config\Level\DeadCodeLevel;
 use Rector\Config\Level\TypeDeclarationLevel;
 use Rector\Config\RectorConfig;
@@ -150,6 +151,10 @@ final class RectorConfigBuilder
     /**
      * @var bool|null
      */
+    private $isCodeQualityLevelUsed;
+    /**
+     * @var bool|null
+     */
     private $isFluentNewLine;
     /**
      * @var RegisteredService[]
@@ -163,6 +168,9 @@ final class RectorConfigBuilder
         }
         if (\in_array(SetList::DEAD_CODE, $uniqueSets, \true) && $this->isDeadCodeLevelUsed === \true) {
             throw new InvalidConfigurationException(\sprintf('Your config already enables dead code set.%sRemove "->withDeadCodeLevel()" as it only duplicates it, or remove dead code set.', \PHP_EOL));
+        }
+        if (\in_array(SetList::CODE_QUALITY, $uniqueSets, \true) && $this->isCodeQualityLevelUsed === \true) {
+            throw new InvalidConfigurationException(\sprintf('Your config already enables code quality set.%sRemove "->withCodeQualityLevel()" as it only duplicates it, or remove code quality set.', \PHP_EOL));
         }
         if ($uniqueSets !== []) {
             $rectorConfig->sets($uniqueSets);
@@ -549,6 +557,20 @@ final class RectorConfigBuilder
         $this->isTypeCoverageLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, 'RectorConfig::withTypeCoverageLevel()');
         $this->rules = \array_merge($this->rules, $levelRules);
+        return $this;
+    }
+    /**
+     * @experimental Raise your code quality from the safest rules
+     * to more affecting ones, one level at a time
+     */
+    public function withCodeQualityLevel(int $level) : self
+    {
+        $this->isCodeQualityLevelUsed = \true;
+        $levelRules = LevelRulesResolver::resolve($level, CodeQualityLevel::RULES, 'RectorConfig::withCodeQualityLevel()');
+        $this->rules = \array_merge($this->rules, $levelRules);
+        foreach (CodeQualityLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
+            $this->rulesWithConfigurations[$rectorClass][] = $configuration;
+        }
         return $this;
     }
     public function withFluentCallNewLine(bool $isFluentNewLine = \true) : self

@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Rector;
 
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;

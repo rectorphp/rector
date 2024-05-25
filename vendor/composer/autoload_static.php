@@ -1419,6 +1419,7 @@ class ComposerStaticInit8f3085135f9c0dec79e149b0c0400440
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/src/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
         'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => __DIR__ . '/../..' . '/src/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+        'Rector\\Config\\Level\\CodeQualityLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodeQualityLevel.php',
         'Rector\\Config\\Level\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Config/Level/DeadCodeLevel.php',
         'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',

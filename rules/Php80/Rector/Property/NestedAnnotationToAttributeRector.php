@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Property;
 
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
