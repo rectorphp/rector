@@ -58,16 +58,18 @@ final class AssignAndBinaryMap
      */
     private const ASSIGN_OP_TO_BINARY_OP_CLASSES = [AssignBitwiseOr::class => BitwiseOr::class, AssignBitwiseAnd::class => BitwiseAnd::class, AssignBitwiseXor::class => BitwiseXor::class, AssignPlus::class => Plus::class, AssignDiv::class => Div::class, AssignMul::class => Mul::class, AssignMinus::class => Minus::class, AssignConcat::class => Concat::class, AssignPow::class => Pow::class, AssignMod::class => Mod::class, AssignShiftLeft::class => ShiftLeft::class, AssignShiftRight::class => ShiftRight::class];
     /**
-     * @var array<class-string<BinaryOp>, class-string<BinaryOp>>
+     * @var array<class-string<BinaryOp>, class-string<AssignOp>>
      */
     private $binaryOpToAssignClasses = [];
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->binaryOpToAssignClasses = \array_flip(self::ASSIGN_OP_TO_BINARY_OP_CLASSES);
+        /** @var array<class-string<BinaryOp>, class-string<AssignOp>> $binaryClassesToAssignOp */
+        $binaryClassesToAssignOp = \array_flip(self::ASSIGN_OP_TO_BINARY_OP_CLASSES);
+        $this->binaryOpToAssignClasses = $binaryClassesToAssignOp;
     }
     /**
-     * @return class-string<BinaryOp>|null
+     * @return class-string<BinaryOp|AssignOp>|null
      */
     public function getAlternative(Node $node) : ?string
     {
