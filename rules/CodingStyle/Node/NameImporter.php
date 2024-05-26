@@ -10,7 +10,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
 final class NameImporter
@@ -22,18 +22,18 @@ final class NameImporter
     private $classNameImportSkipper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper
      */
-    private $staticTypeMapper;
+    private $fullyQualifiedNodeMapper;
     /**
      * @readonly
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
-    public function __construct(ClassNameImportSkipper $classNameImportSkipper, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
+    public function __construct(ClassNameImportSkipper $classNameImportSkipper, FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->staticTypeMapper = $staticTypeMapper;
+        $this->fullyQualifiedNodeMapper = $fullyQualifiedNodeMapper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
     public function importName(FullyQualified $fullyQualified, File $file) : ?Name
@@ -41,7 +41,7 @@ final class NameImporter
         if ($this->shouldSkipName($fullyQualified)) {
             return null;
         }
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($fullyQualified);
+        $staticType = $this->fullyQualifiedNodeMapper->mapToPHPStan($fullyQualified);
         if (!$staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
