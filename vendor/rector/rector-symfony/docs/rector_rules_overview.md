@@ -110,7 +110,7 @@ Make assertSame(200, `$response->getStatusCode())` in tests comparing response c
 
 ## AuthorizationCheckerIsGrantedExtractorRector
 
-Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`
+Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || `$this->authorizationChecker->isGranted($b)`,` also updates AbstractController usages
 
 - class: [`Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector`](../rules/Symfony44/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php)
 

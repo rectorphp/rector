@@ -180,7 +180,7 @@ class Preg
      *
      * @param-out int<0, max> $count
      */
-    public static function replaceCallbackStrictGroups(string $pattern, callable $replacement, $subject, int $limit = -1, int &$count = null, int $flags = 0) : string
+    public static function replaceCallbackStrictGroups(string $pattern, callable $replacement, $subject, int $limit = -1, ?int &$count = null, int $flags = 0) : string
     {
         return self::replaceCallback($pattern, function (array $matches) use($pattern, $replacement) {
             return $replacement(self::enforceNonNullMatches($pattern, $matches, 'replaceCallback'));

@@ -2425,6 +2425,7 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
         'Rector\\Symfony\\Set\\SymfonySetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonySetList.php',
         'Rector\\Symfony\\Set\\TwigLevelSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigLevelSetList.php',
         'Rector\\Symfony\\Set\\TwigSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigSetList.php',
+        'Rector\\Symfony\\SwiftMailer\\Rector\\ClassMethod\\SwiftMessageToEmailRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php',
         'Rector\\Symfony\\SwiftMailer\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/SwiftMailer/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
         'Rector\\Symfony\\SwiftMailer\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/SwiftMailer/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',
         'Rector\\Symfony\\Symfony25\\Rector\\MethodCall\\AddViolationToBuildViolationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony25/Rector/MethodCall/AddViolationToBuildViolationRector.php',

@@ -66,7 +66,7 @@ CODE_SAMPLE
         return [Class_::class];
     }
     /**
-     * @param Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {

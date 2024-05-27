@@ -2206,6 +2206,7 @@ return array(
     'Rector\\Symfony\\Set\\SymfonySetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonySetList.php',
     'Rector\\Symfony\\Set\\TwigLevelSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigLevelSetList.php',
     'Rector\\Symfony\\Set\\TwigSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigSetList.php',
+    'Rector\\Symfony\\SwiftMailer\\Rector\\ClassMethod\\SwiftMessageToEmailRector' => $vendorDir . '/rector/rector-symfony/rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php',
     'Rector\\Symfony\\SwiftMailer\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => $vendorDir . '/rector/rector-symfony/rules/SwiftMailer/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
     'Rector\\Symfony\\SwiftMailer\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => $vendorDir . '/rector/rector-symfony/rules/SwiftMailer/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',
     'Rector\\Symfony\\Symfony25\\Rector\\MethodCall\\AddViolationToBuildViolationRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony25/Rector/MethodCall/AddViolationToBuildViolationRector.php',

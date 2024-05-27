@@ -69,17 +69,17 @@
         },
         {
             "name": "composer\/pcre",
-            "version": "3.1.3",
-            "version_normalized": "3.1.3.0",
+            "version": "3.1.4",
+            "version_normalized": "3.1.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/pcre.git",
-                "reference": "5b16e25a5355f1f3afdfc2f954a0a80aec4826a8"
+                "reference": "04229f163664973f68f38f6f73d917799168ef24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/5b16e25a5355f1f3afdfc2f954a0a80aec4826a8",
-                "reference": "5b16e25a5355f1f3afdfc2f954a0a80aec4826a8",
+                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/04229f163664973f68f38f6f73d917799168ef24",
+                "reference": "04229f163664973f68f38f6f73d917799168ef24",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "symfony\/phpunit-bridge": "^5"
             },
-            "time": "2024-03-19T10:26:25+00:00",
+            "time": "2024-05-27T13:40:54+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -123,7 +123,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/composer\/pcre\/issues",
-                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.1.3"
+                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.1.4"
             },
             "funding": [
                 {
@@ -1867,12 +1867,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "bb85034f522fbc8245595381f23dfd014860b160"
+                "reference": "67e9fcab4f145145dd30d6db6b00a2a446af135c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/bb85034f522fbc8245595381f23dfd014860b160",
-                "reference": "bb85034f522fbc8245595381f23dfd014860b160",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/67e9fcab4f145145dd30d6db6b00a2a446af135c",
+                "reference": "67e9fcab4f145145dd30d6db6b00a2a446af135c",
                 "shasum": ""
             },
             "require": {
@@ -1901,7 +1901,7 @@
                 "tomasvotruba\/class-leak": "^0.2.13",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-05-18T12:45:41+00:00",
+            "time": "2024-05-27T18:27:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
