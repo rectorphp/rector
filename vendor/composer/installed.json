@@ -504,8 +504,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v10.48.11",
-            "version_normalized": "10.48.11.0",
+            "version": "v10.48.12",
+            "version_normalized": "10.48.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -561,8 +561,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v10.48.11",
-            "version_normalized": "10.48.11.0",
+            "version": "v10.48.12",
+            "version_normalized": "10.48.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1867,12 +1867,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "67e9fcab4f145145dd30d6db6b00a2a446af135c"
+                "reference": "0d6888f6c7f80f6cdba581731d2b5eb38531196a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/67e9fcab4f145145dd30d6db6b00a2a446af135c",
-                "reference": "67e9fcab4f145145dd30d6db6b00a2a446af135c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0d6888f6c7f80f6cdba581731d2b5eb38531196a",
+                "reference": "0d6888f6c7f80f6cdba581731d2b5eb38531196a",
                 "shasum": ""
             },
             "require": {
@@ -1901,7 +1901,7 @@
                 "tomasvotruba\/class-leak": "^0.2.13",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-05-27T18:27:37+00:00",
+            "time": "2024-05-28T09:36:19+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
