@@ -23,6 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/KM1Ji
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
+ *
+ * @deprecated This rule is surpassed by more advanced one
+ * Use @see FirstClassCallableRector instead
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwareRector
 {
