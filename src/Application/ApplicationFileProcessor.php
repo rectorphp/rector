@@ -115,10 +115,8 @@ final class ApplicationFileProcessor
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
-        if ($this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
-            $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
-            \sleep(3);
-        }
+        $this->verifyVendor($filePaths);
+        $this->verifySkippedRules();
         // no files found
         if ($filePaths === []) {
             return new ProcessResult([], []);
@@ -196,6 +194,28 @@ final class ApplicationFileProcessor
             }
         }
         return new ProcessResult($systemErrors, $fileDiffs);
+    }
+    /**
+     * @param string[] $filePaths
+     */
+    private function verifyVendor(array $filePaths) : void
+    {
+        if ($this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
+            $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
+            \sleep(3);
+        }
+    }
+    private function verifySkippedRules() : void
+    {
+        $registeredRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
+        $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
+        $neverRegisteredSkippedRules = \array_unique(\array_diff($skippedRules, $registeredRules));
+        if ($neverRegisteredSkippedRules !== []) {
+            $total = \count($neverRegisteredSkippedRules);
+            $reportNeverRegisteredRules = \implode(\PHP_EOL, $neverRegisteredSkippedRules);
+            $this->symfonyStyle->warning(\sprintf('[Note] The following rule%s %s ignored, but %s actually never registered. You can remove %s from the withSkip([...]) method.%s%s', $total > 1 ? 's' : '', $total > 1 ? 'are' : 'is', $total > 1 ? 'they are' : 'it is', $total > 1 ? 'them' : 'it', \PHP_EOL, \PHP_EOL . $reportNeverRegisteredRules));
+            \sleep(3);
+        }
     }
     private function processFile(File $file, Configuration $configuration) : FileProcessResult
     {

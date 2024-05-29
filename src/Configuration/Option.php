@@ -200,4 +200,9 @@ final class Option
      * @var string
      */
     public const REGISTERED_RECTOR_SETS = 'registered_rector_sets';
+    /**
+     * @internal For verify skipped rules exists in registered rules
+     * @var string
+     */
+    public const SKIPPED_RECTOR_RULES = 'skipped_rector_rules';
 }
