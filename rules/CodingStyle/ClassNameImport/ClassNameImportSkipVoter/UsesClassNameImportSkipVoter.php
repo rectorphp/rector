@@ -5,7 +5,6 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
@@ -23,24 +22,14 @@ final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInte
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
-    /**
-     * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file, $node);
         foreach ($useImportTypes as $useImportType) {
-            // if the class is renamed, the use import is no longer blocker
-            if ($this->renamedClassesDataCollector->hasOldClass($useImportType->getClassName())) {
-                continue;
-            }
             if (!$useImportType->equals($fullyQualifiedObjectType) && $useImportType->areShortNamesEqual($fullyQualifiedObjectType)) {
                 return \true;
             }

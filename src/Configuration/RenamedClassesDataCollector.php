@@ -15,6 +15,10 @@ final class RenamedClassesDataCollector implements ResetableInterface
     {
         $this->oldToNewClasses = [];
     }
+    /**
+     * keep public modifier and use internally on matchClassName() method
+     * to keep API as on Configuration level
+     */
     public function hasOldClass(string $oldClass) : bool
     {
         return isset($this->oldToNewClasses[$oldClass]);
@@ -38,11 +42,10 @@ final class RenamedClassesDataCollector implements ResetableInterface
     public function matchClassName(ObjectType $objectType) : ?ObjectType
     {
         $className = $objectType->getClassName();
-        $renamedClassName = $this->oldToNewClasses[$className] ?? null;
-        if ($renamedClassName === null) {
+        if (!$this->hasOldClass($className)) {
             return null;
         }
-        return new ObjectType($renamedClassName);
+        return new ObjectType($this->oldToNewClasses[$className]);
     }
     /**
      * @return string[]
