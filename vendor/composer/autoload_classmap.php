@@ -2392,6 +2392,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromStrictScalarReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromStrictScalarReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NumericReturnTypeFromStrictScalarReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php',

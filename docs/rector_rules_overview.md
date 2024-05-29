@@ -1,4 +1,4 @@
-# 378 Rules Overview
+# 379 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (49)
+- [TypeDeclaration](#typedeclaration) (50)
 
 - [Visibility](#visibility) (3)
 
@@ -6769,6 +6769,37 @@ Add void to PHPUnit test methods
  {
 -    public function testSomething()
 +    public function testSomething(): void
+     {
+     }
+ }
+```
+
+<br>
+
+### AddTypeFromResourceDocblockRector
+
+Add param and return types on resource docblock
+
+:wrench: **configure it!**
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddTypeFromResourceDocblockRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php)
+
+```diff
+ class SomeClass
+ {
+-    /**
+-     * @param resource|null $resource
+-     */
+-    public function setResource($resource)
++    public function setResource(?App\ValueObject\Resource $resource)
+     {
+     }
+
+-    /**
+-     * @return resource|null
+-     */
+-    public function getResource()
++    public function getResource(): ?App\ValueObject\Resource
      {
      }
  }

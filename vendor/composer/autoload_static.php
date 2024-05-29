@@ -2611,6 +2611,7 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromStrictScalarReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromStrictScalarReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NumericReturnTypeFromStrictScalarReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php',
