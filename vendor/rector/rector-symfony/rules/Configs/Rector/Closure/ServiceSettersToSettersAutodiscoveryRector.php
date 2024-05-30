@@ -115,7 +115,7 @@ CODE_SAMPLE
             return null;
         }
         $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCallExpressions);
-        $classNames = \array_map(function (ClassNameAndFilePath $classNameAndFilePath) : string {
+        $classNames = \array_map(static function (ClassNameAndFilePath $classNameAndFilePath) : string {
             return $classNameAndFilePath->getClassName();
         }, $classNamesAndFilesPaths);
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);

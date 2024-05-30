@@ -116,22 +116,22 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
      */
-    private function processControllerMethods(MethodCall $node)
+    private function processControllerMethods(MethodCall $methodCall)
     {
-        if ($this->nodeNameResolver->isName($node->name, 'isGranted')) {
-            return $this->handleIsGranted($node);
+        if ($this->nodeNameResolver->isName($methodCall->name, 'isGranted')) {
+            return $this->handleIsGranted($methodCall);
         }
         return null;
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|null|\PhpParser\Node\Expr\MethodCall
      */
-    private function handleIsGranted(MethodCall $node)
+    private function handleIsGranted(MethodCall $methodCall)
     {
-        if ($node->isFirstClassCallable()) {
+        if ($methodCall->isFirstClassCallable()) {
             return null;
         }
-        $args = $node->getArgs();
+        $args = $methodCall->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
@@ -142,6 +142,6 @@ CODE_SAMPLE
         if (!$value instanceof Array_) {
             return null;
         }
-        return $this->processExtractIsGranted($node, $value, $args);
+        return $this->processExtractIsGranted($methodCall, $value, $args);
     }
 }

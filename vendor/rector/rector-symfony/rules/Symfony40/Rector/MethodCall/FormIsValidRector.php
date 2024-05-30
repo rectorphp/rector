@@ -50,7 +50,7 @@ CODE_SAMPLE
         }
         // mark child calls with known is submitted
         if ($this->isName($methodCall->name, 'isSubmitted')) {
-            $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
+            $this->traverseNodesWithCallable($node->stmts, static function (Node $node) {
                 $node->setAttribute('has_is_submitted', \true);
                 return null;
             });

@@ -15,8 +15,7 @@ use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
-use Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector;
 use Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rules([DeclareStrictTypesRector::class, BinaryOpNullableToInstanceofRector::class, WhileNullableToInstanceofRector::class, IntvalToTypeCastRector::class, StrvalToTypeCastRector::class, BoolvalToTypeCastRector::class, FloatvalToTypeCastRector::class, IncreaseDeclareStrictTypesRector::class, StaticClosureRector::class, StaticArrowFunctionRector::class, PostIncDecToPreIncDecRector::class, UseIncrementAssignRector::class, FinalizeTestCaseClassRector::class]);
+    $rectorConfig->rules([DeclareStrictTypesRector::class, BinaryOpNullableToInstanceofRector::class, WhileNullableToInstanceofRector::class, IntvalToTypeCastRector::class, StrvalToTypeCastRector::class, BoolvalToTypeCastRector::class, FloatvalToTypeCastRector::class, StaticClosureRector::class, StaticArrowFunctionRector::class, PostIncDecToPreIncDecRector::class, UseIncrementAssignRector::class, FinalizeTestCaseClassRector::class]);
 };
