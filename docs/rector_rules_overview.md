@@ -1,4 +1,4 @@
-# 379 Rules Overview
+# 380 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [CodingStyle](#codingstyle) (28)
 
-- [DeadCode](#deadcode) (44)
+- [DeadCode](#deadcode) (45)
 
 - [EarlyReturn](#earlyreturn) (9)
 
@@ -2915,6 +2915,25 @@ Remove unused promoted property
      public function getUsedDependency()
      {
          return $this->usedDependency;
+     }
+ }
+```
+
+<br>
+
+### RemoveUnusedPublicMethodParameterRector
+
+Remove unused parameter in public method on final class without extends and interface
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodParameterRector`](../rules/DeadCode/Rector/ClassMethod/RemoveUnusedPublicMethodParameterRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run($a, $b)
++    public function run($a)
+     {
+         echo $a;
      }
  }
 ```

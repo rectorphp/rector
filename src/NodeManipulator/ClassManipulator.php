@@ -24,7 +24,7 @@ final class ClassManipulator
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod, string $newMethod) : bool
+    public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod) : bool
     {
         if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
             return \false;

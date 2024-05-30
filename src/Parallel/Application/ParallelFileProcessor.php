@@ -14,7 +14,6 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\ValueObject\Bridge;
-use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
@@ -63,7 +62,7 @@ final class ParallelFileProcessor
     /**
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
      */
-    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input, Configuration $configuration) : ProcessResult
+    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input) : ProcessResult
     {
         $jobs = \array_reverse($schedule->getJobs());
         $streamSelectLoop = new StreamSelectLoop();
