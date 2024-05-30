@@ -75,6 +75,9 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
             return null;
         }
         if ($functionLikeReflection instanceof PhpMethodReflection) {
+            if ($functionLikeReflection->isAbstract()) {
+                return null;
+            }
             $classReflection = $functionLikeReflection->getDeclaringClass();
             if ($classReflection->isInterface()) {
                 return null;
