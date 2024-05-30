@@ -1690,7 +1690,7 @@ unwrap `sprintf()` with one argument
 
 ### UseIdenticalOverEqualWithSameTypeRector
 
-Use ===/!== over ==/!=, it values have the same type
+Use ===/!== over ==/!=, if values have the same type
 
 - class: [`Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector`](../rules/CodeQuality/Rector/Equal/UseIdenticalOverEqualWithSameTypeRector.php)
 
@@ -1700,9 +1700,9 @@ Use ===/!== over ==/!=, it values have the same type
      public function run(int $firstValue, int $secondValue)
      {
 -         $isSame = $firstValue == $secondValue;
--         $isDiffernt = $firstValue != $secondValue;
+-         $isDifferent = $firstValue != $secondValue;
 +         $isSame = $firstValue === $secondValue;
-+         $isDiffernt = $firstValue !== $secondValue;
++         $isDifferent = $firstValue !== $secondValue;
      }
  }
 ```
