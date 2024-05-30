@@ -36,6 +36,10 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
+    public const RECTOR_PRESET = __DIR__ . '/../../../config/set/rector-preset.php';
+    /**
+     * @var string
+     */
     public const PHP_52 = __DIR__ . '/../../../config/set/php52.php';
     /**
      * @var string
