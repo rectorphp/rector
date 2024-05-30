@@ -65,7 +65,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param ClassMethod|MethodCall|Node\Stmt\Foreach_ $node
+     * @param ClassMethod|MethodCall|Foreach_ $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Foreach_|null
      */
     public function refactor(Node $node)

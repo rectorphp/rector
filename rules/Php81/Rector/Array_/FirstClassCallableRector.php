@@ -20,6 +20,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -42,10 +43,16 @@ final class FirstClassCallableRector extends AbstractScopeAwareRector implements
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
         $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -109,7 +116,16 @@ CODE_SAMPLE
             }
             return new StaticCall($callerExpr->class, $arrayCallable->getMethod(), $args);
         }
-        return new MethodCall($callerExpr, $arrayCallable->getMethod(), $args);
+        $methodName = $arrayCallable->getMethod();
+        $methodCall = new MethodCall($callerExpr, $methodName, $args);
+        $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($methodCall);
+        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod($methodName)) {
+            $method = $classReflection->getNativeMethod($methodName);
+            if (!$method->isPublic()) {
+                return null;
+            }
+        }
+        return $methodCall;
     }
     public function provideMinPhpVersion() : int
     {
