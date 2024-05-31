@@ -36,7 +36,7 @@ class SwiftMessageToEmailRector extends AbstractRector
     private $addressesMapping = ['addBcc' => null, 'addCc' => null, 'addFrom' => null, 'addReplyTo' => null, 'addTo' => null, 'setBcc' => 'bcc', 'setCc' => 'cc', 'setFrom' => 'from', 'setReplyTo' => 'replyTo', 'setTo' => 'to'];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert \\Swift_Message into an Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert \\Swift_Message into an \\Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
 $message = (new \Swift_Message('Hello Email'))
         ->setFrom('send@example.com')
         ->setTo(['recipient@example.com' => 'Recipient'])
@@ -95,7 +95,7 @@ CODE_SAMPLE
                     if (!$objectType instanceof ObjectType) {
                         return null;
                     }
-                    if (!$objectType->isInstanceOf('Swift_Message')->yes() && !$objectType->isInstanceOf('Symfony\\Component\\Mime\\Email')->yes()) {
+                    if (!$objectType->isInstanceOf(self::SWIFT_MESSAGE_FQN)->yes() && !$objectType->isInstanceOf(self::EMAIL_FQN)->yes()) {
                         return null;
                     }
                     $this->handleBasicMapping($node, $name);
@@ -103,6 +103,9 @@ CODE_SAMPLE
                     $this->handleBody($node, $name);
                     if ($name === 'attach') {
                         $this->handleAttach($node);
+                    }
+                    if ($name === 'getId') {
+                        $node = $this->handleId($node);
                     }
                 }
             }
@@ -129,16 +132,13 @@ CODE_SAMPLE
                 return;
             }
             if ($firstArg->value instanceof Array_ && $firstArg->value->items !== []) {
+                $newArgs = [];
                 foreach ($firstArg->value->items as $item) {
                     if ($item instanceof ArrayItem) {
-                        if ($item->key === null) {
-                            $item->value = $this->createAddress([new Arg($item->value)]);
-                        } else {
-                            $item->value = $this->createAddress([new Arg($item->key), new Arg($item->value)]);
-                            $item->key = null;
-                        }
+                        $newArgs[] = $this->nodeFactory->createArg($this->createAddress($item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg($item->value)]));
                     }
                 }
+                $methodCall->args = $newArgs;
             } else {
                 $addressArguments = [new Arg($firstArg->value)];
                 if (isset($methodCall->args[1]) && ($secondArg = $methodCall->args[1]) instanceof Arg) {
@@ -150,7 +150,7 @@ CODE_SAMPLE
     }
     private function handleBody(MethodCall $methodCall, string $name) : void
     {
-        if ($name !== 'setBody') {
+        if (!\in_array($name, ['setBody', 'addPart'], \true)) {
             return;
         }
         if ($methodCall->args[1] instanceof Arg && $methodCall->args[1]->value instanceof String_ && $methodCall->args[1]->value->value === 'text/html') {
@@ -177,6 +177,11 @@ CODE_SAMPLE
             return $node;
         });
         $methodCall->name = new Identifier('attachFromPath');
+    }
+    private function handleId(MethodCall $methodCall) : MethodCall
+    {
+        $methodCall->name = new Identifier('getHeaders');
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($methodCall, 'get', [$this->nodeFactory->createArg(new String_('Content-ID'))]), 'toString');
     }
     /**
      * @param Arg[] $addressArguments

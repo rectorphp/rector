@@ -9,7 +9,7 @@ use function trim;
 class TemplateTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
-    /** @var string */
+    /** @var non-empty-string */
     public $name;
     /** @var TypeNode|null */
     public $bound;
@@ -17,6 +17,9 @@ class TemplateTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
     public $default;
     /** @var string (may be empty) */
     public $description;
+    /**
+     * @param non-empty-string $name
+     */
     public function __construct(string $name, ?TypeNode $bound, string $description, ?TypeNode $default = null)
     {
         $this->name = $name;
