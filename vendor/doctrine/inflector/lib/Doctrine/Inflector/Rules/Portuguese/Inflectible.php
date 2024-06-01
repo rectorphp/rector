@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202405\Doctrine\Inflector\Rules\Portuguese;
+namespace RectorPrefix202406\Doctrine\Inflector\Rules\Portuguese;
 
-use RectorPrefix202405\Doctrine\Inflector\Rules\Pattern;
-use RectorPrefix202405\Doctrine\Inflector\Rules\Substitution;
-use RectorPrefix202405\Doctrine\Inflector\Rules\Transformation;
-use RectorPrefix202405\Doctrine\Inflector\Rules\Word;
+use RectorPrefix202406\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202406\Doctrine\Inflector\Rules\Substitution;
+use RectorPrefix202406\Doctrine\Inflector\Rules\Transformation;
+use RectorPrefix202406\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /** @return Transformation[] */

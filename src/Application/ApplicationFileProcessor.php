@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Application;
 
-use RectorPrefix202405\Nette\Utils\FileSystem as UtilsFileSystem;
+use RectorPrefix202406\Nette\Utils\FileSystem as UtilsFileSystem;
 use Rector\Caching\Cache;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
@@ -21,11 +21,11 @@ use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
 use Rector\ValueObjectFactory\Application\FileFactory;
-use RectorPrefix202405\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202405\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202405\Symplify\EasyParallel\CpuCoreCountProvider;
-use RectorPrefix202405\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix202405\Symplify\EasyParallel\ScheduleFactory;
+use RectorPrefix202406\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202406\Symplify\EasyParallel\CpuCoreCountProvider;
+use RectorPrefix202406\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202406\Symplify\EasyParallel\ScheduleFactory;
 use Throwable;
 final class ApplicationFileProcessor
 {

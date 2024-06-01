@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202405\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix202406\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix202405\Symfony\Component\Console\Application;
-use RectorPrefix202405\Symfony\Component\Console\Command\Command;
-use RectorPrefix202405\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202405\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202405\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202406\Symfony\Component\Console\Application;
+use RectorPrefix202406\Symfony\Component\Console\Command\Command;
+use RectorPrefix202406\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202406\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202406\Symfony\Component\Console\Input\InputOption;
 /**
  * JSON descriptor.
  *

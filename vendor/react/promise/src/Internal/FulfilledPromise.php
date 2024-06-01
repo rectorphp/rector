@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202405\React\Promise\Internal;
+namespace RectorPrefix202406\React\Promise\Internal;
 
-use RectorPrefix202405\React\Promise\PromiseInterface;
-use function RectorPrefix202405\React\Promise\resolve;
+use RectorPrefix202406\React\Promise\PromiseInterface;
+use function RectorPrefix202406\React\Promise\resolve;
 /**
  * @internal
  *

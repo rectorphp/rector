@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202405\Illuminate\Contracts\Container;
+namespace RectorPrefix202406\Illuminate\Contracts\Container;
 
 interface ContextualBindingBuilder
 {
