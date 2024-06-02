@@ -8,69 +8,46 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ConstantType;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PhpParser\Node\BetterNodeFinder;
 final class SideEffectNodeDetector
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
     /**
      * @readonly
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;
     /**
-     * @var array<class-string<Expr>>
+     * @readonly
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
+    private $betterNodeFinder;
     /**
      * @var array<class-string<Expr>>
      */
     private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [MethodCall::class, New_::class, NullsafeMethodCall::class, StaticCall::class];
-    public function __construct(NodeTypeResolver $nodeTypeResolver, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
+    public function __construct(\Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, BetterNodeFinder $betterNodeFinder)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pureFunctionDetector = $pureFunctionDetector;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function detect(Expr $expr, Scope $scope) : bool
     {
         if ($expr instanceof Assign) {
             return \true;
         }
-        foreach (self::SIDE_EFFECT_NODE_TYPES as $sideEffectNodeType) {
-            if ($expr instanceof $sideEffectNodeType) {
-                return \false;
-            }
-        }
-        $exprStaticType = $this->nodeTypeResolver->getType($expr);
-        if ($exprStaticType instanceof ConstantType) {
-            return \false;
-        }
-        if ($expr instanceof FuncCall) {
-            return !$this->pureFunctionDetector->detect($expr, $scope);
-        }
-        if ($expr instanceof Variable || $expr instanceof ArrayDimFetch) {
-            $variable = $this->resolveVariable($expr);
-            // variables don't have side effects
-            return !$variable instanceof Variable;
-        }
-        return \true;
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) use($scope) : bool {
+            return $this->detectCallExpr($subNode, $scope);
+        });
     }
     public function detectCallExpr(Node $node, Scope $scope) : bool
     {
@@ -89,6 +66,11 @@ final class SideEffectNodeDetector
         }
         if ($node instanceof FuncCall) {
             return !$this->pureFunctionDetector->detect($node, $scope);
+        }
+        if ($node instanceof Variable || $node instanceof ArrayDimFetch) {
+            $variable = $this->resolveVariable($node);
+            // variables don't have side effects
+            return !$variable instanceof Variable;
         }
         return \false;
     }
