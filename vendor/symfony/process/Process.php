@@ -1117,7 +1117,7 @@ class Process implements \IteratorAggregate
     public static function isTtySupported() : bool
     {
         static $isTtySupported;
-        return $isTtySupported = $isTtySupported ?? '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT);
+        return $isTtySupported = $isTtySupported ?? '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT) && @\is_writable('/dev/tty');
     }
     /**
      * Returns whether PTY is supported on the current operating system.

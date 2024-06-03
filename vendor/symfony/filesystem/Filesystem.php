@@ -594,7 +594,7 @@ class Filesystem
             if (\false === self::box('file_put_contents', $tmpFile, $content)) {
                 throw new IOException(\sprintf('Failed to write file "%s": ', $filename) . self::$lastError, 0, null, $filename);
             }
-            self::box('chmod', $tmpFile, @\fileperms($filename) ?: 0666 & ~\umask());
+            self::box('chmod', $tmpFile, self::box('fileperms', $filename) ?: 0666 & ~\umask());
             $this->rename($tmpFile, $filename, \true);
         } finally {
             if (\file_exists($tmpFile)) {

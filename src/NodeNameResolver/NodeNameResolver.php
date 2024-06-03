@@ -92,24 +92,6 @@ final class NodeNameResolver
         return \false;
     }
     /**
-     * @api
-     * @deprecated This method is unused and will be removed, go for isName() instead
-     */
-    public function isCaseSensitiveName(Node $node, string $name) : bool
-    {
-        if ($name === '') {
-            return \false;
-        }
-        if ($node instanceof CallLike && !$node instanceof FuncCall) {
-            return \false;
-        }
-        $resolvedName = $this->getName($node);
-        if ($resolvedName === null) {
-            return \false;
-        }
-        return $name === $resolvedName;
-    }
-    /**
      * Some nodes have always-known string name. This makes PHPStan smarter.
      * @see https://phpstan.org/writing-php-code/phpdoc-types#conditional-return-types
      *
