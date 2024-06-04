@@ -75,7 +75,6 @@ final class MatchPropertyTypeExpectedNameResolver
         if (!$expectedName instanceof ExpectedName) {
             return null;
         }
-        $propertyName = $this->nodeNameResolver->getName($property);
         // skip if already has suffix
         if (\substr_compare($propertyName, $expectedName->getName(), -\strlen($expectedName->getName())) === 0 || \substr_compare($propertyName, \ucfirst($expectedName->getName()), -\strlen(\ucfirst($expectedName->getName()))) === 0) {
             return null;
