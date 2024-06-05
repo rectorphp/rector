@@ -1,4 +1,4 @@
-# 53 Rules Overview
+# 54 Rules Overview
 
 ## AddCoversClassAttributeRector
 
@@ -671,6 +671,38 @@ Turns getMock*() methods to `createMock()`
      {
 -        $classMock = $this->getMock("Class");
 +        $classMock = $this->createMock("Class");
+     }
+ }
+```
+
+<br>
+
+## NamedArgumentForDataProviderRector
+
+Change the array-index names to the argument name of the dataProvider
+
+- class: [`Rector\PHPUnit\PHPUnit110\Rector\Class_\NamedArgumentForDataProviderRector`](../rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public static function dataProviderArray(): array
+     {
+         return [
+             [
+-                'keyA' => true,
+-                'keyB' => false,
++                'changeToKeyA' => true,
++                'changeToKeyB' => false,
+             ]
+         ];
+     }
+
+     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderArray')]
+     public function testFilter(bool $changeToKeyA, bool $changeToKeyB): void
+     {
      }
  }
 ```
