@@ -113,7 +113,7 @@ final class UseImportsAdder
             $comments = (array) $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS);
             if ($comments !== []) {
                 $newUses[0]->setAttribute(AttributeKey::COMMENTS, $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS));
-                $stmts[$indexStmt]->setAttribute(AttributeKey::COMMENTS, null);
+                $stmts[$indexStmt]->setAttribute(AttributeKey::COMMENTS, []);
             }
         }
     }
