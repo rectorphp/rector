@@ -5,29 +5,17 @@ namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Util\Reflection\PrivatesAccessor;
 final class BetterTokenIterator extends TokenIterator
 {
-    /**
-     * @var string
-     */
-    private const TOKENS = 'tokens';
-    /**
-     * @var string
-     */
-    private const INDEX = 'index';
     /**
      * @param array<int, mixed> $tokens
      */
     public function __construct(array $tokens, int $index = 0)
     {
-        $privatesAccessor = new PrivatesAccessor();
         if ($tokens === []) {
-            $privatesAccessor->setPrivateProperty($this, self::TOKENS, []);
-            $privatesAccessor->setPrivateProperty($this, self::INDEX, 0);
-        } else {
-            parent::__construct($tokens, $index);
+            $index = 0;
         }
+        parent::__construct($tokens, $index);
     }
     /**
      * @param int[] $types
