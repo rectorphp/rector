@@ -83,23 +83,15 @@ final class MatchPropertyTypeExpectedNameResolver
     }
     private function resolveExpectedName(Property $property) : ?ExpectedName
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        $isPhpDocInfo = $phpDocInfo instanceof PhpDocInfo;
         // property type first
         if ($property->type instanceof Node) {
             $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
-            // not has docblock, use property type
-            if (!$isPhpDocInfo) {
-                return $this->propertyNaming->getExpectedNameFromType($propertyType);
-            }
-            // @var type is ObjectType, use property type
-            $varType = $phpDocInfo->getVarType();
-            if ($varType instanceof ObjectType) {
-                return $this->propertyNaming->getExpectedNameFromType($propertyType);
-            }
+            return $this->propertyNaming->getExpectedNameFromType($propertyType);
         }
         // fallback to docblock
-        if ($isPhpDocInfo) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        $isVarTypeObjectType = $phpDocInfo instanceof PhpDocInfo && $phpDocInfo->getVarType() instanceof ObjectType;
+        if ($isVarTypeObjectType) {
             return $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
         }
         return null;
