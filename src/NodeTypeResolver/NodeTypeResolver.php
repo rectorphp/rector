@@ -18,7 +18,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
@@ -145,13 +144,10 @@ final class NodeTypeResolver
     }
     public function getType(Node $node) : Type
     {
-        if ($node instanceof Property && $node->type instanceof Node) {
-            return $this->getType($node->type);
+        if ($node instanceof Name && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            return $this->getType(new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME)));
         }
         if ($node instanceof NullableType) {
-            if ($node->type instanceof Name && $node->type->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
-                $node->type = new FullyQualified($node->type->getAttribute(AttributeKey::NAMESPACED_NAME));
-            }
             $type = $this->getType($node->type);
             if (!$type instanceof MixedType) {
                 return new UnionType([$type, new NullType()]);
