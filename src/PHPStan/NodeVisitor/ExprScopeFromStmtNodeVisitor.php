@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
-use PHPStan\Node\VirtualNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -52,9 +51,6 @@ final class ExprScopeFromStmtNodeVisitor extends NodeVisitorAbstract
         }
         if ($node instanceof Stmt) {
             $this->currentStmt = $node;
-            return null;
-        }
-        if ($node instanceof VirtualNode) {
             return null;
         }
         if (!$node instanceof Expr) {
