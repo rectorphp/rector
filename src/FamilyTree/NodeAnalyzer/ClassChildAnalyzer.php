@@ -53,6 +53,9 @@ final class ClassChildAnalyzer
      */
     private function resolveParentClassMethods(ClassReflection $classReflection, string $methodName) : array
     {
+        if ($classReflection->hasNativeMethod($methodName) && $classReflection->getNativeMethod($methodName)->isPrivate()) {
+            return [];
+        }
         $parentClassMethods = [];
         $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($parents as $parent) {
