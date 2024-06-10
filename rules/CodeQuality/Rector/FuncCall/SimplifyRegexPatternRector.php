@@ -76,6 +76,9 @@ CODE_SAMPLE
             if (\strpos($originalValue, '[^' . $complexPattern) !== \false) {
                 continue;
             }
+            if ($complexPattern === $node->value) {
+                continue;
+            }
             $node->value = $simplifiedValue;
             return $node;
         }

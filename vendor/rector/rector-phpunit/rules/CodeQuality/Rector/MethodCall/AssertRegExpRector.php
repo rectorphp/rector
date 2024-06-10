@@ -9,9 +9,13 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeManipulator\StmtsManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -33,6 +37,11 @@ final class AssertRegExpRector extends AbstractRector
      */
     private $valueResolver;
     /**
+     * @readonly
+     * @var \Rector\NodeManipulator\StmtsManipulator
+     */
+    private $stmtsManipulator;
+    /**
      * @var string
      */
     private const ASSERT_SAME = 'assertSame';
@@ -48,10 +57,11 @@ final class AssertRegExpRector extends AbstractRector
      * @var string
      */
     private const ASSERT_NOT_EQUALS = 'assertNotEquals';
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -62,36 +72,59 @@ final class AssertRegExpRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS])) {
+        if ($node->stmts === null) {
             return null;
         }
-        if ($node->isFirstClassCallable()) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
+            }
+            if (!$stmt->expr instanceof MethodCall && !$stmt->expr instanceof StaticCall) {
+                continue;
+            }
+            if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($stmt->expr, [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS])) {
+                continue;
+            }
+            if ($stmt->expr->isFirstClassCallable()) {
+                continue;
+            }
+            /** @var FuncCall|Node $secondArgumentValue */
+            $secondArgumentValue = $stmt->expr->getArgs()[1]->value;
+            if (!$secondArgumentValue instanceof FuncCall) {
+                continue;
+            }
+            if (!$this->isName($secondArgumentValue, 'preg_match')) {
+                continue;
+            }
+            if ($secondArgumentValue->isFirstClassCallable()) {
+                continue;
+            }
+            $oldMethodName = $this->getName($stmt->expr->name);
+            if ($oldMethodName === null) {
+                continue;
+            }
+            $args = $secondArgumentValue->getArgs();
+            if (isset($args[2]) && $args[2]->value instanceof Variable && $this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, (string) $this->getName($args[2]->value))) {
+                continue;
+            }
+            $oldFirstArgument = $stmt->expr->getArgs()[0]->value;
+            $oldCondition = $this->resolveOldCondition($oldFirstArgument);
+            $this->renameMethod($stmt->expr, $oldMethodName, $oldCondition);
+            $this->moveFunctionArgumentsUp($stmt->expr);
+            $hasChanged = \true;
         }
-        /** @var FuncCall|Node $secondArgumentValue */
-        $secondArgumentValue = $node->getArgs()[1]->value;
-        if (!$secondArgumentValue instanceof FuncCall) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        if (!$this->isName($secondArgumentValue, 'preg_match')) {
-            return null;
-        }
-        $oldMethodName = $this->getName($node->name);
-        if ($oldMethodName === null) {
-            return null;
-        }
-        $oldFirstArgument = $node->getArgs()[0]->value;
-        $oldCondition = $this->resolveOldCondition($oldFirstArgument);
-        $this->renameMethod($node, $oldMethodName, $oldCondition);
-        $this->moveFunctionArgumentsUp($node);
-        return $node;
+        return null;
     }
     private function resolveOldCondition(Expr $expr) : int
     {
