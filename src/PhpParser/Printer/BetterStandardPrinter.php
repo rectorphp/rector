@@ -407,7 +407,7 @@ final class BetterStandardPrinter extends Standard
     {
         $stmts = \array_values($stmts);
         if (\count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
-            return $stmts[0]->stmts;
+            return \array_values($stmts[0]->stmts);
         }
         return $stmts;
     }
