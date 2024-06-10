@@ -63,7 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node, 'implode')) {
+        if (!$this->isNames($node, ['implode', 'join'])) {
             return null;
         }
         if ($node->isFirstClassCallable()) {
