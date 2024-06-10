@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
+use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
 final class ClassMethodReturnVendorLockResolver
@@ -21,13 +22,22 @@ final class ClassMethodReturnVendorLockResolver
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
+     */
+    private $magicClassMethodAnalyzer;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
     }
     public function isVendorLocked(ClassMethod $classMethod) : bool
     {
+        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
+            return \true;
+        }
         if ($classMethod->isPrivate()) {
             return \false;
         }

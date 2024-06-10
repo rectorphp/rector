@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Throw_;
-use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -33,19 +32,13 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
     private $classMethodReturnVendorLockResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
-     */
-    private $magicClassMethodAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Reflection\ClassModifierChecker
      */
     private $classModifierChecker;
-    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer, ClassModifierChecker $classModifierChecker)
+    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ClassModifierChecker $classModifierChecker)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
-        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
         $this->classModifierChecker = $classModifierChecker;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -106,9 +99,6 @@ CODE_SAMPLE
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
-        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
-            return \true;
-        }
         if ($classMethod->isAbstract()) {
             return \true;
         }
