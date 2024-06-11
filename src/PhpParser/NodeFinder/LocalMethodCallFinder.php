@@ -36,7 +36,7 @@ final class LocalMethodCallFinder
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @return MethodCall[]
+     * @return MethodCall[]|StaticCall[]
      */
     public function match(Class_ $class, ClassMethod $classMethod) : array
     {
@@ -45,7 +45,7 @@ final class LocalMethodCallFinder
             return [];
         }
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        /** @var MethodCall[] $matchingMethodCalls */
+        /** @var MethodCall[]|StaticCall[] $matchingMethodCalls */
         $matchingMethodCalls = $this->betterNodeFinder->find($class->getMethods(), function (Node $subNode) use($className, $classMethodName) : bool {
             if (!$subNode instanceof MethodCall && !$subNode instanceof StaticCall) {
                 return \false;
