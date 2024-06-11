@@ -258,6 +258,11 @@ final class PureFunctionDetector
         if (!$functionReflection instanceof NativeFunctionReflection) {
             return \false;
         }
+        // use PHPStan first check
+        if ($functionReflection->hasSideEffects()->yes()) {
+            return \false;
+        }
+        // otherwise, use added defined here
         return !\in_array($funcCallName, self::IMPURE_FUNCTIONS, \true);
     }
 }

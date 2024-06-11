@@ -40,7 +40,7 @@
         "evenement\/evenement": "^3.0 || ^2.0 || ^1.0"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35",
+        "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36",
         "clue\/stream-filter": "~1.2"
     },
     "autoload": {

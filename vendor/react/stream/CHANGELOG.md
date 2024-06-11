@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0 (2024-06-11)
+
+*   Feature: Improve PHP 8.4+ support by avoiding implicitly nullable type declarations.
+    (#179 by @clue)
+
+*   Feature: Full PHP 8.3 compatibility.
+    (#172 by @clue)
+
+*   Fix: Fix `drain` event of `ThroughStream` to handle potential race condition.
+    (#171 by @clue)
+
 ## 1.3.0 (2023-06-16)
 
 *   Feature: Full PHP 8.1 and PHP 8.2 compatibility.
