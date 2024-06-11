@@ -132,8 +132,8 @@ CODE_SAMPLE
         if ($this->shouldOmitEnumCase($enumCaseName)) {
             return null;
         }
-        $enumConstFetch = $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
-        return new PropertyFetch($enumConstFetch, 'value');
+        $classConstFetch = $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
+        return new PropertyFetch($classConstFetch, 'value');
     }
     private function refactorEqualsMethodCall(MethodCall $methodCall) : ?Identical
     {

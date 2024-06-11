@@ -29,11 +29,11 @@ final class RectorContainerFactory
     private function createFromConfigs(array $configFiles) : Container
     {
         $lazyContainerFactory = new \Rector\DependencyInjection\LazyContainerFactory();
-        $container = $lazyContainerFactory->create();
+        $rectorConfig = $lazyContainerFactory->create();
         foreach ($configFiles as $configFile) {
-            $container->import($configFile);
+            $rectorConfig->import($configFile);
         }
-        $container->boot();
-        return $container;
+        $rectorConfig->boot();
+        return $rectorConfig;
     }
 }

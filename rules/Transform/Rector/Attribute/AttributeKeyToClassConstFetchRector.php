@@ -132,11 +132,11 @@ CODE_SAMPLE
         if ($constName === null) {
             return \false;
         }
-        $newValue = $this->nodeFactory->createClassConstFetch($attributeKeyToClassConstFetch->getConstantClass(), $constName);
-        if ($arg->value instanceof ClassConstFetch && $this->getName($arg->value) === $this->getName($newValue)) {
+        $classConstFetch = $this->nodeFactory->createClassConstFetch($attributeKeyToClassConstFetch->getConstantClass(), $constName);
+        if ($arg->value instanceof ClassConstFetch && $this->getName($arg->value) === $this->getName($classConstFetch)) {
             return \false;
         }
-        $arg->value = $newValue;
+        $arg->value = $classConstFetch;
         return \true;
     }
 }

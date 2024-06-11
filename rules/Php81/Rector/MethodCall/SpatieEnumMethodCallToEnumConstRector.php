@@ -103,8 +103,8 @@ CODE_SAMPLE
             return null;
         }
         $upperCaseName = \strtoupper($enumCaseName);
-        $enumConstFetch = $this->nodeFactory->createClassConstFetch($className, $upperCaseName);
-        return new PropertyFetch($enumConstFetch, $property);
+        $classConstFetch = $this->nodeFactory->createClassConstFetch($className, $upperCaseName);
+        return new PropertyFetch($classConstFetch, $property);
     }
     private function refactorMethodCall(MethodCall $methodCall, string $methodName) : ?\PhpParser\Node\Expr\PropertyFetch
     {

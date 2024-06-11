@@ -108,8 +108,8 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (!$this->valueResolver->isValue($secondArg->value, 0)) {
             return \false;
         }
-        $hardcodedStringNeedle = $strStartsWith->getNeedleExpr();
-        if (!$hardcodedStringNeedle instanceof String_) {
+        $expr = $strStartsWith->getNeedleExpr();
+        if (!$expr instanceof String_) {
             return \false;
         }
         if (\count($substrFuncCall->getArgs()) < 3) {
@@ -119,6 +119,6 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (!$lNumberLength instanceof LNumber) {
             return \false;
         }
-        return $lNumberLength->value === \strlen($hardcodedStringNeedle->value);
+        return $lNumberLength->value === \strlen($expr->value);
     }
 }

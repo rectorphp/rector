@@ -136,6 +136,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($node->stmts as $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
@@ -146,7 +147,7 @@ CODE_SAMPLE
             $assign = $stmt->expr;
             $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($assign, $node);
             if (!$variableAndCallAssign instanceof VariableAndCallAssign) {
-                return null;
+                continue;
             }
             $call = $variableAndCallAssign->getCall();
             $expectedName = $this->expectedNameResolver->resolveForCall($call);
@@ -160,6 +161,9 @@ CODE_SAMPLE
                 continue;
             }
             $this->renameVariable($variableAndCallAssign, $expectedName, $stmt);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
             return $node;
         }
         return null;
