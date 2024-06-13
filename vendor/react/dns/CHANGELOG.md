@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.0 (2024-06-13)
+
+*   Feature: Improve PHP 8.4+ support by avoiding implicitly nullable type declarations.
+    (#224 by @WyriHaximus)
+
 ## 1.12.0 (2023-11-29)
 
 *   Feature: Full PHP 8.3 compatibility.

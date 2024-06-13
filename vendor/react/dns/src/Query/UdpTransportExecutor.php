@@ -95,7 +95,7 @@ final class UdpTransportExecutor implements ExecutorInterface
      * @param string         $nameserver
      * @param ?LoopInterface $loop
      */
-    public function __construct($nameserver, LoopInterface $loop = null)
+    public function __construct($nameserver, $loop = null)
     {
         if (\strpos($nameserver, '[') === \false && \substr_count($nameserver, ':') >= 2 && \strpos($nameserver, '://') === \false) {
             // several colons, but not enclosed in square brackets => enclose IPv6 address in square brackets
@@ -104,6 +104,10 @@ final class UdpTransportExecutor implements ExecutorInterface
         $parts = \parse_url((\strpos($nameserver, '://') === \false ? 'udp://' : '') . $nameserver);
         if (!isset($parts['scheme'], $parts['host']) || $parts['scheme'] !== 'udp' || @\inet_pton(\trim($parts['host'], '[]')) === \false) {
             throw new \InvalidArgumentException('Invalid nameserver address given');
+        }
+        if ($loop !== null && !$loop instanceof LoopInterface) {
+            // manual type check to support legacy PHP < 7.1
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
         }
         $this->nameserver = 'udp://' . $parts['host'] . ':' . (isset($parts['port']) ? $parts['port'] : 53);
         $this->loop = $loop ?: Loop::get();

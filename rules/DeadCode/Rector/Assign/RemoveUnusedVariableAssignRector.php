@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
+use Rector\NodeManipulator\StmtsManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -49,12 +50,18 @@ final class RemoveUnusedVariableAssignRector extends AbstractScopeAwareRector
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\NodeManipulator\StmtsManipulator
+     */
+    private $stmtsManipulator;
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder, StmtsManipulator $stmtsManipulator)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->variableAnalyzer = $variableAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -156,6 +163,9 @@ CODE_SAMPLE
             }
             $foundVariable = $this->betterNodeFinder->findVariableOfName($stmt, $variableName);
             if ($foundVariable instanceof Variable) {
+                return \true;
+            }
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($functionLike, $key, $variableName)) {
                 return \true;
             }
         }
