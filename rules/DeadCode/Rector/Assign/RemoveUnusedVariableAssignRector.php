@@ -19,7 +19,6 @@ use PHPStan\Analyser\Scope;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractScopeAwareRector;
@@ -108,7 +107,7 @@ CODE_SAMPLE
         $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
         $hasChanged = \false;
         foreach ($assignedVariableNamesByStmtPosition as $stmtPosition => $variableName) {
-            if ($this->isVariableUsedInFollowingStmts($stmts, $stmtPosition, $variableName)) {
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $stmtPosition + 1, $variableName)) {
                 continue;
             }
             /** @var Expression<Assign> $currentStmt */
@@ -143,26 +142,6 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) use($scope) : bool {
             return $this->sideEffectNodeDetector->detectCallExpr($subNode, $scope);
         });
-    }
-    /**
-     * @param Stmt[] $stmts
-     */
-    private function isVariableUsedInFollowingStmts(array $stmts, int $assignStmtPosition, string $variableName) : bool
-    {
-        foreach ($stmts as $key => $stmt) {
-            // do not look yet
-            if ($key <= $assignStmtPosition) {
-                continue;
-            }
-            $stmtScope = $stmt->getAttribute(AttributeKey::SCOPE);
-            if (!$stmtScope instanceof Scope) {
-                continue;
-            }
-            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key, $variableName)) {
-                return \true;
-            }
-        }
-        return \false;
     }
     /**
      * @param Stmt[] $stmts
