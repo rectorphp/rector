@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use Rector\NodeManipulator\StmtsManipulator;
 use Rector\Php81\NodeAnalyzer\CoalesePropertyAssignMatcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -42,11 +43,17 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
      * @var \Rector\Php81\NodeAnalyzer\CoalesePropertyAssignMatcher
      */
     private $coalesePropertyAssignMatcher;
-    public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher)
+    /**
+     * @readonly
+     * @var \Rector\NodeManipulator\StmtsManipulator
+     */
+    private $stmtsManipulator;
+    public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher, StmtsManipulator $stmtsManipulator)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
         $this->coalesePropertyAssignMatcher = $coalesePropertyAssignMatcher;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -100,11 +107,19 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        // stmts variable defined to avoid unset overlap when used via array_slice() on
+        // StmtsManipulator::isVariableUsedInNextStmt()
+        // @see https://github.com/rectorphp/rector-src/pull/5968
+        // @see https://3v4l.org/eojhk
+        $stmts = (array) $constructClassMethod->stmts;
         foreach ((array) $constructClassMethod->stmts as $key => $stmt) {
             foreach ($params as $param) {
                 $paramName = $this->getName($param);
                 $coalesce = $this->coalesePropertyAssignMatcher->matchCoalesceAssignsToLocalPropertyNamed($stmt, $paramName);
                 if (!$coalesce instanceof Coalesce) {
+                    continue;
+                }
+                if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key + 1, $paramName)) {
                     continue;
                 }
                 /** @var NullableType $currentParamType */
