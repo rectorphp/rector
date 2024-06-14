@@ -108,7 +108,7 @@ CODE_SAMPLE
         $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
         $hasChanged = \false;
         foreach ($assignedVariableNamesByStmtPosition as $stmtPosition => $variableName) {
-            if ($this->isVariableUsedInFollowingStmts($node, $stmtPosition, $variableName)) {
+            if ($this->isVariableUsedInFollowingStmts($stmts, $stmtPosition, $variableName)) {
                 continue;
             }
             /** @var Expression<Assign> $currentStmt */
@@ -145,14 +145,11 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param Stmt[] $stmts
      */
-    private function isVariableUsedInFollowingStmts($functionLike, int $assignStmtPosition, string $variableName) : bool
+    private function isVariableUsedInFollowingStmts(array $stmts, int $assignStmtPosition, string $variableName) : bool
     {
-        if ($functionLike->stmts === null) {
-            return \false;
-        }
-        foreach ($functionLike->stmts as $key => $stmt) {
+        foreach ($stmts as $key => $stmt) {
             // do not look yet
             if ($key <= $assignStmtPosition) {
                 continue;
@@ -161,11 +158,7 @@ CODE_SAMPLE
             if (!$stmtScope instanceof Scope) {
                 continue;
             }
-            $foundVariable = $this->betterNodeFinder->findVariableOfName($stmt, $variableName);
-            if ($foundVariable instanceof Variable) {
-                return \true;
-            }
-            if ($this->stmtsManipulator->isVariableUsedInNextStmt($functionLike, $key, $variableName)) {
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key, $variableName)) {
                 return \true;
             }
         }

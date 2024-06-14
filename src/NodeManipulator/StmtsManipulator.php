@@ -73,12 +73,15 @@ final class StmtsManipulator
         });
         return $stmts;
     }
-    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName) : bool
+    /**
+     * @param StmtsAwareInterface|Stmt[] $stmtsAware
+     */
+    public function isVariableUsedInNextStmt($stmtsAware, int $jumpToKey, string $variableName) : bool
     {
-        if ($stmtsAware->stmts === null) {
+        if ($stmtsAware instanceof StmtsAwareInterface && $stmtsAware->stmts === null) {
             return \false;
         }
-        $stmts = \array_slice($stmtsAware->stmts, $jumpToKey, null, \true);
+        $stmts = \array_slice($stmtsAware instanceof StmtsAwareInterface ? $stmtsAware->stmts : $stmtsAware, $jumpToKey, null, \true);
         if ((bool) $this->betterNodeFinder->findVariableOfName($stmts, $variableName)) {
             return \true;
         }
