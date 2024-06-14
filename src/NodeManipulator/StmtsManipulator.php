@@ -82,9 +82,6 @@ final class StmtsManipulator
             return \false;
         }
         $stmts = \array_slice($stmtsAware instanceof StmtsAwareInterface ? $stmtsAware->stmts : $stmtsAware, $jumpToKey, null, \true);
-        if ((bool) $this->betterNodeFinder->findVariableOfName($stmts, $variableName)) {
-            return \true;
-        }
         $variable = new Variable($variableName);
         return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $subNode) use($variable) : bool {
             return $this->exprUsedInNodeAnalyzer->isUsed($subNode, $variable);
