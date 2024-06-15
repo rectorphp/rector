@@ -1868,6 +1868,7 @@ return array(
     'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => $baseDir . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
+    'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => $baseDir . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',
     'Rector\\Php74\\Rector\\LNumber\\AddLiteralSeparatorToNumberRector' => $baseDir . '/rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php',
     'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => $baseDir . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
     'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => $baseDir . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',

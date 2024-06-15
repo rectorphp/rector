@@ -2087,6 +2087,7 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
         'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
+        'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',
         'Rector\\Php74\\Rector\\LNumber\\AddLiteralSeparatorToNumberRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php',
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',

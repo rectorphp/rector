@@ -1,4 +1,4 @@
-# 380 Rules Overview
+# 381 Rules Overview
 
 <br>
 
@@ -38,7 +38,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (12)
+- [Php74](#php74) (13)
 
 - [Php80](#php80) (16)
 
@@ -4816,6 +4816,19 @@ Add null default to properties with PHP 7.4 property nullable type
 -    public ?string $name;
 +    public ?string $name = null;
  }
+```
+
+<br>
+
+### RestoreIncludePathToIniRestoreRector
+
+Change `restore_include_path()` to ini_restore("include_path")
+
+- class: [`Rector\Php74\Rector\FuncCall\RestoreIncludePathToIniRestoreRector`](../rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php)
+
+```diff
+-restore_include_path();
++ini_restore('include_path');
 ```
 
 <br>
