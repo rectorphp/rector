@@ -1867,12 +1867,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "9596a9185373995023b6dab5b3f95f14a2c6626f"
+                "reference": "dc164b8b2a88ee39c164b76935fc9a222789a657"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/9596a9185373995023b6dab5b3f95f14a2c6626f",
-                "reference": "9596a9185373995023b6dab5b3f95f14a2c6626f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/dc164b8b2a88ee39c164b76935fc9a222789a657",
+                "reference": "dc164b8b2a88ee39c164b76935fc9a222789a657",
                 "shasum": ""
             },
             "require": {
@@ -1880,18 +1880,18 @@
                 "php": ">=8.2"
             },
             "require-dev": {
-                "phpstan\/extension-installer": "^1.3",
-                "phpstan\/phpstan": "^1.10.57",
+                "phpstan\/extension-installer": "^1.4",
+                "phpstan\/phpstan": "^1.11",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-generator": "^0.7",
                 "rector\/rector-src": "dev-main",
                 "symfony\/config": "^6.3",
                 "symfony\/dependency-injection": "^6.3",
-                "symfony\/http-kernel": "~6.2.0",
-                "symfony\/routing": "^6.2",
-                "symfony\/security-core": "^6.2",
-                "symfony\/security-http": "^6.1",
+                "symfony\/http-kernel": "~6.3",
+                "symfony\/routing": "^6.3",
+                "symfony\/security-core": "^6.3",
+                "symfony\/security-http": "^6.2",
                 "symfony\/validator": "^6.2",
                 "symplify\/easy-coding-standard": "^12.1",
                 "symplify\/phpstan-extensions": "^11.1",
@@ -1901,7 +1901,7 @@
                 "tomasvotruba\/class-leak": "^0.2.13",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-05-31T12:15:34+00:00",
+            "time": "2024-06-16T15:07:00+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
