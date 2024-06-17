@@ -85,7 +85,7 @@ CODE_SAMPLE
         $parentClassReflections = $this->getParentReflections($className);
         $hasChanged = \false;
         foreach ($classConsts as $classConst) {
-            $valueType = null;
+            $valueTypes = [];
             // If a type is set, skip
             if ($classConst->type !== null) {
                 continue;
@@ -97,9 +97,20 @@ CODE_SAMPLE
                 if ($this->canBeInherited($classConst, $node)) {
                     continue;
                 }
-                $valueType = $this->findValueType($constNode->value);
+                $valueTypes[] = $this->findValueType($constNode->value);
             }
-            if (!($valueType ?? null) instanceof Identifier) {
+            if ($valueTypes === []) {
+                continue;
+            }
+            if (\count($valueTypes) > 1) {
+                $valueTypes = \array_unique($valueTypes, \SORT_REGULAR);
+            }
+            // once more verify after uniquate
+            if (\count($valueTypes) > 1) {
+                continue;
+            }
+            $valueType = \current($valueTypes);
+            if (!$valueType instanceof Identifier) {
                 continue;
             }
             $classConst->type = $valueType;
