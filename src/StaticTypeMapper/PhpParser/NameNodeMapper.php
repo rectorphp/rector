@@ -5,12 +5,14 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Enum\ObjectReference;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -26,9 +28,15 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper
+     */
+    private $fullyQualifiedNodeMapper;
+    public function __construct(ReflectionResolver $reflectionResolver, \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper)
     {
         $this->reflectionResolver = $reflectionResolver;
+        $this->fullyQualifiedNodeMapper = $fullyQualifiedNodeMapper;
     }
     public function getNodeType() : string
     {
@@ -43,7 +51,21 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         if ($node->isSpecialClassName()) {
             return $this->createClassReferenceType($node, $name);
         }
+        $expandedNamespacedName = $this->expandedNamespacedName($node);
+        if ($expandedNamespacedName instanceof FullyQualified) {
+            return $this->fullyQualifiedNodeMapper->mapToPHPStan($expandedNamespacedName);
+        }
         return new MixedType();
+    }
+    private function expandedNamespacedName(Node $node) : ?FullyQualified
+    {
+        if (\get_class($node) !== Name::class) {
+            return null;
+        }
+        if (!$node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            return null;
+        }
+        return new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType|\PHPStan\Type\ObjectWithoutClassType
