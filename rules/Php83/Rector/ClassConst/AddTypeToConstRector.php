@@ -86,6 +86,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($classConsts as $classConst) {
             $valueTypes = [];
+            $valueType = null;
             // If a type is set, skip
             if ($classConst->type !== null) {
                 continue;

@@ -383,7 +383,21 @@ final class RectorConfigBuilder
         }
         return $this;
     }
-    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false, bool $carbon = \false, bool $rectorPreset = \false) : self
+    public function withPreparedSets(
+        bool $deadCode = \false,
+        bool $codeQuality = \false,
+        bool $codingStyle = \false,
+        bool $typeDeclarations = \false,
+        bool $privatization = \false,
+        bool $naming = \false,
+        bool $instanceOf = \false,
+        bool $earlyReturn = \false,
+        bool $strictBooleans = \false,
+        bool $carbon = \false,
+        bool $rectorPreset = \false,
+        // composer based
+        bool $twig = \false
+    ) : self
     {
         if ($deadCode) {
             $this->sets[] = SetList::DEAD_CODE;
@@ -417,6 +431,10 @@ final class RectorConfigBuilder
         }
         if ($rectorPreset) {
             $this->sets[] = SetList::RECTOR_PRESET;
+        }
+        if ($twig) {
+            // resolve sets based on composer.json versions
+            // @todo
         }
         return $this;
     }

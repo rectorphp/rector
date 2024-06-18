@@ -3,10 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
+use Rector\Set\Contract\SetListInterface;
 /**
  * @api
  */
-final class JMSSetList
+final class JMSSetList implements SetListInterface
 {
     /**
      * @var string

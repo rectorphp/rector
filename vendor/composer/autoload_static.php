@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit617a88c9745824dcc98208775208cc4b
+class ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1727,9 +1727,6 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
         'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
         'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
         'Rector\\Naming\\Contract\\AssignVariableNameResolverInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/AssignVariableNameResolverInterface.php',
-        'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
-        'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
-        'Rector\\Naming\\Contract\\RenameValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameValueObjectInterface.php',
         'Rector\\Naming\\ExpectedNameResolver\\InflectorSingularResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/InflectorSingularResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\MatchPropertyTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchPropertyTypeExpectedNameResolver.php',
@@ -2286,6 +2283,7 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
         'Rector\\Renaming\\ValueObject\\RenameFunctionLikeParamWithinCallLikeArg' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameFunctionLikeParamWithinCallLikeArg.php',
         'Rector\\Renaming\\ValueObject\\RenameProperty' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameProperty.php',
         'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
+        'Rector\\Set\\Contract\\ComposerTriggeredSetListInterface' => __DIR__ . '/../..' . '/src/Set/Contract/ComposerTriggeredSetListInterface.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
@@ -2737,9 +2735,9 @@ class ComposerStaticInit617a88c9745824dcc98208775208cc4b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit617a88c9745824dcc98208775208cc4b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit617a88c9745824dcc98208775208cc4b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit617a88c9745824dcc98208775208cc4b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a::$classMap;
 
         }, null, ClassLoader::class);
     }

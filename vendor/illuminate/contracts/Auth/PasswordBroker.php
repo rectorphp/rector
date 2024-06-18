@@ -42,7 +42,7 @@ interface PasswordBroker
      * @param  \Closure|null  $callback
      * @return string
      */
-    public function sendResetLink(array $credentials, Closure $callback = null);
+    public function sendResetLink(array $credentials, ?Closure $callback = null);
     /**
      * Reset the password for the given token.
      *
