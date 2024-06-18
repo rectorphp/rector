@@ -105,6 +105,10 @@ CODE_SAMPLE
             if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerInterface'))) {
                 return null;
             }
+            $args = $node->getArgs();
+            if (\is_array($args) && \count($args) === 1 && $args[0]->value->getType() === 'Expr_ClassConstFetch') {
+                return null;
+            }
             $propertyMetadata = $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($class, $node);
             if (!$propertyMetadata instanceof PropertyMetadata) {
                 return null;
