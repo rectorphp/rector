@@ -1863,6 +1863,7 @@ return array(
     'Rector\\Php74\\Rector\\Double\\RealToFloatTypeCastRector' => $baseDir . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\ArrayKeyExistsOnPropertyRector' => $baseDir . '/rules/Php74/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => $baseDir . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
+    'Rector\\Php74\\Rector\\FuncCall\\HebrevcToNl2brHebrevRector' => $baseDir . '/rules/Php74/Rector/FuncCall/HebrevcToNl2brHebrevRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => $baseDir . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',

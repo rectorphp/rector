@@ -1,4 +1,4 @@
-# 381 Rules Overview
+# 382 Rules Overview
 
 <br>
 
@@ -38,7 +38,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (13)
+- [Php74](#php74) (14)
 
 - [Php80](#php80) (16)
 
@@ -4726,6 +4726,19 @@ Change `filter_var()` with slash escaping to `addslashes()`
  $var= "Satya's here!";
 -filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 +addslashes($var);
+```
+
+<br>
+
+### HebrevcToNl2brHebrevRector
+
+Change hebrevc($str) to nl2br(hebrev($str))
+
+- class: [`Rector\Php74\Rector\FuncCall\HebrevcToNl2brHebrevRector`](../rules/Php74/Rector/FuncCall/HebrevcToNl2brHebrevRector.php)
+
+```diff
+-hebrevc($str);
++nl2br(hebrev($str));
 ```
 
 <br>

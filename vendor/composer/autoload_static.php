@@ -2082,6 +2082,7 @@ class ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a
         'Rector\\Php74\\Rector\\Double\\RealToFloatTypeCastRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\ArrayKeyExistsOnPropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
+        'Rector\\Php74\\Rector\\FuncCall\\HebrevcToNl2brHebrevRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/HebrevcToNl2brHebrevRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',

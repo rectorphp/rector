@@ -340,6 +340,10 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DEPRECATE_HEBREVC = \Rector\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
     public const UNION_TYPES = \Rector\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
