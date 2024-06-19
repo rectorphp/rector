@@ -1,4 +1,4 @@
-# 382 Rules Overview
+# 380 Rules Overview
 
 <br>
 
@@ -42,7 +42,7 @@
 
 - [Php80](#php80) (16)
 
-- [Php81](#php81) (9)
+- [Php81](#php81) (8)
 
 - [Php82](#php82) (5)
 
@@ -50,7 +50,7 @@
 
 - [Php84](#php84) (1)
 
-- [Privatization](#privatization) (5)
+- [Privatization](#privatization) (4)
 
 - [Removing](#removing) (5)
 
@@ -5211,22 +5211,6 @@ Add `Stringable` interface to classes with `__toString()` method
 
 ## Php81
 
-### FinalizePublicClassConstantRector
-
-Add final to constants that does not have children
-
-- class: [`Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector`](../rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php)
-
-```diff
- class SomeClass
- {
--    public const NAME = 'value';
-+    final public const NAME = 'value';
- }
-```
-
-<br>
-
 ### FirstClassCallableRector
 
 Upgrade array callable to first class callable
@@ -5551,25 +5535,6 @@ Make implicit nullable param to explicit
 <br>
 
 ## Privatization
-
-### FinalizeClassesWithoutChildrenRector
-
-Finalize every class that has no children
-
-- class: [`Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`](../rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php)
-
-```diff
--class FirstClass extends SecondClass
-+final class FirstClass extends SecondClass
- {
- }
-
- class SecondClass
- {
- }
-```
-
-<br>
 
 ### FinalizeTestCaseClassRector
 
