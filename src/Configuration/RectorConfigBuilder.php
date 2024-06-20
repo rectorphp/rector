@@ -424,55 +424,55 @@ final class RectorConfigBuilder
     // suitable for PHP 7.4 and lower, before named args
     public function withPhp53Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_53;
         return $this;
     }
     public function withPhp54Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_54;
         return $this;
     }
     public function withPhp55Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_55;
         return $this;
     }
     public function withPhp56Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_56;
         return $this;
     }
     public function withPhp70Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_70;
         return $this;
     }
     public function withPhp71Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_71;
         return $this;
     }
     public function withPhp72Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_72;
         return $this;
     }
     public function withPhp73Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_73;
         return $this;
     }
     public function withPhp74Sets() : self
     {
-        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__, 'withPhpSets');
+        Notifier::notifyNotSuitableMethodForPHP80(__METHOD__);
         $this->sets[] = LevelSetList::UP_TO_PHP_74;
         return $this;
     }
@@ -502,7 +502,7 @@ final class RectorConfigBuilder
         bool $twig = \false
     ) : self
     {
-        Notifier::notifyNotSuitableMethodForPHP74(__METHOD__, 'withSets');
+        Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
         if ($deadCode) {
             $this->sets[] = SetList::DEAD_CODE;
         }
