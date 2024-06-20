@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -98,9 +99,9 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         }
         return $node;
     }
-    private function hasMagicIsset(Node $node) : bool
+    private function hasMagicIsset(Expr $expr) : bool
     {
-        $type = $this->nodeTypeResolver->getType($node);
+        $type = $this->nodeTypeResolver->getType($expr);
         if (!$type instanceof TypeWithClassName) {
             // object not found, skip
             return $type instanceof ObjectWithoutClassType;

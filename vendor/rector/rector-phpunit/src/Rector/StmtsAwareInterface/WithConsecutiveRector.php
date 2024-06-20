@@ -246,15 +246,15 @@ CODE_SAMPLE
     }
     /**
      * @template T of Node
-     * @param Node|Node[] $node
+     * @param Node[] $nodes
      * @param class-string<T> $type
      * @return T[]
      */
-    public function findInstancesOfScoped($node, string $type) : array
+    private function findInstancesOfScoped(array $nodes, string $type) : array
     {
         /** @var T[] $foundNodes */
         $foundNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, static function (Node $subNode) use($type, &$foundNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($type, &$foundNodes) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
