@@ -4,10 +4,8 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use RectorPrefix202406\Nette\Utils\FileSystem;
-use RectorPrefix202406\Nette\Utils\Strings;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\InitFilePathsResolver;
-use Rector\Php\PhpVersionProvider;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConfigInitializer
@@ -28,19 +26,13 @@ final class ConfigInitializer
      */
     private $symfonyStyle;
     /**
-     * @readonly
-     * @var \Rector\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle, PhpVersionProvider $phpVersionProvider)
+    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle)
     {
         $this->rectors = $rectors;
         $this->initFilePathsResolver = $initFilePathsResolver;
         $this->symfonyStyle = $symfonyStyle;
-        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function createConfig(string $projectDirectory) : void
     {
@@ -56,7 +48,6 @@ final class ConfigInitializer
             return;
         }
         $configContents = FileSystem::read(__DIR__ . '/../../templates/rector.php.dist');
-        $configContents = $this->replacePhpLevelContents($configContents);
         $configContents = $this->replacePathsContents($configContents, $projectDirectory);
         FileSystem::write($commonRectorConfigPath, $configContents, null);
         $this->symfonyStyle->success('The config is added now. Re-run command to make Rector do the work!');
@@ -75,12 +66,6 @@ final class ConfigInitializer
         return \array_filter($rectors, static function (RectorInterface $rector) : bool {
             return !$rector instanceof PostRectorInterface;
         });
-    }
-    private function replacePhpLevelContents(string $rectorPhpTemplateContents) : string
-    {
-        $fullPHPVersion = (string) $this->phpVersionProvider->provide();
-        $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
-        return \str_replace('LevelSetList::UP_TO_PHP_XY', 'LevelSetList::UP_TO_PHP_' . $phpVersion, $rectorPhpTemplateContents);
     }
     private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory) : string
     {

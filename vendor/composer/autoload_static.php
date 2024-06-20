@@ -1443,6 +1443,7 @@ class ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a
         'Rector\\Console\\ExitCode' => __DIR__ . '/../..' . '/src/Console/ExitCode.php',
         'Rector\\Console\\Formatter\\ColorConsoleDiffFormatter' => __DIR__ . '/../..' . '/src/Console/Formatter/ColorConsoleDiffFormatter.php',
         'Rector\\Console\\Formatter\\ConsoleDiffer' => __DIR__ . '/../..' . '/src/Console/Formatter/ConsoleDiffer.php',
+        'Rector\\Console\\Notifier' => __DIR__ . '/../..' . '/src/Console/Notifier.php',
         'Rector\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
         'Rector\\Console\\ProcessConfigureDecorator' => __DIR__ . '/../..' . '/src/Console/ProcessConfigureDecorator.php',
         'Rector\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
