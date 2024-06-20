@@ -29,4 +29,14 @@ final class Notifier
         $symfonyStyle->warning($message);
         \sleep(3);
     }
+    public static function notifyWithPhpSetsNotSuitableForPHP80() : void
+    {
+        if (\PHP_VERSION_ID >= 80000) {
+            return;
+        }
+        $message = \sprintf('The "withPhpSets()" method uses named arguments. Its suitable for PHP 8.0+. In lower PHP versions, use withPhp53Sets() ... withPhp74Sets() method instead. One at a time.%sTo use your composer.json PHP version, keep arguments of this method.', \PHP_EOL);
+        $symfonyStyle = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
+        $symfonyStyle->warning($message);
+        \sleep(3);
+    }
 }
