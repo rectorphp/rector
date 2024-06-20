@@ -10,6 +10,7 @@ use Rector\Set\Contract\SetListInterface;
 final class SetList implements SetListInterface
 {
     /**
+     * @internal
      * @var string
      */
     public const PHP_POLYFILLS = __DIR__ . '/../../../config/set/php-polyfills.php';
