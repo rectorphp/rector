@@ -55,6 +55,7 @@ if (!function_exists('mb_http_input')) { function mb_http_input() { return \Rect
 if (!function_exists('mb_http_output')) { function mb_http_output() { return \RectorPrefix202406\mb_http_output(...func_get_args()); } }
 if (!function_exists('mb_internal_encoding')) { function mb_internal_encoding() { return \RectorPrefix202406\mb_internal_encoding(...func_get_args()); } }
 if (!function_exists('mb_language')) { function mb_language() { return \RectorPrefix202406\mb_language(...func_get_args()); } }
+if (!function_exists('mb_lcfirst')) { function mb_lcfirst() { return \RectorPrefix202406\mb_lcfirst(...func_get_args()); } }
 if (!function_exists('mb_list_encodings')) { function mb_list_encodings() { return \RectorPrefix202406\mb_list_encodings(...func_get_args()); } }
 if (!function_exists('mb_ord')) { function mb_ord() { return \RectorPrefix202406\mb_ord(...func_get_args()); } }
 if (!function_exists('mb_output_handler')) { function mb_output_handler() { return \RectorPrefix202406\mb_output_handler(...func_get_args()); } }
@@ -77,6 +78,7 @@ if (!function_exists('mb_strwidth')) { function mb_strwidth() { return \RectorPr
 if (!function_exists('mb_substitute_character')) { function mb_substitute_character() { return \RectorPrefix202406\mb_substitute_character(...func_get_args()); } }
 if (!function_exists('mb_substr')) { function mb_substr() { return \RectorPrefix202406\mb_substr(...func_get_args()); } }
 if (!function_exists('mb_substr_count')) { function mb_substr_count() { return \RectorPrefix202406\mb_substr_count(...func_get_args()); } }
+if (!function_exists('mb_ucfirst')) { function mb_ucfirst() { return \RectorPrefix202406\mb_ucfirst(...func_get_args()); } }
 if (!function_exists('parseArgs')) { function parseArgs() { return \RectorPrefix202406\parseArgs(...func_get_args()); } }
 if (!function_exists('print_node')) { function print_node() { return \RectorPrefix202406\print_node(...func_get_args()); } }
 if (!function_exists('showHelp')) { function showHelp() { return \RectorPrefix202406\showHelp(...func_get_args()); } }

@@ -12,6 +12,10 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
+    public const PHP_POLYFILLS = __DIR__ . '/../../../config/set/php-polyfills.php';
+    /**
+     * @var string
+     */
     public const CODE_QUALITY = __DIR__ . '/../../../config/set/code-quality.php';
     /**
      * @var string
