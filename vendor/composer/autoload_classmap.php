@@ -2207,6 +2207,7 @@ return array(
     'Rector\\Symfony\\Set\\FOSRestSetList' => $vendorDir . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
     'Rector\\Symfony\\Set\\JMSSetList' => $vendorDir . '/rector/rector-symfony/src/Set/JMSSetList.php',
     'Rector\\Symfony\\Set\\SensiolabsSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
+    'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
     'Rector\\Symfony\\Set\\SwiftMailerSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
     'Rector\\Symfony\\Set\\SymfonySetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonySetList.php',
     'Rector\\Symfony\\Set\\TwigSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigSetList.php',

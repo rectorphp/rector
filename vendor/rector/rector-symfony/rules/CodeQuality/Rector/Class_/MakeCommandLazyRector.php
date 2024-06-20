@@ -114,17 +114,18 @@ CODE_SAMPLE
         if (!$this->isName($methodCall->name, 'setName')) {
             return null;
         }
-        $expr = $methodCall->getArgs()[0]->value;
+        $firstArg = $methodCall->getArgs()[0];
+        $expr = $firstArg->value;
         // cleanup fluent call
         unset($classMethod->stmts[$key]);
         return $expr;
     }
-    private function createStaticProtectedPropertyWithDefault(string $name, Node $node) : Property
+    private function createStaticProtectedPropertyWithDefault(string $name, Expr $expr) : Property
     {
-        $property = new \PhpParser\Builder\Property($name);
-        $property->makeProtected();
-        $property->makeStatic();
-        $property->setDefault($node);
-        return $property->getNode();
+        $propertyBuilder = new \PhpParser\Builder\Property($name);
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($expr);
+        return $propertyBuilder->getNode();
     }
 }

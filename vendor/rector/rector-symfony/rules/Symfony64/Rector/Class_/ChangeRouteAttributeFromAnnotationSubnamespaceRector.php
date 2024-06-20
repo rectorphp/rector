@@ -57,8 +57,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function isSymfonyRouteAttribute(Node $node) : bool
+    private function isSymfonyRouteAttribute(Attribute $attribute) : bool
     {
-        return $node instanceof Attribute && $node->name !== null && (string) $node->name === self::ANNOTATION_ROUTE;
+        if ($attribute->name === null) {
+            return \false;
+        }
+        return (string) $attribute->name === self::ANNOTATION_ROUTE;
     }
 }

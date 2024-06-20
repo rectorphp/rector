@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -178,12 +177,6 @@ final class NodeTypeResolver
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
-            if ($node instanceof ConstFetch) {
-                $name = $node->name->toString();
-                if (\strtolower($name) === 'null') {
-                    return new NullType();
-                }
-            }
             return new MixedType();
         }
         if ($node instanceof NodeUnionType) {

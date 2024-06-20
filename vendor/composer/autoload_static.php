@@ -2426,6 +2426,7 @@ class ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a
         'Rector\\Symfony\\Set\\FOSRestSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
         'Rector\\Symfony\\Set\\JMSSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/JMSSetList.php',
         'Rector\\Symfony\\Set\\SensiolabsSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
+        'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
         'Rector\\Symfony\\Set\\SwiftMailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
         'Rector\\Symfony\\Set\\SymfonySetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonySetList.php',
         'Rector\\Symfony\\Set\\TwigSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigSetList.php',

@@ -14,9 +14,8 @@ final class SecurityAccessDecisionManagerConfigArrayHandler
 {
     /**
      * @return array<Expression<MethodCall>>
-     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\MethodCall $configCaller
      */
-    public function handle(Array_ $array, $configCaller, string $mainMethodName) : array
+    public function handle(Array_ $array, Variable $configCaller, string $mainMethodName) : array
     {
         if (!$array->items[0] instanceof ArrayItem) {
             return [];

@@ -156,6 +156,6 @@ CODE_SAMPLE
         if (!$stringNode instanceof StringNode) {
             return \false;
         }
-        return $singleValue->value->value === '/';
+        return $stringNode->value === '/';
     }
 }

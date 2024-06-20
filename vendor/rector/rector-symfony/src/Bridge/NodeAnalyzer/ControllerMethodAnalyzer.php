@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 final class ControllerMethodAnalyzer
@@ -20,14 +19,11 @@ final class ControllerMethodAnalyzer
     /**
      * Detect if is <some>Action() in Controller
      */
-    public function isAction(Node $node) : bool
+    public function isAction(ClassMethod $classMethod) : bool
     {
-        if (!$node instanceof ClassMethod) {
+        if (!$this->controllerAnalyzer->isInsideController($classMethod)) {
             return \false;
         }
-        if (!$this->controllerAnalyzer->isInsideController($node)) {
-            return \false;
-        }
-        return $node->isPublic() && !$node->isStatic();
+        return $classMethod->isPublic() && !$classMethod->isStatic();
     }
 }

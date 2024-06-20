@@ -1869,12 +1869,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "b4dfb48b3f76277d11885d7fcfb9874b5006b988"
+                "reference": "a8fd1d96561cf762cfa52f35e065ead1d5d5fbd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b4dfb48b3f76277d11885d7fcfb9874b5006b988",
-                "reference": "b4dfb48b3f76277d11885d7fcfb9874b5006b988",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/a8fd1d96561cf762cfa52f35e065ead1d5d5fbd3",
+                "reference": "a8fd1d96561cf762cfa52f35e065ead1d5d5fbd3",
                 "shasum": ""
             },
             "require": {
@@ -1888,22 +1888,23 @@
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-generator": "^0.7",
                 "rector\/rector-src": "dev-main",
-                "symfony\/config": "^6.3",
-                "symfony\/dependency-injection": "^6.3",
+                "rector\/type-perfect": "^0.1.6",
+                "symfony\/config": "^6.4",
+                "symfony\/dependency-injection": "^6.4",
                 "symfony\/http-kernel": "~6.3",
-                "symfony\/routing": "^6.3",
-                "symfony\/security-core": "^6.3",
-                "symfony\/security-http": "^6.2",
-                "symfony\/validator": "^6.2",
-                "symplify\/easy-coding-standard": "^12.1",
+                "symfony\/routing": "^6.4",
+                "symfony\/security-core": "^6.4",
+                "symfony\/security-http": "^6.4",
+                "symfony\/validator": "^6.4",
+                "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "^12.0",
+                "symplify\/phpstan-rules": "^13.0",
                 "symplify\/rule-doc-generator": "^12.0",
                 "symplify\/vendor-patches": "^11.2",
-                "tomasvotruba\/class-leak": "^0.2.13",
+                "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-06-20T07:58:56+00:00",
+            "time": "2024-06-20T15:36:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
