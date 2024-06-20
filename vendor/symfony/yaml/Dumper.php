@@ -46,9 +46,9 @@ class Dumper
         $prefix = $indent ? \str_repeat(' ', $indent) : '';
         $dumpObjectAsInlineMap = \true;
         if (Yaml::DUMP_OBJECT_AS_MAP & $flags && ($input instanceof \ArrayObject || $input instanceof \stdClass)) {
-            $dumpObjectAsInlineMap = empty((array) $input);
+            $dumpObjectAsInlineMap = !(array) $input;
         }
-        if ($inline <= 0 || !\is_array($input) && !$input instanceof TaggedValue && $dumpObjectAsInlineMap || empty($input)) {
+        if ($inline <= 0 || !\is_array($input) && !$input instanceof TaggedValue && $dumpObjectAsInlineMap || !$input) {
             $output .= $prefix . Inline::dump($input, $flags);
         } elseif ($input instanceof TaggedValue) {
             $output .= $this->dumpTaggedValue($input, $inline, $indent, $flags, $prefix);
@@ -100,9 +100,9 @@ class Dumper
                 }
                 $dumpObjectAsInlineMap = \true;
                 if (Yaml::DUMP_OBJECT_AS_MAP & $flags && ($value instanceof \ArrayObject || $value instanceof \stdClass)) {
-                    $dumpObjectAsInlineMap = empty((array) $value);
+                    $dumpObjectAsInlineMap = !(array) $value;
                 }
-                $willBeInlined = $inline - 1 <= 0 || !\is_array($value) && $dumpObjectAsInlineMap || empty($value);
+                $willBeInlined = $inline - 1 <= 0 || !\is_array($value) && $dumpObjectAsInlineMap || !$value;
                 $output .= \sprintf('%s%s%s%s', $prefix, $dumpAsMap ? Inline::dump($key, $flags) . ':' : '-', $willBeInlined ? ' ' : "\n", $this->dump($value, $inline - 1, $willBeInlined ? 0 : $indent + $this->indentation, $flags)) . ($willBeInlined ? "\n" : '');
             }
         }
@@ -132,7 +132,7 @@ class Dumper
         // http://www.yaml.org/spec/1.2/spec.html#id2793979
         foreach ($lines as $line) {
             if ('' !== \trim($line, ' ')) {
-                return ' ' === \substr($line, 0, 1) ? (string) $this->indentation : '';
+                return \strncmp($line, ' ', \strlen(' ')) === 0 ? (string) $this->indentation : '';
             }
         }
         return '';

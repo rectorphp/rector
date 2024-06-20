@@ -59,10 +59,7 @@ class LintCommand extends Command
         $this->directoryIteratorProvider = null === $directoryIteratorProvider ? null : \Closure::fromCallable($directoryIteratorProvider);
         $this->isReadableProvider = null === $isReadableProvider ? null : \Closure::fromCallable($isReadableProvider);
     }
-    /**
-     * @return void
-     */
-    protected function configure()
+    protected function configure() : void
     {
         $this->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, InputOption::VALUE_REQUIRED, \sprintf('The output format ("%s")', \implode('", "', $this->getAvailableFormatOptions())))->addOption('exclude', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Path(s) to exclude')->addOption('parse-tags', null, InputOption::VALUE_NEGATABLE, 'Parse custom tags', null)->setHelp(<<<EOF
 The <info>%command.name%</info> command lints a YAML file and outputs to STDOUT

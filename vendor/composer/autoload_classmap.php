@@ -1380,7 +1380,6 @@ return array(
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
-    'Rector\\Doctrine\\TypeAnalyzer\\DoctrineCollectionTypeAnalyzer' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/DoctrineCollectionTypeAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\OverrideFromAnonymousClassMethodAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/OverrideFromAnonymousClassMethodAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\RegexFuncAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/RegexFuncAnalyzer.php',

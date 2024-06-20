@@ -5,54 +5,21 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
-use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
-use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\Rector\AbstractRector;
-use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
  *
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector\InitializeDefaultEntityCollectionRectorTest
- *
- * @deprecated This rule can create incomplete assign of object to an array. Use the @see \Rector\Doctrine\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector instead.
+ * @deprecated This rule can create incomplete assign of object to an array. Use the
+ * @see \Rector\Doctrine\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector instead
  */
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
-     * @readonly
-     * @var \Rector\NodeManipulator\ClassDependencyManipulator
+     * @var bool
      */
-    private $classDependencyManipulator;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory
-     */
-    private $arrayCollectionAssignFactory;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
-     */
-    private $attrinationFinder;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
-     */
-    private $constructorAssignDetector;
-    /**
-     * @var string[]
-     */
-    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
-    public function __construct(ClassDependencyManipulator $classDependencyManipulator, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector)
-    {
-        $this->classDependencyManipulator = $classDependencyManipulator;
-        $this->arrayCollectionAssignFactory = $arrayCollectionAssignFactory;
-        $this->attrinationFinder = $attrinationFinder;
-        $this->constructorAssignDetector = $constructorAssignDetector;
-    }
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Initialize collection property in Entity constructor', [new CodeSample(<<<'CODE_SAMPLE'
@@ -102,49 +69,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->attrinationFinder->hasByOne($node, 'Doctrine\\ORM\\Mapping\\Entity')) {
+        if ($this->hasWarned) {
             return null;
         }
-        $toManyPropertyNames = $this->resolveToManyPropertyNames($node);
-        if ($toManyPropertyNames === []) {
-            return null;
-        }
-        $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
-        $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $assigns);
-        return $node;
-    }
-    /**
-     * @return string[]
-     */
-    private function resolveToManyPropertyNames(Class_ $class) : array
-    {
-        $collectionPropertyNames = [];
-        foreach ($class->getProperties() as $property) {
-            if (\count($property->props) !== 1) {
-                continue;
-            }
-            if (!$this->attrinationFinder->hasByMany($property, self::TO_MANY_ANNOTATION_CLASSES)) {
-                continue;
-            }
-            /** @var string $propertyName */
-            $propertyName = $this->getName($property);
-            if ($this->constructorAssignDetector->isPropertyAssigned($class, $propertyName)) {
-                continue;
-            }
-            $collectionPropertyNames[] = $propertyName;
-        }
-        return $collectionPropertyNames;
-    }
-    /**
-     * @param string[] $propertyNames
-     * @return Expression[]
-     */
-    private function createAssignsOfArrayCollectionsForPropertyNames(array $propertyNames) : array
-    {
-        $assigns = [];
-        foreach ($propertyNames as $propertyName) {
-            $assigns[] = $this->arrayCollectionAssignFactory->createFromPropertyName($propertyName);
-        }
-        return $assigns;
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as its functionality caused bugs. Without knowing the full dependency tree, its risky to change. Use "%s" instead', self::class, 'https://github.com/rectorphp/swiss-knife#4-finalize-classes-without-children'));
+        \sleep(3);
+        $this->hasWarned = \true;
+        return null;
     }
 }

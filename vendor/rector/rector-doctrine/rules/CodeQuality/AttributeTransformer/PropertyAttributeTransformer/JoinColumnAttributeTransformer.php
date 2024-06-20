@@ -30,6 +30,10 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
         $this->transformMapping($property, $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null);
         $this->transformMapping($property, $entityMapping->matchManyToOnePropertyMapping($property));
     }
+    public function getClassName() : string
+    {
+        return MappingClass::JOIN_COLUMN;
+    }
     /**
      * @param array<string, array<string, mixed>>|null $mapping
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
@@ -52,10 +56,6 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
         foreach ($joinColumns as $columnName => $joinColumn) {
             $property->attrGroups[] = $this->createJoinColumnAttrGroup($columnName, $joinColumn);
         }
-    }
-    public function getClassName() : string
-    {
-        return MappingClass::JOIN_COLUMN;
     }
     /**
      * @param int|string $columnName

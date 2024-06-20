@@ -18,33 +18,33 @@ namespace RectorPrefix202406\Symfony\Component\Yaml\Exception;
 class ParseException extends RuntimeException
 {
     /**
-     * @var string|null
+     * @var string
      */
-    private $parsedFile;
+    private $rawMessage;
     /**
      * @var int
      */
-    private $parsedLine;
+    private $parsedLine = -1;
     /**
      * @var string|null
      */
     private $snippet;
     /**
-     * @var string
+     * @var string|null
      */
-    private $rawMessage;
+    private $parsedFile;
     /**
-     * @param string      $message    The error message
+     * @param string      $rawMessage The error message
      * @param int         $parsedLine The line where the error occurred
      * @param string|null $snippet    The snippet of code near the problem
      * @param string|null $parsedFile The file name where the error occurred
      */
-    public function __construct(string $message, int $parsedLine = -1, ?string $snippet = null, ?string $parsedFile = null, ?\Throwable $previous = null)
+    public function __construct(string $rawMessage, int $parsedLine = -1, ?string $snippet = null, ?string $parsedFile = null, ?\Throwable $previous = null)
     {
-        $this->parsedFile = $parsedFile;
+        $this->rawMessage = $rawMessage;
         $this->parsedLine = $parsedLine;
         $this->snippet = $snippet;
-        $this->rawMessage = $message;
+        $this->parsedFile = $parsedFile;
         $this->updateRepr();
         parent::__construct($this->message, 0, $previous);
     }
@@ -57,10 +57,8 @@ class ParseException extends RuntimeException
     }
     /**
      * Sets the snippet of code near the error.
-     *
-     * @return void
      */
-    public function setSnippet(string $snippet)
+    public function setSnippet(string $snippet) : void
     {
         $this->snippet = $snippet;
         $this->updateRepr();
@@ -76,10 +74,8 @@ class ParseException extends RuntimeException
     }
     /**
      * Sets the filename where the error occurred.
-     *
-     * @return void
      */
-    public function setParsedFile(string $parsedFile)
+    public function setParsedFile(string $parsedFile) : void
     {
         $this->parsedFile = $parsedFile;
         $this->updateRepr();
@@ -93,10 +89,8 @@ class ParseException extends RuntimeException
     }
     /**
      * Sets the line where the error occurred.
-     *
-     * @return void
      */
-    public function setParsedLine(int $parsedLine)
+    public function setParsedLine(int $parsedLine) : void
     {
         $this->parsedLine = $parsedLine;
         $this->updateRepr();

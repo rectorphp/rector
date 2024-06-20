@@ -4,14 +4,8 @@ declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Doctrine\TypeAnalyzer\DoctrineCollectionTypeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,26 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromDoctrineCollectionRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\DoctrineCollectionTypeAnalyzer
+     * @var bool
      */
-    private $doctrineCollectionTypeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    public function __construct(DoctrineCollectionTypeAnalyzer $doctrineCollectionTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
-    {
-        $this->doctrineCollectionTypeAnalyzer = $doctrineCollectionTypeAnalyzer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
-    }
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add typed property based on Doctrine collection', [new CodeSample(<<<'CODE_SAMPLE'
@@ -91,23 +68,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->type !== null) {
+        if ($this->hasWarned) {
             return null;
         }
-        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$propertyPhpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-        $varTagValueNode = $propertyPhpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
-            return null;
-        }
-        $varTagType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $node);
-        if (!$this->doctrineCollectionTypeAnalyzer->detect($varTagType)) {
-            return null;
-        }
-        $node->type = new FullyQualified('Doctrine\\Common\\Collections\\Collection');
-        return $node;
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as its functionality caused bugs. Without knowing the full dependency tree, its risky to change. Use "%s" instead', self::class, 'https://github.com/rectorphp/swiss-knife#4-finalize-classes-without-children'));
+        \sleep(3);
+        $this->hasWarned = \true;
+        return null;
     }
     public function provideMinPhpVersion() : int
     {

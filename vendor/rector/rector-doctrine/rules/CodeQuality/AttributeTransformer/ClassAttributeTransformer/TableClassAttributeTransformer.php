@@ -40,6 +40,10 @@ final class TableClassAttributeTransformer implements ClassAttributeTransformerI
         $this->addIndexes($classMapping['indexes'] ?? [], $class, MappingClass::INDEX);
         $this->addIndexes($classMapping['uniqueConstraints'] ?? [], $class, MappingClass::UNIQUE_CONSTRAINT);
     }
+    public function getClassName() : string
+    {
+        return MappingClass::TABLE;
+    }
     /**
      * @param array<string, array<string, mixed>> $mapping
      * @param MappingClass::* $attribute
@@ -51,9 +55,5 @@ final class TableClassAttributeTransformer implements ClassAttributeTransformerI
             $args = $this->nodeFactory->createArgs($values);
             $class->attrGroups[] = AttributeFactory::createGroup($attribute, $args);
         }
-    }
-    public function getClassName() : string
-    {
-        return MappingClass::TABLE;
     }
 }

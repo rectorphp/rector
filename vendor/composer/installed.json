@@ -1680,37 +1680,38 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "6eb8de836a52701d15ab3fd020052a1843fad992"
+                "reference": "c3c91df9134657245c63d956aa6afc5bbdba5d6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/6eb8de836a52701d15ab3fd020052a1843fad992",
-                "reference": "6eb8de836a52701d15ab3fd020052a1843fad992",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c3c91df9134657245c63d956aa6afc5bbdba5d6f",
+                "reference": "c3c91df9134657245c63d956aa6afc5bbdba5d6f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
-                "symfony\/yaml": "^6.4"
+                "symfony\/yaml": "^7.1"
             },
             "require-dev": {
-                "doctrine\/doctrine-bundle": "^2.11",
-                "doctrine\/orm": "^2.18",
+                "doctrine\/doctrine-bundle": "^2.12",
+                "doctrine\/orm": "^2.19",
                 "phpstan\/extension-installer": "^1.3",
-                "phpstan\/phpstan": "^1.10.57",
+                "phpstan\/phpstan": "^1.11",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
-                "rector\/rector-generator": "^0.7.10",
+                "rector\/rector-generator": "^0.7.12",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^12.1",
+                "rector\/type-perfect": "^0.1.6",
+                "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.4",
-                "symplify\/phpstan-rules": "^11.4",
+                "symplify\/phpstan-rules": "^13.0",
                 "symplify\/rule-doc-generator": "^12.1",
                 "symplify\/vendor-patches": "^11.3",
-                "tomasvotruba\/class-leak": "^0.2.13",
+                "tomasvotruba\/class-leak": "^0.2.15",
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-05-30T08:28:26+00:00",
+            "time": "2024-06-20T14:04:02+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2540,31 +2541,30 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v6.4.8",
-            "version_normalized": "6.4.8.0",
+            "version": "v7.1.1",
+            "version_normalized": "7.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "52903de178d542850f6f341ba92995d3d63e60c9"
+                "reference": "fa34c77015aa6720469db7003567b9f772492bf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/52903de178d542850f6f341ba92995d3d63e60c9",
-                "reference": "52903de178d542850f6f341ba92995d3d63e60c9",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/fa34c77015aa6720469db7003567b9f772492bf2",
+                "reference": "fa34c77015aa6720469db7003567b9f772492bf2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1",
-                "symfony\/deprecation-contracts": "^2.5|^3",
+                "php": ">=8.2",
                 "symfony\/polyfill-ctype": "^1.8"
             },
             "conflict": {
-                "symfony\/console": "<5.4"
+                "symfony\/console": "<6.4"
             },
             "require-dev": {
-                "symfony\/console": "^5.4|^6.0|^7.0"
+                "symfony\/console": "^6.4|^7.0"
             },
-            "time": "2024-05-31T14:49:08+00:00",
+            "time": "2024-05-31T14:57:53+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -2595,7 +2595,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v6.4.8"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.1.1"
             },
             "funding": [
                 {

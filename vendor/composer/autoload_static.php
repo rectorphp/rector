@@ -1599,7 +1599,6 @@ class ComposerStaticInitc6bcdb63495c7f1cc77baa21ee134e8a
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
-        'Rector\\Doctrine\\TypeAnalyzer\\DoctrineCollectionTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/DoctrineCollectionTypeAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\OverrideFromAnonymousClassMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/OverrideFromAnonymousClassMethodAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\RegexFuncAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/RegexFuncAnalyzer.php',
