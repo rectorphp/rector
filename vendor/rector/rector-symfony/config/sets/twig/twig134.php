@@ -5,6 +5,4 @@ namespace RectorPrefix202406;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Twig134\Rector\Return_\SimpleFunctionAndFilterRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(SimpleFunctionAndFilterRector::class);
-};
+return RectorConfig::configure()->withRules([SimpleFunctionAndFilterRector::class]);

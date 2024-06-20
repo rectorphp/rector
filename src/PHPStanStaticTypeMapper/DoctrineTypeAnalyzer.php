@@ -6,7 +6,6 @@ namespace Rector\PHPStanStaticTypeMapper;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 final class DoctrineTypeAnalyzer
 {
@@ -18,7 +17,7 @@ final class DoctrineTypeAnalyzer
         $arrayType = null;
         $hasDoctrineCollectionType = \false;
         foreach ($type->getTypes() as $unionedType) {
-            if ($this->isCollectionObjectType($unionedType)) {
+            if ($this->isInstanceOfCollectionType($unionedType)) {
                 $hasDoctrineCollectionType = \true;
             }
             if ($unionedType instanceof ArrayType) {
@@ -36,12 +35,5 @@ final class DoctrineTypeAnalyzer
             return \false;
         }
         return $type->isInstanceOf('Doctrine\\Common\\Collections\\Collection')->yes();
-    }
-    private function isCollectionObjectType(Type $type) : bool
-    {
-        if (!$type instanceof TypeWithClassName) {
-            return \false;
-        }
-        return $type->getClassName() === 'Doctrine\\Common\\Collections\\Collection';
     }
 }
