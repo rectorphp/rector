@@ -57,15 +57,15 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
         return new MixedType();
     }
-    private function expandedNamespacedName(Node $node) : ?FullyQualified
+    private function expandedNamespacedName(Name $name) : ?FullyQualified
     {
-        if (\get_class($node) !== Name::class) {
+        if (\get_class($name) !== Name::class) {
             return null;
         }
-        if (!$node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+        if (!$name->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
             return null;
         }
-        return new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
+        return new FullyQualified($name->getAttribute(AttributeKey::NAMESPACED_NAME));
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType|\PHPStan\Type\ObjectWithoutClassType

@@ -8,7 +8,6 @@ use RectorPrefix202406\Symfony\Component\Console\Application;
 use RectorPrefix202406\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202406\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202406\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
 final class SymfonyStyleFactory
 {
     /**
@@ -23,7 +22,7 @@ final class SymfonyStyleFactory
     /**
      * @api
      */
-    public function create() : SymfonyStyle
+    public function create() : \Rector\Console\Style\RectorStyle
     {
         // to prevent missing argv indexes
         if (!isset($_SERVER['argv'])) {
