@@ -179,7 +179,6 @@ use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202406\Symfony\Component\Console\Application;
 use RectorPrefix202406\Symfony\Component\Console\Command\Command;
 use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
@@ -270,10 +269,6 @@ final class LazyContainerFactory
         $rectorConfig->singleton(CustomRuleCommand::class);
         $rectorConfig->singleton(DetectNodeCommand::class);
         $rectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
-        // dev
-        if (\class_exists(OutsideAnySetCommand::class)) {
-            $rectorConfig->singleton(OutsideAnySetCommand::class);
-        }
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
         // phpdoc-parser
