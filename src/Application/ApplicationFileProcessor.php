@@ -4,12 +4,10 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202406\Nette\Utils\FileSystem as UtilsFileSystem;
-use Rector\Caching\Cache;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Provider\CurrentFileProvider;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -80,16 +78,6 @@ final class ApplicationFileProcessor
      */
     private $vendorMissAnalyseGuard;
     /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
-     */
-    private $dynamicSourceLocatorProvider;
-    /**
-     * @readonly
-     * @var \Rector\Caching\Cache
-     */
-    private $cache;
-    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -97,7 +85,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, VendorMissAnalyseGuard $vendorMissAnalyseGuard, DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, Cache $cache)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, VendorMissAnalyseGuard $vendorMissAnalyseGuard)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -109,8 +97,6 @@ final class ApplicationFileProcessor
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->vendorMissAnalyseGuard = $vendorMissAnalyseGuard;
-        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
-        $this->cache = $cache;
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
@@ -121,9 +107,6 @@ final class ApplicationFileProcessor
         if ($filePaths === []) {
             return new ProcessResult([], []);
         }
-        // ensure clear classnames collection caches on repetitive call
-        $key = $this->dynamicSourceLocatorProvider->getCacheClassNameKey();
-        $this->cache->clean($key);
         $this->configureCustomErrorHandler();
         /**
          * Mimic @see https://github.com/phpstan/phpstan-src/blob/ab154e1da54d42fec751e17a1199b3e07591e85e/src/Command/AnalyseApplication.php#L188C23-L244
@@ -147,8 +130,6 @@ final class ApplicationFileProcessor
         } else {
             $preFileCallback = null;
         }
-        // trigger cache class names collection
-        $this->dynamicSourceLocatorProvider->provide();
         if ($configuration->isParallel()) {
             $processResult = $this->runParallel($filePaths, $input, $postFileCallback);
         } else {
