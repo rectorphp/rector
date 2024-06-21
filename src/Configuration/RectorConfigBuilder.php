@@ -26,6 +26,7 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\FOSRestSetList;
 use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
+use Rector\Symfony\Set\SetProvider\TwigSetProvider;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\PhpVersion;
 use RectorPrefix202406\Symfony\Component\Finder\Finder;
@@ -539,6 +540,7 @@ final class RectorConfigBuilder
         // @experimental 2024-06
         if ($twig) {
             $this->setGroups[] = SetGroup::TWIG;
+            $this->withSetProviders([new TwigSetProvider()]);
         }
         return $this;
     }
