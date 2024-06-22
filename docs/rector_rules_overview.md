@@ -1,4 +1,4 @@
-# 380 Rules Overview
+# 381 Rules Overview
 
 <br>
 
@@ -54,7 +54,7 @@
 
 - [Removing](#removing) (5)
 
-- [Renaming](#renaming) (10)
+- [Renaming](#renaming) (11)
 
 - [Strict](#strict) (5)
 
@@ -5718,6 +5718,24 @@ Turns defined annotations above properties and methods to their new values.
      public function someMethod()
      {
      }
+ }
+```
+
+<br>
+
+### RenameAttributeRector
+
+Rename attribute class names
+
+:wrench: **configure it!**
+
+- class: [`Rector\Renaming\Rector\Class_\RenameAttributeRector`](../rules/Renaming/Rector/Class_/RenameAttributeRector.php)
+
+```diff
+-#[SimpleRoute()]
++#[BasicRoute()]
+ class SomeClass
+ {
  }
 ```
 

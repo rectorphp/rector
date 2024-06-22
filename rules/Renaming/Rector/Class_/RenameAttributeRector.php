@@ -39,7 +39,7 @@ class SomeClass
 {
 }
 CODE_SAMPLE
-, [])]);
+, [new RenameAttribute('SimpleRoute', 'BasicRoute')])]);
     }
     /**
      * @return array<class-string<Node>>
