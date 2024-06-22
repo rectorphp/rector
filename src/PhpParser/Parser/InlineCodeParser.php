@@ -160,6 +160,20 @@ final class InlineCodeParser
         if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0) {
             $concat->right->value .= '.';
         }
+        if ($concat->left instanceof Concat) {
+            if ($concat->left->left instanceof String_ && !$concat->left->right instanceof String_) {
+                $trimLeftValue = \trim($concat->left->left->value);
+                if (\substr_compare($trimLeftValue, ')', -\strlen(')')) === 0) {
+                    $concat->left->left->value .= '.';
+                }
+            }
+            if (!$concat->left->right instanceof String_ && $concat->right instanceof String_) {
+                $firstChar = \trim($concat->right->value)[0] ?? '';
+                if (!\in_array($firstChar, [')', '(', '"', "'", '\\', '.', ';'], \true)) {
+                    $concat->right->value = '.' . $concat->right->value;
+                }
+            }
+        }
         $string = $this->stringify($concat->left) . $this->stringify($concat->right);
         return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static function (array $match) {
             return $match['variable'];
