@@ -70,7 +70,6 @@ final class DeadCodeLevel
      */
     public const RULES = [
         // easy picks
-        RemoveNullTagValueNodeRector::class,
         RemoveUnusedForeachKeyRector::class,
         RemoveDuplicatedArrayKeyRector::class,
         RecastingRemovalRector::class,
@@ -93,6 +92,8 @@ final class DeadCodeLevel
         RemoveUselessReadOnlyTagRector::class,
         RemoveNonExistingVarAnnotationRector::class,
         RemoveUselessVarTagRector::class,
+        // prioritize safe belt on RemoveUseless*TagRector that registered previously first
+        RemoveNullTagValueNodeRector::class,
         RemovePhpVersionIdCheckRector::class,
         RemoveAlwaysTrueIfConditionRector::class,
         ReduceAlwaysFalseIfOrRector::class,
