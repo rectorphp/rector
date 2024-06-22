@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
@@ -37,9 +38,18 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private $classAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
+     */
+    private $phpAttributeAnalyzer;
+    /**
      * @var string
      */
     private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface';
+    /**
+     * @var string
+     */
+    private const EVENT_LISTENER_ATTRIBUTE = 'Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener';
     /**
      * @var string
      */
@@ -57,11 +67,12 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      * @var EventNameToClassAndConstant[]
      */
     private $eventNamesToClassConstants = [];
-    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer)
+    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->classAnalyzer = $classAnalyzer;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->eventNamesToClassConstants = [
             // kernel events
             new EventNameToClassAndConstant('kernel.request', self::KERNEL_EVENTS_CLASS, 'REQUEST'),
@@ -134,6 +145,9 @@ CODE_SAMPLE
         if ($this->classAnalyzer->hasImplements($node, 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface')) {
             return null;
         }
+        if ($this->hasAsListenerAttribute($node)) {
+            return null;
+        }
         // there must be event dispatcher in the application
         $listenerClassesToEventsToMethods = $this->listenerServiceDefinitionProvider->extract();
         if ($listenerClassesToEventsToMethods === []) {
@@ -158,5 +172,23 @@ CODE_SAMPLE
         $class->name = new Identifier($classShortName . 'EventSubscriber');
         $classMethod = $this->getSubscribedEventsClassMethodFactory->createFromServiceDefinitionsAndEventsToMethods($eventsToMethods, $this->eventNamesToClassConstants);
         $class->stmts[] = $classMethod;
+    }
+    /**
+     * @see https://symfony.com/doc/current/event_dispatcher.html#event-dispatcher_event-listener-attributes
+     */
+    private function hasAsListenerAttribute(Class_ $class) : bool
+    {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::EVENT_LISTENER_ATTRIBUTE)) {
+            return \true;
+        }
+        foreach ($class->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::EVENT_LISTENER_ATTRIBUTE)) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
