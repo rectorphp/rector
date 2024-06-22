@@ -13,8 +13,10 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
+use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
+        RedirectToRouteRector::class,
         EventListenerToEventSubscriberRector::class,
         ResponseReturnTypeControllerActionRector::class,
         // int and string literals to const fetches

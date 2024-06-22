@@ -21,20 +21,18 @@ final class ChangeRouteAttributeFromAnnotationSubnamespaceRector extends Abstrac
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replace Symfony\\Component\\Routing\\Annotation\\Route by Symfony\\Component\\Routing\\Attribute\\Route when the class use #Route[] attribute', [new CodeSample(<<<'CODE_SAMPLE'
-    /**
-     * #[\Symfony\Component\Routing\Annotation\Route("/foo")]
-    */
-    public function create(Request $request): Response
-    {
-        return new Response();
-    }
+#[\Symfony\Component\Routing\Annotation\Route("/foo")]
+public function create(Request $request): Response
+{
+    return new Response();
+}
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-    #[\Symfony\Component\Routing\Attribute\Route('/foo')]
-    public function create(Request $request): Response
-    {
-        return new Response();
-    }
+#[\Symfony\Component\Routing\Attribute\Route('/foo')]
+public function create(Request $request): Response
+{
+    return new Response();
+}
 CODE_SAMPLE
 )]);
     }
@@ -47,13 +45,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        $hasChanged = \false;
         foreach ($node->attrGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
                 if ($this->isSymfonyRouteAttribute($attribute)) {
                     $attribute->name = new FullyQualified(self::ATTRIBUTE_ROUTE);
-                    return $node;
+                    $hasChanged = \true;
                 }
             }
+        }
+        if ($hasChanged) {
+            return $node;
         }
         return null;
     }

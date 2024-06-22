@@ -77,10 +77,7 @@ CODE_SAMPLE
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
-#[AsCommand(
-    name: 'sunshine',
-    description: 'some description'
-)]
+#[AsCommand(name: 'sunshine', description: 'some description')]
 final class SunshineCommand extends Command
 {
 }

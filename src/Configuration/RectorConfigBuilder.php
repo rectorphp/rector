@@ -497,6 +497,7 @@ final class RectorConfigBuilder
         bool $phpunitCodeQuality = \false,
         bool $doctrineCodeQuality = \false,
         bool $symfonyCodeQuality = \false,
+        bool $symfonyConfigs = \false,
         // composer based
         bool $twig = \false,
         bool $phpunit = \false
@@ -544,6 +545,9 @@ final class RectorConfigBuilder
         }
         if ($symfonyCodeQuality) {
             $this->sets[] = SymfonySetList::SYMFONY_CODE_QUALITY;
+        }
+        if ($symfonyConfigs) {
+            $this->sets[] = SymfonySetList::CONFIGS;
         }
         // @experimental 2024-06
         if ($twig) {

@@ -1,4 +1,4 @@
-# 85 Rules Overview
+# 83 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -178,14 +178,12 @@ Replace `Symfony\Component\Routing\Annotation\Route` by `Symfony\Component\Routi
 - class: [`Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector`](../rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php)
 
 ```diff
--/**
--     * #[\Symfony\Component\Routing\Annotation\Route("/foo")]
--    */
+-#[\Symfony\Component\Routing\Annotation\Route("/foo")]
 +#[\Symfony\Component\Routing\Attribute\Route('/foo')]
-     public function create(Request $request): Response
-     {
-         return new Response();
-     }
+ public function create(Request $request): Response
+ {
+     return new Response();
+ }
 ```
 
 <br>
@@ -274,10 +272,7 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand(
-+    name: 'sunshine',
-+    description: 'some description'
-+)]
++#[AsCommand(name: 'sunshine', description: 'some description')]
  final class SunshineCommand extends Command
  {
 -    public static $defaultName = 'sunshine';
@@ -462,14 +457,13 @@ Downgrade Symfony Command Attribute
 ```diff
  #[AsCommand(name: 'app:create-user', description: 'some description')]
  class CreateUserCommand extends Command
--{}
-+{
+ {
 +    protected function configure(): void
 +    {
 +        $this->setName('app:create-user');
 +        $this->setDescription('some description');
 +    }
-+}
+ }
 ```
 
 <br>
@@ -1130,35 +1124,6 @@ Replaces deprecated `Yaml::parse()` of file argument with file contents
 
 -$parsedFile = Yaml::parse('someFile.yml');
 +$parsedFile = Yaml::parse(file_get_contents('someFile.yml'));
-```
-
-<br>
-
-## ProcessBuilderGetProcessRector
-
-Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
-
-- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector`](../rules/Symfony40/Rector/MethodCall/ProcessBuilderGetProcessRector.php)
-
-```diff
- $processBuilder = new Symfony\Component\Process\ProcessBuilder;
--$process = $processBuilder->getProcess();
--$commamdLine = $processBuilder->getProcess()->getCommandLine();
-+$process = $processBuilder;
-+$commamdLine = $processBuilder->getCommandLine();
-```
-
-<br>
-
-## ProcessBuilderInstanceRector
-
-Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
-
-- class: [`Rector\Symfony\Symfony40\Rector\StaticCall\ProcessBuilderInstanceRector`](../rules/Symfony40/Rector/StaticCall/ProcessBuilderInstanceRector.php)
-
-```diff
--$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
-+$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
 
 <br>

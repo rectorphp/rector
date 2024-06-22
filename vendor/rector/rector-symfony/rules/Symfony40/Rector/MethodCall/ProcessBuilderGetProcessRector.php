@@ -5,15 +5,21 @@ namespace Rector\Symfony\Symfony40\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
+ * @deprecated This rule is deprecated since Rector 1.1.2, as it can create invalid code.
+ * This needs a manual change
+ *
+ * @see https://github.com/pact-foundation/pact-php/pull/61/files.
  */
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
+    /**
+     * @var bool
+     */
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.', [new CodeSample(<<<'CODE_SAMPLE'
@@ -40,12 +46,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node->name, 'getProcess')) {
+        if ($this->hasWarned) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Process\\ProcessBuilder'))) {
-            return null;
-        }
-        return $node->var;
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as it cannot change fluent code builder in a reliable way.', self::class));
+        \sleep(3);
+        $this->hasWarned = \true;
+        return null;
     }
 }
