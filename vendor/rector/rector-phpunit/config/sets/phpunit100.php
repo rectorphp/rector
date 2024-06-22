@@ -21,7 +21,7 @@ return static function (RectorConfig $rectorConfig) : void {
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),
         // https://github.com/sebastianbergmann/phpunit/issues/5220
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertObjectHasAttribute', 'assertObjectHasProperty'),
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertObjectNotHasAttribute', 'assertObjectHasNotProperty'),
+        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertObjectNotHasAttribute', 'assertObjectNotHasProperty'),
         new MethodCallRename('PHPUnit\\Framework\\MockObject\\Rule\\InvocationOrder', 'getInvocationCount', 'numberOfInvocations'),
         // https://github.com/sebastianbergmann/phpunit/issues/4090
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'),
