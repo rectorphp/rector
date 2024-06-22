@@ -13,11 +13,12 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
+use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(SimplifyFormRenderingRector::class);
+    $rectorConfig->rules([SimplifyFormRenderingRector::class, SecurityAttributeToIsGrantedAttributeRector::class]);
     // change to attribute before rename
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
     // @see https://github.com/rectorphp/rector-symfony/issues/535#issuecomment-1783983383
