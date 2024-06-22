@@ -171,23 +171,6 @@ Rename `type` option to `entry_type` in CollectionType
 
 <br>
 
-## ChangeRouteAttributeFromAnnotationSubnamespaceRector
-
-Replace `Symfony\Component\Routing\Annotation\Route` by `Symfony\Component\Routing\Attribute\Route` when the class use #Route[] attribute
-
-- class: [`Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector`](../rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php)
-
-```diff
--#[\Symfony\Component\Routing\Annotation\Route("/foo")]
-+#[\Symfony\Component\Routing\Attribute\Route('/foo')]
- public function create(Request $request): Response
- {
-     return new Response();
- }
-```
-
-<br>
-
 ## ChangeStringCollectionOptionToConstantRector
 
 Change type in CollectionType from alias string to class reference
@@ -1421,6 +1404,29 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 +        $routes->add('admin_dashboard', '/admin')
 +            ->controller('App\Controller\AdminController::dashboard')
 +    }}
+```
+
+<br>
+
+## SecurityAttributeToIsGrantedAttributeRector
+
+Replaces #[Security] framework-bundle attribute with Symfony native #[IsGranted] one
+
+- class: [`Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector`](../rules/Symfony62/Rector/Class_/SecurityAttributeToIsGrantedAttributeRector.php)
+
+```diff
+-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
++use Symfony\Component\ExpressionLanguage\Expression;
++use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+ class PostController extends Controller
+ {
+-    #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
++    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')"))]
+     public function index()
+     {
+     }
+ }
 ```
 
 <br>
