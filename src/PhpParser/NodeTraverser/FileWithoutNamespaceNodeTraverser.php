@@ -10,7 +10,7 @@ use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
 {
     /**
-     * @template TNode as Node
+     * @template TNode as Node\Stmt
      *
      * @param TNode[] $nodes
      * @return TNode[]|FileWithoutNamespace[]
