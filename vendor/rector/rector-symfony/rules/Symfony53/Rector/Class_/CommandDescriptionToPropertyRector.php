@@ -4,25 +4,22 @@ declare (strict_types=1);
 namespace Rector\Symfony\Symfony53\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
  *
- * @see \Rector\Symfony\Tests\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector\CommandDescriptionToPropertyRectorTest
+ * @deprecated This rule is deprecated since Rector 1.1.2, as Symfony 6.1 introduced native attribute,
+ * more reliable and validated
  */
 final class CommandDescriptionToPropertyRector extends AbstractRector
 {
+    /**
+     * @var bool
+     */
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Symfony Command description setters are moved to properties', [new CodeSample(<<<'CODE_SAMPLE'
@@ -62,96 +59,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if ($this->hasWarned) {
             return null;
         }
-        // already set → skip
-        $defaultNameProperty = $node->getProperty('defaultDescription');
-        if ($defaultNameProperty instanceof Property) {
-            return null;
-        }
-        $commandDescriptionString = $this->resolveCommandDescriptionFromSetDescription($node);
-        if (!$commandDescriptionString instanceof String_) {
-            return null;
-        }
-        $defaultDescriptionProperty = $this->createStaticProtectedPropertyWithDefault($commandDescriptionString);
-        return $this->addDefaultDescriptionProperty($node, $defaultDescriptionProperty);
-    }
-    private function resolveCommandDescriptionFromSetDescription(Class_ $class) : ?String_
-    {
-        $classMethod = $class->getMethod('configure');
-        if (!$classMethod instanceof ClassMethod || $classMethod->stmts === null) {
-            return null;
-        }
-        foreach ($classMethod->stmts as $key => $stmt) {
-            if (!$stmt instanceof Expression) {
-                continue;
-            }
-            if (!$stmt->expr instanceof MethodCall) {
-                continue;
-            }
-            $methodCall = $stmt->expr;
-            if ($methodCall->var instanceof Variable) {
-                return $this->resolveFromNonFluentMethodCall($methodCall, $classMethod, $key);
-            }
-            $string = null;
-            $this->traverseNodesWithCallable($stmt, function (Node $node) use(&$string) {
-                if ($node instanceof MethodCall && $this->isName($node->name, 'setDescription')) {
-                    $string = $this->matchFirstArgString($node);
-                    // remove nested call
-                    return $node->var;
-                }
-                return null;
-            });
-            return $string;
-        }
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as its only dead middle step before more solid PHP attributes.', self::class));
+        \sleep(3);
+        $this->hasWarned = \true;
         return null;
-    }
-    private function createStaticProtectedPropertyWithDefault(String_ $string) : Property
-    {
-        $property = new \PhpParser\Builder\Property('defaultDescription');
-        $property->makeProtected();
-        $property->makeStatic();
-        $property->setDefault($string);
-        return $property->getNode();
-    }
-    private function addDefaultDescriptionProperty(Class_ $class, Property $defaultDescriptionProperty) : Node
-    {
-        // When we have property defaultName insert defaultDescription after it.
-        foreach ($class->stmts as $key => $stmt) {
-            if (!$stmt instanceof Property) {
-                continue;
-            }
-            if ($this->isName($stmt, 'defaultName')) {
-                \array_splice($class->stmts, ++$key, 0, [$defaultDescriptionProperty]);
-                return $class;
-            }
-        }
-        $class->stmts = \array_merge([$defaultDescriptionProperty], $class->stmts);
-        return $class;
-    }
-    private function matchFirstArgString(MethodCall $methodCall) : ?\PhpParser\Node\Scalar\String_
-    {
-        $arg = $methodCall->getArgs()[0] ?? null;
-        if (!$arg instanceof Arg) {
-            return null;
-        }
-        if (!$arg->value instanceof String_) {
-            return null;
-        }
-        return $arg->value;
-    }
-    private function resolveFromNonFluentMethodCall(MethodCall $methodCall, ClassMethod $classMethod, int $key) : ?String_
-    {
-        if (!$this->isName($methodCall->name, 'setDescription')) {
-            return null;
-        }
-        $string = $this->matchFirstArgString($methodCall);
-        if (!$string instanceof String_) {
-            return null;
-        }
-        // cleanup fluent call
-        unset($classMethod->stmts[$key]);
-        return $string;
     }
 }

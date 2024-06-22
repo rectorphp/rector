@@ -7,7 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -18,7 +19,6 @@ use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
-use Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -50,18 +50,12 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor
-     */
-    private $setAliasesMethodCallExtractor;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, AttributeValueResolver $attributeValueResolver, ReflectionProvider $reflectionProvider, SetAliasesMethodCallExtractor $setAliasesMethodCallExtractor)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, AttributeValueResolver $attributeValueResolver, ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->attributeValueResolver = $attributeValueResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->setAliasesMethodCallExtractor = $setAliasesMethodCallExtractor;
     }
     public function provideMinPhpVersion() : int
     {
@@ -74,15 +68,19 @@ use Symfony\Component\Console\Command\Command;
 
 final class SunshineCommand extends Command
 {
-    /** @var string|null */
     public static $defaultName = 'sunshine';
+
+    public static $defaultDescription = 'Ssome description';
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
-#[AsCommand('sunshine')]
+#[AsCommand(
+    name: 'sunshine',
+    description: 'some description'
+)]
 final class SunshineCommand extends Command
 {
 }
@@ -112,20 +110,16 @@ CODE_SAMPLE
             return null;
         }
         $defaultDescription = $this->resolveDefaultDescription($node);
-        $alisesArray = $this->setAliasesMethodCallExtractor->resolveCommandAliasesFromAttributeOrSetter($node);
-        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray));
+        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultName, $defaultDescription));
     }
-    private function createAttributeGroupAsCommand(string $defaultName, ?string $defaultDescription, ?Array_ $aliasesArray) : AttributeGroup
+    private function createAttributeGroupAsCommand(string $defaultName, ?string $defaultDescription) : AttributeGroup
     {
+        $nameArg = $this->createNamedArg('name', new String_($defaultName));
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
-        $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultName));
+        $attributeGroup->attrs[0]->args[] = $nameArg;
         if ($defaultDescription !== null) {
-            $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
-        } elseif ($aliasesArray instanceof Array_) {
-            $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
-        }
-        if ($aliasesArray instanceof Array_) {
-            $attributeGroup->attrs[0]->args[] = new Arg($aliasesArray);
+            $descriptionArg = $this->createNamedArg('description', new String_($defaultDescription));
+            $attributeGroup->attrs[0]->args[] = $descriptionArg;
         }
         return $attributeGroup;
     }
@@ -146,7 +140,7 @@ CODE_SAMPLE
             if (!$stmt instanceof Property) {
                 continue;
             }
-            if (!$this->isName($stmt->props[0], 'defaultName')) {
+            if (!$this->isName($stmt, 'defaultName')) {
                 continue;
             }
             $defaultName = $this->getValueFromProperty($stmt);
@@ -237,5 +231,9 @@ CODE_SAMPLE
             return $defaultNameFromArgument;
         }
         return null;
+    }
+    private function createNamedArg(string $name, Expr $expr) : Arg
+    {
+        return new Arg($expr, \false, \false, [], new Identifier($name));
     }
 }

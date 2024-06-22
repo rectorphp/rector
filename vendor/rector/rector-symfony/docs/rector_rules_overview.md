@@ -171,6 +171,25 @@ Rename `type` option to `entry_type` in CollectionType
 
 <br>
 
+## ChangeRouteAttributeFromAnnotationSubnamespaceRector
+
+Replace `Symfony\Component\Routing\Annotation\Route` by `Symfony\Component\Routing\Attribute\Route` when the class use #Route[] attribute
+
+- class: [`Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector`](../rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php)
+
+```diff
+-/**
+-     * #[\Symfony\Component\Routing\Annotation\Route("/foo")]
+-    */
++#[\Symfony\Component\Routing\Attribute\Route('/foo')]
+     public function create(Request $request): Response
+     {
+         return new Response();
+     }
+```
+
+<br>
+
 ## ChangeStringCollectionOptionToConstantRector
 
 Change type in CollectionType from alias string to class reference
@@ -201,6 +220,30 @@ Change type in CollectionType from alias string to class reference
 
 <br>
 
+## CommandConfigureToAttributeRector
+
+Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands from `configure()`
+
+- class: [`Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector`](../rules/Symfony61/Rector/Class_/CommandConfigureToAttributeRector.php)
+
+```diff
++use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+
++#[AsCommand(name: 'sunshine', description: 'Some description')]
+ final class SunshineCommand extends Command
+ {
+-    public function configure()
+-    {
+-        $this->setName('sunshine');
+-        $this->setDescription('Some description');
+-
+-    }
+ }
+```
+
+<br>
+
 ## CommandConstantReturnCodeRector
 
 Changes int return from execute to use Symfony Command constants.
@@ -221,28 +264,6 @@ Changes int return from execute to use Symfony Command constants.
 
 <br>
 
-## CommandDescriptionToPropertyRector
-
-Symfony Command description setters are moved to properties
-
-- class: [`Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector`](../rules/Symfony53/Rector/Class_/CommandDescriptionToPropertyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultDescription = 'sunshine description';
-+
-     public function configure()
-     {
--        $this->setDescription('sunshine description');
-     }
- }
-```
-
-<br>
-
 ## CommandPropertyToAttributeRector
 
 Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remove the deprecated properties
@@ -253,11 +274,15 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand('sunshine')]
++#[AsCommand(
++    name: 'sunshine',
++    description: 'some description'
++)]
  final class SunshineCommand extends Command
  {
--    /** @var string|null */
 -    public static $defaultName = 'sunshine';
+-
+-    public static $defaultDescription = 'Ssome description';
  }
 ```
 
@@ -893,27 +918,6 @@ Change TwigExtension function/filter magic closures to inlined and clear callabl
      private function resolve($value)
      {
          return $value + 100;
-     }
- }
-```
-
-<br>
-
-## MakeCommandLazyRector
-
-Make Symfony commands lazy
-
-- class: [`Rector\Symfony\CodeQuality\Rector\Class_\MakeCommandLazyRector`](../rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultName = 'sunshine';
-     public function configure()
-     {
--        $this->setName('sunshine');
      }
  }
 ```
@@ -1688,7 +1692,7 @@ Changes Process string argument to an array
 
 ## SwiftCreateMessageToNewEmailRector
 
-Changes `createMessage()` into a new Symfony\Component\Mime\Email
+Changes `createMessage()` into a new `Symfony\Component\Mime\Email`
 
 - class: [`Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../rules/SwiftMailer/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
 
@@ -1701,7 +1705,7 @@ Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
 ## SwiftMessageToEmailRector
 
-Convert `\Swift_Message` into an \Symfony\Component\Mime\Email
+Convert `\Swift_Message` into an `\Symfony\Component\Mime\Email`
 
 - class: [`Rector\Symfony\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector`](../rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php)
 

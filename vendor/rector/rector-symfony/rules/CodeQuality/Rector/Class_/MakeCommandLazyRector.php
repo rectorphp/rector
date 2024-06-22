@@ -4,24 +4,20 @@ declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://symfony.com/doc/current/console/commands_as_services.html
- *
- * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
+ * @deprecated This rule is deprecated since Rector 1.1.2, as Symfony 6.1 introduced native attribute,
+ *  more reliable and validated
  */
 final class MakeCommandLazyRector extends AbstractRector
 {
+    /**
+     * @var bool
+     */
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Make Symfony commands lazy', [new CodeSample(<<<'CODE_SAMPLE'
@@ -60,72 +56,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if ($this->hasWarned) {
             return null;
         }
-        $defaultNameProperty = $node->getProperty('defaultName');
-        if ($defaultNameProperty instanceof Property) {
-            return null;
-        }
-        $commandNameExpr = $this->resolveCommandNameFromSetName($node);
-        if (!$commandNameExpr instanceof Expr) {
-            return null;
-        }
-        $commandNameType = $this->getType($commandNameExpr);
-        if (!$commandNameType->isConstantScalarValue()->yes()) {
-            return null;
-        }
-        $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandNameExpr);
-        $node->stmts = \array_merge([$defaultNameProperty], $node->stmts);
-        return $node;
-    }
-    private function resolveCommandNameFromSetName(Class_ $class) : ?Expr
-    {
-        $configureClassMethod = $class->getMethod('configure');
-        if (!$configureClassMethod instanceof ClassMethod || $configureClassMethod->stmts === null) {
-            return null;
-        }
-        foreach ($configureClassMethod->stmts as $key => $stmt) {
-            if (!$stmt instanceof Expression) {
-                continue;
-            }
-            if (!$stmt->expr instanceof MethodCall) {
-                continue;
-            }
-            $methodCall = $stmt->expr;
-            if ($methodCall->var instanceof Variable) {
-                return $this->resolveFromNonFluentMethodCall($methodCall, $configureClassMethod, $key);
-            }
-            $expr = null;
-            $this->traverseNodesWithCallable($stmt, function (Node $node) use(&$expr) {
-                if ($node instanceof MethodCall && $this->isName($node->name, 'setName')) {
-                    $expr = $node->getArgs()[0]->value;
-                    // remove nested call
-                    return $node->var;
-                }
-                return null;
-            });
-            return $expr;
-        }
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as its only dead middle step before more solid PHP attributes.', self::class));
+        \sleep(3);
+        $this->hasWarned = \true;
         return null;
-    }
-    private function resolveFromNonFluentMethodCall(MethodCall $methodCall, ClassMethod $classMethod, int $key) : ?Expr
-    {
-        if (!$this->isName($methodCall->name, 'setName')) {
-            return null;
-        }
-        $firstArg = $methodCall->getArgs()[0];
-        $expr = $firstArg->value;
-        // cleanup fluent call
-        unset($classMethod->stmts[$key]);
-        return $expr;
-    }
-    private function createStaticProtectedPropertyWithDefault(string $name, Expr $expr) : Property
-    {
-        $propertyBuilder = new \PhpParser\Builder\Property($name);
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($expr);
-        return $propertyBuilder->getNode();
     }
 }
