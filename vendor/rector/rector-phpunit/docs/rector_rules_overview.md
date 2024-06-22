@@ -270,22 +270,37 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 <br>
 
-## AssertIssetToSpecificMethodRector
+## AssertIssetToAssertObjectHasPropertyRector
 
-Turns isset comparisons to their method name alternatives in PHPUnit TestCase
+Change `"isset()"` property check, to `assertObjectHasProperty()` method
 
-- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertIssetToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\MethodCall\AssertIssetToAssertObjectHasPropertyRector`](../rules/PHPUnit100/Rector/MethodCall/AssertIssetToAssertObjectHasPropertyRector.php)
 
 ```diff
--$this->assertTrue(isset($anything->foo));
-+$this->assertObjectHasAttribute("foo", $anything);
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function test()
+     {
+         $object = new stdClass();
+-        $this->assertTrue(isset($object->someProperty));
++        $this->assertObjectHasProperty('someProperty', $object);
+     }
+ }
 ```
 
 <br>
 
+## AssertIssetToSpecificMethodRector
+
+Turns `assertTrue()` + `isset()` comparisons to more precise `assertArrayHasKey()` method
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertIssetToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php)
+
 ```diff
--$this->assertFalse(isset($anything["foo"]), "message");
-+$this->assertArrayNotHasKey("foo", $anything, "message");
+-$this->assertTrue(isset($anything["foo"]), "message");
++$this->assertArrayHasKey("foo", $anything, "message");
 ```
 
 <br>
@@ -747,21 +762,6 @@ Changes PHPUnit calls from self::assert*() to `$this->assert*()`
 +        $this->assertEquals('expected', $result);
      }
  }
-```
-
-<br>
-
-## PropertyExistsWithoutAssertRector
-
-Turns PHPUnit TestCase assertObjectHasAttribute into `property_exists` comparisons
-
-- class: [`Rector\PHPUnit\PHPUnit100\Rector\MethodCall\PropertyExistsWithoutAssertRector`](../rules/PHPUnit100/Rector/MethodCall/PropertyExistsWithoutAssertRector.php)
-
-```diff
--$this->assertClassHasAttribute("property", "Class");
--$this->assertClassNotHasAttribute("property", "Class");
-+$this->assertFalse(property_exists(new Class, "property"));
-+$this->assertTrue(property_exists(new Class, "property"));
 ```
 
 <br>

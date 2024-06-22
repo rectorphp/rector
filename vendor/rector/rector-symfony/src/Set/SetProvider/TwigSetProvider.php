@@ -6,7 +6,6 @@ namespace Rector\Symfony\Set\SetProvider;
 use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
-use Rector\Symfony\Set\TwigSetList;
 final class TwigSetProvider implements SetProviderInterface
 {
     /**
@@ -14,6 +13,6 @@ final class TwigSetProvider implements SetProviderInterface
      */
     public function provide() : array
     {
-        return [new ComposerTriggeredSet('twig', 'twig/twig', '1.12', TwigSetList::TWIG_112), new ComposerTriggeredSet('twig', 'twig/twig', '1.27', TwigSetList::TWIG_127), new ComposerTriggeredSet('twig', 'twig/twig', '1.34', TwigSetList::TWIG_134), new ComposerTriggeredSet('twig', 'twig/twig', '1.40', TwigSetList::TWIG_140), new ComposerTriggeredSet('twig', 'twig/twig', '2.0', TwigSetList::TWIG_20), new ComposerTriggeredSet('twig', 'twig/twig', '2.40', TwigSetList::TWIG_240)];
+        return [new ComposerTriggeredSet('twig', 'twig/twig', '1.12', __DIR__ . '/../../../config/sets/twig/twig112.php'), new ComposerTriggeredSet('twig', 'twig/twig', '1.27', __DIR__ . '/../../../config/sets/twig/twig127.php'), new ComposerTriggeredSet('twig', 'twig/twig', '1.34', __DIR__ . '/../../../config/sets/twig/twig134.php'), new ComposerTriggeredSet('twig', 'twig/twig', '1.40', __DIR__ . '/../../../config/sets/twig/twig140.php'), new ComposerTriggeredSet('twig', 'twig/twig', '2.0', __DIR__ . '/../../../config/sets/twig/twig20.php'), new ComposerTriggeredSet('twig', 'twig/twig', '2.40', __DIR__ . '/../../../config/sets/twig/twig240.php')];
     }
 }

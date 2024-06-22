@@ -40,6 +40,10 @@ final class PHPUnitSetList implements SetListInterface
     /**
      * @var string
      */
+    public const PHPUNIT_110 = __DIR__ . '/../../config/sets/phpunit110.php';
+    /**
+     * @var string
+     */
     public const PHPUNIT_CODE_QUALITY = __DIR__ . '/../../config/sets/phpunit-code-quality.php';
     /**
      * @var string

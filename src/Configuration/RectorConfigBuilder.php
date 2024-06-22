@@ -18,6 +18,7 @@ use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\PHPUnit\Set\SetProvider\PHPUnitSetProvider;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
@@ -330,30 +331,30 @@ final class RectorConfigBuilder
     /**
      * Upgrade your annotations to attributes
      */
-    public function withAttributesSets(bool $symfony = \false, bool $doctrine = \false, bool $mongoDb = \false, bool $gedmo = \false, bool $phpunit = \false, bool $fosRest = \false, bool $jms = \false, bool $sensiolabs = \false) : self
+    public function withAttributesSets(bool $symfony = \false, bool $doctrine = \false, bool $mongoDb = \false, bool $gedmo = \false, bool $phpunit = \false, bool $fosRest = \false, bool $jms = \false, bool $sensiolabs = \false, bool $all = \false) : self
     {
-        if ($symfony) {
+        if ($symfony || $all) {
             $this->sets[] = SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($doctrine) {
+        if ($doctrine || $all) {
             $this->sets[] = DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($mongoDb) {
+        if ($mongoDb || $all) {
             $this->sets[] = DoctrineSetList::MONGODB__ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($gedmo) {
+        if ($gedmo || $all) {
             $this->sets[] = DoctrineSetList::GEDMO_ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($phpunit) {
+        if ($phpunit || $all) {
             $this->sets[] = PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($fosRest) {
+        if ($fosRest || $all) {
             $this->sets[] = FOSRestSetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($jms) {
+        if ($jms || $all) {
             $this->sets[] = JMSSetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($sensiolabs) {
+        if ($sensiolabs || $all) {
             $this->sets[] = SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
         return $this;
@@ -493,8 +494,11 @@ final class RectorConfigBuilder
         bool $strictBooleans = \false,
         bool $carbon = \false,
         bool $rectorPreset = \false,
+        bool $phpunitCodeQuality = \false,
+        bool $doctrineCodeQuality = \false,
         // composer based
-        bool $twig = \false
+        bool $twig = \false,
+        bool $phpunit = \false
     ) : self
     {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
@@ -531,10 +535,20 @@ final class RectorConfigBuilder
         if ($rectorPreset) {
             $this->sets[] = SetList::RECTOR_PRESET;
         }
+        if ($phpunitCodeQuality) {
+            $this->sets[] = PHPUnitSetList::PHPUNIT_CODE_QUALITY;
+        }
+        if ($doctrineCodeQuality) {
+            $this->sets[] = DoctrineSetList::DOCTRINE_CODE_QUALITY;
+        }
         // @experimental 2024-06
         if ($twig) {
             $this->setGroups[] = SetGroup::TWIG;
             $this->withSetProviders([new TwigSetProvider()]);
+        }
+        if ($phpunit) {
+            $this->setGroups[] = SetGroup::PHPUNIT;
+            $this->withSetProviders([new PHPUnitSetProvider()]);
         }
         return $this;
     }
