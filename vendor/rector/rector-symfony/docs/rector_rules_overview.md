@@ -1,4 +1,4 @@
-# 83 Rules Overview
+# 82 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1816,7 +1816,7 @@ Simplify use of assertions in WebTestCase
      public function test()
      {
 -        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-+         $this->assertResponseIsSuccessful();
++        $this->assertResponseIsSuccessful();
      }
  }
 ```
@@ -1842,29 +1842,6 @@ Simplify use of assertions in WebTestCase
 -        $this->assertSame('https://example.com', $response->headers->get('Location'));
 +        $this->assertResponseStatusCodeSame(301);
 +        $this->assertResponseRedirects('https://example.com');
-     }
- }
-```
-
-<br>
-
-## WebTestCaseAssertSelectorTextContainsRector
-
-Simplify use of assertions in WebTestCase to `assertSelectorTextContains()`
-
-- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector`](../rules/Symfony43/Rector/MethodCall/WebTestCaseAssertSelectorTextContainsRector.php)
-
-```diff
- use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
- use Symfony\Component\DomCrawler\Crawler;
-
- final class SomeTest extends WebTestCase
- {
-     public function testContains()
-     {
-         $crawler = new Symfony\Component\DomCrawler\Crawler();
--        $this->assertContains('Hello World', $crawler->filter('h1')->text());
-+        $this->assertSelectorTextContains('h1', 'Hello World');
      }
  }
 ```

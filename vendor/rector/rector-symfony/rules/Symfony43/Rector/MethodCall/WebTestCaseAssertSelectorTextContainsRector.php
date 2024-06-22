@@ -4,52 +4,20 @@ declare (strict_types=1);
 namespace Rector\Symfony\Symfony43\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\ExprAnalyzer;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
- * @changelog https://github.com/symfony/symfony/pull/30813
- *
- * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\WebTestCaseAssertSelectorTextContainsRectorTest
+ * @deprecated This rule is deprecated since Rector 1.1.2, as it does not upgrade to valid code.
  */
 final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
 {
     /**
-     * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer
+     * @var bool
      */
-    private $symfonyTestCaseAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
-     */
-    private $testsNodeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\NodeAnalyzer\ExprAnalyzer
-     */
-    private $exprAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
-     */
-    private $valueResolver;
-    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ExprAnalyzer $exprAnalyzer, ValueResolver $valueResolver)
-    {
-        $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->exprAnalyzer = $exprAnalyzer;
-        $this->valueResolver = $valueResolver;
-    }
+    private $hasWarned = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Simplify use of assertions in WebTestCase to assertSelectorTextContains()', [new CodeSample(<<<'CODE_SAMPLE'
@@ -92,47 +60,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
+        if ($this->hasWarned) {
             return null;
         }
-        if (!$this->testsNodeAnalyzer->isAssertMethodCallName($node, 'assertContains')) {
-            return null;
-        }
-        $args = $node->getArgs();
-        $firstArgValue = $args[1]->value;
-        if (!$firstArgValue instanceof MethodCall) {
-            return null;
-        }
-        $methodCall = $firstArgValue;
-        if (!$this->isName($methodCall->name, 'text')) {
-            return null;
-        }
-        if (!$methodCall->var instanceof MethodCall) {
-            return null;
-        }
-        $nestedMethodCall = $methodCall->var;
-        if (!$this->isName($nestedMethodCall->name, 'filter')) {
-            return null;
-        }
-        $newArgs = [$nestedMethodCall->args[0], $args[0]];
-        // When we had a custom message argument we want to add it to the new assert.
-        if (isset($args[2])) {
-            if ($this->exprAnalyzer->isDynamicExpr($args[2]->value)) {
-                $newArgs[] = $args[2]->value;
-            } else {
-                $newArgs[] = new Arg(new String_($this->valueResolver->getValue($args[2]->value, \true)));
-            }
-        }
-        return $this->replaceFunctionCall($node, $newArgs);
-    }
-    /**
-     * @param Node[] $newArgs
-     */
-    private function replaceFunctionCall(Node $node, array $newArgs) : Node
-    {
-        if ($node instanceof StaticCall) {
-            return $this->nodeFactory->createStaticCall('self', 'assertSelectorTextContains', $newArgs);
-        }
-        return $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $newArgs);
+        \trigger_error(\sprintf('The "%s" rule was deprecated, as it does not upgrade to valid code.', self::class));
+        \sleep(3);
+        $this->hasWarned = \true;
+        return null;
     }
 }
