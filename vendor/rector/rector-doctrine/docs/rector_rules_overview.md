@@ -1,4 +1,29 @@
-# 19 Rules Overview
+# 20 Rules Overview
+
+## AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector
+
+Adds `@return` PHPDoc type to Collection property getter by *ToMany attribute
+
+- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector`](../rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector.php)
+
+```diff
+ #[ORM\Entity]
+ final class Trainer
+ {
+     #[ORM\OneToMany(targetEntity:Training::class, mappedBy:"trainer")]
+     private $trainings;
+
++    /**
++     * @return \Doctrine\Common\Collections\Collection<int, \Rector\Doctrine\Tests\CodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training>
++     */
+     public function getTrainings()
+     {
+         return $this->trainings;
+     }
+ }
+```
+
+<br>
 
 ## ChangeCompositeExpressionAddMultipleWithWithRector
 
