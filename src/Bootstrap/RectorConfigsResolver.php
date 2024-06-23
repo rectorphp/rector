@@ -12,24 +12,7 @@ final class RectorConfigsResolver
     {
         $argvInput = new ArgvInput();
         $mainConfigFile = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
-        $rectorRecipeConfigFile = $this->resolveRectorRecipeConfig($argvInput);
-        $configFiles = [];
-        if ($rectorRecipeConfigFile !== null) {
-            $configFiles[] = $rectorRecipeConfigFile;
-        }
-        return new BootstrapConfigs($mainConfigFile, $configFiles);
-    }
-    private function resolveRectorRecipeConfig(ArgvInput $argvInput) : ?string
-    {
-        if ($argvInput->getFirstArgument() !== 'generate') {
-            return null;
-        }
-        // autoload rector recipe file if present, just for \Rector\RectorGenerator\Command\GenerateCommand
-        $rectorRecipeFilePath = \getcwd() . '/rector-recipe.php';
-        if (!\file_exists($rectorRecipeFilePath)) {
-            return null;
-        }
-        return $rectorRecipeFilePath;
+        return new BootstrapConfigs($mainConfigFile, []);
     }
     private function resolveFromInput(ArgvInput $argvInput) : ?string
     {
