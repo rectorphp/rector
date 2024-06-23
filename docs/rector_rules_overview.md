@@ -1,4 +1,4 @@
-# 381 Rules Overview
+# 379 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [Carbon](#carbon) (4)
 
-- [CodeQuality](#codequality) (75)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (28)
 
@@ -358,35 +358,6 @@ Refactor `call_user_func()` with arrow function to direct call
      {
 -        $result = \call_user_func(fn () => 100);
 +        $result = 100;
-     }
- }
-```
-
-<br>
-
-### CallableThisArrayToAnonymousFunctionRector
-
-Convert [$this, "method"] to proper anonymous function
-
-- class: [`Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector`](../rules/CodeQuality/Rector/Array_/CallableThisArrayToAnonymousFunctionRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $values = [1, 5, 3];
--        usort($values, [$this, 'compareSize']);
-+        usort($values, function ($first, $second) {
-+            return $this->compareSize($first, $second);
-+        });
-
-         return $values;
-     }
-
-     private function compareSize($first, $second)
-     {
-         return $first <=> $second;
      }
  }
 ```
@@ -748,19 +719,6 @@ Simplify `foreach` loops into `in_array` when possible
 -
 -return false;
 +return in_array('something', $items, true);
-```
-
-<br>
-
-### GetClassToInstanceOfRector
-
-Changes comparison with get_class to instanceof
-
-- class: [`Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector`](../rules/CodeQuality/Rector/Identical/GetClassToInstanceOfRector.php)
-
-```diff
--if (EventsListener::class === get_class($event->job)) { }
-+if ($event->job instanceof EventsListener) { }
 ```
 
 <br>
