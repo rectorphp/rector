@@ -22,6 +22,7 @@ use Rector\PHPUnit\Set\SetProvider\PHPUnitSetProvider;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
+use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\FOSRestSetList;
@@ -724,6 +725,35 @@ final class RectorConfigBuilder
     public function registerService(string $className, ?string $alias = null, ?string $tag = null) : self
     {
         $this->registerServices[] = new RegisteredService($className, $alias, $tag);
+        return $this;
+    }
+    public function withDowngradeSets(bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false) : self
+    {
+        $pickedArguments = \array_filter(\func_get_args());
+        if (\count($pickedArguments) !== 1) {
+            throw new InvalidConfigurationException('Pick only one PHP version target in "withDowngradeSets()". All rules down to this version will be used.');
+        }
+        if ($php82) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_82;
+        }
+        if ($php81) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_81;
+        }
+        if ($php80) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_80;
+        }
+        if ($php74) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_74;
+        }
+        if ($php73) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_73;
+        }
+        if ($php72) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_72;
+        }
+        if ($php71) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_71;
+        }
         return $this;
     }
 }
