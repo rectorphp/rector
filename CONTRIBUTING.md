@@ -59,10 +59,10 @@ above commands in a docker container:
 docker compose build
 
 # Run the entire CI suite
-compose compose run php complete-check
+docker compose run php composer complete-check
 
 # Fix the coding standards
-docker compose run php fix-cs
+docker compose run php composer fix-cs
 ```
 
 ## Repository layout
