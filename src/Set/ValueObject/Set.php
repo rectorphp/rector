@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
 use Rector\Set\Contract\SetInterface;
+use RectorPrefix202406\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */
@@ -29,6 +30,7 @@ final class Set implements SetInterface
         $this->groupName = $groupName;
         $this->setName = $setName;
         $this->setFilePath = $setFilePath;
+        Assert::fileExists($setFilePath);
     }
     public function getGroupName() : string
     {

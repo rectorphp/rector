@@ -8,6 +8,14 @@ final class SetGroup
     /**
      * @var string
      */
+    public const CORE = 'core';
+    /**
+     * @var string
+     */
+    public const PHP = 'php';
+    /**
+     * @var string
+     */
     public const TWIG = 'twig';
     /**
      * @var string
