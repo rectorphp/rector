@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeFinder;
 use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\BinaryOpManipulator;
@@ -36,10 +37,16 @@ final class ForeachToInArrayRector extends AbstractRector
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     * @var \PhpParser\NodeFinder
+     */
+    private $nodeFinder;
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver, NodeFinder $nodeFinder)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
         $this->valueResolver = $valueResolver;
+        $this->nodeFinder = $nodeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -95,6 +102,12 @@ CODE_SAMPLE
             $twoNodeMatch = $this->matchNodes($ifCondition, $foreach->valueVar);
             if (!$twoNodeMatch instanceof TwoNodeMatch) {
                 return null;
+            }
+            $variableNodes = $this->nodeFinder->findInstanceOf($twoNodeMatch->getSecondExpr(), Variable::class);
+            foreach ($variableNodes as $variableNode) {
+                if ($this->nodeComparator->areNodesEqual($variableNode, $foreach->valueVar)) {
+                    return null;
+                }
             }
             $comparedExpr = $twoNodeMatch->getSecondExpr();
             if (!$this->isIfBodyABoolReturnNode($firstNodeInsideForeach)) {
