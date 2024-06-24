@@ -2080,6 +2080,7 @@ return array(
     'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
     'Rector\\Set\\ValueObject\\DowngradeSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
     'Rector\\Set\\ValueObject\\LevelSetList' => $baseDir . '/src/Set/ValueObject/LevelSetList.php',
+    'Rector\\Set\\ValueObject\\Set' => $baseDir . '/src/Set/ValueObject/Set.php',
     'Rector\\Set\\ValueObject\\SetList' => $baseDir . '/src/Set/ValueObject/SetList.php',
     'Rector\\Skipper\\Contract\\SkipVoterInterface' => $baseDir . '/src/Skipper/Contract/SkipVoterInterface.php',
     'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => $baseDir . '/src/Skipper/FileSystem/FnMatchPathNormalizer.php',

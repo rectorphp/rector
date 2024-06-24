@@ -2299,6 +2299,7 @@ class ComposerStaticInitd98d3a989b9f99591f8f5a74c164268a
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
         'Rector\\Set\\ValueObject\\LevelSetList' => __DIR__ . '/../..' . '/src/Set/ValueObject/LevelSetList.php',
+        'Rector\\Set\\ValueObject\\Set' => __DIR__ . '/../..' . '/src/Set/ValueObject/Set.php',
         'Rector\\Set\\ValueObject\\SetList' => __DIR__ . '/../..' . '/src/Set/ValueObject/SetList.php',
         'Rector\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/../..' . '/src/Skipper/Contract/SkipVoterInterface.php',
         'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/../..' . '/src/Skipper/FileSystem/FnMatchPathNormalizer.php',
