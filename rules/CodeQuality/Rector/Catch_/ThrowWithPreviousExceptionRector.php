@@ -125,9 +125,12 @@ CODE_SAMPLE
             $getMessageMethodCall = new MethodCall($catchedThrowableVariable, 'getMessage');
             $new->args[0] = new Arg($getMessageMethodCall);
         }
+        /** @var Arg $messageArgument */
+        $messageArgument = $new->getArgs()[0];
+        $shouldUseNamedArguments = $messageArgument->name !== null;
         if (!isset($new->getArgs()[1])) {
             // get previous code
-            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'), \false, \false, [], $shouldUseNamedArguments ? new Identifier('code') : null);
         }
         /** @var Arg $arg1 */
         $arg1 = $new->args[1];
@@ -135,7 +138,7 @@ CODE_SAMPLE
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
             $new->args[$exceptionArgumentPosition] = $arg1;
         } else {
-            $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+            $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable, \false, \false, [], $shouldUseNamedArguments ? new Identifier('previous') : null);
         }
         // null the node, to fix broken format preserving printers, see https://github.com/rectorphp/rector/issues/5576
         $new->setAttribute(AttributeKey::ORIGINAL_NODE, null);
