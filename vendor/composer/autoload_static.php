@@ -1257,6 +1257,8 @@ class ComposerStaticInitd98d3a989b9f99591f8f5a74c164268a
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
         'Rector\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
+        'Rector\\Bridge\\SetProviderCollector' => __DIR__ . '/../..' . '/src/Bridge/SetProviderCollector.php',
+        'Rector\\Bridge\\SetRectorsResolver' => __DIR__ . '/../..' . '/src/Bridge/SetRectorsResolver.php',
         'Rector\\Caching\\Cache' => __DIR__ . '/../..' . '/src/Caching/Cache.php',
         'Rector\\Caching\\CacheFactory' => __DIR__ . '/../..' . '/src/Caching/CacheFactory.php',
         'Rector\\Caching\\Config\\FileHashComputer' => __DIR__ . '/../..' . '/src/Caching/Config/FileHashComputer.php',

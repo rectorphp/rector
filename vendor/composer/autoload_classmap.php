@@ -1038,6 +1038,8 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
     'Rector\\Bootstrap\\ExtensionConfigResolver' => $baseDir . '/src/Bootstrap/ExtensionConfigResolver.php',
     'Rector\\Bootstrap\\RectorConfigsResolver' => $baseDir . '/src/Bootstrap/RectorConfigsResolver.php',
+    'Rector\\Bridge\\SetProviderCollector' => $baseDir . '/src/Bridge/SetProviderCollector.php',
+    'Rector\\Bridge\\SetRectorsResolver' => $baseDir . '/src/Bridge/SetRectorsResolver.php',
     'Rector\\Caching\\Cache' => $baseDir . '/src/Caching/Cache.php',
     'Rector\\Caching\\CacheFactory' => $baseDir . '/src/Caching/CacheFactory.php',
     'Rector\\Caching\\Config\\FileHashComputer' => $baseDir . '/src/Caching/Config/FileHashComputer.php',
