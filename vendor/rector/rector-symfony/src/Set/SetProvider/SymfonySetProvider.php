@@ -41,9 +41,9 @@ final class SymfonySetProvider implements SetProviderInterface
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '6.4', __DIR__ . '/../../../config/sets/symfony/symfony64.php'),
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '7.0', __DIR__ . '/../../../config/sets/symfony/symfony70.php'),
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '7.1', __DIR__ . '/../../../config/sets/symfony/symfony71.php'),
-            new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/configs.php'),
-            new Set(SetGroup::SYMFONY, 'Code Quality', __DIR__ . '/../../../config/sets/symfony-code-quality.php'),
-            new Set(SetGroup::SYMFONY, 'Constructor Injection', __DIR__ . '/../../../config/sets/symfony-constructor-injection.php'),
+            new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/symfony/configs.php'),
+            new Set(SetGroup::SYMFONY, 'Code Quality', __DIR__ . '/../../../config/sets/symfony/symfony-code-quality.php'),
+            new Set(SetGroup::SYMFONY, 'Constructor Injection', __DIR__ . '/../../../config/sets/symfony/symfony-constructor-injection.php'),
             new Set(SetGroup::SYMFONY, 'SwiftMailer to Symfony Mailer', __DIR__ . '/../../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php'),
             // attributes
             new Set(SetGroup::ATTRIBUTES, 'FOS Rest', __DIR__ . '/../../../config/sets/fosrest/annotations-to-attributes.php'),
