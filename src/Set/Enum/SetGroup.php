@@ -28,5 +28,9 @@ final class SetGroup
     /**
      * @var string
      */
+    public const SYMFONY = 'symfony';
+    /**
+     * @var string
+     */
     public const ATTRIBUTES = 'attributes';
 }
