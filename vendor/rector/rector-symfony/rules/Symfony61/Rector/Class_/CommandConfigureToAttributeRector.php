@@ -48,7 +48,7 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
     /**
      * @var array<string, string>
      */
-    private const METHODS_TO_ATTRIBUTE_NAMES = ['setName' => 'name', 'setDescription' => 'description', 'setAliases' => 'aliases'];
+    private const METHODS_TO_ATTRIBUTE_NAMES = ['setName' => 'name', 'setDescription' => 'description', 'setAliases' => 'aliases', 'setHidden' => 'hidden'];
     public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;

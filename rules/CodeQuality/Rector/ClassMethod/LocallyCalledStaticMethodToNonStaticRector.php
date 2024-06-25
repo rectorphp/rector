@@ -139,6 +139,7 @@ CODE_SAMPLE
      */
     private function isClassMethodCalledInAnotherStaticClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
+        $currentClassNamespacedName = (string) $this->getName($class);
         $currentClassMethodName = $this->getName($classMethod);
         $isInsideStaticClassMethod = \false;
         // check if called stati call somewhere in class, but only in static methods
@@ -147,11 +148,11 @@ CODE_SAMPLE
             if (!$checkedClassMethod->isStatic()) {
                 continue;
             }
-            $this->traverseNodesWithCallable($checkedClassMethod, function (Node $node) use($currentClassMethodName, &$isInsideStaticClassMethod) : ?int {
+            $this->traverseNodesWithCallable($checkedClassMethod, function (Node $node) use($currentClassNamespacedName, $currentClassMethodName, &$isInsideStaticClassMethod) : ?int {
                 if (!$node instanceof StaticCall) {
                     return null;
                 }
-                if (!$this->isNames($node->class, ['self', 'static'])) {
+                if (!$this->isNames($node->class, ['self', 'static', $currentClassNamespacedName])) {
                     return null;
                 }
                 if (!$this->isName($node->name, $currentClassMethodName)) {
