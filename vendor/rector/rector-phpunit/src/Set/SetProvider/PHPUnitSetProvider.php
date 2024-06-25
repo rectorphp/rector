@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\Set\SetProvider;
 
+use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
@@ -13,7 +14,7 @@ use Rector\Set\ValueObject\Set;
 final class PHPUnitSetProvider implements SetProviderInterface
 {
     /**
-     * @return ComposerTriggeredSet[]
+     * @return SetInterface[]
      */
     public function provide() : array
     {
