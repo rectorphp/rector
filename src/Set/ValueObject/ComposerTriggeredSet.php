@@ -33,9 +33,9 @@ final class ComposerTriggeredSet implements SetInterface
     private $setFilePath;
     /**
      * @var string
-     * @see https://regex101.com/r/xRjQ2X/1
+     * @see https://regex101.com/r/ioYomu/1
      */
-    private const PACKAGE_REGEX = '#^[a-z0-9-]+\\/[a-z0-9-_]+$#';
+    private const PACKAGE_REGEX = '#^[a-z0-9-]+\\/([a-z0-9-_]+|\\*)$#';
     public function __construct(string $groupName, string $packageName, string $version, string $setFilePath)
     {
         $this->groupName = $groupName;
