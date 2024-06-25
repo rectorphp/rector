@@ -66,4 +66,8 @@ final class ComposerTriggeredSet implements SetInterface
         }
         return \false;
     }
+    public function getName() : string
+    {
+        return $this->packageName . ' ' . $this->version;
+    }
 }

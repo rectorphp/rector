@@ -36,7 +36,7 @@ final class Set implements SetInterface
     {
         return $this->groupName;
     }
-    public function getSetName() : string
+    public function getName() : string
     {
         return $this->setName;
     }

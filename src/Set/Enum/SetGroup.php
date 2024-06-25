@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Set\Enum;
 
+/**
+ * @api used in sets
+ */
 final class SetGroup
 {
     /**

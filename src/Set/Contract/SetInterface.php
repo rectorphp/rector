@@ -5,4 +5,6 @@ namespace Rector\Set\Contract;
 
 interface SetInterface
 {
+    public function getGroupName() : string;
+    public function getName() : string;
 }
