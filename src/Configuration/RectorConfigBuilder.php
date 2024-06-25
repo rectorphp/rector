@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use RectorPrefix202406\Nette\Utils\FileSystem;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Config\Level\CodeQualityLevel;
 use Rector\Config\Level\DeadCodeLevel;
@@ -315,9 +316,41 @@ final class RectorConfigBuilder
      */
     public function withRootFiles() : self
     {
+        $gitIgnoreContents = [];
+        if (\file_exists(\getcwd() . '/.gitignore')) {
+            $gitIgnoreContents = \array_filter(\iterator_to_array(FileSystem::readLines(\getcwd() . '/.gitignore')), function (string $string) : bool {
+                $string = \trim($string);
+                // new line
+                if ($string === '') {
+                    return \false;
+                }
+                // comment
+                if (\strncmp($string, '#', \strlen('#')) === 0) {
+                    return \false;
+                }
+                // normalize
+                $string = \ltrim($string, '/\\');
+                // files in deep directory, no need to be in lists
+                if (\strpos($string, '/') !== \false || \strpos($string, '\\') !== \false) {
+                    return \false;
+                }
+                // only files
+                return \is_file($string);
+            });
+            // make realpath collection
+            $gitIgnoreContents = \array_map(function (string $string) : string {
+                // normalize
+                $string = \ltrim($string, '/\\');
+                return \realpath($string);
+            }, $gitIgnoreContents);
+        }
         $rootPhpFilesFinder = (new Finder())->files()->in(\getcwd())->depth(0)->name('*.php');
         foreach ($rootPhpFilesFinder as $rootPhpFileFinder) {
-            $this->paths[] = $rootPhpFileFinder->getRealPath();
+            $path = $rootPhpFileFinder->getRealPath();
+            if (\in_array($path, $gitIgnoreContents, \true)) {
+                continue;
+            }
+            $this->paths[] = $path;
         }
         return $this;
     }
