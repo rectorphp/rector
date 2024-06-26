@@ -6,6 +6,7 @@ namespace Rector\Reporting;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissConfigurationReporter
 {
@@ -30,6 +31,10 @@ final class MissConfigurationReporter
         $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
         $neverRegisteredSkippedRules = \array_unique(\array_diff($skippedRules, $registeredRules));
         foreach ($neverRegisteredSkippedRules as $neverRegisteredSkippedRule) {
+            // post rules are registered in a different way
+            if (\is_a($neverRegisteredSkippedRule, PostRectorInterface::class, \true)) {
+                continue;
+            }
             $this->symfonyStyle->warning(\sprintf('Skipped rule "%s" is never registered. You can remove it from "->withSkip()"', $neverRegisteredSkippedRule));
         }
     }
