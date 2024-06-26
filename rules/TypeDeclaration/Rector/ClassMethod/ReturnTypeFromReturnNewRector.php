@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -133,10 +132,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
-     * @param ClassMethod|Function_|ArrowFunction $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
@@ -146,12 +145,10 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
-        if (!$node instanceof ArrowFunction) {
-            $returnedNewClassName = $this->strictReturnNewAnalyzer->matchAlwaysReturnVariableNew($node);
-            if (\is_string($returnedNewClassName)) {
-                $node->returnType = new FullyQualified($returnedNewClassName);
-                return $node;
-            }
+        $returnedNewClassName = $this->strictReturnNewAnalyzer->matchAlwaysReturnVariableNew($node);
+        if (\is_string($returnedNewClassName)) {
+            $node->returnType = new FullyQualified($returnedNewClassName);
+            return $node;
         }
         return $this->refactorDirectReturnNew($node);
     }
@@ -189,17 +186,13 @@ CODE_SAMPLE
         return new ObjectType($className, null, $classReflection);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $node
-     * @return null|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @return null|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure
      */
     private function refactorDirectReturnNew($node)
     {
-        if ($node instanceof ArrowFunction) {
-            $returns = [new Return_($node->expr)];
-        } else {
-            /** @var Return_[] $returns */
-            $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
-        }
+        /** @var Return_[] $returns */
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
         if ($returns === []) {
             return null;
         }
