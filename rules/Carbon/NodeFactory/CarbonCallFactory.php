@@ -17,16 +17,26 @@ final class CarbonCallFactory
      * @var string
      * @see https://regex101.com/r/9vGt8r/1
      */
-    private const DAY_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(day|days)#';
+    private const PLUS_DAY_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(day|days)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/pqOPg6/1
+     */
+    private const MINUS_DAY_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(day|days)#';
     /**
      * @var string
      * @see https://regex101.com/r/6VUUQF/1
      */
-    private const MONTH_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(month|months)#';
+    private const PLUS_MONTH_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(month|months)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/IvyT7w/1
+     */
+    private const MINUS_MONTH_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(month|months)#';
     /**
      * @var array<self::*_REGEX, string>
      */
-    private const REGEX_TO_METHOD_NAME_MAP = [self::DAY_COUNT_REGEX => 'addDays', self::MONTH_COUNT_REGEX => 'addMonths'];
+    private const REGEX_TO_METHOD_NAME_MAP = [self::PLUS_DAY_COUNT_REGEX => 'addDays', self::MINUS_DAY_COUNT_REGEX => 'subDays', self::PLUS_MONTH_COUNT_REGEX => 'addMonths', self::MINUS_MONTH_COUNT_REGEX => 'subMonths'];
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
