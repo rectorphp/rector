@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
 use RectorPrefix202406\Nette\Utils\Json;
-use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\ValueObject\Configuration;
@@ -13,18 +12,9 @@ use Rector\ValueObject\ProcessResult;
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
     /**
-     * @readonly
-     * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
-     */
-    private $rectorsChangelogResolver;
-    /**
      * @var string
      */
     public const NAME = 'json';
-    public function __construct(RectorsChangelogResolver $rectorsChangelogResolver)
-    {
-        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
-    }
     public function getName() : string
     {
         return self::NAME;
@@ -36,8 +26,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         \ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
-            $appliedRectorsWithChangelog = $this->rectorsChangelogResolver->resolve($fileDiff->getRectorClasses());
-            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $relativeFilePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses(), 'applied_rectors_with_changelog' => $appliedRectorsWithChangelog];
+            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $relativeFilePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses()];
             // for Rector CI
             $errorsJson['changed_files'][] = $relativeFilePath;
         }

@@ -12,8 +12,6 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://tonyshowoff.com/articles/casting-int-faster-than-intval-in-php/
- *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\IntvalToTypeCastRectorTest
  */
 final class IntvalToTypeCastRector extends AbstractRector

@@ -17,8 +17,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @changelog https://3v4l.org/RTCUq
  * @see \Rector\Tests\Php74\Rector\StaticCall\ExportToReflectionFunctionRector\ExportToReflectionFunctionRectorTest
  */
 final class ExportToReflectionFunctionRector extends AbstractRector implements MinPhpVersionInterface

@@ -12,8 +12,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @changelog https://3v4l.org/INd7o
  * @see \Rector\Tests\Php55\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
 final class ClassConstantToSelfClassRector extends AbstractRector implements MinPhpVersionInterface

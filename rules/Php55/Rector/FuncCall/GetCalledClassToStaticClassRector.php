@@ -13,8 +13,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://www.php.net/ChangeLog-5.php#5.5.0
- * @changelog https://3v4l.org/dJgXd
  * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\GetCalledClassToStaticClassRectorTest
  */
 final class GetCalledClassToStaticClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface

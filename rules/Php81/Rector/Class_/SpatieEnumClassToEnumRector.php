@@ -15,9 +15,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/enumerations
- * @changelog https://github.com/spatie/enum
- *
  * @see \Rector\Tests\Php81\Rector\Class_\SpatieEnumClassToEnumRector\SpatieEnumClassToEnumRectorTest
  */
 final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
@@ -65,7 +62,7 @@ enum StatusEnum : string
     case ARCHIVED = 'archived';
 }
 CODE_SAMPLE
-, [\Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector::TO_UPPER_SNAKE_CASE => \false])]);
+, [self::TO_UPPER_SNAKE_CASE => \false])]);
     }
     /**
      * @return array<class-string<Node>>

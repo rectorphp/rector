@@ -21,10 +21,6 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://3v4l.org/GL6II
- * @changelog https://3v4l.org/eTrhZ
- * @changelog https://3v4l.org/C554W
- *
  * @see \Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector

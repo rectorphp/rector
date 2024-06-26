@@ -57,7 +57,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [\Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY => \true])]);
+, [self::TREAT_AS_NON_EMPTY => \true])]);
     }
     /**
      * @return array<class-string<Node>>

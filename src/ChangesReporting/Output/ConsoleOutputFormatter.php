@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
 use RectorPrefix202406\Nette\Utils\Strings;
-use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
@@ -19,11 +18,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private $symfonyStyle;
     /**
-     * @readonly
-     * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
-     */
-    private $rectorsChangelogResolver;
-    /**
      * @var string
      */
     public const NAME = 'console';
@@ -32,10 +26,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      * @see https://regex101.com/r/q8I66g/1
      */
     private const ON_LINE_REGEX = '# on line #';
-    public function __construct(SymfonyStyle $symfonyStyle, RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
     public function report(ProcessResult $processResult, Configuration $configuration) : void
     {
@@ -81,10 +74,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
-            $rectorsChangelogsLines = $this->createRectorChangelogLines($fileDiff);
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
-                $this->symfonyStyle->listing($rectorsChangelogsLines);
+                $this->symfonyStyle->listing($fileDiff->getRectorShortClasses());
                 $this->symfonyStyle->newLine();
             }
         }
@@ -117,18 +109,5 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return 'Rector is done!';
         }
         return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
-    }
-    /**
-     * @return string[]
-     */
-    private function createRectorChangelogLines(FileDiff $fileDiff) : array
-    {
-        $rectorsChangelogs = $this->rectorsChangelogResolver->resolveIncludingMissing($fileDiff->getRectorClasses());
-        $rectorsChangelogsLines = [];
-        foreach ($rectorsChangelogs as $rectorClass => $changelog) {
-            $rectorShortClass = (string) Strings::after($rectorClass, '\\', -1);
-            $rectorsChangelogsLines[] = $changelog === null ? $rectorShortClass : $rectorShortClass . ' (' . $changelog . ')';
-        }
-        return $rectorsChangelogsLines;
     }
 }

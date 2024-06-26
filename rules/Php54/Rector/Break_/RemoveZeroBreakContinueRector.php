@@ -18,8 +18,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://www.php.net/manual/en/control-structures.continue.php https://www.php.net/manual/en/control-structures.break.php
- *
  * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
  */
 final class RemoveZeroBreakContinueRector extends AbstractRector implements MinPhpVersionInterface

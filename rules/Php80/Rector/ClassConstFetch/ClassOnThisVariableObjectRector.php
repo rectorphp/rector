@@ -19,9 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * ::class introduced in php 5.5
  * while $this::class introduced in php 8.0
  *
- * @changelog https://wiki.php.net/rfc/class_name_scalars
- * @changelog https://wiki.php.net/rfc/class_name_literal_on_object
- *
  * @see \Rector\Tests\Php80\Rector\ClassConstFetch\ClassOnThisVariableObjectRector\ClassOnThisVariableObjectRectorTest
  */
 final class ClassOnThisVariableObjectRector extends AbstractScopeAwareRector implements MinPhpVersionInterface

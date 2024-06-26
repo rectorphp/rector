@@ -38,8 +38,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/constructor_promotion https://github.com/php/php-src/pull/5291
- *
  * @see \Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\ClassPropertyAssignToConstructorPromotionRectorTest
  */
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
@@ -155,7 +153,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => \false, \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::RENAME_PROPERTY => \true])]);
+, [self::INLINE_PUBLIC => \false, self::RENAME_PROPERTY => \true])]);
     }
     public function configure(array $configuration) : void
     {

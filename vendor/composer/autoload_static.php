@@ -1275,8 +1275,6 @@ class ComposerStaticInitd98d3a989b9f99591f8f5a74c164268a
         'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',
         'Rector\\Carbon\\Rector\\MethodCall\\DateTimeMethodCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/DateTimeMethodCallToCarbonRector.php',
         'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
-        'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => __DIR__ . '/../..' . '/src/ChangesReporting/Annotation/AnnotationExtractor.php',
-        'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => __DIR__ . '/../..' . '/src/ChangesReporting/Annotation/RectorsChangelogResolver.php',
         'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => __DIR__ . '/../..' . '/src/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
         'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/JsonOutputFormatter.php',

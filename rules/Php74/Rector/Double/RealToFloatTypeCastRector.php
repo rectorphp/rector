@@ -12,7 +12,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/deprecations_php_7_4
  * @see \Rector\Tests\Php74\Rector\Double\RealToFloatTypeCastRector\RealToFloatTypeCastRectorTest
  */
 final class RealToFloatTypeCastRector extends AbstractRector implements MinPhpVersionInterface

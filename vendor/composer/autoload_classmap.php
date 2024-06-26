@@ -1056,8 +1056,6 @@ return array(
     'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',
     'Rector\\Carbon\\Rector\\MethodCall\\DateTimeMethodCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/MethodCall/DateTimeMethodCallToCarbonRector.php',
     'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => $baseDir . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
-    'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => $baseDir . '/src/ChangesReporting/Annotation/AnnotationExtractor.php',
-    'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => $baseDir . '/src/ChangesReporting/Annotation/RectorsChangelogResolver.php',
     'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => $baseDir . '/src/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
     'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/JsonOutputFormatter.php',

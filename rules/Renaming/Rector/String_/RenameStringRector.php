@@ -12,8 +12,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202406\Webmozart\Assert\Assert;
 /**
- * @changelog https://github.com/symfony/symfony/pull/35858
- *
  * @see \Rector\Tests\Renaming\Rector\String_\RenameStringRector\RenameStringRectorTest
  */
 final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface

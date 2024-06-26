@@ -13,8 +13,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://www.php.net/manual/en/migration74.deprecated.php
- * @changelog https://3v4l.org/vhdlJ
  * @see \Rector\Tests\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector\ParenthesizeNestedTernaryRectorTest
  */
 final class ParenthesizeNestedTernaryRector extends AbstractRector implements MinPhpVersionInterface

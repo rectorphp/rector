@@ -14,8 +14,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202406\Webmozart\Assert\Assert;
 /**
- * @changelog https://github.com/symfony/symfony/pull/35308
- *
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
 final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface

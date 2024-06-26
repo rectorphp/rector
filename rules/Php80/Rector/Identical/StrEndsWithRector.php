@@ -27,8 +27,6 @@ use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
- *
  * @see \Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\StrEndsWithRectorTest
  */
 final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface

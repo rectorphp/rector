@@ -12,9 +12,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
- *
- * @changelog https://stackoverflow.com/a/47965344/1348344
  * @see \Rector\Tests\Php70\Rector\Assign\ListSplitStringRector\ListSplitStringRectorTest
  */
 final class ListSplitStringRector extends AbstractRector implements MinPhpVersionInterface

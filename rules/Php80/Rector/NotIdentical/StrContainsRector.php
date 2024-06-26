@@ -23,8 +23,6 @@ use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://externals.io/message/108562 https://github.com/php/php-src/pull/5179
- *
  * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */
 final class StrContainsRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
