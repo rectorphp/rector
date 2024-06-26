@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use RectorPrefix202406\Nette\Utils\FileSystem;
+use Rector\Bridge\SetProviderCollector;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Config\Level\CodeQualityLevel;
 use Rector\Config\Level\DeadCodeLevel;
@@ -16,11 +17,8 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\PHPUnit\Set\SetProvider\PHPUnitSetProvider;
-use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
@@ -29,7 +27,6 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\FOSRestSetList;
 use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
-use Rector\Symfony\Set\SetProvider\TwigSetProvider;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\PhpVersion;
 use RectorPrefix202406\Symfony\Component\Finder\Finder;
@@ -170,10 +167,6 @@ final class RectorConfigBuilder
      */
     private $registerServices = [];
     /**
-     * @var SetProviderInterface[]
-     */
-    private $setProviders = [];
-    /**
      * @var array<SetGroup::*>
      */
     private $setGroups = [];
@@ -185,10 +178,8 @@ final class RectorConfigBuilder
     {
         // @experimental 2024-06
         if ($this->setGroups !== []) {
-            if ($this->setProviders === []) {
-                throw new ShouldNotHappenException(\sprintf('Register set providers first, as they are required for dynamic sets: "%s"', \implode('", "', $this->setGroups)));
-            }
-            $setManager = new SetManager($this->setProviders);
+            $setProviderCollector = $rectorConfig->make(SetProviderCollector::class);
+            $setManager = new SetManager($setProviderCollector);
             $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
         }
         // merge sets together
@@ -508,14 +499,6 @@ final class RectorConfigBuilder
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
-    /**
-     * @param SetProviderInterface[] $setProviders
-     */
-    public function withSetProviders(array $setProviders) : self
-    {
-        $this->setProviders = \array_merge($this->setProviders, $setProviders);
-        return $this;
-    }
     public function withPreparedSets(
         bool $deadCode = \false,
         bool $codeQuality = \false,
@@ -586,11 +569,9 @@ final class RectorConfigBuilder
         // @experimental 2024-06
         if ($twig) {
             $this->setGroups[] = SetGroup::TWIG;
-            $this->withSetProviders([new TwigSetProvider()]);
         }
         if ($phpunit) {
             $this->setGroups[] = SetGroup::PHPUNIT;
-            $this->withSetProviders([new PHPUnitSetProvider()]);
         }
         return $this;
     }
