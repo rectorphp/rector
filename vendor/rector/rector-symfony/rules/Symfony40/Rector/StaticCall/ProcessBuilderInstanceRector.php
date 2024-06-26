@@ -5,6 +5,7 @@ namespace Rector\Symfony\Symfony40\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see https://github.com/pact-foundation/pact-php/pull/61/files.
  */
-final class ProcessBuilderInstanceRector extends AbstractRector
+final class ProcessBuilderInstanceRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @var bool

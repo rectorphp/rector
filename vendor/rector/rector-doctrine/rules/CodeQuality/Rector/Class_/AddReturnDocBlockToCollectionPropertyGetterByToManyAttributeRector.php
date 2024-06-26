@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
-use PhpParser\Node\Attribute;
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;

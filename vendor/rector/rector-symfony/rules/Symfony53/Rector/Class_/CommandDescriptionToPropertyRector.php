@@ -5,6 +5,7 @@ namespace Rector\Symfony\Symfony53\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @deprecated This rule is deprecated since Rector 1.1.2, as Symfony 6.1 introduced native attribute,
  * more reliable and validated
  */
-final class CommandDescriptionToPropertyRector extends AbstractRector
+final class CommandDescriptionToPropertyRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @var bool
