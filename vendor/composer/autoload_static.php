@@ -2218,7 +2218,6 @@ class ComposerStaticInitd98d3a989b9f99591f8f5a74c164268a
         'Rector\\PhpParser\\Parser\\RectorParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/RectorParser.php',
         'Rector\\PhpParser\\Parser\\SimplePhpParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/SimplePhpParser.php',
         'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
-        'Rector\\PhpParser\\Printer\\FormatPerservingPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/FormatPerservingPrinter.php',
         'Rector\\PhpParser\\ValueObject\\StmtsAndTokens' => __DIR__ . '/../..' . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
         'Rector\\Php\\PhpVersionProvider' => __DIR__ . '/../..' . '/src/Php/PhpVersionProvider.php',
         'Rector\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',

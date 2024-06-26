@@ -1999,7 +1999,6 @@ return array(
     'Rector\\PhpParser\\Parser\\RectorParser' => $baseDir . '/src/PhpParser/Parser/RectorParser.php',
     'Rector\\PhpParser\\Parser\\SimplePhpParser' => $baseDir . '/src/PhpParser/Parser/SimplePhpParser.php',
     'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => $baseDir . '/src/PhpParser/Printer/BetterStandardPrinter.php',
-    'Rector\\PhpParser\\Printer\\FormatPerservingPrinter' => $baseDir . '/src/PhpParser/Printer/FormatPerservingPrinter.php',
     'Rector\\PhpParser\\ValueObject\\StmtsAndTokens' => $baseDir . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
     'Rector\\Php\\PhpVersionProvider' => $baseDir . '/src/Php/PhpVersionProvider.php',
     'Rector\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => $baseDir . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
