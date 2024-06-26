@@ -37,6 +37,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromSymfonySerializerRec
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureUnionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector;
 use Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector;
@@ -88,6 +89,8 @@ final class TypeDeclarationLevel
         // param
         AddMethodCallBasedStrictParamTypeRector::class,
         ParamTypeByParentCallTypeRector::class,
+        // multi types (nullable, union)
+        AddClosureUnionReturnTypeRector::class,
         ReturnUnionTypeRector::class,
         // more risky rules
         ReturnTypeFromStrictParamRector::class,
