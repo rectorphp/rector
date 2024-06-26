@@ -13,7 +13,7 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\Plus\UseIncrementAssignRector\UseIncrementAssignRectorTest
+ * @deprecated Since 1.1.2 as often used intentionally and depends on context. Cannot be changed in one way.
  */
 final class UseIncrementAssignRector extends AbstractRector
 {

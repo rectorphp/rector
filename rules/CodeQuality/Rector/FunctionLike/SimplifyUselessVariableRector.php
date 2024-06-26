@@ -20,7 +20,6 @@ use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -70,18 +69,23 @@ final class SimplifyUselessVariableRector extends AbstractRector implements Conf
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Removes useless variable assigns', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes useless variable assigns', [new ConfiguredCodeSample(
+            <<<'CODE_SAMPLE'
 function () {
     $a = true;
     return $a;
 };
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+,
+            <<<'CODE_SAMPLE'
 function () {
     return true;
 };
 CODE_SAMPLE
-), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+,
+            // default
+            [self::ONLY_DIRECT_ASSIGN => \true]
+        ), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 function () {
     $a = 'Hello, ';
     $a .= 'World!';

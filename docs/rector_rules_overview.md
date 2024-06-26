@@ -10,11 +10,11 @@
 
 - [CodeQuality](#codequality) (73)
 
-- [CodingStyle](#codingstyle) (28)
+- [CodingStyle](#codingstyle) (27)
 
 - [DeadCode](#deadcode) (45)
 
-- [EarlyReturn](#earlyreturn) (9)
+- [EarlyReturn](#earlyreturn) (8)
 
 - [Instanceof](#instanceof) (1)
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (50)
+- [TypeDeclaration](#typedeclaration) (52)
 
 - [Visibility](#visibility) (3)
 
@@ -1354,6 +1354,8 @@ Simplify tautology ternary to value
 
 Removes useless variable assigns
 
+:wrench: **configure it!**
+
 - class: [`Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector`](../rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php)
 
 ```diff
@@ -1361,6 +1363,18 @@ Removes useless variable assigns
 -    $a = true;
 -    return $a;
 +    return true;
+ };
+```
+
+<br>
+
+```diff
+ function () {
+     $a = 'Hello, ';
+-    $a .= 'World!';
+
+-    return $a;
++    return $a . 'World!';
  };
 ```
 
@@ -2137,25 +2151,6 @@ Use `class` keyword for class name resolution in string instead of hardcoded str
 ```diff
 -$value = 'App\SomeClass::someMethod()';
 +$value = \App\SomeClass::class . '::someMethod()';
-```
-
-<br>
-
-### UseIncrementAssignRector
-
-Use ++ increment instead of `$var += 1`
-
-- class: [`Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector`](../rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $style += 1;
-+        ++$style;
-     }
- }
 ```
 
 <br>
@@ -3110,35 +3105,6 @@ Remove php version checks if they are passed
 <br>
 
 ## EarlyReturn
-
-### ChangeAndIfToEarlyReturnRector
-
-Changes if && to early return
-
-- class: [`Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector`](../rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php)
-
-```diff
- class SomeClass
- {
-     public function canDrive(Car $car)
-     {
--        if ($car->hasWheels && $car->hasFuel) {
--            return true;
-+        if (! $car->hasWheels) {
-+            return false;
-         }
-
--        return false;
-+        if (! $car->hasFuel) {
-+            return false;
-+        }
-+
-+        return true;
-     }
- }
-```
-
-<br>
 
 ### ChangeIfElseValueAssignToEarlyReturnRector
 
@@ -6496,6 +6462,40 @@ Add known return type to arrow function
 ```diff
 -fn () => [];
 +fn (): array => [];
+```
+
+<br>
+
+### AddClosureNeverReturnTypeRector
+
+Add "never" return-type for closure that never return anything
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php)
+
+```diff
+-function () {
++function (): never {
+     throw new InvalidException();
+ }
+```
+
+<br>
+
+### AddClosureUnionReturnTypeRector
+
+Add union return type on closure
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureUnionReturnTypeRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureUnionReturnTypeRector.php)
+
+```diff
+-function () {
++function (): int|string {
+     if (rand(0, 1)) {
+         return 1;
+     }
+
+     return 'one';
+ }
 ```
 
 <br>
