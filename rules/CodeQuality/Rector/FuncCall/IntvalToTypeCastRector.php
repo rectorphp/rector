@@ -12,7 +12,7 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\IntvalToTypeCastRectorTest
+ * @deprecated Since 1.1.2 as no clear performance difference and both are equivalent.
  */
 final class IntvalToTypeCastRector extends AbstractRector
 {

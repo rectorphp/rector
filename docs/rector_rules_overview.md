@@ -1,4 +1,4 @@
-# 379 Rules Overview
+# 375 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [Carbon](#carbon) (4)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (69)
 
 - [CodingStyle](#codingstyle) (27)
 
@@ -326,25 +326,6 @@ Negated identical boolean compare to not identical compare (does not apply to no
 
 <br>
 
-### BoolvalToTypeCastRector
-
-Change `boolval()` to faster and readable (bool) `$value`
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\BoolvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/BoolvalToTypeCastRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        return boolval($value);
-+        return (bool) $value;
-     }
- }
-```
-
-<br>
-
 ### CallUserFuncWithArrowFunctionToInlineRector
 
 Refactor `call_user_func()` with arrow function to direct call
@@ -638,27 +619,6 @@ Flip type control from null compare to use exclusive instanceof object
 
 <br>
 
-### FloatvalToTypeCastRector
-
-Change `floatval()` and `doubleval()` to faster and readable (float) `$value`
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\FloatvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/FloatvalToTypeCastRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        $a = floatval($value);
--        $b = doubleval($value);
-+        $a = (float) $value;
-+        $b = (float) $value;
-     }
- }
-```
-
-<br>
-
 ### ForRepeatedCountToOwnVariableRector
 
 Change `count()` in for function to own variable
@@ -803,25 +763,6 @@ Change `is_a()` with object and class name check to instanceof
      {
 -        return is_a($object, SomeType::class);
 +        return $object instanceof SomeType;
-     }
- }
-```
-
-<br>
-
-### IntvalToTypeCastRector
-
-Change `intval()` to faster and readable (int) `$value`
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/IntvalToTypeCastRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        return intval($value);
-+        return (int) $value;
      }
  }
 ```
@@ -1463,25 +1404,6 @@ Changes strlen comparison to 0 to direct empty string compare
      {
 -        $empty = strlen($value) === 0;
 +        $empty = $value === '';
-     }
- }
-```
-
-<br>
-
-### StrvalToTypeCastRector
-
-Change `strval()` to faster and readable (string) `$value`
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\StrvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/StrvalToTypeCastRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        return strval($value);
-+        return (string) $value;
      }
  }
 ```
