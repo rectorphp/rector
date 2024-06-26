@@ -11,6 +11,9 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+/**
+ * @deprecated Since 1.1.2, as related rule creates inverted conditions and makes code much less readable.
+ */
 final class IfAndAnalyzer
 {
     /**

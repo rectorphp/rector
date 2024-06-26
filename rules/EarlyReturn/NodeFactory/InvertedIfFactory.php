@@ -11,6 +11,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @deprecated Since 1.1.2, as related rule creates inverted conditions and makes code much less readable.
+ */
 final class InvertedIfFactory
 {
     /**
