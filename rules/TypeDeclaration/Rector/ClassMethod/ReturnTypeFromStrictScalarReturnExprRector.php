@@ -94,7 +94,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::HARD_CODED_ONLY => \false])]);
+, [\Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector::HARD_CODED_ONLY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
