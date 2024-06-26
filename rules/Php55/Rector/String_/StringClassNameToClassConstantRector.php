@@ -77,7 +77,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['ClassName', 'AnotherClassName', \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::SHOULD_KEEP_PRE_SLASH => \false])]);
+, ['ClassName', 'AnotherClassName', self::SHOULD_KEEP_PRE_SLASH => \false])]);
     }
     /**
      * @return array<class-string<Node>>

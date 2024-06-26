@@ -58,7 +58,7 @@ final class NegatedString
     }
 }
 CODE_SAMPLE
-, [\Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector::TREAT_AS_NON_EMPTY => \false])]);
+, [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>

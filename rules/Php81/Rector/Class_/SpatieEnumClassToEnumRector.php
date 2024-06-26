@@ -62,7 +62,7 @@ enum StatusEnum : string
     case ARCHIVED = 'archived';
 }
 CODE_SAMPLE
-, [\Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector::TO_UPPER_SNAKE_CASE => \false])]);
+, [self::TO_UPPER_SNAKE_CASE => \false])]);
     }
     /**
      * @return array<class-string<Node>>

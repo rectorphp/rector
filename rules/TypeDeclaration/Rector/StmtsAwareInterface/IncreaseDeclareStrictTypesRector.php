@@ -29,7 +29,7 @@ final class IncreaseDeclareStrictTypesRector extends AbstractRector implements C
      * @var \Rector\TypeDeclaration\NodeAnalyzer\DeclareStrictTypeFinder
      */
     private $declareStrictTypeFinder;
-    public const LIMIT = 'limit';
+    private const LIMIT = 'limit';
     /**
      * @var int
      */
@@ -56,7 +56,7 @@ function someFunction()
 {
 }
 CODE_SAMPLE
-, [\Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector::LIMIT => 10])]);
+, [self::LIMIT => 10])]);
     }
     /**
      * @param Stmt[] $nodes

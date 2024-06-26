@@ -71,7 +71,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [\Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector::LIMIT_VALUE => 1000000])]);
+, [self::LIMIT_VALUE => 1000000])]);
     }
     /**
      * @return array<class-string<Node>>

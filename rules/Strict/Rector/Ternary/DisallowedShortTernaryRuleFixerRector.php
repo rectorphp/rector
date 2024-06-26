@@ -54,7 +54,7 @@ final class ShortTernaryArray
     }
 }
 CODE_SAMPLE
-, [\Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector::TREAT_AS_NON_EMPTY => \false])]);
+, [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>

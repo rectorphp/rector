@@ -153,7 +153,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => \false, \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::RENAME_PROPERTY => \true])]);
+, [self::INLINE_PUBLIC => \false, self::RENAME_PROPERTY => \true])]);
     }
     public function configure(array $configuration) : void
     {

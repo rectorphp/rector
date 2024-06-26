@@ -49,7 +49,7 @@ final class ArrayCompare
     }
 }
 CODE_SAMPLE
-, [\Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector::TREAT_AS_NON_EMPTY => \false])]);
+, [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
