@@ -1396,6 +1396,7 @@ class ComposerStaticInitd98d3a989b9f99591f8f5a74c164268a
         'Rector\\CodingStyle\\Rector\\Closure\\StaticClosureRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Closure/StaticClosureRector.php',
         'Rector\\CodingStyle\\Rector\\Encapsed\\EncapsedStringsToSprintfRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php',
         'Rector\\CodingStyle\\Rector\\Encapsed\\WrapEncapsedVariableInCurlyBracesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector.php',
+        'Rector\\CodingStyle\\Rector\\Foreach_\\MultiDimensionalArrayToArrayDestructRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Foreach_/MultiDimensionalArrayToArrayDestructRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncArrayToVariadicRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',

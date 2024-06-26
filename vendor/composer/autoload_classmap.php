@@ -1177,6 +1177,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\Closure\\StaticClosureRector' => $baseDir . '/rules/CodingStyle/Rector/Closure/StaticClosureRector.php',
     'Rector\\CodingStyle\\Rector\\Encapsed\\EncapsedStringsToSprintfRector' => $baseDir . '/rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php',
     'Rector\\CodingStyle\\Rector\\Encapsed\\WrapEncapsedVariableInCurlyBracesRector' => $baseDir . '/rules/CodingStyle/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector.php',
+    'Rector\\CodingStyle\\Rector\\Foreach_\\MultiDimensionalArrayToArrayDestructRector' => $baseDir . '/rules/CodingStyle/Rector/Foreach_/MultiDimensionalArrayToArrayDestructRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncArrayToVariadicRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',
