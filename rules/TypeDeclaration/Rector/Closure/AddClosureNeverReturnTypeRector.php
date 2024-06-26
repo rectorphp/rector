@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassMethod;
+namespace Rector\TypeDeclaration\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use Rector\Rector\AbstractScopeAwareRector;
 use Rector\TypeDeclaration\NodeManipulator\AddNeverReturnType;
@@ -15,9 +13,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector\ReturnNeverTypeRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector\AddClosureNeverReturnTypeRectorTest
  */
-final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class AddClosureNeverReturnTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -30,22 +28,14 @@ final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements Mi
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add "never" return-type for methods that never return anything', [new CodeSample(<<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function run()
-    {
-        throw new InvalidException();
-    }
+        return new RuleDefinition('Add "never" return-type for closure that never return anything', [new CodeSample(<<<'CODE_SAMPLE'
+function () {
+    throw new InvalidException();
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function run(): never
-    {
-        throw new InvalidException();
-    }
+function (): never {
+    throw new InvalidException();
 }
 CODE_SAMPLE
 )]);
@@ -55,10 +45,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [Closure::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param Closure $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
