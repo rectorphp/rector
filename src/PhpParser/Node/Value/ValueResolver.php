@@ -20,13 +20,13 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Enum\ObjectReference;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Provider\CurrentFileProvider;
 use Rector\Reflection\ClassReflectionAnalyzer;
 use Rector\Reflection\ReflectionResolver;
 use TypeError;
@@ -58,7 +58,7 @@ final class ValueResolver
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
+     * @var \Rector\Application\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**

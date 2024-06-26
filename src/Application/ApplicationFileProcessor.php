@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202406\Nette\Utils\FileSystem as UtilsFileSystem;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Configuration\VendorMissAnalyseGuard;
 use Rector\Parallel\Application\ParallelFileProcessor;
-use Rector\Provider\CurrentFileProvider;
+use Rector\Reporting\MissConfigurationReporter;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -59,7 +59,7 @@ final class ApplicationFileProcessor
     private $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
+     * @var \Rector\Application\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
@@ -74,9 +74,9 @@ final class ApplicationFileProcessor
     private $arrayParametersMerger;
     /**
      * @readonly
-     * @var \Rector\Configuration\VendorMissAnalyseGuard
+     * @var \Rector\Reporting\MissConfigurationReporter
      */
-    private $vendorMissAnalyseGuard;
+    private $missConfigurationReporter;
     /**
      * @var string
      */
@@ -85,7 +85,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, VendorMissAnalyseGuard $vendorMissAnalyseGuard)
+    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileFactory = $fileFactory;
@@ -96,13 +96,12 @@ final class ApplicationFileProcessor
         $this->currentFileProvider = $currentFileProvider;
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
-        $this->vendorMissAnalyseGuard = $vendorMissAnalyseGuard;
+        $this->missConfigurationReporter = $missConfigurationReporter;
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
-        $this->verifyVendor($filePaths);
-        $this->verifySkippedRules();
+        $this->missConfigurationReporter->reportVendorInPaths($filePaths);
         // no files found
         if ($filePaths === []) {
             return new ProcessResult([], []);
@@ -175,28 +174,6 @@ final class ApplicationFileProcessor
             }
         }
         return new ProcessResult($systemErrors, $fileDiffs);
-    }
-    /**
-     * @param string[] $filePaths
-     */
-    private function verifyVendor(array $filePaths) : void
-    {
-        if ($this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
-            $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
-            \sleep(3);
-        }
-    }
-    private function verifySkippedRules() : void
-    {
-        $registeredRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
-        $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
-        $neverRegisteredSkippedRules = \array_unique(\array_diff($skippedRules, $registeredRules));
-        if ($neverRegisteredSkippedRules !== []) {
-            $total = \count($neverRegisteredSkippedRules);
-            $reportNeverRegisteredRules = \implode(\PHP_EOL, $neverRegisteredSkippedRules);
-            $this->symfonyStyle->warning(\sprintf('[Note] The following rule%s %s ignored, but %s actually never registered. You can remove %s from the withSkip([...]) method.%s%s', $total > 1 ? 's' : '', $total > 1 ? 'are' : 'is', $total > 1 ? 'they are' : 'it is', $total > 1 ? 'them' : 'it', \PHP_EOL, \PHP_EOL . $reportNeverRegisteredRules));
-            \sleep(3);
-        }
     }
     private function processFile(File $file, Configuration $configuration) : FileProcessResult
     {

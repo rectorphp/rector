@@ -5,12 +5,12 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\Provider\CurrentFileProvider;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
 final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
@@ -32,7 +32,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
     private $useNodesToAddCollector;
     /**
      * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
+     * @var \Rector\Application\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(TypeFactory $typeFactory, UseImportsAdder $useImportsAdder, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider)

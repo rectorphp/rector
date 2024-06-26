@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\Identical;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -13,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @deprecated Deprecated since 1.1.2, as can create invalid checks. See https://github.com/rectorphp/rector/issues/8639
  * Use PHPStan to find those case and upgrade manually with care instead.
  */
-final class GetClassToInstanceOfRector extends AbstractRector
+final class GetClassToInstanceOfRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @var bool

@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\EarlyReturn\NodeAnalyzer\IfAndAnalyzer;
 use Rector\EarlyReturn\NodeAnalyzer\SimpleScalarAnalyzer;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
@@ -31,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated Since 1.1.2, as this rule creates inverted conditions and makes code much less readable.
  */
-final class ChangeAndIfToEarlyReturnRector extends AbstractRector
+final class ChangeAndIfToEarlyReturnRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @readonly

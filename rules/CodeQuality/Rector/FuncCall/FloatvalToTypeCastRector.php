@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -13,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated Since 1.1.2 as no clear performance difference and both are equivalent.
  */
-final class FloatvalToTypeCastRector extends AbstractRector
+final class FloatvalToTypeCastRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @var string[]

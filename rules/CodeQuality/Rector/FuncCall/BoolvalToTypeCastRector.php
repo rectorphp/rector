@@ -6,13 +6,14 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated Since 1.1.2 as no clear performance difference and both are equivalent.
  */
-final class BoolvalToTypeCastRector extends AbstractRector
+final class BoolvalToTypeCastRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition() : RuleDefinition
     {

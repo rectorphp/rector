@@ -8,14 +8,14 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Provider\CurrentFileProvider;
 use Rector\ValueObject\Application\File;
 final class UseImportsResolver
 {
     /**
      * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
+     * @var \Rector\Application\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(CurrentFileProvider $currentFileProvider)

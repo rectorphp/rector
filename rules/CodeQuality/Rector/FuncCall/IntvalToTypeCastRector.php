@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated Since 1.1.2 as no clear performance difference and both are equivalent.
  */
-final class IntvalToTypeCastRector extends AbstractRector
+final class IntvalToTypeCastRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @readonly

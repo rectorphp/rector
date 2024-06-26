@@ -14,6 +14,8 @@ use Rector\Console\ExitCode;
 use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\ProcessConfigureDecorator;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Reporting\DeprecatedRulesReporter;
+use Rector\Reporting\MissConfigurationReporter;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
@@ -70,7 +72,17 @@ final class ProcessCommand extends Command
      * @var \Rector\Configuration\ConfigurationFactory
      */
     private $configurationFactory;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
+    /**
+     * @readonly
+     * @var \Rector\Reporting\DeprecatedRulesReporter
+     */
+    private $deprecatedRulesReporter;
+    /**
+     * @readonly
+     * @var \Rector\Reporting\MissConfigurationReporter
+     */
+    private $missConfigurationReporter;
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -81,6 +93,8 @@ final class ProcessCommand extends Command
         $this->symfonyStyle = $symfonyStyle;
         $this->memoryLimiter = $memoryLimiter;
         $this->configurationFactory = $configurationFactory;
+        $this->deprecatedRulesReporter = $deprecatedRulesReporter;
+        $this->missConfigurationReporter = $missConfigurationReporter;
         parent::__construct();
     }
     protected function configure() : void
@@ -121,6 +135,9 @@ final class ProcessCommand extends Command
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($processResult, $configuration);
+        $this->deprecatedRulesReporter->reportDeprecatedRules();
+        $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
+        $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         return $this->resolveReturnCode($processResult, $configuration);
     }
     protected function initialize(InputInterface $input, OutputInterface $output) : void

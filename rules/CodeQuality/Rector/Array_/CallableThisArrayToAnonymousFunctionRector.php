@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -23,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @deprecated This rule is surpassed by more advanced one
  * Use @see FirstClassCallableRector instead
  */
-final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwareRector
+final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwareRector implements DeprecatedInterface
 {
     /**
      * @readonly

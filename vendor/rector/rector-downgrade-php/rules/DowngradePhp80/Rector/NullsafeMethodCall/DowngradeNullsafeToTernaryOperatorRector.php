@@ -11,9 +11,7 @@ use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use Rector\Provider\CurrentFileProvider;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\Application\File;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,25 +20,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
     /**
-     * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
-    /**
      * @var int
      */
     private $counter = 0;
     /**
-     * @var string|null
+     * Hack-ish way to reset counter for a new file, to avoid rising counter for each file
+     *
+     * @param Node[] $nodes
+     * @return array|Node[]|null
      */
-    private $previousFileName;
-    /**
-     * @var string|null
-     */
-    private $currentFileName;
-    public function __construct(CurrentFileProvider $currentFileProvider)
+    public function beforeTraverse(array $nodes) : ?array
     {
-        $this->currentFileProvider = $currentFileProvider;
+        $this->counter = 0;
+        return parent::beforeTraverse($nodes);
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -64,18 +56,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Ternary
     {
-        if ($this->previousFileName === null) {
-            $previousFile = $this->currentFileProvider->getFile();
-            if (!$previousFile instanceof File) {
-                return null;
-            }
-            $this->previousFileName = $previousFile->getFilePath();
-        }
-        $currentFile = $this->currentFileProvider->getFile();
-        if (!$currentFile instanceof File) {
-            return null;
-        }
-        $this->currentFileName = $currentFile->getFilePath();
         $nullsafeVariable = $this->createNullsafeVariable();
         $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariable, $node->name, $node->getArgs()) : new PropertyFetch($nullsafeVariable, $node->name);
         $assign = new Assign($nullsafeVariable, $node->var);
@@ -83,10 +63,6 @@ CODE_SAMPLE
     }
     private function createNullsafeVariable() : Variable
     {
-        if ($this->previousFileName !== $this->currentFileName) {
-            $this->counter = 0;
-            $this->previousFileName = $this->currentFileName;
-        }
         $nullsafeVariableName = 'nullsafeVariable' . ++$this->counter;
         return new Variable($nullsafeVariableName);
     }

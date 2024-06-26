@@ -5,10 +5,10 @@ namespace Rector\Testing\TestingParser;
 
 use RectorPrefix202406\Nette\Utils\FileSystem;
 use PhpParser\Node;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\PhpParser\Parser\RectorParser;
-use Rector\Provider\CurrentFileProvider;
 use Rector\ValueObject\Application\File;
 /**
  * @api
@@ -27,7 +27,7 @@ final class TestingParser
     private $nodeScopeAndMetadataDecorator;
     /**
      * @readonly
-     * @var \Rector\Provider\CurrentFileProvider
+     * @var \Rector\Application\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**

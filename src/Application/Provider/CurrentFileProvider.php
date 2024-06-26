@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Provider;
+namespace Rector\Application\Provider;
 
 use Rector\ValueObject\Application\File;
 final class CurrentFileProvider
