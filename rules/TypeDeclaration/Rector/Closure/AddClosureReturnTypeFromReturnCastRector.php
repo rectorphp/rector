@@ -1,11 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassMethod;
+namespace Rector\TypeDeclaration\Rector\Closure;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
 use Rector\Rector\AbstractScopeAwareRector;
 use Rector\TypeDeclaration\NodeManipulator\AddReturnTypeFromCast;
@@ -14,9 +13,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector\ReturnTypeFromReturnCastRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromReturnCastRector\AddClosureReturnTypeFromReturnCastRectorTest
  */
-final class ReturnTypeFromReturnCastRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class AddClosureReturnTypeFromReturnCastRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -29,33 +28,15 @@ final class ReturnTypeFromReturnCastRector extends AbstractScopeAwareRector impl
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add return type to function like with return cast', [new CodeSample(<<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function action($param)
-    {
-        try {
-            return (array) $param;
-        } catch (Exception $exception) {
-            // some logging
-            throw $exception;
-        }
-    }
-}
+        return new RuleDefinition('Add return type to closure with return cast', [new CodeSample(<<<'CODE_SAMPLE'
+function ($param) {
+    return (string) $param;
+};
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function action($param): array
-    {
-        try {
-            return (array) $param;
-        } catch (Exception $exception) {
-            // some logging
-            throw $exception;
-        }
-    }
-}
+function ($param): string {
+    return (string) $param;
+};
 CODE_SAMPLE
 )]);
     }
@@ -64,10 +45,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class];
+        return [Closure::class];
     }
     /**
-     * @param ClassMethod|Function_ $node
+     * @param Closure $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {

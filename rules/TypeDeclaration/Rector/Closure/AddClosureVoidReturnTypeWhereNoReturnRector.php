@@ -30,11 +30,11 @@ final class AddClosureVoidReturnTypeWhereNoReturnRector extends AbstractRector i
     {
         return new RuleDefinition('Add closure return type void if there is no return', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
-}
+};
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 function (): void {
-}
+};
 CODE_SAMPLE
 )]);
     }

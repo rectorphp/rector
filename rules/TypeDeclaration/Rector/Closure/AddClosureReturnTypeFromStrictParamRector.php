@@ -32,13 +32,13 @@ final class AddClosureReturnTypeFromStrictParamRector extends AbstractScopeAware
 function(ParamType $item)
 {
     return $item;
-}
+};
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 function(ParamType $item): ParamType
 {
     return $item;
-}
+};
 CODE_SAMPLE
 )]);
     }
