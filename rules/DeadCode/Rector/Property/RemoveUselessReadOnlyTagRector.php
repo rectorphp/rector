@@ -13,12 +13,14 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUselessReadOnlyTagRector\RemoveUselessReadOnlyTagRectorTest
  */
-final class RemoveUselessReadOnlyTagRector extends AbstractRector
+final class RemoveUselessReadOnlyTagRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -103,5 +105,9 @@ CODE_SAMPLE
         $phpDocInfo->removeByName('readonly');
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::READONLY_PROPERTY;
     }
 }
