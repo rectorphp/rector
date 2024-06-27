@@ -121,6 +121,7 @@ CODE_SAMPLE
                     $callableArgs[] = $reflectionParameter->getPosition();
                 }
             }
+            $hasChanged = \false;
             foreach ($node->getArgs() as $key => $arg) {
                 if (!\in_array($key, $callableArgs, \true)) {
                     continue;
@@ -129,8 +130,9 @@ CODE_SAMPLE
                     continue;
                 }
                 $node->args[$key] = new Arg(new FuncCall(new Name($arg->value->value), [new VariadicPlaceholder()]), \false, \false, [], $arg->name);
+                $hasChanged = \true;
             }
-            return $node;
+            return $hasChanged ? $node : null;
         }
         if ($node instanceof Property || $node instanceof ClassConst) {
             return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
