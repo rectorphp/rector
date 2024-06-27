@@ -4,8 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php\PhpVersionResolver;
 
 use RectorPrefix202406\Composer\Semver\VersionParser;
-use RectorPrefix202406\Nette\Utils\FileSystem;
-use RectorPrefix202406\Nette\Utils\Json;
+use Rector\FileSystem\JsonFileSystem;
 use Rector\Util\PhpVersionFactory;
 /**
  * @see \Rector\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
@@ -21,8 +20,7 @@ final class ProjectComposerJsonPhpVersionResolver
         if (\array_key_exists($composerJson, self::$cachedPhpVersions)) {
             return self::$cachedPhpVersions[$composerJson];
         }
-        $composerJsonContents = FileSystem::read($composerJson);
-        $projectComposerJson = Json::decode($composerJsonContents, \true);
+        $projectComposerJson = JsonFileSystem::readFilePath($composerJson);
         // give this one a priority, as more generic one
         $requirePhpVersion = $projectComposerJson['require']['php'] ?? null;
         if ($requirePhpVersion !== null) {
