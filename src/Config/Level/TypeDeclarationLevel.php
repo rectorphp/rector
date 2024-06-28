@@ -39,6 +39,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromReturnCastRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictParamRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureUnionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
@@ -87,6 +88,7 @@ final class TypeDeclarationLevel
         AddParamTypeBasedOnPHPUnitDataProviderRector::class,
         // php 7.4
         TypedPropertyFromStrictSetUpRector::class,
+        AddClosureReturnTypeFromStrictNativeCallRector::class,
         ReturnTypeFromStrictNativeCallRector::class,
         ReturnTypeFromStrictTypedCallRector::class,
         ChildDoctrineRepositoryClassTypeRector::class,
