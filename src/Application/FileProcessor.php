@@ -110,7 +110,7 @@ final class FileProcessor
             $file->changeHasChanged(\false);
             $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
             // apply post rectors
-            $postNewStmts = $this->postFileProcessor->traverse($newStmts, $filePath);
+            $postNewStmts = $this->postFileProcessor->traverse($newStmts, $file);
             // this is needed for new tokens added in "afterTraverse()"
             $file->changeNewStmts($postNewStmts);
             // 3. print to file or string

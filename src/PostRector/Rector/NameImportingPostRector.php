@@ -12,13 +12,11 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Application\Provider\CurrentFileProvider;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\ValueObject\Application\File;
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -31,11 +29,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
-    /**
-     * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
     /**
      * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
@@ -51,11 +44,10 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NameImporter $nameImporter, ClassNameImportSkipper $classNameImportSkipper, CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(NameImporter $nameImporter, ClassNameImportSkipper $classNameImportSkipper, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nameImporter = $nameImporter;
         $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->currentFileProvider = $currentFileProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->aliasNameResolver = $aliasNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -80,9 +72,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($nameInUse instanceof Name) {
             return $nameInUse;
         }
-        /** @var File $file */
-        $file = $this->currentFileProvider->getFile();
-        return $this->nameImporter->importName($node, $file);
+        return $this->nameImporter->importName($node, $this->getFile());
     }
     /**
      * @param Stmt[] $stmts

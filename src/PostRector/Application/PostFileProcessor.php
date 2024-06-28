@@ -16,6 +16,7 @@ use Rector\PostRector\Rector\UnusedImportRemovingPostRector;
 use Rector\PostRector\Rector\UseAddingPostRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Skipper\Skipper\Skipper;
+use Rector\ValueObject\Application\File;
 final class PostFileProcessor implements ResetableInterface
 {
     /**
@@ -69,12 +70,13 @@ final class PostFileProcessor implements ResetableInterface
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function traverse(array $stmts, string $filePath) : array
+    public function traverse(array $stmts, File $file) : array
     {
         foreach ($this->getPostRectors() as $postRector) {
-            if ($this->shouldSkipPostRector($postRector, $filePath, $stmts)) {
+            if ($this->shouldSkipPostRector($postRector, $file->getFilePath(), $stmts)) {
                 continue;
             }
+            $postRector->setFile($file);
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
             $stmts = $nodeTraverser->traverse($stmts);

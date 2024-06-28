@@ -57,13 +57,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     public function beforeTraverse(array $nodes) : array
     {
         // ensure reset early on every run to avoid reuse existing value
-        $this->rootNode = null;
-        foreach ($nodes as $node) {
-            if ($node instanceof FileWithoutNamespace || $node instanceof Namespace_) {
-                $this->rootNode = $node;
-                break;
-            }
-        }
+        $this->rootNode = $this->resolveRootNode($nodes);
         return $nodes;
     }
     public function enterNode(Node $node) : ?Node
@@ -110,6 +104,19 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $phpAttributeName = $name->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
         if (\is_string($phpAttributeName)) {
             return $this->classRenamer->renameNode(new FullyQualified($phpAttributeName, $name->getAttributes()), $oldToNewClasses, $scope);
+        }
+        return null;
+    }
+    /**
+     * @param Stmt[] $nodes
+     * @return \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
+     */
+    private function resolveRootNode(array $nodes)
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof FileWithoutNamespace || $node instanceof Namespace_) {
+                return $node;
+            }
         }
         return null;
     }
