@@ -1999,17 +1999,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.8",
-            "version_normalized": "6.4.8.0",
+            "version": "v6.4.9",
+            "version_normalized": "6.4.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "be5854cee0e8c7b110f00d695d11debdfa1a2a91"
+                "reference": "6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/be5854cee0e8c7b110f00d695d11debdfa1a2a91",
-                "reference": "be5854cee0e8c7b110f00d695d11debdfa1a2a91",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9",
+                "reference": "6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9",
                 "shasum": ""
             },
             "require": {
@@ -2042,7 +2042,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2024-05-31T14:49:08+00:00",
+            "time": "2024-06-28T09:49:33+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2081,7 +2081,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.8"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.9"
             },
             "funding": [
                 {
@@ -2171,17 +2171,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v6.4.8",
-            "version_normalized": "6.4.8.0",
+            "version": "v6.4.9",
+            "version_normalized": "6.4.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "4d37529150e7081c51b3c5d5718c55a04a9503f3"
+                "reference": "b51ef8059159330b74a4d52f68e671033c0fe463"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/4d37529150e7081c51b3c5d5718c55a04a9503f3",
-                "reference": "4d37529150e7081c51b3c5d5718c55a04a9503f3",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/b51ef8059159330b74a4d52f68e671033c0fe463",
+                "reference": "b51ef8059159330b74a4d52f68e671033c0fe463",
                 "shasum": ""
             },
             "require": {
@@ -2192,7 +2192,7 @@
             "require-dev": {
                 "symfony\/process": "^5.4|^6.4|^7.0"
             },
-            "time": "2024-05-31T14:49:08+00:00",
+            "time": "2024-06-28T09:49:33+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2220,7 +2220,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.8"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.9"
             },
             "funding": [
                 {

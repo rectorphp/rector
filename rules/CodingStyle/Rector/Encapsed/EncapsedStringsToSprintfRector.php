@@ -33,13 +33,13 @@ final class EncapsedStringsToSprintfRector extends AbstractRector implements Con
      */
     public const ALWAYS = 'always';
     /**
-     * @var bool
-     */
-    private $always = \false;
-    /**
      * @var array<string, array<class-string<Type>>>
      */
     private const FORMAT_SPECIFIERS = ['%s' => ['PHPStan\\Type\\StringType'], '%d' => ['PHPStan\\Type\\Constant\\ConstantIntegerType', 'PHPStan\\Type\\IntegerRangeType', 'PHPStan\\Type\\IntegerType']];
+    /**
+     * @var bool
+     */
+    private $always = \false;
     /**
      * @var string
      */
