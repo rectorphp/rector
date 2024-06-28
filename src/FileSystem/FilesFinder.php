@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileSystem;
 
+use RectorPrefix202406\Nette\Utils\FileSystem;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Skipper\Skipper\PathSkipper;
 use RectorPrefix202406\Symfony\Component\Finder\Finder;
@@ -31,11 +32,6 @@ final class FilesFinder
      * @var \Rector\Skipper\Skipper\PathSkipper
      */
     private $pathSkipper;
-    /**
-     * @var string
-     * @see https://regex101.com/r/3NwDLo/1
-     */
-    private const OPEN_SHORTTAG_REGEX = '#^\\<\\?=#';
     public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper)
     {
         $this->filesystemTweaker = $filesystemTweaker;
@@ -53,13 +49,8 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $files = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
         // exclude short "<?=" tags as lead to invalid changes
-        $files = \array_filter($files, static function (string $file) : bool {
-            // @ on purpose to deal with broken symlinks
-            $fileContents = @\file_get_contents($file);
-            if (!\is_string($fileContents)) {
-                return \true;
-            }
-            return \strncmp($fileContents, '<?=', \strlen('<?=')) !== 0;
+        $files = \array_filter($files, function (string $file) : bool {
+            return !$this->isStartWithShortPHPTag(FileSystem::read($file));
         });
         $filteredFilePaths = \array_filter($files, function (string $filePath) : bool {
             return !$this->pathSkipper->shouldSkip($filePath);
@@ -76,6 +67,10 @@ final class FilesFinder
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
+    private function isStartWithShortPHPTag(string $fileContent) : bool
+    {
+        return \strncmp(\ltrim($fileContent), '<?=', \strlen('<?=')) === 0;
+    }
     /**
      * @param string[] $directories
      * @param string[] $suffixes
@@ -86,7 +81,7 @@ final class FilesFinder
         if ($directories === []) {
             return [];
         }
-        $finder = Finder::create()->files()->size('> 0')->notContains(self::OPEN_SHORTTAG_REGEX)->in($directories);
+        $finder = Finder::create()->files()->size('> 0')->in($directories);
         if ($sortByName) {
             $finder->sortByName();
         }
@@ -104,6 +99,9 @@ final class FilesFinder
                 continue;
             }
             if ($this->pathSkipper->shouldSkip($path)) {
+                continue;
+            }
+            if ($this->isStartWithShortPHPTag($fileInfo->getContents())) {
                 continue;
             }
             $filePaths[] = $path;
