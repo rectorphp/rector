@@ -47,12 +47,9 @@ final class FilesFinder
     public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
-        $files = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        // exclude short "<?=" tags as lead to invalid changes
-        $files = \array_filter($files, function (string $file) : bool {
-            return !$this->isStartWithShortPHPTag(FileSystem::read($file));
-        });
-        $filteredFilePaths = \array_filter($files, function (string $filePath) : bool {
+        // filtering files in files collection
+        $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
+        $filteredFilePaths = \array_filter($filteredFilePaths, function (string $filePath) : bool {
             return !$this->pathSkipper->shouldSkip($filePath);
         });
         if ($suffixes !== []) {
@@ -62,11 +59,18 @@ final class FilesFinder
             };
             $filteredFilePaths = \array_filter($filteredFilePaths, $fileWithExtensionsFilter);
         }
+        $filteredFilePaths = \array_filter($filteredFilePaths, function (string $file) : bool {
+            return !$this->isStartWithShortPHPTag(FileSystem::read($file));
+        });
+        // filtering files in directories collection
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $sortByName);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
+    /**
+     * Exclude short "<?=" tags as lead to invalid changes
+     */
     private function isStartWithShortPHPTag(string $fileContent) : bool
     {
         return \strncmp(\ltrim($fileContent), '<?=', \strlen('<?=')) === 0;

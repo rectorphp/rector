@@ -22,6 +22,7 @@ final class UnchangedFilesFilter
     public function filterFilePaths(array $filePaths) : array
     {
         $changedFileInfos = [];
+        $filePaths = \array_unique($filePaths);
         foreach ($filePaths as $filePath) {
             if (!$this->changedFilesDetector->hasFileChanged($filePath)) {
                 continue;
@@ -29,6 +30,6 @@ final class UnchangedFilesFilter
             $changedFileInfos[] = $filePath;
             $this->changedFilesDetector->invalidateFile($filePath);
         }
-        return \array_unique($changedFileInfos);
+        return $changedFileInfos;
     }
 }
