@@ -9,6 +9,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\RectorConfigBuilder;
 use Rector\Contract\DependencyInjection\RelatedConfigInterface;
+use Rector\Contract\DependencyInjection\ResetableInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\Laravel\ContainerMemento;
@@ -34,7 +35,7 @@ final class RectorConfig extends Container
     /**
      * @var string[]
      */
-    private $autotagInterfaces = [Command::class];
+    private $autotagInterfaces = [Command::class, ResetableInterface::class];
     public static function configure() : RectorConfigBuilder
     {
         return new RectorConfigBuilder();
