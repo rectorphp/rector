@@ -19,7 +19,7 @@ final class UnchangedFilesFilter
      * @param string[] $filePaths
      * @return string[]
      */
-    public function filterFileInfos(array $filePaths) : array
+    public function filterFilePaths(array $filePaths) : array
     {
         $changedFileInfos = [];
         foreach ($filePaths as $filePath) {

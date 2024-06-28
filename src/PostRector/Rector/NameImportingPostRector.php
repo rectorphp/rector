@@ -119,12 +119,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return \false;
         }
         $currentStmt = \current($firstStmt->stmts);
-        if ($currentStmt instanceof InlineHTML || $currentStmt === \false) {
-            return \true;
-        }
-        $oldTokens = $file->getOldTokens();
-        $tokenStartPos = $currentStmt->getStartTokenPos();
-        return isset($oldTokens[$tokenStartPos][1]) && $oldTokens[$tokenStartPos][1] === '<?=';
+        return $currentStmt instanceof InlineHTML || $currentStmt === \false;
     }
     private function processNodeName(FullyQualified $fullyQualified, File $file) : ?Node
     {
