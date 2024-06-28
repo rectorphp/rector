@@ -7,9 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use Rector\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
-use Rector\PHPStan\NodeVisitor\UnreachableStatementNodeVisitor;
 final class NodeScopeAndMetadataDecorator
 {
     /**
@@ -17,11 +15,6 @@ final class NodeScopeAndMetadataDecorator
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
-     */
-    private $scopeFactory;
     /**
      * @readonly
      * @var \Rector\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
@@ -32,10 +25,9 @@ final class NodeScopeAndMetadataDecorator
      * @var \PhpParser\NodeTraverser
      */
     private $nodeTraverser;
-    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeFactory $scopeFactory, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->scopeFactory = $scopeFactory;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
         $this->nodeTraverser = new NodeTraverser();
         // needed for format preserving printing
@@ -49,19 +41,6 @@ final class NodeScopeAndMetadataDecorator
     {
         $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
         $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath);
-        if ($this->phpStanNodeScopeResolver->hasUnreachableStatementNode()) {
-            $unreachableStatementNodeVisitor = new UnreachableStatementNodeVisitor($this->phpStanNodeScopeResolver, $filePath, $this->scopeFactory);
-            $this->nodeTraverser->addVisitor($unreachableStatementNodeVisitor);
-            $stmts = $this->nodeTraverser->traverse($stmts);
-            /**
-             * immediate remove UnreachableStatementNodeVisitor after traverse to avoid
-             * re-used in nodeTraverser property in next file
-             */
-            $this->nodeTraverser->removeVisitor($unreachableStatementNodeVisitor);
-            // next file must be init hasUnreachableStatementNode to be false again
-            $this->phpStanNodeScopeResolver->resetHasUnreachableStatementNode();
-            return $stmts;
-        }
         return $this->nodeTraverser->traverse($stmts);
     }
 }

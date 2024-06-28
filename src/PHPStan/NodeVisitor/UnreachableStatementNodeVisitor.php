@@ -12,7 +12,6 @@ use PHPStan\Analyser\Scope;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
 {
     /**
@@ -27,14 +26,14 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
     private $filePath;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
+     * @var \PHPStan\Analyser\MutatingScope
      */
-    private $scopeFactory;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, string $filePath, ScopeFactory $scopeFactory)
+    private $mutatingScope;
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, string $filePath, MutatingScope $mutatingScope)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->filePath = $filePath;
-        $this->scopeFactory = $scopeFactory;
+        $this->mutatingScope = $mutatingScope;
     }
     public function enterNode(Node $node) : ?Node
     {
@@ -64,6 +63,6 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
     }
     private function resolveScope(?Scope $mutatingScope) : MutatingScope
     {
-        return $mutatingScope instanceof MutatingScope ? $mutatingScope : $this->scopeFactory->createFromFile($this->filePath);
+        return $mutatingScope instanceof MutatingScope ? $mutatingScope : $this->mutatingScope;
     }
 }
