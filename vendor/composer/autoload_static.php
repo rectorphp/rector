@@ -2231,6 +2231,7 @@ class ComposerStaticInita0d93d8f497cc171aacd63896104eb68
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/AbstractPostRector.php',
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/ClassRenamingPostRector.php',
+        'Rector\\PostRector\\Rector\\DocblockNameImportingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/DocblockNameImportingPostRector.php',
         'Rector\\PostRector\\Rector\\NameImportingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/NameImportingPostRector.php',
         'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/UseAddingPostRector.php',

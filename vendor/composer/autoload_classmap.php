@@ -2012,6 +2012,7 @@ return array(
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
     'Rector\\PostRector\\Rector\\AbstractPostRector' => $baseDir . '/src/PostRector/Rector/AbstractPostRector.php',
     'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => $baseDir . '/src/PostRector/Rector/ClassRenamingPostRector.php',
+    'Rector\\PostRector\\Rector\\DocblockNameImportingPostRector' => $baseDir . '/src/PostRector/Rector/DocblockNameImportingPostRector.php',
     'Rector\\PostRector\\Rector\\NameImportingPostRector' => $baseDir . '/src/PostRector/Rector/NameImportingPostRector.php',
     'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => $baseDir . '/src/PostRector/Rector/UnusedImportRemovingPostRector.php',
     'Rector\\PostRector\\Rector\\UseAddingPostRector' => $baseDir . '/src/PostRector/Rector/UseAddingPostRector.php',

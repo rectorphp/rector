@@ -78,7 +78,6 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $result = null;
         if ($node instanceof FullyQualified) {
             $result = $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
         } else {
