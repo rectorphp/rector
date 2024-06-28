@@ -19,7 +19,6 @@ use PHPStan\Type\Type;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -54,7 +53,7 @@ final class EncapsedStringsToSprintfRector extends AbstractRector implements Con
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert enscaped {$string} to more readable sprintf or concat, if no mask is used', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert enscaped {$string} to more readable sprintf or concat, if no mask is used', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 echo "Unsupported format {$format} - use another";
 
 echo "Try {$allowed}";
@@ -64,7 +63,7 @@ echo sprintf('Unsupported format %s - use another', $format);
 
 echo 'Try ' . $allowed;
 CODE_SAMPLE
-), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+, [self::ALWAYS => \false]), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 echo "Unsupported format {$format} - use another";
 
 echo "Try {$allowed}";

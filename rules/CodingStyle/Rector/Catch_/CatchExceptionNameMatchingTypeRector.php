@@ -46,29 +46,17 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Type and name of catch exception should match', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        try {
-            // ...
-        } catch (SomeException $typoException) {
-            $typoException->getMessage();
-        }
-    }
+try {
+    // ...
+} catch (SomeException $typoException) {
+    $typoException->getMessage();
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        try {
-            // ...
-        } catch (SomeException $someException) {
-            $someException->getMessage();
-        }
-    }
+try {
+    // ...
+} catch (SomeException $someException) {
+    $someException->getMessage();
 }
 CODE_SAMPLE
 )]);

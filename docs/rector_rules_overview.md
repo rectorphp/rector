@@ -1,4 +1,4 @@
-# 375 Rules Overview
+# 379 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodeQuality](#codequality) (69)
 
-- [CodingStyle](#codingstyle) (27)
+- [CodingStyle](#codingstyle) (28)
 
 - [DeadCode](#deadcode) (45)
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (52)
+- [TypeDeclaration](#typedeclaration) (55)
 
 - [Visibility](#visibility) (3)
 
@@ -1676,18 +1676,12 @@ Type and name of catch exception should match
 - class: [`Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector`](../rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
-         try {
-             // ...
--        } catch (SomeException $typoException) {
--            $typoException->getMessage();
-+        } catch (SomeException $someException) {
-+            $someException->getMessage();
-         }
-     }
+ try {
+     // ...
+-} catch (SomeException $typoException) {
+-    $typoException->getMessage();
++} catch (SomeException $someException) {
++    $someException->getMessage();
  }
 ```
 
@@ -1735,6 +1729,8 @@ Change count array comparison to empty array comparison to improve performance
 
 Convert enscaped {$string} to more readable sprintf or concat, if no mask is used
 
+:wrench: **configure it!**
+
 - class: [`Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector`](../rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php)
 
 ```diff
@@ -1743,6 +1739,16 @@ Convert enscaped {$string} to more readable sprintf or concat, if no mask is use
 
 -echo "Try {$allowed}";
 +echo 'Try ' . $allowed;
+```
+
+<br>
+
+```diff
+-echo "Unsupported format {$format} - use another";
++echo sprintf('Unsupported format %s - use another', $format);
+
+-echo "Try {$allowed}";
++echo sprintf('Try %s', $allowed);
 ```
 
 <br>
@@ -1782,6 +1788,33 @@ Make method visibility same as parent one
  {
      protected function run()
      {
+     }
+ }
+```
+
+<br>
+
+### MultiDimensionalArrayToArrayDestructRector
+
+Change multidimensional array access in foreach to array destruct
+
+- class: [`Rector\CodingStyle\Rector\Foreach_\MultiDimensionalArrayToArrayDestructRector`](../rules/CodingStyle/Rector/Foreach_/MultiDimensionalArrayToArrayDestructRector.php)
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @param array<int, array{id: int, name: string}> $users
+      */
+     public function run(array $users)
+     {
+-        foreach ($users as $user) {
+-            echo $user['id'];
+-            echo sprintf('Name: %s', $user['name']);
++        foreach ($users as ['id' => $id, 'name' => $name]) {
++            echo $id;
++            echo sprintf('Name: %s', $name);
+         }
      }
  }
 ```
@@ -6403,6 +6436,53 @@ Add "never" return-type for closure that never return anything
 
 <br>
 
+### AddClosureReturnTypeFromReturnCastRector
+
+Add return type to closure with return cast
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromReturnCastRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromReturnCastRector.php)
+
+```diff
+-function ($param) {
++function ($param): string {
+     return (string) $param;
+ };
+```
+
+<br>
+
+### AddClosureReturnTypeFromStrictNativeCallRector
+
+Add closure strict return type based native function or native method
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictNativeCallRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromStrictNativeCallRector.php)
+
+```diff
+-function () {
++function (): string {
+     $dt = new DateTime('now');
+     return $dt->format('Y-m-d');
+ };
+```
+
+<br>
+
+### AddClosureReturnTypeFromStrictParamRector
+
+Add closure return type based on strict parameter type
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictParamRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromStrictParamRector.php)
+
+```diff
+-function(ParamType $item)
++function(ParamType $item): ParamType
+ {
+     return $item;
+ };
+```
+
+<br>
+
 ### AddClosureUnionReturnTypeRector
 
 Add union return type on closure
@@ -6417,7 +6497,7 @@ Add union return type on closure
      }
 
      return 'one';
- }
+ };
 ```
 
 <br>
@@ -6431,7 +6511,7 @@ Add closure return type void if there is no return
 ```diff
 -function () {
 +function (): void {
- }
+ };
 ```
 
 <br>
@@ -7124,7 +7204,7 @@ Add return type from strict return `$this`
 
 ### ReturnTypeFromStrictNativeCallRector
 
-Add strict return type based native function or class method return
+Add strict return type based native function or native method
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeCallRector.php)
 
