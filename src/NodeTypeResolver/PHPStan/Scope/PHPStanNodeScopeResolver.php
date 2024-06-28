@@ -253,12 +253,11 @@ final class PHPStanNodeScopeResolver
         };
         $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
         $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
         $nodeTraverser->addVisitor(new ExprScopeFromStmtNodeVisitor($this, $filePath, $scope));
         if ($hasUnreachableStatementNode) {
             $nodeTraverser->addVisitor(new UnreachableStatementNodeVisitor($this, $filePath, $scope));
         }
-        // wrap node on last to avoid PHPStan Virtual node re-added
-        $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
         $nodeTraverser->traverse($stmts);
         return $stmts;
     }

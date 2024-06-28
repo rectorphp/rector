@@ -26,6 +26,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
+use PHPStan\Node\Expr\AlwaysRememberedExpr;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -110,6 +111,9 @@ final class BetterStandardPrinter extends Standard
     }
     protected function p(Node $node, $parentFormatPreserved = \false) : string
     {
+        while ($node instanceof AlwaysRememberedExpr) {
+            $node = $node->getExpr();
+        }
         $content = parent::p($node, $parentFormatPreserved);
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
     }
