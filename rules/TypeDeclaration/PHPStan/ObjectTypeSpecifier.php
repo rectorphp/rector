@@ -76,7 +76,7 @@ final class ObjectTypeSpecifier
         return new NonExistingObjectType($className);
     }
     /**
-     * @param Use_[]|GroupUse[] $uses
+     * @param array<Use_|GroupUse> $uses
      */
     private function matchAliasedObjectType(ObjectType $objectType, array $uses) : ?AliasedObjectType
     {
@@ -114,7 +114,7 @@ final class ObjectTypeSpecifier
         return null;
     }
     /**
-     * @param Use_[]|GroupUse[] $uses
+     * @param array<Use_|GroupUse> $uses
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
     private function matchShortenedObjectType(ObjectType $objectType, array $uses)

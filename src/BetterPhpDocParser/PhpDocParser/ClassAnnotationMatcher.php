@@ -50,7 +50,7 @@ final class ClassAnnotationMatcher
         }
         $tag = \ltrim($tag, '@');
         $uses = $this->useImportsResolver->resolve();
-        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag, \false);
+        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
         if ($fullyQualifiedClass === null) {
             $fullyQualifiedClass = $tag;
         }
@@ -58,9 +58,9 @@ final class ClassAnnotationMatcher
         return $fullyQualifiedClass;
     }
     /**
-     * @param Use_[]|GroupUse[] $uses
+     * @param array<Use_|GroupUse> $uses
      */
-    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag, bool $returnNullOnUnknownClass) : ?string
+    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag) : ?string
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope) {
@@ -71,7 +71,7 @@ final class ClassAnnotationMatcher
                     return $namespacedTag;
                 }
                 if (\strpos($tag, '\\') === \false) {
-                    return $this->resolveAsAliased($uses, $tag, $returnNullOnUnknownClass);
+                    return $this->resolveAsAliased($uses, $tag);
                 }
                 if ($this->isPreslashedExistingClass($tag)) {
                     // Global or absolute Class
@@ -79,13 +79,12 @@ final class ClassAnnotationMatcher
                 }
             }
         }
-        $class = $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
-        return $this->resolveClass($class, $returnNullOnUnknownClass);
+        return $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
     }
     /**
-     * @param Use_[]|GroupUse[] $uses
+     * @param array<Use_|GroupUse> $uses
      */
-    private function resolveAsAliased(array $uses, string $tag, bool $returnNullOnUnknownClass) : ?string
+    private function resolveAsAliased(array $uses, string $tag) : ?string
     {
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
@@ -94,21 +93,11 @@ final class ClassAnnotationMatcher
                     continue;
                 }
                 if ($useUse->alias->toString() === $tag) {
-                    $class = $prefix . $useUse->name->toString();
-                    return $this->resolveClass($class, $returnNullOnUnknownClass);
+                    return $prefix . $useUse->name->toString();
                 }
             }
         }
-        $class = $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
-        return $this->resolveClass($class, $returnNullOnUnknownClass);
-    }
-    private function resolveClass(?string $class, bool $returnNullOnUnknownClass) : ?string
-    {
-        if ($class === null) {
-            return null;
-        }
-        $resolvedClass = $this->reflectionProvider->hasClass($class) ? $class : null;
-        return $returnNullOnUnknownClass ? $resolvedClass : $class;
+        return $this->useImportNameMatcher->matchNameWithUses($tag, $uses);
     }
     private function isPreslashedExistingClass(string $tag) : bool
     {

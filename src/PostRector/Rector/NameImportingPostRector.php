@@ -87,7 +87,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         return !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
     }
     /**
-     * @param Use_[]|GroupUse[] $currentUses
+     * @param array<Use_|GroupUse> $currentUses
      */
     private function resolveNameInUse(FullyQualified $fullyQualified, array $currentUses) : ?\PhpParser\Node\Name
     {

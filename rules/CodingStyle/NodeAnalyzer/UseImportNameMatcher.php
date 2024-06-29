@@ -48,7 +48,7 @@ final class UseImportNameMatcher
         return $this->matchNameWithUses($tag, $uses);
     }
     /**
-     * @param Use_[]|GroupUse[] $uses
+     * @param array<Use_|GroupUse> $uses
      */
     public function matchNameWithUses(string $tag, array $uses) : ?string
     {

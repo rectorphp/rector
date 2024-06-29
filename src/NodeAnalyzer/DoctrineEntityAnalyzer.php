@@ -9,7 +9,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 /**
- * @api
+ * @api used in doctrine
  */
 final class DoctrineEntityAnalyzer
 {

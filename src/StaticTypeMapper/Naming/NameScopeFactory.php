@@ -82,7 +82,7 @@ final class NameScopeFactory
         return new NameScope($namespace, $nameScope->getUses(), $nameScope->getClassName(), null, $templateTypeMap);
     }
     /**
-     * @param Use_[]|GroupUse[] $useNodes
+     * @param array<Use_|GroupUse> $useNodes
      * @return array<string, string>
      */
     private function resolveUseNamesByAlias(array $useNodes) : array
