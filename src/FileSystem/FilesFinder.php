@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\FileSystem;
 
 use RectorPrefix202406\Nette\Utils\FileSystem;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Skipper\Skipper\PathSkipper;
+use Rector\ValueObject\Configuration;
 use RectorPrefix202406\Symfony\Component\Finder\Finder;
 /**
  * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
@@ -39,13 +41,19 @@ final class FilesFinder
      * @var \Rector\FileSystem\FilePathHelper
      */
     private $filePathHelper;
-    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper)
+    /**
+     * @readonly
+     * @var \Rector\Caching\Detector\ChangedFilesDetector
+     */
+    private $changedFilesDetector;
+    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
         $this->fileAndDirectoryFilter = $fileAndDirectoryFilter;
         $this->pathSkipper = $pathSkipper;
         $this->filePathHelper = $filePathHelper;
+        $this->changedFilesDetector = $changedFilesDetector;
     }
     /**
      * @param string[] $source
@@ -79,6 +87,18 @@ final class FilesFinder
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $sortByName);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
+    }
+    /**
+     * @param string[] $paths
+     * @return string[]
+     */
+    public function findFilesInPaths(array $paths, Configuration $configuration) : array
+    {
+        if ($configuration->shouldClearCache()) {
+            $this->changedFilesDetector->clear();
+        }
+        $supportedFileExtensions = $configuration->getFileExtensions();
+        return $this->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
     }
     /**
      * Exclude short "<?=" tags as lead to invalid changes

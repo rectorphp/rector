@@ -8,9 +8,6 @@ use PhpParser\Node\Stmt;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\ValueObject\Reporting\FileDiff;
-/**
- * @see \Rector\ValueObjectFactory\Application\FileFactory
- */
 final class File
 {
     /**

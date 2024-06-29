@@ -60,12 +60,6 @@ final class ObjectTypeSpecifier
             }
         }
         $uses = $this->useImportsResolver->resolve();
-        if ($uses === []) {
-            if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
-                return new NonExistingObjectType($objectType->getClassName());
-            }
-            return new FullyQualifiedObjectType($objectType->getClassName(), null, $objectType->getClassReflection());
-        }
         $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
         if ($aliasedObjectType instanceof AliasedObjectType) {
             return $aliasedObjectType;

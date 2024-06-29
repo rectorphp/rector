@@ -8,6 +8,7 @@ use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\FileSystem\FilesFinder;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Reporting\MissConfigurationReporter;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -18,7 +19,6 @@ use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
-use Rector\ValueObjectFactory\Application\FileFactory;
 use RectorPrefix202406\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202406\Symplify\EasyParallel\CpuCoreCountProvider;
@@ -34,9 +34,9 @@ final class ApplicationFileProcessor
     private $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\ValueObjectFactory\Application\FileFactory
+     * @var \Rector\FileSystem\FilesFinder
      */
-    private $fileFactory;
+    private $filesFinder;
     /**
      * @readonly
      * @var \Rector\Parallel\Application\ParallelFileProcessor
@@ -85,10 +85,10 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FileFactory $fileFactory, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter)
+    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->fileFactory = $fileFactory;
+        $this->filesFinder = $filesFinder;
         $this->parallelFileProcessor = $parallelFileProcessor;
         $this->scheduleFactory = $scheduleFactory;
         $this->cpuCoreCountProvider = $cpuCoreCountProvider;
@@ -100,7 +100,7 @@ final class ApplicationFileProcessor
     }
     public function run(Configuration $configuration, InputInterface $input) : ProcessResult
     {
-        $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
+        $filePaths = $this->filesFinder->findFilesInPaths($configuration->getPaths(), $configuration);
         $this->missConfigurationReporter->reportVendorInPaths($filePaths);
         $this->missConfigurationReporter->reportStartWithShortOpenTag();
         // no files found

@@ -23,7 +23,7 @@ final class UseImportsResolver
         $this->currentFileProvider = $currentFileProvider;
     }
     /**
-     * @return Use_[]|GroupUse[]
+     * @return array<Use_|GroupUse>
      */
     public function resolve() : array
     {

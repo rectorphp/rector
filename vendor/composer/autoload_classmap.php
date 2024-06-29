@@ -2499,7 +2499,6 @@ return array(
     'Rector\\Util\\StringUtils' => $baseDir . '/src/Util/StringUtils.php',
     'Rector\\Validation\\RectorAssert' => $baseDir . '/src/Validation/RectorAssert.php',
     'Rector\\Validation\\RectorConfigValidator' => $baseDir . '/src/Validation/RectorConfigValidator.php',
-    'Rector\\ValueObjectFactory\\Application\\FileFactory' => $baseDir . '/src/ValueObjectFactory/Application/FileFactory.php',
     'Rector\\ValueObject\\Application\\File' => $baseDir . '/src/ValueObject/Application/File.php',
     'Rector\\ValueObject\\Bootstrap\\BootstrapConfigs' => $baseDir . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
     'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => $vendorDir . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
