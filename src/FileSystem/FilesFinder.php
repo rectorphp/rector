@@ -5,6 +5,8 @@ namespace Rector\FileSystem;
 
 use RectorPrefix202406\Nette\Utils\FileSystem;
 use Rector\Caching\UnchangedFilesFilter;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Skipper\Skipper\PathSkipper;
 use RectorPrefix202406\Symfony\Component\Finder\Finder;
 /**
@@ -32,12 +34,18 @@ final class FilesFinder
      * @var \Rector\Skipper\Skipper\PathSkipper
      */
     private $pathSkipper;
-    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper)
+    /**
+     * @readonly
+     * @var \Rector\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
         $this->fileAndDirectoryFilter = $fileAndDirectoryFilter;
         $this->pathSkipper = $pathSkipper;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @param string[] $source
@@ -60,7 +68,11 @@ final class FilesFinder
             $filteredFilePaths = \array_filter($filteredFilePaths, $fileWithExtensionsFilter);
         }
         $filteredFilePaths = \array_filter($filteredFilePaths, function (string $file) : bool {
-            return !$this->isStartWithShortPHPTag(FileSystem::read($file));
+            if ($this->isStartWithShortPHPTag(FileSystem::read($file))) {
+                SimpleParameterProvider::addParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES, $this->filePathHelper->relativePath($file));
+                return \false;
+            }
+            return \true;
         });
         // filtering files in directories collection
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
@@ -106,6 +118,7 @@ final class FilesFinder
                 continue;
             }
             if ($this->isStartWithShortPHPTag($fileInfo->getContents())) {
+                SimpleParameterProvider::addParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES, $this->filePathHelper->relativePath($path));
                 continue;
             }
             $filePaths[] = $path;

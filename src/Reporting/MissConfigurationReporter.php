@@ -49,4 +49,15 @@ final class MissConfigurationReporter
         $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
         \sleep(3);
     }
+    public function reportStartWithShortOpenTag() : void
+    {
+        $files = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES);
+        if ($files === []) {
+            return;
+        }
+        $suffix = \count($files) > 1 ? 's' : '';
+        $fileList = \implode(\PHP_EOL, $files);
+        $this->symfonyStyle->warning(\sprintf('The following file' . $suffix . ' skipped as start with short open tag, migrate to long open php tag first: %s%s', \PHP_EOL . \PHP_EOL, $fileList));
+        \sleep(3);
+    }
 }
