@@ -13,8 +13,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\UnionType as NodeUnionType;
@@ -143,9 +141,6 @@ final class NodeTypeResolver
     }
     public function getType(Node $node) : Type
     {
-        if ($node instanceof Name && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
-            return $this->getType(new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME)));
-        }
         if ($node instanceof NullableType) {
             $type = $this->getType($node->type);
             if (!$type instanceof MixedType) {
