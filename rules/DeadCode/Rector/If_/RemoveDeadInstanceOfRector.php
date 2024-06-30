@@ -13,12 +13,14 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -140,12 +142,15 @@ CODE_SAMPLE
         if ($classReflection instanceof ClassReflection && $classReflection->isTrait()) {
             return null;
         }
-        $classType = $this->nodeTypeResolver->getType($instanceof->class);
-        $exprType = $this->nodeTypeResolver->getNativeType($instanceof->expr);
-        if ($classType->equals($exprType)) {
-            return \true;
+        if (!$instanceof->class instanceof FullyQualified) {
+            return null;
         }
-        return $classType->isSuperTypeOf($exprType)->yes();
+        $exprType = $this->nodeTypeResolver->getNativeType($instanceof->expr);
+        if (!$exprType instanceof ObjectType) {
+            return null;
+        }
+        $className = $instanceof->class->toString();
+        return $exprType->isInstanceOf($className)->yes();
     }
     private function refactorIfWithBooleanAnd(If_ $if) : ?\PhpParser\Node\Stmt\If_
     {
