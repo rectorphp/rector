@@ -4,25 +4,19 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Generic\GenericClassStringType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -57,22 +51,16 @@ final class TypeComparator
     private $scalarTypeComparator;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
-     */
-    private $typeFactory;
-    /**
-     * @readonly
      * @var \Rector\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, TypeFactory $typeFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, ReflectionResolver $reflectionResolver)
     {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->arrayTypeComparator = $arrayTypeComparator;
         $this->scalarTypeComparator = $scalarTypeComparator;
-        $this->typeFactory = $typeFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function areTypesEqual(Type $firstType, Type $secondType) : bool
@@ -87,9 +75,6 @@ final class TypeComparator
         }
         // aliases and types
         if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
-            return \true;
-        }
-        if ($this->areArrayUnionConstantEqualTypes($firstType, $secondType)) {
             return \true;
         }
         $firstType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($firstType);
@@ -113,9 +98,6 @@ final class TypeComparator
         // is scalar replace by another - remove it?
         $areDifferentScalarTypes = $this->scalarTypeComparator->areDifferentScalarTypes($phpParserNodeType, $phpStanDocType);
         if (!$areDifferentScalarTypes && !$this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
-            return \false;
-        }
-        if ($this->isTypeSelfAndDocParamTypeStatic($phpStanDocType, $phpParserNodeType, $phpStanDocTypeNode)) {
             return \false;
         }
         if ($this->areTypesSameWithLiteralTypeInPhpDoc($areDifferentScalarTypes, $phpStanDocType, $phpParserNodeType)) {
@@ -187,44 +169,6 @@ final class TypeComparator
         }
         return $secondArrayItemType->isSuperTypeOf($firstArrayItemType)->yes();
     }
-    private function normalizeSingleUnionType(Type $type) : Type
-    {
-        if (!$type instanceof UnionType) {
-            return $type;
-        }
-        $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
-        if (\count($uniqueTypes) !== 1) {
-            return $type;
-        }
-        return $uniqueTypes[0];
-    }
-    private function areArrayUnionConstantEqualTypes(Type $firstType, Type $secondType) : bool
-    {
-        if (!$firstType instanceof ArrayType) {
-            return \false;
-        }
-        if (!$secondType instanceof ArrayType) {
-            return \false;
-        }
-        if ($firstType instanceof ConstantArrayType || $secondType instanceof ConstantArrayType) {
-            return \false;
-        }
-        $firstKeyType = $this->normalizeSingleUnionType($firstType->getKeyType());
-        $secondKeyType = $this->normalizeSingleUnionType($secondType->getKeyType());
-        // mixed and integer type are mutual replaceable in practise
-        if ($firstKeyType instanceof MixedType) {
-            $firstKeyType = new IntegerType();
-        }
-        if ($secondKeyType instanceof MixedType) {
-            $secondKeyType = new IntegerType();
-        }
-        if (!$this->areTypesEqual($firstKeyType, $secondKeyType)) {
-            return \false;
-        }
-        $firstArrayType = $this->normalizeSingleUnionType($firstType->getItemType());
-        $secondArrayType = $this->normalizeSingleUnionType($secondType->getItemType());
-        return $this->areTypesEqual($firstArrayType, $secondArrayType);
-    }
     private function normalizeConstantBooleanType(Type $type) : Type
     {
         return TypeTraverser::map($type, static function (Type $type, callable $callable) : Type {
@@ -233,10 +177,6 @@ final class TypeComparator
             }
             return $callable($type);
         });
-    }
-    private function isTypeSelfAndDocParamTypeStatic(Type $phpStanDocType, Type $phpParserNodeType, TypeNode $phpStanDocTypeNode) : bool
-    {
-        return $phpStanDocType instanceof StaticType && $phpParserNodeType instanceof ThisType && $phpStanDocTypeNode->getAttribute(PhpDocAttributeKey::PARENT) instanceof ParamTagValueNode;
     }
     private function areTypesSameWithLiteralTypeInPhpDoc(bool $areDifferentScalarTypes, Type $phpStanDocType, Type $phpParserNodeType) : bool
     {
