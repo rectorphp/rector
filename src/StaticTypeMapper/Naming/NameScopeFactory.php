@@ -40,12 +40,13 @@ final class NameScopeFactory
         }
         return new NameScope($namespace, $usesAliasesToNames, $className);
     }
+    /**
+     * @api
+     * @deprecated Use createNameScopeFromNodeWithoutTemplateTypes() instead, as same
+     */
     public function createNameScopeFromNode(Node $node) : NameScope
     {
-        $nameScope = $this->createNameScopeFromNodeWithoutTemplateTypes($node);
-        /** @var non-empty-string|null $namespace */
-        $namespace = $nameScope->getNamespace();
-        return new NameScope($namespace, $nameScope->getUses(), $nameScope->getClassName(), null, null);
+        return $this->createNameScopeFromNodeWithoutTemplateTypes($node);
     }
     /**
      * @param array<Use_|GroupUse> $useNodes
