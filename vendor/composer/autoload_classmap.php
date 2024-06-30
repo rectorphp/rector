@@ -1673,7 +1673,6 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\Enum\\TypeKind' => $baseDir . '/src/PHPStanStaticTypeMapper/Enum/TypeKind.php',
     'Rector\\PHPStanStaticTypeMapper\\PHPStanStaticTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
-    'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryLiteralStringTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryLiteralStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonFalsyStringTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonFalsyStringTypeMapper.php',

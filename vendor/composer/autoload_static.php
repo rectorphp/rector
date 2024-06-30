@@ -1892,7 +1892,6 @@ class ComposerStaticInita0d93d8f497cc171aacd63896104eb68
         'Rector\\PHPStanStaticTypeMapper\\Enum\\TypeKind' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/Enum/TypeKind.php',
         'Rector\\PHPStanStaticTypeMapper\\PHPStanStaticTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
-        'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryLiteralStringTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryLiteralStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonFalsyStringTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonFalsyStringTypeMapper.php',
