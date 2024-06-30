@@ -22,9 +22,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
-use Rector\TypeDeclaration\PHPStan\TypeSpecifier\SameNamespacedTypeSpecifier;
-use Rector\TypeDeclaration\PHPStan\TypeSpecifier\SelfStaticParentTypeSpecifier;
 final class ObjectTypeSpecifier
 {
     /**
@@ -37,28 +34,16 @@ final class ObjectTypeSpecifier
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    /**
-     * @var TypeWithClassTypeSpecifierInterface[]
-     */
-    private $typeWithClassTypeSpecifiers = [];
-    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, SelfStaticParentTypeSpecifier $selfStaticParentTypeSpecifier, SameNamespacedTypeSpecifier $sameNamespacedTypeSpecifier)
+    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
-        $this->typeWithClassTypeSpecifiers = [$selfStaticParentTypeSpecifier, $sameNamespacedTypeSpecifier];
     }
     /**
      * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope)
     {
-        if ($scope instanceof Scope) {
-            foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
-                if ($typeWithClassTypeSpecifier->match($objectType, $scope)) {
-                    return $typeWithClassTypeSpecifier->resolveObjectReferenceType($objectType, $scope);
-                }
-            }
-        }
         $uses = $this->useImportsResolver->resolve();
         $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
         if ($aliasedObjectType instanceof AliasedObjectType) {
