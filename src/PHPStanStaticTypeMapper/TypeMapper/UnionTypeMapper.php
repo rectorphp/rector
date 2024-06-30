@@ -11,15 +11,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
-use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -30,7 +27,6 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use RectorPrefix202406\Webmozart\Assert\Assert;
 use RectorPrefix202406\Webmozart\Assert\InvalidArgumentException;
@@ -229,11 +225,6 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private function matchTypeForUnionedTypes(UnionType $unionType, string $typeKind) : ?Node
     {
-        // use first unioned type in case of unioned object types
-        $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
-        if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
-            return $compatibleObjectTypeNode;
-        }
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType, $typeKind);
         if ($phpParserUnionType instanceof NullableType) {
             return $phpParserUnionType;
@@ -242,21 +233,6 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $this->resolveUnionTypeNode($phpParserUnionType);
         }
         return $phpParserUnionType;
-    }
-    private function processResolveCompatibleObjectCandidates(UnionType $unionType) : ?Node
-    {
-        // the type should be compatible with all other types, e.g. A extends B, B
-        $compatibleObjectType = $this->resolveCompatibleObjectCandidate($unionType);
-        if ($compatibleObjectType instanceof UnionType) {
-            $type = $this->matchTypeForNullableUnionType($compatibleObjectType);
-            if ($type instanceof ObjectType) {
-                return $this->resolveNullableType(new NullableType(new FullyQualified($type->getClassName())));
-            }
-        }
-        if (!$compatibleObjectType instanceof ObjectType) {
-            return null;
-        }
-        return new FullyQualified($compatibleObjectType->getClassName());
     }
     /**
      * @param TypeKind::* $typeKind
@@ -303,50 +279,6 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new Identifier('false');
         }
         return $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
-    }
-    /**
-     * @return \PHPStan\Type\UnionType|\PHPStan\Type\TypeWithClassName|null
-     */
-    private function resolveCompatibleObjectCandidate(UnionType $unionType)
-    {
-        $typesWithClassNames = $this->unionTypeAnalyzer->matchExclusiveTypesWithClassNames($unionType);
-        if ($typesWithClassNames === []) {
-            return null;
-        }
-        $sharedTypeWithClassName = $this->matchTwoObjectTypes($typesWithClassNames);
-        if ($sharedTypeWithClassName instanceof TypeWithClassName) {
-            return $this->correctObjectType($sharedTypeWithClassName);
-        }
-        return null;
-    }
-    /**
-     * @param TypeWithClassName[] $typesWithClassNames
-     */
-    private function matchTwoObjectTypes(array $typesWithClassNames) : ?TypeWithClassName
-    {
-        foreach ($typesWithClassNames as $typeWithClassName) {
-            foreach ($typesWithClassNames as $nestedTypeWithClassName) {
-                if (!$this->areTypeWithClassNamesRelated($typeWithClassName, $nestedTypeWithClassName)) {
-                    continue 2;
-                }
-            }
-            return $typeWithClassName;
-        }
-        return null;
-    }
-    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType) : bool
-    {
-        return $firstType->accepts($secondType, \false)->yes();
-    }
-    private function correctObjectType(TypeWithClassName $typeWithClassName) : TypeWithClassName
-    {
-        if ($typeWithClassName->getClassName() === NodeAbstract::class) {
-            return new ObjectType('PhpParser\\Node');
-        }
-        if ($typeWithClassName->getClassName() === AbstractRector::class) {
-            return new ObjectType('Rector\\Contract\\Rector\\RectorInterface');
-        }
-        return $typeWithClassName;
     }
     private function resolveUnionTypeNode(PhpParserUnionType $phpParserUnionType) : ?PhpParserUnionType
     {

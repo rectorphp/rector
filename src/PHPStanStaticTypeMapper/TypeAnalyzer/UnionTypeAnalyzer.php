@@ -7,7 +7,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Traversable;
@@ -33,20 +32,6 @@ final class UnionTypeAnalyzer
             return null;
         }
         return new UnionTypeAnalysis($hasIterable, $hasArray);
-    }
-    /**
-     * @return TypeWithClassName[]
-     */
-    public function matchExclusiveTypesWithClassNames(UnionType $unionType) : array
-    {
-        $typesWithClassNames = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
-                return [];
-            }
-            $typesWithClassNames[] = $unionedType;
-        }
-        return $typesWithClassNames;
     }
     public function isNullable(UnionType $unionType, bool $checkTwoTypes = \false) : bool
     {
