@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -353,13 +352,6 @@ final class PhpDocInfo
             $templateNames[] = $templateTagValueNode->name;
         }
         return $templateNames;
-    }
-    /**
-     * @return TemplateTagValueNode[]
-     */
-    public function getTemplateTagValueNodes() : array
-    {
-        return $this->phpDocNode->getTemplateTagValues();
     }
     public function makeMultiLined() : void
     {
