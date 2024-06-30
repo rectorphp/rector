@@ -96,6 +96,17 @@ final class ReturnStrictTypeAnalyzer
      */
     public function resolveMethodCallReturnNode($call) : ?Node
     {
+        $returnType = $this->resolveMethodCallReturnType($call);
+        if (!$returnType instanceof Type) {
+            return null;
+        }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     */
+    public function resolveMethodCallReturnType($call) : ?Type
+    {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
             return null;
@@ -114,8 +125,7 @@ final class ReturnStrictTypeAnalyzer
         if ($returnType instanceof MixedType) {
             return null;
         }
-        $returnType = $this->normalizeStaticType($call, $returnType);
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+        return $this->normalizeStaticType($call, $returnType);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
