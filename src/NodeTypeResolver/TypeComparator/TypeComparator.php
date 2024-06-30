@@ -10,7 +10,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantScalarType;
-use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -144,17 +143,7 @@ final class TypeComparator
         }
         $firstArrayItemType = $firstType->getItemType();
         $secondArrayItemType = $secondType->getItemType();
-        if ($this->isMutualObjectSubtypes($firstArrayItemType, $secondArrayItemType)) {
-            return \true;
-        }
-        if (!$firstArrayItemType instanceof GenericClassStringType) {
-            return \false;
-        }
-        if (!$secondArrayItemType instanceof GenericClassStringType) {
-            return \false;
-        }
-        // @todo resolve later better with template map, @see https://github.com/symplify/symplify/pull/3034/commits/4f6be8b87e52117b1aa1613b9b689ae958a9d6f4
-        return $firstArrayItemType->getGenericType() instanceof ObjectType && $secondArrayItemType->getGenericType() instanceof ObjectType;
+        return $this->isMutualObjectSubtypes($firstArrayItemType, $secondArrayItemType);
     }
     private function isMutualObjectSubtypes(Type $firstArrayItemType, Type $secondArrayItemType) : bool
     {
