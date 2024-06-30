@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use RectorPrefix202406\PHPUnit\Framework\Attributes\DataProvider;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -159,7 +158,7 @@ CODE_SAMPLE
     }
     private function getDataProviderMethodName(ClassMethod $classMethod) : ?string
     {
-        $attributeClassName = DataProvider::class;
+        $attributeClassName = 'PHPUnit\\Framework\\Attributes\\DataProvider';
         foreach ($classMethod->attrGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
                 if (!$this->isName($attribute->name, $attributeClassName)) {
