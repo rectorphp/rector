@@ -1,4 +1,4 @@
-# 20 Rules Overview
+# 18 Rules Overview
 
 ## AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector
 
@@ -178,34 +178,6 @@ Improve @var, `@param` and `@return` types for Doctrine collections to make them
 +     * @var Collection<int, Trainer>
       */
      private $trainings = [];
- }
-```
-
-<br>
-
-## InitializeDefaultEntityCollectionRector
-
-Initialize collection property in Entity constructor
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector`](../rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SomeClass
- {
-     /**
-      * @ORM\OneToMany(targetEntity="MarketingEvent")
-      */
-     private $marketingEvents = [];
-+
-+    public function __construct()
-+    {
-+        $this->marketingEvents = new ArrayCollection();
-+    }
  }
 ```
 
@@ -402,32 +374,6 @@ Complete `@var` annotations or types based on @ORM\Column
 
 <br>
 
-## TypedPropertyFromDoctrineCollectionRector
-
-Add typed property based on Doctrine collection
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromDoctrineCollectionRector`](../rules/CodeQuality/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
- use App\Entity\TrainingTerm;
-
- /**
-  * @ORM\Entity
-  */
- class DoctrineCollection
- {
-     /**
-      * @ORM\OneToMany(targetEntity="App\Entity\TrainingTerm", mappedBy="training")
-      * @var TrainingTerm[]|Collection
-      */
--    private $trainingTerms;
-+    private \Doctrine\Common\Collections\Collection $trainingTerms;
- }
-```
-
-<br>
-
 ## TypedPropertyFromToManyRelationTypeRector
 
 Complete `@var` annotations or types based on @ORM\*toMany annotations or attributes
@@ -454,6 +400,8 @@ Complete `@var` annotations or types based on @ORM\*toMany annotations or attrib
 
 Complete `@var` annotations or types based on @ORM\*toOne annotations or attributes
 
+:wrench: **configure it!**
+
 - class: [`Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromToOneRelationTypeRector`](../rules/CodeQuality/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php)
 
 ```diff
@@ -463,9 +411,26 @@ Complete `@var` annotations or types based on @ORM\*toOne annotations or attribu
  {
      /**
       * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+      * @ORM\JoinColumn(nullable=false)
       */
 -    private $company;
 +    private ?\App\Company\Entity\Company $company = null;
+ }
+```
+
+<br>
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SimpleColumn
+ {
+     /**
+      * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+      * @ORM\JoinColumn(nullable=false)
+      */
+-    private $company;
++    private \App\Company\Entity\Company $company;
  }
 ```
 
