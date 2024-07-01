@@ -43,12 +43,14 @@ final class NullTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULL_FALSE_TRUE_STANDALONE_TYPE)) {
-            return null;
+        // can be a standalone type, only case where null makes sense
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULL_FALSE_TRUE_STANDALONE_TYPE) && $typeKind === TypeKind::RETURN) {
+            return new Identifier('null');
         }
-        if ($typeKind !== TypeKind::RETURN) {
-            return null;
+        // if part of union, can be added even in PHP 8.0
+        if ($typeKind === TypeKind::UNION && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULLABLE_TYPE)) {
+            return new Identifier('null');
         }
-        return new Identifier('null');
+        return null;
     }
 }

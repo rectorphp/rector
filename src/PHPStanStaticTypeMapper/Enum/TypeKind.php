@@ -17,4 +17,8 @@ final class TypeKind
      * @var string
      */
     public const PARAM = 'param';
+    /**
+     * @var string
+     */
+    public const UNION = 'union';
 }

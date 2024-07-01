@@ -46,15 +46,15 @@ final class BooleanTypeMapper implements TypeMapperInterface
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
-        if ($typeKind !== TypeKind::RETURN) {
+        if ($typeKind === TypeKind::PROPERTY) {
             return new Identifier('bool');
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULL_FALSE_TRUE_STANDALONE_TYPE)) {
-            return new Identifier('bool');
+        if ($typeKind === TypeKind::UNION && $type instanceof ConstantBooleanType && $type->getValue() === \false) {
+            return new Identifier('false');
         }
-        if (!$type instanceof ConstantBooleanType) {
-            return new Identifier('bool');
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULL_FALSE_TRUE_STANDALONE_TYPE) && $type instanceof ConstantBooleanType) {
+            return $type->getValue() ? new Identifier('true') : new Identifier('false');
         }
-        return $type->getValue() ? new Identifier('true') : new Identifier('false');
+        return new Identifier('bool');
     }
 }
