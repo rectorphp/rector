@@ -37,11 +37,6 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
     private $phpAttributeGroupFactory;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
-     */
-    private $phpAttributeAnalyzer;
-    /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
@@ -49,10 +44,9 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
      * @var array<string, string>
      */
     private const METHODS_TO_ATTRIBUTE_NAMES = ['setName' => 'name', 'setDescription' => 'description', 'setAliases' => 'aliases', 'setHidden' => 'hidden'];
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
@@ -103,30 +97,47 @@ CODE_SAMPLE
         if (!$this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
             return null;
         }
-        // already converted
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, SymfonyAnnotation::AS_COMMAND)) {
-            return null;
-        }
         $configureClassMethod = $node->getMethod('configure');
         if (!$configureClassMethod instanceof ClassMethod) {
             return null;
         }
-        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        // handle existing attribute
+        $asCommandAttribute = null;
         $attributeArgs = [];
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if (!$this->nodeNameResolver->isName($attribute->name, SymfonyAnnotation::AS_COMMAND)) {
+                    continue;
+                }
+                $asCommandAttribute = $attribute;
+                foreach ($asCommandAttribute->args as $arg) {
+                    if ($arg->name === null) {
+                        // when the existing attribute does not use named arguments, we cannot upgrade
+                        return null;
+                    }
+                    $attributeArgs[$arg->name->toString()] = $arg;
+                }
+                break 2;
+            }
+        }
+        if ($asCommandAttribute === null) {
+            $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+            $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
+            $node->attrGroups[] = $asCommandAttributeGroup;
+        }
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
             if ($resolvedExpr instanceof Expr) {
-                $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
+                $attributeArgs[$attributeName] = $this->createNamedArg($attributeName, $resolvedExpr);
             }
         }
-        $asCommandAttribute->attrs[0]->args = $attributeArgs;
+        $asCommandAttribute->args = $attributeArgs;
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
             if ($this->isExpressionVariableThis($stmt)) {
                 unset($configureClassMethod->stmts[$key]);
             }
         }
-        $node->attrGroups[] = $asCommandAttribute;
         return $node;
     }
     private function createNamedArg(string $name, Expr $expr) : Arg

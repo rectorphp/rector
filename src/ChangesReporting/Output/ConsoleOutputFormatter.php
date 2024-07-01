@@ -108,6 +108,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($changeCount === 0) {
             return 'Rector is done!';
         }
-        return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
+        return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have been changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
     }
 }
