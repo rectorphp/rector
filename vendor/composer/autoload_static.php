@@ -1930,7 +1930,6 @@ class ComposerStaticInita0d93d8f497cc171aacd63896104eb68
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
-        'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
         'Rector\\PHPStan\\NodeVisitor\\ExprScopeFromStmtNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/ExprScopeFromStmtNodeVisitor.php',
         'Rector\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',

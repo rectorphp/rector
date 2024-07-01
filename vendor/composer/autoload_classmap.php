@@ -1711,7 +1711,6 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => $baseDir . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
-    'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => $baseDir . '/src/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
     'Rector\\PHPStan\\NodeVisitor\\ExprScopeFromStmtNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/ExprScopeFromStmtNodeVisitor.php',
     'Rector\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
     'Rector\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => $baseDir . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
