@@ -123,7 +123,7 @@ CODE_SAMPLE
         }
         foreach ($node->getMethods() as $classMethod) {
             if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod, $scope)) {
-                return null;
+                continue;
             }
             $property = $this->methodUniqueReturnedPropertyResolver->resolve($node, $classMethod);
             if (!$property instanceof Property) {
@@ -131,7 +131,7 @@ CODE_SAMPLE
             }
             $collectionObjectType = $this->getCollectionObjectTypeFromToManyAttribute($property);
             if (!$collectionObjectType instanceof FullyQualifiedObjectType) {
-                return null;
+                continue;
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
