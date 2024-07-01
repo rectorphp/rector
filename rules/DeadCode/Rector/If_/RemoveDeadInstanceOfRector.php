@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -140,9 +139,6 @@ CODE_SAMPLE
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($instanceof);
         if ($classReflection instanceof ClassReflection && $classReflection->isTrait()) {
-            return null;
-        }
-        if (!$instanceof->class instanceof FullyQualified) {
             return null;
         }
         $exprType = $this->nodeTypeResolver->getNativeType($instanceof->expr);
