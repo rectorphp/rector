@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202406\Illuminate\Contracts\Validation;
+namespace RectorPrefix202407\Illuminate\Contracts\Validation;
 
 interface DataAwareRule
 {

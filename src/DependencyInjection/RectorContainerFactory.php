@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202406\Illuminate\Container\Container;
+use RectorPrefix202407\Illuminate\Container\Container;
 use Rector\Autoloading\BootstrapFilesIncluder;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;

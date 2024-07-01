@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202406\Symfony\Component\Console\Helper;
+namespace RectorPrefix202407\Symfony\Component\Console\Helper;
 
-use RectorPrefix202406\Symfony\Component\Console\Cursor;
-use RectorPrefix202406\Symfony\Component\Console\Exception\MissingInputException;
-use RectorPrefix202406\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202406\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202406\Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use RectorPrefix202406\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202406\Symfony\Component\Console\Input\StreamableInputInterface;
-use RectorPrefix202406\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202406\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use RectorPrefix202406\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202406\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix202406\Symfony\Component\Console\Question\Question;
-use RectorPrefix202406\Symfony\Component\Console\Terminal;
-use function RectorPrefix202406\Symfony\Component\String\s;
+use RectorPrefix202407\Symfony\Component\Console\Cursor;
+use RectorPrefix202407\Symfony\Component\Console\Exception\MissingInputException;
+use RectorPrefix202407\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202407\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202407\Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use RectorPrefix202407\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202407\Symfony\Component\Console\Input\StreamableInputInterface;
+use RectorPrefix202407\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202407\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use RectorPrefix202407\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202407\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix202407\Symfony\Component\Console\Question\Question;
+use RectorPrefix202407\Symfony\Component\Console\Terminal;
+use function RectorPrefix202407\Symfony\Component\String\s;
 /**
  * The QuestionHelper class provides helpers to interact with the user.
  *

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202406\Fidry\CpuCoreCounter\Finder;
+namespace RectorPrefix202407\Fidry\CpuCoreCounter\Finder;
 
 interface CpuCoreFinder
 {

@@ -102,18 +102,20 @@ CODE_SAMPLE
             if ($classMethod->getParams() === []) {
                 continue;
             }
-            $dataProviderMethodName = $this->getDataProviderMethodName($classMethod);
-            if ($dataProviderMethodName === null) {
+            $dataProviderMethodNames = $this->getDataProviderMethodNames($classMethod);
+            if ($dataProviderMethodNames === []) {
                 continue;
             }
-            $dataProviderMethod = $node->getMethod($dataProviderMethodName);
-            if ($dataProviderMethod === null) {
-                continue;
-            }
-            $namedArgumentsFromTestClass = $this->getNamedArguments($classMethod);
-            foreach ($this->extractDataProviderArrayItem($dataProviderMethod) as $dataProviderArrayItem) {
-                if ($this->refactorArrayKey($dataProviderArrayItem, $namedArgumentsFromTestClass)) {
-                    $wasChanged = \true;
+            foreach ($dataProviderMethodNames as $dataProviderMethodName) {
+                $dataProviderMethod = $node->getMethod($dataProviderMethodName);
+                if ($dataProviderMethod === null) {
+                    continue;
+                }
+                $namedArgumentsFromTestClass = $this->getNamedArguments($classMethod);
+                foreach ($this->extractDataProviderArrayItem($dataProviderMethod) as $dataProviderArrayItem) {
+                    if ($this->refactorArrayKey($dataProviderArrayItem, $namedArgumentsFromTestClass)) {
+                        $wasChanged = \true;
+                    }
                 }
             }
         }
@@ -156,8 +158,12 @@ CODE_SAMPLE
         }
         return $variables;
     }
-    private function getDataProviderMethodName(ClassMethod $classMethod) : ?string
+    /**
+     * @return list<string>
+     */
+    private function getDataProviderMethodNames(ClassMethod $classMethod) : array
     {
+        $dataProviderMethodNames = [];
         $attributeClassName = 'PHPUnit\\Framework\\Attributes\\DataProvider';
         foreach ($classMethod->attrGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
@@ -166,12 +172,12 @@ CODE_SAMPLE
                 }
                 foreach ($attribute->args as $arg) {
                     if ($arg->value instanceof String_) {
-                        return $arg->value->value;
+                        $dataProviderMethodNames[] = $arg->value->value;
                     }
                 }
             }
         }
-        return null;
+        return $dataProviderMethodNames;
     }
     /**
      * @param list<string> $dataProviderNameMapping

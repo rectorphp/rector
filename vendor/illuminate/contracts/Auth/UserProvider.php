@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202406\Illuminate\Contracts\Auth;
+namespace RectorPrefix202407\Illuminate\Contracts\Auth;
 
 interface UserProvider
 {

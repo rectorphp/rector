@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Application;
 
-use RectorPrefix202406\Nette\Utils\FileSystem;
-use RectorPrefix202406\Nette\Utils\Strings;
+use RectorPrefix202407\Nette\Utils\FileSystem;
+use RectorPrefix202407\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
@@ -22,7 +22,7 @@ use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202406\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202407\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {

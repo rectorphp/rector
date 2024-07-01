@@ -5,10 +5,10 @@ namespace Rector\Doctrine\CodeQuality;
 
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
-use RectorPrefix202406\Symfony\Component\Finder\Finder;
-use RectorPrefix202406\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix202406\Symfony\Component\Yaml\Yaml;
-use RectorPrefix202406\Webmozart\Assert\Assert;
+use RectorPrefix202407\Symfony\Component\Finder\Finder;
+use RectorPrefix202407\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202407\Symfony\Component\Yaml\Yaml;
+use RectorPrefix202407\Webmozart\Assert\Assert;
 final class EntityMappingResolver
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202406;
+namespace RectorPrefix202407;
 
 use Rector\Config\RectorConfig;
 use Rector\Php70\Rector\Assign\ListSplitStringRector;

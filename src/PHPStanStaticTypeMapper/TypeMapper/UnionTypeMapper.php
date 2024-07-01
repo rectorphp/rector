@@ -28,8 +28,8 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Rector\ValueObject\PhpVersionFeature;
-use RectorPrefix202406\Webmozart\Assert\Assert;
-use RectorPrefix202406\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202407\Webmozart\Assert\Assert;
+use RectorPrefix202407\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */

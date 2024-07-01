@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202406\Symfony\Component\Console\Input;
+namespace RectorPrefix202407\Symfony\Component\Console\Input;
 
-use RectorPrefix202406\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202406\Symfony\Component\Console\Exception\InvalidOptionException;
+use RectorPrefix202407\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202407\Symfony\Component\Console\Exception\InvalidOptionException;
 /**
  * ArrayInput represents an input provided as an array.
  *

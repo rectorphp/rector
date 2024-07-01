@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202406\Doctrine\Inflector\Rules\Turkish;
+namespace RectorPrefix202407\Doctrine\Inflector\Rules\Turkish;
 
-use RectorPrefix202406\Doctrine\Inflector\GenericLanguageInflectorFactory;
-use RectorPrefix202406\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix202407\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use RectorPrefix202407\Doctrine\Inflector\Rules\Ruleset;
 final class InflectorFactory extends GenericLanguageInflectorFactory
 {
     protected function getSingularRuleset() : Ruleset

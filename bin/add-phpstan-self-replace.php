@@ -2,10 +2,10 @@
 
 // this is part of downgrade build
 declare (strict_types=1);
-namespace RectorPrefix202406;
+namespace RectorPrefix202407;
 
-use RectorPrefix202406\Nette\Utils\FileSystem;
-use RectorPrefix202406\Nette\Utils\Json;
+use RectorPrefix202407\Nette\Utils\FileSystem;
+use RectorPrefix202407\Nette\Utils\Json;
 require __DIR__ . '/../vendor/autoload.php';
 $composerJsonFileContents = FileSystem::read(__DIR__ . '/../composer.json');
 $composerJson = Json::decode($composerJsonFileContents, \true);

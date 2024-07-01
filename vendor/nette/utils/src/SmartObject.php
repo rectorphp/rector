@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202406\Nette;
+namespace RectorPrefix202407\Nette;
 
-use RectorPrefix202406\Nette\Utils\ObjectHelpers;
+use RectorPrefix202407\Nette\Utils\ObjectHelpers;
 /**
  * Strict class for better experience.
  * - 'did you mean' hints
