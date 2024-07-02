@@ -1,4 +1,33 @@
-# 18 Rules Overview
+# 19 Rules Overview
+
+## AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector
+
+Adds `@return` PHPDoc type to Collection property getter by *ToMany annotation
+
+- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector`](../rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector.php)
+
+```diff
+ /**
+  * @ORM\Entity
+  */
+ final class Trainer
+ {
+     /**
+      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+      */
+     private $trainings;
+
++    /**
++     * @return \Doctrine\Common\Collections\Collection<int, \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\Source>
++     */
+     public function getTrainings()
+     {
+         return $this->trainings;
+     }
+ }
+```
+
+<br>
 
 ## AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector
 

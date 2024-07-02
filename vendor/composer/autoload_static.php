@@ -1565,6 +1565,7 @@ class ComposerStaticInit2971ea952332f12bcefd9fbb21b5c118
         'Rector\\Doctrine\\CodeQuality\\Enum\\ToManyMappings' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/ToManyMappings.php',
         'Rector\\Doctrine\\CodeQuality\\Helper\\NodeValueNormalizer' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Helper/NodeValueNormalizer.php',
         'Rector\\Doctrine\\CodeQuality\\NodeFactory\\AttributeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/NodeFactory/AttributeFactory.php',
+        'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\ExplicitRelationCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/ExplicitRelationCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
