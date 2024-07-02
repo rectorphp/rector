@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\NodeAnalyzer\ClassAnalyzer;
@@ -179,6 +180,25 @@ final class BetterNodeFinder
             return null;
         });
         return $isFoundNode;
+    }
+    /**
+     * @return Return_[]
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     */
+    public function findReturnsScoped($functionLike) : array
+    {
+        $returns = [];
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $subNode) use(&$returns) : ?int {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($subNode instanceof Return_) {
+                $returns[] = $subNode;
+            }
+            return null;
+        });
+        Assert::allIsInstanceOf($returns, Return_::class);
+        return $returns;
     }
     /**
      * @template T of Node
