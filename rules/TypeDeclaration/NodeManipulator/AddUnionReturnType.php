@@ -5,16 +5,11 @@ namespace Rector\TypeDeclaration\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -33,36 +28,27 @@ final class AddUnionReturnType
     private $unionTypeMapper;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
-     */
-    private $docBlockUpdater;
-    /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(ReturnTypeInferer $returnTypeInferer, UnionTypeMapper $unionTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    public function __construct(ReturnTypeInferer $returnTypeInferer, UnionTypeMapper $unionTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->unionTypeMapper = $unionTypeMapper;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockUpdater = $docBlockUpdater;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
     /**
+     * @template TCallLike as ClassMethod|Function_|Closure
+     *
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     * @return TCallLike|null
      */
     public function add($node, Scope $scope)
     {
         if ($node->stmts === null) {
             return null;
         }
+        // type is already known
         if ($node->returnType instanceof Node) {
             return null;
         }
@@ -77,39 +63,11 @@ final class AddUnionReturnType
         if (!$returnType instanceof Node) {
             return null;
         }
-        $this->mapStandaloneSubType($node, $inferReturnType);
+        // handled by another PHP 7.1 rule with broader scope
+        if ($returnType instanceof NullableType) {
+            return null;
+        }
         $node->returnType = $returnType;
         return $node;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     */
-    private function mapStandaloneSubType($node, UnionType $unionType) : void
-    {
-        $value = null;
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof ConstantBooleanType) {
-                $value = $type->getValue() ? 'true' : 'false';
-                break;
-            }
-        }
-        if ($value === null) {
-            return;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnType = $phpDocInfo->getReturnTagValue();
-        if (!$returnType instanceof ReturnTagValueNode) {
-            return;
-        }
-        if (!$returnType->type instanceof BracketsAwareUnionTypeNode) {
-            return;
-        }
-        foreach ($returnType->type->types as $key => $type) {
-            if ($type instanceof IdentifierTypeNode && $type->__toString() === 'bool') {
-                $returnType->type->types[$key] = new IdentifierTypeNode($value);
-                $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-                break;
-            }
-        }
     }
 }
