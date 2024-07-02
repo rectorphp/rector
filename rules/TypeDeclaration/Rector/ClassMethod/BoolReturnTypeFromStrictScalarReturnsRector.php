@@ -147,7 +147,7 @@ CODE_SAMPLE
         if ($returns === []) {
             return \false;
         }
-        if (!$this->returnAnalyzer->hasClassMethodRootReturn($functionLike)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike)) {
             return \false;
         }
         foreach ($returns as $return) {
