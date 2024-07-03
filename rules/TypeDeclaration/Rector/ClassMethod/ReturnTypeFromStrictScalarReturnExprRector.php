@@ -6,18 +6,11 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\NullType;
-use PHPStan\Type\Type;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractScopeAwareRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictScalarReturnTypeAnalyzer;
 use Rector\ValueObject\PhpVersion;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,35 +21,10 @@ use RectorPrefix202407\Webmozart\Assert\Assert;
 final class ReturnTypeFromStrictScalarReturnExprRector extends AbstractScopeAwareRector implements MinPhpVersionInterface, ConfigurableRectorInterface, DeprecatedInterface
 {
     /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictScalarReturnTypeAnalyzer
-     */
-    private $strictScalarReturnTypeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
-     */
-    private $classMethodReturnTypeOverrideGuard;
-    /**
-     * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
      * @api
      * @var string
      */
     public const HARD_CODED_ONLY = 'hard_coded_only';
-    /**
-     * @var bool
-     */
-    private $hardCodedOnly = \false;
-    public function __construct(StrictScalarReturnTypeAnalyzer $strictScalarReturnTypeAnalyzer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, StaticTypeMapper $staticTypeMapper)
-    {
-        $this->strictScalarReturnTypeAnalyzer = $strictScalarReturnTypeAnalyzer;
-        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
-        $this->staticTypeMapper = $staticTypeMapper;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change return type based on strict scalar returns - string, int, float or bool', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -109,31 +77,8 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        // already added → skip
-        if ($node->returnType instanceof Node) {
-            return null;
-        }
-        $scalarReturnType = $this->strictScalarReturnTypeAnalyzer->matchAlwaysScalarReturnType($node, $this->hardCodedOnly);
-        if (!$scalarReturnType instanceof Type) {
-            return null;
-        }
-        // skip null as often placeholder value and not an only type
-        if ($scalarReturnType instanceof NullType) {
-            return null;
-        }
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($scalarReturnType, TypeKind::RETURN);
-        if (!$returnTypeNode instanceof Node) {
-            return null;
-        }
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-            return null;
-        }
-        // handled by another rule
-        if ($returnTypeNode instanceof UnionType) {
-            return null;
-        }
-        $node->returnType = $returnTypeNode;
-        return $node;
+        // deprecated
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -143,6 +88,5 @@ CODE_SAMPLE
     {
         $hardCodedOnly = $configuration[self::HARD_CODED_ONLY] ?? \false;
         Assert::boolean($hardCodedOnly);
-        $this->hardCodedOnly = $hardCodedOnly;
     }
 }

@@ -7431,7 +7431,7 @@ Add string return type based on returned string scalar values
  final class SomeClass
  {
 -    public function foo($condition)
-+    public function foo($condition): string;
++    public function foo($condition): string
      {
          if ($condition) {
              return 'yes';

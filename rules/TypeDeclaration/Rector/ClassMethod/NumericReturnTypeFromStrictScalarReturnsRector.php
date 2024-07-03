@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
+use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\DNumber;
@@ -81,10 +82,14 @@ CODE_SAMPLE
         $isAlwaysInt = \true;
         $isAlwaysFloat = \true;
         foreach ($returns as $return) {
-            if (!$return->expr instanceof DNumber) {
+            $expr = $return->expr;
+            if ($expr instanceof UnaryMinus) {
+                $expr = $expr->expr;
+            }
+            if (!$expr instanceof DNumber) {
                 $isAlwaysFloat = \false;
             }
-            if (!$return->expr instanceof LNumber) {
+            if (!$expr instanceof LNumber) {
                 $isAlwaysInt = \false;
             }
         }
