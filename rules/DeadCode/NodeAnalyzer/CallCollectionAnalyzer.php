@@ -8,6 +8,8 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -38,6 +40,18 @@ final class CallCollectionAnalyzer
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
             $callerType = $this->nodeTypeResolver->getType($callerRoot);
             if (!$callerType instanceof TypeWithClassName) {
+                // handle fluent by $this->bar()->baz()->qux()
+                // that methods don't have return type
+                if ($callerType instanceof MixedType && !$callerType->isExplicitMixed()) {
+                    $cloneCallerRoot = clone $callerRoot;
+                    while ($cloneCallerRoot instanceof MethodCall && $cloneCallerRoot->var instanceof MethodCall) {
+                        $callerType = $this->nodeTypeResolver->getType($cloneCallerRoot->var->var);
+                        $cloneCallerRoot = $cloneCallerRoot->var;
+                        if ($callerType instanceof ThisType && $callerType->getStaticObjectType()->getClassName() === $className) {
+                            return \true;
+                        }
+                    }
+                }
                 continue;
             }
             if ($this->isSelfStatic($call) && $this->shouldSkip($call, $classMethodName)) {
