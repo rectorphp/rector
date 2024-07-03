@@ -1,4 +1,4 @@
-# 379 Rules Overview
+# 376 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (55)
+- [TypeDeclaration](#typedeclaration) (52)
 
 - [Visibility](#visibility) (3)
 
@@ -6436,72 +6436,6 @@ Add "never" return-type for closure that never return anything
 
 <br>
 
-### AddClosureReturnTypeFromReturnCastRector
-
-Add return type to closure with return cast
-
-- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromReturnCastRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromReturnCastRector.php)
-
-```diff
--function ($param) {
-+function ($param): string {
-     return (string) $param;
- };
-```
-
-<br>
-
-### AddClosureReturnTypeFromStrictNativeCallRector
-
-Add closure strict return type based native function or native method
-
-- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictNativeCallRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromStrictNativeCallRector.php)
-
-```diff
--function () {
-+function (): string {
-     $dt = new DateTime('now');
-     return $dt->format('Y-m-d');
- };
-```
-
-<br>
-
-### AddClosureReturnTypeFromStrictParamRector
-
-Add closure return type based on strict parameter type
-
-- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeFromStrictParamRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromStrictParamRector.php)
-
-```diff
--function(ParamType $item)
-+function(ParamType $item): ParamType
- {
-     return $item;
- };
-```
-
-<br>
-
-### AddClosureUnionReturnTypeRector
-
-Add union return type on closure
-
-- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureUnionReturnTypeRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureUnionReturnTypeRector.php)
-
-```diff
--function () {
-+function (): int|string {
-     if (rand(0, 1)) {
-         return 1;
-     }
-
-     return 'one';
- };
-```
-
-<br>
-
 ### AddClosureVoidReturnTypeWhereNoReturnRector
 
 Add closure return type void if there is no return
@@ -6880,6 +6814,21 @@ Add return type to classes that extend `Doctrine\ORM\EntityRepository` based on 
          ]);
      }
  }
+```
+
+<br>
+
+### ClosureReturnTypeRector
+
+Add return type to closures based on known return values
+
+- class: [`Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector`](../rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php)
+
+```diff
+-function () {
++function (): int {
+     return 100;
+ };
 ```
 
 <br>
