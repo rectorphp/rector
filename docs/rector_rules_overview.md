@@ -1,4 +1,4 @@
-# 376 Rules Overview
+# 377 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (52)
+- [TypeDeclaration](#typedeclaration) (53)
 
 - [Visibility](#visibility) (3)
 
@@ -7024,6 +7024,29 @@ Add "never" return-type for methods that never return anything
 +    public function run(): never
      {
          throw new InvalidException();
+     }
+ }
+```
+
+<br>
+
+### ReturnNullableTypeRector
+
+Add basic ? nullable type to class methods and functions, as of PHP 7.1
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnNullableTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnNullableTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function getData()
++    public function getData(): ?int
+     {
+         if (rand(0, 1)) {
+             return null;
+         }
+
+         return 100;
      }
  }
 ```

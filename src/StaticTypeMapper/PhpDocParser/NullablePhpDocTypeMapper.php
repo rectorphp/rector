@@ -16,21 +16,21 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 /**
  * @implements PhpDocTypeMapperInterface<NullableTypeNode>
  */
-final class NullableTypeMapper implements PhpDocTypeMapperInterface
+final class NullablePhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper
      */
-    private $identifierTypeMapper;
+    private $identifierPhpDocTypeMapper;
     /**
      * @readonly
      * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;
-    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper $identifierTypeMapper, TypeNodeResolver $typeNodeResolver)
+    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper, TypeNodeResolver $typeNodeResolver)
     {
-        $this->identifierTypeMapper = $identifierTypeMapper;
+        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
     public function getNodeType() : string
@@ -43,7 +43,7 @@ final class NullableTypeMapper implements PhpDocTypeMapperInterface
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
     {
         if ($typeNode->type instanceof IdentifierTypeNode) {
-            $type = $this->identifierTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
+            $type = $this->identifierPhpDocTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
             if ($type instanceof UnionType) {
                 return new UnionType(\array_merge([new NullType()], $type->getTypes()));
             }

@@ -15,16 +15,16 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 /**
  * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
  */
-final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
+final class IntersectionPhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper
      */
-    private $identifierTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper $identifierTypeMapper)
+    private $identifierPhpDocTypeMapper;
+    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
     {
-        $this->identifierTypeMapper = $identifierTypeMapper;
+        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
     }
     public function getNodeType() : string
     {
@@ -40,7 +40,7 @@ final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
             if (!$intersectionedTypeNode instanceof IdentifierTypeNode) {
                 return new MixedType();
             }
-            $intersectionedTypes[] = $this->identifierTypeMapper->mapIdentifierTypeNode($intersectionedTypeNode, $node);
+            $intersectionedTypes[] = $this->identifierPhpDocTypeMapper->mapIdentifierTypeNode($intersectionedTypeNode, $node);
         }
         return new IntersectionType($intersectionedTypes);
     }

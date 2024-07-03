@@ -32,7 +32,7 @@ use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 /**
  * @implements PhpDocTypeMapperInterface<IdentifierTypeNode>
  */
-final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
+final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly

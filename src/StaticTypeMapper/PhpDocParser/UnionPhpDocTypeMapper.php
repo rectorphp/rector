@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 /**
  * @implements PhpDocTypeMapperInterface<UnionTypeNode>
  */
-final class UnionTypeMapper implements PhpDocTypeMapperInterface
+final class UnionPhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
@@ -25,24 +25,24 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
     private $typeFactory;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper
      */
-    private $identifierTypeMapper;
+    private $identifierPhpDocTypeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IntersectionTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper
      */
-    private $intersectionTypeMapper;
+    private $intersectionPhpDocTypeMapper;
     /**
      * @readonly
      * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;
-    public function __construct(TypeFactory $typeFactory, \Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper $identifierTypeMapper, \Rector\StaticTypeMapper\PhpDocParser\IntersectionTypeMapper $intersectionTypeMapper, TypeNodeResolver $typeNodeResolver)
+    public function __construct(TypeFactory $typeFactory, \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper, \Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper $intersectionPhpDocTypeMapper, TypeNodeResolver $typeNodeResolver)
     {
         $this->typeFactory = $typeFactory;
-        $this->identifierTypeMapper = $identifierTypeMapper;
-        $this->intersectionTypeMapper = $intersectionTypeMapper;
+        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
+        $this->intersectionPhpDocTypeMapper = $intersectionPhpDocTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
     public function getNodeType() : string
@@ -57,11 +57,11 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
         $unionedTypes = [];
         foreach ($typeNode->types as $unionedTypeNode) {
             if ($unionedTypeNode instanceof IdentifierTypeNode) {
-                $unionedTypes[] = $this->identifierTypeMapper->mapToPHPStanType($unionedTypeNode, $node, $nameScope);
+                $unionedTypes[] = $this->identifierPhpDocTypeMapper->mapToPHPStanType($unionedTypeNode, $node, $nameScope);
                 continue;
             }
             if ($unionedTypeNode instanceof IntersectionTypeNode) {
-                $unionedTypes[] = $this->intersectionTypeMapper->mapToPHPStanType($unionedTypeNode, $node, $nameScope);
+                $unionedTypes[] = $this->intersectionPhpDocTypeMapper->mapToPHPStanType($unionedTypeNode, $node, $nameScope);
                 continue;
             }
             $unionedTypes[] = $this->typeNodeResolver->resolve($unionedTypeNode, $nameScope);

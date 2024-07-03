@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
+use Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use RectorPrefix202407\Doctrine\Inflector\Inflector;
 use RectorPrefix202407\Doctrine\Inflector\Rules\English\InflectorFactory;
 use RectorPrefix202407\Illuminate\Container\Container;
@@ -165,10 +167,10 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\IntersectionTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\NullableTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\UnionTypeMapper;
+use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
+use Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper;
+use Rector\StaticTypeMapper\PhpDocParser\NullablePhpDocTypeMapper;
+use Rector\StaticTypeMapper\PhpDocParser\UnionPhpDocTypeMapper;
 use Rector\StaticTypeMapper\PhpParser\ExprNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper;
@@ -202,7 +204,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<PhpDocTypeMapperInterface>>
      */
-    private const PHPDOC_TYPE_MAPPER_CLASSES = [IdentifierTypeMapper::class, IntersectionTypeMapper::class, NullableTypeMapper::class, UnionTypeMapper::class];
+    private const PHPDOC_TYPE_MAPPER_CLASSES = [IdentifierPhpDocTypeMapper::class, IntersectionPhpDocTypeMapper::class, NullablePhpDocTypeMapper::class, UnionPhpDocTypeMapper::class];
     /**
      * @var array<class-string<ClassNameImportSkipVoterInterface>>
      */
@@ -210,7 +212,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<TypeMapperInterface>>
      */
-    private const TYPE_MAPPER_CLASSES = [AccessoryLiteralStringTypeMapper::class, AccessoryNonEmptyStringTypeMapper::class, AccessoryNonFalsyStringTypeMapper::class, AccessoryNumericStringTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, GenericClassStringTypeMapper::class, HasMethodTypeMapper::class, HasOffsetTypeMapper::class, HasOffsetValueTypeTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, \Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NonEmptyArrayTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, OversizedArrayTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, SelfObjectTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, ThisTypeMapper::class, TypeWithClassNameTypeMapper::class, \Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper::class, VoidTypeMapper::class];
+    private const TYPE_MAPPER_CLASSES = [AccessoryLiteralStringTypeMapper::class, AccessoryNonEmptyStringTypeMapper::class, AccessoryNonFalsyStringTypeMapper::class, AccessoryNumericStringTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, GenericClassStringTypeMapper::class, HasMethodTypeMapper::class, HasOffsetTypeMapper::class, HasOffsetValueTypeTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NonEmptyArrayTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, OversizedArrayTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, SelfObjectTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, ThisTypeMapper::class, TypeWithClassNameTypeMapper::class, UnionTypeMapper::class, VoidTypeMapper::class];
     /**
      * @var array<class-string<PhpDocNodeDecoratorInterface>>
      */
@@ -302,7 +304,7 @@ final class LazyContainerFactory
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $conditionalTypeMapper->autowire($phpStanStaticTypeMapper);
         });
-        $rectorConfig->afterResolving(\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper::class, static function (\Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper $unionTypeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(UnionTypeMapper::class, static function (UnionTypeMapper $unionTypeMapper, Container $container) : void {
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $unionTypeMapper->autowire($phpStanStaticTypeMapper);
         });
