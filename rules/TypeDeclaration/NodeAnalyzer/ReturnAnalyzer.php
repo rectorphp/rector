@@ -31,7 +31,7 @@ final class ReturnAnalyzer
         $this->silentVoidResolver = $silentVoidResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasOnlyReturnWithExpr($functionLike) : bool
     {

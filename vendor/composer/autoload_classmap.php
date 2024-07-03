@@ -2450,6 +2450,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeFromStrictParamRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromStrictParamRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureUnionReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureUnionReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',

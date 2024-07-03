@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
@@ -51,18 +50,21 @@ final class AddReturnTypeFromStrictNativeCall
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     * @template TFunctionLike as ClassMethod|Function_
+     *
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return TFunctionLike|null
      */
-    public function add($node, Scope $scope)
+    public function add($functionLike, Scope $scope)
     {
-        if ($node->returnType !== null) {
+        // already filled, skip
+        if ($functionLike->returnType instanceof Node) {
             return null;
         }
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope)) {
             return null;
         }
-        $nativeCallLikes = $this->strictNativeFunctionReturnTypeAnalyzer->matchAlwaysReturnNativeCallLikes($node);
+        $nativeCallLikes = $this->strictNativeFunctionReturnTypeAnalyzer->matchAlwaysReturnNativeCallLikes($functionLike);
         if ($nativeCallLikes === null) {
             return null;
         }
@@ -78,7 +80,7 @@ final class AddReturnTypeFromStrictNativeCall
         if (!$returnTypeNode instanceof Node) {
             return null;
         }
-        $node->returnType = $returnTypeNode;
-        return $node;
+        $functionLike->returnType = $returnTypeNode;
+        return $functionLike;
     }
 }

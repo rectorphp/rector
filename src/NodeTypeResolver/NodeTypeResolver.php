@@ -217,7 +217,7 @@ final class NodeTypeResolver
                 return $type;
             }
         }
-        $type = $scope->getNativeType($expr);
+        $type = $this->resolveNativeTypeWithBuiltinMethodCallFallback($expr, $scope);
         if ($expr instanceof ArrayDimFetch) {
             $type = $this->resolveArrayDimFetchType($expr, $scope, $type);
         }
@@ -446,5 +446,19 @@ final class NodeTypeResolver
             }
         }
         return new MixedType();
+    }
+    /**
+     * Method calls on native PHP classes report mixed,
+     * even on strict known type; this fallbacks to getType() that provides correct type
+     */
+    private function resolveNativeTypeWithBuiltinMethodCallFallback(Expr $expr, Scope $scope) : Type
+    {
+        if ($expr instanceof MethodCall) {
+            $callerType = $scope->getType($expr->var);
+            if ($callerType instanceof ObjectType && $callerType->getClassReflection() instanceof ClassReflection && $callerType->getClassReflection()->isBuiltin()) {
+                return $scope->getType($expr);
+            }
+        }
+        return $scope->getNativeType($expr);
     }
 }

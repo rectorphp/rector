@@ -52,6 +52,7 @@ CODE_SAMPLE
             return null;
         }
         $type = $this->nodeTypeResolver->getNativeType($node->expr);
+        // not valid to add explicit type in PHP
         if ($type->isVoid()->yes()) {
             return null;
         }

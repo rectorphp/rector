@@ -6,26 +6,17 @@ namespace Rector\TypeDeclaration\Rector\Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractScopeAwareRector;
-use Rector\TypeDeclaration\NodeManipulator\AddUnionReturnType;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureUnionReturnTypeRector\AddClosureUnionReturnTypeRectorTest
+ * @deprecated since 1.2.1, use @see \Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector instead
  */
-final class AddClosureUnionReturnTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class AddClosureUnionReturnTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddUnionReturnType
-     */
-    private $addUnionReturnType;
-    public function __construct(AddUnionReturnType $addUnionReturnType)
-    {
-        $this->addUnionReturnType = $addUnionReturnType;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add union return type on closure', [new CodeSample(<<<'CODE_SAMPLE'
@@ -57,13 +48,14 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NULLABLE_TYPE;
+        return PhpVersionFeature::UNION_TYPES;
     }
     /**
      * @param Closure $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        return $this->addUnionReturnType->add($node, $scope);
+        // deprecated
+        return null;
     }
 }

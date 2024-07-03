@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -131,7 +130,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
@@ -189,14 +188,14 @@ CODE_SAMPLE
         return new ObjectType($className, null, $classReflection);
     }
     /**
-     * @template TCallLike as ClassMethod|Function_|Closure
+     * @template TFunctionLike as ClassMethod|Function_
      *
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return TCallLike|null
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return TFunctionLike|null
      */
-    private function refactorDirectReturnNew($node)
+    private function refactorDirectReturnNew($functionLike)
     {
-        $returns = $this->betterNodeFinder->findReturnsScoped($node);
+        $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
         if ($returns === []) {
             return null;
         }
@@ -209,8 +208,8 @@ CODE_SAMPLE
         if (!$returnTypeNode instanceof Node) {
             return null;
         }
-        $node->returnType = $returnTypeNode;
-        return $node;
+        $functionLike->returnType = $returnTypeNode;
+        return $functionLike;
     }
     /**
      * @param Return_[] $returns

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -83,10 +82,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
@@ -126,18 +125,19 @@ CODE_SAMPLE
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function shouldSkip($node, Scope $scope) : bool
+    private function shouldSkip($functionLike, Scope $scope) : bool
     {
-        if ($node->returnType !== null) {
+        // type is already filled, skip
+        if ($functionLike->returnType instanceof Node) {
             return \true;
         }
-        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        $returnType = $this->returnTypeInferer->inferFunctionLike($functionLike);
         $returnType = TypeCombinator::removeNull($returnType);
         if ($returnType instanceof UnionType) {
             return \true;
         }
-        return $node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope);
+        return $functionLike instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope);
     }
 }

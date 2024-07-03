@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -55,24 +54,24 @@ final class AddReturnTypeFromParam
         $this->returnTypeInferer = $returnTypeInferer;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
-    public function add($node, Scope $scope)
+    public function add($functionLike, Scope $scope)
     {
-        if ($node->stmts === null) {
+        if ($functionLike->stmts === null) {
             return null;
         }
-        if ($this->shouldSkipNode($node, $scope)) {
+        if ($this->shouldSkipNode($functionLike, $scope)) {
             return null;
         }
-        $return = $this->findCurrentScopeReturn($node->stmts);
+        $return = $this->findCurrentScopeReturn($functionLike->stmts);
         if (!$return instanceof Return_ || !$return->expr instanceof Expr) {
             return null;
         }
         $returnName = $this->nodeNameResolver->getName($return->expr);
-        $stmts = $node->stmts;
-        foreach ($node->getParams() as $param) {
+        $stmts = $functionLike->stmts;
+        foreach ($functionLike->getParams() as $param) {
             if (!$param->type instanceof Node) {
                 continue;
             }
@@ -83,8 +82,8 @@ final class AddReturnTypeFromParam
             if ($returnName !== $paramName) {
                 continue;
             }
-            $node->returnType = $param->type;
-            return $node;
+            $functionLike->returnType = $param->type;
+            return $functionLike;
         }
         return null;
     }
@@ -143,17 +142,18 @@ final class AddReturnTypeFromParam
         return $isParamModified;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function shouldSkipNode($node, Scope $scope) : bool
+    private function shouldSkipNode($functionLike, Scope $scope) : bool
     {
-        if ($node->returnType !== null) {
+        // type is already known, skip
+        if ($functionLike->returnType instanceof Node) {
             return \true;
         }
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope)) {
             return \true;
         }
-        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        $returnType = $this->returnTypeInferer->inferFunctionLike($functionLike);
         if ($returnType instanceof MixedType) {
             return \true;
         }

@@ -50,7 +50,7 @@ final class StrictReturnNewAnalyzer
         $this->returnAnalyzer = $returnAnalyzer;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function matchAlwaysReturnVariableNew($functionLike) : ?string
     {

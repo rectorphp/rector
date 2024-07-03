@@ -94,10 +94,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class, Closure::class];
+        return [Function_::class, ClassMethod::class];
     }
     /**
-     * @param Function_|ClassMethod|Closure $node
+     * @param Function_|ClassMethod $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
@@ -184,7 +184,7 @@ CODE_SAMPLE
     }
     /**
      * @param array<Yield_|YieldFrom> $yieldNodes
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType
      */
     private function resolveYieldType(array $yieldNodes, $functionLike)

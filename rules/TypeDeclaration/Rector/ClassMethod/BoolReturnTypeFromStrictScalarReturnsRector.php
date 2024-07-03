@@ -107,17 +107,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($this->shouldSkip($node, $scope)) {
             return null;
         }
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (!$this->hasOnlyBoolScalarReturnExprs($returns, $node)) {
             return null;
         }
@@ -140,7 +140,7 @@ CODE_SAMPLE
     }
     /**
      * @param Return_[] $returns
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasOnlyBoolScalarReturnExprs(array $returns, $functionLike) : bool
     {
