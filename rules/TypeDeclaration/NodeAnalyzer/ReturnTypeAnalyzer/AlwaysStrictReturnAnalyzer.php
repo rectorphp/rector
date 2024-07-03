@@ -40,7 +40,7 @@ final class AlwaysStrictReturnAnalyzer
             return [];
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
+        $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
         if ($returns === []) {
             return [];
         }

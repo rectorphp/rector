@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeCombinator;
@@ -95,7 +94,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (\count($returns) !== 1) {
             return null;
         }

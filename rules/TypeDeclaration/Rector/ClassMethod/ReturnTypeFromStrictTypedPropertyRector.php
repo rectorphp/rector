@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
@@ -131,8 +130,7 @@ CODE_SAMPLE
      */
     private function resolveReturnPropertyType(ClassMethod $classMethod) : array
     {
-        /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
+        $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
         $propertyTypes = [];
         foreach ($returns as $return) {
             if (!$return->expr instanceof Expr) {

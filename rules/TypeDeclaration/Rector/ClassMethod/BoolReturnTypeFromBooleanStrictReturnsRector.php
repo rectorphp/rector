@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -28,25 +29,16 @@ use PHPStan\Type\BooleanType;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractScopeAwareRector;
-use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @deprecated Since 1.2.1, as name is invalid and work with native constants, not scalars. Use
- * @see BoolReturnTypeFromBooleanConstReturnsRector instead.
- *
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromStrictScalarReturnsRector\BoolReturnTypeFromStrictScalarReturnsRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector\BoolReturnTypeFromBooleanStrictReturnsRectorTest
  */
-final class BoolReturnTypeFromStrictScalarReturnsRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class BoolReturnTypeFromBooleanStrictReturnsRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
-     */
-    private $returnAnalyzer;
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
@@ -67,9 +59,8 @@ final class BoolReturnTypeFromStrictScalarReturnsRector extends AbstractScopeAwa
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(ReturnAnalyzer $returnAnalyzer, ReflectionProvider $reflectionProvider, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    public function __construct(ReflectionProvider $reflectionProvider, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
-        $this->returnAnalyzer = $returnAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
         $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -77,15 +68,11 @@ final class BoolReturnTypeFromStrictScalarReturnsRector extends AbstractScopeAwa
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change return type based on strict returns type operations', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add bool return type based on strict bool returns type operations', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function resolve($first, $second)
     {
-        if ($first) {
-            return false;
-        }
-
         return $first > $second;
     }
 }
@@ -95,10 +82,6 @@ class SomeClass
 {
     public function resolve($first, $second): bool
     {
-        if ($first) {
-            return false;
-        }
-
         return $first > $second;
     }
 }
@@ -121,7 +104,12 @@ CODE_SAMPLE
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if (!$this->hasOnlyBoolScalarReturnExprs($returns, $node)) {
+        // handled in another rule
+        if ($this->hasOnlyBooleanConstExprs($returns)) {
+            return null;
+        }
+        // handled in another rule
+        if (!$this->hasOnlyBoolScalarReturnExprs($returns)) {
             return null;
         }
         $node->returnType = new Identifier('bool');
@@ -144,22 +132,12 @@ CODE_SAMPLE
     }
     /**
      * @param Return_[] $returns
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function hasOnlyBoolScalarReturnExprs(array $returns, $functionLike) : bool
+    private function hasOnlyBoolScalarReturnExprs(array $returns) : bool
     {
-        if ($returns === []) {
-            return \false;
-        }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike)) {
-            return \false;
-        }
         foreach ($returns as $return) {
             if (!$return->expr instanceof Expr) {
                 return \false;
-            }
-            if ($this->valueResolver->isTrueOrFalse($return->expr)) {
-                continue;
             }
             if ($this->isBooleanBinaryOp($return->expr)) {
                 continue;
@@ -216,5 +194,23 @@ CODE_SAMPLE
             return \true;
         }
         return $expr instanceof NotEqual;
+    }
+    /**
+     * @param Return_[] $returns
+     */
+    private function hasOnlyBooleanConstExprs(array $returns) : bool
+    {
+        if ($returns === []) {
+            return \false;
+        }
+        foreach ($returns as $return) {
+            if (!$return->expr instanceof ConstFetch) {
+                return \false;
+            }
+            if (!$this->valueResolver->isTrueOrFalse($return->expr)) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }

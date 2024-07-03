@@ -180,7 +180,7 @@ final class ReturnTypeInferer
             return $unionType;
         }
         if (!$functionLike instanceof ArrowFunction) {
-            $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
+            $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
             $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
                 return $return->expr instanceof Expr;
             });

@@ -1,4 +1,4 @@
-# 377 Rules Overview
+# 380 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (51)
+- [TypeDeclaration](#typedeclaration) (56)
 
 - [Visibility](#visibility) (3)
 
@@ -6769,11 +6769,34 @@ Change && and || between nullable objects to instanceof compares
 
 <br>
 
-### BoolReturnTypeFromStrictScalarReturnsRector
+### BoolReturnTypeFromBooleanConstReturnsRector
 
-Change return type based on strict returns type operations
+Add return bool, based on direct true/false returns
 
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromStrictScalarReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromStrictScalarReturnsRector.php)
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve($value)
++    public function resolve($value): bool
+     {
+         if ($value) {
+             return false;
+         }
+
+         return true;
+     }
+ }
+```
+
+<br>
+
+### BoolReturnTypeFromBooleanStrictReturnsRector
+
+Add bool return type based on strict bool returns type operations
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanStrictReturnsRector.php)
 
 ```diff
  class SomeClass
@@ -6781,10 +6804,6 @@ Change return type based on strict returns type operations
 -    public function resolve($first, $second)
 +    public function resolve($first, $second): bool
      {
-         if ($first) {
-             return false;
-         }
-
          return $first > $second;
      }
  }
@@ -6909,19 +6928,38 @@ Set DateTime to DateTimeInterface for DateTime property with DateTimeInterface d
 
 <br>
 
+### NumericReturnTypeFromStrictReturnsRector
+
+Add int/float return type based on strict typed returns
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictReturnsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function increase($value)
++    public function increase($value): int
+     {
+         return ++$value;
+     }
+ }
+```
+
+<br>
+
 ### NumericReturnTypeFromStrictScalarReturnsRector
 
-Change numeric return type based on strict returns type operations
+Add int/float return type based on strict scalar returns type
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php)
 
 ```diff
  class SomeClass
  {
--    public function resolve(int $first, int $second)
-+    public function resolve(int $first, int $second): int
+-    public function getNumber()
++    public function getNumber(): int
      {
-         return $first - $second;
+         return 200;
      }
  }
 ```
@@ -7377,6 +7415,52 @@ Add string type based on concat use
 +    public function resolve(string $item)
      {
          return $item . ' world';
+     }
+ }
+```
+
+<br>
+
+### StringReturnTypeFromStrictScalarReturnsRector
+
+Add string return type based on returned string scalar values
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/StringReturnTypeFromStrictScalarReturnsRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function foo($condition)
++    public function foo($condition): string;
+     {
+         if ($condition) {
+             return 'yes';
+         }
+
+         return 'no';
+     }
+ }
+```
+
+<br>
+
+### StringReturnTypeFromStrictStringReturnsRector
+
+Add string return type based on returned strict string values
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/StringReturnTypeFromStrictStringReturnsRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function foo($condition, $value)
++    public function foo($condition, $value): string;
+     {
+         if ($value) {
+             return 'yes';
+         }
+
+         return strtoupper($value);
      }
  }
 ```

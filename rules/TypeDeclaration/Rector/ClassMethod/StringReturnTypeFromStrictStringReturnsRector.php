@@ -4,11 +4,13 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractScopeAwareRector;
@@ -18,9 +20,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector\StringReturnTypeFromStrictScalarReturnsRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector\StringReturnTypeFromStrictStringReturnsRectorTest
  */
-final class StringReturnTypeFromStrictScalarReturnsRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class StringReturnTypeFromStrictStringReturnsRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -39,29 +41,29 @@ final class StringReturnTypeFromStrictScalarReturnsRector extends AbstractScopeA
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add string return type based on returned string scalar values', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add string return type based on returned strict string values', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function foo($condition)
+    public function foo($condition, $value)
     {
-        if ($condition) {
+        if ($value) {
             return 'yes';
         }
 
-        return 'no';
+        return strtoupper($value);
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function foo($condition): string;
+    public function foo($condition, $value): string;
     {
-        if ($condition) {
+        if ($value) {
             return 'yes';
         }
 
-        return 'no';
+        return strtoupper($value);
     }
 }
 CODE_SAMPLE
@@ -88,11 +90,13 @@ CODE_SAMPLE
             // void
             return null;
         }
-        foreach ($returns as $return) {
-            // we need exact string "value" return
-            if (!$return->expr instanceof String_ && !$return->expr instanceof Encapsed) {
-                return null;
-            }
+        // handled by another rule
+        if ($this->hasAlwaysStringScalarReturn($returns)) {
+            return null;
+        }
+        // anything that return strict string, but no strings only
+        if (!$this->isAlwaysStringStrictType($returns)) {
+            return null;
         }
         if ($this->shouldSkipClassMethodForOverride($node, $scope)) {
             return null;
@@ -113,5 +117,35 @@ CODE_SAMPLE
             return \false;
         }
         return $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope);
+    }
+    /**
+     * @param Return_[] $returns
+     */
+    private function hasAlwaysStringScalarReturn(array $returns) : bool
+    {
+        foreach ($returns as $return) {
+            // we need exact string "value" return
+            if (!$return->expr instanceof String_ && !$return->expr instanceof Encapsed) {
+                return \false;
+            }
+        }
+        return \true;
+    }
+    /**
+     * @param Return_[] $returns
+     */
+    private function isAlwaysStringStrictType(array $returns) : bool
+    {
+        foreach ($returns as $return) {
+            // void return
+            if (!$return->expr instanceof Expr) {
+                return \false;
+            }
+            $exprType = $this->nodeTypeResolver->getNativeType($return->expr);
+            if (!$exprType->isString()->yes()) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }

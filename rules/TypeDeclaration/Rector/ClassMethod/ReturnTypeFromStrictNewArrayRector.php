@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -105,7 +104,7 @@ CODE_SAMPLE
         return [ClassMethod::class, Function_::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
@@ -125,8 +124,7 @@ CODE_SAMPLE
         if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [Yield_::class, YieldFrom::class])) {
             return null;
         }
-        /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if ($returns === []) {
             return null;
         }
@@ -199,7 +197,7 @@ CODE_SAMPLE
     /**
      * @param Variable[] $variables
      * @return Variable[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function matchVariableNotOverriddenByNonArray($functionLike, array $variables) : array
     {
