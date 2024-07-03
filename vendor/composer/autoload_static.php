@@ -2658,6 +2658,7 @@ class ComposerStaticInit2971ea952332f12bcefd9fbb21b5c118
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StringReturnTypeFromStrictScalarReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/StringReturnTypeFromStrictScalarReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\AddTestsVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/AddTestsVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\ChildDoctrineRepositoryClassTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/ChildDoctrineRepositoryClassTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\MergeDateTimePropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/MergeDateTimePropertyTypeDeclarationRector.php',

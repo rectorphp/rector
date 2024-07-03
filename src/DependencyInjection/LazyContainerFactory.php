@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use RectorPrefix202407\Doctrine\Inflector\Inflector;
 use RectorPrefix202407\Doctrine\Inflector\Rules\English\InflectorFactory;
 use RectorPrefix202407\Illuminate\Container\Container;
@@ -141,6 +139,7 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\HasOffsetTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\HasOffsetValueTypeTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\HasPropertyTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\IntegerTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\IterableTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\MixedTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\NeverTypeMapper;
@@ -157,6 +156,7 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\StrictMixedTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ThisTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\TypeWithClassNameTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\VoidTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;

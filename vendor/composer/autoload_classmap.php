@@ -2439,6 +2439,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StringReturnTypeFromStrictScalarReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StringReturnTypeFromStrictScalarReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\AddTestsVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/AddTestsVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\ChildDoctrineRepositoryClassTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/ChildDoctrineRepositoryClassTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\MergeDateTimePropertyTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/MergeDateTimePropertyTypeDeclarationRector.php',

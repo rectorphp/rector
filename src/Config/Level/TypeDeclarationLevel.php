@@ -31,13 +31,13 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictFluentReturnRe
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictParamRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromSymfonySerializerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector;
@@ -65,10 +65,11 @@ final class TypeDeclarationLevel
         ReturnTypeFromStrictConstantReturnRector::class,
         ReturnTypeFromStrictNewArrayRector::class,
         ReturnTypeFromStrictBoolReturnExprRector::class,
-        NumericReturnTypeFromStrictScalarReturnsRector::class,
+        // scalar values
         BoolReturnTypeFromStrictScalarReturnsRector::class,
+        NumericReturnTypeFromStrictScalarReturnsRector::class,
+        StringReturnTypeFromStrictScalarReturnsRector::class,
         ReturnTypeFromStrictTernaryRector::class,
-        ReturnTypeFromStrictScalarReturnExprRector::class,
         ReturnTypeFromReturnDirectArrayRector::class,
         ReturnTypeFromReturnNewRector::class,
         ReturnTypeFromReturnCastRector::class,
