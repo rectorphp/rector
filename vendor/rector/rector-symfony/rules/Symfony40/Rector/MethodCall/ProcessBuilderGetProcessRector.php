@@ -6,7 +6,6 @@ namespace Rector\Symfony\Symfony40\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Rector\Contract\DependencyInjection\ResetableInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

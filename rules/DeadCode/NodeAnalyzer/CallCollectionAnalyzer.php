@@ -6,10 +6,10 @@ namespace Rector\DeadCode\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -44,12 +44,21 @@ final class CallCollectionAnalyzer
                 // that methods don't have return type
                 if ($callerType instanceof MixedType && !$callerType->isExplicitMixed()) {
                     $cloneCallerRoot = clone $callerRoot;
-                    while ($cloneCallerRoot instanceof MethodCall && $cloneCallerRoot->var instanceof MethodCall) {
-                        $callerType = $this->nodeTypeResolver->getType($cloneCallerRoot->var->var);
-                        $cloneCallerRoot = $cloneCallerRoot->var;
-                        if ($callerType instanceof ThisType && $callerType->getStaticObjectType()->getClassName() === $className) {
-                            return \true;
+                    $isFluent = \false;
+                    // init
+                    $methodCallNames = [];
+                    // first append
+                    $methodCallNames[] = (string) $this->nodeNameResolver->getName($call->name);
+                    while ($cloneCallerRoot instanceof MethodCall) {
+                        $methodCallNames[] = (string) $this->nodeNameResolver->getName($cloneCallerRoot->name);
+                        if ($cloneCallerRoot->var instanceof Variable && $cloneCallerRoot->var->name === 'this') {
+                            $isFluent = \true;
+                            break;
                         }
+                        $cloneCallerRoot = $cloneCallerRoot->var;
+                    }
+                    if ($isFluent && \in_array($classMethodName, $methodCallNames, \true)) {
+                        return \true;
                     }
                 }
                 continue;

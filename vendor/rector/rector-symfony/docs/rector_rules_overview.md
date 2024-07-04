@@ -1,4 +1,4 @@
-# 82 Rules Overview
+# 83 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -117,6 +117,31 @@ Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizati
 ```diff
 -if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
 +if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+ }
+```
+
+<br>
+
+## AutowireAttributeRector
+
+Change explicit configuration parameter pass into #[Autowire] attributes
+
+:wrench: **configure it!**
+
+- class: [`Rector\Symfony\Configs\Rector\Class_\AutowireAttributeRector`](../rules/Configs/Rector/Class_/AutowireAttributeRector.php)
+
+```diff
++use Symfony\Component\DependencyInjection\Attribute\Autowire;
++
+ final class SomeClass
+ {
+     public function __construct(
++        #[Autowire(param: 'timeout')]
+         private int $timeout,
++        #[Autowire(env: 'APP_SECRET')]
+         private string $secret,
+     )  {
+     }
  }
 ```
 

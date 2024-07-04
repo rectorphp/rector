@@ -15,7 +15,7 @@ final class SecurityAccessDecisionManagerConfigArrayHandler
     /**
      * @return array<Expression<MethodCall>>
      */
-    public function handle(Array_ $array, Variable $configCaller, string $mainMethodName) : array
+    public function handle(Array_ $array, Variable $variable, string $mainMethodName) : array
     {
         if (!$array->items[0] instanceof ArrayItem) {
             return [];
@@ -26,7 +26,7 @@ final class SecurityAccessDecisionManagerConfigArrayHandler
             return [];
         }
         // build accessControl() method call here
-        $accessDecisionManagerMethodCall = new MethodCall($configCaller, $mainMethodName);
+        $accessDecisionManagerMethodCall = new MethodCall($variable, $mainMethodName);
         foreach ($nestedArray->items as $nestedArrayItem) {
             if (!$nestedArrayItem instanceof ArrayItem) {
                 continue;
