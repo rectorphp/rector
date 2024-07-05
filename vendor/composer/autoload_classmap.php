@@ -2195,7 +2195,6 @@ return array(
     'Rector\\Symfony\\NodeAnalyzer\\Annotations\\PropertyAnnotationAssertResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/PropertyAnnotationAssertResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\Annotations\\StmtMethodCallMatcher' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/StmtMethodCallMatcher.php',
     'Rector\\Symfony\\NodeAnalyzer\\ClassAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ClassAnalyzer.php',
-    'Rector\\Symfony\\NodeAnalyzer\\Command\\AttributeValueResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/Command/AttributeValueResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormAddMethodCallAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',

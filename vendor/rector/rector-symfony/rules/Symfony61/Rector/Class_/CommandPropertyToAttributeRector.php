@@ -14,11 +14,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
-use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,24 +36,12 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     private $phpAttributeGroupFactory;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
-     */
-    private $phpAttributeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver
-     */
-    private $attributeValueResolver;
-    /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, AttributeValueResolver $attributeValueResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-        $this->attributeValueResolver = $attributeValueResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
@@ -96,82 +83,46 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new ObjectType(SymfonyClass::COMMAND))) {
             return null;
         }
+        // does attribute already exist?
         if (!$this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
             return null;
         }
-        $defaultName = $this->resolveDefaultName($node);
-        if ($defaultName === null) {
+        $defaultNameExpr = $this->resolvePropertyExpr($node, 'defaultName');
+        if (!$defaultNameExpr instanceof Expr) {
             return null;
         }
-        $defaultDescription = $this->resolveDefaultDescription($node);
-        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultName, $defaultDescription));
+        $defaultDescriptionExpr = $this->resolvePropertyExpr($node, 'defaultDescription');
+        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultNameExpr, $defaultDescriptionExpr));
     }
-    private function createAttributeGroupAsCommand(string $defaultName, ?string $defaultDescription) : AttributeGroup
+    private function createAttributeGroupAsCommand(Expr $defaultNameExpr, ?Expr $defaultDescription) : AttributeGroup
     {
-        $nameArg = $this->createNamedArg('name', new String_($defaultName));
+        // name is always required to add
+        $nameArg = $this->createNamedArg('name', $defaultNameExpr);
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
         $attributeGroup->attrs[0]->args[] = $nameArg;
-        if ($defaultDescription !== null) {
-            $descriptionArg = $this->createNamedArg('description', new String_($defaultDescription));
+        if ($defaultDescription instanceof Expr) {
+            $descriptionArg = $this->createNamedArg('description', $defaultDescription);
             $attributeGroup->attrs[0]->args[] = $descriptionArg;
         }
         return $attributeGroup;
     }
-    private function getValueFromProperty(Property $property) : ?string
-    {
-        if (\count($property->props) !== 1) {
-            return null;
-        }
-        $propertyProperty = $property->props[0];
-        if ($propertyProperty->default instanceof String_) {
-            return $propertyProperty->default->value;
-        }
-        return null;
-    }
-    private function resolveDefaultName(Class_ $class) : ?string
+    private function resolvePropertyExpr(Class_ $class, string $propertyName) : ?Expr
     {
         foreach ($class->stmts as $key => $stmt) {
             if (!$stmt instanceof Property) {
                 continue;
             }
-            if (!$this->isName($stmt, 'defaultName')) {
+            if (!$this->isName($stmt, $propertyName)) {
                 continue;
             }
-            $defaultName = $this->getValueFromProperty($stmt);
-            if ($defaultName !== null) {
+            $defaultExpr = $stmt->props[0]->default;
+            if ($defaultExpr instanceof Expr) {
                 // remove property
                 unset($class->stmts[$key]);
-                return $defaultName;
-            }
-        }
-        return $this->defaultDefaultNameFromAttribute($class);
-    }
-    private function resolveDefaultDescription(Class_ $class) : ?string
-    {
-        foreach ($class->stmts as $key => $stmt) {
-            if (!$stmt instanceof Property) {
-                continue;
-            }
-            if (!$this->isName($stmt, 'defaultDescription')) {
-                continue;
-            }
-            $defaultDescription = $this->getValueFromProperty($stmt);
-            if ($defaultDescription !== null) {
-                unset($class->stmts[$key]);
-                return $defaultDescription;
-            }
-        }
-        return $this->resolveDefaultDescriptionFromAttribute($class);
-    }
-    private function resolveDefaultDescriptionFromAttribute(Class_ $class) : ?string
-    {
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
-            $defaultDescriptionFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 1);
-            if (\is_string($defaultDescriptionFromArgument)) {
-                return $defaultDescriptionFromArgument;
+                return $defaultExpr;
             }
         }
         return null;
@@ -217,17 +168,6 @@ CODE_SAMPLE
             $replacedAsCommandAttribute = \true;
         }
         return $replacedAsCommandAttribute;
-    }
-    private function defaultDefaultNameFromAttribute(Class_ $class) : ?string
-    {
-        if (!$this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
-            return null;
-        }
-        $defaultNameFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 0);
-        if (\is_string($defaultNameFromArgument)) {
-            return $defaultNameFromArgument;
-        }
-        return null;
     }
     private function createNamedArg(string $name, Expr $expr) : Arg
     {

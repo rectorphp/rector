@@ -2414,7 +2414,6 @@ class ComposerStaticInit2971ea952332f12bcefd9fbb21b5c118
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\PropertyAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/PropertyAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\StmtMethodCallMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/StmtMethodCallMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\ClassAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ClassAnalyzer.php',
-        'Rector\\Symfony\\NodeAnalyzer\\Command\\AttributeValueResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Command/AttributeValueResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormAddMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',
