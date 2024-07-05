@@ -156,7 +156,7 @@ CODE_SAMPLE
             }
             $propertyTypes[] = $this->nodeTypeResolver->getNativeType($return->expr);
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
             return [];
         }
         return $propertyTypes;

@@ -93,11 +93,7 @@ CODE_SAMPLE
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if ($returns === []) {
-            // void
-            return null;
-        }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
         // handled by another rule

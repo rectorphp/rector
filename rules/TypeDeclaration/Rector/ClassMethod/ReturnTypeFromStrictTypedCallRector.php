@@ -143,7 +143,7 @@ CODE_SAMPLE
         if ($returnedStrictTypes === []) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $currentScopeReturns)) {
             return null;
         }
         if (\count($returnedStrictTypes) === 1) {

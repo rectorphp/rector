@@ -98,10 +98,10 @@ CODE_SAMPLE
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if (!$this->hasOnlyBooleanConstExprs($returns)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        if (!$this->hasOnlyBooleanConstExprs($returns)) {
             return null;
         }
         $node->returnType = new Identifier('bool');
@@ -127,9 +127,6 @@ CODE_SAMPLE
      */
     private function hasOnlyBooleanConstExprs(array $returns) : bool
     {
-        if ($returns === []) {
-            return \false;
-        }
         foreach ($returns as $return) {
             if (!$return->expr instanceof ConstFetch) {
                 return \false;

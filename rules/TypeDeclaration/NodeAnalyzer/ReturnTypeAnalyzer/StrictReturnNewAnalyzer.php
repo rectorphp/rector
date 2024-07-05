@@ -60,10 +60,7 @@ final class StrictReturnNewAnalyzer
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
-        if ($returns === []) {
-            return null;
-        }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike, $returns)) {
             return null;
         }
         if (\count($returns) !== 1) {

@@ -144,7 +144,8 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
         $returnedNewClassName = $this->strictReturnNewAnalyzer->matchAlwaysReturnVariableNew($node);
@@ -152,7 +153,7 @@ CODE_SAMPLE
             $node->returnType = new FullyQualified($returnedNewClassName);
             return $node;
         }
-        return $this->refactorDirectReturnNew($node);
+        return $this->refactorDirectReturnNew($node, $returns);
     }
     public function provideMinPhpVersion() : int
     {
@@ -191,14 +192,11 @@ CODE_SAMPLE
      * @template TFunctionLike as ClassMethod|Function_
      *
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param Return_[] $returns
      * @return TFunctionLike|null
      */
-    private function refactorDirectReturnNew($functionLike)
+    private function refactorDirectReturnNew($functionLike, array $returns)
     {
-        $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
-        if ($returns === []) {
-            return null;
-        }
         $newTypes = $this->resolveReturnNewType($returns);
         if ($newTypes === null) {
             return null;

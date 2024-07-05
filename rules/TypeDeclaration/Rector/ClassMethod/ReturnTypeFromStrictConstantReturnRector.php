@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -104,13 +105,14 @@ CODE_SAMPLE
         if ($this->hasYield($node)) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
-        $matchedType = $this->matchAlwaysReturnConstFetch($node);
+        $matchedType = $this->matchAlwaysReturnConstFetch($returns);
         if (!$matchedType instanceof Type) {
             return null;
         }
@@ -128,12 +130,11 @@ CODE_SAMPLE
     {
         return PhpVersion::PHP_70;
     }
-    private function matchAlwaysReturnConstFetch(ClassMethod $classMethod) : ?Type
+    /**
+     * @param Return_[] $returns
+     */
+    private function matchAlwaysReturnConstFetch(array $returns) : ?Type
     {
-        $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
-        if ($returns === []) {
-            return null;
-        }
         $classConstFetchTypes = [];
         foreach ($returns as $return) {
             if (!$return->expr instanceof ClassConstFetch) {

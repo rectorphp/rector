@@ -105,7 +105,7 @@ CODE_SAMPLE
         if (\count($returns) !== 1) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
         $return = $returns[0];
