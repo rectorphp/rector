@@ -7,11 +7,19 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ConstantType;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -28,6 +36,10 @@ final class ContinueToBreakInSwitchRector extends AbstractRector implements MinP
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
@@ -78,42 +90,58 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Switch_
     {
-        $hasChanged = \false;
+        $this->hasChanged = \false;
         foreach ($node->cases as $case) {
-            foreach ($case->stmts as $key => $caseStmt) {
-                if (!$caseStmt instanceof Continue_) {
-                    continue;
-                }
-                $newStmt = $this->processContinueStatement($caseStmt);
-                if ($newStmt instanceof Continue_) {
-                    continue;
-                }
-                $case->stmts[$key] = $newStmt;
-                $hasChanged = \true;
-            }
+            $this->processContinueStatement($case);
         }
-        if (!$hasChanged) {
+        if (!$this->hasChanged) {
             return null;
         }
         return $node;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_
+     * @param \PhpParser\Node\Stmt|\Rector\Contract\PhpParser\Node\StmtsAwareInterface $stmt
      */
-    private function processContinueStatement(Continue_ $continue)
+    private function processContinueStatement($stmt) : void
     {
-        if (!$continue->num instanceof Expr) {
-            return new Break_();
+        if ($stmt instanceof Class_ || $stmt instanceof Function_ || $stmt instanceof While_ || $stmt instanceof Do_ || $stmt instanceof Foreach_ || $stmt instanceof For_) {
+            return;
         }
-        if ($continue->num instanceof LNumber) {
-            $continueNumber = $this->valueResolver->getValue($continue->num);
-            if ($continueNumber <= 1) {
-                return new Break_();
+        if (!$stmt instanceof StmtsAwareInterface) {
+            return;
+        }
+        if ($stmt->stmts === null) {
+            return;
+        }
+        foreach ($stmt->stmts as $key => $stmtStmt) {
+            if ($stmtStmt instanceof StmtsAwareInterface) {
+                $this->processContinueStatement($stmtStmt);
+                continue;
             }
-        } elseif ($continue->num instanceof Variable) {
-            return $this->processVariableNum($continue, $continue->num);
+            if (!$stmtStmt instanceof Continue_) {
+                continue;
+            }
+            if (!$stmtStmt->num instanceof Expr) {
+                $this->hasChanged = \true;
+                $stmt->stmts[$key] = new Break_();
+                continue;
+            }
+            if ($stmtStmt->num instanceof LNumber) {
+                $continueNumber = $this->valueResolver->getValue($stmtStmt->num);
+                if ($continueNumber <= 1) {
+                    $this->hasChanged = \true;
+                    $stmt->stmts[$key] = new Break_();
+                    continue;
+                }
+            } elseif ($stmtStmt->num instanceof Variable) {
+                $continue = $this->processVariableNum($stmtStmt, $stmtStmt->num);
+                if ($continue instanceof Continue_) {
+                    continue;
+                }
+                $this->hasChanged = \true;
+                $stmt->stmts[$key] = new Break_();
+            }
         }
-        return $continue;
     }
     /**
      * @return \PhpParser\Node\Stmt\Continue_|\PhpParser\Node\Stmt\Break_
