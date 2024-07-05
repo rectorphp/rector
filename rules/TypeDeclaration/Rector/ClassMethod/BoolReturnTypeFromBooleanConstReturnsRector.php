@@ -14,6 +14,7 @@ use PHPStan\Analyser\Scope;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -39,11 +40,17 @@ final class BoolReturnTypeFromBooleanConstReturnsRector extends AbstractScopeAwa
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
+     */
+    private $returnAnalyzer;
+    public function __construct(ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
     {
         $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnAnalyzer = $returnAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -92,6 +99,9 @@ CODE_SAMPLE
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (!$this->hasOnlyBooleanConstExprs($returns)) {
+            return null;
+        }
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
             return null;
         }
         $node->returnType = new Identifier('bool');

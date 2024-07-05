@@ -21,6 +21,7 @@ use PHPStan\Type\UnionType;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -64,7 +65,12 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractScopeAwareRector
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(TypeNodeUnwrapper $typeNodeUnwrapper, ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, ReturnTypeInferer $returnTypeInferer, BetterNodeFinder $betterNodeFinder, PhpVersionProvider $phpVersionProvider, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
+     */
+    private $returnAnalyzer;
+    public function __construct(TypeNodeUnwrapper $typeNodeUnwrapper, ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, ReturnTypeInferer $returnTypeInferer, BetterNodeFinder $betterNodeFinder, PhpVersionProvider $phpVersionProvider, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
         $this->returnStrictTypeAnalyzer = $returnStrictTypeAnalyzer;
@@ -72,6 +78,7 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractScopeAwareRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnAnalyzer = $returnAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -134,6 +141,9 @@ CODE_SAMPLE
         $currentScopeReturns = $this->betterNodeFinder->findReturnsScoped($node);
         $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($currentScopeReturns, $scope);
         if ($returnedStrictTypes === []) {
+            return null;
+        }
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node)) {
             return null;
         }
         if (\count($returnedStrictTypes) === 1) {
