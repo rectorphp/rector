@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Configs\NodeVisitor;
 
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Expr\Array_;
 use RectorPrefix202407\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;

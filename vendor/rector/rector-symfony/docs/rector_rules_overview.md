@@ -1,4 +1,4 @@
-# 83 Rules Overview
+# 84 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1065,6 +1065,34 @@ Turns old option names to new ones in FormTypes in Form in Symfony
  $builder = new FormBuilder;
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
+```
+
+<br>
+
+## ParamAndEnvAttributeRector
+
+Make param/env use in #[Attribute] more precise
+
+- class: [`Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector`](../rules/Symfony63/Rector/Class_/ParamAndEnvAttributeRector.php)
+
+```diff
+ namespace App\Service;
+
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+ class MessageGenerator
+ {
+     public function __construct(
+-        #[Autowire('%kernel.debug%')]
++        #[Autowire(param: 'kernel.debug')]
+         bool $debugMode,
+
+-        #[Autowire('%env(SOME_ENV_VAR)%')]
++        #[Autowire(env: 'SOME_ENV_VAR')]
+         string $senderName,
+     ) {
+     }
+ }
 ```
 
 <br>

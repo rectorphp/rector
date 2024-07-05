@@ -5,6 +5,7 @@ namespace RectorPrefix202407;
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 use Rector\Symfony\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector;
 // @see https://github.com/symfony/symfony/blob/6.3/UPGRADE-6.3.md
 // @see \Rector\Symfony\Tests\Set\Symfony63\Symfony63Test
@@ -20,6 +21,10 @@ return static function (RectorConfig $rectorConfig) : void {
         'Symfony\\Component\\Messenger\\Transport\\InMemoryTransport' => 'Symfony\\Component\\Messenger\\Transport\\InMemory\\InMemoryTransport',
         'Symfony\\Component\\Messenger\\Transport\\InMemoryTransportFactory' => 'Symfony\\Component\\Messenger\\Transport\\InMemory\\InMemoryTransportFactory',
     ]);
-    // @see https://github.com/symfony/symfony/commit/1650e3861b5fcd931e5d3eb1dd84bad764020d8e
-    $rectorConfig->rule(SignalableCommandInterfaceReturnTypeRector::class);
+    $rectorConfig->rules([
+        // @see https://github.com/symfony/symfony/commit/1650e3861b5fcd931e5d3eb1dd84bad764020d8e
+        SignalableCommandInterfaceReturnTypeRector::class,
+        // @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
+        ParamAndEnvAttributeRector::class,
+    ]);
 };
