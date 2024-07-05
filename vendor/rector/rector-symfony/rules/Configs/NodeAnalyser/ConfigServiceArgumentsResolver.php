@@ -16,10 +16,12 @@ final class ConfigServiceArgumentsResolver
      */
     private $namedSimplePhpParser;
     /**
+     * @readonly
      * @var \PhpParser\NodeTraverser
      */
     private $nodeTraverser;
     /**
+     * @readonly
      * @var \Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor
      */
     private $collectServiceArgumentsNodeVisitor;

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Configs\Rector\Class_;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -160,9 +161,15 @@ CODE_SAMPLE
         }
         return \iterator_to_array($phpConfigsFinder->getIterator());
     }
-    private function createAutowireAttribute(string $value, string $argName) : Attribute
+    /**
+     * @param string|\PhpParser\Node\Expr $value
+     */
+    private function createAutowireAttribute($value, string $argName) : Attribute
     {
-        $args = [new Arg(new String_($value), \false, \false, [], new Identifier($argName))];
+        if (\is_string($value)) {
+            $value = new String_($value);
+        }
+        $args = [new Arg($value, \false, \false, [], new Identifier($argName))];
         return new Attribute(new FullyQualified(self::AUTOWIRE_CLASS), $args);
     }
 }

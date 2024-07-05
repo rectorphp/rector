@@ -11,6 +11,7 @@ use PhpParser\ParserFactory;
 final class NamedSimplePhpParser
 {
     /**
+     * @readonly
      * @var \PhpParser\Parser
      */
     private $phpParser;
