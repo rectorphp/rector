@@ -68,16 +68,13 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
     public function inferFunctionLike($functionLike) : Type
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
-        if (!$classReflection instanceof ClassReflection) {
-            return new MixedType();
-        }
-        if ($functionLike instanceof ClassMethod && $classReflection->isInterface()) {
+        if ($functionLike instanceof ClassMethod && (!$classReflection instanceof ClassReflection || $classReflection->isInterface())) {
             return new MixedType();
         }
         $types = [];
         $localReturnNodes = $this->betterNodeFinder->findReturnsScoped($functionLike);
         if ($localReturnNodes === []) {
-            return $this->resolveNoLocalReturnNodes($classReflection, $functionLike);
+            return $this->resolveNoLocalReturnNodes($functionLike, $classReflection);
         }
         foreach ($localReturnNodes as $localReturnNode) {
             $returnedExprType = $localReturnNode->expr instanceof Expr ? $this->nodeTypeResolver->getNativeType($localReturnNode->expr) : new VoidType();
@@ -91,18 +88,21 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
     /**
      * @return \PHPStan\Type\VoidType|\PHPStan\Type\MixedType
      */
-    private function resolveNoLocalReturnNodes(ClassReflection $classReflection, FunctionLike $functionLike)
+    private function resolveNoLocalReturnNodes(FunctionLike $functionLike, ?ClassReflection $classReflection)
     {
         // void type
-        if (!$this->isAbstractMethod($classReflection, $functionLike)) {
+        if (!$this->isAbstractMethod($functionLike, $classReflection)) {
             return new VoidType();
         }
         return new MixedType();
     }
-    private function isAbstractMethod(ClassReflection $classReflection, FunctionLike $functionLike) : bool
+    private function isAbstractMethod(FunctionLike $functionLike, ?ClassReflection $classReflection) : bool
     {
         if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
             return \true;
+        }
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
         }
         if (!$classReflection->isClass()) {
             return \false;
