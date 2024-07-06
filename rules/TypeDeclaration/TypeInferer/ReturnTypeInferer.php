@@ -5,7 +5,6 @@ namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
@@ -139,14 +138,11 @@ final class ReturnTypeInferer
         return new MixedType();
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveTypeWithVoidHandling($functionLike, Type $resolvedType) : Type
     {
         if ($resolvedType->isVoid()->yes()) {
-            if ($functionLike instanceof ArrowFunction) {
-                return new MixedType();
-            }
             $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static function (Node $subNode) : bool {
                 if (!$subNode instanceof Return_) {
                     // yield return is handled on speicific rule: AddReturnTypeDeclarationFromYieldsRector
@@ -167,7 +163,7 @@ final class ReturnTypeInferer
         return $resolvedType;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveBenevolentUnionTypeInteger($functionLike, UnionType $unionType) : Type
     {
@@ -179,15 +175,10 @@ final class ReturnTypeInferer
         if (!($types[0]->isInteger()->yes() && $types[1]->isString()->yes())) {
             return $unionType;
         }
-        if (!$functionLike instanceof ArrowFunction) {
-            $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
-            $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
-                return $return->expr instanceof Expr;
-            });
-        } else {
-            $returns = $functionLike->getStmts();
-            $returnsWithExpr = $returns;
-        }
+        $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
+        $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
+            return $return->expr instanceof Expr;
+        });
         if ($returns !== $returnsWithExpr) {
             return $unionType;
         }
