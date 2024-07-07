@@ -261,8 +261,8 @@ CODE_SAMPLE
     private function shouldSkipParams(array $params) : bool
     {
         foreach ($params as $param) {
-            // has non-property promotion, skip
-            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY)) {
+            // has non-readonly property promotion
+            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY) && $param->flags !== 0) {
                 return \true;
             }
             // type is missing, invalid syntax
