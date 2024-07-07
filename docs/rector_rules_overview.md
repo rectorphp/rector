@@ -1,4 +1,4 @@
-# 380 Rules Overview
+# 379 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (56)
+- [TypeDeclaration](#typedeclaration) (55)
 
 - [Visibility](#visibility) (3)
 
@@ -4092,7 +4092,7 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
 -        $value = 5 + '';
 -        $value = 5.0 + 'hi';
 +        $value = 5 + 0;
-+        $value = 5.0 + 0;
++        $value = 5.0 + 0.0;
      }
  }
 ```
@@ -5371,7 +5371,7 @@ Add override attribute to overridden methods
 
 ### AddTypeToConstRector
 
-Add type to constants
+Add type to constants based on their value
 
 - class: [`Rector\Php83\Rector\ClassConst\AddTypeToConstRector`](../rules/Php83/Rector/ClassConst/AddTypeToConstRector.php)
 
@@ -7147,25 +7147,6 @@ Add return type to function like with return new
 +    public function action(): Response
      {
          return new Response();
-     }
- }
-```
-
-<br>
-
-### ReturnTypeFromStrictBoolReturnExprRector
-
-Add strict return type based on returned strict expr type
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictBoolReturnExprRector.php)
-
-```diff
- final class SomeClass
- {
--    public function run()
-+    public function run(): bool
-     {
-         return $this->first() && $this->somethingElse();
      }
  }
 ```
