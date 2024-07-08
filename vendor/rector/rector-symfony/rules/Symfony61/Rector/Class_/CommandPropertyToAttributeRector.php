@@ -9,11 +9,11 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -22,6 +22,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix202407\Webmozart\Assert\Assert;
 /**
  * @changelog https://symfony.com/doc/current/console.html#registering-the-command
  *
@@ -39,10 +40,16 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
+     */
+    private $attributeFinder;
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider, AttributeFinder $attributeFinder)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->attributeFinder = $attributeFinder;
     }
     public function provideMinPhpVersion() : int
     {
@@ -57,7 +64,7 @@ final class SunshineCommand extends Command
 {
     public static $defaultName = 'sunshine';
 
-    public static $defaultDescription = 'Ssome description';
+    public static $defaultDescription = 'some description';
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -95,18 +102,24 @@ CODE_SAMPLE
             return null;
         }
         $defaultDescriptionExpr = $this->resolvePropertyExpr($node, 'defaultDescription');
-        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultNameExpr, $defaultDescriptionExpr));
-    }
-    private function createAttributeGroupAsCommand(Expr $defaultNameExpr, ?Expr $defaultDescription) : AttributeGroup
-    {
-        // name is always required to add
-        $nameArg = $this->createNamedArg('name', $defaultNameExpr);
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
-        $attributeGroup->attrs[0]->args[] = $nameArg;
-        if ($defaultDescription instanceof Expr) {
-            $descriptionArg = $this->createNamedArg('description', $defaultDescription);
-            $attributeGroup->attrs[0]->args[] = $descriptionArg;
+        $existingAsCommandAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAnnotation::AS_COMMAND);
+        $attributeArgs = $this->createAttributeArgs($defaultNameExpr, $defaultDescriptionExpr);
+        // already has attribute, only add "name" and optionally "description"
+        if ($existingAsCommandAttribute instanceof Attribute) {
+            $existingAsCommandAttribute->args = \array_merge($attributeArgs, $existingAsCommandAttribute->args);
+            return $node;
         }
+        $node->attrGroups[] = $this->createAttributeGroupAsCommand($attributeArgs);
+        return $node;
+    }
+    /**
+     * @param Arg[] $args
+     */
+    private function createAttributeGroupAsCommand(array $args) : AttributeGroup
+    {
+        Assert::allIsInstanceOf($args, Arg::class);
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        $attributeGroup->attrs[0]->args = $args;
         return $attributeGroup;
     }
     private function resolvePropertyExpr(Class_ $class, string $propertyName) : ?Expr
@@ -127,50 +140,21 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function replaceAsCommandAttribute(Class_ $class, AttributeGroup $createAttributeGroup) : ?Class_
-    {
-        $hasAsCommandAttribute = \false;
-        $replacedAsCommandAttribute = \false;
-        foreach ($class->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isName($attribute->name, SymfonyAnnotation::AS_COMMAND)) {
-                    $hasAsCommandAttribute = \true;
-                    $replacedAsCommandAttribute = $this->replaceArguments($attribute, $createAttributeGroup);
-                }
-            }
-        }
-        if ($hasAsCommandAttribute === \false) {
-            $class->attrGroups[] = $createAttributeGroup;
-            $replacedAsCommandAttribute = \true;
-        }
-        if ($replacedAsCommandAttribute === \false) {
-            return null;
-        }
-        return $class;
-    }
-    private function replaceArguments(Attribute $attribute, AttributeGroup $createAttributeGroup) : bool
-    {
-        $replacedAsCommandAttribute = \false;
-        if (!$attribute->args[0]->value instanceof String_) {
-            $attribute->args[0] = $createAttributeGroup->attrs[0]->args[0];
-            $replacedAsCommandAttribute = \true;
-        }
-        if (!isset($attribute->args[1]) && isset($createAttributeGroup->attrs[0]->args[1])) {
-            $attribute->args[1] = $createAttributeGroup->attrs[0]->args[1];
-            $replacedAsCommandAttribute = \true;
-        }
-        if (!isset($attribute->args[2]) && isset($createAttributeGroup->attrs[0]->args[2])) {
-            $attribute->args[2] = $createAttributeGroup->attrs[0]->args[2];
-            $replacedAsCommandAttribute = \true;
-        }
-        if (!isset($attribute->args[3]) && isset($createAttributeGroup->attrs[0]->args[3])) {
-            $attribute->args[3] = $createAttributeGroup->attrs[0]->args[3];
-            $replacedAsCommandAttribute = \true;
-        }
-        return $replacedAsCommandAttribute;
-    }
     private function createNamedArg(string $name, Expr $expr) : Arg
     {
         return new Arg($expr, \false, \false, [], new Identifier($name));
+    }
+    /**
+     * @return Arg[]
+     */
+    private function createAttributeArgs(Expr $defaultNameExpr, ?Expr $defaultDescriptionExpr) : array
+    {
+        // already has the attribute, add description and name to the front
+        $attributeArgs = [];
+        $attributeArgs[] = $this->createNamedArg('name', $defaultNameExpr);
+        if ($defaultDescriptionExpr instanceof Expr) {
+            $attributeArgs[] = $this->createNamedArg('description', $defaultDescriptionExpr);
+        }
+        return $attributeArgs;
     }
 }
