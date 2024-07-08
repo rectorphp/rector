@@ -1186,6 +1186,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentImplodeRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ConsistentImplodeRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CountArrayToEmptyArrayComparisonRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php',
+    'Rector\\CodingStyle\\Rector\\FuncCall\\FunctionFirstClassCallableRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
     'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => $baseDir . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',

@@ -1405,6 +1405,7 @@ class ComposerStaticInit2971ea952332f12bcefd9fbb21b5c118
         'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentImplodeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/ConsistentImplodeRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CountArrayToEmptyArrayComparisonRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php',
+        'Rector\\CodingStyle\\Rector\\FuncCall\\FunctionFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
         'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
