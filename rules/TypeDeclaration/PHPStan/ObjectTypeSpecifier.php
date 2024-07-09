@@ -57,6 +57,16 @@ final class ObjectTypeSpecifier
         if ($this->reflectionProvider->hasClass($className)) {
             return new FullyQualifiedObjectType($className);
         }
+        // probably in same namespace
+        if ($scope instanceof Scope) {
+            $namespaceName = $scope->getNamespace();
+            if ($namespaceName !== null) {
+                $newClassName = $namespaceName . '\\' . $className;
+                if ($this->reflectionProvider->hasClass($newClassName)) {
+                    return new FullyQualifiedObjectType($newClassName);
+                }
+            }
+        }
         // invalid type
         return new NonExistingObjectType($className);
     }
