@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -14,7 +15,6 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -48,22 +48,18 @@ final class CallTypesResolver
         $this->typeComparator = $typeComparator;
     }
     /**
-     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
+     * @param MethodCall[]|StaticCall[] $calls
      * @return array<int, Type>
      */
     public function resolveStrictTypesFromCalls(array $calls) : array
     {
         $staticTypesByArgumentPosition = [];
         foreach ($calls as $call) {
-            if (!$call instanceof StaticCall && !$call instanceof MethodCall) {
-                continue;
-            }
             foreach ($call->args as $position => $arg) {
-                if (!$arg instanceof Arg) {
-                    continue;
-                }
-                if ($arg->unpack) {
-                    continue;
+                // there is first class callable usage, or argument unpack, or named arg
+                // simply returns array marks as unknown as can be anything and in any position
+                if (!$arg instanceof Arg || $arg->unpack || $arg->name instanceof Identifier) {
+                    return [];
                 }
                 $staticTypesByArgumentPosition[$position][] = $this->resolveStrictArgValueType($arg);
             }
