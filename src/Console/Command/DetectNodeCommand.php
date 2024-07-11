@@ -34,7 +34,7 @@ final class DetectNodeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $this->symfonyStyle->warning('This rule is deprecated as too sensitive on correct output and unable to click through.
- Use dynamic, sharedable online version https://getrector.com/ast instead.');
+ Use dynamic, shareable online version https://getrector.com/ast instead.');
         return self::SUCCESS;
     }
 }
