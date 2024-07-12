@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
@@ -43,9 +42,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?MethodCall
     {
-        if (!$node->var instanceof Variable) {
-            return null;
-        }
         if (!$node->dim instanceof Node) {
             return null;
         }
