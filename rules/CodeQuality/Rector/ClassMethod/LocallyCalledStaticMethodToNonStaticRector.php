@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -117,7 +119,33 @@ CODE_SAMPLE
         }
         // replace all the calls
         $classMethodName = $this->getName($classMethod);
-        $this->traverseNodesWithCallable($class, function (Node $node) use($classMethodName) : ?MethodCall {
+        $shouldSkip = \false;
+        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use(&$shouldSkip, $classMethodName) : ?int {
+            if (($node instanceof Closure || $node instanceof ArrowFunction) && $node->static) {
+                $this->traverseNodesWithCallable($node->getStmts(), function (Node $subNode) use(&$shouldSkip, $classMethodName) : ?int {
+                    if (!$subNode instanceof StaticCall) {
+                        return null;
+                    }
+                    if (!$this->isNames($subNode->class, ['self', 'static'])) {
+                        return null;
+                    }
+                    if (!$this->isName($subNode->name, $classMethodName)) {
+                        return null;
+                    }
+                    $shouldSkip = \true;
+                    return NodeTraverser::STOP_TRAVERSAL;
+                });
+                if ($shouldSkip) {
+                    return NodeTraverser::STOP_TRAVERSAL;
+                }
+                return null;
+            }
+            return null;
+        });
+        if ($shouldSkip) {
+            return null;
+        }
+        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use($classMethodName) : ?MethodCall {
             if (!$node instanceof StaticCall) {
                 return null;
             }
