@@ -39,6 +39,8 @@ final class SetList implements SetListInterface
      */
     public const NAMING = __DIR__ . '/../../../config/set/naming.php';
     /**
+     * Opinionated rules that match rector coding standard
+     *
      * @var string
      */
     public const RECTOR_PRESET = __DIR__ . '/../../../config/set/rector-preset.php';
