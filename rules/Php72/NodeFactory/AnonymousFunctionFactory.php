@@ -261,7 +261,7 @@ final class AnonymousFunctionFactory
         if (!$paramDefaultExpr instanceof Expr) {
             return null;
         }
-        return $this->nodeFactory->createReprintedExpr($paramDefaultExpr);
+        return $this->nodeFactory->createReprintedNode($paramDefaultExpr);
     }
     /**
      * @param Param[] $params

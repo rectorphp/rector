@@ -72,10 +72,14 @@ class VersionParser
      * @param string $stability
      *
      * @return string
+     * @phpstan-return 'stable'|'RC'|'beta'|'alpha'|'dev'
      */
     public static function normalizeStability($stability)
     {
         $stability = \strtolower((string) $stability);
+        if (!\in_array($stability, ['stable', 'rc', 'beta', 'alpha', 'dev'], \true)) {
+            throw new \InvalidArgumentException('Invalid stability string "' . $stability . '", expected one of stable, RC, beta, alpha or dev');
+        }
         return $stability === 'rc' ? 'RC' : $stability;
     }
     /**

@@ -318,15 +318,24 @@ final class NodeFactory
         }
         return $this->createBooleanAndFromNodes($newNodes);
     }
-    public function createReprintedExpr(Expr $expr) : Expr
+    /**
+     * Setting all child nodes to null is needed to avoid reprint of invalid tokens
+     * @see https://github.com/rectorphp/rector/issues/8712
+     *
+     * @template TNode as Node
+     *
+     * @param TNode $node
+     * @return TNode
+     */
+    public function createReprintedNode(Node $node) : Node
     {
-        // reset original node, to allow the printer to re-use the expr
-        $expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($expr, static function (Node $node) : Node {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return $node;
+        // reset original node, to allow the printer to re-use the node
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, static function (Node $subNode) : Node {
+            $subNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $subNode;
         });
-        return $expr;
+        return $node;
     }
     /**
      * @param string|int|null $key

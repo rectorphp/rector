@@ -199,7 +199,7 @@ CODE_SAMPLE
             }
             $paramDefault = $parentClassMethodParam->default;
             if ($paramDefault instanceof Expr) {
-                $paramDefault = $this->nodeFactory->createReprintedExpr($paramDefault);
+                $paramDefault = $this->nodeFactory->createReprintedNode($paramDefault);
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
@@ -219,9 +219,7 @@ CODE_SAMPLE
         if ($param->type === null) {
             return null;
         }
-        $paramType = $param->type;
-        $paramType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        return $paramType;
+        return $this->nodeFactory->createReprintedNode($param->type);
     }
     /**
      * @return string[]
