@@ -72,7 +72,7 @@ CODE_SAMPLE
     {
         $leftValue = $leftString->value;
         $rightValue = $rightString->value;
-        if ($leftValue === "\n" || $rightValue === "\n") {
+        if (\strpos($leftValue, "\n") !== \false || \strpos($rightValue, "\n") !== \false) {
             return null;
         }
         $joinedStringValue = $leftValue . $rightValue;
