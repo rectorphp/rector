@@ -116,22 +116,8 @@ final class ReflectionResolver
             if ($property->isPrivate()) {
                 return $classReflection;
             }
-            $nativeReflection = $classReflection->getNativeReflection();
-            $properties = $nativeReflection->getProperties();
-            // no need to lookup properties on interfaces
-            $ancestors = $classReflection->getParents();
-            foreach ($properties as $property) {
-                if ($property->getName() !== $propertyName) {
-                    continue;
-                }
-                if ($property->getDeclaringClass()->getName() === $className) {
-                    return $classReflection;
-                }
-                foreach ($ancestors as $ancestor) {
-                    if ($ancestor->hasNativeProperty($propertyName)) {
-                        return $ancestor;
-                    }
-                }
+            if ($this->reflectionProvider->hasClass($property->getDeclaringClass()->getName())) {
+                return $this->reflectionProvider->getClass($property->getDeclaringClass()->getName());
             }
             return $classReflection;
         }
@@ -143,21 +129,8 @@ final class ReflectionResolver
         if ($extendedMethodReflection->isPrivate()) {
             return $classReflection;
         }
-        $nativeReflection = $classReflection->getNativeReflection();
-        $methods = $nativeReflection->getMethods();
-        $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($methods as $method) {
-            if ($method->getName() !== $methodName) {
-                continue;
-            }
-            if ($method->getDeclaringClass()->getName() === $className) {
-                return $classReflection;
-            }
-            foreach ($ancestors as $ancestor) {
-                if ($ancestor->hasNativeMethod($methodName)) {
-                    return $ancestor;
-                }
-            }
+        if ($this->reflectionProvider->hasClass($extendedMethodReflection->getDeclaringClass()->getName())) {
+            return $this->reflectionProvider->getClass($extendedMethodReflection->getDeclaringClass()->getName());
         }
         return $classReflection;
     }
