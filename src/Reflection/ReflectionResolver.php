@@ -30,7 +30,6 @@ use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\AstResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\ValueObject\MethodName;
 final class ReflectionResolver
@@ -60,19 +59,13 @@ final class ReflectionResolver
      * @var \Rector\Reflection\MethodReflectionResolver
      */
     private $methodReflectionResolver;
-    /**
-     * @readonly
-     * @var \Rector\PhpParser\AstResolver
-     */
-    private $astResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, \Rector\Reflection\MethodReflectionResolver $methodReflectionResolver, AstResolver $astResolver)
+    public function __construct(ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, \Rector\Reflection\MethodReflectionResolver $methodReflectionResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
         $this->methodReflectionResolver = $methodReflectionResolver;
-        $this->astResolver = $astResolver;
     }
     /**
      * @api
@@ -105,19 +98,67 @@ final class ReflectionResolver
      */
     public function resolveClassReflectionSourceObject($node) : ?ClassReflection
     {
-        if ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) {
-            $objectType = $node instanceof PropertyFetch ? $this->nodeTypeResolver->getType($node->var) : $this->nodeTypeResolver->getType($node->class);
-            if (!$objectType instanceof TypeWithClassName) {
-                return null;
-            }
-            $className = $objectType->getClassName();
-            if (!$this->reflectionProvider->hasClass($className)) {
-                return null;
-            }
-            return $this->reflectionProvider->getClass($className);
+        $objectType = $node instanceof StaticCall || $node instanceof StaticPropertyFetch ? $this->nodeTypeResolver->getType($node->class) : $this->nodeTypeResolver->getType($node->var);
+        if (!$objectType instanceof TypeWithClassName) {
+            return null;
         }
-        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-        return $this->resolveClassReflection($classMethod);
+        $className = $objectType->getClassName();
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) {
+            $propertyName = (string) $this->nodeNameResolver->getName($node->name);
+            if (!$classReflection->hasNativeProperty($propertyName)) {
+                return null;
+            }
+            $property = $classReflection->getNativeProperty($propertyName);
+            if ($property->isPrivate()) {
+                return $classReflection;
+            }
+            $nativeReflection = $classReflection->getNativeReflection();
+            $properties = $nativeReflection->getProperties();
+            $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+            foreach ($properties as $property) {
+                if ($property->getName() !== $propertyName) {
+                    continue;
+                }
+                if ($property->getDeclaringClass()->getName() === $className) {
+                    return $classReflection;
+                }
+                foreach ($ancestors as $ancestor) {
+                    if ($ancestor->hasNativeProperty($propertyName)) {
+                        return $ancestor;
+                    }
+                }
+            }
+            return $classReflection;
+        }
+        $methodName = (string) $this->nodeNameResolver->getName($node->name);
+        if (!$classReflection->hasNativeMethod($methodName)) {
+            return null;
+        }
+        $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
+        if ($extendedMethodReflection->isPrivate()) {
+            return $classReflection;
+        }
+        $nativeReflection = $classReflection->getNativeReflection();
+        $methods = $nativeReflection->getMethods();
+        $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($methods as $method) {
+            if ($method->getName() !== $methodName) {
+                continue;
+            }
+            if ($method->getDeclaringClass()->getName() === $className) {
+                return $classReflection;
+            }
+            foreach ($ancestors as $ancestor) {
+                if ($ancestor->hasNativeMethod($methodName)) {
+                    return $ancestor;
+                }
+            }
+        }
+        return $classReflection;
     }
     /**
      * @param class-string $className
