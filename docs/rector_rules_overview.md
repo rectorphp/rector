@@ -1,4 +1,4 @@
-# 379 Rules Overview
+# 380 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodeQuality](#codequality) (69)
 
-- [CodingStyle](#codingstyle) (28)
+- [CodingStyle](#codingstyle) (29)
 
 - [DeadCode](#deadcode) (45)
 
@@ -1764,6 +1764,25 @@ Refactor `func_get_args()` in to a variadic param
 +function run(...$args)
  {
 -    $args = \func_get_args();
+ }
+```
+
+<br>
+
+### FunctionFirstClassCallableRector
+
+Upgrade string callback functions to first class callable
+
+- class: [`Rector\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector`](../rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run(array $data)
+     {
+-        return array_map('trim', $data);
++        return array_map(trim(...), $data);
+     }
  }
 ```
 
