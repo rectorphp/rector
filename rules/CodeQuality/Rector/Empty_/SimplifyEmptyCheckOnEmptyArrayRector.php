@@ -125,7 +125,7 @@ CODE_SAMPLE
         if (!$expr->name instanceof Identifier) {
             return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
+        $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($expr);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
