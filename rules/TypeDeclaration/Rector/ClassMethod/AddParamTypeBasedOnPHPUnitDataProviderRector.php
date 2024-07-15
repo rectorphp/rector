@@ -307,6 +307,9 @@ CODE_SAMPLE
             if ($param->type instanceof Node) {
                 continue;
             }
+            if ($param->variadic) {
+                continue;
+            }
             $paramTypes = [];
             foreach ($dataProviderNodes as $dataProviderNode) {
                 $paramTypes[] = $this->inferParam($class, $parameterPosition, $dataProviderNode);
