@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -137,7 +138,7 @@ CODE_SAMPLE
     {
         $classConstFetchTypes = [];
         foreach ($returns as $return) {
-            if (!$return->expr instanceof ClassConstFetch) {
+            if (!$return->expr instanceof ClassConstFetch && !$return->expr instanceof ConstFetch) {
                 return null;
             }
             $classConstFetchTypes[] = $this->nodeTypeResolver->getType($return->expr);
