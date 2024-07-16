@@ -98,7 +98,7 @@ CODE_SAMPLE
             if (!$return->expr instanceof Expr) {
                 return null;
             }
-            $exprType = $this->nodeTypeResolver->getType($return->expr);
+            $exprType = $this->nodeTypeResolver->getNativeType($return->expr);
             if (!$exprType->isInteger()->yes()) {
                 $isAlwaysIntType = \false;
             }
