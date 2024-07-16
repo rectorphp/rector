@@ -4,21 +4,19 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Guard\ParamTypeAddGuard;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
@@ -49,12 +47,30 @@ final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(CallerParamMatcher $callerParamMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
+     */
+    private $phpParserNodeMapper;
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
+    public function __construct(CallerParamMatcher $callerParamMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard, BetterNodeFinder $betterNodeFinder, PhpParserNodeMapper $phpParserNodeMapper, StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->paramTypeAddGuard = $paramTypeAddGuard;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpParserNodeMapper = $phpParserNodeMapper;
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->typeFactory = $typeFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -138,20 +154,6 @@ CODE_SAMPLE
         }
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
-    /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType $paramType
-     */
-    private function mirrorParamType(Param $decoratedParam, $paramType) : void
-    {
-        // mimic type
-        $newParamType = $paramType;
-        $this->traverseNodesWithCallable($newParamType, static function (Node $node) {
-            // original node has to removed to avoid tokens crashing from origin positions
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return null;
-        });
-        $decoratedParam->type = $newParamType;
-    }
     private function shouldSkipParam(Param $param, ClassMethod $classMethod) : bool
     {
         // already has type, skip
@@ -173,13 +175,23 @@ CODE_SAMPLE
             if ($this->shouldSkipParam($param, $classMethod)) {
                 continue;
             }
+            $paramTypes = [];
             foreach ($callers as $caller) {
                 $paramType = $this->callerParamMatcher->matchCallParamType($caller, $param, $scope);
                 if ($paramType === null) {
-                    continue;
+                    $paramTypes = [];
+                    break;
                 }
-                $this->mirrorParamType($param, $paramType);
+                $paramTypes[] = $this->phpParserNodeMapper->mapToPHPStanType($paramType);
                 $hasChanged = \true;
+            }
+            if ($paramTypes === []) {
+                continue;
+            }
+            $type = $this->typeFactory->createMixedPassedOrUnionType($paramTypes);
+            $paramNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
+            if ($paramNodeType instanceof Node) {
+                $param->type = $paramNodeType;
             }
         }
         return $hasChanged;
