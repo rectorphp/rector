@@ -57,13 +57,14 @@ final class CallerParamMatcher
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType
+     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall
      */
     public function matchCallParamType($call, Param $param, Scope $scope)
     {
         $callParam = $this->matchCallParam($call, $param, $scope);
+        // just return caller, it means the caller is nothing to do with param
         if (!$callParam instanceof Param) {
-            return null;
+            return $call;
         }
         if (!$param->default instanceof Expr && !$callParam->default instanceof Expr) {
             // skip as mixed is not helpful and possibly requires more precise change elsewhere
