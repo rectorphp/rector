@@ -56,25 +56,19 @@ final class CallerParamMatcher
         $this->typeComparator = $typeComparator;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall
+     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType
      */
-    public function matchCallParamType($call, Param $param, Scope $scope)
+    public function matchCallParamType(Param $param, Param $callParam)
     {
-        $callParam = $this->matchCallParam($call, $param, $scope);
-        // just return caller, it means the caller is nothing to do with param
-        if (!$callParam instanceof Param) {
-            return $call;
+        if (!$callParam->type instanceof Node) {
+            return null;
         }
         if (!$param->default instanceof Expr && !$callParam->default instanceof Expr) {
             // skip as mixed is not helpful and possibly requires more precise change elsewhere
-            if ($this->isCallParamMixed($callParam)) {
+            if ($this->isCallParamMixed($callParam->type)) {
                 return null;
             }
             return $callParam->type;
-        }
-        if (!$callParam->type instanceof Node) {
-            return null;
         }
         $default = $param->default ?? $callParam->default;
         if (!$default instanceof Expr) {
@@ -115,7 +109,7 @@ final class CallerParamMatcher
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function matchCallParam($call, Param $param, Scope $scope) : ?Param
+    public function matchCallParam($call, Param $param, Scope $scope) : ?Param
     {
         $callArgPosition = $this->matchCallArgPosition($call, $param);
         if ($callArgPosition === null) {
@@ -165,12 +159,9 @@ final class CallerParamMatcher
         }
         return null;
     }
-    private function isCallParamMixed(Param $param) : bool
+    private function isCallParamMixed(Node $node) : bool
     {
-        if (!$param->type instanceof Node) {
-            return \false;
-        }
-        $callParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $callParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
         return $callParamType instanceof MixedType;
     }
 }
