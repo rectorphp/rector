@@ -131,7 +131,9 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
             // parent outside the class, e.g. in a function
             return new MixedType();
         }
-        /** @var ClassReflection $classReflection */
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return new MixedType();
+        }
         $classReflection = $this->reflectionProvider->getClass($className);
         $parentClassReflection = $classReflection->getParentClass();
         if (!$parentClassReflection instanceof ClassReflection) {
@@ -149,7 +151,9 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
             // static outside the class, e.g. in a function
             return new MixedType();
         }
-        /** @var ClassReflection $classReflection */
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return new MixedType();
+        }
         $classReflection = $this->reflectionProvider->getClass($className);
         return new StaticType($classReflection);
     }
