@@ -85,6 +85,9 @@ CODE_SAMPLE
             if ($param->type instanceof Node) {
                 continue;
             }
+            if ($param->variadic) {
+                continue;
+            }
             if ($param->default instanceof Expr && !$this->getType($param->default)->isArray()->yes()) {
                 continue;
             }
