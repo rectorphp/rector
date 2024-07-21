@@ -1,4 +1,4 @@
-# 380 Rules Overview
+# 381 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (55)
+- [TypeDeclaration](#typedeclaration) (56)
 
 - [Visibility](#visibility) (3)
 
@@ -7104,6 +7104,26 @@ Add basic ? nullable type to class methods and functions, as of PHP 7.1
          }
 
          return 100;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromMockObjectRector
+
+Add known property and return MockObject types
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromMockObjectRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromMockObjectRector.php)
+
+```diff
+ class SomeTest extends TestCase
+ {
+-    public function test()
++    public function test(): \PHPUnit\Framework\MockObject\MockObject
+     {
+         $someMock = $this->createMock(SomeClass::class);
+         return $someMock;
      }
  }
 ```

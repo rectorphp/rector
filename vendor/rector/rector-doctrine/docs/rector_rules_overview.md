@@ -111,10 +111,10 @@ Replace EventSubscriberInterface with AsDoctrineListener attribute(s)
 +use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
  use Doctrine\ORM\Event\PrePersistEventArgs;
  use Doctrine\ORM\Event\PostUpdateEventArgs;
--use Doctrine\Common\EventSubscriber;
+-use Doctrine\Common\EventSubscriberInterface;
  use Doctrine\ORM\Events;
 
--class MyEventSubscriber implements EventSubscriber
+-class MyEventSubscriber implements EventSubscriberInterface
 +#[AsDoctrineListener(event: Events::postUpdate)]
 +#[AsDoctrineListener(event: Events::prePersist)]
 +class MyEventSubscriber

@@ -2431,6 +2431,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamTypeByParentCallTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByParentCallTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNeverTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNullableTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNullableTypeRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromMockObjectRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromMockObjectRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnCastRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnCastRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnDirectArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnDirectArrayRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnNewRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnNewRector.php',
