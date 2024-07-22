@@ -14,6 +14,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -35,6 +36,11 @@ final class ReturnTypeFromMockObjectRector extends AbstractScopeAwareRector impl
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
+     */
+    private $returnAnalyzer;
+    /**
      * @var string
      */
     private const TESTCASE_CLASS = 'PHPUnit\\Framework\\TestCase';
@@ -42,10 +48,11 @@ final class ReturnTypeFromMockObjectRector extends AbstractScopeAwareRector impl
      * @var string
      */
     private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
-    public function __construct(BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnAnalyzer = $returnAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -95,11 +102,12 @@ CODE_SAMPLE
         if (\count($returns) !== 1) {
             return null;
         }
-        $soleReturn = $returns[0];
-        if (!$soleReturn->expr instanceof Expr) {
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
-        $returnType = $this->getType($soleReturn->expr);
+        /** @var Expr $expr */
+        $expr = $returns[0]->expr;
+        $returnType = $this->nodeTypeResolver->getNativeType($expr);
         if (!$this->isMockObjectType($returnType)) {
             return null;
         }
