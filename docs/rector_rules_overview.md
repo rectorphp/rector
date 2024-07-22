@@ -7119,8 +7119,8 @@ Add known property and return MockObject types
 ```diff
  class SomeTest extends TestCase
  {
--    public function test()
-+    public function test(): \PHPUnit\Framework\MockObject\MockObject
+-    public function createSomeMock()
++    public function createSomeMock(): \PHPUnit\Framework\MockObject\MockObject
      {
          $someMock = $this->createMock(SomeClass::class);
          return $someMock;
