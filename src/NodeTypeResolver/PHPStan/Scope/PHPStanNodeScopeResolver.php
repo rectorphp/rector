@@ -177,7 +177,8 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof Assign || $node instanceof AssignOp) {
                 $this->processAssign($node, $mutatingScope);
                 if ($node->var instanceof Variable && $node->var->name instanceof Expr) {
-                    $this->nodeScopeResolverProcessNodes([new Expression($node->var), new Expression($node->expr)], $mutatingScope, $nodeCallback);
+                    $node->var->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $this->nodeScopeResolverProcessNodes([new Expression($node->expr)], $mutatingScope, $nodeCallback);
                 }
                 return;
             }
