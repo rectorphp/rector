@@ -4,16 +4,14 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -26,9 +24,9 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassMethodPropertyFetchManipulator
+     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer
      */
-    private $classMethodPropertyFetchManipulator;
+    private $trustedClassMethodPropertyTypeInferer;
     /**
      * @var string
      */
@@ -37,9 +35,9 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
      * @var string
      */
     private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
-    public function __construct(ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator)
+    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer)
     {
-        $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
+        $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -89,16 +87,12 @@ CODE_SAMPLE
             if ($property->type instanceof Node) {
                 continue;
             }
-            $propertyName = $this->getName($property);
             $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
             if (!$setUpClassMethod instanceof ClassMethod) {
                 continue;
             }
-            $assignedType = $this->resolveSingleAssignedExprType($setUpClassMethod, $propertyName);
-            if (!$assignedType instanceof Type) {
-                continue;
-            }
-            if (!$this->isMockObjectType($assignedType)) {
+            $type = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, $property, $setUpClassMethod);
+            if (!$this->isMockObjectType($type)) {
                 continue;
             }
             $property->type = new FullyQualified(self::MOCK_OBJECT_CLASS);
@@ -129,19 +123,5 @@ CODE_SAMPLE
             return \false;
         }
         return \in_array(self::MOCK_OBJECT_CLASS, $type->getObjectClassNames());
-    }
-    private function resolveSingleAssignedExprType(ClassMethod $setUpClassMethod, string $propertyName) : ?Type
-    {
-        $assignedExprs = $this->classMethodPropertyFetchManipulator->findAssignsToPropertyName($setUpClassMethod, $propertyName);
-        if (\count($assignedExprs) !== 1) {
-            return null;
-        }
-        $assignedExpr = $assignedExprs[0];
-        $exprType = $this->getType($assignedExpr);
-        // work around finalized class mock
-        if ($exprType instanceof NeverType && $assignedExpr instanceof MethodCall && $this->isName($assignedExpr->name, 'createMock')) {
-            return new ObjectType(self::MOCK_OBJECT_CLASS);
-        }
-        return $exprType;
     }
 }
