@@ -10,6 +10,7 @@ use Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
@@ -65,6 +66,7 @@ final class TypeDeclarationLevel
         AddFunctionVoidReturnTypeWhereNoReturnRector::class,
         AddTestsVoidReturnTypeWhereNoReturnRector::class,
         ReturnTypeFromMockObjectRector::class,
+        TypedPropertyFromCreateMockAssignRector::class,
         AddArrowFunctionReturnTypeRector::class,
         BoolReturnTypeFromBooleanConstReturnsRector::class,
         ReturnTypeFromStrictNewArrayRector::class,

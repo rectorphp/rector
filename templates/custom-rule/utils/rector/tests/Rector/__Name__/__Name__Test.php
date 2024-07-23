@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Utils\Rector\Tests\Rector\__Name__;
+namespace Rector\Tests\TypeDeclaration\Rector\__Name__;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

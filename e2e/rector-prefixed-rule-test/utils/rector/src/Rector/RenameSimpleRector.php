@@ -10,7 +10,7 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Utils\Rector\Tests\Rector\RenameSimpleRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\RenameSimpleRectorTest
  */
 final class RenameSimpleRector extends AbstractRector
 {

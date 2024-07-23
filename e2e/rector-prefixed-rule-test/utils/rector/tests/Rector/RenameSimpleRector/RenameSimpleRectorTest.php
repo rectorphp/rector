@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Utils\Rector\Tests\Rector\RenameSimpleRector;
+namespace Rector\Tests\TypeDeclaration\Rector\RenameSimpleRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

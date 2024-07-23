@@ -2455,6 +2455,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Class_\\MergeDateTimePropertyTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/MergeDateTimePropertyTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromJMSSerializerAttributeTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromJMSSerializerAttributeTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeFromReturnCastRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeFromReturnCastRector.php',
