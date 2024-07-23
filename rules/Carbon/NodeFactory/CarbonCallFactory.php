@@ -30,13 +30,43 @@ final class CarbonCallFactory
     private const PLUS_MONTH_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(month|months)#';
     /**
      * @var string
+     * @see https://regex101.com/r/dWRjk5/1
+     */
+    private const PLUS_HOUR_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(hour|hours)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/dfK0Ri/1
+     */
+    private const PLUS_MINUTE_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(minute|minuts)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/o7QDYL/1
+     */
+    private const PLUS_SECOND_COUNT_REGEX = '#\\+(\\s+)?(?<count>\\d+)(\\s+)?(second|seconds)#';
+    /**
+     * @var string
      * @see https://regex101.com/r/IvyT7w/1
      */
     private const MINUS_MONTH_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(month|months)#';
     /**
+     * @var string
+     * @see https://regex101.com/r/bICKg6/1
+     */
+    private const MINUS_HOUR_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(hour|hours)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/WILFvX/1
+     */
+    private const MINUS_MINUTE_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(minute|minutes)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/FwCUup/1
+     */
+    private const MINUS_SECOND_COUNT_REGEX = '#-(\\s+)?(?<count>\\d+)(\\s+)?(second|seconds)#';
+    /**
      * @var array<self::*_REGEX, string>
      */
-    private const REGEX_TO_METHOD_NAME_MAP = [self::PLUS_DAY_COUNT_REGEX => 'addDays', self::MINUS_DAY_COUNT_REGEX => 'subDays', self::PLUS_MONTH_COUNT_REGEX => 'addMonths', self::MINUS_MONTH_COUNT_REGEX => 'subMonths'];
+    private const REGEX_TO_METHOD_NAME_MAP = [self::PLUS_DAY_COUNT_REGEX => 'addDays', self::MINUS_DAY_COUNT_REGEX => 'subDays', self::PLUS_MONTH_COUNT_REGEX => 'addMonths', self::MINUS_MONTH_COUNT_REGEX => 'subMonths', self::PLUS_HOUR_COUNT_REGEX => 'addHours', self::MINUS_HOUR_COUNT_REGEX => 'subHours', self::PLUS_MINUTE_COUNT_REGEX => 'addMinutes', self::MINUS_MINUTE_COUNT_REGEX => 'subMinutes', self::PLUS_SECOND_COUNT_REGEX => 'addSeconds', self::MINUS_SECOND_COUNT_REGEX => 'subSeconds'];
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
