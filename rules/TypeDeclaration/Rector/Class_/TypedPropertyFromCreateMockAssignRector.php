@@ -4,14 +4,16 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\IntersectionType;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer;
+use Rector\Reflection\ReflectionResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -24,9 +26,19 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer
+     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $trustedClassMethodPropertyTypeInferer;
+    private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
+     */
+    private $allAssignNodePropertyTypeInferer;
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
     /**
      * @var string
      */
@@ -35,9 +47,11 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
      * @var string
      */
     private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
-    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer)
+    public function __construct(ReflectionResolver $reflectionResolver, AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, StaticTypeMapper $staticTypeMapper)
     {
-        $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -81,6 +95,7 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType(self::TEST_CASE_CLASS))) {
             return null;
         }
+        $classReflection = null;
         $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
             // already typed
@@ -91,11 +106,25 @@ CODE_SAMPLE
             if (!$setUpClassMethod instanceof ClassMethod) {
                 continue;
             }
-            $type = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, $property, $setUpClassMethod);
-            if (!$this->isMockObjectType($type)) {
+            if (!$classReflection instanceof ClassReflection) {
+                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+            }
+            // ClassReflection not detected, early skip
+            if (!$classReflection instanceof ClassReflection) {
+                return null;
+            }
+            $type = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection, $this->file);
+            if (!$type instanceof Type) {
                 continue;
             }
-            $property->type = new FullyQualified(self::MOCK_OBJECT_CLASS);
+            $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+            if (!$propertyType instanceof Node) {
+                continue;
+            }
+            if (!$this->isObjectType($propertyType, new ObjectType(self::MOCK_OBJECT_CLASS))) {
+                continue;
+            }
+            $property->type = $propertyType;
             $hasChanged = \true;
         }
         if (!$hasChanged) {
@@ -106,22 +135,5 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-    private function isMockObjectType(Type $type) : bool
-    {
-        if ($type instanceof ObjectType && $type->isInstanceOf(self::MOCK_OBJECT_CLASS)->yes()) {
-            return \true;
-        }
-        return $this->isIntersectionWithMockObjectType($type);
-    }
-    private function isIntersectionWithMockObjectType(Type $type) : bool
-    {
-        if (!$type instanceof IntersectionType) {
-            return \false;
-        }
-        if (\count($type->getTypes()) !== 2) {
-            return \false;
-        }
-        return \in_array(self::MOCK_OBJECT_CLASS, $type->getObjectClassNames());
     }
 }
