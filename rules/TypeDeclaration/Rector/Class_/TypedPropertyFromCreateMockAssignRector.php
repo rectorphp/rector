@@ -6,15 +6,13 @@ namespace Rector\TypeDeclaration\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,14 +24,9 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
+     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
-    private $reflectionResolver;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
-     */
-    private $allAssignNodePropertyTypeInferer;
+    private $assignToPropertyTypeInferer;
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
@@ -52,10 +45,9 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
      * @var string
      */
     private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
-    public function __construct(ReflectionResolver $reflectionResolver, AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, StaticTypeMapper $staticTypeMapper, ConstructorAssignDetector $constructorAssignDetector)
+    public function __construct(AssignToPropertyTypeInferer $assignToPropertyTypeInferer, StaticTypeMapper $staticTypeMapper, ConstructorAssignDetector $constructorAssignDetector)
     {
-        $this->reflectionResolver = $reflectionResolver;
-        $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
+        $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
@@ -101,7 +93,6 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType(self::TEST_CASE_CLASS))) {
             return null;
         }
-        $classReflection = null;
         $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
             // already typed
@@ -111,14 +102,8 @@ CODE_SAMPLE
             if (\count($property->props) !== 1) {
                 continue;
             }
-            if (!$classReflection instanceof ClassReflection) {
-                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-            }
-            // ClassReflection not detected, early skip
-            if (!$classReflection instanceof ClassReflection) {
-                return null;
-            }
-            $type = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection, $this->file);
+            $propertyName = (string) $this->getName($property);
+            $type = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $node);
             if (!$type instanceof Type) {
                 continue;
             }
@@ -129,7 +114,6 @@ CODE_SAMPLE
             if (!$this->isObjectType($propertyType, new ObjectType(self::MOCK_OBJECT_CLASS))) {
                 continue;
             }
-            $propertyName = (string) $this->getName($property);
             if (!$this->constructorAssignDetector->isPropertyAssigned($node, $propertyName)) {
                 if (!$propertyType instanceof NullableType) {
                     continue;
