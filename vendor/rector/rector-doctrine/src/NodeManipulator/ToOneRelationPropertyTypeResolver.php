@@ -5,6 +5,7 @@ namespace Rector\Doctrine\NodeManipulator;
 
 use RectorPrefix202407\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\MixedType;
@@ -133,6 +134,6 @@ final class ToOneRelationPropertyTypeResolver
     private function isNullableJoinColumn(Property $property) : bool
     {
         $joinExpr = $this->attributeFinder->findAttributeByClassesArgByName($property, self::JOIN_COLUMN, 'nullable');
-        return $joinExpr instanceof Expr\ConstFetch && !\in_array('false', $joinExpr->name->getParts(), \true);
+        return $joinExpr instanceof ConstFetch && !\in_array('false', $joinExpr->name->getParts(), \true);
     }
 }

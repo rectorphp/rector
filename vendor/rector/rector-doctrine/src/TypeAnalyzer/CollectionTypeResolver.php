@@ -65,10 +65,13 @@ final class CollectionTypeResolver
             return null;
         }
         $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue('targetEntity');
-        if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
+        // in case of odm
+        $targetDocumentArrayItemNode = $doctrineAnnotationTagValueNode->getValue('targetDocument');
+        $targetArrayItemNode = $targetEntityArrayItemNode ?: $targetDocumentArrayItemNode;
+        if (!$targetArrayItemNode instanceof ArrayItemNode) {
             return null;
         }
-        $targetEntityClass = $targetEntityArrayItemNode->value;
+        $targetEntityClass = $targetArrayItemNode->value;
         if ($targetEntityClass instanceof StringNode) {
             $targetEntityClass = $targetEntityClass->value;
         }

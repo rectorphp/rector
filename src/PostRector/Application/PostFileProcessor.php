@@ -116,7 +116,7 @@ final class PostFileProcessor implements ResetableInterface
             $postRectors[] = $this->nameImportingPostRector;
         }
         // import docblocks
-        if ($isDocblockNameImportingEnabled) {
+        if ($isNameImportingEnabled && $isDocblockNameImportingEnabled) {
             $postRectors[] = $this->docblockNameImportingPostRector;
         }
         $postRectors[] = $this->useAddingPostRector;

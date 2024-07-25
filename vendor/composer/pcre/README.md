@@ -12,7 +12,8 @@ to understand the implications.
 
 It thus makes it easier to work with static analysis tools like PHPStan or Psalm as it
 simplifies and reduces the possible return values from all the `preg_*` functions which
-are quite packed with edge cases.
+are quite packed with edge cases. As of v2.2.0 / v3.2.0 the library also comes with a
+[PHPStan extension](#phpstan-extension) for parsing regular expressions and giving you even better output types.
 
 This library is a thin wrapper around `preg_*` functions with [some limitations](#restrictions--limitations).
 If you are looking for a richer API to handle regular expressions have a look at
@@ -174,6 +175,13 @@ preg_match('/(a)(b)*(c)(d)*/', 'ac', $matches, $flags);
 |                             |   4 => null |
 | group 2 (any unmatched group preceding one that matched) is set to `''`. You cannot tell if it matched an empty string or did not match at all | group 2 is `null` when unmatched and a string if it matched, easy to check for |
 | group 4 (any optional group without a matching one following) is missing altogether. So you have to check with `isset()`, but really you want `isset($m[4]) && $m[4] !== ''` for safety unless you are very careful to check that a non-optional group follows it | group 4 is always set, and null in this case as there was no match, easy to check for with `$m[4] !== null` |
+
+PHPStan Extension
+-----------------
+
+To use the PHPStan extension if you do not use `phpstan/extension-installer` you can include `vendor/composer/pcre/extension.neon` in your PHPStan config.
+
+The extension provides much better type information for $matches as well as regex validation where possible.
 
 License
 -------

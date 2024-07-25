@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce
+class ComposerStaticInite9e62f8370526a5f08ea47a490713455
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -570,6 +570,11 @@ class ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce
         'RectorPrefix202407\\Composer\\Pcre\\MatchResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchResult.php',
         'RectorPrefix202407\\Composer\\Pcre\\MatchStrictGroupsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchStrictGroupsResult.php',
         'RectorPrefix202407\\Composer\\Pcre\\MatchWithOffsetsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchWithOffsetsResult.php',
+        'RectorPrefix202407\\Composer\\Pcre\\PHPStan\\InvalidRegexPatternRule' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/InvalidRegexPatternRule.php',
+        'RectorPrefix202407\\Composer\\Pcre\\PHPStan\\PregMatchFlags' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchFlags.php',
+        'RectorPrefix202407\\Composer\\Pcre\\PHPStan\\PregMatchParameterOutTypeExtension' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchParameterOutTypeExtension.php',
+        'RectorPrefix202407\\Composer\\Pcre\\PHPStan\\PregMatchTypeSpecifyingExtension' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchTypeSpecifyingExtension.php',
+        'RectorPrefix202407\\Composer\\Pcre\\PHPStan\\UnsafeStrictGroupsCallRule' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/UnsafeStrictGroupsCallRule.php',
         'RectorPrefix202407\\Composer\\Pcre\\PcreException' => __DIR__ . '/..' . '/composer/pcre/src/PcreException.php',
         'RectorPrefix202407\\Composer\\Pcre\\Preg' => __DIR__ . '/..' . '/composer/pcre/src/Preg.php',
         'RectorPrefix202407\\Composer\\Pcre\\Regex' => __DIR__ . '/..' . '/composer/pcre/src/Regex.php',
@@ -1589,6 +1594,7 @@ class ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',
         'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
         'Rector\\Doctrine\\Enum\\MappingClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/MappingClass.php',
+        'Rector\\Doctrine\\Enum\\OdmMappingClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/OdmMappingClass.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php',
@@ -2774,9 +2780,9 @@ class ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita40fb1533ebdca8bab24fcd004c56dce::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$classMap;
 
         }, null, ClassLoader::class);
     }

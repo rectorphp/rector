@@ -1,0 +1,22 @@
+# composer/pcre PHPStan extensions
+#
+# These can be reused by third party packages by including 'vendor/composer/pcre/extension.neon'
+# in your phpstan config
+
+conditionalTags:
+    Composer\Pcre\PHPStan\PregMatchParameterOutTypeExtension:
+        phpstan.staticMethodParameterOutTypeExtension: %featureToggles.narrowPregMatches%
+    Composer\Pcre\PHPStan\PregMatchTypeSpecifyingExtension:
+        phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension: %featureToggles.narrowPregMatches%
+    Composer\Pcre\PHPStan\UnsafeStrictGroupsCallRule:
+        phpstan.rules.rule: %featureToggles.narrowPregMatches%
+
+services:
+    -
+        class: Composer\Pcre\PHPStan\PregMatchParameterOutTypeExtension
+    -
+        class: Composer\Pcre\PHPStan\PregMatchTypeSpecifyingExtension
+
+rules:
+    - Composer\Pcre\PHPStan\UnsafeStrictGroupsCallRule
+    - Composer\Pcre\PHPStan\InvalidRegexPatternRule
