@@ -4,12 +4,14 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202407\Nette\Utils\FileSystem as UtilsFileSystem;
+use PHPStan\Parser\ParserErrorsException;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\FileSystem\FilesFinder;
 use Rector\Parallel\Application\ParallelFileProcessor;
+use Rector\PhpParser\Parser\ParserErrors;
 use Rector\Reporting\MissConfigurationReporter;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
@@ -194,6 +196,9 @@ final class ApplicationFileProcessor
             $errorMessage .= \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString();
         } else {
             $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
+        }
+        if ($throwable instanceof ParserErrorsException) {
+            $throwable = new ParserErrors($throwable);
         }
         return new SystemError($errorMessage, $filePath, $throwable->getLine());
     }

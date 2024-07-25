@@ -2007,6 +2007,7 @@ return array(
     'Rector\\PhpParser\\Node\\NodeFactory' => $baseDir . '/src/PhpParser/Node/NodeFactory.php',
     'Rector\\PhpParser\\Node\\Value\\ValueResolver' => $baseDir . '/src/PhpParser/Node/Value/ValueResolver.php',
     'Rector\\PhpParser\\Parser\\InlineCodeParser' => $baseDir . '/src/PhpParser/Parser/InlineCodeParser.php',
+    'Rector\\PhpParser\\Parser\\ParserErrors' => $baseDir . '/src/PhpParser/Parser/ParserErrors.php',
     'Rector\\PhpParser\\Parser\\RectorParser' => $baseDir . '/src/PhpParser/Parser/RectorParser.php',
     'Rector\\PhpParser\\Parser\\SimplePhpParser' => $baseDir . '/src/PhpParser/Parser/SimplePhpParser.php',
     'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => $baseDir . '/src/PhpParser/Printer/BetterStandardPrinter.php',

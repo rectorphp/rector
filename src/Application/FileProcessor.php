@@ -6,6 +6,7 @@ namespace Rector\Application;
 use RectorPrefix202407\Nette\Utils\FileSystem;
 use RectorPrefix202407\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
+use PHPStan\Parser\ParserErrorsException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
@@ -13,6 +14,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilePathHelper;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\Parser\ParserErrors;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PostRector\Application\PostFileProcessor;
@@ -150,6 +152,9 @@ final class FileProcessor
                 throw $throwable;
             }
             $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
+            if ($throwable instanceof ParserErrorsException) {
+                $throwable = new ParserErrors($throwable);
+            }
             return new SystemError($throwable->getMessage(), $relativeFilePath, $throwable->getLine());
         }
         return null;

@@ -2226,6 +2226,7 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'Rector\\PhpParser\\Node\\NodeFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NodeFactory.php',
         'Rector\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
         'Rector\\PhpParser\\Parser\\InlineCodeParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/InlineCodeParser.php',
+        'Rector\\PhpParser\\Parser\\ParserErrors' => __DIR__ . '/../..' . '/src/PhpParser/Parser/ParserErrors.php',
         'Rector\\PhpParser\\Parser\\RectorParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/RectorParser.php',
         'Rector\\PhpParser\\Parser\\SimplePhpParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/SimplePhpParser.php',
         'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
