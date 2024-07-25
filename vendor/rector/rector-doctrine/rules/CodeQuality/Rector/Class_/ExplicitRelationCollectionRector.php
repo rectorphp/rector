@@ -54,7 +54,7 @@ final class ExplicitRelationCollectionRector extends AbstractRector implements M
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Use explicit collection in one-to-many relations of Doctrine entity', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use Collection object type for one-to-many relations of Doctrine entity/ODM document', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Entity;
 
@@ -97,7 +97,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->attrinationFinder->hasByOne($node, MappingClass::ENTITY) && !$this->attrinationFinder->hasByOne($node, OdmMappingClass::DOCUMENT)) {
+        if (!$this->attrinationFinder->hasByMany($node, [MappingClass::ENTITY, MappingClass::EMBEDDABLE, OdmMappingClass::DOCUMENT])) {
             return null;
         }
         $arrayCollectionAssigns = [];

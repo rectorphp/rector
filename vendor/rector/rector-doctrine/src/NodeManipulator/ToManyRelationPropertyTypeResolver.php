@@ -11,6 +11,9 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
+use Rector\Doctrine\CodeQuality\Enum\OdmMappingKey;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
@@ -47,10 +50,6 @@ final class ToManyRelationPropertyTypeResolver
      * @var string
      */
     private const COLLECTION_TYPE = 'Doctrine\\Common\\Collections\\Collection';
-    /**
-     * @var class-string[]
-     */
-    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -62,11 +61,11 @@ final class ToManyRelationPropertyTypeResolver
     public function resolve(Property $property) : ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(self::TO_MANY_ANNOTATION_CLASSES);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(CollectionMapping::TO_MANY_CLASSES);
         if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return $this->processToManyRelation($property, $doctrineAnnotationTagValueNode);
         }
-        $expr = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
+        $expr = $this->attributeFinder->findAttributeByClassesArgByNames($property, CollectionMapping::TO_MANY_CLASSES, [EntityMappingKey::TARGET_ENTITY, OdmMappingKey::TARGET_DOCUMENT]);
         if (!$expr instanceof Expr) {
             return null;
         }
@@ -74,7 +73,7 @@ final class ToManyRelationPropertyTypeResolver
     }
     private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?\PHPStan\Type\Type
     {
-        $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue('targetEntity');
+        $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue(EntityMappingKey::TARGET_ENTITY) ?: $doctrineAnnotationTagValueNode->getValue(OdmMappingKey::TARGET_DOCUMENT);
         if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
             return null;
         }

@@ -38,6 +38,25 @@ final class AttributeFinder
     }
     /**
      * @param string[] $attributeClasses
+     * @param string[] $argNames
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     */
+    public function findAttributeByClassesArgByNames($node, array $attributeClasses, array $argNames) : ?Expr
+    {
+        $attribute = $this->findAttributeByClasses($node, $attributeClasses);
+        if (!$attribute instanceof Attribute) {
+            return null;
+        }
+        foreach ($argNames as $argName) {
+            $argExpr = $this->findArgByName($attribute, $argName);
+            if ($argExpr instanceof Expr) {
+                return $argExpr;
+            }
+        }
+        return null;
+    }
+    /**
+     * @param string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
     public function findAttributeByClassesArgByName($node, array $attributeClasses, string $argName) : ?Expr

@@ -1,49 +1,26 @@
-# 19 Rules Overview
+# 18 Rules Overview
 
 ## AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector
 
-Adds `@return` PHPDoc type to Collection property getter by *ToMany annotation
+Adds `@return` PHPDoc type to Collection property getter by *ToMany annotation/attribute
 
 - class: [`Rector\Doctrine\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector`](../rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector.php)
 
 ```diff
+-use App\Entity\Training;
+-
  /**
   * @ORM\Entity
   */
  final class Trainer
  {
      /**
-      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+      * @ORM\OneToMany(targetEntity=Training::class)
       */
      private $trainings;
 
 +    /**
-+     * @return \Doctrine\Common\Collections\Collection<int, \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\Source>
-+     */
-     public function getTrainings()
-     {
-         return $this->trainings;
-     }
- }
-```
-
-<br>
-
-## AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector
-
-Adds `@return` PHPDoc type to Collection property getter by *ToMany attribute
-
-- class: [`Rector\Doctrine\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector`](../rules/CodeQuality/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector.php)
-
-```diff
- #[ORM\Entity]
- final class Trainer
- {
-     #[ORM\OneToMany(targetEntity:Training::class, mappedBy:"trainer")]
-     private $trainings;
-
-+    /**
-+     * @return \Doctrine\Common\Collections\Collection<int, \Rector\Doctrine\Tests\CodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training>
++     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Training>
 +     */
      public function getTrainings()
      {
@@ -143,7 +120,7 @@ Replace EventSubscriberInterface with AsDoctrineListener attribute(s)
 
 ## ExplicitRelationCollectionRector
 
-Use explicit collection in one-to-many relations of Doctrine entity
+Use Collection object type for one-to-many relations of Doctrine entity/ODM document
 
 - class: [`Rector\Doctrine\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector`](../rules/CodeQuality/Rector/Class_/ExplicitRelationCollectionRector.php)
 

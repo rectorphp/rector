@@ -4,75 +4,16 @@ declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Doctrine\CodeQuality\Enum\ToManyMappings;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use Rector\Doctrine\NodeAnalyzer\MethodUniqueReturnedPropertyResolver;
-use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
-use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
-use Rector\Rector\AbstractScopeAwareRector;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- *  @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector\AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRectorTest
+ * @deprecated This rule is deprecated, as merged into same-feature rule @see \Rector\Doctrine\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector, use it instead
  */
-final class AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class AddReturnDocBlockToCollectionPropertyGetterByToManyAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
-     */
-    private $classMethodReturnTypeOverrideGuard;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
-     */
-    private $attributeFinder;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver
-     */
-    private $targetEntityResolver;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
-     */
-    private $collectionTypeFactory;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\MethodUniqueReturnedPropertyResolver
-     */
-    private $methodUniqueReturnedPropertyResolver;
-    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver, CollectionTypeFactory $collectionTypeFactory, MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver)
-    {
-        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->attributeFinder = $attributeFinder;
-        $this->targetEntityResolver = $targetEntityResolver;
-        $this->collectionTypeFactory = $collectionTypeFactory;
-        $this->methodUniqueReturnedPropertyResolver = $methodUniqueReturnedPropertyResolver;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Adds @return PHPDoc type to Collection property getter by *ToMany attribute', [new CodeSample(<<<'CODE_SAMPLE'
@@ -116,50 +57,8 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isDoctrineEntityClass($node)) {
-            return null;
-        }
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod, $scope)) {
-                continue;
-            }
-            $property = $this->methodUniqueReturnedPropertyResolver->resolve($node, $classMethod);
-            if (!$property instanceof Property) {
-                continue;
-            }
-            $collectionObjectType = $this->getCollectionObjectTypeFromToManyAttribute($property);
-            if (!$collectionObjectType instanceof FullyQualifiedObjectType) {
-                continue;
-            }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
-            $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $newVarType);
-            $hasChanged = \true;
-        }
-        return $hasChanged ? $node : null;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
-    }
-    private function getCollectionObjectTypeFromToManyAttribute(Property $property) : ?FullyQualifiedObjectType
-    {
-        $targetEntityExpr = $this->attributeFinder->findAttributeByClassesArgByName($property, ToManyMappings::TO_MANY_CLASSES, 'targetEntity');
-        if (!$targetEntityExpr instanceof ClassConstFetch) {
-            return null;
-        }
-        $targetEntityClassName = $this->targetEntityResolver->resolveFromExpr($targetEntityExpr);
-        if ($targetEntityClassName === null) {
-            return null;
-        }
-        return new FullyQualifiedObjectType($targetEntityClassName);
-    }
-    private function isDoctrineEntityClass(Class_ $class) : bool
-    {
-        $entityAttribute = $this->attributeFinder->findAttributeByClasses($class, ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable']);
-        return $entityAttribute instanceof Attribute;
+        return null;
     }
 }
