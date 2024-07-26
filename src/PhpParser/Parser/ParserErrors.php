@@ -7,17 +7,19 @@ use PHPStan\Parser\ParserErrorsException;
 final class ParserErrors
 {
     /**
+     * @readonly
      * @var string
      */
     private $message;
     /**
+     * @readonly
      * @var int
      */
     private $line;
-    public function __construct(ParserErrorsException $exception)
+    public function __construct(ParserErrorsException $parserErrorsException)
     {
-        $this->message = $exception->getMessage();
-        $this->line = $exception->getAttributes()['startLine'] ?? $exception->getLine();
+        $this->message = $parserErrorsException->getMessage();
+        $this->line = $parserErrorsException->getAttributes()['startLine'] ?? $parserErrorsException->getLine();
     }
     public function getMessage() : string
     {
