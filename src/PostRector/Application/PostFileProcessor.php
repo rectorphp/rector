@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Contract\DependencyInjection\ResetableInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\PostRector\Rector\ClassRenamingPostRector;
@@ -50,10 +51,15 @@ final class PostFileProcessor implements ResetableInterface
      */
     private $unusedImportRemovingPostRector;
     /**
+     * @readonly
+     * @var \Rector\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    /**
      * @var PostRectorInterface[]
      */
     private $postRectors = [];
-    public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector)
+    public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector, RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->skipper = $skipper;
         $this->useAddingPostRector = $useAddingPostRector;
@@ -61,6 +67,7 @@ final class PostFileProcessor implements ResetableInterface
         $this->classRenamingPostRector = $classRenamingPostRector;
         $this->docblockNameImportingPostRector = $docblockNameImportingPostRector;
         $this->unusedImportRemovingPostRector = $unusedImportRemovingPostRector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function reset() : void
     {
@@ -106,11 +113,15 @@ final class PostFileProcessor implements ResetableInterface
         if ($this->postRectors !== []) {
             return $this->postRectors;
         }
+        $isRenamedClassEnabled = $this->renamedClassesDataCollector->getOldToNewClasses() !== [];
         $isNameImportingEnabled = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES);
         $isDocblockNameImportingEnabled = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES);
         $isRemovingUnusedImportsEnabled = SimpleParameterProvider::provideBoolParameter(Option::REMOVE_UNUSED_IMPORTS);
+        $postRectors = [];
         // sorted by priority, to keep removed imports in order
-        $postRectors = [$this->classRenamingPostRector];
+        if ($isRenamedClassEnabled) {
+            $postRectors[] = $this->classRenamingPostRector;
+        }
         // import names
         if ($isNameImportingEnabled) {
             $postRectors[] = $this->nameImportingPostRector;
