@@ -73,13 +73,17 @@ final class FdServer extends EventEmitter implements ServerInterface
      * @throws \InvalidArgumentException if the listening address is invalid
      * @throws \RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($fd, LoopInterface $loop = null)
+    public function __construct($fd, $loop = null)
     {
         if (\preg_match('#^php://fd/(\\d+)$#', $fd, $m)) {
             $fd = (int) $m[1];
         }
         if (!\is_int($fd) || $fd < 0 || $fd >= \PHP_INT_MAX) {
             throw new \InvalidArgumentException('Invalid FD number given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22));
+        }
+        if ($loop !== null && !$loop instanceof LoopInterface) {
+            // manual type check to support legacy PHP < 7.1
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
         }
         $this->loop = $loop ?: Loop::get();
         $errno = 0;

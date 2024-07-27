@@ -512,17 +512,17 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.18.0",
-            "version_normalized": "11.18.0.0",
+            "version": "v11.18.1",
+            "version_normalized": "11.18.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
-                "reference": "c3c2713c66d120bf42865e831cfcef6ed9e10db2"
+                "reference": "122c62229b209678013c0833793d7cf94d14bbbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/c3c2713c66d120bf42865e831cfcef6ed9e10db2",
-                "reference": "c3c2713c66d120bf42865e831cfcef6ed9e10db2",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/122c62229b209678013c0833793d7cf94d14bbbd",
+                "reference": "122c62229b209678013c0833793d7cf94d14bbbd",
                 "shasum": ""
             },
             "require": {
@@ -533,7 +533,7 @@
             "provide": {
                 "psr\/container-implementation": "1.1|2.0"
             },
-            "time": "2024-07-18T15:50:24+00:00",
+            "time": "2024-07-26T06:12:27+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -569,8 +569,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.18.0",
-            "version_normalized": "11.18.0.0",
+            "version": "v11.18.1",
+            "version_normalized": "11.18.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1466,34 +1466,34 @@
         },
         {
             "name": "react\/socket",
-            "version": "v1.15.0",
-            "version_normalized": "1.15.0.0",
+            "version": "v1.16.0",
+            "version_normalized": "1.16.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/socket.git",
-                "reference": "216d3aec0b87f04a40ca04f481e6af01bdd1d038"
+                "reference": "23e4ff33ea3e160d2d1f59a0e6050e4b0fb0eac1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/216d3aec0b87f04a40ca04f481e6af01bdd1d038",
-                "reference": "216d3aec0b87f04a40ca04f481e6af01bdd1d038",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/23e4ff33ea3e160d2d1f59a0e6050e4b0fb0eac1",
+                "reference": "23e4ff33ea3e160d2d1f59a0e6050e4b0fb0eac1",
                 "shasum": ""
             },
             "require": {
                 "evenement\/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
-                "react\/dns": "^1.11",
+                "react\/dns": "^1.13",
                 "react\/event-loop": "^1.2",
-                "react\/promise": "^3 || ^2.6 || ^1.2.1",
-                "react\/stream": "^1.2"
+                "react\/promise": "^3.2 || ^2.6 || ^1.2.1",
+                "react\/stream": "^1.4"
             },
             "require-dev": {
                 "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36",
-                "react\/async": "^4 || ^3 || ^2",
+                "react\/async": "^4.3 || ^3.3 || ^2",
                 "react\/promise-stream": "^1.4",
-                "react\/promise-timer": "^1.10"
+                "react\/promise-timer": "^1.11"
             },
-            "time": "2023-12-15T11:02:10+00:00",
+            "time": "2024-07-26T10:38:09+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1537,7 +1537,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/socket\/issues",
-                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.15.0"
+                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.16.0"
             },
             "funding": [
                 {
@@ -2007,17 +2007,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.9",
-            "version_normalized": "6.4.9.0",
+            "version": "v6.4.10",
+            "version_normalized": "6.4.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9"
+                "reference": "504974cbe43d05f83b201d6498c206f16fc0cdbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9",
-                "reference": "6edb5363ec0c78ad4d48c5128ebf4d083d89d3a9",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/504974cbe43d05f83b201d6498c206f16fc0cdbc",
+                "reference": "504974cbe43d05f83b201d6498c206f16fc0cdbc",
                 "shasum": ""
             },
             "require": {
@@ -2050,7 +2050,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2024-06-28T09:49:33+00:00",
+            "time": "2024-07-26T12:30:32+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2089,7 +2089,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.9"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.10"
             },
             "funding": [
                 {
@@ -2248,17 +2248,17 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v6.4.8",
-            "version_normalized": "6.4.8.0",
+            "version": "v6.4.10",
+            "version_normalized": "6.4.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "3ef977a43883215d560a2cecb82ec8e62131471c"
+                "reference": "af29198d87112bebdd397bd7735fbd115997824c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/3ef977a43883215d560a2cecb82ec8e62131471c",
-                "reference": "3ef977a43883215d560a2cecb82ec8e62131471c",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/af29198d87112bebdd397bd7735fbd115997824c",
+                "reference": "af29198d87112bebdd397bd7735fbd115997824c",
                 "shasum": ""
             },
             "require": {
@@ -2267,7 +2267,7 @@
             "require-dev": {
                 "symfony\/filesystem": "^6.0|^7.0"
             },
-            "time": "2024-05-31T14:49:08+00:00",
+            "time": "2024-07-24T07:06:38+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2295,7 +2295,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.4.8"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.4.10"
             },
             "funding": [
                 {

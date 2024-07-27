@@ -7,6 +7,7 @@ use RectorPrefix202407\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
@@ -56,23 +57,28 @@ final class UseImportsAdder
         }
         // place after declare strict_types
         foreach ($stmts as $key => $stmt) {
-            if ($stmt instanceof Declare_) {
-                if (isset($stmts[$key + 1]) && $stmts[$key + 1] instanceof Use_) {
-                    $nodesToAdd = $newUses;
-                } else {
-                    // add extra space, if there are no new use imports to be added
-                    $nodesToAdd = \array_merge([new Nop()], $newUses);
-                }
-                $this->mirrorUseComments($stmts, $newUses, $key + 1);
-                \array_splice($stmts, $key + 1, 0, $nodesToAdd);
-                $fileWithoutNamespace->stmts = $stmts;
-                $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
-                return [$fileWithoutNamespace];
+            // maybe just added a space
+            if ($stmt instanceof Nop) {
+                continue;
             }
+            // when we found a non-declare, directly stop
+            if (!$stmt instanceof Declare_) {
+                break;
+            }
+            $nodesToAdd = \array_merge([new Nop()], $newUses);
+            $this->mirrorUseComments($stmts, $newUses, $key + 1);
+            // remove space before next use tweak
+            if (isset($stmts[$key + 1]) && ($stmts[$key + 1] instanceof Use_ || $stmts[$key + 1] instanceof GroupUse)) {
+                $stmts[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
+            \array_splice($stmts, $key + 1, 0, $nodesToAdd);
+            $fileWithoutNamespace->stmts = $stmts;
+            $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
+            return [$fileWithoutNamespace];
         }
         $this->mirrorUseComments($stmts, $newUses);
         // make use stmts first
-        $fileWithoutNamespace->stmts = \array_merge($newUses, $stmts);
+        $fileWithoutNamespace->stmts = \array_merge($newUses, $this->resolveInsertNop($fileWithoutNamespace), $stmts);
         $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
         return [$fileWithoutNamespace];
     }
@@ -97,8 +103,20 @@ final class UseImportsAdder
             return;
         }
         $this->mirrorUseComments($namespace->stmts, $newUses);
-        $namespace->stmts = \array_merge($newUses, $namespace->stmts);
+        $namespace->stmts = \array_merge($newUses, $this->resolveInsertNop($namespace), $namespace->stmts);
         $namespace->stmts = \array_values($namespace->stmts);
+    }
+    /**
+     * @return Nop[]
+     * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
+     */
+    private function resolveInsertNop($namespace) : array
+    {
+        $currentStmt = $namespace->stmts[0] ?? null;
+        if (!$currentStmt instanceof Stmt || $currentStmt instanceof Use_ || $currentStmt instanceof GroupUse) {
+            return [];
+        }
+        return [new Nop()];
     }
     /**
      * @param Stmt[] $stmts

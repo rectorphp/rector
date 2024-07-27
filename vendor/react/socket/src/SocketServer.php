@@ -29,8 +29,12 @@ final class SocketServer extends EventEmitter implements ServerInterface
      * @throws \InvalidArgumentException if the listening address is invalid
      * @throws \RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($uri, array $context = array(), LoopInterface $loop = null)
+    public function __construct($uri, array $context = array(), $loop = null)
     {
+        if ($loop !== null && !$loop instanceof LoopInterface) {
+            // manual type check to support legacy PHP < 7.1
+            throw new \InvalidArgumentException('Argument #3 ($loop) expected null|React\\EventLoop\\LoopInterface');
+        }
         // apply default options if not explicitly given
         $context += array('tcp' => array(), 'tls' => array(), 'unix' => array());
         $scheme = 'tcp';
