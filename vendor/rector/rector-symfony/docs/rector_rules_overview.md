@@ -1,4 +1,4 @@
-# 84 Rules Overview
+# 83 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -285,7 +285,7 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
  {
 -    public static $defaultName = 'sunshine';
 -
--    public static $defaultDescription = 'Ssome description';
+-    public static $defaultDescription = 'some description';
  }
 ```
 
@@ -1474,9 +1474,15 @@ Replaces #[Security] framework-bundle attribute with Symfony native #[IsGranted]
 
  class PostController extends Controller
  {
+-    #[Security("is_granted('ROLE_ADMIN')")]
++    #[IsGranted('ROLE_ADMIN')]
+     public function index()
+     {
+     }
+
 -    #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
 +    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')"))]
-     public function index()
+     public function list()
      {
      }
  }
@@ -1566,25 +1572,6 @@ Change `$services->set(...,` ...)->tag(...) to `$services->defaults()->autodisco
 -    $services->set(SomeCommand::class)
 -        ->tag('console.command');
 +    $services->set(SomeCommand::class);
- };
-```
-
-<br>
-
-## ServicesSetNameToSetTypeRector
-
-Change `$services->set("name_type",` SomeType::class) to bare type, useful since Symfony 3.4
-
-- class: [`Rector\Symfony\Configs\Rector\Closure\ServicesSetNameToSetTypeRector`](../rules/Configs/Rector/Closure/ServicesSetNameToSetTypeRector.php)
-
-```diff
- use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
- return static function (ContainerConfigurator $containerConfigurator): void {
-     $services = $containerConfigurator->services();
-
--    $services->set('some_name', App\SomeClass::class);
-+    $services->set(App\SomeClass::class);
  };
 ```
 

@@ -1,4 +1,4 @@
-# 381 Rules Overview
+# 382 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Transform](#transform) (25)
 
-- [TypeDeclaration](#typedeclaration) (56)
+- [TypeDeclaration](#typedeclaration) (57)
 
 - [Visibility](#visibility) (3)
 
@@ -7504,6 +7504,29 @@ Add typed property from assigned types
      public function run()
      {
          $this->name = 'string';
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromCreateMockAssignRector
+
+Add typed property from assigned mock
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector`](../rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+-    private $someProperty;
++    private \PHPUnit\Framework\MockObject\MockObject $someProperty;
+
+     protected function setUp(): void
+     {
+         $this->someProperty = $this->createMock(SomeMockedClass::class);
      }
  }
 ```
