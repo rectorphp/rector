@@ -2397,6 +2397,7 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'Rector\\Symfony\\Configs\\NodeVisitor\\CollectServiceArgumentsNodeVisitor' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeVisitor/CollectServiceArgumentsNodeVisitor.php',
         'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Class_\\AutowireAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Class_/AutowireAttributeRector.php',
+        'Rector\\Symfony\\Configs\\Rector\\Closure\\MergeServiceNameTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/MergeServiceNameTypeRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',

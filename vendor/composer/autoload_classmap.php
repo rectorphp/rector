@@ -2178,6 +2178,7 @@ return array(
     'Rector\\Symfony\\Configs\\NodeVisitor\\CollectServiceArgumentsNodeVisitor' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeVisitor/CollectServiceArgumentsNodeVisitor.php',
     'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Class_\\AutowireAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Class_/AutowireAttributeRector.php',
+    'Rector\\Symfony\\Configs\\Rector\\Closure\\MergeServiceNameTypeRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/MergeServiceNameTypeRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',

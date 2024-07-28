@@ -1,4 +1,4 @@
-# 83 Rules Overview
+# 84 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -985,6 +985,24 @@ Merge removed `@Method` annotation to `@Route` one
      {
      }
  }
+```
+
+<br>
+
+## MergeServiceNameTypeRector
+
+Merge name === type service registration, `$services->set(SomeType::class,` SomeType::class)
+
+- class: [`Rector\Symfony\Configs\Rector\Closure\MergeServiceNameTypeRector`](../rules/Configs/Rector/Closure/MergeServiceNameTypeRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+-    $services->set(\App\SomeClass::class, \App\SomeClass::class);
++    $services->set(\App\SomeClass::class);
+ };
 ```
 
 <br>
