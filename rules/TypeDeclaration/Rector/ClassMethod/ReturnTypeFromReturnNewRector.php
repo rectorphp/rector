@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -91,7 +92,12 @@ final class ReturnTypeFromReturnNewRector extends AbstractScopeAwareRector imple
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;
-    public function __construct(TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, StrictReturnNewAnalyzer $strictReturnNewAnalyzer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ClassAnalyzer $classAnalyzer, NewTypeResolver $newTypeResolver, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper, ReturnAnalyzer $returnAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
+     */
+    private $controllerAnalyzer;
+    public function __construct(TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, StrictReturnNewAnalyzer $strictReturnNewAnalyzer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ClassAnalyzer $classAnalyzer, NewTypeResolver $newTypeResolver, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper, ReturnAnalyzer $returnAnalyzer, ControllerAnalyzer $controllerAnalyzer)
     {
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
@@ -103,6 +109,7 @@ final class ReturnTypeFromReturnNewRector extends AbstractScopeAwareRector imple
         $this->betterNodeFinder = $betterNodeFinder;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->returnAnalyzer = $returnAnalyzer;
+        $this->controllerAnalyzer = $controllerAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -206,9 +213,8 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
-        // skip in case of response, as handled by another rule earlier
-        /** @see ResponseReturnTypeControllerActionRector */
-        if ($returnType instanceof ObjectType && $returnType->isInstanceOf(ResponseClass::BASIC)->yes()) {
+        /** handled by @see \Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector earlier */
+        if ($this->isResponseInsideController($returnType, $functionLike)) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
@@ -236,5 +242,21 @@ CODE_SAMPLE
             $newTypes[] = $newType;
         }
         return $newTypes;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function isResponseInsideController(Type $returnType, $functionLike) : bool
+    {
+        if (!$functionLike instanceof ClassMethod) {
+            return \false;
+        }
+        if (!$returnType instanceof ObjectType) {
+            return \false;
+        }
+        if (!$returnType->isInstanceOf(ResponseClass::BASIC)->yes()) {
+            return \false;
+        }
+        return $this->controllerAnalyzer->isInsideController($functionLike);
     }
 }
