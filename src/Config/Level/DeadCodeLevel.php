@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Config\Level;
 
-use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
