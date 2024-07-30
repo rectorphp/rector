@@ -28,6 +28,7 @@ use Rector\Rector\AbstractScopeAwareRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
+use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictReturnNewAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
@@ -205,6 +206,11 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
+        // skip in case of response, as handled by another rule earlier
+        /** @see ResponseReturnTypeControllerActionRector */
+        if ($returnType instanceof ObjectType && $returnType->isInstanceOf(ResponseClass::BASIC)->yes()) {
+            return null;
+        }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
         if (!$returnTypeNode instanceof Node) {
             return null;
