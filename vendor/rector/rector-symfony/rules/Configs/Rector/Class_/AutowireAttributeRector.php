@@ -28,6 +28,8 @@ use RectorPrefix202407\Webmozart\Assert\Assert;
 /**
  * The param/env is only available since Symfony 6.3
  * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
+ *
+ * @see \Rector\Symfony\Tests\Configs\Rector\Class_\AutowireAttributeRector\AutowireAttributeRectorTest
  */
 final class AutowireAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {

@@ -14,6 +14,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Exception\ShouldNotHappenException;
@@ -197,7 +198,7 @@ CODE_SAMPLE
             return null;
         }
         $responseReturnType = $this->resolveResponseOnlyReturnType($returns);
-        if (!$responseReturnType instanceof \PHPStan\Type\Type) {
+        if (!$responseReturnType instanceof Type) {
             return null;
         }
         $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($responseReturnType, TypeKind::RETURN);
@@ -210,7 +211,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function resolveResponseOnlyReturnType(array $returns) : ?\PHPStan\Type\Type
+    private function resolveResponseOnlyReturnType(array $returns) : ?Type
     {
         $returnedTypes = [];
         foreach ($returns as $return) {

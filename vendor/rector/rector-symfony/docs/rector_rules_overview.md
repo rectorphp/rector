@@ -1,4 +1,4 @@
-# 84 Rules Overview
+# 85 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1161,6 +1161,33 @@ Complete strict param type declaration based on route annotation
 -    public function detailAction($number)
 +    public function detailAction(int $number)
      {
+     }
+ }
+```
+
+<br>
+
+## ParameterBagToAutowireAttributeRector
+
+Change explicit configuration parameter pass into #[Autowire] attributes
+
+- class: [`Rector\Symfony\Configs\Rector\Class_\ParameterBagToAutowireAttributeRector`](../rules/Configs/Rector/Class_/ParameterBagToAutowireAttributeRector.php)
+
+```diff
+-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
++use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+ final class CertificateFactory
+ {
+     private ?string $certName;
+
+     public function __construct(
+-        ParameterBagInterface $parameterBag
++        #[Autowire('%env(CERT_NAME)%')]
++        $certName,
+     ) {
+-        $this->certName = $parameterBag->get('certificate_name');
++        $this->certName = $certName;
      }
  }
 ```
