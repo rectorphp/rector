@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Config\Level;
 
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector;
@@ -79,6 +80,7 @@ final class TypeDeclarationLevel
         NumericReturnTypeFromStrictReturnsRector::class,
         ReturnTypeFromStrictTernaryRector::class,
         ReturnTypeFromReturnDirectArrayRector::class,
+        ResponseReturnTypeControllerActionRector::class,
         ReturnTypeFromReturnNewRector::class,
         ReturnTypeFromReturnCastRector::class,
         ReturnTypeFromSymfonySerializerRector::class,

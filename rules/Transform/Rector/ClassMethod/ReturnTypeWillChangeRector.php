@@ -89,7 +89,7 @@ CODE_SAMPLE
                 continue;
             }
             // the return type is known, no need to add attribute
-            if ($classMethod->returnType !== null) {
+            if ($classMethod->returnType instanceof Node) {
                 continue;
             }
             foreach ($this->returnTypeChangedClassMethodReferences as $returnTypeChangedClassMethodReference) {

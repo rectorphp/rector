@@ -48,7 +48,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->returnType !== null) {
+        if ($node->returnType instanceof Node) {
             return null;
         }
         $type = $this->nodeTypeResolver->getNativeType($node->expr);

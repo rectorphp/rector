@@ -188,7 +188,7 @@ CODE_SAMPLE
      */
     private function shouldSkip($node, Scope $scope) : bool
     {
-        if ($node->returnType !== null) {
+        if ($node->returnType instanceof Node) {
             return \true;
         }
         if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {

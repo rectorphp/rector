@@ -22,10 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector\SwiftMessageToEmailRectorTest
  */
-class SwiftMessageToEmailRector extends AbstractRector
+final class SwiftMessageToEmailRector extends AbstractRector
 {
-    public const EMAIL_FQN = 'Symfony\\Component\\Mime\\Email';
-    public const SWIFT_MESSAGE_FQN = 'Swift_Message';
+    /**
+     * @var string
+     */
+    private const EMAIL_FQN = 'Symfony\\Component\\Mime\\Email';
+    /**
+     * @var string
+     */
+    private const SWIFT_MESSAGE_FQN = 'Swift_Message';
     /**
      * @var array<string, string>
      */

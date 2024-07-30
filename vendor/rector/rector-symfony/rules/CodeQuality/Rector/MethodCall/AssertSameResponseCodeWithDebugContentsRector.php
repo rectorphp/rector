@@ -11,6 +11,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -111,7 +112,7 @@ CODE_SAMPLE
         if (!$varType instanceof ObjectType) {
             return null;
         }
-        if (!$varType->isInstanceof('Symfony\\Component\\HttpFoundation\\Response')->yes()) {
+        if (!$varType->isInstanceof(ResponseClass::BASIC)->yes()) {
             return null;
         }
         // must be status method call

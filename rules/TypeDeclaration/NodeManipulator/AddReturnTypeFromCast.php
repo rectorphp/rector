@@ -50,7 +50,7 @@ final class AddReturnTypeFromCast
      */
     public function add($functionLike, Scope $scope)
     {
-        if ($functionLike->returnType !== null) {
+        if ($functionLike->returnType instanceof Node) {
             return null;
         }
         if ($functionLike instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope)) {

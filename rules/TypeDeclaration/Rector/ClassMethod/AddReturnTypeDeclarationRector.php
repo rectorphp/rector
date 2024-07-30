@@ -118,7 +118,7 @@ CODE_SAMPLE
         if ($newType instanceof MixedType) {
             $className = (string) $this->nodeNameResolver->getName($class);
             $currentObjectType = new ObjectType($className);
-            if (!$objectType->equals($currentObjectType) && $classMethod->returnType !== null) {
+            if (!$objectType->equals($currentObjectType) && $classMethod->returnType instanceof Node) {
                 return;
             }
         }

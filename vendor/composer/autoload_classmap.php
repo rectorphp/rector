@@ -2155,6 +2155,7 @@ return array(
     'Rector\\Symfony\\Bridge\\Symfony\\ContainerServiceProvider' => $vendorDir . '/rector/rector-symfony/src/Bridge/Symfony/ContainerServiceProvider.php',
     'Rector\\Symfony\\Bridge\\Symfony\\Routing\\SymfonyRoutesProvider' => $vendorDir . '/rector/rector-symfony/src/Bridge/Symfony/Routing/SymfonyRoutesProvider.php',
     'Rector\\Symfony\\BundleClassResolver' => $vendorDir . '/rector/rector-symfony/src/BundleClassResolver.php',
+    'Rector\\Symfony\\CodeQuality\\Enum\\ResponseClass' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Enum/ResponseClass.php',
     'Rector\\Symfony\\CodeQuality\\NodeFactory\\SymfonyClosureFactory' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/NodeFactory/SymfonyClosureFactory.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\BinaryOp\\ResponseStatusCodeRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/BinaryOp/ResponseStatusCodeRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ActionSuffixRemoverRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/ActionSuffixRemoverRector.php',
