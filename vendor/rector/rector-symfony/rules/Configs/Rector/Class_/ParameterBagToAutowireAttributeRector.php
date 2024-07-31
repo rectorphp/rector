@@ -62,7 +62,7 @@ final class CertificateFactory
     private ?string $certName;
 
     public function __construct(
-        #[Autowire('%env(CERT_NAME)%')]
+        #[Autowire(param: 'certificate_name')]
         $certName,
     ) {
         $this->certName = $certName;

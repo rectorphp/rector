@@ -512,8 +512,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.18.1",
-            "version_normalized": "11.18.1.0",
+            "version": "v11.19.0",
+            "version_normalized": "11.19.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -569,17 +569,17 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.18.1",
-            "version_normalized": "11.18.1.0",
+            "version": "v11.19.0",
+            "version_normalized": "11.19.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
-                "reference": "be935e9d9115a57be74d20176f43fa8a207029f3"
+                "reference": "ebe2b8d69b8fb1c07111e3500d464e77dfab3202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/be935e9d9115a57be74d20176f43fa8a207029f3",
-                "reference": "be935e9d9115a57be74d20176f43fa8a207029f3",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/ebe2b8d69b8fb1c07111e3500d464e77dfab3202",
+                "reference": "ebe2b8d69b8fb1c07111e3500d464e77dfab3202",
                 "shasum": ""
             },
             "require": {
@@ -587,7 +587,7 @@
                 "psr\/container": "^1.1.1|^2.0.1",
                 "psr\/simple-cache": "^1.0|^2.0|^3.0"
             },
-            "time": "2024-07-09T13:57:38+00:00",
+            "time": "2024-07-29T06:48:51+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1810,12 +1810,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "887a20abd9394b296244ab1082b3cec02ac8498b"
+                "reference": "acfcef8cfbceefee966253ef5f1b2ec57bc10e22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/887a20abd9394b296244ab1082b3cec02ac8498b",
-                "reference": "887a20abd9394b296244ab1082b3cec02ac8498b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/acfcef8cfbceefee966253ef5f1b2ec57bc10e22",
+                "reference": "acfcef8cfbceefee966253ef5f1b2ec57bc10e22",
                 "shasum": ""
             },
             "require": {
@@ -1839,7 +1839,7 @@
                 "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-07-01T06:12:31+00:00",
+            "time": "2024-07-31T14:43:42+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1875,12 +1875,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5971b88676e8c1c62c84f8c1ea84dd600f11082f"
+                "reference": "38b5eeb9add27183126e203b442abde04edc4ad7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5971b88676e8c1c62c84f8c1ea84dd600f11082f",
-                "reference": "5971b88676e8c1c62c84f8c1ea84dd600f11082f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/38b5eeb9add27183126e203b442abde04edc4ad7",
+                "reference": "38b5eeb9add27183126e203b442abde04edc4ad7",
                 "shasum": ""
             },
             "require": {
@@ -1910,7 +1910,7 @@
                 "tomasvotruba\/unused-public": "^0.3.10",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-07-30T13:05:50+00:00",
+            "time": "2024-07-31T14:02:19+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

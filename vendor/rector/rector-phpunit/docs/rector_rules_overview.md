@@ -1,4 +1,4 @@
-# 54 Rules Overview
+# 55 Rules Overview
 
 ## AddCoversClassAttributeRector
 
@@ -870,7 +870,7 @@ Remove `expect($this->any())` from mocks as it has no added value
 
 ## RemoveSetMethodsMethodCallRector
 
-Remove `"setMethods()"` method as never used
+Remove `"setMethods()"` method as never used, move methods to `"addMethods()"` if non-existent or `@method` magic
 
 - class: [`Rector\PHPUnit\PHPUnit100\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
 
@@ -906,6 +906,37 @@ Replace `@test` with prefixed function
 +    public function testOnePlusOneShouldBeTwo()
      {
          $this->assertSame(2, 1+1);
+     }
+ }
+```
+
+<br>
+
+## SetUpBeforeClassToSetUpRector
+
+Change `setUpBeforeClass()` to `setUp()` if not needed
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\SetUpBeforeClassToSetUpRector`](../rules/CodeQuality/Rector/Class_/SetUpBeforeClassToSetUpRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+-    private static $someService;
++    private $someService;
+
+-    public static function setUpBeforeClass(): void
++    protected function setUp(): void
+     {
+-        self::$someService = new SomeService();
++        $this->someService = new SomeService();
+     }
+
+     public function test()
+     {
+-        $result = self::$someService->getValue();
++        $result = $this->someService->getValue();
      }
  }
 ```
@@ -1235,22 +1266,6 @@ Refactor deprecated `withConsecutive()` to `willReturnCallback()` structure
 +                    1 => self::assertEquals([1, 2], $parameters),
 +                    2 => self::assertEquals([3, 4], $parameters),
 +                };
-+            });
-
--        $this->userServiceMock->expects(self::exactly(2))
-+        $matcher = self::exactly(2);
-+
-+        $this->userServiceMock->expects($matcher)
-             ->method('prepare')
--            ->withConsecutive(
--                [1, 2],
--                [3, 4],
--            );
-+            ->willReturnCallback(function ($parameters) use ($matcher) {
-+                match ($matcher->numberOfInvocations()) {
-+                    1 => self::assertEquals([1, 2], $parameters),
-+                    2 => self::assertEquals([3, 4], $parameters),
-+                }
 +            });
      }
  }

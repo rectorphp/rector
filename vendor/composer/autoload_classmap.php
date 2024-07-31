@@ -1738,6 +1738,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SetUpBeforeClassToSetUpRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SetUpBeforeClassToSetUpRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\TestWithToDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/TestWithToDataProviderRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\YieldDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
