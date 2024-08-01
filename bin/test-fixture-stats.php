@@ -2,9 +2,9 @@
 
 // this is part of downgrade build
 declare (strict_types=1);
-namespace RectorPrefix202407;
+namespace RectorPrefix202408;
 
-use RectorPrefix202407\Symfony\Component\Finder\Finder;
+use RectorPrefix202408\Symfony\Component\Finder\Finder;
 require __DIR__ . '/../vendor/autoload.php';
 $finder = Finder::create()->in(__DIR__ . '/../rules-tests')->directories()->name('#Rector$#')->getIterator();
 $ruleToFixtureCount = [];

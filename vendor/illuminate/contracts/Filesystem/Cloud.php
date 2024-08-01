@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Filesystem;
+namespace RectorPrefix202408\Illuminate\Contracts\Filesystem;
 
 interface Cloud extends Filesystem
 {

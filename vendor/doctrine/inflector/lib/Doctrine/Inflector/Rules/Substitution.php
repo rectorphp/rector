@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202407\Doctrine\Inflector\Rules;
+namespace RectorPrefix202408\Doctrine\Inflector\Rules;
 
 final class Substitution
 {

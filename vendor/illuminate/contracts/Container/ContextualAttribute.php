@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Container;
+namespace RectorPrefix202408\Illuminate\Contracts\Container;
 
 interface ContextualAttribute
 {

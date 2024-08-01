@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Database\Events;
+namespace RectorPrefix202408\Illuminate\Contracts\Database\Events;
 
 interface MigrationEvent
 {

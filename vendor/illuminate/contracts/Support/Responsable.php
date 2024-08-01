@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Support;
+namespace RectorPrefix202408\Illuminate\Contracts\Support;
 
 interface Responsable
 {

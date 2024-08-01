@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202407\Nette\Utils;
+namespace RectorPrefix202408\Nette\Utils;
 
-use RectorPrefix202407\Nette;
+use RectorPrefix202408\Nette;
 class Helpers
 {
     /**

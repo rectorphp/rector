@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202407\Clue\React\NDJson;
+namespace RectorPrefix202408\Clue\React\NDJson;
 
-use RectorPrefix202407\Evenement\EventEmitter;
-use RectorPrefix202407\React\Stream\WritableStreamInterface;
+use RectorPrefix202408\Evenement\EventEmitter;
+use RectorPrefix202408\React\Stream\WritableStreamInterface;
 /**
  * The Encoder / Serializer can be used to write any value, encode it as a JSON text and forward it to an output stream
  */

@@ -5,7 +5,7 @@ namespace Rector\Configuration\Levels;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202407\Webmozart\Assert\Assert;
+use RectorPrefix202408\Webmozart\Assert\Assert;
 final class LevelRulesResolver
 {
     /**

@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix202407\React\EventLoop;
+namespace RectorPrefix202408\React\EventLoop;
 
 use BadMethodCallException;
-use RectorPrefix202407\libev\EventLoop;
-use RectorPrefix202407\libev\IOEvent;
-use RectorPrefix202407\libev\SignalEvent;
-use RectorPrefix202407\libev\TimerEvent;
-use RectorPrefix202407\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix202407\React\EventLoop\Timer\Timer;
+use RectorPrefix202408\libev\EventLoop;
+use RectorPrefix202408\libev\IOEvent;
+use RectorPrefix202408\libev\SignalEvent;
+use RectorPrefix202408\libev\TimerEvent;
+use RectorPrefix202408\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix202408\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * [Deprecated] An `ext-libev` based event loop.
@@ -37,7 +37,7 @@ final class ExtLibevLoop implements LoopInterface
     private $signalEvents = array();
     public function __construct()
     {
-        if (!\class_exists('RectorPrefix202407\\libev\\EventLoop', \false)) {
+        if (!\class_exists('RectorPrefix202408\\libev\\EventLoop', \false)) {
             throw new BadMethodCallException('Cannot create ExtLibevLoop, ext-libev extension missing');
         }
         $this->loop = new EventLoop();

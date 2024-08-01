@@ -1,23 +1,23 @@
 <?php
 
-namespace RectorPrefix202407\React\Dns\Resolver;
+namespace RectorPrefix202408\React\Dns\Resolver;
 
-use RectorPrefix202407\React\Cache\ArrayCache;
-use RectorPrefix202407\React\Cache\CacheInterface;
-use RectorPrefix202407\React\Dns\Config\Config;
-use RectorPrefix202407\React\Dns\Config\HostsFile;
-use RectorPrefix202407\React\Dns\Query\CachingExecutor;
-use RectorPrefix202407\React\Dns\Query\CoopExecutor;
-use RectorPrefix202407\React\Dns\Query\ExecutorInterface;
-use RectorPrefix202407\React\Dns\Query\FallbackExecutor;
-use RectorPrefix202407\React\Dns\Query\HostsFileExecutor;
-use RectorPrefix202407\React\Dns\Query\RetryExecutor;
-use RectorPrefix202407\React\Dns\Query\SelectiveTransportExecutor;
-use RectorPrefix202407\React\Dns\Query\TcpTransportExecutor;
-use RectorPrefix202407\React\Dns\Query\TimeoutExecutor;
-use RectorPrefix202407\React\Dns\Query\UdpTransportExecutor;
-use RectorPrefix202407\React\EventLoop\Loop;
-use RectorPrefix202407\React\EventLoop\LoopInterface;
+use RectorPrefix202408\React\Cache\ArrayCache;
+use RectorPrefix202408\React\Cache\CacheInterface;
+use RectorPrefix202408\React\Dns\Config\Config;
+use RectorPrefix202408\React\Dns\Config\HostsFile;
+use RectorPrefix202408\React\Dns\Query\CachingExecutor;
+use RectorPrefix202408\React\Dns\Query\CoopExecutor;
+use RectorPrefix202408\React\Dns\Query\ExecutorInterface;
+use RectorPrefix202408\React\Dns\Query\FallbackExecutor;
+use RectorPrefix202408\React\Dns\Query\HostsFileExecutor;
+use RectorPrefix202408\React\Dns\Query\RetryExecutor;
+use RectorPrefix202408\React\Dns\Query\SelectiveTransportExecutor;
+use RectorPrefix202408\React\Dns\Query\TcpTransportExecutor;
+use RectorPrefix202408\React\Dns\Query\TimeoutExecutor;
+use RectorPrefix202408\React\Dns\Query\UdpTransportExecutor;
+use RectorPrefix202408\React\EventLoop\Loop;
+use RectorPrefix202408\React\EventLoop\LoopInterface;
 final class Factory
 {
     /**

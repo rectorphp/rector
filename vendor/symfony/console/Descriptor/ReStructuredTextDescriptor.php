@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202407\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix202408\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix202407\Symfony\Component\Console\Application;
-use RectorPrefix202407\Symfony\Component\Console\Command\Command;
-use RectorPrefix202407\Symfony\Component\Console\Helper\Helper;
-use RectorPrefix202407\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202407\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202407\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202407\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202407\Symfony\Component\String\UnicodeString;
+use RectorPrefix202408\Symfony\Component\Console\Application;
+use RectorPrefix202408\Symfony\Component\Console\Command\Command;
+use RectorPrefix202408\Symfony\Component\Console\Helper\Helper;
+use RectorPrefix202408\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202408\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202408\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202408\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202408\Symfony\Component\String\UnicodeString;
 class ReStructuredTextDescriptor extends Descriptor
 {
     // <h1>

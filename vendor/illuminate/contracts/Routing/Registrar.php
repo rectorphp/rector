@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Routing;
+namespace RectorPrefix202408\Illuminate\Contracts\Routing;
 
 interface Registrar
 {

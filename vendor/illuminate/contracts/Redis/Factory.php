@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Redis;
+namespace RectorPrefix202408\Illuminate\Contracts\Redis;
 
 interface Factory
 {

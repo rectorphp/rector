@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202407\Composer\Pcre\PHPStan;
+namespace RectorPrefix202408\Composer\Pcre\PHPStan;
 
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantIntegerType;

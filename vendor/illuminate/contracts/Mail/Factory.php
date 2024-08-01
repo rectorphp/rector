@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Mail;
+namespace RectorPrefix202408\Illuminate\Contracts\Mail;
 
 interface Factory
 {

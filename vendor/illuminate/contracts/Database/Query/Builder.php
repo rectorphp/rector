@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202407\Illuminate\Contracts\Database\Query;
+namespace RectorPrefix202408\Illuminate\Contracts\Database\Query;
 
 /**
  * This interface is intentionally empty and exists to improve IDE support.

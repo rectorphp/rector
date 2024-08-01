@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202407\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202407\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202407\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202408\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202408\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202408\Symfony\Component\Console\Style\SymfonyStyle;
 final class Notifier
 {
     public static function notifyNotSuitableMethodForPHP74(string $calledMethod) : void
