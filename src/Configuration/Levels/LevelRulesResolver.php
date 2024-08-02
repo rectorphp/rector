@@ -19,7 +19,7 @@ final class LevelRulesResolver
             throw new ShouldNotHappenException(\sprintf('There is no available rules in %s, define the available rules first', $methodName));
         }
         // level < 0 is not allowed
-        Assert::natural($level, \sprintf('Level must be > 0 on %s', $methodName));
+        Assert::natural($level, \sprintf('Level must be >= 0 on %s', $methodName));
         // start with 0
         $maxLevel = $rulesCount - 1;
         if ($level > $maxLevel) {
