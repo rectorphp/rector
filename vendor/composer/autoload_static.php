@@ -2240,6 +2240,7 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/src/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/src/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
+        'Rector\\PostRector\\Guard\\AddUseStatementGuard' => __DIR__ . '/../..' . '/src/PostRector/Guard/AddUseStatementGuard.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/AbstractPostRector.php',
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/ClassRenamingPostRector.php',
         'Rector\\PostRector\\Rector\\DocblockNameImportingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/DocblockNameImportingPostRector.php',

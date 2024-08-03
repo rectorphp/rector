@@ -6,12 +6,11 @@ namespace Rector\PostRector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\InlineHTML;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PostRector\Guard\AddUseStatementGuard;
 final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -31,15 +30,15 @@ final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\Ab
     private $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\PostRector\Guard\AddUseStatementGuard
      */
-    private $betterNodeFinder;
-    public function __construct(DocBlockNameImporter $docBlockNameImporter, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, BetterNodeFinder $betterNodeFinder)
+    private $addUseStatementGuard;
+    public function __construct(DocBlockNameImporter $docBlockNameImporter, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, AddUseStatementGuard $addUseStatementGuard)
     {
         $this->docBlockNameImporter = $docBlockNameImporter;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->addUseStatementGuard = $addUseStatementGuard;
     }
     /**
      * @return \PhpParser\Node|int|null
@@ -65,6 +64,6 @@ final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\Ab
      */
     public function shouldTraverse(array $stmts) : bool
     {
-        return !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
+        return $this->addUseStatementGuard->shouldTraverse($stmts);
     }
 }

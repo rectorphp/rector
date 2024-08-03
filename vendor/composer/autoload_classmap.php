@@ -2021,6 +2021,7 @@ return array(
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/src/PostRector/Application/PostFileProcessor.php',
     'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => $baseDir . '/src/PostRector/Collector/UseNodesToAddCollector.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
+    'Rector\\PostRector\\Guard\\AddUseStatementGuard' => $baseDir . '/src/PostRector/Guard/AddUseStatementGuard.php',
     'Rector\\PostRector\\Rector\\AbstractPostRector' => $baseDir . '/src/PostRector/Rector/AbstractPostRector.php',
     'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => $baseDir . '/src/PostRector/Rector/ClassRenamingPostRector.php',
     'Rector\\PostRector\\Rector\\DocblockNameImportingPostRector' => $baseDir . '/src/PostRector/Rector/DocblockNameImportingPostRector.php',
