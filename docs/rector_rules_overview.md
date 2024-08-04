@@ -7182,10 +7182,10 @@ Add return type to function like with return new
 ```diff
  final class SomeClass
  {
--    public function action()
-+    public function action(): Response
+-    public function create()
++    public function create(): Project
      {
-         return new Response();
+         return new Project();
      }
  }
 ```
