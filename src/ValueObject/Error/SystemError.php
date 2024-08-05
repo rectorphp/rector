@@ -50,12 +50,22 @@ final class SystemError implements SerializableInterface
     {
         return $this->relativeFilePath;
     }
+    public function getAbsoluteFilePath() : ?string
+    {
+        return $this->relativeFilePath ? \realpath($this->relativeFilePath) ?: null : null;
+    }
     /**
-     * @return array{message: string, relative_file_path: string|null, line: int|null, rector_class: string|null}
+     * @return array{
+     *     message: string,
+     *     relative_file_path: string|null,
+     *     absolute_file_path: string|null,
+     *     line: int|null,
+     *     rector_class: string|null
+     * }
      */
     public function jsonSerialize() : array
     {
-        return [BridgeItem::MESSAGE => $this->message, BridgeItem::RELATIVE_FILE_PATH => $this->relativeFilePath, BridgeItem::LINE => $this->line, BridgeItem::RECTOR_CLASS => $this->rectorClass];
+        return [BridgeItem::MESSAGE => $this->message, BridgeItem::RELATIVE_FILE_PATH => $this->relativeFilePath, BridgeItem::ABSOLUTE_FILE_PATH => $this->getAbsoluteFilePath(), BridgeItem::LINE => $this->line, BridgeItem::RECTOR_CLASS => $this->rectorClass];
     }
     /**
      * @param mixed[] $json

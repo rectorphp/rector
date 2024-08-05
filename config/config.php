@@ -33,4 +33,6 @@ return static function (RectorConfig $rectorConfig) : void {
     }
     // use original php-parser printer to avoid BC break on fluent call
     $rectorConfig->newLineOnFluentCall(\false);
+    // allow real paths in output formatters
+    $rectorConfig->reportingRealPath(\false);
 };

@@ -332,4 +332,8 @@ final class RectorConfig extends Container
             $this->tag($abstract, $autotagInterface);
         }
     }
+    public function reportingRealPath(bool $absolute = \true) : void
+    {
+        SimpleParameterProvider::setParameter(Option::ABSOLUTE_FILE_PATH, $absolute);
+    }
 }

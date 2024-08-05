@@ -68,10 +68,15 @@ final class Configuration
      */
     private $isDebug = \false;
     /**
+     * @readonly
+     * @var bool
+     */
+    private $reportingWithRealPath = \false;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -85,6 +90,7 @@ final class Configuration
         $this->isParallel = $isParallel;
         $this->memoryLimit = $memoryLimit;
         $this->isDebug = $isDebug;
+        $this->reportingWithRealPath = $reportingWithRealPath;
     }
     public function isDryRun() : bool
     {
@@ -140,5 +146,9 @@ final class Configuration
     public function isDebug() : bool
     {
         return $this->isDebug;
+    }
+    public function isReportingWithRealPath() : bool
+    {
+        return $this->reportingWithRealPath;
     }
 }

@@ -25,14 +25,14 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $fileDiffs = $processResult->getFileDiffs();
         \ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
-            $relativeFilePath = $fileDiff->getRelativeFilePath();
-            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $relativeFilePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses()];
+            $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath();
+            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $filePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses()];
             // for Rector CI
-            $errorsJson['changed_files'][] = $relativeFilePath;
+            $errorsJson['changed_files'][] = $filePath;
         }
         $systemErrors = $processResult->getSystemErrors();
         $errorsJson['totals']['errors'] = \count($systemErrors);
-        $errorsData = $this->createErrorsData($systemErrors);
+        $errorsData = $this->createErrorsData($systemErrors, $configuration->isReportingWithRealPath());
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
         }
@@ -43,11 +43,11 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @param SystemError[] $errors
      * @return mixed[]
      */
-    private function createErrorsData(array $errors) : array
+    private function createErrorsData(array $errors, bool $absoluteFilePath) : array
     {
         $errorsData = [];
         foreach ($errors as $error) {
-            $errorDataJson = ['message' => $error->getMessage(), 'file' => $error->getRelativeFilePath()];
+            $errorDataJson = ['message' => $error->getMessage(), 'file' => $absoluteFilePath ? $error->getAbsoluteFilePath() : $error->getRelativeFilePath()];
             if ($error->getRectorClass() !== null) {
                 $errorDataJson['caused_by'] = $error->getRectorClass();
             }

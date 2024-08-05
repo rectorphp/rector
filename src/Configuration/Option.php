@@ -210,4 +210,10 @@ final class Option
      * @var string
      */
     public const SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES = 'skipped_start_with_short_open_tag_files';
+    /**
+     * @internal For reporting with absolute paths instead of relative paths (default behaviour)
+     * @see \Rector\Config\RectorConfig::reportingRealPath()
+     * @var string
+     */
+    public const ABSOLUTE_FILE_PATH = 'absolute_file_path';
 }
