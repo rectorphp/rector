@@ -131,6 +131,10 @@ CODE_SAMPLE
         if ($if->else instanceof Else_ || $if->elseifs !== []) {
             return null;
         }
+        $foreachExprType = $this->nodeTypeResolver->getNativeType($foreach->expr);
+        if (!$foreachExprType->isArray()->yes()) {
+            return null;
+        }
         $innerStmt = $if->stmts[0];
         if ($innerStmt instanceof Return_) {
             return $innerStmt;
