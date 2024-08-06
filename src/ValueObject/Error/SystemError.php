@@ -52,7 +52,10 @@ final class SystemError implements SerializableInterface
     }
     public function getAbsoluteFilePath() : ?string
     {
-        return $this->relativeFilePath ? \realpath($this->relativeFilePath) ?: null : null;
+        if ($this->relativeFilePath === null) {
+            return null;
+        }
+        return \realpath($this->relativeFilePath);
     }
     /**
      * @return array{

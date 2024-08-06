@@ -65,10 +65,9 @@ CODE_SAMPLE
         foreach ($node->catches as $key => $catch) {
             $currentPrintedCatch = $this->betterStandardPrinter->print($catch->stmts);
             // already duplicated catch → remove it and join the type
-            if (\in_array($currentPrintedCatch, $printedCatches, \true)) {
-                // merge type to existing type
-                $existingCatchKey = \array_search($currentPrintedCatch, $printedCatches, \true);
-                $node->catches[$existingCatchKey]->types[] = $catch->types[0];
+            if (isset($printedCatches[$key - 1]) && $printedCatches[$key - 1] === $currentPrintedCatch) {
+                // merge type to previous
+                $node->catches[$key - 1]->types[] = $catch->types[0];
                 unset($node->catches[$key]);
                 $hasChanged = \true;
                 continue;
