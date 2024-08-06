@@ -1976,6 +1976,7 @@ return array(
     'Rector\\PhpAttribute\\AttributeArrayNameInliner' => $baseDir . '/src/PhpAttribute/AttributeArrayNameInliner.php',
     'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => $baseDir . '/src/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
     'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => $baseDir . '/src/PhpAttribute/Enum/DocTagNodeState.php',
+    'Rector\\PhpAttribute\\NodeFactory\\AnnotationToAttributeIntegerValueCaster' => $baseDir . '/src/PhpAttribute/NodeFactory/AnnotationToAttributeIntegerValueCaster.php',
     'Rector\\PhpAttribute\\NodeFactory\\AttributeNameFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/AttributeNameFactory.php',
     'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/NamedArgsFactory.php',
     'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
