@@ -75,7 +75,6 @@ CODE_SAMPLE
                 $node->catches[$key + 1]->types = \array_merge($node->catches[$key]->types, $node->catches[$key + 1]->types);
                 unset($node->catches[$key]);
                 $hasChanged = \true;
-                ++$key;
             }
         }
         if ($hasChanged) {
