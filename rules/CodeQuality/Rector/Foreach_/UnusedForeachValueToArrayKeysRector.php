@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
-use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
@@ -95,7 +94,7 @@ CODE_SAMPLE
             if (!$stmt->keyVar instanceof Expr) {
                 continue;
             }
-            if (!$this->isArrayType($stmt->expr)) {
+            if (!$this->nodeTypeResolver->getNativeType($stmt->expr)->isArray()->yes()) {
                 continue;
             }
             // special case of nested array items
@@ -185,13 +184,5 @@ CODE_SAMPLE
         $foreach->valueVar = $keyVarExpr;
         $foreach->keyVar = null;
         $foreach->expr = $this->nodeFactory->createFuncCall('array_keys', [$foreach->expr]);
-    }
-    private function isArrayType(Expr $expr) : bool
-    {
-        $exprType = $this->getType($expr);
-        if ($exprType instanceof ObjectType) {
-            return \false;
-        }
-        return $exprType->isArray()->yes();
     }
 }

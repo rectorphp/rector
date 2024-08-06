@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\BinaryOpManipulator;
 use Rector\Php71\ValueObject\TwoNodeMatch;
@@ -151,8 +150,7 @@ CODE_SAMPLE
         if (!$foreach->stmts[0] instanceof If_) {
             return \true;
         }
-        $foreachValueStaticType = $this->getType($foreach->expr);
-        return $foreachValueStaticType instanceof ObjectType;
+        return !$this->nodeTypeResolver->getNativeType($foreach->expr)->isArray()->yes();
     }
     private function shouldSkipIf(If_ $if) : bool
     {
