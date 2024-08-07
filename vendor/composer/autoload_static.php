@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite9e62f8370526a5f08ea47a490713455
+class ComposerStaticInit4bcaef4da4b0314c67dae59e30837b25
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -666,7 +666,15 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'RectorPrefix202408\\Fidry\\CpuCoreCounter\\Finder\\WmicPhysicalFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/WmicPhysicalFinder.php',
         'RectorPrefix202408\\Fidry\\CpuCoreCounter\\Finder\\_NProcessorFinder' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/Finder/_NProcessorFinder.php',
         'RectorPrefix202408\\Fidry\\CpuCoreCounter\\NumberOfCpuCoreNotFound' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/NumberOfCpuCoreNotFound.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Auth' => __DIR__ . '/..' . '/illuminate/container/Attributes/Auth.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Authenticated' => __DIR__ . '/..' . '/illuminate/container/Attributes/Authenticated.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Cache' => __DIR__ . '/..' . '/illuminate/container/Attributes/Cache.php',
         'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Config' => __DIR__ . '/..' . '/illuminate/container/Attributes/Config.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\CurrentUser' => __DIR__ . '/..' . '/illuminate/container/Attributes/CurrentUser.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\DB' => __DIR__ . '/..' . '/illuminate/container/Attributes/DB.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Database' => __DIR__ . '/..' . '/illuminate/container/Attributes/Database.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Log' => __DIR__ . '/..' . '/illuminate/container/Attributes/Log.php',
+        'RectorPrefix202408\\Illuminate\\Container\\Attributes\\Storage' => __DIR__ . '/..' . '/illuminate/container/Attributes/Storage.php',
         'RectorPrefix202408\\Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'RectorPrefix202408\\Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
         'RectorPrefix202408\\Illuminate\\Container\\ContextualBindingBuilder' => __DIR__ . '/..' . '/illuminate/container/ContextualBindingBuilder.php',
@@ -725,6 +733,7 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'RectorPrefix202408\\Illuminate\\Contracts\\Database\\Query\\ConditionExpression' => __DIR__ . '/..' . '/illuminate/contracts/Database/Query/ConditionExpression.php',
         'RectorPrefix202408\\Illuminate\\Contracts\\Database\\Query\\Expression' => __DIR__ . '/..' . '/illuminate/contracts/Database/Query/Expression.php',
         'RectorPrefix202408\\Illuminate\\Contracts\\Debug\\ExceptionHandler' => __DIR__ . '/..' . '/illuminate/contracts/Debug/ExceptionHandler.php',
+        'RectorPrefix202408\\Illuminate\\Contracts\\Debug\\ShouldntReport' => __DIR__ . '/..' . '/illuminate/contracts/Debug/ShouldntReport.php',
         'RectorPrefix202408\\Illuminate\\Contracts\\Encryption\\DecryptException' => __DIR__ . '/..' . '/illuminate/contracts/Encryption/DecryptException.php',
         'RectorPrefix202408\\Illuminate\\Contracts\\Encryption\\EncryptException' => __DIR__ . '/..' . '/illuminate/contracts/Encryption/EncryptException.php',
         'RectorPrefix202408\\Illuminate\\Contracts\\Encryption\\Encrypter' => __DIR__ . '/..' . '/illuminate/contracts/Encryption/Encrypter.php',
@@ -1941,7 +1950,6 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
-        'Rector\\PHPStan\\NodeVisitor\\ExprScopeFromStmtNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/ExprScopeFromStmtNodeVisitor.php',
         'Rector\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
@@ -2789,9 +2797,9 @@ class ComposerStaticInite9e62f8370526a5f08ea47a490713455
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite9e62f8370526a5f08ea47a490713455::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4bcaef4da4b0314c67dae59e30837b25::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4bcaef4da4b0314c67dae59e30837b25::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4bcaef4da4b0314c67dae59e30837b25::$classMap;
 
         }, null, ClassLoader::class);
     }
