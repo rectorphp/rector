@@ -620,21 +620,21 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v4.0.4",
-            "version_normalized": "4.0.4.0",
+            "version": "v4.0.5",
+            "version_normalized": "4.0.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "d3ad0aa3b9f934602cb3e3902ebccf10be34d218"
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/d3ad0aa3b9f934602cb3e3902ebccf10be34d218",
-                "reference": "d3ad0aa3b9f934602cb3e3902ebccf10be34d218",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0 <8.4"
+                "php": "8.0 - 8.4"
             },
             "conflict": {
                 "nette\/finder": "<3",
@@ -654,7 +654,7 @@
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2024-01-17T16:50:36+00:00",
+            "time": "2024-08-07T15:39:19+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -703,7 +703,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.0.4"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.0.5"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -1688,12 +1688,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "3ba7adbca3491a977b81147d93eb78084ed8e454"
+                "reference": "11ac7b9060990b62f972a42330cceab294ee097e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/3ba7adbca3491a977b81147d93eb78084ed8e454",
-                "reference": "3ba7adbca3491a977b81147d93eb78084ed8e454",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/11ac7b9060990b62f972a42330cceab294ee097e",
+                "reference": "11ac7b9060990b62f972a42330cceab294ee097e",
                 "shasum": ""
             },
             "require": {
@@ -1712,13 +1712,13 @@
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.2",
+                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^0.2.15",
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-07-25T15:38:30+00:00",
+            "time": "2024-08-08T13:34:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1810,12 +1810,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "acfcef8cfbceefee966253ef5f1b2ec57bc10e22"
+                "reference": "2bacfc618ca1987deab1e70f87720805a171a1a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/acfcef8cfbceefee966253ef5f1b2ec57bc10e22",
-                "reference": "acfcef8cfbceefee966253ef5f1b2ec57bc10e22",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/2bacfc618ca1987deab1e70f87720805a171a1a8",
+                "reference": "2bacfc618ca1987deab1e70f87720805a171a1a8",
                 "shasum": ""
             },
             "require": {
@@ -1834,12 +1834,12 @@
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.2",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.0",
+                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.2",
                 "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-07-31T14:43:42+00:00",
+            "time": "2024-08-08T13:39:23+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1875,12 +1875,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "01e3fe74284092db2c4b6cec28a0ae723d419f31"
+                "reference": "ece927272de55206ad2832bb7fe3993c814fae01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/01e3fe74284092db2c4b6cec28a0ae723d419f31",
-                "reference": "01e3fe74284092db2c4b6cec28a0ae723d419f31",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/ece927272de55206ad2832bb7fe3993c814fae01",
+                "reference": "ece927272de55206ad2832bb7fe3993c814fae01",
                 "shasum": ""
             },
             "require": {
@@ -1904,13 +1904,13 @@
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.2.2",
+                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^0.2",
                 "tomasvotruba\/unused-public": "^0.3.10",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-08-05T15:01:30+00:00",
+            "time": "2024-08-08T13:37:21+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -19,7 +19,7 @@
         "symplify\/easy-coding-standard": "^12.3",
         "symplify\/phpstan-extensions": "^11.4",
         "symplify\/phpstan-rules": "^13.0",
-        "symplify\/rule-doc-generator": "^12.2",
+        "symplify\/rule-doc-generator": "^12.2.5",
         "symplify\/vendor-patches": "^11.3",
         "tomasvotruba\/class-leak": "^0.2.15",
         "tomasvotruba\/unused-public": "^0.3",
@@ -51,10 +51,7 @@
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "rector": "vendor\/bin\/rector --ansi",
         "check-cs": "vendor\/bin\/ecs check --ansi",
-        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
-        "docs": [
-            "vendor\/bin\/rule-doc-generator generate src rules --output-file docs\/rector_rules_overview.md --ansi"
-        ]
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi"
     },
     "extra": {
         "enable-patching": true

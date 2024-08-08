@@ -77,7 +77,7 @@ final class Callback
             $callable = self::unwrap($callable);
         }
         if (is_string($callable) && \strpos($callable, '::') !== \false) {
-            return new ReflectionMethod($callable);
+            return new ReflectionMethod(...\explode('::', $callable, 2));
         } elseif (is_array($callable)) {
             return new ReflectionMethod($callable[0], $callable[1]);
         } elseif (is_object($callable) && !$callable instanceof \Closure) {

@@ -486,6 +486,7 @@ class Strings
     /**
      * Searches the string for all occurrences matching the regular expression and
      * returns an array of arrays containing the found expression and each subexpression.
+     * @return ($lazy is true ? \Generator<int, array> : array[])
      * @param bool|int $captureOffset
      */
     public static function matchAll(
@@ -498,17 +499,35 @@ class Strings
         int $offset = 0,
         bool $unmatchedAsNull = \false,
         bool $patternOrder = \false,
-        bool $utf8 = \false
-    ) : array
+        bool $utf8 = \false,
+        bool $lazy = \false
+    )
     {
-        $flags = \is_int($captureOffset) ? $captureOffset : ($captureOffset ? \PREG_OFFSET_CAPTURE : 0) | ($unmatchedAsNull ? \PREG_UNMATCHED_AS_NULL : 0) | ($patternOrder ? \PREG_PATTERN_ORDER : 0);
         if ($utf8) {
             $offset = strlen(self::substring($subject, 0, $offset));
             $pattern .= 'u';
         }
+        if ($lazy) {
+            $flags = \PREG_OFFSET_CAPTURE | ($unmatchedAsNull ? \PREG_UNMATCHED_AS_NULL : 0);
+            return (function () use($utf8, $captureOffset, $flags, $subject, $pattern, $offset) {
+                $counter = 0;
+                while ($offset <= strlen($subject) - ($counter ? 1 : 0) && self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset])) {
+                    $offset = $m[0][1] + \max(1, strlen($m[0][0]));
+                    if (!$captureOffset) {
+                        $m = \array_map(function ($item) {
+                            return $item[0];
+                        }, $m);
+                    } elseif ($utf8) {
+                        $m = self::bytesToChars($subject, [$m])[0];
+                    }
+                    (yield $counter++ => $m);
+                }
+            })();
+        }
         if ($offset > strlen($subject)) {
             return [];
         }
+        $flags = \is_int($captureOffset) ? $captureOffset : ($captureOffset ? \PREG_OFFSET_CAPTURE : 0) | ($unmatchedAsNull ? \PREG_UNMATCHED_AS_NULL : 0) | ($patternOrder ? \PREG_PATTERN_ORDER : 0);
         self::pcre('preg_match_all', [$pattern, $subject, &$m, $flags & \PREG_PATTERN_ORDER ? $flags : $flags | \PREG_SET_ORDER, $offset]);
         return $utf8 && $captureOffset ? self::bytesToChars($subject, $m) : $m;
     }

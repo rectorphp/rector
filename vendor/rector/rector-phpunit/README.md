@@ -1,6 +1,6 @@
 # Rector Rules for PHPUnit
 
-See available [PHPUnit rules](/docs/rector_rules_overview.md)
+See available [PHPUnit rules](https://getrector.com/find-rule?query=phpunit+rules)
 
 ## Install
 

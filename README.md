@@ -72,7 +72,7 @@ vendor/bin/rector process src
 ## Documentation
 
 * Find [full documentation here](https://getrector.com/documentation/).
-* [Explore Rector Rules](/docs/rector_rules_overview.md)
+* [Explore Rector Rules](https://getrector.com/find-rule)
 
 <br>
 

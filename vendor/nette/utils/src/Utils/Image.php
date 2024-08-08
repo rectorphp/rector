@@ -133,9 +133,7 @@ class Image
      */
     public static function fromFile(string $file, ?int &$type = null)
     {
-        if (!\extension_loaded('gd')) {
-            throw new Nette\NotSupportedException('PHP extension GD is not loaded.');
-        }
+        self::ensureExtension();
         $type = self::detectTypeFromFile($file);
         if (!$type) {
             throw new UnknownImageFileException(\is_file($file) ? "Unknown type of file '{$file}'." : "File '{$file}' not found.");
@@ -150,9 +148,7 @@ class Image
      */
     public static function fromString(string $s, ?int &$type = null)
     {
-        if (!\extension_loaded('gd')) {
-            throw new Nette\NotSupportedException('PHP extension GD is not loaded.');
-        }
+        self::ensureExtension();
         $type = self::detectTypeFromString($s);
         if (!$type) {
             throw new UnknownImageFileException('Unknown type of image.');
@@ -185,9 +181,7 @@ class Image
      */
     public static function fromBlank(int $width, int $height, $color = null)
     {
-        if (!\extension_loaded('gd')) {
-            throw new Nette\NotSupportedException('PHP extension GD is not loaded.');
-        }
+        self::ensureExtension();
         if ($width < 1 || $height < 1) {
             throw new Nette\InvalidArgumentException('Image width and height must be greater than zero.');
         }
@@ -257,6 +251,7 @@ class Image
      */
     public static function isTypeSupported(int $type) : bool
     {
+        self::ensureExtension();
         switch ($type) {
             case ImageType::JPEG:
                 return \IMG_JPG;
@@ -277,6 +272,7 @@ class Image
     /** @return  ImageType[] */
     public static function getSupportedTypes() : array
     {
+        self::ensureExtension();
         $flag = \imagetypes();
         return \array_filter([
             $flag & \IMG_GIF ? ImageType::GIF : null,
@@ -526,6 +522,7 @@ class Image
      */
     public static function calculateTextBox(string $text, string $fontFile, float $size, float $angle = 0, array $options = []) : array
     {
+        self::ensureExtension();
         $box = \imagettfbbox($size, $angle, $fontFile, $text, $options);
         return ['left' => $minX = \min([$box[0], $box[2], $box[4], $box[6]]), 'top' => $minY = \min([$box[1], $box[3], $box[5], $box[7]]), 'width' => \max([$box[0], $box[2], $box[4], $box[6]]) - $minX + 1, 'height' => \max([$box[1], $box[3], $box[5], $box[7]]) - $minY + 1];
     }
@@ -683,5 +680,11 @@ class Image
     {
         $color = $color instanceof ImageColor ? $color->toRGBA() : \array_values($color);
         return \imagecolorallocatealpha($this->image, ...$color) ?: \imagecolorresolvealpha($this->image, ...$color);
+    }
+    private static function ensureExtension() : void
+    {
+        if (!\extension_loaded('gd')) {
+            throw new Nette\NotSupportedException('PHP extension GD is not loaded.');
+        }
     }
 }

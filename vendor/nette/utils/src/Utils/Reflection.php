@@ -75,7 +75,7 @@ final class Reflection
             return $method;
         }
         $hash = [$method->getFileName(), $method->getStartLine(), $method->getEndLine()];
-        if (($alias = $decl->getTraitAliases()[$method->name] ?? null) && ($m = new \ReflectionMethod($alias)) && $hash === [$m->getFileName(), $m->getStartLine(), $m->getEndLine()]) {
+        if (($alias = $decl->getTraitAliases()[$method->name] ?? null) && ($m = new \ReflectionMethod(...\explode('::', $alias, 2))) && $hash === [$m->getFileName(), $m->getStartLine(), $m->getEndLine()]) {
             return self::getMethodDeclaringMethod($m);
         }
         foreach ($decl->getTraits() as $trait) {
@@ -91,7 +91,7 @@ final class Reflection
     public static function areCommentsAvailable() : bool
     {
         static $res;
-        return $res ?? ($res = (bool) (new \ReflectionMethod(__METHOD__))->getDocComment());
+        return $res ?? ($res = (bool) (new \ReflectionMethod(self::class, __FUNCTION__))->getDocComment());
     }
     public static function toString(\Reflector $ref) : string
     {
@@ -100,7 +100,7 @@ final class Reflection
         } elseif ($ref instanceof \ReflectionMethod) {
             return $ref->getDeclaringClass()->name . '::' . $ref->name . '()';
         } elseif ($ref instanceof \ReflectionFunction) {
-            return $ref->name . '()';
+            return \PHP_VERSION_ID >= 80200 && $ref->isAnonymous() ? '{closure}()' : $ref->name . '()';
         } elseif ($ref instanceof \ReflectionProperty) {
             return self::getPropertyDeclaringClass($ref)->name . '::$' . $ref->name;
         } elseif ($ref instanceof \ReflectionParameter) {
