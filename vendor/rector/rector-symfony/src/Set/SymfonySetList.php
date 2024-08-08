@@ -120,6 +120,10 @@ final class SymfonySetList implements SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_70 = __DIR__ . '/../../config/sets/symfony/symfony70.php';
+    /**
+     * @var string
+     */
     public const SYMFONY_71 = __DIR__ . '/../../config/sets/symfony/symfony71.php';
     /**
      * @var string
