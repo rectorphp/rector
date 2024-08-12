@@ -12,10 +12,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -158,11 +156,8 @@ final class UnionTypeMapper implements TypeMapperInterface
     {
         $phpParserUnionedTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            // void type and mixed type are not allowed in union
-            if (\in_array(\get_class($unionedType), [MixedType::class, VoidType::class], \true)) {
-                return null;
-            }
             // NullType or ConstantBooleanType with false value inside UnionType is allowed
+            // void type and mixed type are not allowed in union
             $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, TypeKind::UNION);
             if ($phpParserNode === null) {
                 return null;

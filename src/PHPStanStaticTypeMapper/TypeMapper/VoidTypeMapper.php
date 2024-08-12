@@ -50,7 +50,7 @@ final class VoidTypeMapper implements TypeMapperInterface
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
-        if (\in_array($typeKind, [TypeKind::PARAM, TypeKind::PROPERTY], \true)) {
+        if (\in_array($typeKind, [TypeKind::PARAM, TypeKind::PROPERTY, TypeKind::UNION], \true)) {
             return null;
         }
         return new Identifier(self::VOID);
