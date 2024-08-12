@@ -123,7 +123,8 @@ CODE_SAMPLE
             if (!$getterSetterPropertyType instanceof Type) {
                 continue;
             }
-            if (!$this->isDefaultExprTypeCompatible($property, $getterSetterPropertyType)) {
+            $hasPropertyDefaultNull = $this->hasPropertyDefaultNull($property);
+            if (!$hasPropertyDefaultNull && !$this->isDefaultExprTypeCompatible($property, $getterSetterPropertyType)) {
                 continue;
             }
             if (!$classReflection instanceof ClassReflection) {
@@ -139,7 +140,7 @@ CODE_SAMPLE
             if (!$propertyTypeDeclaration instanceof Node) {
                 continue;
             }
-            $this->decorateDefaultExpr($getterSetterPropertyType, $property);
+            $this->decorateDefaultExpr($getterSetterPropertyType, $property, $hasPropertyDefaultNull);
             $property->type = $propertyTypeDeclaration;
             $hasChanged = \true;
         }
@@ -184,9 +185,13 @@ CODE_SAMPLE
         $defaultExprType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($defaultExpr);
         return $defaultExprType->equals($getterSetterPropertyType);
     }
-    private function decorateDefaultExpr(Type $getterSetterPropertyType, Property $property) : void
+    private function decorateDefaultExpr(Type $getterSetterPropertyType, Property $property, bool $hasPropertyDefaultNull) : void
     {
         if (!TypeCombinator::containsNull($getterSetterPropertyType)) {
+            if ($hasPropertyDefaultNull) {
+                // reset to nothign
+                $property->props[0]->default = null;
+            }
             return;
         }
         $propertyProperty = $property->props[0];
@@ -195,5 +200,13 @@ CODE_SAMPLE
             return;
         }
         $propertyProperty->default = new ConstFetch(new Name('null'));
+    }
+    private function hasPropertyDefaultNull(Property $property) : bool
+    {
+        $defaultExpr = $property->props[0]->default ?? null;
+        if (!$defaultExpr instanceof ConstFetch) {
+            return \false;
+        }
+        return $defaultExpr->name->toLowerString() === 'null';
     }
 }
