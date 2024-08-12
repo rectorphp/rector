@@ -27,6 +27,7 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -61,13 +62,19 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, AttrinationFinder $attrinationFinder, BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, AttrinationFinder $attrinationFinder, BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper, ReturnTypeInferer $returnTypeInferer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->attrinationFinder = $attrinationFinder;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->returnAnalyzer = $returnAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -129,6 +136,14 @@ CODE_SAMPLE
             return null;
         }
         if ($this->attrinationFinder->hasByOne($node, SensioAttribute::TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
+            $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+            $types = $returnType instanceof UnionType ? $returnType->getTypes() : [$returnType];
+            $objectType = new ObjectType('Symfony\\Component\\HttpFoundation\\Response');
+            foreach ($types as $type) {
+                if ($type instanceof ObjectType && $objectType->isSuperTypeOf($type)->yes()) {
+                    return null;
+                }
+            }
             $node->returnType = new NullableType(new Identifier('array'));
             return $node;
         }
