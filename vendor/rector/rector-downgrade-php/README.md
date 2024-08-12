@@ -1,6 +1,6 @@
 # Rector Rules for PHP Downgrade
 
-See available [Downgrade rules](/docs/rector_rules_overview.md)
+See available [Downgrade rules](https://getrector.com/find-rule?query=downgrade+rules)
 
 ## Install
 

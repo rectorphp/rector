@@ -1751,12 +1751,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "c053b9795a81bb9fd5b8d59e05c7556f19267893"
+                "reference": "ceccbe41e5d7fd1a4d4319bd767719244c63575e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/c053b9795a81bb9fd5b8d59e05c7556f19267893",
-                "reference": "c053b9795a81bb9fd5b8d59e05c7556f19267893",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/ceccbe41e5d7fd1a4d4319bd767719244c63575e",
+                "reference": "ceccbe41e5d7fd1a4d4319bd767719244c63575e",
                 "shasum": ""
             },
             "require": {
@@ -1768,16 +1768,16 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-src": "dev-main",
-                "rector\/type-perfect": "^0.1.6",
-                "symplify\/easy-coding-standard": "^12.0",
-                "symplify\/phpstan-extensions": "^11.3",
+                "rector\/type-perfect": "^0.1.8",
+                "symplify\/easy-coding-standard": "^12.3",
+                "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.0",
-                "symplify\/vendor-patches": "^11.2",
+                "symplify\/rule-doc-generator": "^12.2",
+                "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^0.2.13",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-06-26T13:42:44+00:00",
+            "time": "2024-08-12T16:25:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
