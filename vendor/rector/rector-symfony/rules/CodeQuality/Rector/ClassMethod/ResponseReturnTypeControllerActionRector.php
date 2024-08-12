@@ -144,8 +144,11 @@ CODE_SAMPLE
                     return null;
                 }
             }
-            $node->returnType = new NullableType(new Identifier('array'));
-            return $node;
+            if ($returnType->isArray()->yes()) {
+                $node->returnType = new Identifier('array');
+                return $node;
+            }
+            return null;
         }
         return $this->refactorResponse($node);
     }
