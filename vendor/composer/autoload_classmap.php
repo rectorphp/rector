@@ -2444,6 +2444,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnArrayDocblockBasedOnArrayMapRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnArrayDocblockBasedOnArrayMapRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',

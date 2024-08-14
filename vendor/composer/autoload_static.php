@@ -2663,6 +2663,7 @@ class ComposerStaticInit969cf4fb8686733ba64d08544d342ca0
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnArrayDocblockBasedOnArrayMapRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnArrayDocblockBasedOnArrayMapRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',
