@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use RectorPrefix202408\PHPUnit\Framework\Attributes\Ticket;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -45,6 +44,10 @@ final class TicketAnnotationToAttributeRector extends AbstractRector implements 
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+    /**
+     * @var string
+     */
+    private const TICKET_CLASS = 'PHPUnit\\Framework\\Attributes\\Ticket';
     public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -119,7 +122,7 @@ CODE_SAMPLE
     }
     private function createTicketAttribute(string $stringValue) : Attribute
     {
-        $fullyQualified = new FullyQualified(Ticket::class);
+        $fullyQualified = new FullyQualified(self::TICKET_CLASS);
         $ticketString = new String_($stringValue);
         $args = [new Arg($ticketString)];
         return new Attribute($fullyQualified, $args);
