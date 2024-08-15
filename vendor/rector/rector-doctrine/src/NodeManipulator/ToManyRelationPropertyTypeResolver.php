@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Rector\Doctrine\CodeQuality\Enum\DoctrineClass;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\Enum\OdmMappingKey;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
@@ -46,10 +47,6 @@ final class ToManyRelationPropertyTypeResolver
      * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
     private $collectionTypeFactory;
-    /**
-     * @var string
-     */
-    private const COLLECTION_TYPE = 'Doctrine\\Common\\Collections\\Collection';
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -96,7 +93,7 @@ final class ToManyRelationPropertyTypeResolver
             $targetEntity = $this->valueResolver->getValue($targetEntity);
         }
         if (!\is_string($targetEntity)) {
-            return new FullyQualifiedObjectType(self::COLLECTION_TYPE);
+            return new FullyQualifiedObjectType(DoctrineClass::COLLECTION);
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($entityFullyQualifiedClass);

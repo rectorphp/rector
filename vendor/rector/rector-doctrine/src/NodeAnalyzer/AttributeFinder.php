@@ -99,6 +99,14 @@ final class AttributeFinder
         }
         return null;
     }
+    /**
+     * @param string[] $attributeClasses
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     */
+    public function hasAttributeByClasses($node, array $attributeClasses) : bool
+    {
+        return $this->findAttributeByClasses($node, $attributeClasses) !== [];
+    }
     private function findArgByName(Attribute $attribute, string $argName) : ?\PhpParser\Node\Expr
     {
         foreach ($attribute->args as $arg) {

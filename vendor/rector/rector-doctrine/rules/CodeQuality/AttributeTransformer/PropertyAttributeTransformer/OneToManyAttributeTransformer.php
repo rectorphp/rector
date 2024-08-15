@@ -35,7 +35,7 @@ final class OneToManyAttributeTransformer implements PropertyAttributeTransforme
         // handled by OrderBy mapping rule as standalone entity class
         unset($oneToManyMapping[EntityMappingKey::ORDER_BY]);
         $args = $this->nodeFactory->createArgs($oneToManyMapping);
-        NodeValueNormalizer::ensureKeyIsClassConstFetch($args, 'targetEntity');
+        NodeValueNormalizer::ensureKeyIsClassConstFetch($args, EntityMappingKey::TARGET_ENTITY);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
     }
     public function getClassName() : string

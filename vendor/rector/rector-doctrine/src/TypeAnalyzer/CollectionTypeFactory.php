@@ -5,12 +5,12 @@ namespace Rector\Doctrine\TypeAnalyzer;
 
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use PHPStan\Type\ObjectType;
 final class CollectionTypeFactory
 {
-    public function createType(FullyQualifiedObjectType $fullyQualifiedObjectType) : GenericObjectType
+    public function createType(ObjectType $objectType) : GenericObjectType
     {
-        $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
+        $genericTypes = [new IntegerType(), $objectType];
         return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
     }
 }
