@@ -110,7 +110,7 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        $this->identifierManipulator->renameNodeWithMap($node, [AssertMethod::ASSERT_TRUE => 'assertObjectHasAttribute', AssertMethod::ASSERT_FALSE => 'assertObjectNotHasAttribute']);
+        $this->identifierManipulator->renameNodeWithMap($node, [AssertMethod::ASSERT_TRUE => 'assertObjectHasProperty', AssertMethod::ASSERT_FALSE => 'assertObjectNotHasProperty']);
         $oldArgs = $node->getArgs();
         unset($oldArgs[0]);
         $newArgs = $this->nodeFactory->createArgs([new String_($name), $issetExpr->var]);
