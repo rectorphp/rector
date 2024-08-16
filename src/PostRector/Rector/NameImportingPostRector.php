@@ -14,6 +14,7 @@ use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Guard\AddUseStatementGuard;
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
@@ -68,6 +69,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         // make use of existing use import
         $nameInUse = $this->resolveNameInUse($node, $currentUses);
         if ($nameInUse instanceof Name) {
+            $nameInUse->setAttribute(AttributeKey::NAMESPACED_NAME, $node->toString());
             return $nameInUse;
         }
         return $this->nameImporter->importName($node, $this->getFile());
