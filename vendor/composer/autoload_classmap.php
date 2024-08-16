@@ -1753,6 +1753,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\TestWithToDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/TestWithToDataProviderRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\YieldDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertCompareOnCountableWithMethodToAssertCountRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertCompareOnCountableWithMethodToAssertCountRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertComparisonToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertEmptyNullableObjectToAssertInstanceofRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertEmptyNullableObjectToAssertInstanceofRector.php',

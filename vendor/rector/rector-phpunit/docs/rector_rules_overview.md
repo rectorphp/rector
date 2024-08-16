@@ -1,4 +1,4 @@
-# 55 Rules Overview
+# 56 Rules Overview
 
 **This overview is deprecated and replaced by more advanced web search. There you can search and filter by nodes, copy-paste configs for configurable rules and more.**
 
@@ -116,6 +116,19 @@ Change annotations with value to attribute
  final class SomeTest extends TestCase
  {
  }
+```
+
+<br>
+
+## AssertCompareOnCountableWithMethodToAssertCountRector
+
+
+
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareOnCountableWithMethodToAssertCountRector`](../rules/CodeQuality/Rector/MethodCall/AssertCompareOnCountableWithMethodToAssertCountRector.php)
+
+```diff
+-$this->assertSame(1, $countable->count());
++$this->assertCount(1, $countable);
 ```
 
 <br>

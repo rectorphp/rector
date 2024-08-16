@@ -12,6 +12,7 @@ use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLined
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareOnCountableWithMethodToAssertCountRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
@@ -42,6 +43,7 @@ return static function (RectorConfig $rectorConfig) : void {
         AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector::class,
         DataProviderArrayItemsNewlinedRector::class,
         // specific asserts
+        AssertCompareOnCountableWithMethodToAssertCountRector::class,
         AssertCompareToSpecificMethodRector::class,
         AssertComparisonToSpecificMethodRector::class,
         AssertNotOperatorRector::class,
