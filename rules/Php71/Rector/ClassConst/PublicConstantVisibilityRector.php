@@ -5,6 +5,7 @@ namespace Rector\Php71\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -13,8 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php71\Rector\ClassConst\PublicConstantVisibilityRector\PublicConstantVisibilityRectorTest
+ * @deprecated Since 1.2.4, as adds blindly public to all constants, even local-only ones that should be private. Use scope-based solution instead, e.g. https://tomasvotruba.com/blog/how-to-add-visbility-to-338-class-constants-in-25-seconds
  */
-final class PublicConstantVisibilityRector extends AbstractRector implements MinPhpVersionInterface
+final class PublicConstantVisibilityRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
     /**
      * @readonly
