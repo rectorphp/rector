@@ -34,6 +34,10 @@ final class NameTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $node) : Type
     {
+        // not instanceof FullyQualified means it is a Name
+        if (!$node instanceof FullyQualified && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            return $this->resolve(new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME)));
+        }
         if ($node->toString() === ObjectReference::PARENT) {
             return $this->resolveParent($node);
         }
