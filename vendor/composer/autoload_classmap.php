@@ -355,6 +355,7 @@ return array(
     'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchFlags' => $vendorDir . '/composer/pcre/src/PHPStan/PregMatchFlags.php',
     'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchParameterOutTypeExtension' => $vendorDir . '/composer/pcre/src/PHPStan/PregMatchParameterOutTypeExtension.php',
     'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchTypeSpecifyingExtension' => $vendorDir . '/composer/pcre/src/PHPStan/PregMatchTypeSpecifyingExtension.php',
+    'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregReplaceCallbackClosureTypeExtension' => $vendorDir . '/composer/pcre/src/PHPStan/PregReplaceCallbackClosureTypeExtension.php',
     'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\UnsafeStrictGroupsCallRule' => $vendorDir . '/composer/pcre/src/PHPStan/UnsafeStrictGroupsCallRule.php',
     'RectorPrefix202408\\Composer\\Pcre\\PcreException' => $vendorDir . '/composer/pcre/src/PcreException.php',
     'RectorPrefix202408\\Composer\\Pcre\\Preg' => $vendorDir . '/composer/pcre/src/Preg.php',

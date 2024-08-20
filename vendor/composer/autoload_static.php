@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit969cf4fb8686733ba64d08544d342ca0
+class ComposerStaticInit900e9d3a850659d65b1997f7abdf1e41
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -574,6 +574,7 @@ class ComposerStaticInit969cf4fb8686733ba64d08544d342ca0
         'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchFlags' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchFlags.php',
         'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchParameterOutTypeExtension' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchParameterOutTypeExtension.php',
         'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregMatchTypeSpecifyingExtension' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregMatchTypeSpecifyingExtension.php',
+        'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\PregReplaceCallbackClosureTypeExtension' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/PregReplaceCallbackClosureTypeExtension.php',
         'RectorPrefix202408\\Composer\\Pcre\\PHPStan\\UnsafeStrictGroupsCallRule' => __DIR__ . '/..' . '/composer/pcre/src/PHPStan/UnsafeStrictGroupsCallRule.php',
         'RectorPrefix202408\\Composer\\Pcre\\PcreException' => __DIR__ . '/..' . '/composer/pcre/src/PcreException.php',
         'RectorPrefix202408\\Composer\\Pcre\\Preg' => __DIR__ . '/..' . '/composer/pcre/src/Preg.php',
@@ -2805,9 +2806,9 @@ class ComposerStaticInit969cf4fb8686733ba64d08544d342ca0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit969cf4fb8686733ba64d08544d342ca0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit969cf4fb8686733ba64d08544d342ca0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit969cf4fb8686733ba64d08544d342ca0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit900e9d3a850659d65b1997f7abdf1e41::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit900e9d3a850659d65b1997f7abdf1e41::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit900e9d3a850659d65b1997f7abdf1e41::$classMap;
 
         }, null, ClassLoader::class);
     }

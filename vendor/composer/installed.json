@@ -69,31 +69,31 @@
         },
         {
             "name": "composer\/pcre",
-            "version": "3.2.0",
-            "version_normalized": "3.2.0.0",
+            "version": "3.3.0",
+            "version_normalized": "3.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/pcre.git",
-                "reference": "ea4ab6f9580a4fd221e0418f2c357cdd39102a90"
+                "reference": "1637e067347a0c40bbb1e3cd786b20dcab556a81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/ea4ab6f9580a4fd221e0418f2c357cdd39102a90",
-                "reference": "ea4ab6f9580a4fd221e0418f2c357cdd39102a90",
+                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/1637e067347a0c40bbb1e3cd786b20dcab556a81",
+                "reference": "1637e067347a0c40bbb1e3cd786b20dcab556a81",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0"
             },
             "conflict": {
-                "phpstan\/phpstan": "<1.11.8"
+                "phpstan\/phpstan": "<1.11.10"
             },
             "require-dev": {
-                "phpstan\/phpstan": "^1.11.8",
+                "phpstan\/phpstan": "^1.11.10",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpunit\/phpunit": "^8 || ^9"
             },
-            "time": "2024-07-25T09:36:02+00:00",
+            "time": "2024-08-19T19:43:53+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -131,7 +131,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/composer\/pcre\/issues",
-                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.2.0"
+                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.3.0"
             },
             "funding": [
                 {
@@ -1875,12 +1875,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "0eca1e4ae7f7c799119363d469ca6ce477b1a919"
+                "reference": "d7cc42e17c272184d6dfcfa699e2f16285bb5392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0eca1e4ae7f7c799119363d469ca6ce477b1a919",
-                "reference": "0eca1e4ae7f7c799119363d469ca6ce477b1a919",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d7cc42e17c272184d6dfcfa699e2f16285bb5392",
+                "reference": "d7cc42e17c272184d6dfcfa699e2f16285bb5392",
                 "shasum": ""
             },
             "require": {
@@ -1910,7 +1910,7 @@
                 "tomasvotruba\/unused-public": "^0.3.10",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-08-18T07:44:05+00:00",
+            "time": "2024-08-20T12:50:29+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
