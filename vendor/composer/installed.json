@@ -512,17 +512,17 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.21.0",
-            "version_normalized": "11.21.0.0",
+            "version": "v11.20.0",
+            "version_normalized": "11.20.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
-                "reference": "4e353ac5dc1c61eb28e1d3721741989dd692df15"
+                "reference": "f47be671981a4438257c4fbfc3ad257f4e3e929a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/4e353ac5dc1c61eb28e1d3721741989dd692df15",
-                "reference": "4e353ac5dc1c61eb28e1d3721741989dd692df15",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/f47be671981a4438257c4fbfc3ad257f4e3e929a",
+                "reference": "f47be671981a4438257c4fbfc3ad257f4e3e929a",
                 "shasum": ""
             },
             "require": {
@@ -533,7 +533,7 @@
             "provide": {
                 "psr\/container-implementation": "1.1|2.0"
             },
-            "time": "2024-08-17T21:07:31+00:00",
+            "time": "2024-08-05T15:04:01+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
