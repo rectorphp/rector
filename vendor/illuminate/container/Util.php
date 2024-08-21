@@ -3,6 +3,8 @@
 namespace RectorPrefix202408\Illuminate\Container;
 
 use Closure;
+use RectorPrefix202408\Illuminate\Contracts\Container\ContextualAttribute;
+use ReflectionAttribute;
 use ReflectionNamedType;
 /**
  * @internal
@@ -61,5 +63,15 @@ class Util
             }
         }
         return $name;
+    }
+    /**
+     * Get a contextual attribute from a dependency.
+     *
+     * @param  ReflectionParameter  $dependency
+     * @return \ReflectionAttribute|null
+     */
+    public static function getContextualAttributeFromDependency($dependency)
+    {
+        return $dependency->getAttributes(ContextualAttribute::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
     }
 }
