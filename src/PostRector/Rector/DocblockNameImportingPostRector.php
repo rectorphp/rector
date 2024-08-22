@@ -64,6 +64,6 @@ final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\Ab
      */
     public function shouldTraverse(array $stmts) : bool
     {
-        return $this->addUseStatementGuard->shouldTraverse($stmts);
+        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
     }
 }

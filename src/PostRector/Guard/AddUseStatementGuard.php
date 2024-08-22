@@ -14,6 +14,10 @@ class AddUseStatementGuard
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
+    /**
+     * @var array<string, bool>
+     */
+    private $shouldTraverseOnFiles = [];
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -21,8 +25,11 @@ class AddUseStatementGuard
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts) : bool
+    public function shouldTraverse(array $stmts, string $filePath) : bool
     {
+        if (isset($this->shouldTraverseOnFiles[$filePath])) {
+            return $this->shouldTraverseOnFiles[$filePath];
+        }
         $totalNamespaces = 0;
         // just loop the first level stmts to locate namespace to improve performance
         // as namespace is always on first level
@@ -32,9 +39,9 @@ class AddUseStatementGuard
             }
             // skip if 2 namespaces are present
             if ($totalNamespaces === 2) {
-                return \false;
+                return $this->shouldTraverseOnFiles[$filePath] = \false;
             }
         }
-        return !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
+        return $this->shouldTraverseOnFiles[$filePath] = !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
     }
 }
