@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\PhpParser\Node\BetterNodeFinder;
-class AddUseStatementGuard
+final class AddUseStatementGuard
 {
     /**
      * @readonly
