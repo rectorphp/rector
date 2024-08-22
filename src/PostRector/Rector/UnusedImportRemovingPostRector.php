@@ -15,8 +15,6 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -40,9 +38,6 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
     public function enterNode(Node $node) : ?Node
     {
         if (!$node instanceof Namespace_ && !$node instanceof FileWithoutNamespace) {
-            return null;
-        }
-        if (!SimpleParameterProvider::provideBoolParameter(Option::REMOVE_UNUSED_IMPORTS)) {
             return null;
         }
         $hasChanged = \false;

@@ -43,6 +43,10 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\PostRector\Guard\AddUseStatementGuard
      */
     private $addUseStatementGuard;
+    /**
+     * @var array<Use_|GroupUse>
+     */
+    private $currentUses = [];
     public function __construct(NameImporter $nameImporter, ClassNameImportSkipper $classNameImportSkipper, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver, AddUseStatementGuard $addUseStatementGuard)
     {
         $this->nameImporter = $nameImporter;
@@ -50,6 +54,11 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->useImportsResolver = $useImportsResolver;
         $this->aliasNameResolver = $aliasNameResolver;
         $this->addUseStatementGuard = $addUseStatementGuard;
+    }
+    public function beforeTraverse(array $nodes)
+    {
+        $this->currentUses = $this->useImportsResolver->resolve();
+        return $nodes;
     }
     /**
      * @return \PhpParser\Node|int|null
@@ -62,12 +71,11 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($node->isSpecialClassName()) {
             return null;
         }
-        $currentUses = $this->useImportsResolver->resolve();
-        if ($this->classNameImportSkipper->shouldSkipName($node, $currentUses)) {
+        if ($this->classNameImportSkipper->shouldSkipName($node, $this->currentUses)) {
             return null;
         }
         // make use of existing use import
-        $nameInUse = $this->resolveNameInUse($node, $currentUses);
+        $nameInUse = $this->resolveNameInUse($node);
         if ($nameInUse instanceof Name) {
             $nameInUse->setAttribute(AttributeKey::NAMESPACED_NAME, $node->toString());
             return $nameInUse;
@@ -81,12 +89,9 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     {
         return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
     }
-    /**
-     * @param array<Use_|GroupUse> $currentUses
-     */
-    private function resolveNameInUse(FullyQualified $fullyQualified, array $currentUses) : ?\PhpParser\Node\Name
+    private function resolveNameInUse(FullyQualified $fullyQualified) : ?\PhpParser\Node\Name
     {
-        $aliasName = $this->aliasNameResolver->resolveByName($fullyQualified, $currentUses);
+        $aliasName = $this->aliasNameResolver->resolveByName($fullyQualified, $this->currentUses);
         if (\is_string($aliasName)) {
             return new Name($aliasName);
         }
@@ -94,7 +99,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return null;
         }
         $lastName = $fullyQualified->getLast();
-        foreach ($currentUses as $currentUse) {
+        foreach ($this->currentUses as $currentUse) {
             foreach ($currentUse->uses as $useUse) {
                 if ($useUse->name->getLast() !== $lastName) {
                     continue;
