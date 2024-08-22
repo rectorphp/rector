@@ -9,14 +9,11 @@ trait LoggerAwareTrait
 {
     /**
      * The logger instance.
-     *
-     * @var LoggerInterface|null
+     * @var \Psr\Log\LoggerInterface|null
      */
     protected $logger;
     /**
      * Sets a logger.
-     *
-     * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger) : void
     {

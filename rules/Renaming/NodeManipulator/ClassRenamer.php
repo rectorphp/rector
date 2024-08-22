@@ -158,10 +158,6 @@ final class ClassRenamer
         $hasChanged = \false;
         $classLike->implements = \array_unique($classLike->implements);
         foreach ($classLike->implements as $key => $implementName) {
-            $virtualNode = (bool) $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
-            if (!$virtualNode) {
-                continue;
-            }
             $namespaceName = $scope instanceof Scope ? $scope->getNamespace() : null;
             $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
             $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;

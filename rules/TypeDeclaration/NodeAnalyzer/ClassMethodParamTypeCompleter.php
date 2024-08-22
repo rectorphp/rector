@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\CallableType;
@@ -14,7 +13,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
@@ -57,9 +55,6 @@ final class ClassMethodParamTypeCompleter
             }
             // skip if param type already filled
             if ($param->type instanceof Identifier) {
-                continue;
-            }
-            if ($param->type instanceof Name && $param->type->getAttribute(AttributeKey::VIRTUAL_NODE) === \true) {
                 continue;
             }
             // update parameter

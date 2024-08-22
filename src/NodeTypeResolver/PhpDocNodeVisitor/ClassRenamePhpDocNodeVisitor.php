@@ -78,10 +78,6 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         /** @var \PhpParser\Node $currentPhpNode */
         $currentPhpNode = $this->currentPhpNode;
-        $virtualNode = $currentPhpNode->getAttribute(AttributeKey::VIRTUAL_NODE);
-        if ($virtualNode === \true) {
-            return null;
-        }
         $identifier = clone $node;
         $identifier->name = $this->resolveNamespacedName($identifier, $currentPhpNode, $node->name);
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifier, $currentPhpNode);
