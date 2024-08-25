@@ -80,13 +80,12 @@ final class SilentVoidResolver
         if ($classReflection instanceof ClassReflection && $classReflection->isInterface()) {
             return \false;
         }
-        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, [Yield_::class, YieldFrom::class])) {
-            return \false;
-        }
-        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static function (Node $node) : bool {
-            return $node instanceof Return_ && $node->expr instanceof Expr;
+        return !(bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, function (Node $subNode) : bool {
+            if ($subNode instanceof Yield_ || $subNode instanceof YieldFrom) {
+                return \true;
+            }
+            return $subNode instanceof Return_ && $subNode->expr instanceof Expr;
         });
-        return !$return instanceof Return_;
     }
     public function hasSilentVoid(FunctionLike $functionLike) : bool
     {
