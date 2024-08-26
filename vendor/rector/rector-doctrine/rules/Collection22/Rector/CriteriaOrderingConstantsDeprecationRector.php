@@ -4,8 +4,14 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Collection22\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -17,6 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\ObjectType
      */
     private $criteriaObjectType;
@@ -27,39 +34,27 @@ final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replace ASC/DESC with enum Ordering in Criteria::orderBy method call, and remove usage of Criteria::ASC and Criteria::DESC constants elsewhere', [new CodeSample(<<<'CODE_SAMPLE'
-<?php
+use Doctrine\Common\Collections\Criteria;
 
-namespace RectorPrefix202408;
-
-use RectorPrefix202408\Doctrine\Common\Collections\Criteria;
 $criteria = new Criteria();
 $criteria->orderBy(['someProperty' => 'ASC', 'anotherProperty' => 'DESC']);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-<?php
+use Doctrine\Common\Collections\Criteria;
 
-namespace RectorPrefix202408;
-
-use RectorPrefix202408\Doctrine\Common\Collections\Criteria;
 $criteria = new Criteria();
-$criteria->orderBy(['someProperty' => \RectorPrefix202408\Doctrine\Common\Collections\Order::Ascending, 'anotherProperty' => \RectorPrefix202408\Doctrine\Common\Collections\Order::Descending]);
+$criteria->orderBy(['someProperty' => \Doctrine\Common\Collections\Order::Ascending, 'anotherProperty' => \Doctrine\Common\Collections\Order::Descending]);
 CODE_SAMPLE
-), new CodeSample(<<<'PHP'
-<?php
+), new CodeSample(<<<'CODE_SAMPLE'
+use Doctrine\Common\Collections\Criteria;
 
-namespace RectorPrefix202408;
-
-use RectorPrefix202408\Doctrine\Common\Collections\Criteria;
 $query->addOrderBy('something', Criteria::ASC);
-PHP
-, <<<'PHP'
-<?php
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Doctrine\Common\Collections\Criteria;
 
-namespace RectorPrefix202408;
-
-use RectorPrefix202408\Doctrine\Common\Collections\Criteria;
 $query->addOrderBy('something', 'ASC');
-PHP
+CODE_SAMPLE
 )]);
     }
     /**
@@ -67,27 +62,27 @@ PHP
      */
     public function getNodeTypes() : array
     {
-        return [Node\Expr\MethodCall::class, Node\Expr\ClassConstFetch::class];
+        return [MethodCall::class, ClassConstFetch::class];
     }
     /**
-     * @param Node\Expr\MethodCall|Node\Expr\ClassConstFetch $node
+     * @param MethodCall|ClassConstFetch $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof Node\Expr\ClassConstFetch) {
+        if ($node instanceof ClassConstFetch) {
             return $this->refactorClassConstFetch($node);
         }
         return $this->refactorMethodCall($node);
     }
-    private function refactorClassConstFetch(Node\Expr\ClassConstFetch $classConstFetch) : ?Node
+    private function refactorClassConstFetch(ClassConstFetch $classConstFetch) : ?Node
     {
-        if (!$classConstFetch->name instanceof Node\Identifier) {
+        if (!$classConstFetch->name instanceof Identifier) {
             return null;
         }
         if (!\in_array($classConstFetch->name->name, ['ASC', 'DESC'])) {
             return null;
         }
-        if (!$classConstFetch->class instanceof Node\Name) {
+        if (!$classConstFetch->class instanceof Name) {
             return null;
         }
         if (!$this->criteriaObjectType->isSuperTypeOf(new ObjectType($classConstFetch->class->toCodeString()))->yes()) {
@@ -100,23 +95,23 @@ PHP
                 return new String_('DESC');
         }
     }
-    private function refactorMethodCall(Node\Expr\MethodCall $node) : ?Node
+    private function refactorMethodCall(MethodCall $methodCall) : ?Node
     {
-        if (!$this->isName($node->name, 'orderBy')) {
+        if (!$this->isName($methodCall->name, 'orderBy')) {
             return null;
         }
-        if ($node->isFirstClassCallable()) {
+        if ($methodCall->isFirstClassCallable()) {
             return null;
         }
-        if (!$this->criteriaObjectType->isSuperTypeOf($this->nodeTypeResolver->getType($node->var))->yes()) {
+        if (!$this->criteriaObjectType->isSuperTypeOf($this->nodeTypeResolver->getType($methodCall->var))->yes()) {
             return null;
         }
-        $args = $node->getArgs();
+        $args = $methodCall->getArgs();
         if (\count($args) < 1) {
             return null;
         }
         $arg = $args[0];
-        if (!$arg instanceof Node\Arg) {
+        if (!$arg instanceof Arg) {
             return null;
         }
         if (!$arg->value instanceof Array_) {
@@ -133,7 +128,7 @@ PHP
             if ($item->value instanceof String_ && \in_array($v = \strtoupper($item->value->value), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
-            } elseif ($item->value instanceof Node\Expr\ClassConstFetch && $item->value->class instanceof Node\Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) && $item->value->name instanceof Node\Identifier && \in_array($v = \strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
+            } elseif ($item->value instanceof ClassConstFetch && $item->value->class instanceof Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) && $item->value->name instanceof Identifier && \in_array($v = \strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
             } else {
@@ -141,17 +136,16 @@ PHP
             }
         }
         if ($nodeHasChange) {
-            return $this->nodeFactory->createMethodCall($node->var, 'orderBy', $this->nodeFactory->createArgs([$this->nodeFactory->createArg(new Array_($newItems))]));
+            return $this->nodeFactory->createMethodCall($methodCall->var, 'orderBy', $this->nodeFactory->createArgs([$this->nodeFactory->createArg(new Array_($newItems))]));
         }
         return null;
     }
     /**
      * @param 'ASC'|'DESC' $direction
-     * @return ArrayItem
      */
-    private function buildArrayItem(string $direction, ?\PhpParser\Node\Expr $key) : Node\Expr\ArrayItem
+    private function buildArrayItem(string $direction, ?\PhpParser\Node\Expr $key) : ArrayItem
     {
-        $value = $this->nodeFactory->createClassConstFetch('Doctrine\\Common\\Collections\\Order', (function () use($direction) {
+        $classConstFetch = $this->nodeFactory->createClassConstFetch('Doctrine\\Common\\Collections\\Order', (function () use($direction) {
             switch ($direction) {
                 case 'ASC':
                     return 'Ascending';
@@ -159,6 +153,6 @@ PHP
                     return 'Descending';
             }
         })());
-        return new Node\Expr\ArrayItem($value, $key);
+        return new ArrayItem($classConstFetch, $key);
     }
 }
