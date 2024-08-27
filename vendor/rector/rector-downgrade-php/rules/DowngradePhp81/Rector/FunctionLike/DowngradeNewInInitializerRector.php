@@ -159,6 +159,9 @@ CODE_SAMPLE
             $stmts[] = new Expression($assign);
             $param->default = $this->nodeFactory->createNull();
         }
+        if ($functionLike->stmts === null) {
+            return $functionLike;
+        }
         $functionLike->stmts = $functionLike->stmts ?? [];
         $functionLike->stmts = \array_merge($stmts, $functionLike->stmts);
         return $functionLike;
