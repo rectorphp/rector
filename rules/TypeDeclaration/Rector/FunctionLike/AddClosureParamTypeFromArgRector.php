@@ -49,6 +49,10 @@ final class AddClosureParamTypeFromArgRector extends AbstractRector implements C
      */
     private $reflectionProvider;
     /**
+     * @var int
+     */
+    private const DEFAULT_CLOSURE_ARG_POSITION = 0;
+    /**
      * @var AddClosureParamTypeFromArg[]
      */
     private $addClosureParamTypeFromArgs = [];
@@ -68,7 +72,7 @@ CODE_SAMPLE
 $app = new Container();
 $app->extend(SomeClass::class, function (SomeClass $parameter) {});
 CODE_SAMPLE
-, [new AddClosureParamTypeFromArg('Container', 'extend', 1, 0, 0)])]);
+, [new AddClosureParamTypeFromArg('Container', 'extend', 1, 0)])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -129,7 +133,7 @@ CODE_SAMPLE
         if (!isset($functionLike->params[$addClosureParamTypeFromArg->getFunctionLikePosition()])) {
             return null;
         }
-        $callLikeArg = $callLike->getArgs()[$addClosureParamTypeFromArg->getFromArgPosition()] ?? null;
+        $callLikeArg = $callLike->getArgs()[self::DEFAULT_CLOSURE_ARG_POSITION] ?? null;
         if (!$callLikeArg instanceof Arg) {
             return null;
         }

@@ -28,22 +28,15 @@ final class AddClosureParamTypeFromArg
      */
     private $functionLikePosition;
     /**
-     * @var int<0, max>
-     * @readonly
-     */
-    private $fromArgPosition;
-    /**
      * @param int<0, max> $callLikePosition
      * @param int<0, max> $functionLikePosition
-     * @param int<0, max> $fromArgPosition
      */
-    public function __construct(string $className, string $methodName, int $callLikePosition, int $functionLikePosition, int $fromArgPosition)
+    public function __construct(string $className, string $methodName, int $callLikePosition, int $functionLikePosition)
     {
         $this->className = $className;
         $this->methodName = $methodName;
         $this->callLikePosition = $callLikePosition;
         $this->functionLikePosition = $functionLikePosition;
-        $this->fromArgPosition = $fromArgPosition;
         RectorAssert::className($className);
     }
     public function getObjectType() : ObjectType
@@ -67,12 +60,5 @@ final class AddClosureParamTypeFromArg
     public function getFunctionLikePosition() : int
     {
         return $this->functionLikePosition;
-    }
-    /**
-     * @return int<0, max>
-     */
-    public function getFromArgPosition() : int
-    {
-        return $this->fromArgPosition;
     }
 }
