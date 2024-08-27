@@ -101,6 +101,24 @@ final class ProcessCommand extends Command
     {
         $this->setName('process');
         $this->setDescription('Upgrades or refactors source code with provided rectors');
+        $this->setHelp(<<<'EOF'
+The <info>%command.name%</info> command will run Rector main feature:
+
+  <info>%command.full_name%</info>
+
+To specify a folder or a file, you can run:
+
+  <info>%command.full_name% src/Controller</info>
+
+You can also dry run to see the changes that Rector will make with the <comment>--dry-run</comment> option:
+
+  <info>%command.full_name% src/Controller --dry-run</info>
+
+It's also possible to get debug via the <comment>--debug</comment> option:
+
+  <info>%command.full_name% src/Controller --dry-run --debug</info>
+EOF
+);
         ProcessConfigureDecorator::decorate($this);
         parent::configure();
     }
