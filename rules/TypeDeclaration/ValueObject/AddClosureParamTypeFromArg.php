@@ -5,9 +5,6 @@ namespace Rector\TypeDeclaration\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Validation\RectorAssert;
-/**
- * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeFromArgRector\AddClosureParamTypeFromArgRectorTest
- */
 final class AddClosureParamTypeFromArg
 {
     /**
