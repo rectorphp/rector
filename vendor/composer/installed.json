@@ -69,17 +69,17 @@
         },
         {
             "name": "composer\/pcre",
-            "version": "3.3.0",
-            "version_normalized": "3.3.0.0",
+            "version": "3.3.1",
+            "version_normalized": "3.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/pcre.git",
-                "reference": "1637e067347a0c40bbb1e3cd786b20dcab556a81"
+                "reference": "63aaeac21d7e775ff9bc9d45021e1745c97521c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/1637e067347a0c40bbb1e3cd786b20dcab556a81",
-                "reference": "1637e067347a0c40bbb1e3cd786b20dcab556a81",
+                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/63aaeac21d7e775ff9bc9d45021e1745c97521c4",
+                "reference": "63aaeac21d7e775ff9bc9d45021e1745c97521c4",
                 "shasum": ""
             },
             "require": {
@@ -93,7 +93,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpunit\/phpunit": "^8 || ^9"
             },
-            "time": "2024-08-19T19:43:53+00:00",
+            "time": "2024-08-27T18:44:43+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -131,7 +131,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/composer\/pcre\/issues",
-                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.3.0"
+                "source": "https:\/\/github.com\/composer\/pcre\/tree\/3.3.1"
             },
             "funding": [
                 {

@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -251,6 +252,10 @@ final class PHPStanNodeScopeResolver
                 $this->processCallike($node, $mutatingScope);
                 return;
             }
+            if ($node instanceof Match_) {
+                $this->processMatch($node, $mutatingScope);
+                return;
+            }
         };
         $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
         $nodeTraverser = new NodeTraverser();
@@ -260,6 +265,18 @@ final class PHPStanNodeScopeResolver
         }
         $nodeTraverser->traverse($stmts);
         return $stmts;
+    }
+    private function processMatch(Match_ $match, MutatingScope $mutatingScope) : void
+    {
+        $match->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        foreach ($match->arms as $arm) {
+            if ($arm->conds !== null) {
+                foreach ($arm->conds as $cond) {
+                    $cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                }
+            }
+            $arm->body->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
     }
     /**
      * @param Stmt[] $stmts
