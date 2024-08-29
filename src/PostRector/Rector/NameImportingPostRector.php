@@ -71,6 +71,15 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($node->isSpecialClassName()) {
             return null;
         }
+        // verify long name, as short name verify may conflict
+        // see test PR: https://github.com/rectorphp/rector-src/pull/6208
+        // ref https://3v4l.org/21H5j vs https://3v4l.org/GIHSB
+        if (\substr_count($node->toCodeString(), '\\') > 1) {
+            $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
+            if ($originalName instanceof Name && $originalName->getLast() === $originalName->toString()) {
+                return null;
+            }
+        }
         if ($this->classNameImportSkipper->shouldSkipName($node, $this->currentUses)) {
             return null;
         }

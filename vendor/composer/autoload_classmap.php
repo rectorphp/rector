@@ -66,6 +66,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/VarTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeItemNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeUnsealedTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeUnsealedTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeParameterNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php',
