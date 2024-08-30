@@ -70,21 +70,14 @@ final class UseImportsResolver
         if ($newStmts === []) {
             return null;
         }
+        /** @var Namespace_[]|FileWithoutNamespace[] $namespaces */
         $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_;
+            return $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace;
         });
         // multiple namespaces is not supported
-        if (\count($namespaces) > 1) {
+        if (\count($namespaces) !== 1) {
             return null;
         }
-        $currentNamespace = \current($namespaces);
-        if ($currentNamespace instanceof Namespace_) {
-            return $currentNamespace;
-        }
-        $currentStmt = \current($newStmts);
-        if (!$currentStmt instanceof FileWithoutNamespace) {
-            return null;
-        }
-        return $currentStmt;
+        return \current($namespaces);
     }
 }
