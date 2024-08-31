@@ -5,12 +5,16 @@ namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
 final class ClassNameImportSkipper
@@ -42,13 +46,42 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
+    private function shouldSkipShortName(FullyQualified $fullyQualified) : bool
+    {
+        // is scalar name?
+        if (\in_array($fullyQualified->toLowerString(), ['true', 'false', 'bool'], \true)) {
+            return \true;
+        }
+        if ($fullyQualified->isSpecialClassName()) {
+            return \true;
+        }
+        if ($this->isFunctionOrConstantImport($fullyQualified)) {
+            return \true;
+        }
+        // Importing root namespace classes (like \DateTime) is optional
+        return !SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
+    }
+    private function isFunctionOrConstantImport(FullyQualified $fullyQualified) : bool
+    {
+        if ($fullyQualified->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
+            return \true;
+        }
+        return $fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true;
+    }
     /**
      * @param array<Use_|GroupUse> $uses
      */
     public function shouldSkipName(FullyQualified $fullyQualified, array $uses) : bool
     {
-        if (\substr_count($fullyQualified->toCodeString(), '\\') <= 1) {
-            return \false;
+        if (\substr_count($fullyQualified->toCodeString(), '\\') === 1) {
+            return $this->shouldSkipShortName($fullyQualified);
+        }
+        // verify long name, as short name verify may conflict
+        // see test PR: https://github.com/rectorphp/rector-src/pull/6208
+        // ref https://3v4l.org/21H5j vs https://3v4l.org/GIHSB
+        $originalName = $fullyQualified->getAttribute(AttributeKey::ORIGINAL_NAME);
+        if ($originalName instanceof Name && $originalName->getLast() === $originalName->toString()) {
+            return \true;
         }
         $stringName = $fullyQualified->toString();
         $lastUseName = $fullyQualified->getLast();

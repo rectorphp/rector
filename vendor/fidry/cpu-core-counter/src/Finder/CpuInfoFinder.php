@@ -35,7 +35,7 @@ final class CpuInfoFinder implements CpuCoreFinder
         if (\false === $cpuInfo) {
             return sprintf('Could not get the content of the file "%s".', self::CPU_INFO_PATH);
         }
-        return sprintf('Found the file "%s" with the content:%s%s', self::CPU_INFO_PATH, PHP_EOL, $cpuInfo);
+        return sprintf('Found the file "%s" with the content:%s%s%sWill return "%s".', self::CPU_INFO_PATH, PHP_EOL, $cpuInfo, PHP_EOL, self::countCpuCores($cpuInfo));
     }
     /**
      * @return positive-int|null

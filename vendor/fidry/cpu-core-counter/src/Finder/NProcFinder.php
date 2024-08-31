@@ -26,9 +26,12 @@ final class NProcFinder extends ProcOpenBasedFinder
      */
     private $all;
     /**
-     * @param bool $all If disabled will give the number of cores available for the current process only.
+     * @param bool $all If disabled will give the number of cores available for the current process
+     *                  only. This is disabled by default as it is known to be "buggy" on virtual
+     *                  environments as the virtualization tool, e.g. VMWare, might over-commit
+     *                  resources by default.
      */
-    public function __construct(bool $all = \true, ?ProcessExecutor $executor = null)
+    public function __construct(bool $all = \false, ?ProcessExecutor $executor = null)
     {
         parent::__construct($executor);
         $this->all = $all;
