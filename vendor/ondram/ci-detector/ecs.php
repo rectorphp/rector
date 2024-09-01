@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202408;
+namespace RectorPrefix202409;
 
-use RectorPrefix202408\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
-use RectorPrefix202408\PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer;
-use RectorPrefix202408\PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer;
-use RectorPrefix202408\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix202408\Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
-use RectorPrefix202408\Symplify\EasyCodingStandard\ValueObject\Option;
+use RectorPrefix202409\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
+use RectorPrefix202409\PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer;
+use RectorPrefix202409\PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer;
+use RectorPrefix202409\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202409\Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
+use RectorPrefix202409\Symplify\EasyCodingStandard\ValueObject\Option;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::SKIP, [__DIR__ . '/tests/PropertiesPrinterHelper.php']);

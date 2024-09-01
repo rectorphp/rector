@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix202408\Nette\Utils\Strings;
+use RectorPrefix202409\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix202408;
+namespace RectorPrefix202409;
 
 /*
  * This file is part of the Symfony package.
@@ -18,8 +18,8 @@ if ('cli' !== \PHP_SAPI) {
  *
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  */
-use RectorPrefix202408\Symfony\Component\Console\Application;
-use RectorPrefix202408\Symfony\Component\Yaml\Command\LintCommand;
+use RectorPrefix202409\Symfony\Component\Console\Application;
+use RectorPrefix202409\Symfony\Component\Yaml\Command\LintCommand;
 function includeIfExists(string $file) : bool
 {
     return \file_exists($file) && (include $file);

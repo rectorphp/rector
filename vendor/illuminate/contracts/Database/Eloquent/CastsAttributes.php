@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202408\Illuminate\Contracts\Database\Eloquent;
+namespace RectorPrefix202409\Illuminate\Contracts\Database\Eloquent;
 
-use RectorPrefix202408\Illuminate\Database\Eloquent\Model;
+use RectorPrefix202409\Illuminate\Database\Eloquent\Model;
 /**
  * @template TGet
  * @template TSet

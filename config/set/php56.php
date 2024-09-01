@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202408;
+namespace RectorPrefix202409;
 
 use Rector\Config\RectorConfig;
 use Rector\Php56\Rector\FuncCall\PowToExpRector;

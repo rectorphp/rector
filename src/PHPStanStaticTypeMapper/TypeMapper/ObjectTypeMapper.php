@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use RectorPrefix202408\Nette\Utils\Strings;
+use RectorPrefix202409\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;

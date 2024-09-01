@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202408\Illuminate\Contracts\Pagination;
+namespace RectorPrefix202409\Illuminate\Contracts\Pagination;
 
 interface CursorPaginator
 {

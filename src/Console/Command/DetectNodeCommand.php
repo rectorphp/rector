@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202408\Symfony\Component\Console\Command\Command;
-use RectorPrefix202408\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202408\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202408\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202408\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202409\Symfony\Component\Console\Command\Command;
+use RectorPrefix202409\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202409\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202409\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202409\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @deprecated since 1.1.2 as too sensitive on correct output and unable to click through.
  * Use dynamic, sharedable online version https://getrector.com/ast instead

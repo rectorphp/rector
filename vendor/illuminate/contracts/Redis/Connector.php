@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202408\Illuminate\Contracts\Redis;
+namespace RectorPrefix202409\Illuminate\Contracts\Redis;
 
 interface Connector
 {

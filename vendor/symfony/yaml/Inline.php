@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202408\Symfony\Component\Yaml;
+namespace RectorPrefix202409\Symfony\Component\Yaml;
 
-use RectorPrefix202408\Symfony\Component\Yaml\Exception\DumpException;
-use RectorPrefix202408\Symfony\Component\Yaml\Exception\ParseException;
-use RectorPrefix202408\Symfony\Component\Yaml\Tag\TaggedValue;
+use RectorPrefix202409\Symfony\Component\Yaml\Exception\DumpException;
+use RectorPrefix202409\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix202409\Symfony\Component\Yaml\Tag\TaggedValue;
 /**
  * Inline implements a YAML parser/dumper for the YAML inline syntax.
  *

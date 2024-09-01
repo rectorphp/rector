@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202408\\Symfony\\Component\\Filesystem\\": ""
+            "RectorPrefix202409\\Symfony\\Component\\Filesystem\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

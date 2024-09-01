@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202408;
+namespace RectorPrefix202409;
 
 use Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;

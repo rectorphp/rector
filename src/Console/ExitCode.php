@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202408\Symfony\Component\Console\Command\Command;
+use RectorPrefix202409\Symfony\Component\Console\Command\Command;
 /**
  * @api
  */

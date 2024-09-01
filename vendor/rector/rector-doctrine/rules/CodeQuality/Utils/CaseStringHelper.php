@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Utils;
 
-use RectorPrefix202408\Nette\Utils\Strings;
+use RectorPrefix202409\Nette\Utils\Strings;
 final class CaseStringHelper
 {
     public static function camelCase(string $value) : string

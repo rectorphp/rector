@@ -14,7 +14,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202408\Webmozart\Assert\Assert;
+use RectorPrefix202409\Webmozart\Assert\Assert;
 /**
  * @deprecated since 1.2.1, as duplicate of split rules. Use @see BoolReturnTypeFromStrictScalarReturnsRector, NumericReturnTypeFromStrictScalarReturnsRector, StringReturnTypeFromStrictScalarReturnsRector instead.
  */
