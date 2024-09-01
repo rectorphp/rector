@@ -46,28 +46,6 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
-    private function shouldSkipShortName(FullyQualified $fullyQualified) : bool
-    {
-        // is scalar name?
-        if (\in_array($fullyQualified->toLowerString(), ['true', 'false', 'bool'], \true)) {
-            return \true;
-        }
-        if ($fullyQualified->isSpecialClassName()) {
-            return \true;
-        }
-        if ($this->isFunctionOrConstantImport($fullyQualified)) {
-            return \true;
-        }
-        // Importing root namespace classes (like \DateTime) is optional
-        return !SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
-    }
-    private function isFunctionOrConstantImport(FullyQualified $fullyQualified) : bool
-    {
-        if ($fullyQualified->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
-            return \true;
-        }
-        return $fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true;
-    }
     /**
      * @param array<Use_|GroupUse> $uses
      */
@@ -101,6 +79,28 @@ final class ClassNameImportSkipper
             }
         }
         return \false;
+    }
+    private function shouldSkipShortName(FullyQualified $fullyQualified) : bool
+    {
+        // is scalar name?
+        if (\in_array($fullyQualified->toLowerString(), ['true', 'false', 'bool'], \true)) {
+            return \true;
+        }
+        if ($fullyQualified->isSpecialClassName()) {
+            return \true;
+        }
+        if ($this->isFunctionOrConstantImport($fullyQualified)) {
+            return \true;
+        }
+        // Importing root namespace classes (like \DateTime) is optional
+        return !SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
+    }
+    private function isFunctionOrConstantImport(FullyQualified $fullyQualified) : bool
+    {
+        if ($fullyQualified->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
+            return \true;
+        }
+        return $fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true;
     }
     private function isConflictedShortNameInUse(UseUse $useUse, string $useName, string $lastUseName, string $stringName) : bool
     {
