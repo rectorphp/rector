@@ -3,8 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Util;
 
+use Rector\ValueObject\PhpVersion;
 final class PhpVersionFactory
 {
+    /**
+     * @return PhpVersion::*
+     */
     public static function createIntVersion(string $version) : int
     {
         $explodeDash = \explode('-', $version);

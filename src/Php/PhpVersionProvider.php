@@ -6,7 +6,7 @@ namespace Rector\Php;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
+use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\StringUtils;
 use Rector\ValueObject\PhpVersion;
@@ -44,7 +44,7 @@ final class PhpVersionProvider
         }
         $projectComposerJson = \getcwd() . '/composer.json';
         if (\file_exists($projectComposerJson)) {
-            $phpVersion = ProjectComposerJsonPhpVersionResolver::resolve($projectComposerJson);
+            $phpVersion = ComposerJsonPhpVersionResolver::resolve($projectComposerJson);
             if ($phpVersion !== null) {
                 return $this->phpVersionFeatures = $phpVersion;
             }

@@ -3,44 +3,32 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
+use Rector\Tests\Configuration\PhpLevelSetResolverTest;
 use Rector\ValueObject\PhpVersion;
+use RectorPrefix202409\Webmozart\Assert\Assert;
+/**
+ * @see PhpLevelSetResolverTest
+ */
 final class PhpLevelSetResolver
 {
-    public static function resolveFromPhpVersion(int $phpVersion) : string
+    /**
+     * @var array<PhpVersion::*, SetList::PHP_*>
+     */
+    private const VERSION_LOWER_BOUND_CONFIGS = [PhpVersion::PHP_52 => SetList::PHP_52, PhpVersion::PHP_53 => SetList::PHP_53, PhpVersion::PHP_54 => SetList::PHP_54, PhpVersion::PHP_55 => SetList::PHP_55, PhpVersion::PHP_56 => SetList::PHP_56, PhpVersion::PHP_70 => SetList::PHP_70, PhpVersion::PHP_71 => SetList::PHP_71, PhpVersion::PHP_72 => SetList::PHP_72, PhpVersion::PHP_73 => SetList::PHP_73, PhpVersion::PHP_74 => SetList::PHP_74, PhpVersion::PHP_80 => SetList::PHP_80, PhpVersion::PHP_81 => SetList::PHP_81, PhpVersion::PHP_82 => SetList::PHP_82, PhpVersion::PHP_83 => SetList::PHP_83, PhpVersion::PHP_84 => SetList::PHP_84];
+    /**
+     * @param PhpVersion::* $phpVersion
+     * @return string[]
+     */
+    public static function resolveFromPhpVersion(int $phpVersion) : array
     {
-        switch ($phpVersion) {
-            case PhpVersion::PHP_53:
-                return LevelSetList::UP_TO_PHP_53;
-            case PhpVersion::PHP_54:
-                return LevelSetList::UP_TO_PHP_54;
-            case PhpVersion::PHP_55:
-                return LevelSetList::UP_TO_PHP_55;
-            case PhpVersion::PHP_56:
-                return LevelSetList::UP_TO_PHP_56;
-            case PhpVersion::PHP_70:
-                return LevelSetList::UP_TO_PHP_70;
-            case PhpVersion::PHP_71:
-                return LevelSetList::UP_TO_PHP_71;
-            case PhpVersion::PHP_72:
-                return LevelSetList::UP_TO_PHP_72;
-            case PhpVersion::PHP_73:
-                return LevelSetList::UP_TO_PHP_73;
-            case PhpVersion::PHP_74:
-                return LevelSetList::UP_TO_PHP_74;
-            case PhpVersion::PHP_80:
-                return LevelSetList::UP_TO_PHP_80;
-            case PhpVersion::PHP_81:
-                return LevelSetList::UP_TO_PHP_81;
-            case PhpVersion::PHP_82:
-                return LevelSetList::UP_TO_PHP_82;
-            case PhpVersion::PHP_83:
-                return LevelSetList::UP_TO_PHP_83;
-            case PhpVersion::PHP_84:
-                return LevelSetList::UP_TO_PHP_84;
-            default:
-                throw new InvalidConfigurationException(\sprintf('Could not resolve PHP level set list for "%s"', $phpVersion));
+        $configFilePaths = [];
+        foreach (self::VERSION_LOWER_BOUND_CONFIGS as $versionLowerBound => $phpSetFilePath) {
+            if ($versionLowerBound <= $phpVersion) {
+                $configFilePaths[] = $phpSetFilePath;
+            }
         }
+        Assert::allFileExists($configFilePaths);
+        return $configFilePaths;
     }
 }

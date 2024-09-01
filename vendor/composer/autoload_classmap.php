@@ -2032,7 +2032,7 @@ return array(
     'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => $baseDir . '/src/PhpParser/Printer/BetterStandardPrinter.php',
     'Rector\\PhpParser\\ValueObject\\StmtsAndTokens' => $baseDir . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
     'Rector\\Php\\PhpVersionProvider' => $baseDir . '/src/Php/PhpVersionProvider.php',
-    'Rector\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => $baseDir . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
+    'Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver' => $baseDir . '/src/Php/PhpVersionResolver/ComposerJsonPhpVersionResolver.php',
     'Rector\\Php\\PolyfillPackagesProvider' => $baseDir . '/src/Php/PolyfillPackagesProvider.php',
     'Rector\\Php\\ReservedKeywordAnalyzer' => $baseDir . '/src/Php/ReservedKeywordAnalyzer.php',
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/src/PostRector/Application/PostFileProcessor.php',

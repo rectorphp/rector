@@ -2251,7 +2251,7 @@ class ComposerStaticInitf022c0913f90a8ce8e0872b4624f9c82
         'Rector\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
         'Rector\\PhpParser\\ValueObject\\StmtsAndTokens' => __DIR__ . '/../..' . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
         'Rector\\Php\\PhpVersionProvider' => __DIR__ . '/../..' . '/src/Php/PhpVersionProvider.php',
-        'Rector\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
+        'Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ComposerJsonPhpVersionResolver.php',
         'Rector\\Php\\PolyfillPackagesProvider' => __DIR__ . '/../..' . '/src/Php/PolyfillPackagesProvider.php',
         'Rector\\Php\\ReservedKeywordAnalyzer' => __DIR__ . '/../..' . '/src/Php/ReservedKeywordAnalyzer.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/src/PostRector/Application/PostFileProcessor.php',

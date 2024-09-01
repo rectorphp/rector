@@ -17,12 +17,11 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
+use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
-use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\FOSRestSetList;
 use Rector\Symfony\Set\JMSSetList;
@@ -413,46 +412,44 @@ final class RectorConfigBuilder
             throw new InvalidConfigurationException(\sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
         }
         if ($pickedArguments === []) {
-            // use composer.json PHP version
-            $projectComposerJsonFilePath = \getcwd() . '/composer.json';
-            if (\file_exists($projectComposerJsonFilePath)) {
-                $projectPhpVersion = ProjectComposerJsonPhpVersionResolver::resolve($projectComposerJsonFilePath);
-                if (\is_int($projectPhpVersion)) {
-                    $this->sets[] = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
-                    return $this;
-                }
-            }
-            throw new InvalidConfigurationException(\sprintf('We could not find local "composer.json" to determine your PHP version.%sPlease, fill the PHP version set in withPhpSets() manually.', \PHP_EOL));
+            $projectPhpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
+            $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
+            $this->sets = \array_merge($this->sets, $phpLevelSets);
+            return $this;
         }
         if ($php53) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_53;
+            $targetPhpVersion = PhpVersion::PHP_53;
         } elseif ($php54) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_54;
+            $targetPhpVersion = PhpVersion::PHP_54;
         } elseif ($php55) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_55;
+            $targetPhpVersion = PhpVersion::PHP_55;
         } elseif ($php56) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_56;
+            $targetPhpVersion = PhpVersion::PHP_56;
         } elseif ($php70) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_70;
+            $targetPhpVersion = PhpVersion::PHP_70;
         } elseif ($php71) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_71;
+            $targetPhpVersion = PhpVersion::PHP_71;
         } elseif ($php72) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_72;
+            $targetPhpVersion = PhpVersion::PHP_72;
         } elseif ($php73) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_73;
+            $targetPhpVersion = PhpVersion::PHP_73;
         } elseif ($php74) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_74;
+            $targetPhpVersion = PhpVersion::PHP_74;
         } elseif ($php80) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_80;
+            $targetPhpVersion = PhpVersion::PHP_80;
         } elseif ($php81) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_81;
+            $targetPhpVersion = PhpVersion::PHP_81;
         } elseif ($php82) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_82;
+            $targetPhpVersion = PhpVersion::PHP_82;
         } elseif ($php83) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_83;
+            $targetPhpVersion = PhpVersion::PHP_83;
         } elseif ($php84) {
-            $this->sets[] = LevelSetList::UP_TO_PHP_84;
+            $targetPhpVersion = PhpVersion::PHP_84;
+        } else {
+            throw new InvalidConfigurationException('Invalid PHP version set');
         }
+        $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($targetPhpVersion);
+        $this->sets = \array_merge($this->sets, $phpLevelSets);
         return $this;
     }
     /**
@@ -461,47 +458,47 @@ final class RectorConfigBuilder
      */
     public function withPhp53Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_53;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_53));
         return $this;
     }
     public function withPhp54Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_54;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_54));
         return $this;
     }
     public function withPhp55Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_55;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_55));
         return $this;
     }
     public function withPhp56Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_56;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_56));
         return $this;
     }
     public function withPhp70Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_70;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_70));
         return $this;
     }
     public function withPhp71Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_71;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_71));
         return $this;
     }
     public function withPhp72Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_72;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_72));
         return $this;
     }
     public function withPhp73Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_73;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_73));
         return $this;
     }
     public function withPhp74Sets() : self
     {
-        $this->sets[] = LevelSetList::UP_TO_PHP_74;
+        $this->sets = \array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_74));
         return $this;
     }
     // there is no withPhp80Sets() and above,
