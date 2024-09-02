@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Analyser\Scope;
@@ -85,6 +86,10 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
+     * @var string
+     */
+    private const ERROR_MESSAGE = '%s itself does not have any type. Check the %s node instead';
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, iterable $nodeTypeResolvers)
@@ -123,11 +128,8 @@ final class NodeTypeResolver
             return \false;
         }
         // warn about invalid use of this method
-        if ($node instanceof ClassMethod) {
-            throw new ShouldNotHappenException('ClassMethod itself does not have any type. Check the Class_/Interface/Trait_ node instead');
-        }
-        if ($node instanceof ClassConst) {
-            throw new ShouldNotHappenException('Class constant itself does not have any type. Check the Class_/Trait_ instead');
+        if ($node instanceof ClassMethod || $node instanceof ClassConst) {
+            throw new ShouldNotHappenException(\sprintf(self::ERROR_MESSAGE, \get_class($node), ClassLike::class));
         }
         $resolvedType = $this->getType($node);
         if ($resolvedType instanceof MixedType) {
