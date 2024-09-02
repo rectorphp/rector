@@ -69,7 +69,7 @@ final class CollectionTypeResolver
             }
         }
         if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode) {
-            $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
+            $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
             $fullyQualifiedName = $nameScope->resolveStringName($typeNode->type->name);
             return new FullyQualifiedObjectType($fullyQualifiedName);
         }

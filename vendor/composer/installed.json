@@ -1688,12 +1688,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "ef84d74067958aff8c2b0bbb02abb96c53cd1fe6"
+                "reference": "fb26209e01b08bf3163f6fada4c72ad34b8716a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/ef84d74067958aff8c2b0bbb02abb96c53cd1fe6",
-                "reference": "ef84d74067958aff8c2b0bbb02abb96c53cd1fe6",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/fb26209e01b08bf3163f6fada4c72ad34b8716a8",
+                "reference": "fb26209e01b08bf3163f6fada4c72ad34b8716a8",
                 "shasum": ""
             },
             "require": {
@@ -1705,6 +1705,7 @@
                 "doctrine\/orm": "^2.19",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^1.11",
+                "phpstan\/phpstan-deprecation-rules": "^1.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-src": "dev-main",
@@ -1718,7 +1719,7 @@
                 "tomasvotruba\/unused-public": "^0.3",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-08-26T17:08:21+00:00",
+            "time": "2024-09-02T08:37:04+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

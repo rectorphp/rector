@@ -72,20 +72,6 @@ final class InlineCodeParser
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @return Stmt[]
-     *
-     * @api
-     * @deprecated use parseFile() or parseString() instead
-     */
-    public function parse(string $content) : array
-    {
-        // to cover files too
-        if (\is_file($content)) {
-            $content = FileSystem::read($content);
-        }
-        return $this->parseCode($content);
-    }
-    /**
      * @api downgrade
      *
      * @return Stmt[]
