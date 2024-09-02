@@ -4,7 +4,8 @@ declare (strict_types=1);
 namespace Rector\Visibility\Rector\ClassConst;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
@@ -62,21 +63,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConst::class];
+        return [Class_::class, Interface_::class];
     }
     /**
-     * @param ClassConst $node
+     * @param Class_|Interface_ $node
      */
     public function refactor(Node $node) : ?Node
     {
+        $hasChanged = \false;
         foreach ($this->classConstantVisibilityChanges as $classConstantVisibilityChange) {
-            if (!$this->isName($node, $classConstantVisibilityChange->getConstant())) {
-                continue;
-            }
             if (!$this->isObjectType($node, $classConstantVisibilityChange->getObjectType())) {
                 continue;
             }
-            $this->visibilityManipulator->changeNodeVisibility($node, $classConstantVisibilityChange->getVisibility());
+            foreach ($node->getConstants() as $classConst) {
+                if (!$this->isName($classConst, $classConstantVisibilityChange->getConstant())) {
+                    continue;
+                }
+                $this->visibilityManipulator->changeNodeVisibility($classConst, $classConstantVisibilityChange->getVisibility());
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
             return $node;
         }
         return null;

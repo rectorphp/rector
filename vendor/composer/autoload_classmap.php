@@ -1641,7 +1641,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\CastTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/CastTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassAndInterfaceTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/ClassAndInterfaceTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassConstFetchTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/ClassConstFetchTypeResolver.php',
-    'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassMethodOrClassConstTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/ClassMethodOrClassConstTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\IdentifierTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/IdentifierTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\NameTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/NameTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\NewTypeResolver' => $baseDir . '/src/NodeTypeResolver/NodeTypeResolver/NewTypeResolver.php',

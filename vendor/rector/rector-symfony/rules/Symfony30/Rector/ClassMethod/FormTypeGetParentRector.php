@@ -118,7 +118,7 @@ CODE_SAMPLE
             return $this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractType'));
         }
         if ($this->isName($classMethod->name, 'getExtendedType')) {
-            return $this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'));
+            return $this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'));
         }
         return \false;
     }

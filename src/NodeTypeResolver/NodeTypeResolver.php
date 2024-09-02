@@ -15,6 +15,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
@@ -35,6 +37,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Configuration\RenamedClassesDataCollector;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -118,6 +121,13 @@ final class NodeTypeResolver
     {
         if ($node instanceof ClassConstFetch) {
             return \false;
+        }
+        // warn about invalid use of this method
+        if ($node instanceof ClassMethod) {
+            throw new ShouldNotHappenException('ClassMethod itself does not have any type. Check the Class_/Interface/Trait_ node instead');
+        }
+        if ($node instanceof ClassConst) {
+            throw new ShouldNotHappenException('Class constant itself does not have any type. Check the Class_/Trait_ instead');
         }
         $resolvedType = $this->getType($node);
         if ($resolvedType instanceof MixedType) {

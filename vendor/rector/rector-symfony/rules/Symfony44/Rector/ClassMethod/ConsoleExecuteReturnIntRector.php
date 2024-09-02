@@ -134,6 +134,9 @@ CODE_SAMPLE
     }
     private function isReturnIntegerType(?Expr $expr) : bool
     {
+        if ($expr instanceof Int_) {
+            return \true;
+        }
         if ($expr instanceof Expr) {
             $returnedType = $this->getType($expr);
             if ($returnedType instanceof IntegerType) {

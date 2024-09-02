@@ -1860,7 +1860,6 @@ class ComposerStaticInitf022c0913f90a8ce8e0872b4624f9c82
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\CastTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/CastTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassAndInterfaceTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/ClassAndInterfaceTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassConstFetchTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/ClassConstFetchTypeResolver.php',
-        'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassMethodOrClassConstTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/ClassMethodOrClassConstTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\IdentifierTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/IdentifierTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\NameTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/NameTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver\\NewTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver/NewTypeResolver.php',

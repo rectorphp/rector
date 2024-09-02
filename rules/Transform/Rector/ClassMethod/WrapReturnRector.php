@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -51,24 +52,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
+        $hasChanged = \false;
         foreach ($this->typeMethodWraps as $typeMethodWrap) {
-            if (!$this->isName($node, $typeMethodWrap->getMethod())) {
-                continue;
-            }
             if (!$this->isObjectType($node, $typeMethodWrap->getObjectType())) {
                 continue;
             }
-            if ($node->stmts === null) {
-                continue;
+            foreach ($node->getMethods() as $classMethod) {
+                if (!$this->isName($classMethod, $typeMethodWrap->getMethod())) {
+                    continue;
+                }
+                if ($node->stmts === null) {
+                    continue;
+                }
+                $this->wrap($classMethod, $typeMethodWrap->isArrayWrap());
+                $hasChanged = \true;
             }
-            return $this->wrap($node, $typeMethodWrap->isArrayWrap());
+        }
+        if ($hasChanged) {
+            return $node;
         }
         return null;
     }
