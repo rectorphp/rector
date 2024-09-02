@@ -2336,7 +2336,6 @@ class ComposerStaticInitf022c0913f90a8ce8e0872b4624f9c82
         'Rector\\Set\\ValueObject\\LevelSetList' => __DIR__ . '/../..' . '/src/Set/ValueObject/LevelSetList.php',
         'Rector\\Set\\ValueObject\\Set' => __DIR__ . '/../..' . '/src/Set/ValueObject/Set.php',
         'Rector\\Set\\ValueObject\\SetList' => __DIR__ . '/../..' . '/src/Set/ValueObject/SetList.php',
-        'Rector\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/../..' . '/src/Skipper/Contract/SkipVoterInterface.php',
         'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/../..' . '/src/Skipper/FileSystem/FnMatchPathNormalizer.php',
         'Rector\\Skipper\\FileSystem\\PathNormalizer' => __DIR__ . '/../..' . '/src/Skipper/FileSystem/PathNormalizer.php',
         'Rector\\Skipper\\Fnmatcher' => __DIR__ . '/../..' . '/src/Skipper/Fnmatcher.php',

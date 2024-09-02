@@ -6,8 +6,7 @@ namespace Rector\Skipper\Skipper;
 use PhpParser\Node;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ProcessAnalyzer\RectifiedAnalyzer;
-use Rector\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix202409\Webmozart\Assert\Assert;
+use Rector\Skipper\SkipVoter\ClassSkipVoter;
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest
@@ -20,24 +19,20 @@ final class Skipper
      */
     private $rectifiedAnalyzer;
     /**
-     * @var array<SkipVoterInterface>
-     * @readonly
-     */
-    private $skipVoters;
-    /**
      * @readonly
      * @var \Rector\Skipper\Skipper\PathSkipper
      */
     private $pathSkipper;
     /**
-     * @param array<SkipVoterInterface> $skipVoters
+     * @readonly
+     * @var \Rector\Skipper\SkipVoter\ClassSkipVoter
      */
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, array $skipVoters, \Rector\Skipper\Skipper\PathSkipper $pathSkipper)
+    private $classSkipVoter;
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
-        $this->skipVoters = $skipVoters;
         $this->pathSkipper = $pathSkipper;
-        Assert::allIsInstanceOf($this->skipVoters, SkipVoterInterface::class);
+        $this->classSkipVoter = $classSkipVoter;
     }
     /**
      * @param string|object $element
@@ -55,16 +50,10 @@ final class Skipper
      */
     public function shouldSkipElementAndFilePath($element, string $filePath) : bool
     {
-        foreach ($this->skipVoters as $skipVoter) {
-            if (!$skipVoter->match($element)) {
-                continue;
-            }
-            if (!$skipVoter->shouldSkip($element, $filePath)) {
-                continue;
-            }
-            return \true;
+        if (!$this->classSkipVoter->match($element)) {
+            return \false;
         }
-        return \false;
+        return $this->classSkipVoter->shouldSkip($element, $filePath);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
