@@ -82,13 +82,13 @@ final class NodeTypeResolver
      */
     private $renamedClassesDataCollector;
     /**
-     * @var array<class-string<Node>, NodeTypeResolverInterface>
-     */
-    private $nodeTypeResolvers = [];
-    /**
      * @var string
      */
     private const ERROR_MESSAGE = '%s itself does not have any type. Check the %s node instead';
+    /**
+     * @var array<class-string<Node>, NodeTypeResolverInterface>
+     */
+    private $nodeTypeResolvers = [];
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
