@@ -109,7 +109,8 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
             } elseif ($subNode instanceof \PhpParser\Node) {
                 $traverseChildren = \true;
                 $breakVisitorIndex = null;
-                foreach ($this->visitors as $visitorIndex => $visitor) {
+                $visitors = $this->getVisitorsForNode($subNode);
+                foreach ($visitors as $visitorIndex => $visitor) {
                     $return = $visitor->enterNode($subNode);
                     if (null !== $return) {
                         if ($return instanceof \PhpParser\Node) {
@@ -135,7 +136,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                         break;
                     }
                 }
-                foreach ($this->visitors as $visitorIndex => $visitor) {
+                foreach ($visitors as $visitorIndex => $visitor) {
                     $return = $visitor->leaveNode($subNode);
                     if (null !== $return) {
                         if ($return instanceof \PhpParser\Node) {
@@ -172,7 +173,8 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
             if ($node instanceof \PhpParser\Node) {
                 $traverseChildren = \true;
                 $breakVisitorIndex = null;
-                foreach ($this->visitors as $visitorIndex => $visitor) {
+                $visitors = $this->getVisitorsForNode($node);
+                foreach ($visitors as $visitorIndex => $visitor) {
                     $return = $visitor->enterNode($node);
                     if (null !== $return) {
                         if ($return instanceof \PhpParser\Node) {
@@ -198,7 +200,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                         break;
                     }
                 }
-                foreach ($this->visitors as $visitorIndex => $visitor) {
+                foreach ($visitors as $visitorIndex => $visitor) {
                     $return = $visitor->leaveNode($node);
                     if (null !== $return) {
                         if ($return instanceof \PhpParser\Node) {
@@ -233,6 +235,13 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
             }
         }
         return $nodes;
+    }
+    /**
+     * @return NodeVisitor[]
+     */
+    public function getVisitorsForNode(\PhpParser\Node $node)
+    {
+        return $this->visitors;
     }
     private function ensureReplacementReasonable($old, $new)
     {

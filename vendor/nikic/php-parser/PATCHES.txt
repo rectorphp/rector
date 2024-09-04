@@ -61,3 +61,7 @@ Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/
 Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-namespace-php.patch
 
 
+15
+Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-nodetraverser-php.patch
+
+
