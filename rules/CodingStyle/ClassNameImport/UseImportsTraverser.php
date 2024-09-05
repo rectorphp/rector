@@ -3,31 +3,22 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class UseImportsTraverser
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
@@ -36,24 +27,26 @@ final class UseImportsTraverser
      */
     public function traverserStmts(array $stmts, callable $callable) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($callable) : ?int {
-            if ($node instanceof Namespace_ || $node instanceof FileWithoutNamespace) {
-                // traverse into namespaces
-                return null;
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace) {
+                $this->traverserStmts($stmt->stmts, $callable);
+                return;
             }
-            if ($node instanceof Use_) {
-                foreach ($node->uses as $useUse) {
+            if (!$stmt instanceof Use_ && !$stmt instanceof GroupUse) {
+                continue;
+            }
+            if ($stmt instanceof Use_) {
+                foreach ($stmt->uses as $useUse) {
                     $name = $this->nodeNameResolver->getName($useUse);
                     if ($name === null) {
                         continue;
                     }
-                    $callable($node->type, $useUse, $name);
+                    $callable($stmt->type, $useUse, $name);
                 }
-            } elseif ($node instanceof GroupUse) {
-                $this->processGroupUse($node, $callable);
+                continue;
             }
-            return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-        });
+            $this->processGroupUse($stmt, $callable);
+        }
     }
     /**
      * @param callable(Use_::TYPE_* $useType, UseUse $useUse, string $name): void $callable
