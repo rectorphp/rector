@@ -148,7 +148,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
      */
     private function isUseImportUsed(UseUse $useUse, array $names, ?Name $namespaceName) : bool
     {
-        $comparedName = $useUse->name->toString();
+        $comparedName = $useUse->alias instanceof Identifier ? $useUse->alias->toString() : $useUse->name->toString();
         if (\in_array($comparedName, $names, \true)) {
             return \true;
         }
