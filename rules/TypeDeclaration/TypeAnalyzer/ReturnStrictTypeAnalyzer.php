@@ -123,6 +123,9 @@ final class ReturnStrictTypeAnalyzer
             $returnType = $parametersAcceptorWithPhpDocs->getReturnType();
         }
         if ($returnType instanceof MixedType) {
+            if ($returnType->isExplicitMixed()) {
+                return $returnType;
+            }
             return null;
         }
         return $this->normalizeStaticType($call, $returnType);

@@ -20,7 +20,9 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractScopeAwareRector;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer;
@@ -70,7 +72,12 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractScopeAwareRector
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;
-    public function __construct(TypeNodeUnwrapper $typeNodeUnwrapper, ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, ReturnTypeInferer $returnTypeInferer, BetterNodeFinder $betterNodeFinder, PhpVersionProvider $phpVersionProvider, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(TypeNodeUnwrapper $typeNodeUnwrapper, ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, ReturnTypeInferer $returnTypeInferer, BetterNodeFinder $betterNodeFinder, PhpVersionProvider $phpVersionProvider, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
         $this->returnStrictTypeAnalyzer = $returnStrictTypeAnalyzer;
@@ -79,6 +86,7 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractScopeAwareRector
         $this->phpVersionProvider = $phpVersionProvider;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnAnalyzer = $returnAnalyzer;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -152,7 +160,14 @@ CODE_SAMPLE
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
-            $node->returnType = new PhpParserUnionType($unwrappedTypes);
+            $unionType = new PhpParserUnionType($unwrappedTypes);
+            $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($unionType);
+            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);
+            // verify type transformed into node
+            if (!$returnType instanceof Node) {
+                return null;
+            }
+            $node->returnType = $unionType;
             return $node;
         }
         return null;
