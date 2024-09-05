@@ -32,9 +32,6 @@ final class UseImportsTraverser
                 $this->traverserStmts($stmt->stmts, $callable);
                 continue;
             }
-            if (!$stmt instanceof Use_ && !$stmt instanceof GroupUse) {
-                continue;
-            }
             if ($stmt instanceof Use_) {
                 foreach ($stmt->uses as $useUse) {
                     $name = $this->nodeNameResolver->getName($useUse);
@@ -45,7 +42,9 @@ final class UseImportsTraverser
                 }
                 continue;
             }
-            $this->processGroupUse($stmt, $callable);
+            if ($stmt instanceof GroupUse) {
+                $this->processGroupUse($stmt, $callable);
+            }
         }
     }
     /**
