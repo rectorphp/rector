@@ -22,12 +22,12 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
     private $methodCallsToPropertyFetches = [];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns method call "$this->something()" to property fetch "$this->something"', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns method call "$this->getFirstname()" to property fetch "$this->firstname"', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
-        $this->someMethod();
+        $this->getFirstname();
     }
 }
 CODE_SAMPLE
@@ -36,11 +36,11 @@ class SomeClass
 {
     public function run()
     {
-        $this->someProperty;
+        $this->firstname;
     }
 }
 CODE_SAMPLE
-, ['someMethod' => 'someProperty'])]);
+, [new MethodCallToPropertyFetch('ExamplePersonClass', 'getFirstname', 'firstname')])]);
     }
     /**
      * @return array<class-string<Node>>
