@@ -166,7 +166,7 @@ class PhpDocParser
             $tmpText = $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_EOL, ...$endTokens);
             $text .= $tmpText;
             // stop if we're not at EOL - meaning it's the end of PHPDoc
-            if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC)) {
                 break;
             }
             if ($this->textBetweenTagsBelongsToDescription) {
@@ -209,7 +209,7 @@ class PhpDocParser
             $tmpText = $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, Lexer::TOKEN_PHPDOC_EOL, ...$endTokens);
             $text .= $tmpText;
             // stop if we're not at EOL - meaning it's the end of PHPDoc
-            if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC)) {
                 if (!$tokens->isPrecededByHorizontalWhitespace()) {
                     return trim($text . $this->parseText($tokens)->text, " \t");
                 }

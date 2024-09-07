@@ -137,25 +137,32 @@ class BoundMethod
      */
     protected static function addDependencyForCallParameter($container, $parameter, array &$parameters, &$dependencies)
     {
+        $pendingDependencies = [];
         if (\array_key_exists($paramName = $parameter->getName(), $parameters)) {
-            $dependencies[] = $parameters[$paramName];
+            $pendingDependencies[] = $parameters[$paramName];
             unset($parameters[$paramName]);
+        } elseif ($attribute = Util::getContextualAttributeFromDependency($parameter)) {
+            $pendingDependencies[] = $container->resolveFromAttribute($attribute);
         } elseif (!\is_null($className = Util::getParameterClassName($parameter))) {
             if (\array_key_exists($className, $parameters)) {
-                $dependencies[] = $parameters[$className];
+                $pendingDependencies[] = $parameters[$className];
                 unset($parameters[$className]);
             } elseif ($parameter->isVariadic()) {
                 $variadicDependencies = $container->make($className);
-                $dependencies = \array_merge($dependencies, \is_array($variadicDependencies) ? $variadicDependencies : [$variadicDependencies]);
+                $pendingDependencies = \array_merge($pendingDependencies, \is_array($variadicDependencies) ? $variadicDependencies : [$variadicDependencies]);
             } else {
-                $dependencies[] = $container->make($className);
+                $pendingDependencies[] = $container->make($className);
             }
         } elseif ($parameter->isDefaultValueAvailable()) {
-            $dependencies[] = $parameter->getDefaultValue();
+            $pendingDependencies[] = $parameter->getDefaultValue();
         } elseif (!$parameter->isOptional() && !\array_key_exists($paramName, $parameters)) {
             $message = "Unable to resolve dependency [{$parameter}] in class {$parameter->getDeclaringClass()->getName()}";
             throw new BindingResolutionException($message);
         }
+        foreach ($pendingDependencies as $dependency) {
+            $container->fireAfterResolvingAttributeCallbacks(\method_exists($parameter, 'getAttributes') ? $parameter->getAttributes() : [], $dependency);
+        }
+        $dependencies = \array_merge($dependencies, $pendingDependencies);
     }
     /**
      * Determine if the given string is in Class@method syntax.
