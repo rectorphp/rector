@@ -27,6 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParameterBagToAutowireAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\Configs\NodeFactory\AutowiredParamFactory
      */
     private $autowiredParamFactory;
