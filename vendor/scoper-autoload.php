@@ -57,9 +57,11 @@ if (!function_exists('mb_internal_encoding')) { function mb_internal_encoding() 
 if (!function_exists('mb_language')) { function mb_language() { return \RectorPrefix202409\mb_language(...func_get_args()); } }
 if (!function_exists('mb_lcfirst')) { function mb_lcfirst() { return \RectorPrefix202409\mb_lcfirst(...func_get_args()); } }
 if (!function_exists('mb_list_encodings')) { function mb_list_encodings() { return \RectorPrefix202409\mb_list_encodings(...func_get_args()); } }
+if (!function_exists('mb_ltrim')) { function mb_ltrim() { return \RectorPrefix202409\mb_ltrim(...func_get_args()); } }
 if (!function_exists('mb_ord')) { function mb_ord() { return \RectorPrefix202409\mb_ord(...func_get_args()); } }
 if (!function_exists('mb_output_handler')) { function mb_output_handler() { return \RectorPrefix202409\mb_output_handler(...func_get_args()); } }
 if (!function_exists('mb_parse_str')) { function mb_parse_str() { return \RectorPrefix202409\mb_parse_str(...func_get_args()); } }
+if (!function_exists('mb_rtrim')) { function mb_rtrim() { return \RectorPrefix202409\mb_rtrim(...func_get_args()); } }
 if (!function_exists('mb_scrub')) { function mb_scrub() { return \RectorPrefix202409\mb_scrub(...func_get_args()); } }
 if (!function_exists('mb_str_pad')) { function mb_str_pad() { return \RectorPrefix202409\mb_str_pad(...func_get_args()); } }
 if (!function_exists('mb_str_split')) { function mb_str_split() { return \RectorPrefix202409\mb_str_split(...func_get_args()); } }
@@ -78,6 +80,7 @@ if (!function_exists('mb_strwidth')) { function mb_strwidth() { return \RectorPr
 if (!function_exists('mb_substitute_character')) { function mb_substitute_character() { return \RectorPrefix202409\mb_substitute_character(...func_get_args()); } }
 if (!function_exists('mb_substr')) { function mb_substr() { return \RectorPrefix202409\mb_substr(...func_get_args()); } }
 if (!function_exists('mb_substr_count')) { function mb_substr_count() { return \RectorPrefix202409\mb_substr_count(...func_get_args()); } }
+if (!function_exists('mb_trim')) { function mb_trim() { return \RectorPrefix202409\mb_trim(...func_get_args()); } }
 if (!function_exists('mb_ucfirst')) { function mb_ucfirst() { return \RectorPrefix202409\mb_ucfirst(...func_get_args()); } }
 if (!function_exists('parseArgs')) { function parseArgs() { return \RectorPrefix202409\parseArgs(...func_get_args()); } }
 if (!function_exists('print_node')) { function print_node() { return \RectorPrefix202409\print_node(...func_get_args()); } }
