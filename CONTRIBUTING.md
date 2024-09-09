@@ -65,5 +65,10 @@ docker compose run php composer complete-check
 docker compose run php composer fix-cs
 ```
 
+## TroubleShooting
+If you are on macOS, and got hang on applying patch, you may need to install gpatch, you can install with:
+
+`brew install gpatch`
+
 ## Repository layout
 Documentation goes into `build/target-repository/docs`.
