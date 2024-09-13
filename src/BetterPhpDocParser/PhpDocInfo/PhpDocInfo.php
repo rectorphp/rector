@@ -258,7 +258,7 @@ final class PhpDocInfo
                     return null;
                 }
                 if ($name !== null && $node->value instanceof VarTagValueNode && $node->value->variableName !== '$' . \ltrim($name, '$')) {
-                    return null;
+                    return PhpDocNodeTraverser::DONT_TRAVERSE_CHILDREN;
                 }
                 $hasChanged = \true;
                 return PhpDocNodeTraverser::NODE_REMOVE;
