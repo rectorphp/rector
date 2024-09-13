@@ -512,17 +512,17 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.22.0",
-            "version_normalized": "11.22.0.0",
+            "version": "v11.23.4",
+            "version_normalized": "11.23.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
-                "reference": "85e3396fde3139eae3f37128222c9a7746ca4bbb"
+                "reference": "66d20471c8c55ef056044dc1ff16da90d7b4d649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/85e3396fde3139eae3f37128222c9a7746ca4bbb",
-                "reference": "85e3396fde3139eae3f37128222c9a7746ca4bbb",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/66d20471c8c55ef056044dc1ff16da90d7b4d649",
+                "reference": "66d20471c8c55ef056044dc1ff16da90d7b4d649",
                 "shasum": ""
             },
             "require": {
@@ -533,7 +533,7 @@
             "provide": {
                 "psr\/container-implementation": "1.1|2.0"
             },
-            "time": "2024-08-21T16:01:30+00:00",
+            "time": "2024-09-11T20:15:17+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -569,17 +569,17 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.22.0",
-            "version_normalized": "11.22.0.0",
+            "version": "v11.23.4",
+            "version_normalized": "11.23.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
-                "reference": "af9b459f195d57f279ec30a45446ddaeb3337bcb"
+                "reference": "272aad6ca259425d50b266218be5a7955a4c8af3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/af9b459f195d57f279ec30a45446ddaeb3337bcb",
-                "reference": "af9b459f195d57f279ec30a45446ddaeb3337bcb",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/272aad6ca259425d50b266218be5a7955a4c8af3",
+                "reference": "272aad6ca259425d50b266218be5a7955a4c8af3",
                 "shasum": ""
             },
             "require": {
@@ -587,7 +587,7 @@
                 "psr\/container": "^1.1.1|^2.0.1",
                 "psr\/simple-cache": "^1.0|^2.0|^3.0"
             },
-            "time": "2024-08-21T16:02:16+00:00",
+            "time": "2024-09-11T20:06:38+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -973,23 +973,23 @@
         },
         {
             "name": "psr\/log",
-            "version": "3.0.1",
-            "version_normalized": "3.0.1.0",
+            "version": "3.0.2",
+            "version_normalized": "3.0.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/php-fig\/log.git",
-                "reference": "79dff0b268932c640297f5208d6298f71855c03e"
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/php-fig\/log\/zipball\/79dff0b268932c640297f5208d6298f71855c03e",
-                "reference": "79dff0b268932c640297f5208d6298f71855c03e",
+                "url": "https:\/\/api.github.com\/repos\/php-fig\/log\/zipball\/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0.0"
             },
-            "time": "2024-08-21T13:31:24+00:00",
+            "time": "2024-09-11T13:17:53+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1020,7 +1020,7 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https:\/\/github.com\/php-fig\/log\/tree\/3.0.1"
+                "source": "https:\/\/github.com\/php-fig\/log\/tree\/3.0.2"
             },
             "install-path": "..\/psr\/log"
         },
