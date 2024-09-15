@@ -71,6 +71,8 @@ final class AddNeverReturnType
      */
     private function shouldSkip($node, Scope $scope) : bool
     {
+        // already has return type, and non-void
+        // it can be "never" return itself, or other return type
         if ($node->returnType instanceof Node && !$this->nodeNameResolver->isName($node->returnType, 'void')) {
             return \true;
         }
@@ -87,10 +89,7 @@ final class AddNeverReturnType
             return \false;
         }
         // skip as most likely intentional
-        if (!$this->classModifierChecker->isInsideFinalClass($node) && $this->nodeNameResolver->isName($node->returnType, 'void')) {
-            return \true;
-        }
-        return $this->nodeNameResolver->isName($node->returnType, 'never');
+        return !$this->classModifierChecker->isInsideFinalClass($node) && $this->nodeNameResolver->isName($node->returnType, 'void');
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
