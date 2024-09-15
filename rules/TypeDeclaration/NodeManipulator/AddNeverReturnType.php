@@ -96,10 +96,7 @@ final class AddNeverReturnType
      */
     private function hasReturnOrYields($node) : bool
     {
-        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, Return_::class)) {
-            return \true;
-        }
-        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Yield_::class, YieldFrom::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES));
+        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Return_::class, Yield_::class, YieldFrom::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES));
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
