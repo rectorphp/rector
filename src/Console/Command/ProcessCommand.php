@@ -141,7 +141,14 @@ EOF
         // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
         if ($this->dynamicSourceLocatorDecorator->isPathsEmpty()) {
-            $this->symfonyStyle->error('The given paths do not match any files');
+            // read from rector.php, no paths definition needs withPaths() config
+            if ($paths === []) {
+                $this->symfonyStyle->error('No paths definition in rector configuration, define paths: https://getrector.com/documentation/define-paths');
+                return ExitCode::FAILURE;
+            }
+            // read from cli paths arguments, eg: vendor/bin/rector process A B C which A, B, and C not exists
+            $isSingular = \count($paths) === 1;
+            $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', \PHP_EOL . \PHP_EOL . ' - ', \implode(\PHP_EOL . ' - ', $paths)));
             return ExitCode::FAILURE;
         }
         // MAIN PHASE
