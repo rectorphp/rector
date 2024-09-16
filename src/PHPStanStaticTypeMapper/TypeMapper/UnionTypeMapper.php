@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\CallableType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -64,7 +65,7 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        $phpParserUnionType = $this->matchPhpParserUnionType($type);
+        $phpParserUnionType = $this->matchPhpParserUnionType($type, $typeKind);
         if ($phpParserUnionType instanceof PhpParserUnionType) {
             return $this->resolveUnionTypeNode($phpParserUnionType);
         }
@@ -152,7 +153,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * @return Name|FullyQualified|ComplexType|Identifier|null
      */
-    private function matchPhpParserUnionType(UnionType $unionType) : ?Node
+    private function matchPhpParserUnionType(UnionType $unionType, string $typeKind) : ?Node
     {
         $phpParserUnionedTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -160,6 +161,10 @@ final class UnionTypeMapper implements TypeMapperInterface
             // void type and mixed type are not allowed in union
             $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, TypeKind::UNION);
             if ($phpParserNode === null) {
+                return null;
+            }
+            // special callable type only not allowed on property
+            if ($typeKind === TypeKind::PROPERTY && $unionedType instanceof CallableType) {
                 return null;
             }
             $phpParserUnionedTypes[] = $phpParserNode;
