@@ -8,12 +8,14 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
@@ -29,14 +31,19 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
@@ -145,10 +152,12 @@ final class PHPStanNodeScopeResolver
                 /** @var MutatingScope $mutatingScope */
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
                 return;
             }
             if ($node instanceof Trait_) {
                 $this->processTrait($node, $mutatingScope, $nodeCallback);
+                $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
                 return;
             }
             // special case for unreachable nodes
@@ -165,6 +174,7 @@ final class PHPStanNodeScopeResolver
             if (!$node instanceof VirtualNode) {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
+            $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
             if ($node instanceof FileWithoutNamespace) {
                 $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
@@ -326,12 +336,21 @@ final class PHPStanNodeScopeResolver
         }
         $arrayItem->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
-    private function decorateTraitAttrGroups(Trait_ $trait, MutatingScope $mutatingScope) : void
+    /**
+     * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
+     */
+    private function decorateNodeAttrGroups(Node $node, MutatingScope $mutatingScope, callable $nodeCallback) : void
     {
-        foreach ($trait->attrGroups as $attrGroup) {
+        // better to have AttrGroupsAwareInterface for all Node definition with attrGroups property
+        // but because may conflict with StmtsAwareInterface patch, this needs to be here
+        if (!$node instanceof Param && !$node instanceof ArrowFunction && !$node instanceof Closure && !$node instanceof ClassConst && !$node instanceof ClassLike && !$node instanceof ClassMethod && !$node instanceof EnumCase && !$node instanceof Function_ && !$node instanceof Property) {
+            return;
+        }
+        foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
                 foreach ($attr->args as $arg) {
                     $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $this->nodeScopeResolverProcessNodes([new Expression($arg->value)], $mutatingScope, $nodeCallback);
                 }
             }
         }
@@ -441,7 +460,6 @@ final class PHPStanNodeScopeResolver
         if (!$this->reflectionProvider->hasClass($traitName)) {
             $trait->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $this->nodeScopeResolverProcessNodes($trait->stmts, $mutatingScope, $nodeCallback);
-            $this->decorateTraitAttrGroups($trait, $mutatingScope);
             return;
         }
         $traitClassReflection = $this->reflectionProvider->getClass($traitName);
@@ -454,6 +472,5 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
         $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
         $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
-        $this->decorateTraitAttrGroups($trait, $traitScope);
     }
 }
