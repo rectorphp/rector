@@ -157,7 +157,6 @@ final class PHPStanNodeScopeResolver
             }
             if ($node instanceof Trait_) {
                 $this->processTrait($node, $mutatingScope, $nodeCallback);
-                $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
                 return;
             }
             // special case for unreachable nodes
@@ -460,6 +459,7 @@ final class PHPStanNodeScopeResolver
         if (!$this->reflectionProvider->hasClass($traitName)) {
             $trait->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $this->nodeScopeResolverProcessNodes($trait->stmts, $mutatingScope, $nodeCallback);
+            $this->decorateNodeAttrGroups($trait, $mutatingScope, $nodeCallback);
             return;
         }
         $traitClassReflection = $this->reflectionProvider->getClass($traitName);
@@ -472,5 +472,6 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
         $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
         $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
+        $this->decorateNodeAttrGroups($trait, $traitScope, $nodeCallback);
     }
 }
