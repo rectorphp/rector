@@ -348,7 +348,6 @@ final class PHPStanNodeScopeResolver
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
                 foreach ($attr->args as $arg) {
-                    $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                     $this->nodeScopeResolverProcessNodes([new Expression($arg->value)], $mutatingScope, $nodeCallback);
                 }
             }
