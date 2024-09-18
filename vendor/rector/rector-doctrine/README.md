@@ -1,6 +1,6 @@
 # Rector Rules for Doctrine
 
-See available [Doctrine rules](https://getrector.com/find-rule?query=doctrine+rules)
+See available [Doctrine rules](https://getrector.com/find-rule?activeRectorSetGroup=doctrine)
 
 ## Install
 

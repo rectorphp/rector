@@ -709,17 +709,17 @@
         },
         {
             "name": "nikic\/php-parser",
-            "version": "v4.19.1",
-            "version_normalized": "4.19.1.0",
+            "version": "v4.19.2",
+            "version_normalized": "4.19.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nikic\/PHP-Parser.git",
-                "reference": "4e1b88d21c69391150ace211e9eaf05810858d0b"
+                "reference": "0ed4c8949a32986043e977dbe14776c14d644c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/4e1b88d21c69391150ace211e9eaf05810858d0b",
-                "reference": "4e1b88d21c69391150ace211e9eaf05810858d0b",
+                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/0ed4c8949a32986043e977dbe14776c14d644c45",
+                "reference": "0ed4c8949a32986043e977dbe14776c14d644c45",
                 "shasum": ""
             },
             "require": {
@@ -730,7 +730,7 @@
                 "ircmaxell\/php-yacc": "^0.0.7",
                 "phpunit\/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
             },
-            "time": "2024-03-17T08:10:35+00:00",
+            "time": "2024-09-17T19:36:00+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -780,7 +780,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nikic\/PHP-Parser\/issues",
-                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.19.1"
+                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.19.2"
             },
             "install-path": "..\/nikic\/php-parser"
         },
@@ -1689,12 +1689,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "fb26209e01b08bf3163f6fada4c72ad34b8716a8"
+                "reference": "e75008c293679e0bb0637bf09cf6dd43ff34526a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/fb26209e01b08bf3163f6fada4c72ad34b8716a8",
-                "reference": "fb26209e01b08bf3163f6fada4c72ad34b8716a8",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/e75008c293679e0bb0637bf09cf6dd43ff34526a",
+                "reference": "e75008c293679e0bb0637bf09cf6dd43ff34526a",
                 "shasum": ""
             },
             "require": {
@@ -1710,17 +1710,16 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-src": "dev-main",
-                "rector\/type-perfect": "^0.1.8",
+                "rector\/type-perfect": "^0.2",
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^0.2.15",
-                "tomasvotruba\/unused-public": "^0.3",
+                "tomasvotruba\/unused-public": "^0.4",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-09-02T08:37:04+00:00",
+            "time": "2024-09-18T08:20:56+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1812,12 +1811,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "93a04b08a9b9b77215096c3451a4397e660ea40c"
+                "reference": "a2bee2ccf4ce96a9056e7c8eefd4d304a87a7ae2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/93a04b08a9b9b77215096c3451a4397e660ea40c",
-                "reference": "93a04b08a9b9b77215096c3451a4397e660ea40c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/a2bee2ccf4ce96a9056e7c8eefd4d304a87a7ae2",
+                "reference": "a2bee2ccf4ce96a9056e7c8eefd4d304a87a7ae2",
                 "shasum": ""
             },
             "require": {
@@ -1832,16 +1831,15 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.5",
                 "rector\/rector-src": "dev-main",
-                "rector\/type-perfect": "^0.1.6",
+                "rector\/type-perfect": "^0.2",
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.2",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.2",
                 "tomasvotruba\/class-leak": "^0.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-08-16T19:53:08+00:00",
+            "time": "2024-09-18T08:17:40+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1877,12 +1875,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "2d6a8ca3ca18dd0bbd64d5f793fb1b68444f48cc"
+                "reference": "352a84cafb99f8d386fa905724440bc664607256"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2d6a8ca3ca18dd0bbd64d5f793fb1b68444f48cc",
-                "reference": "2d6a8ca3ca18dd0bbd64d5f793fb1b68444f48cc",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/352a84cafb99f8d386fa905724440bc664607256",
+                "reference": "352a84cafb99f8d386fa905724440bc664607256",
                 "shasum": ""
             },
             "require": {
@@ -1906,13 +1904,12 @@
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^11.4",
                 "symplify\/phpstan-rules": "^13.0",
-                "symplify\/rule-doc-generator": "^12.2.5",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^0.2",
-                "tomasvotruba\/unused-public": "^0.3.10",
+                "tomasvotruba\/unused-public": "^0.4",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-09-08T17:10:25+00:00",
+            "time": "2024-09-18T08:18:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -1,6 +1,6 @@
 # Rector Rules for Symfony
 
-See available [Symfony rules](https://getrector.com/find-rule?query=symfony+rules)
+See available [Symfony rules](https://getrector.com/find-rule?activeRectorSetGroup=symfony)
 
 ## Install
 
