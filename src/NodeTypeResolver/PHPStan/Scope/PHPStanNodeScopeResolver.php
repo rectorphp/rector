@@ -152,7 +152,6 @@ final class PHPStanNodeScopeResolver
                 /** @var MutatingScope $mutatingScope */
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
                 return;
             }
             if ($node instanceof Trait_) {
@@ -173,11 +172,11 @@ final class PHPStanNodeScopeResolver
             if (!$node instanceof VirtualNode) {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
-            $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
             if ($node instanceof FileWithoutNamespace) {
                 $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }
+            $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
