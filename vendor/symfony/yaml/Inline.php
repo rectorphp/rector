@@ -332,11 +332,17 @@ class Inline
         $len = \strlen($sequence);
         ++$i;
         // [foo, bar, ...]
+        $lastToken = null;
         while ($i < $len) {
             if (']' === $sequence[$i]) {
                 return $output;
             }
             if (',' === $sequence[$i] || ' ' === $sequence[$i]) {
+                if (',' === $sequence[$i] && (null === $lastToken || 'separator' === $lastToken)) {
+                    $output[] = null;
+                } elseif (',' === $sequence[$i]) {
+                    $lastToken = 'separator';
+                }
                 ++$i;
                 continue;
             }
@@ -372,6 +378,7 @@ class Inline
                 $value = new TaggedValue($tag, $value);
             }
             $output[] = $value;
+            $lastToken = 'value';
             ++$i;
         }
         throw new ParseException(\sprintf('Malformed inline YAML string: "%s".', $sequence), self::$parsedLineNumber + 1, null, self::$parsedFilename);
