@@ -8,8 +8,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -125,10 +123,6 @@ CODE_SAMPLE
         }
         $variables = $this->matchArrayAssignedVariable($stmts);
         if ($variables === []) {
-            return null;
-        }
-        // 2. skip yields
-        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [Yield_::class, YieldFrom::class])) {
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);

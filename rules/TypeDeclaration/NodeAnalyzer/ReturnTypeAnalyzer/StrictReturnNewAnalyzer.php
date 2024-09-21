@@ -7,8 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -54,9 +52,6 @@ final class StrictReturnNewAnalyzer
     public function matchAlwaysReturnVariableNew($functionLike) : ?string
     {
         if ($functionLike->stmts === null) {
-            return null;
-        }
-        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, [Yield_::class, YieldFrom::class])) {
             return null;
         }
         $returns = $this->betterNodeFinder->findReturnsScoped($functionLike);
