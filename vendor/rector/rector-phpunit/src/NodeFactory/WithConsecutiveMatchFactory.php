@@ -16,12 +16,9 @@ use PhpParser\Node\MatchArm;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\Node\BetterNodeFinder;
 final class WithConsecutiveMatchFactory
 {
     /**
@@ -31,19 +28,19 @@ final class WithConsecutiveMatchFactory
     private $nodeNameResolver;
     /**
      * @readonly
+     * @var \Rector\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
      * @var \PhpParser\BuilderFactory
      */
     private $builderFactory;
-    /**
-     * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    public function __construct(NodeNameResolver $nodeNameResolver, BuilderFactory $builderFactory, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, BuilderFactory $builderFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->builderFactory = $builderFactory;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
      * @param Stmt[] $returnStmts
@@ -86,7 +83,7 @@ final class WithConsecutiveMatchFactory
     private function resolveUniqueUsedVariables(array $nodes) : array
     {
         /** @var Variable[] $usedVariables */
-        $usedVariables = $this->findInstancesOfScoped($nodes, Variable::class);
+        $usedVariables = $this->betterNodeFinder->findInstancesOfScoped($nodes, Variable::class);
         $uniqueUsedVariables = [];
         foreach ($usedVariables as $usedVariable) {
             if ($this->nodeNameResolver->isNames($usedVariable, ['this', 'matcher', 'parameters'])) {
@@ -96,29 +93,5 @@ final class WithConsecutiveMatchFactory
             $uniqueUsedVariables[$usedVariableName] = $usedVariable;
         }
         return $uniqueUsedVariables;
-    }
-    /**
-     * @todo should be part of core in BetterNodeFinder
-     *
-     * @template T of Node
-     * @param Node[] $nodes
-     * @param class-string<T> $type
-     * @return T[]
-     */
-    private function findInstancesOfScoped(array $nodes, string $type) : array
-    {
-        /** @var T[] $foundNodes */
-        $foundNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($type, &$foundNodes) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if ($subNode instanceof $type) {
-                $foundNodes[] = $subNode;
-                return null;
-            }
-            return null;
-        });
-        return $foundNodes;
     }
 }
