@@ -207,19 +207,25 @@ final class BetterNodeFinder
         return $returns;
     }
     /**
+     * @api to be used
+     *
      * @template T of Node
-     * @param array<class-string<T>>|class-string<T> $types
-     * @return array<T>
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param Node[] $nodes
+     * @param class-string<T>|array<class-string<T>> $types
+     * @return T[]
      */
-    public function findInstancesOfInFunctionLikeScoped($functionLike, $types) : array
+    public function findInstancesOfScoped(array $nodes, $types) : array
     {
+        // here verify only pass single nodes as FunctionLike
+        if (\count($nodes) === 1 && ($nodes[0] instanceof ClassMethod || $nodes[0] instanceof Function_ || $nodes[0] instanceof Closure)) {
+            $nodes = (array) $nodes[0]->stmts;
+        }
         if (\is_string($types)) {
             $types = [$types];
         }
         /** @var T[] $foundNodes */
         $foundNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, static function (Node $subNode) use($types, &$foundNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($types, &$foundNodes) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -232,6 +238,16 @@ final class BetterNodeFinder
             return null;
         });
         return $foundNodes;
+    }
+    /**
+     * @template T of Node
+     * @param array<class-string<T>>|class-string<T> $types
+     * @return array<T>
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     */
+    public function findInstancesOfInFunctionLikeScoped($functionLike, $types) : array
+    {
+        return $this->findInstancesOfScoped([$functionLike], $types);
     }
     /**
      * @param callable(Node $node): bool $filter

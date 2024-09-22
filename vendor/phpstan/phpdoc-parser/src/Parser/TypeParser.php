@@ -346,10 +346,12 @@ class TypeParser
     {
         $name = $tokens->currentTokenValue();
         $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
+        $upperBound = $lowerBound = null;
         if ($tokens->tryConsumeTokenValue('of') || $tokens->tryConsumeTokenValue('as')) {
-            $bound = $this->parse($tokens);
-        } else {
-            $bound = null;
+            $upperBound = $this->parse($tokens);
+        }
+        if ($tokens->tryConsumeTokenValue('super')) {
+            $lowerBound = $this->parse($tokens);
         }
         if ($tokens->tryConsumeTokenValue('=')) {
             $default = $this->parse($tokens);
@@ -364,7 +366,7 @@ class TypeParser
         if ($name === '') {
             throw new LogicException('Template tag name cannot be empty.');
         }
-        return new Ast\PhpDoc\TemplateTagValueNode($name, $bound, $description, $default);
+        return new Ast\PhpDoc\TemplateTagValueNode($name, $upperBound, $description, $default, $lowerBound);
     }
     /** @phpstan-impure */
     private function parseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier, bool $hasTemplate) : Ast\Type\TypeNode

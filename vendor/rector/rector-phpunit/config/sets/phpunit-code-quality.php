@@ -41,7 +41,7 @@ return static function (RectorConfig $rectorConfig) : void {
         ReplaceTestAnnotationWithPrefixedFunctionRector::class,
         TestWithToDataProviderRector::class,
         AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector::class,
-        DataProviderArrayItemsNewlinedRector::class,
+        DataProviderArrayItemsNewLinedRector::class,
         // specific asserts
         AssertCompareOnCountableWithMethodToAssertCountRector::class,
         AssertCompareToSpecificMethodRector::class,

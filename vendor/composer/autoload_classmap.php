@@ -1774,6 +1774,7 @@ return array(
     'Rector\\PHPUnit\\NodeAnalyzer\\TestsNodeAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/TestsNodeAnalyzer.php',
     'Rector\\PHPUnit\\NodeFactory\\AssertCallFactory' => $vendorDir . '/rector/rector-phpunit/src/NodeFactory/AssertCallFactory.php',
     'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => $vendorDir . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
+    'Rector\\PHPUnit\\NodeFactory\\WithConsecutiveMatchFactory' => $vendorDir . '/rector/rector-phpunit/src/NodeFactory/WithConsecutiveMatchFactory.php',
     'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => $vendorDir . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
