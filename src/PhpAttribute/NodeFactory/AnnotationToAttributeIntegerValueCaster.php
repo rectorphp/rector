@@ -90,7 +90,7 @@ final class AnnotationToAttributeIntegerValueCaster
     private function resolveConstructorParameterReflections(ClassReflection $classReflection) : array
     {
         $extendedMethodReflection = $classReflection->getConstructor();
-        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         return $parametersAcceptorWithPhpDocs->getParameters();
     }
 }

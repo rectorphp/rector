@@ -35,8 +35,8 @@ final class UnnamedArgumentResolver
      */
     public function resolveFromReflection($functionLikeReflection, array $currentArgs) : array
     {
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
-        $parameters = $parametersAcceptor->getParameters();
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($functionLikeReflection->getVariants());
+        $parameters = $parametersAcceptorWithPhpDocs->getParameters();
         if ($functionLikeReflection instanceof NativeFunctionReflection) {
             $functionLikeReflection = new ReflectionFunction($functionLikeReflection->getName());
         }

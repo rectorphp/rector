@@ -22,9 +22,6 @@ final class ParametersAcceptorSelectorVariantsWrapper
         if ($node instanceof FunctionLike) {
             return ParametersAcceptorSelector::combineAcceptors($variants);
         }
-        if ($node->isFirstClassCallable()) {
-            return ParametersAcceptorSelector::selectSingle($variants);
-        }
         return ParametersAcceptorSelector::selectFromArgs($scope, $node->getArgs(), $variants);
     }
 }
