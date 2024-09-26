@@ -297,6 +297,10 @@ class PhpDocParser
                 case '@phpstan-param-closure-this':
                     $tagValue = $this->parseParamClosureThisTagValue($tokens);
                     break;
+                case '@pure-unless-callable-is-impure':
+                case '@phpstan-pure-unless-callable-is-impure':
+                    $tagValue = $this->parsePureUnlessCallableIsImpureTagValue($tokens);
+                    break;
                 case '@var':
                 case '@phpstan-var':
                 case '@psalm-var':
@@ -635,6 +639,12 @@ class PhpDocParser
         $parameterName = $this->parseRequiredVariableName($tokens);
         $description = $this->parseOptionalDescription($tokens);
         return new Ast\PhpDoc\ParamClosureThisTagValueNode($type, $parameterName, $description);
+    }
+    private function parsePureUnlessCallableIsImpureTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PureUnlessCallableIsImpureTagValueNode
+    {
+        $parameterName = $this->parseRequiredVariableName($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new Ast\PhpDoc\PureUnlessCallableIsImpureTagValueNode($parameterName, $description);
     }
     private function parseVarTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\VarTagValueNode
     {

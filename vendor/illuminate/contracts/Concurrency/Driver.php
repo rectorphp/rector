@@ -3,7 +3,7 @@
 namespace RectorPrefix202409\Illuminate\Contracts\Concurrency;
 
 use Closure;
-use RectorPrefix202409\Illuminate\Foundation\Defer\DeferredCallback;
+use RectorPrefix202409\Illuminate\Support\Defer\DeferredCallback;
 interface Driver
 {
     /**

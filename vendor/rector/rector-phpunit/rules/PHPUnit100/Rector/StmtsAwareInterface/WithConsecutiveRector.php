@@ -31,7 +31,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\StmtsAwareInterface\WithConsecutiveRector\WithConsecutiveRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector\WithConsecutiveRectorTest
  */
 final class WithConsecutiveRector extends AbstractRector implements MinPhpVersionInterface
 {
@@ -122,28 +122,16 @@ CODE_SAMPLE
         if ($this->hasWillReturnMapOrWill($node)) {
             return null;
         }
+        $firstArg = $withConsecutiveMethodCall->getArgs()[0];
+        $isWithConsecutiveVariadic = $firstArg->unpack;
         $returnStmts = [];
         $willReturn = $this->findMethodCall($node, 'willReturn');
         if ($willReturn instanceof MethodCall) {
-            $args = $willReturn->getArgs();
-            if (\count($args) !== 1 || !$args[0] instanceof Arg) {
-                return null;
-            }
-            $returnStmts = [new Return_($args[0]->value)];
+            $returnStmts[] = $this->createWillReturnStmt($willReturn);
         }
         $willReturnSelf = $this->findMethodCall($node, 'willReturnSelf');
         if ($willReturnSelf instanceof MethodCall) {
-            if ($returnStmts !== []) {
-                return null;
-            }
-            $selfVariable = $willReturnSelf;
-            while (\true) {
-                if (!$selfVariable instanceof MethodCall) {
-                    break;
-                }
-                $selfVariable = $selfVariable->var;
-            }
-            $returnStmts = [new Return_($selfVariable)];
+            $returnStmts[] = $this->createWillReturnSelfStmts($willReturnSelf);
         }
         $willReturnArgument = $this->findMethodCall($node, 'willReturnArgument');
         if ($willReturnArgument instanceof MethodCall) {
@@ -151,11 +139,11 @@ CODE_SAMPLE
                 return null;
             }
             $parametersVariable = new Variable('parameters');
-            $args = $willReturnArgument->getArgs();
-            if (\count($args) !== 1 || !$args[0] instanceof Arg) {
+            $firstArgs = $willReturnArgument->getArgs()[0];
+            if (!$firstArgs instanceof Arg) {
                 return null;
             }
-            $returnStmts = [new Return_(new ArrayDimFetch($parametersVariable, $args[0]->value))];
+            $returnStmts = [new Return_(new ArrayDimFetch($parametersVariable, $firstArgs->value))];
         }
         $willReturnOnConsecutiveCallsArgument = $this->findMethodCall($node, 'willReturnOnConsecutiveCalls');
         if ($willReturnOnConsecutiveCallsArgument instanceof MethodCall) {
@@ -176,11 +164,11 @@ CODE_SAMPLE
             if ($returnStmts !== []) {
                 return null;
             }
-            $args = $willReturnReferenceArgument->args;
-            if (\count($args) !== 1 || !$args[0] instanceof Arg) {
+            $firstArg = $willReturnReferenceArgument->getArgs()[0] ?? null;
+            if (!$firstArg instanceof Arg) {
                 return null;
             }
-            $referenceVariable = $args[0]->value;
+            $referenceVariable = $firstArg->value;
             if (!$referenceVariable instanceof Variable) {
                 return null;
             }
@@ -191,11 +179,11 @@ CODE_SAMPLE
             if ($returnStmts !== []) {
                 return null;
             }
-            $args = $willThrowException->getArgs();
-            if (\count($args) !== 1 || !$args[0] instanceof Arg) {
+            $firstArg = $willThrowException->getArgs()[0] ?? null;
+            if (!$firstArg instanceof Arg) {
                 return null;
             }
-            $returnStmts = [new Throw_($args[0]->value)];
+            $returnStmts = [new Throw_($firstArg->value)];
         }
         $this->removeMethodCalls($node, ['willReturn', 'willReturnArgument', 'willReturnSelf', 'willReturnOnConsecutiveCalls', 'willReturnReference', 'willThrowException']);
         $expectsCall = $this->matchAndRefactorExpectsMethodCall($node);
@@ -207,31 +195,15 @@ CODE_SAMPLE
         // 2. does willReturnCallback() exist? just merge
         $existingWillReturnCallback = $this->findMethodCall($node, 'willReturnCallback');
         if ($existingWillReturnCallback instanceof MethodCall) {
-            $callbackArg = $existingWillReturnCallback->getArgs()[0];
-            if (!$callbackArg->value instanceof Closure) {
-                throw new ShouldNotHappenException();
-            }
-            $callbackClosure = $callbackArg->value;
-            $matcherVariable = new Variable('matcher');
-            $parametersVariable = new Variable('parameters');
-            $parametersMatch = $this->withConsecutiveMatchFactory->createParametersMatch($matcherVariable, $withConsecutiveMethodCall, $parametersVariable);
-            $callbackClosure->params[] = new Param($parametersVariable);
-            $callbackClosure->stmts = \array_merge([new Expression($parametersMatch)], $callbackClosure->stmts);
-            $this->removeMethodCalls($node, [self::WITH_CONSECUTIVE_METHOD]);
-            return [$node];
+            return $this->refactorWithExistingWillReturnCallback($existingWillReturnCallback, $withConsecutiveMethodCall, $node);
         }
         // 3. rename and replace withConsecutive()
-        return $this->refactorToWillReturnCallback($withConsecutiveMethodCall, $returnStmts, $referenceVariable, $expectsCall, $node);
+        return $this->refactorToWillReturnCallback($withConsecutiveMethodCall, $returnStmts, $referenceVariable, $expectsCall, $node, $isWithConsecutiveVariadic);
     }
     public function provideMinPhpVersion() : int
     {
-        /**
-         * This rule just work for phpunit 10,
-         * And as php 8.1 is the min version supported by phpunit 10, then we decided to let this version as minimum.
-         *
-         * You can see more detail in this issue: https://github.com/rectorphp/rector-phpunit/issues/272
-         */
-        return PhpVersion::PHP_81;
+        // This rule uses PHP 8.0 match
+        return PhpVersion::PHP_80;
     }
     /**
      * Replace $this->expects(...)
@@ -285,6 +257,41 @@ CODE_SAMPLE
         return $nodesWithWillReturnMap !== [];
     }
     /**
+     * @param Stmt[] $returnStmts
+     * @return Stmt[]
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expectsCall
+     */
+    private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable, $expectsCall, Expression $expression, bool $isWithConsecutiveVariadic) : array
+    {
+        $withConsecutiveMethodCall->name = new Identifier('willReturnCallback');
+        $withConsecutiveMethodCall->args = [new Arg($this->withConsecutiveMatchFactory->createClosure($withConsecutiveMethodCall, $returnStmts, $referenceVariable, $isWithConsecutiveVariadic))];
+        $hasExpects = $this->findMethodCall($expression, 'expects') instanceof MethodCall;
+        $matcherVariable = new Variable('matcher');
+        if ($hasExpects === \false) {
+            /** @var MethodCall $mockMethodCall */
+            $mockMethodCall = $expression->expr;
+            $mockMethodCall->var = new MethodCall($mockMethodCall->var, 'expects', [new Arg($matcherVariable)]);
+        }
+        $matcherAssign = new Assign($matcherVariable, $expectsCall);
+        return [new Expression($matcherAssign), $expression];
+    }
+    private function refactorWithExistingWillReturnCallback(MethodCall $existingWillReturnCallback, MethodCall $withConsecutiveMethodCall, Expression $expression) : Expression
+    {
+        $callbackArg = $existingWillReturnCallback->getArgs()[0];
+        if (!$callbackArg->value instanceof Closure) {
+            throw new ShouldNotHappenException();
+        }
+        $callbackClosure = $callbackArg->value;
+        $matcherVariable = new Variable('matcher');
+        $parametersVariable = new Variable('parameters');
+        $parametersMatch = $this->withConsecutiveMatchFactory->createParametersMatch($matcherVariable, $withConsecutiveMethodCall, $parametersVariable);
+        $callbackClosure->params[] = new Param($parametersVariable);
+        $callbackClosure->stmts = \array_merge([new Expression($parametersMatch)], $callbackClosure->stmts);
+        $this->removeMethodCalls($expression, [self::WITH_CONSECUTIVE_METHOD]);
+        return $expression;
+    }
+    /**
      * @param string[] $methodNames
      */
     private function removeMethodCalls(Expression $expression, array $methodNames) : void
@@ -299,17 +306,23 @@ CODE_SAMPLE
             return $node->var;
         });
     }
-    /**
-     * @param Stmt[] $returnStmts
-     * @return Stmt[]
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expectsCall
-     */
-    private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable, $expectsCall, Expression $expression) : array
+    private function createWillReturnStmt(MethodCall $willReturnMethodCall) : Return_
     {
-        $withConsecutiveMethodCall->name = new Identifier('willReturnCallback');
-        $withConsecutiveMethodCall->args = [new Arg($this->withConsecutiveMatchFactory->createClosure($withConsecutiveMethodCall, $returnStmts, $referenceVariable))];
-        $matcherAssign = new Assign(new Variable('matcher'), $expectsCall);
-        return [new Expression($matcherAssign), $expression];
+        $firstArg = $willReturnMethodCall->getArgs()[0] ?? null;
+        if (!$firstArg instanceof Arg) {
+            throw new ShouldNotHappenException();
+        }
+        return new Return_($firstArg->value);
+    }
+    private function createWillReturnSelfStmts(MethodCall $willReturnSelfMethodCall) : Return_
+    {
+        $selfVariable = $willReturnSelfMethodCall;
+        while (\true) {
+            if (!$selfVariable instanceof MethodCall) {
+                break;
+            }
+            $selfVariable = $selfVariable->var;
+        }
+        return new Return_($selfVariable);
     }
 }

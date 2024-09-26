@@ -53,6 +53,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTextNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PropertyTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PropertyTagValueNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PureUnlessCallableIsImpureTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PureUnlessCallableIsImpureTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\RequireExtendsTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireExtendsTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\RequireImplementsTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireImplementsTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ReturnTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ReturnTagValueNode.php',

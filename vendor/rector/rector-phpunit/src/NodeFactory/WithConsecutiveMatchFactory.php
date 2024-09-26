@@ -5,7 +5,10 @@ namespace Rector\PHPUnit\NodeFactory;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Match_;
@@ -46,31 +49,32 @@ final class WithConsecutiveMatchFactory
      * @param Stmt[] $returnStmts
      * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr|null $referenceVariable
      */
-    public function createClosure(MethodCall $expectsMethodCall, array $returnStmts, $referenceVariable) : Closure
+    public function createClosure(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable, bool $isWithConsecutiveVariadic) : Closure
     {
-        $byRef = $referenceVariable instanceof Variable;
-        $closure = new Closure(['byRef' => $byRef]);
         $matcherVariable = new Variable('matcher');
-        $closure->uses[] = new ClosureUse($matcherVariable);
-        $usedVariables = $this->resolveUniqueUsedVariables(\array_merge($expectsMethodCall->getArgs(), $this->resolveUniqueUsedVariables($returnStmts)));
-        foreach ($usedVariables as $usedVariable) {
-            $closureUse = new ClosureUse($usedVariable);
-            if ($byRef && $this->nodeNameResolver->areNamesEqual($usedVariable, $referenceVariable)) {
-                $closureUse->byRef = \true;
-            }
-            $closure->uses[] = $closureUse;
-        }
+        $usedVariables = $this->resolveUsedVariables($withConsecutiveMethodCall, $returnStmts);
+        $isByRef = $this->isByRef($referenceVariable);
+        $uses = $this->createUses($matcherVariable, $usedVariables);
         $parametersVariable = new Variable('parameters');
-        $match = $this->createParametersMatch($matcherVariable, $expectsMethodCall, $parametersVariable);
-        $closure->params[] = new Param($parametersVariable);
-        $closure->stmts = \array_merge([new Expression($match)], $returnStmts);
-        return $closure;
+        $match = $this->createParametersMatch($matcherVariable, $withConsecutiveMethodCall, $parametersVariable);
+        $parametersParam = new Param($parametersVariable);
+        if ($isWithConsecutiveVariadic) {
+            $parametersParam->variadic = \true;
+        }
+        return new Closure(['byRef' => $isByRef, 'uses' => $uses, 'params' => [$parametersParam], 'stmts' => \array_merge([new Expression($match)], $returnStmts)]);
     }
-    public function createParametersMatch(Variable $matcherVariable, MethodCall $expectsMethodCall, Variable $parameters) : Match_
+    /**
+     * @return \PhpParser\Node\Expr\Match_|\PhpParser\Node\Expr\MethodCall
+     */
+    public function createParametersMatch(Variable $matcherVariable, MethodCall $withConsecutiveMethodCall, Variable $parameters)
     {
+        $firstArg = $withConsecutiveMethodCall->getArgs()[0] ?? null;
+        if ($firstArg instanceof Arg && $firstArg->unpack) {
+            return $this->createAssertSameDimFetch($firstArg, $matcherVariable, $parameters);
+        }
         $numberOfInvocationsMethodCall = new MethodCall($matcherVariable, new Identifier('numberOfInvocations'));
         $matchArms = [];
-        foreach ($expectsMethodCall->getArgs() as $key => $arg) {
+        foreach ($withConsecutiveMethodCall->getArgs() as $key => $arg) {
             $assertEquals = $this->builderFactory->staticCall('self', 'assertEquals', [$arg, $parameters]);
             $matchArms[] = new MatchArm([new LNumber($key + 1)], $assertEquals);
         }
@@ -93,5 +97,40 @@ final class WithConsecutiveMatchFactory
             $uniqueUsedVariables[$usedVariableName] = $usedVariable;
         }
         return $uniqueUsedVariables;
+    }
+    private function createAssertSameDimFetch(Arg $firstArg, Variable $matcherVariable, Variable $parameters) : MethodCall
+    {
+        $currentValueArrayDimFetch = new ArrayDimFetch($firstArg->value, new Minus(new MethodCall($matcherVariable, new Identifier('numberOfInvocations')), new LNumber(1)));
+        $compareArgs = [new Arg($currentValueArrayDimFetch), new Arg(new ArrayDimFetch($parameters, new LNumber(0)))];
+        return $this->builderFactory->methodCall(new Variable('this'), 'assertSame', $compareArgs);
+    }
+    /**
+     * @param Stmt[] $returnStmts
+     * @return Variable[]
+     */
+    private function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, array $returnStmts) : array
+    {
+        $consecutiveArgs = $withConsecutiveMethodCall->getArgs();
+        $stmtVariables = $this->resolveUniqueUsedVariables($returnStmts);
+        return $this->resolveUniqueUsedVariables(\array_merge($consecutiveArgs, $stmtVariables));
+    }
+    /**
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
+     */
+    private function isByRef($referenceVariable) : bool
+    {
+        return $referenceVariable instanceof Variable;
+    }
+    /**
+     * @param Variable[] $usedVariables
+     * @return ClosureUse[]
+     */
+    private function createUses(Variable $matcherVariable, array $usedVariables) : array
+    {
+        $uses = [new ClosureUse($matcherVariable)];
+        foreach ($usedVariables as $usedVariable) {
+            $uses[] = new ClosureUse($usedVariable);
+        }
+        return $uses;
     }
 }
