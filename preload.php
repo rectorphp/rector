@@ -301,6 +301,7 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocNode.
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PropertyTagValueNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PureUnlessCallableIsImpureTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireExtendsTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireImplementsTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ReturnTagValueNode.php';
