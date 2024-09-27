@@ -72,7 +72,10 @@ final class AssignManipulator
         if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
             return \true;
         }
-        return $node->getAttribute(AttributeKey::IS_ASSIGNED_TO) === \true;
+        if ($node->getAttribute(AttributeKey::IS_ASSIGN_REF_EXPR) === \true) {
+            return \true;
+        }
+        return $node->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true;
     }
     /**
      * @api doctrine

@@ -153,6 +153,14 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const IS_ASSIGN_OP_VAR = 'is_assign_op_var';
+    /**
+     * @var string
+     */
+    public const IS_ASSIGN_REF_EXPR = 'is_assign_ref_expr';
+    /**
+     * @var string
+     */
     public const IS_MULTI_ASSIGN = 'is_multi_assign';
     /**
      * @var string
