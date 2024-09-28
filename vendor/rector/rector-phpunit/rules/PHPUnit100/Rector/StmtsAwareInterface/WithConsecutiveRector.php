@@ -25,6 +25,7 @@ use PhpParser\NodeTraverser;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFactory\MatcherNodeFactory;
 use Rector\PHPUnit\NodeFactory\WithConsecutiveMatchFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersion;
@@ -52,14 +53,20 @@ final class WithConsecutiveRector extends AbstractRector implements MinPhpVersio
      */
     private $withConsecutiveMatchFactory;
     /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeFactory\MatcherNodeFactory
+     */
+    private $matcherNodeFactory;
+    /**
      * @var string
      */
     private const WITH_CONSECUTIVE_METHOD = 'withConsecutive';
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder, WithConsecutiveMatchFactory $withConsecutiveMatchFactory)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder, WithConsecutiveMatchFactory $withConsecutiveMatchFactory, MatcherNodeFactory $matcherNodeFactory)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->withConsecutiveMatchFactory = $withConsecutiveMatchFactory;
+        $this->matcherNodeFactory = $matcherNodeFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -136,23 +143,14 @@ CODE_SAMPLE
         }
         $willReturnArgument = $this->findMethodCall($node, 'willReturnArgument');
         if ($willReturnArgument instanceof MethodCall) {
-            if ($returnStmts !== []) {
-                return null;
-            }
-            $parametersVariable = new Variable('parameters');
-            $firstArgs = $willReturnArgument->getArgs()[0];
-            if (!$firstArgs instanceof Arg) {
-                return null;
-            }
-            $returnStmts = [new Return_(new ArrayDimFetch($parametersVariable, $firstArgs->value))];
+            $returnStmts[] = $this->createWillReturnArgument($willReturnArgument);
         }
         $willReturnOnConsecutiveCallsArgument = $this->findMethodCall($node, 'willReturnOnConsecutiveCalls');
         if ($willReturnOnConsecutiveCallsArgument instanceof MethodCall) {
             if ($returnStmts !== []) {
                 return null;
             }
-            $matcherVariable = new Variable('matcher');
-            $numberOfInvocationsMethodCall = new MethodCall($matcherVariable, new Identifier('numberOfInvocations'));
+            $numberOfInvocationsMethodCall = $this->matcherNodeFactory->create();
             $matchArms = [];
             foreach ($willReturnOnConsecutiveCallsArgument->getArgs() as $key => $arg) {
                 $matchArms[] = new MatchArm([new LNumber($key + 1)], $arg->value);
@@ -162,29 +160,13 @@ CODE_SAMPLE
         $willReturnReferenceArgument = $this->findMethodCall($node, 'willReturnReference');
         $referenceVariable = null;
         if ($willReturnReferenceArgument instanceof MethodCall) {
-            if ($returnStmts !== []) {
-                return null;
-            }
-            $firstArg = $willReturnReferenceArgument->getArgs()[0] ?? null;
-            if (!$firstArg instanceof Arg) {
-                return null;
-            }
-            $referenceVariable = $firstArg->value;
-            if (!$referenceVariable instanceof Variable) {
-                return null;
-            }
-            $returnStmts = [new Return_($referenceVariable)];
+            $returnStmts[] = $this->createWillReturn($willReturnReferenceArgument);
+            // return pased args
+            $referenceVariable = new Variable('parameters');
         }
         $willThrowException = $this->findMethodCall($node, 'willThrowException');
         if ($willThrowException instanceof MethodCall) {
-            if ($returnStmts !== []) {
-                return null;
-            }
-            $firstArg = $willThrowException->getArgs()[0] ?? null;
-            if (!$firstArg instanceof Arg) {
-                return null;
-            }
-            $returnStmts = [new Throw_($firstArg->value)];
+            $returnStmts[] = $this->createWillThrowException($willThrowException);
         }
         $this->removeMethodCalls($node, ['willReturn', 'willReturnArgument', 'willReturnSelf', 'willReturnOnConsecutiveCalls', 'willReturnReference', 'willThrowException']);
         $expectsCall = $this->matchAndRefactorExpectsMethodCall($node);
@@ -291,9 +273,8 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
         $callbackClosure = $callbackArg->value;
-        $matcherVariable = new Variable('matcher');
         $parametersVariable = new Variable('parameters');
-        $parametersMatch = $this->withConsecutiveMatchFactory->createParametersMatch($matcherVariable, $withConsecutiveMethodCall, $parametersVariable);
+        $parametersMatch = $this->withConsecutiveMatchFactory->createParametersMatch($withConsecutiveMethodCall, $parametersVariable);
         $callbackClosure->params[] = new Param($parametersVariable);
         $callbackClosure->stmts = \array_merge([new Expression($parametersMatch)], $callbackClosure->stmts);
         $this->removeMethodCalls($expression, [self::WITH_CONSECUTIVE_METHOD]);
@@ -332,5 +313,34 @@ CODE_SAMPLE
             $selfVariable = $selfVariable->var;
         }
         return new Return_($selfVariable);
+    }
+    private function createWillThrowException(MethodCall $willThrowExceptionMethodCall) : Throw_
+    {
+        $firstArg = $willThrowExceptionMethodCall->getArgs()[0] ?? null;
+        if (!$firstArg instanceof Arg) {
+            throw new ShouldNotHappenException();
+        }
+        return new Throw_($firstArg->value);
+    }
+    private function createWillReturn(MethodCall $willReturnReferenceMethodCall) : Return_
+    {
+        $firstArg = $willReturnReferenceMethodCall->getArgs()[0] ?? null;
+        if (!$firstArg instanceof Arg) {
+            throw new ShouldNotHappenException();
+        }
+        $referenceVariable = $firstArg->value;
+        if (!$referenceVariable instanceof Variable) {
+            throw new ShouldNotHappenException();
+        }
+        return new Return_($referenceVariable);
+    }
+    private function createWillReturnArgument(MethodCall $willReturnArgumentMethodCall) : Return_
+    {
+        $parametersVariable = new Variable('parameters');
+        $firstArgs = $willReturnArgumentMethodCall->getArgs()[0];
+        if (!$firstArgs instanceof Arg) {
+            throw new ShouldNotHappenException();
+        }
+        return new Return_(new ArrayDimFetch($parametersVariable, $firstArgs->value));
     }
 }
