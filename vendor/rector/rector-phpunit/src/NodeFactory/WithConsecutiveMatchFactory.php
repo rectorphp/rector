@@ -20,20 +20,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPUnit\Enum\ConsecutiveVariable;
 final class WithConsecutiveMatchFactory
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     /**
      * @readonly
      * @var \PhpParser\BuilderFactory
@@ -41,44 +32,72 @@ final class WithConsecutiveMatchFactory
     private $builderFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeFactory\MatcherNodeFactory
+     * @var \Rector\PHPUnit\NodeFactory\UsedVariablesResolver
      */
-    private $matcherNodeFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, BuilderFactory $builderFactory, \Rector\PHPUnit\NodeFactory\MatcherNodeFactory $matcherNodeFactory)
+    private $usedVariablesResolver;
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeFactory\MatcherInvocationCountMethodCallNodeFactory
+     */
+    private $matcherInvocationCountMethodCallNodeFactory;
+    /**
+     * @readonly
+     * @var \PhpParser\NodeFinder
+     */
+    private $nodeFinder;
+    /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeFactory\ConsecutiveIfsFactory
+     */
+    private $consecutiveIfsFactory;
+    public function __construct(BuilderFactory $builderFactory, \Rector\PHPUnit\NodeFactory\UsedVariablesResolver $usedVariablesResolver, \Rector\PHPUnit\NodeFactory\MatcherInvocationCountMethodCallNodeFactory $matcherInvocationCountMethodCallNodeFactory, NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ConsecutiveIfsFactory $consecutiveIfsFactory)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->builderFactory = $builderFactory;
-        $this->matcherNodeFactory = $matcherNodeFactory;
+        $this->usedVariablesResolver = $usedVariablesResolver;
+        $this->matcherInvocationCountMethodCallNodeFactory = $matcherInvocationCountMethodCallNodeFactory;
+        $this->nodeFinder = $nodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->consecutiveIfsFactory = $consecutiveIfsFactory;
     }
     /**
      * @param Stmt[] $returnStmts
      * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr|null $referenceVariable
      */
-    public function createClosure(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable, bool $isWithConsecutiveVariadic) : Closure
+    public function createClosure(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable) : Closure
     {
-        $matcherVariable = new Variable('matcher');
-        $usedVariables = $this->resolveUsedVariables($withConsecutiveMethodCall, $returnStmts);
-        $isByRef = $this->isByRef($referenceVariable);
-        $uses = $this->createUses($matcherVariable, $usedVariables);
-        $parametersVariable = new Variable('parameters');
-        $match = $this->createParametersMatch($withConsecutiveMethodCall, $parametersVariable);
-        $parametersParam = new Param($parametersVariable);
-        if ($isWithConsecutiveVariadic) {
-            $parametersParam->variadic = \true;
+        $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
+        $usedVariables = $this->usedVariablesResolver->resolveUsedVariables($withConsecutiveMethodCall, $returnStmts);
+        $matchOrIfs = $this->createParametersMatch($withConsecutiveMethodCall);
+        if (\is_array($matchOrIfs)) {
+            $closureStmts = \array_merge($matchOrIfs, $returnStmts);
+        } else {
+            $closureStmts = \array_merge([new Expression($matchOrIfs)], $returnStmts);
         }
-        return new Closure(['byRef' => $isByRef, 'uses' => $uses, 'params' => [$parametersParam], 'stmts' => \array_merge([new Expression($match)], $returnStmts)]);
+        $parametersParam = new Param(new Variable(ConsecutiveVariable::PARAMETERS));
+        $parametersParam->variadic = \true;
+        return new Closure(['byRef' => $this->isByRef($referenceVariable), 'uses' => $this->createClosureUses($matcherVariable, $usedVariables), 'params' => [$parametersParam], 'stmts' => $closureStmts]);
     }
     /**
-     * @return \PhpParser\Node\Expr\Match_|\PhpParser\Node\Expr\MethodCall
+     * @return Match_|MethodCall|Stmt\If_[]
      */
-    public function createParametersMatch(MethodCall $withConsecutiveMethodCall, Variable $parametersVariable)
+    public function createParametersMatch(MethodCall $withConsecutiveMethodCall)
     {
+        $parametersVariable = new Variable(ConsecutiveVariable::PARAMETERS);
         $firstArg = $withConsecutiveMethodCall->getArgs()[0] ?? null;
         if ($firstArg instanceof Arg && $firstArg->unpack) {
-            return $this->createAssertSameDimFetch($firstArg, new Variable('matcher'), $parametersVariable);
+            return $this->createAssertSameDimFetch($firstArg, $parametersVariable);
         }
-        $numberOfInvocationsMethodCall = $this->matcherNodeFactory->create();
+        $numberOfInvocationsMethodCall = $this->matcherInvocationCountMethodCallNodeFactory->create();
+        // A. has assert inside the on consecutive? create ifs
+        if ($this->hasInnerAssertCall($withConsecutiveMethodCall)) {
+            return $this->consecutiveIfsFactory->createIfs($withConsecutiveMethodCall);
+        }
+        // B. if not, create match
         $matchArms = [];
         foreach ($withConsecutiveMethodCall->getArgs() as $key => $arg) {
             $assertEquals = $this->builderFactory->staticCall('self', 'assertEquals', [$arg, $parametersVariable]);
@@ -86,39 +105,11 @@ final class WithConsecutiveMatchFactory
         }
         return new Match_($numberOfInvocationsMethodCall, $matchArms);
     }
-    /**
-     * @param Node[] $nodes
-     * @return Variable[]
-     */
-    private function resolveUniqueUsedVariables(array $nodes) : array
+    private function createAssertSameDimFetch(Arg $firstArg, Variable $variable) : MethodCall
     {
-        /** @var Variable[] $usedVariables */
-        $usedVariables = $this->betterNodeFinder->findInstancesOfScoped($nodes, Variable::class);
-        $uniqueUsedVariables = [];
-        foreach ($usedVariables as $usedVariable) {
-            if ($this->nodeNameResolver->isNames($usedVariable, ['this', 'matcher', 'parameters'])) {
-                continue;
-            }
-            $usedVariableName = $this->nodeNameResolver->getName($usedVariable);
-            $uniqueUsedVariables[$usedVariableName] = $usedVariable;
-        }
-        return $uniqueUsedVariables;
-    }
-    private function createAssertSameDimFetch(Arg $firstArg, Variable $matcherVariable, Variable $parameters) : MethodCall
-    {
-        $currentValueArrayDimFetch = new ArrayDimFetch($firstArg->value, new Minus(new MethodCall($matcherVariable, new Identifier('numberOfInvocations')), new LNumber(1)));
-        $compareArgs = [new Arg($currentValueArrayDimFetch), new Arg(new ArrayDimFetch($parameters, new LNumber(0)))];
+        $currentValueArrayDimFetch = new ArrayDimFetch($firstArg->value, new Minus(new MethodCall(new Variable(ConsecutiveVariable::MATCHER), new Identifier('numberOfInvocations')), new LNumber(1)));
+        $compareArgs = [new Arg($currentValueArrayDimFetch), new Arg(new ArrayDimFetch($variable, new LNumber(0)))];
         return $this->builderFactory->methodCall(new Variable('this'), 'assertSame', $compareArgs);
-    }
-    /**
-     * @param Stmt[] $returnStmts
-     * @return Variable[]
-     */
-    private function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, array $returnStmts) : array
-    {
-        $consecutiveArgs = $withConsecutiveMethodCall->getArgs();
-        $stmtVariables = $this->resolveUniqueUsedVariables($returnStmts);
-        return $this->resolveUniqueUsedVariables(\array_merge($consecutiveArgs, $stmtVariables));
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
@@ -131,12 +122,34 @@ final class WithConsecutiveMatchFactory
      * @param Variable[] $usedVariables
      * @return ClosureUse[]
      */
-    private function createUses(Variable $matcherVariable, array $usedVariables) : array
+    private function createClosureUses(Variable $matcherVariable, array $usedVariables) : array
     {
         $uses = [new ClosureUse($matcherVariable)];
         foreach ($usedVariables as $usedVariable) {
             $uses[] = new ClosureUse($usedVariable);
         }
         return $uses;
+    }
+    /**
+     * We look for $this->assert/equals*() calls inside the consecutive calls
+     */
+    private function hasInnerAssertCall(MethodCall $withConsecutiveMethodCall) : bool
+    {
+        return (bool) $this->nodeFinder->findFirst($withConsecutiveMethodCall->getArgs(), function (Node $node) : bool {
+            if (!$node instanceof MethodCall) {
+                return \false;
+            }
+            if (!$node->var instanceof Variable) {
+                return \false;
+            }
+            if (!$this->nodeNameResolver->isName($node->var, 'this')) {
+                return \false;
+            }
+            if (!$node->name instanceof Identifier) {
+                return \false;
+            }
+            // is one of assert methods
+            return \strncmp($node->name->toString(), 'equal', \strlen('equal')) === 0;
+        });
     }
 }
