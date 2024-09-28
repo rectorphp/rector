@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
@@ -170,7 +171,7 @@ final class BetterNodeFinder
         }
         $isFoundNode = \false;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, static function (Node $subNode) use($types, &$isFoundNode) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure || $subNode instanceof ArrowFunction) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($types as $type) {
@@ -226,7 +227,7 @@ final class BetterNodeFinder
         /** @var T[] $foundNodes */
         $foundNodes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($types, &$foundNodes) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure || $subNode instanceof ArrowFunction) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($types as $type) {
