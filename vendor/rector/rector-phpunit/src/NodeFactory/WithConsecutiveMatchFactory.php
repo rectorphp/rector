@@ -107,8 +107,9 @@ final class WithConsecutiveMatchFactory
     }
     private function createAssertSameDimFetch(Arg $firstArg, Variable $variable) : MethodCall
     {
-        $currentValueArrayDimFetch = new ArrayDimFetch($firstArg->value, new Minus(new MethodCall(new Variable(ConsecutiveVariable::MATCHER), new Identifier('numberOfInvocations')), new LNumber(1)));
-        $compareArgs = [new Arg($currentValueArrayDimFetch), new Arg(new ArrayDimFetch($variable, new LNumber(0)))];
+        $matcherCountMethodCall = $this->matcherInvocationCountMethodCallNodeFactory->create();
+        $currentValueArrayDimFetch = new ArrayDimFetch($firstArg->value, new Minus($matcherCountMethodCall, new LNumber(1)));
+        $compareArgs = [new Arg($currentValueArrayDimFetch), new Arg($variable)];
         return $this->builderFactory->methodCall(new Variable('this'), 'assertSame', $compareArgs);
     }
     /**

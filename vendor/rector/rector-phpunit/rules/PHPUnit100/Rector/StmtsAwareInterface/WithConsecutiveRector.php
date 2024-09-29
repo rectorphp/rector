@@ -331,7 +331,7 @@ CODE_SAMPLE
     }
     private function createWillReturnArgument(MethodCall $willReturnArgumentMethodCall) : Return_
     {
-        $parametersVariable = new Variable('parameters');
+        $parametersVariable = new Variable(ConsecutiveVariable::PARAMETERS);
         $firstArgs = $willReturnArgumentMethodCall->getArgs()[0];
         if (!$firstArgs instanceof Arg) {
             throw new ShouldNotHappenException();
