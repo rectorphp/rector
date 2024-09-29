@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -62,7 +63,7 @@ final class SomeTest extends TestCase
         $matcher = $this->exactly(1);
 
         $this->personServiceMock->expects($matcher)
-            ->with([1], $parameters);
+            ->with(1, $parameters);
     }
 }
 CODE_SAMPLE
@@ -106,8 +107,13 @@ CODE_SAMPLE
         }
         // we look for $this->assertSame(...)
         $expectedExpr = $matchAndReturnMatch->getConsecutiveMatchExpr();
+        if ($expectedExpr instanceof Array_) {
+            $args = $this->nodeFactory->createArgs($expectedExpr->items);
+        } else {
+            $args = [new Arg($expectedExpr)];
+        }
         $node->name = new Identifier('with');
-        $node->args = [new Arg($expectedExpr)];
+        $node->args = $args;
         // remove the returnCallback if present
         if ($matchAndReturnMatch->getWillReturnMatch() instanceof Match_) {
             return new MethodCall($node, new Identifier('willReturn'), [new Arg($matchAndReturnMatch->getWillReturnMatchExpr())]);
