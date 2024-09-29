@@ -1766,6 +1766,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowIdenticalWithConsecutiveRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowIdenticalWithConsecutiveRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowSingleWillReturnCallbackRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowSingleWillReturnCallbackRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SingleWithConsecutiveToWithRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SingleWithConsecutiveToWithRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
