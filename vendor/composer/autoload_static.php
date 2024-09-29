@@ -1990,6 +1990,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SingleWithConsecutiveToWithRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SingleWithConsecutiveToWithRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\ValueObject\\MatchAndReturnMatch' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/MatchAndReturnMatch.php',
         'Rector\\PHPUnit\\Composer\\ProjectPackageVersionResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Composer/ProjectPackageVersionResolver.php',
         'Rector\\PHPUnit\\Enum\\AssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/AssertMethod.php',
         'Rector\\PHPUnit\\Enum\\ConsecutiveVariable' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/ConsecutiveVariable.php',

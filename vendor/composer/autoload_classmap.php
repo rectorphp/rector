@@ -1771,6 +1771,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SingleWithConsecutiveToWithRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SingleWithConsecutiveToWithRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\ValueObject\\MatchAndReturnMatch' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/MatchAndReturnMatch.php',
     'Rector\\PHPUnit\\Composer\\ProjectPackageVersionResolver' => $vendorDir . '/rector/rector-phpunit/src/Composer/ProjectPackageVersionResolver.php',
     'Rector\\PHPUnit\\Enum\\AssertMethod' => $vendorDir . '/rector/rector-phpunit/src/Enum/AssertMethod.php',
     'Rector\\PHPUnit\\Enum\\ConsecutiveVariable' => $vendorDir . '/rector/rector-phpunit/src/Enum/ConsecutiveVariable.php',
