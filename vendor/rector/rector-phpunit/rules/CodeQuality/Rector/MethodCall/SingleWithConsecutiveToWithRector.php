@@ -83,6 +83,9 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['withConsecutive', 'willReturnOnConsecutiveCalls'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (\count($node->getArgs()) !== 1) {
             return null;
         }

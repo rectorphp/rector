@@ -84,6 +84,9 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['withConsecutive', 'willReturnOnConsecutiveCalls'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         // skip as most likely nested array of unique values
         if ($firstArg->unpack) {

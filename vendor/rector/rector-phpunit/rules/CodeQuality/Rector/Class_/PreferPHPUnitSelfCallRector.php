@@ -96,6 +96,9 @@ CODE_SAMPLE
             $classReflection = $this->reflectionResolver->resolveClassReflection($node);
             if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod($methodName)) {
                 $method = $classReflection->getNativeMethod($methodName);
+                if ($node->isFirstClassCallable()) {
+                    return null;
+                }
                 if ($method->isStatic()) {
                     $hasChanged = \true;
                     return $this->nodeFactory->createStaticCall('self', $methodName, $node->getArgs());

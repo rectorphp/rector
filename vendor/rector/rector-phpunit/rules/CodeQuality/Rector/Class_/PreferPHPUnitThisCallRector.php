@@ -88,6 +88,9 @@ CODE_SAMPLE
             if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0) {
                 return null;
             }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
             $hasChanged = \true;
             return $this->nodeFactory->createMethodCall('this', $methodName, $node->getArgs());
         });

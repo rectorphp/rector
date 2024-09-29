@@ -196,6 +196,9 @@ CODE_SAMPLE
             if (!$this->isName($node->name, 'expects')) {
                 return null;
             }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
             $firstArg = $node->getArgs()[0];
             if (!$firstArg->value instanceof MethodCall && !$firstArg->value instanceof StaticCall) {
                 return null;

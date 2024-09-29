@@ -71,6 +71,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertEquals', 'assertSame'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $args = $node->getArgs();
         $firstValue = $args[0]->value;
         if (!$firstValue instanceof DNumber) {
