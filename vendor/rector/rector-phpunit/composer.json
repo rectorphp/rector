@@ -18,7 +18,8 @@
         "symplify\/vendor-patches": "^11.2",
         "tomasvotruba\/class-leak": "^0.2",
         "tracy\/tracy": "^2.10",
-        "rector\/type-perfect": "^0.2"
+        "rector\/type-perfect": "^0.2",
+        "rector\/swiss-knife": "^0.2.35"
     },
     "autoload": {
         "psr-4": {

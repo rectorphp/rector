@@ -27,7 +27,9 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 return static function (RectorConfig $rectorConfig) : void {
@@ -42,6 +44,9 @@ return static function (RectorConfig $rectorConfig) : void {
         TestWithToDataProviderRector::class,
         AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector::class,
         DataProviderArrayItemsNewLinedRector::class,
+        // narrow with consecutive
+        NarrowIdenticalWithConsecutiveRector::class,
+        SingleWithConsecutiveToWithRector::class,
         // specific asserts
         AssertCompareOnCountableWithMethodToAssertCountRector::class,
         AssertCompareToSpecificMethodRector::class,
