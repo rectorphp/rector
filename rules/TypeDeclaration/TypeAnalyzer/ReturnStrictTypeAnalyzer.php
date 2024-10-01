@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\Native\NativeMethodReflection;
 use PHPStan\Reflection\ParametersAcceptorWithPhpDocs;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StaticType;
@@ -117,7 +118,7 @@ final class ReturnStrictTypeAnalyzer
             return null;
         }
         $parametersAcceptorWithPhpDocs = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $call, $scope);
-        if ($methodReflection instanceof NativeFunctionReflection) {
+        if ($methodReflection instanceof NativeFunctionReflection || $methodReflection instanceof NativeMethodReflection) {
             $returnType = $parametersAcceptorWithPhpDocs->getReturnType();
         } elseif ($parametersAcceptorWithPhpDocs instanceof ParametersAcceptorWithPhpDocs) {
             // native return type is needed, as docblock can be false
