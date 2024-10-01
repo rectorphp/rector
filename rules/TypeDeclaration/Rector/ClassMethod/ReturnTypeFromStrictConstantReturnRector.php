@@ -6,10 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
@@ -103,9 +100,6 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        if ($this->hasYield($node)) {
-            return null;
-        }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
@@ -144,12 +138,5 @@ CODE_SAMPLE
             $classConstFetchTypes[] = $this->nodeTypeResolver->getType($return->expr);
         }
         return $this->typeFactory->createMixedPassedOrUnionType($classConstFetchTypes);
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    private function hasYield($functionLike) : bool
-    {
-        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($functionLike, [Yield_::class, YieldFrom::class]);
     }
 }

@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Rector\Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PHPStan\Type\NeverType;
-use PHPStan\Type\VoidType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -67,7 +66,7 @@ CODE_SAMPLE
         }
         $closureReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         // handled by other rules
-        if ($closureReturnType instanceof VoidType || $closureReturnType instanceof NeverType) {
+        if ($closureReturnType instanceof NeverType) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($closureReturnType, TypeKind::RETURN);

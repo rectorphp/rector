@@ -63,7 +63,7 @@ final class AddReturnTypeFromCast
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($functionLike);
-        if ($returnType instanceof UnionType || $returnType->isVoid()->yes()) {
+        if ($returnType instanceof UnionType) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
