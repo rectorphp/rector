@@ -15,9 +15,12 @@ use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -149,7 +152,7 @@ CODE_SAMPLE
             if (!$return->expr instanceof Expr) {
                 return \false;
             }
-            if ($this->isBooleanBinaryOp($return->expr)) {
+            if ($this->isBooleanOp($return->expr)) {
                 continue;
             }
             if ($return->expr instanceof FuncCall && $this->isNativeBooleanReturnTypeFuncCall($return->expr)) {
@@ -178,7 +181,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isBooleanBinaryOp(Expr $expr) : bool
+    private function isBooleanOp(Expr $expr) : bool
     {
         if ($expr instanceof Smaller) {
             return \true;
@@ -207,7 +210,16 @@ CODE_SAMPLE
         if ($expr instanceof Equal) {
             return \true;
         }
-        return $expr instanceof NotEqual;
+        if ($expr instanceof NotEqual) {
+            return \true;
+        }
+        if ($expr instanceof Empty_) {
+            return \true;
+        }
+        if ($expr instanceof Isset_) {
+            return \true;
+        }
+        return $expr instanceof BooleanNot;
     }
     /**
      * @param Return_[] $returns

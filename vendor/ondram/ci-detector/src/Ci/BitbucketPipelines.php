@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202409\OndraM\CiDetector\Ci;
+namespace RectorPrefix202410\OndraM\CiDetector\Ci;
 
-use RectorPrefix202409\OndraM\CiDetector\CiDetector;
-use RectorPrefix202409\OndraM\CiDetector\Env;
-use RectorPrefix202409\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202410\OndraM\CiDetector\CiDetector;
+use RectorPrefix202410\OndraM\CiDetector\Env;
+use RectorPrefix202410\OndraM\CiDetector\TrinaryLogic;
 class BitbucketPipelines extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

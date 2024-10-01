@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202409\Illuminate\Contracts\Database\Query;
+namespace RectorPrefix202410\Illuminate\Contracts\Database\Query;
 
 interface ConditionExpression extends Expression
 {

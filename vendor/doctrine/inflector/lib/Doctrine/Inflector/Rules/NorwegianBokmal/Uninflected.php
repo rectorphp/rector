@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202409\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix202410\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix202409\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202410\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /** @return Pattern[] */

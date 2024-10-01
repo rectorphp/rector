@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202409\React\Socket;
+namespace RectorPrefix202410\React\Socket;
 
-use RectorPrefix202409\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix202409\React\Promise;
-use RectorPrefix202409\React\Promise\PromiseInterface;
+use RectorPrefix202410\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix202410\React\Promise;
+use RectorPrefix202410\React\Promise\PromiseInterface;
 final class DnsConnector implements ConnectorInterface
 {
     private $connector;

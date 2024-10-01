@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202409\Symfony\Component\Console\Helper;
+namespace RectorPrefix202410\Symfony\Component\Console\Helper;
 
-use RectorPrefix202409\Symfony\Component\Console\Cursor;
-use RectorPrefix202409\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix202409\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202409\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use RectorPrefix202409\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202409\Symfony\Component\Console\Terminal;
+use RectorPrefix202410\Symfony\Component\Console\Cursor;
+use RectorPrefix202410\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202410\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202410\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use RectorPrefix202410\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202410\Symfony\Component\Console\Terminal;
 /**
  * The ProgressBar provides helpers to display progress output.
  *

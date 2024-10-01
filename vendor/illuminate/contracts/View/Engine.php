@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202409\Illuminate\Contracts\View;
+namespace RectorPrefix202410\Illuminate\Contracts\View;
 
 interface Engine
 {

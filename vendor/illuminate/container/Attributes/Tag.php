@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202409\Illuminate\Container\Attributes;
+namespace RectorPrefix202410\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202409\Illuminate\Contracts\Container\Container;
-use RectorPrefix202409\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202410\Illuminate\Contracts\Container\Container;
+use RectorPrefix202410\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class Tag implements ContextualAttribute
 {

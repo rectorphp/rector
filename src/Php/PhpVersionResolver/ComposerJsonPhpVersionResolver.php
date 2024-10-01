@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php\PhpVersionResolver;
 
-use RectorPrefix202409\Composer\Semver\VersionParser;
+use RectorPrefix202410\Composer\Semver\VersionParser;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\FileSystem\JsonFileSystem;
 use Rector\Util\PhpVersionFactory;

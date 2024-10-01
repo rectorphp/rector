@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202409\Illuminate\Contracts\Auth;
+namespace RectorPrefix202410\Illuminate\Contracts\Auth;
 
 interface Guard
 {

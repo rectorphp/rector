@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202409\Illuminate\Contracts\Queue;
+namespace RectorPrefix202410\Illuminate\Contracts\Queue;
 
 interface Queue
 {
