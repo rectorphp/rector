@@ -2188,6 +2188,7 @@ return array(
     'Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\AssertSameResponseCodeWithDebugContentsRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
+    'Rector\\Symfony\\CodeQuality\\Rector\\Trait_\\AddTraitGetterReturnTypeBasedOnSetterRequiredRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Trait_/AddTraitGetterReturnTypeBasedOnSetterRequiredRector.php',
     'Rector\\Symfony\\Configs\\ConfigArrayHandler\\NestedConfigCallsFactory' => $vendorDir . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/NestedConfigCallsFactory.php',
     'Rector\\Symfony\\Configs\\ConfigArrayHandler\\SecurityAccessDecisionManagerConfigArrayHandler' => $vendorDir . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/SecurityAccessDecisionManagerConfigArrayHandler.php',
     'Rector\\Symfony\\Configs\\Enum\\DoctrineConfigKey' => $vendorDir . '/rector/rector-symfony/rules/Configs/Enum/DoctrineConfigKey.php',

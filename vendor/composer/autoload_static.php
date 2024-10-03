@@ -2407,6 +2407,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\AssertSameResponseCodeWithDebugContentsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
+        'Rector\\Symfony\\CodeQuality\\Rector\\Trait_\\AddTraitGetterReturnTypeBasedOnSetterRequiredRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Trait_/AddTraitGetterReturnTypeBasedOnSetterRequiredRector.php',
         'Rector\\Symfony\\Configs\\ConfigArrayHandler\\NestedConfigCallsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/NestedConfigCallsFactory.php',
         'Rector\\Symfony\\Configs\\ConfigArrayHandler\\SecurityAccessDecisionManagerConfigArrayHandler' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/ConfigArrayHandler/SecurityAccessDecisionManagerConfigArrayHandler.php',
         'Rector\\Symfony\\Configs\\Enum\\DoctrineConfigKey' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Enum/DoctrineConfigKey.php',
