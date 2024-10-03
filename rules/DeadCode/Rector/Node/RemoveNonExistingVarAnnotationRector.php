@@ -147,6 +147,9 @@ CODE_SAMPLE
                 // skip edge case with double comment, as impossible to resolve by PHPStan doc parser
                 continue;
             }
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, $variableName)) {
+                continue;
+            }
             $phpDocInfo->removeByType(VarTagValueNode::class);
             $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
             $hasChanged = \true;
