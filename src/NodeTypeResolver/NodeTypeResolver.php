@@ -370,7 +370,14 @@ final class NodeTypeResolver
     }
     private function isAnonymousObjectType(Type $type) : bool
     {
-        return $type instanceof ObjectType && $this->classAnalyzer->isAnonymousClassName($type->getClassName());
+        if (!$type instanceof ObjectType) {
+            return \false;
+        }
+        $classReflection = $type->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->isAnonymous();
     }
     private function isUnionTypeable(Type $first, Type $second) : bool
     {
