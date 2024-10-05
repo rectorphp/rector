@@ -67,17 +67,8 @@ final class EregToPcreTransformer
     {
         $this->pcreDelimiter = $pcreDelimiter;
     }
-    public function transform(string $ereg, bool $isCaseInsensitive) : string
-    {
-        if (\strpos($ereg, $this->pcreDelimiter) === \false) {
-            return $this->ere2pcre($ereg, $isCaseInsensitive);
-        }
-        // fallback
-        $quotedEreg = \preg_quote($ereg, $this->pcreDelimiter);
-        return $this->ere2pcre($quotedEreg, $isCaseInsensitive);
-    }
     // converts the ERE $s into the PCRE $r. triggers error on any invalid input.
-    private function ere2pcre(string $content, bool $ignorecase) : string
+    public function transform(string $content, bool $ignorecase) : string
     {
         if ($ignorecase) {
             if (isset($this->icache[$content])) {
@@ -178,7 +169,11 @@ final class EregToPcreTransformer
         if ($r[$rr] === '') {
             throw new InvalidEregException('empty regular expression or branch');
         }
-        return [\str_replace($this->pcreDelimiter, '\\' . $this->pcreDelimiter, \implode('|', $r)), $i];
+        return [$this->normalize(\implode('|', $r)), $i];
+    }
+    private function normalize(string $content) : string
+    {
+        return \str_replace($this->pcreDelimiter, '\\' . $this->pcreDelimiter, $content);
     }
     /**
      * @param mixed[] $r
