@@ -73,7 +73,7 @@ final class EregToPcreTransformer
             return $this->ere2pcre($ereg, $isCaseInsensitive);
         }
         // fallback
-        $quotedEreg = \preg_quote($ereg, '#');
+        $quotedEreg = \preg_quote($ereg, $this->pcreDelimiter);
         return $this->ere2pcre($quotedEreg, $isCaseInsensitive);
     }
     // converts the ERE $s into the PCRE $r. triggers error on any invalid input.
@@ -91,9 +91,9 @@ final class EregToPcreTransformer
             throw new InvalidEregException('unescaped metacharacter ")"');
         }
         if ($ignorecase) {
-            return $this->icache[$content] = '#' . $r . '#mi';
+            return $this->icache[$content] = $this->pcreDelimiter . $r . $this->pcreDelimiter . 'mi';
         }
-        return $this->cache[$content] = '#' . $r . '#m';
+        return $this->cache[$content] = $this->pcreDelimiter . $r . $this->pcreDelimiter . 'm';
     }
     /**
      * Recursively converts ERE into PCRE, starting at the position $i.
@@ -178,7 +178,7 @@ final class EregToPcreTransformer
         if ($r[$rr] === '') {
             throw new InvalidEregException('empty regular expression or branch');
         }
-        return [\implode('|', $r), $i];
+        return [\str_replace($this->pcreDelimiter, '\\' . $this->pcreDelimiter, \implode('|', $r)), $i];
     }
     /**
      * @param mixed[] $r

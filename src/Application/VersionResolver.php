@@ -19,12 +19,12 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const PACKAGE_VERSION = '7752ca8c9fdbd39569cedc6398f13b4f9a6feae7';
+    public const PACKAGE_VERSION = '3d76a1a73bfd7220b23d2beaa5c1e4d94c0fea7b';
     /**
      * @api
      * @var string
      */
-    public const RELEASE_DATE = '2024-10-05 11:18:41';
+    public const RELEASE_DATE = '2024-10-06 01:02:31';
     /**
      * @var int
      */
