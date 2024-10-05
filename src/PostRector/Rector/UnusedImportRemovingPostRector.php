@@ -137,14 +137,14 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         $phpNames = $this->findNonUseImportNames($namespace);
         $docBlockNames = $this->findNamesInDocBlocks($namespace);
         $names = \array_merge($phpNames, $docBlockNames);
-        return \array_unique(\array_map(\Closure::fromCallable('strtolower'), $names));
+        return \array_unique($names);
     }
     /**
-     * @param string[] $names
+     * @param string[]  $names
      */
     private function isUseImportUsed(UseUse $useUse, array $names, ?Name $namespaceName) : bool
     {
-        $comparedName = \strtolower($useUse->alias instanceof Identifier ? $useUse->alias->toString() : $useUse->name->toString());
+        $comparedName = $useUse->alias instanceof Identifier ? $useUse->alias->toString() : $useUse->name->toString();
         if (\in_array($comparedName, $names, \true)) {
             return \true;
         }
@@ -152,8 +152,8 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         if ($namespacedPrefix === '\\') {
             $namespacedPrefix = $comparedName . '\\';
         }
-        $lastName = \strtolower($useUse->name->getLast());
-        $namespaceName = $namespaceName instanceof Name ? \strtolower($namespaceName->toString()) : null;
+        $lastName = $useUse->name->getLast();
+        $namespaceName = $namespaceName instanceof Name ? $namespaceName->toString() : null;
         // match partial import
         foreach ($names as $name) {
             if ($this->isSubNamespace($name, $comparedName, $namespacedPrefix)) {
