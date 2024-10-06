@@ -20,6 +20,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPUnit\Enum\ConsecutiveVariable;
@@ -68,22 +69,26 @@ final class WithConsecutiveMatchFactory
      * @param Stmt[] $returnStmts
      * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr|null $referenceVariable
      */
-    public function createClosure(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable) : Closure
+    public function createClosure(MethodCall $withConsecutiveMethodCall, array $returnStmts, $referenceVariable, bool $areIfsPreferred) : Closure
     {
         $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
         $usedVariables = $this->usedVariablesResolver->resolveUsedVariables($withConsecutiveMethodCall, $returnStmts);
-        $matchOrIfs = $this->createParametersMatch($withConsecutiveMethodCall);
-        if (\is_array($matchOrIfs)) {
-            $closureStmts = \array_merge($matchOrIfs, $returnStmts);
+        if ($areIfsPreferred) {
+            $closureStmts = $returnStmts;
         } else {
-            $closureStmts = \array_merge([new Expression($matchOrIfs)], $returnStmts);
+            $matchOrIfs = $this->createParametersMatch($withConsecutiveMethodCall);
+            if (\is_array($matchOrIfs)) {
+                $closureStmts = \array_merge($matchOrIfs, $returnStmts);
+            } else {
+                $closureStmts = \array_merge([new Expression($matchOrIfs)], $returnStmts);
+            }
         }
         $parametersParam = new Param(new Variable(ConsecutiveVariable::PARAMETERS));
         $parametersParam->variadic = \true;
         return new Closure(['byRef' => $this->isByRef($referenceVariable), 'uses' => $this->createClosureUses($matcherVariable, $usedVariables), 'params' => [$parametersParam], 'stmts' => $closureStmts]);
     }
     /**
-     * @return Match_|MethodCall|Stmt\If_[]
+     * @return Match_|MethodCall|If_[]
      */
     public function createParametersMatch(MethodCall $withConsecutiveMethodCall)
     {
