@@ -2720,6 +2720,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromArgRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromArgRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromIterableMethodCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromIterableMethodCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromObjectRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromObjectRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',

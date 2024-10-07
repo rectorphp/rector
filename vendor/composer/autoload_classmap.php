@@ -2501,6 +2501,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => $baseDir . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromArgRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromArgRector.php',
+    'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromIterableMethodCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromIterableMethodCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromObjectRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromObjectRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
