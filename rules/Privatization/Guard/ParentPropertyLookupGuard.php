@@ -58,7 +58,10 @@ final class ParentPropertyLookupGuard
         $this->propertyManipulator = $propertyManipulator;
         $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
-    public function isLegal(Property $property, ?ClassReflection $classReflection) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Property|string $property
+     */
+    public function isLegal($property, ?ClassReflection $classReflection) : bool
     {
         if (!$classReflection instanceof ClassReflection) {
             return \false;
@@ -66,7 +69,7 @@ final class ParentPropertyLookupGuard
         if ($classReflection->isAnonymous()) {
             return \false;
         }
-        $propertyName = $this->nodeNameResolver->getName($property);
+        $propertyName = $property instanceof Property ? $this->nodeNameResolver->getName($property) : $property;
         if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return \false;
         }
