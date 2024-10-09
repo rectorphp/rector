@@ -104,7 +104,7 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces(), $classReflection->getTraits());
         $this->processAddOverrideAttribute($node, $parentClassReflections);
         if (!$this->hasChanged) {
             return null;
@@ -142,6 +142,9 @@ CODE_SAMPLE
                 // ignore if it is a private method on the parent
                 $parentMethod = $parentClassReflection->getNativeMethod($classMethod->name->toString());
                 if ($parentMethod->isPrivate()) {
+                    continue;
+                }
+                if ($parentClassReflection->isTrait() && !$parentMethod->isAbstract()) {
                     continue;
                 }
                 $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Override'))]);
