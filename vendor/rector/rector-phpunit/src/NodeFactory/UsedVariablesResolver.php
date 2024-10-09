@@ -28,13 +28,12 @@ final class UsedVariablesResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param Stmt[] $returnStmts
      * @return Variable[]
      */
-    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, array $returnStmts) : array
+    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt) : array
     {
         $consecutiveArgs = $withConsecutiveMethodCall->getArgs();
-        $stmtVariables = $this->resolveUniqueVariables($returnStmts);
+        $stmtVariables = $returnStmt instanceof Stmt ? $this->resolveUniqueVariables([$returnStmt]) : [];
         return $this->resolveUniqueVariables(\array_merge($consecutiveArgs, $stmtVariables));
     }
     /**
