@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -63,6 +64,12 @@ CODE_SAMPLE
     {
         foreach ((array) $node->stmts as $key => $stmt) {
             if (!$stmt instanceof If_) {
+                continue;
+            }
+            if ($stmt->else instanceof Else_) {
+                continue;
+            }
+            if ($stmt->elseifs !== []) {
                 continue;
             }
             if (!isset($node->stmts[$key + 1])) {
