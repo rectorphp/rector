@@ -2011,7 +2011,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\PHPUnit\\NodeFactory\\UsedVariablesResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/UsedVariablesResolver.php',
         'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
         'Rector\\PHPUnit\\NodeFinder\\MethodCallNodeFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/MethodCallNodeFinder.php',
-        'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnPerIfNodeDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnPerIfNodeDecorator.php',
+        'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnIfNodeDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnIfNodeDecorator.php',
         'Rector\\PHPUnit\\PHPUnit100\\NodeFactory\\WillReturnCallbackFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/NodeFactory/WillReturnCallbackFactory.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',

@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,6 +40,9 @@ final class ExprAnalyzer
             return \true;
         }
         $type = $scope->getType($expr);
+        if ($nativeType instanceof ObjectWithoutClassType && !$type instanceof ObjectWithoutClassType) {
+            return \true;
+        }
         if ($nativeType instanceof UnionType) {
             return !$nativeType->equals($type);
         }

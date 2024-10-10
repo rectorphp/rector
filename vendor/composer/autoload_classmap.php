@@ -1792,7 +1792,7 @@ return array(
     'Rector\\PHPUnit\\NodeFactory\\UsedVariablesResolver' => $vendorDir . '/rector/rector-phpunit/src/NodeFactory/UsedVariablesResolver.php',
     'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => $vendorDir . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
     'Rector\\PHPUnit\\NodeFinder\\MethodCallNodeFinder' => $vendorDir . '/rector/rector-phpunit/src/NodeFinder/MethodCallNodeFinder.php',
-    'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnPerIfNodeDecorator' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnPerIfNodeDecorator.php',
+    'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnIfNodeDecorator' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnIfNodeDecorator.php',
     'Rector\\PHPUnit\\PHPUnit100\\NodeFactory\\WillReturnCallbackFactory' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/NodeFactory/WillReturnCallbackFactory.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',

@@ -25,7 +25,7 @@ use Rector\PHPUnit\Enum\ConsecutiveVariable;
 use Rector\PHPUnit\MethodCallRemover;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFinder\MethodCallNodeFinder;
-use Rector\PHPUnit\PHPUnit100\NodeDecorator\WillReturnPerIfNodeDecorator;
+use Rector\PHPUnit\PHPUnit100\NodeDecorator\WillReturnIfNodeDecorator;
 use Rector\PHPUnit\PHPUnit100\NodeFactory\WillReturnCallbackFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -47,9 +47,9 @@ final class WithConsecutiveRector extends AbstractRector
     private $willReturnCallbackFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PHPUnit100\NodeDecorator\WillReturnPerIfNodeDecorator
+     * @var \Rector\PHPUnit\MethodCallRemover
      */
-    private $willReturnPerIfNodeDecorator;
+    private $methodCallRemover;
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeFinder\MethodCallNodeFinder
@@ -62,17 +62,17 @@ final class WithConsecutiveRector extends AbstractRector
     private $expectsMethodCallDecorator;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\MethodCallRemover
+     * @var \Rector\PHPUnit\PHPUnit100\NodeDecorator\WillReturnIfNodeDecorator
      */
-    private $methodCallRemover;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, WillReturnCallbackFactory $willReturnCallbackFactory, WillReturnPerIfNodeDecorator $willReturnPerIfNodeDecorator, MethodCallNodeFinder $methodCallNodeFinder, \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator $expectsMethodCallDecorator, MethodCallRemover $methodCallRemover)
+    private $willReturnIfNodeDecorator;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, WillReturnCallbackFactory $willReturnCallbackFactory, MethodCallRemover $methodCallRemover, MethodCallNodeFinder $methodCallNodeFinder, \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator $expectsMethodCallDecorator, WillReturnIfNodeDecorator $willReturnIfNodeDecorator)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->willReturnCallbackFactory = $willReturnCallbackFactory;
-        $this->willReturnPerIfNodeDecorator = $willReturnPerIfNodeDecorator;
+        $this->methodCallRemover = $methodCallRemover;
         $this->methodCallNodeFinder = $methodCallNodeFinder;
         $this->expectsMethodCallDecorator = $expectsMethodCallDecorator;
-        $this->methodCallRemover = $methodCallRemover;
+        $this->willReturnIfNodeDecorator = $willReturnIfNodeDecorator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -201,7 +201,7 @@ CODE_SAMPLE
         $withConsecutiveMethodCall->args = [new Arg($closure)];
         $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
         $matcherAssign = new Assign($matcherVariable, $expectsCall);
-        $this->willReturnPerIfNodeDecorator->decorate($closure, $willReturnOnConsecutiveMethodCall);
+        $this->willReturnIfNodeDecorator->decorate($closure, $willReturnOnConsecutiveMethodCall);
         return [new Expression($matcherAssign), $expression];
     }
     private function refactorWithExistingWillReturnCallback(MethodCall $existingWillReturnCallback, MethodCall $withConsecutiveMethodCall, Expression $expression) : Expression
