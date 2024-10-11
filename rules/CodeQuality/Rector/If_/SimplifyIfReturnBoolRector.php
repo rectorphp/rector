@@ -118,10 +118,10 @@ CODE_SAMPLE
         if ($if->elseifs !== []) {
             return \true;
         }
-        if ($this->isElseSeparatedThenIf($if)) {
+        if (!$this->isIfWithSingleReturnExpr($if)) {
             return \true;
         }
-        if (!$this->isIfWithSingleReturnExpr($if)) {
+        if ($this->isElseSeparatedThenIf($if)) {
             return \true;
         }
         /** @var Return_ $ifInnerNode */
@@ -181,10 +181,18 @@ CODE_SAMPLE
             return \false;
         }
         if (\count($if->else->stmts) !== 1) {
-            return \false;
+            return \true;
         }
         $onlyStmt = $if->else->stmts[0];
-        return $onlyStmt instanceof If_;
+        if (!$onlyStmt instanceof Return_ || !$onlyStmt->expr instanceof Expr) {
+            return \true;
+        }
+        if ($this->valueResolver->isTrueOrFalse($onlyStmt->expr)) {
+            /** @var Return_ $ifReturn */
+            $ifReturn = $if->stmts[0];
+            return $this->nodeComparator->areNodesEqual($onlyStmt->expr, $ifReturn->expr);
+        }
+        return \true;
     }
     private function isIfWithSingleReturnExpr(If_ $if) : bool
     {
