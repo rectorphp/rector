@@ -8,6 +8,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Enum\ClassName;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -37,10 +38,6 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    /**
-     * @var string
-     */
-    private const TEST_CASE_CLASS = 'PHPUnit\\Framework\\TestCase';
     /**
      * @var string
      */
@@ -90,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType(self::TEST_CASE_CLASS))) {
+        if (!$this->isObjectType($node, new ObjectType(ClassName::TEST_CASE_CLASS))) {
             return null;
         }
         $hasChanged = \false;

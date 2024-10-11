@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
+class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1505,6 +1505,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
         'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
         'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
+        'Rector\\DeadCode\\Rector\\ClassLike\\RemoveTypedPropertyNonMockDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveTypedPropertyNonMockDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
@@ -1730,6 +1731,7 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
         'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryOrToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryOrToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
         'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => __DIR__ . '/../..' . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
+        'Rector\\Enum\\ClassName' => __DIR__ . '/../..' . '/src/Enum/ClassName.php',
         'Rector\\Enum\\JsonConstant' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
         'Rector\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',
@@ -2818,9 +2820,9 @@ class ComposerStaticInit7c12491db1a700dd78980ecb6595c088
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7c12491db1a700dd78980ecb6595c088::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7c12491db1a700dd78980ecb6595c088::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7c12491db1a700dd78980ecb6595c088::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7::$classMap;
 
         }, null, ClassLoader::class);
     }

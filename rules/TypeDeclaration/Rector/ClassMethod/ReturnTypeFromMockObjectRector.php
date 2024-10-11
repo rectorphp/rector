@@ -12,6 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Enum\ClassName;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractScopeAwareRector;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
@@ -40,10 +41,6 @@ final class ReturnTypeFromMockObjectRector extends AbstractScopeAwareRector impl
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;
-    /**
-     * @var string
-     */
-    private const TESTCASE_CLASS = 'PHPUnit\\Framework\\TestCase';
     /**
      * @var string
      */
@@ -142,6 +139,6 @@ CODE_SAMPLE
             return \false;
         }
         // is phpunit test case?
-        return $classReflection->isSubclassOf(self::TESTCASE_CLASS);
+        return $classReflection->isSubclassOf(ClassName::TEST_CASE_CLASS);
     }
 }
