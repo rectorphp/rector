@@ -5,6 +5,7 @@ namespace Rector\NodeManipulator;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Variable;
@@ -122,6 +123,9 @@ final class IfManipulator
         }
         $onlyForeachStmt = $foreach->stmts[0];
         if (!$onlyForeachStmt instanceof If_) {
+            return [];
+        }
+        if ($onlyForeachStmt->cond instanceof BooleanOr) {
             return [];
         }
         $ifs = [];
