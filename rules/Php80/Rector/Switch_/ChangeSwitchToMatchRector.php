@@ -139,6 +139,10 @@ CODE_SAMPLE
         }
         return null;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::MATCH_EXPRESSION;
+    }
     private function castMatchCond(Match_ $match) : void
     {
         $type = $this->nodeTypeResolver->getNativeType($match->cond);
@@ -168,10 +172,6 @@ CODE_SAMPLE
         if ($newMatchCond instanceof Cast) {
             $match->cond = $newMatchCond;
         }
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::MATCH_EXPRESSION;
     }
     /**
      * @param CondAndExpr[] $condAndExprs

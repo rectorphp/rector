@@ -6,15 +6,19 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Node as AstNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 use Rector\ValueObject\PhpVersionFeature;
 /**
  * @implements TypeMapperInterface<IntersectionType>
@@ -36,11 +40,17 @@ final class IntersectionTypeMapper implements TypeMapperInterface
      * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper
      */
     private $objectTypeMapper;
-    public function __construct(PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper $objectTypeMapper)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
+     */
+    private $scalarStringToTypeMapper;
+    public function __construct(PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper $objectTypeMapper, ScalarStringToTypeMapper $scalarStringToTypeMapper)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;
         $this->objectTypeMapper = $objectTypeMapper;
+        $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
     public function getNodeClass() : string
     {
@@ -53,12 +63,28 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     {
         $typeNode = $type->toPhpDocNode();
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($typeNode, '', static function (AstNode $astNode) : ?IdentifierTypeNode {
-            if ($astNode instanceof IdentifierTypeNode) {
-                $astNode->name = '\\' . \ltrim($astNode->name, '\\');
-                return $astNode;
+        $phpDocNodeTraverser->traverseWithCallable($typeNode, '', function (AstNode $astNode) {
+            if ($astNode instanceof UnionTypeNode) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            return null;
+            if ($astNode instanceof ArrayShapeItemNode) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if (!$astNode instanceof IdentifierTypeNode) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            $type = $this->scalarStringToTypeMapper->mapScalarStringToType($astNode->name);
+            if ($type->isScalar()->yes()) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($type->isArray()->yes()) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($type instanceof MixedType && $type->isExplicitMixed()) {
+                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            $astNode->name = '\\' . \ltrim($astNode->name, '\\');
+            return $astNode;
         });
         return $typeNode;
     }
