@@ -336,6 +336,10 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::ABSOLUTE_FILE_PATH, $absolute);
     }
+    public function editorUrl(string $editorUrl) : void
+    {
+        SimpleParameterProvider::setParameter(Option::EDITOR_URL, $editorUrl);
+    }
     /**
      * @internal Used only for bridge
      * @return array<class-string<ConfigurableRectorInterface>, mixed>

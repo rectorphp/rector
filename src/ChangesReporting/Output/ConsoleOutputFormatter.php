@@ -5,10 +5,13 @@ namespace Rector\ChangesReporting\Output;
 
 use RectorPrefix202410\Nette\Utils\Strings;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
+use RectorPrefix202410\Symfony\Component\Console\Formatter\OutputFormatter;
 use RectorPrefix202410\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
@@ -70,7 +73,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             if ($firstLineNumber !== null) {
                 $filePath .= ':' . $firstLineNumber;
             }
-            $message = \sprintf('<options=bold>%d) %s</>', ++$i, $filePath);
+            $filePathWithUrl = $this->addEditorUrl($filePath, $fileDiff->getAbsoluteFilePath(), $fileDiff->getRelativeFilePath(), (string) $fileDiff->getFirstLineNumber());
+            $message = \sprintf('<options=bold>%d) %s</>', ++$i, $filePathWithUrl);
             $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
@@ -110,5 +114,14 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return 'Rector is done!';
         }
         return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have been changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
+    }
+    private function addEditorUrl(string $filePath, ?string $absoluteFilePath, ?string $relativeFilePath, ?string $lineNumber) : string
+    {
+        $editorUrl = SimpleParameterProvider::provideStringParameter(Option::EDITOR_URL, '');
+        if ($editorUrl !== '') {
+            $editorUrl = \str_replace(['%file%', '%relFile%', '%line%'], [$absoluteFilePath, $relativeFilePath, $lineNumber], $editorUrl);
+            $filePath = '<href=' . OutputFormatter::escape($editorUrl) . '>' . $filePath . '</>';
+        }
+        return $filePath;
     }
 }

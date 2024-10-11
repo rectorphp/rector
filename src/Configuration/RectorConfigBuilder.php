@@ -178,6 +178,10 @@ final class RectorConfigBuilder
      */
     private $groupLoadedSets = [];
     /**
+     * @var string|null
+     */
+    private $editorUrl;
+    /**
      * @api soon to be used
      * @var bool|null
      */
@@ -287,6 +291,9 @@ final class RectorConfigBuilder
         }
         if ($this->reportingRealPath !== null) {
             $rectorConfig->reportingRealPath($this->reportingRealPath);
+        }
+        if ($this->editorUrl !== null) {
+            $rectorConfig->editorUrl($this->editorUrl);
         }
     }
     /**
@@ -813,6 +820,11 @@ final class RectorConfigBuilder
     public function withRealPathReporting(bool $absolutePath = \true) : self
     {
         $this->reportingRealPath = $absolutePath;
+        return $this;
+    }
+    public function withEditorUrl(string $editorUrl) : self
+    {
+        $this->editorUrl = $editorUrl;
         return $this;
     }
 }
