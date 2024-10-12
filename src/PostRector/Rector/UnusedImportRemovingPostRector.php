@@ -41,7 +41,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             return null;
         }
         $hasChanged = \false;
-        $namespaceOriginalName = $node instanceof Namespace_ && $node->name instanceof Name ? $node->name : null;
+        $namespaceOriginalCase = $node instanceof Namespace_ && $node->name instanceof Name ? $node->name->toString() : null;
         $namesInOriginalCase = $this->resolveUsedPhpAndDocNames($node);
         $namesInLowerCase = \array_map(\Closure::fromCallable('strtolower'), $namesInOriginalCase);
         foreach ($node->stmts as $key => $stmt) {
@@ -55,7 +55,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             }
             $isCaseSensitive = $stmt->type === Use_::TYPE_CONSTANT;
             $names = $isCaseSensitive ? $namesInOriginalCase : $namesInLowerCase;
-            $namespaceName = $namespaceOriginalName instanceof Name ? $isCaseSensitive ? $namespaceOriginalName->toString() : \strtolower($namespaceOriginalName->toString()) : null;
+            $namespaceName = $namespaceOriginalCase === null ? null : ($isCaseSensitive ? $namespaceOriginalCase : \strtolower($namespaceOriginalCase));
             foreach ($stmt->uses as $useUseKey => $useUse) {
                 if ($this->isUseImportUsed($useUse, $isCaseSensitive, $names, $namespaceName)) {
                     continue;
