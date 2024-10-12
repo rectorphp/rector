@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -16,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\CodeQuality\NodeFactory\TypedPropertyFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -32,9 +31,9 @@ final class DynamicDocBlockPropertyToNativePropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $attributeFinder;
+    private $phpAttributeAnalyzer;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
@@ -65,9 +64,9 @@ final class DynamicDocBlockPropertyToNativePropertyRector extends AbstractRector
      * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(AttributeFinder $attributeFinder, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, TypedPropertyFactory $typedPropertyFactory, TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
+    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, TypedPropertyFactory $typedPropertyFactory, TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
     {
-        $this->attributeFinder = $attributeFinder;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->docBlockUpdater = $docBlockUpdater;
@@ -115,8 +114,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $allowDynamicPropertiesAttribute = $this->attributeFinder->findAttributeByClass($node, 'AllowDynamicProperties');
-        if (!$allowDynamicPropertiesAttribute instanceof Attribute) {
+        if (!$this->phpAttributeAnalyzer->hasPhpAttribute($node, 'AllowDynamicProperties')) {
             return null;
         }
         if ($this->shouldSkipClass($node)) {
