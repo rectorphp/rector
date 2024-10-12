@@ -122,23 +122,27 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        // 1. remove dynamic attribute, most likely any
-        $node->attrGroups = [];
         // 2. add defined @property explicitly
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($classPhpDocInfo instanceof PhpDocInfo) {
-            $propertyPhpDocTagNodes = $classPhpDocInfo->getTagsByName('property');
-            $newProperties = $this->createNewPropertyFromPropertyTagValueNodes($propertyPhpDocTagNodes, $node);
-            // remove property tags
-            foreach ($propertyPhpDocTagNodes as $propertyPhpDocTagNode) {
-                // remove from docblock
-                $this->phpDocTagRemover->removeTagValueFromNode($classPhpDocInfo, $propertyPhpDocTagNode);
-            }
-            // merge new properties to start of the file
-            $node->stmts = \array_merge($newProperties, $node->stmts);
-            // update doc info
-            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        if (!$classPhpDocInfo instanceof PhpDocInfo) {
+            return null;
         }
+        $propertyPhpDocTagNodes = $classPhpDocInfo->getTagsByName('property');
+        if ($propertyPhpDocTagNodes === []) {
+            return null;
+        }
+        // 1. remove dynamic attribute, most likely any
+        $node->attrGroups = [];
+        $newProperties = $this->createNewPropertyFromPropertyTagValueNodes($propertyPhpDocTagNodes, $node);
+        // remove property tags
+        foreach ($propertyPhpDocTagNodes as $propertyPhpDocTagNode) {
+            // remove from docblock
+            $this->phpDocTagRemover->removeTagValueFromNode($classPhpDocInfo, $propertyPhpDocTagNode);
+        }
+        // merge new properties to start of the file
+        $node->stmts = \array_merge($newProperties, $node->stmts);
+        // update doc info
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
     public function provideMinPhpVersion() : int
