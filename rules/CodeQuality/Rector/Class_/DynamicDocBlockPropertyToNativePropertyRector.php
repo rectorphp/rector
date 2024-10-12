@@ -132,7 +132,15 @@ CODE_SAMPLE
             return null;
         }
         // 1. remove dynamic attribute, most likely any
-        $node->attrGroups = [];
+        foreach ($node->attrGroups as $key => $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($attr->name->toString() === 'AllowDynamicProperties') {
+                    unset($node->attrGroups[$key]);
+                    continue 2;
+                }
+            }
+        }
+        $node->attrGroups = \array_values($node->attrGroups);
         $newProperties = $this->createNewPropertyFromPropertyTagValueNodes($propertyPhpDocTagNodes, $node);
         // remove property tags
         foreach ($propertyPhpDocTagNodes as $propertyPhpDocTagNode) {
