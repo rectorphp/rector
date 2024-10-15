@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -94,6 +95,9 @@ CODE_SAMPLE
                 continue;
             }
             if (\count($property->props) !== 1) {
+                continue;
+            }
+            if (!$property->type instanceof FullyQualified) {
                 continue;
             }
             if ($this->isObjectType($property->type, new ObjectType(self::MOCK_OBJECT_CLASS))) {
