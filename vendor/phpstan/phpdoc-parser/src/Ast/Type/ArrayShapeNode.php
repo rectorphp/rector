@@ -9,6 +9,8 @@ class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     public const KIND_ARRAY = 'array';
     public const KIND_LIST = 'list';
+    public const KIND_NON_EMPTY_ARRAY = 'non-empty-array';
+    public const KIND_NON_EMPTY_LIST = 'non-empty-list';
     use NodeAttributes;
     /** @var ArrayShapeItemNode[] */
     public $items;

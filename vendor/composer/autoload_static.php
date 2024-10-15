@@ -679,6 +679,7 @@ class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
         'RectorPrefix202410\\Illuminate\\Container\\Attributes\\DB' => __DIR__ . '/..' . '/illuminate/container/Attributes/DB.php',
         'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Database' => __DIR__ . '/..' . '/illuminate/container/Attributes/Database.php',
         'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Log' => __DIR__ . '/..' . '/illuminate/container/Attributes/Log.php',
+        'RectorPrefix202410\\Illuminate\\Container\\Attributes\\RouteParameter' => __DIR__ . '/..' . '/illuminate/container/Attributes/RouteParameter.php',
         'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Storage' => __DIR__ . '/..' . '/illuminate/container/Attributes/Storage.php',
         'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Tag' => __DIR__ . '/..' . '/illuminate/container/Attributes/Tag.php',
         'RectorPrefix202410\\Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',

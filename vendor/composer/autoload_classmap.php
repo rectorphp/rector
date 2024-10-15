@@ -460,6 +460,7 @@ return array(
     'RectorPrefix202410\\Illuminate\\Container\\Attributes\\DB' => $vendorDir . '/illuminate/container/Attributes/DB.php',
     'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Database' => $vendorDir . '/illuminate/container/Attributes/Database.php',
     'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Log' => $vendorDir . '/illuminate/container/Attributes/Log.php',
+    'RectorPrefix202410\\Illuminate\\Container\\Attributes\\RouteParameter' => $vendorDir . '/illuminate/container/Attributes/RouteParameter.php',
     'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Storage' => $vendorDir . '/illuminate/container/Attributes/Storage.php',
     'RectorPrefix202410\\Illuminate\\Container\\Attributes\\Tag' => $vendorDir . '/illuminate/container/Attributes/Tag.php',
     'RectorPrefix202410\\Illuminate\\Container\\BoundMethod' => $vendorDir . '/illuminate/container/BoundMethod.php',

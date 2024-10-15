@@ -81,13 +81,12 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $callArgs = $node->getArgs();
-        $firstArg = $callArgs[0];
+        $firstArg = $node->getArgs()[0];
         // special case for new map
         if ($firstArg->value instanceof New_) {
             return $this->refactorNew($firstArg->value, $node);
         }
-        if (!$firstArg->value instanceof MethodCall) {
+        if (!$firstArg->value instanceof MethodCall && !$firstArg->value instanceof StaticCall) {
             return null;
         }
         $nestedMethodCall = $firstArg->value;
@@ -96,7 +95,6 @@ CODE_SAMPLE
                 continue;
             }
             $node->name = new Identifier($newParentMethodName);
-            // move args up
             $node->args = $nestedMethodCall->args;
             return $node;
         }
