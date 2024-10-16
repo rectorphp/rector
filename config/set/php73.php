@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix202410;
 
 use Rector\Config\RectorConfig;
-use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
@@ -32,5 +31,5 @@ return static function (RectorConfig $rectorConfig) : void {
         'mbereg_search_getregs' => 'mb_ereg_search_getregs',
         'mbereg_search_getpos' => 'mb_ereg_search_getpos',
     ]);
-    $rectorConfig->rules([StringifyStrNeedlesRector::class, RegexDashEscapeRector::class, ContinueToBreakInSwitchRector::class, SetCookieRector::class, IsCountableRector::class, ArrayKeyFirstLastRector::class, SensitiveDefineRector::class, SensitiveConstantNameRector::class, SensitiveHereNowDocRector::class]);
+    $rectorConfig->rules([StringifyStrNeedlesRector::class, RegexDashEscapeRector::class, SetCookieRector::class, IsCountableRector::class, ArrayKeyFirstLastRector::class, SensitiveDefineRector::class, SensitiveConstantNameRector::class, SensitiveHereNowDocRector::class]);
 };
