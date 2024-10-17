@@ -37,7 +37,7 @@ final class ArrayItemNode implements PhpDocTagValueNode
                 $value .= $singleValue;
             }
         } elseif ($this->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-            $value .= $this->value->identifierTypeNode . $this->value;
+            $value .= '@' . \ltrim((string) $this->value->identifierTypeNode, '@') . $this->value;
         } else {
             $value .= $this->value;
         }
