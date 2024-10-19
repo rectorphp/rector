@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
@@ -20,7 +21,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -91,8 +94,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_|ElseIf_|Ternary $node
+     * @return null|Stmt[]|Node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         // skip short ternary
         if ($node instanceof Ternary && !$node->if instanceof Expr) {
@@ -115,6 +119,13 @@ CODE_SAMPLE
         $binaryOp = $this->resolveNewConditionNode($conditionNode, $isNegated);
         if (!$binaryOp instanceof BinaryOp) {
             return null;
+        }
+        if ($node instanceof If_ && $node->cond instanceof Assign && $binaryOp->left instanceof NotIdentical && $binaryOp->right instanceof NotIdentical) {
+            $expression = new Expression($node->cond);
+            $binaryOp->left->left = $node->cond->var;
+            $binaryOp->right->left = $node->cond->var;
+            $node->cond = $binaryOp;
+            return [$expression, $node];
         }
         $node->cond = $binaryOp;
         return $node;
