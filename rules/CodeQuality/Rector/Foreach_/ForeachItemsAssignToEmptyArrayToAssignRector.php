@@ -119,6 +119,10 @@ CODE_SAMPLE
                     return NodeTraverser::STOP_TRAVERSAL;
                 }
             }
+            if ($subNode instanceof Assign && $subNode->var instanceof Variable && $this->isNames($subNode->var, $emptyArrayVariables) && !$this->valueResolver->isValue($subNode->expr, [])) {
+                $isAppend = \true;
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
             return null;
         });
         return $isAppend;
