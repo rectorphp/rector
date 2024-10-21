@@ -84,12 +84,12 @@ CODE_SAMPLE
     private function removeDuplicatedCases(Switch_ $switch) : void
     {
         $totalKeys = \count($switch->cases);
+        $conds = [];
         foreach (\array_keys($switch->cases) as $key) {
             if (isset($switch->cases[$key - 1]) && $switch->cases[$key - 1]->stmts === []) {
                 continue;
             }
             $nextCases = [];
-            $reInsert = 0;
             for ($jumpToKey = $key + 1; $jumpToKey < $totalKeys; ++$jumpToKey) {
                 if (!isset($switch->cases[$jumpToKey])) {
                     continue;
@@ -100,7 +100,7 @@ CODE_SAMPLE
                 $nextCase = $switch->cases[$jumpToKey];
                 if (isset($switch->cases[$jumpToKey - 1]) && $switch->cases[$jumpToKey - 1]->stmts === []) {
                     $nextCases[] = $switch->cases[$jumpToKey - 1];
-                    ++$reInsert;
+                    $conds[] = $switch->cases[$jumpToKey - 1]->cond;
                 }
                 unset($switch->cases[$jumpToKey]);
                 $nextCases[] = $nextCase;
@@ -109,11 +109,20 @@ CODE_SAMPLE
             if ($nextCases === []) {
                 continue;
             }
-            \array_splice($switch->cases, $key + 1, $reInsert, $nextCases);
+            \array_splice($switch->cases, $key + 1, 0, $nextCases);
             for ($jumpToKey = $key; $jumpToKey < $key + \count($nextCases); ++$jumpToKey) {
                 $switch->cases[$jumpToKey]->stmts = [];
             }
             $key += \count($nextCases);
+        }
+        foreach ($conds as $keyCond => $cond) {
+            foreach (\array_reverse($switch->cases, \true) as $keyCase => $case) {
+                if ($this->nodeComparator->areNodesEqual($cond, $case->cond)) {
+                    unset($switch->cases[$keyCase]);
+                    unset($conds[$keyCond]);
+                    continue 2;
+                }
+            }
         }
     }
     private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextCase) : bool
