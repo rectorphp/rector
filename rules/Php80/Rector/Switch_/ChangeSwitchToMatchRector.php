@@ -112,6 +112,17 @@ CODE_SAMPLE
             }
             $match = $matchResult->getMatch();
             if ($matchResult->shouldRemoveNextStmt() && $isReturn) {
+                /** @var Return_ $returnStatement */
+                $returnStatement = $node->stmts[$key + 1];
+                $returnComment = $returnStatement->getComments();
+                if ($returnComment !== []) {
+                    foreach ($match->arms as $arm) {
+                        if ($arm->conds === null) {
+                            $this->mirrorComments($arm, $returnStatement);
+                            break;
+                        }
+                    }
+                }
                 unset($node->stmts[$key + 1]);
             }
             $assignVar = $this->resolveAssignVar($condAndExprs);
