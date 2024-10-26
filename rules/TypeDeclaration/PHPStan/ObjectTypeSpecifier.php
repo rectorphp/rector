@@ -10,13 +10,19 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\Tag\TemplateTag;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\Generic\TemplateType;
+use PHPStan\Type\Generic\TemplateTypeFactory;
+use PHPStan\Type\Generic\TemplateTypeScope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Naming\Naming\UseImportsResolver;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
@@ -34,13 +40,19 @@ final class ObjectTypeSpecifier
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
+     */
+    private $nameScopeFactory;
+    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, NameScopeFactory $nameScopeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
+        $this->nameScopeFactory = $nameScopeFactory;
     }
     /**
-     * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType|\PHPStan\Type\Generic\TemplateType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope)
     {
@@ -65,6 +77,26 @@ final class ObjectTypeSpecifier
                 if ($this->reflectionProvider->hasClass($newClassName)) {
                     return new FullyQualifiedObjectType($newClassName);
                 }
+            }
+        }
+        if ($scope instanceof Scope) {
+            $classReflection = $scope->getClassReflection();
+            if ($classReflection instanceof ClassReflection) {
+                $templateTags = $classReflection->getTemplateTags();
+                $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
+                $templateTypeScope = $nameScope->getTemplateTypeScope();
+                if (!$templateTypeScope instanceof TemplateTypeScope) {
+                    // invalid type
+                    return new NonExistingObjectType($className);
+                }
+                // only support single @template for now
+                if (\count($templateTags) !== 1) {
+                    // invalid type
+                    return new NonExistingObjectType($className);
+                }
+                /** @var TemplateTag $currentTemplateTag */
+                $currentTemplateTag = \current($templateTags);
+                return TemplateTypeFactory::create($templateTypeScope, $currentTemplateTag->getName(), $currentTemplateTag->getBound(), $currentTemplateTag->getVariance());
             }
         }
         // invalid type

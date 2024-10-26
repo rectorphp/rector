@@ -14,7 +14,7 @@ interface AnnotationToAttributeMapperInterface
      */
     public function isCandidate($value) : bool;
     /**
-     * @param T $value
+     * @param mixed $value
      */
     public function map($value) : Expr;
 }
