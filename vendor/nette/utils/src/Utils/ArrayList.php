@@ -104,7 +104,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     }
     /**
      * Prepends a item.
-     * @param mixed $value
+     * @param  T  $value
      */
     public function prepend($value) : void
     {

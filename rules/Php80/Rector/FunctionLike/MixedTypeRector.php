@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -139,9 +138,6 @@ CODE_SAMPLE
             }
             $paramType = $phpDocInfo->getParamType($paramName);
             if (!$paramType instanceof MixedType) {
-                continue;
-            }
-            if ($paramType instanceof TemplateType) {
                 continue;
             }
             $this->hasChanged = \true;
