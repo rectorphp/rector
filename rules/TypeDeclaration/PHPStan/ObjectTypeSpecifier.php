@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDoc\Tag\TemplateTag;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -89,13 +88,11 @@ final class ObjectTypeSpecifier
                     // invalid type
                     return new NonExistingObjectType($className);
                 }
-                // only support single @template for now
-                if (\count($templateTags) !== 1) {
+                $currentTemplateTag = $templateTags[$className] ?? null;
+                if ($currentTemplateTag === null) {
                     // invalid type
                     return new NonExistingObjectType($className);
                 }
-                /** @var TemplateTag $currentTemplateTag */
-                $currentTemplateTag = \current($templateTags);
                 return TemplateTypeFactory::create($templateTypeScope, $currentTemplateTag->getName(), $currentTemplateTag->getBound(), $currentTemplateTag->getVariance());
             }
         }
