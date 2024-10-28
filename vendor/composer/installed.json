@@ -1876,12 +1876,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "974034e9f4aea8de21974faa1c67d993303bda0b"
+                "reference": "799b454b63c240edc962c8fafea2c5a2a61e5393"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/974034e9f4aea8de21974faa1c67d993303bda0b",
-                "reference": "974034e9f4aea8de21974faa1c67d993303bda0b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/799b454b63c240edc962c8fafea2c5a2a61e5393",
+                "reference": "799b454b63c240edc962c8fafea2c5a2a61e5393",
                 "shasum": ""
             },
             "require": {
@@ -1910,7 +1910,7 @@
                 "tomasvotruba\/unused-public": "^0.4",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-10-24T19:57:48+00:00",
+            "time": "2024-10-28T21:03:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2008,17 +2008,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.12",
-            "version_normalized": "6.4.12.0",
+            "version": "v6.4.13",
+            "version_normalized": "6.4.13.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "72d080eb9edf80e36c19be61f72c98ed8273b765"
+                "reference": "f793dd5a7d9ae9923e35d0503d08ba734cec1d79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/72d080eb9edf80e36c19be61f72c98ed8273b765",
-                "reference": "72d080eb9edf80e36c19be61f72c98ed8273b765",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/f793dd5a7d9ae9923e35d0503d08ba734cec1d79",
+                "reference": "f793dd5a7d9ae9923e35d0503d08ba734cec1d79",
                 "shasum": ""
             },
             "require": {
@@ -2051,7 +2051,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2024-09-20T08:15:52+00:00",
+            "time": "2024-10-09T08:40:40+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2090,7 +2090,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.12"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.13"
             },
             "funding": [
                 {
@@ -2180,17 +2180,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v6.4.12",
-            "version_normalized": "6.4.12.0",
+            "version": "v6.4.13",
+            "version_normalized": "6.4.13.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "f810e3cbdf7fdc35983968523d09f349fa9ada12"
+                "reference": "4856c9cf585d5a0313d8d35afd681a526f038dd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/f810e3cbdf7fdc35983968523d09f349fa9ada12",
-                "reference": "f810e3cbdf7fdc35983968523d09f349fa9ada12",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/4856c9cf585d5a0313d8d35afd681a526f038dd3",
+                "reference": "4856c9cf585d5a0313d8d35afd681a526f038dd3",
                 "shasum": ""
             },
             "require": {
@@ -2201,7 +2201,7 @@
             "require-dev": {
                 "symfony\/process": "^5.4|^6.4|^7.0"
             },
-            "time": "2024-09-16T16:01:33+00:00",
+            "time": "2024-10-25T15:07:50+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2229,7 +2229,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.12"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.13"
             },
             "funding": [
                 {
@@ -2249,17 +2249,17 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v6.4.11",
-            "version_normalized": "6.4.11.0",
+            "version": "v6.4.13",
+            "version_normalized": "6.4.13.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "d7eb6daf8cd7e9ac4976e9576b32042ef7253453"
+                "reference": "daea9eca0b08d0ed1dc9ab702a46128fd1be4958"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/d7eb6daf8cd7e9ac4976e9576b32042ef7253453",
-                "reference": "d7eb6daf8cd7e9ac4976e9576b32042ef7253453",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/daea9eca0b08d0ed1dc9ab702a46128fd1be4958",
+                "reference": "daea9eca0b08d0ed1dc9ab702a46128fd1be4958",
                 "shasum": ""
             },
             "require": {
@@ -2268,7 +2268,7 @@
             "require-dev": {
                 "symfony\/filesystem": "^6.0|^7.0"
             },
-            "time": "2024-08-13T14:27:37+00:00",
+            "time": "2024-10-01T08:30:56+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2296,7 +2296,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.4.11"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.4.13"
             },
             "funding": [
                 {
@@ -2399,23 +2399,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.4.12",
-            "version_normalized": "6.4.12.0",
+            "version": "v6.4.13",
+            "version_normalized": "6.4.13.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "3f94e5f13ff58df371a7ead461b6e8068900fbb3"
+                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/3f94e5f13ff58df371a7ead461b6e8068900fbb3",
-                "reference": "3f94e5f13ff58df371a7ead461b6e8068900fbb3",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/1f9f59b46880201629df3bd950fc5ae8c55b960f",
+                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2024-09-17T12:47:12+00:00",
+            "time": "2024-09-25T14:18:03+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2443,7 +2443,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.12"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.13"
             },
             "funding": [
                 {
@@ -2549,17 +2549,17 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.1.5",
-            "version_normalized": "7.1.5.0",
+            "version": "v7.1.6",
+            "version_normalized": "7.1.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "4e561c316e135e053bd758bf3b3eb291d9919de4"
+                "reference": "3ced3f29e4f0d6bce2170ff26719f1fe9aacc671"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/4e561c316e135e053bd758bf3b3eb291d9919de4",
-                "reference": "4e561c316e135e053bd758bf3b3eb291d9919de4",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/3ced3f29e4f0d6bce2170ff26719f1fe9aacc671",
+                "reference": "3ced3f29e4f0d6bce2170ff26719f1fe9aacc671",
                 "shasum": ""
             },
             "require": {
@@ -2572,7 +2572,7 @@
             "require-dev": {
                 "symfony\/console": "^6.4|^7.0"
             },
-            "time": "2024-09-17T12:49:58+00:00",
+            "time": "2024-09-25T14:20:29+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -2603,7 +2603,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.1.5"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.1.6"
             },
             "funding": [
                 {

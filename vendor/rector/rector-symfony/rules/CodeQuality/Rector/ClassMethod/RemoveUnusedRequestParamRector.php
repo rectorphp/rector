@@ -5,12 +5,15 @@ namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractScopeAwareRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector\RemoveUnusedRequestParamRectorTest
  */
-final class RemoveUnusedRequestParamRector extends AbstractRector
+final class RemoveUnusedRequestParamRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -40,12 +43,18 @@ final class RemoveUnusedRequestParamRector extends AbstractRector
      * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
+     */
+    private $isClassMethodUsedAnalyzer;
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, BetterNodeFinder $betterNodeFinder, IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -80,45 +89,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if (!$node->isPublic()) {
-            return null;
-        }
-        if ($node->isAbstract() || $this->hasAbstractParentClassMethod($node)) {
-            return null;
-        }
         if (!$this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
-        if ($node->getParams() === []) {
-            return null;
-        }
-        // skip empty method
-        if ($node->stmts === null) {
-            return null;
-        }
-        foreach ($node->getParams() as $paramPosition => $param) {
-            if (!$param->type instanceof Node) {
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
                 continue;
             }
-            if (!$this->isObjectType($param->type, new ObjectType('Symfony\\Component\\HttpFoundation\\Request'))) {
+            if ($classMethod->isAbstract() || $this->hasAbstractParentClassMethod($classMethod)) {
                 continue;
             }
-            /** @var string $requestParamName */
-            $requestParamName = $this->getName($param);
-            // we have request param here
-            $requestVariable = $this->betterNodeFinder->findVariableOfName($node->stmts, $requestParamName);
-            // is variable used?
-            if ($requestVariable instanceof Variable) {
-                return null;
+            if ($classMethod->getParams() === []) {
+                continue;
             }
-            unset($node->params[$paramPosition]);
+            // skip empty method
+            if ($classMethod->stmts === null) {
+                continue;
+            }
+            foreach ($classMethod->getParams() as $paramPosition => $param) {
+                if (!$param->type instanceof Node) {
+                    continue;
+                }
+                if (!$this->isObjectType($param->type, new ObjectType('Symfony\\Component\\HttpFoundation\\Request'))) {
+                    continue;
+                }
+                /** @var string $requestParamName */
+                $requestParamName = $this->getName($param);
+                // we have request param here
+                $requestVariable = $this->betterNodeFinder->findVariableOfName($classMethod->stmts, $requestParamName);
+                // is variable used?
+                if ($requestVariable instanceof Variable) {
+                    continue 2;
+                }
+                if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $classMethod, $scope)) {
+                    continue 2;
+                }
+                unset($classMethod->params[$paramPosition]);
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
             return $node;
         }
         return null;

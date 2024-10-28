@@ -211,8 +211,8 @@ class Application implements ResetInterface
                 $phpHandler[0]->setExceptionHandler($errorHandler);
             }
         }
-        $this->configureIO($input, $output);
         try {
+            $this->configureIO($input, $output);
             $exitCode = $this->doRun($input, $output);
         } catch (\Throwable $e) {
             if ($e instanceof \Exception && !$this->catchExceptions) {
