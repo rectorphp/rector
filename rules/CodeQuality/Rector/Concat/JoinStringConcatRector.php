@@ -66,6 +66,11 @@ CODE_SAMPLE
         if (!$node->right instanceof String_) {
             return null;
         }
+        $leftStartLine = $node->left->getStartLine();
+        $rightStartLine = $node->right->getStartLine();
+        if ($leftStartLine > 0 && $rightStartLine > 0 && $rightStartLine > $leftStartLine) {
+            return null;
+        }
         return $this->joinConcatIfStrings($node->left, $node->right);
     }
     private function joinConcatIfStrings(String_ $leftString, String_ $rightString) : ?String_
