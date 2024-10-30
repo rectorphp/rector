@@ -1965,6 +1965,7 @@ class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\DataProviderArrayItemsNewLinedRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/DataProviderArrayItemsNewLinedRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestFunctionPrefixWithAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestFunctionPrefixWithAttributeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddCoversClassAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddCoversClassAttributeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParentSetupCallOnSetupRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParentSetupCallOnSetupRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
