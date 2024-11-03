@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php70;
 
-use RectorPrefix202410\Nette\Utils\Strings;
+use RectorPrefix202411\Nette\Utils\Strings;
 use Rector\Php70\Exception\InvalidEregException;
 /**
  * @changelog https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8

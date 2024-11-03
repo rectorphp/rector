@@ -1,10 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202410;
+namespace RectorPrefix202411;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\NarrowUnusedSetUpDefinedPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\TestWithToDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
@@ -49,6 +50,7 @@ return static function (RectorConfig $rectorConfig) : void {
         NarrowIdenticalWithConsecutiveRector::class,
         NarrowSingleWillReturnCallbackRector::class,
         SingleWithConsecutiveToWithRector::class,
+        NarrowUnusedSetUpDefinedPropertyRector::class,
         // specific asserts
         AssertCompareOnCountableWithMethodToAssertCountRector::class,
         AssertCompareToSpecificMethodRector::class,

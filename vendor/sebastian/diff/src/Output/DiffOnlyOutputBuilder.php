@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202410\SebastianBergmann\Diff\Output;
+namespace RectorPrefix202411\SebastianBergmann\Diff\Output;
 
 use function fclose;
 use function fopen;
@@ -17,7 +17,7 @@ use function fwrite;
 use function str_ends_with;
 use function stream_get_contents;
 use function substr;
-use RectorPrefix202410\SebastianBergmann\Diff\Differ;
+use RectorPrefix202411\SebastianBergmann\Diff\Differ;
 /**
  * Builds a diff string representation in a loose unified diff format
  * listing only changes lines. Does not include line numbers.

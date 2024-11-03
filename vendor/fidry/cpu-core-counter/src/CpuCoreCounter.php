@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202410\Fidry\CpuCoreCounter;
+namespace RectorPrefix202411\Fidry\CpuCoreCounter;
 
-use RectorPrefix202410\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
-use RectorPrefix202410\Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
-use RectorPrefix202410\Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use RectorPrefix202411\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use RectorPrefix202411\Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
+use RectorPrefix202411\Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use InvalidArgumentException;
 use function implode;
 use function max;

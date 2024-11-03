@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202410\Doctrine\Inflector\Rules\English;
+namespace RectorPrefix202411\Doctrine\Inflector\Rules\English;
 
-use RectorPrefix202410\Doctrine\Inflector\Rules\Pattern;
-use RectorPrefix202410\Doctrine\Inflector\Rules\Substitution;
-use RectorPrefix202410\Doctrine\Inflector\Rules\Transformation;
-use RectorPrefix202410\Doctrine\Inflector\Rules\Word;
+use RectorPrefix202411\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202411\Doctrine\Inflector\Rules\Substitution;
+use RectorPrefix202411\Doctrine\Inflector\Rules\Transformation;
+use RectorPrefix202411\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /** @return Transformation[] */
     public static function getSingular() : iterable
     {
-        (yield new Transformation(new Pattern('(s)tatuses$'), 'RectorPrefix202410\\1\\2tatus'));
-        (yield new Transformation(new Pattern('(s)tatus$'), 'RectorPrefix202410\\1\\2tatus'));
-        (yield new Transformation(new Pattern('(c)ampus$'), 'RectorPrefix202410\\1\\2ampus'));
-        (yield new Transformation(new Pattern('^(.*)(menu)s$'), 'RectorPrefix202410\\1\\2'));
+        (yield new Transformation(new Pattern('(s)tatuses$'), 'RectorPrefix202411\\1\\2tatus'));
+        (yield new Transformation(new Pattern('(s)tatus$'), 'RectorPrefix202411\\1\\2tatus'));
+        (yield new Transformation(new Pattern('(c)ampus$'), 'RectorPrefix202411\\1\\2ampus'));
+        (yield new Transformation(new Pattern('^(.*)(menu)s$'), 'RectorPrefix202411\\1\\2'));
         (yield new Transformation(new Pattern('(quiz)zes$'), '\\1'));
         (yield new Transformation(new Pattern('(matr)ices$'), '\\1ix'));
         (yield new Transformation(new Pattern('(vert|ind)ices$'), '\\1ex'));
@@ -31,8 +31,8 @@ class Inflectible
         (yield new Transformation(new Pattern('([^a])uses$'), '\\1us'));
         (yield new Transformation(new Pattern('([m|l])ice$'), '\\1ouse'));
         (yield new Transformation(new Pattern('(x|ch|ss|sh)es$'), '\\1'));
-        (yield new Transformation(new Pattern('(m)ovies$'), 'RectorPrefix202410\\1\\2ovie'));
-        (yield new Transformation(new Pattern('(s)eries$'), 'RectorPrefix202410\\1\\2eries'));
+        (yield new Transformation(new Pattern('(m)ovies$'), 'RectorPrefix202411\\1\\2ovie'));
+        (yield new Transformation(new Pattern('(s)eries$'), 'RectorPrefix202411\\1\\2eries'));
         (yield new Transformation(new Pattern('([^aeiouy]|qu)ies$'), '\\1y'));
         (yield new Transformation(new Pattern('([lr])ves$'), '\\1f'));
         (yield new Transformation(new Pattern('(tive)s$'), '\\1'));
@@ -42,15 +42,15 @@ class Inflectible
         (yield new Transformation(new Pattern('(olive)s$'), '\\1'));
         (yield new Transformation(new Pattern('([^fo])ves$'), '\\1fe'));
         (yield new Transformation(new Pattern('(^analy)ses$'), '\\1sis'));
-        (yield new Transformation(new Pattern('(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$'), 'RectorPrefix202410\\1\\2sis'));
+        (yield new Transformation(new Pattern('(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$'), 'RectorPrefix202411\\1\\2sis'));
         (yield new Transformation(new Pattern('(tax)a$'), '\\1on'));
         (yield new Transformation(new Pattern('(c)riteria$'), '\\1riterion'));
         (yield new Transformation(new Pattern('([ti])a(?<!regatta)$'), '\\1um'));
-        (yield new Transformation(new Pattern('(p)eople$'), 'RectorPrefix202410\\1\\2erson'));
+        (yield new Transformation(new Pattern('(p)eople$'), 'RectorPrefix202411\\1\\2erson'));
         (yield new Transformation(new Pattern('(m)en$'), '\\1an'));
-        (yield new Transformation(new Pattern('(c)hildren$'), 'RectorPrefix202410\\1\\2hild'));
+        (yield new Transformation(new Pattern('(c)hildren$'), 'RectorPrefix202411\\1\\2hild'));
         (yield new Transformation(new Pattern('(f)eet$'), '\\1oot'));
-        (yield new Transformation(new Pattern('(n)ews$'), 'RectorPrefix202410\\1\\2ews'));
+        (yield new Transformation(new Pattern('(n)ews$'), 'RectorPrefix202411\\1\\2ews'));
         (yield new Transformation(new Pattern('eaus$'), 'eau'));
         (yield new Transformation(new Pattern('^tights$'), 'tights'));
         (yield new Transformation(new Pattern('^shorts$'), 'shorts'));
@@ -59,15 +59,15 @@ class Inflectible
     /** @return Transformation[] */
     public static function getPlural() : iterable
     {
-        (yield new Transformation(new Pattern('(s)tatus$'), 'RectorPrefix202410\\1\\2tatuses'));
+        (yield new Transformation(new Pattern('(s)tatus$'), 'RectorPrefix202411\\1\\2tatuses'));
         (yield new Transformation(new Pattern('(quiz)$'), '\\1zes'));
-        (yield new Transformation(new Pattern('^(ox)$'), 'RectorPrefix202410\\1\\2en'));
+        (yield new Transformation(new Pattern('^(ox)$'), 'RectorPrefix202411\\1\\2en'));
         (yield new Transformation(new Pattern('([m|l])ouse$'), '\\1ice'));
         (yield new Transformation(new Pattern('(matr|vert|ind)(ix|ex)$'), '\\1ices'));
         (yield new Transformation(new Pattern('(x|ch|ss|sh)$'), '\\1es'));
         (yield new Transformation(new Pattern('([^aeiouy]|qu)y$'), '\\1ies'));
         (yield new Transformation(new Pattern('(hive|gulf)$'), '\\1s'));
-        (yield new Transformation(new Pattern('(?:([^f])fe|([lr])f)$'), 'RectorPrefix202410\\1\\2ves'));
+        (yield new Transformation(new Pattern('(?:([^f])fe|([lr])f)$'), 'RectorPrefix202411\\1\\2ves'));
         (yield new Transformation(new Pattern('sis$'), 'ses'));
         (yield new Transformation(new Pattern('([ti])um$'), '\\1a'));
         (yield new Transformation(new Pattern('(tax)on$'), '\\1a'));
@@ -76,7 +76,7 @@ class Inflectible
         (yield new Transformation(new Pattern('(m)an$'), '\\1en'));
         (yield new Transformation(new Pattern('(c)hild$'), '\\1hildren'));
         (yield new Transformation(new Pattern('(f)oot$'), '\\1eet'));
-        (yield new Transformation(new Pattern('(buffal|her|potat|tomat|volcan)o$'), 'RectorPrefix202410\\1\\2oes'));
+        (yield new Transformation(new Pattern('(buffal|her|potat|tomat|volcan)o$'), 'RectorPrefix202411\\1\\2oes'));
         (yield new Transformation(new Pattern('(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$'), '\\1i'));
         (yield new Transformation(new Pattern('us$'), 'uses'));
         (yield new Transformation(new Pattern('(alias)$'), '\\1es'));

@@ -6,7 +6,7 @@ namespace Rector\Reporting;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use RectorPrefix202410\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202411\Symfony\Component\Console\Style\SymfonyStyle;
 final class DeprecatedRulesReporter
 {
     /**

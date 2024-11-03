@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202410\Symfony\Component\Console\Style;
+namespace RectorPrefix202411\Symfony\Component\Console\Style;
 
-use RectorPrefix202410\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix202410\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix202410\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202410\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix202411\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix202411\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Decorates output to add console style guide helpers.
  *

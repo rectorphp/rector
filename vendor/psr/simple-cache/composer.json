@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202410\\Psr\\SimpleCache\\": "src\/"
+            "RectorPrefix202411\\Psr\\SimpleCache\\": "src\/"
         }
     },
     "extra": {

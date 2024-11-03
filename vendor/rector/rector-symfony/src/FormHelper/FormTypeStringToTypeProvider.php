@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\FormHelper;
 
-use RectorPrefix202410\Nette\Utils\Strings;
+use RectorPrefix202411\Nette\Utils\Strings;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class FormTypeStringToTypeProvider

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202410\Symfony\Contracts\Service;
+namespace RectorPrefix202411\Symfony\Contracts\Service;
 
-use RectorPrefix202410\Psr\Container\ContainerInterface;
-use RectorPrefix202410\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202410\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix202411\Psr\Container\ContainerInterface;
+use RectorPrefix202411\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202411\Symfony\Contracts\Service\Attribute\SubscribedService;
 trigger_deprecation('symfony/contracts', 'v3.5', '"%s" is deprecated, use "ServiceMethodsSubscriberTrait" instead.', ServiceSubscriberTrait::class);
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\Illuminate\Contracts\Pipeline;
+namespace RectorPrefix202411\Illuminate\Contracts\Pipeline;
 
 use Closure;
 interface Pipeline

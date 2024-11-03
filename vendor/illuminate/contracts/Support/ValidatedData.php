@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\Illuminate\Contracts\Support;
+namespace RectorPrefix202411\Illuminate\Contracts\Support;
 
 use ArrayAccess;
 use IteratorAggregate;

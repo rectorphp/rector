@@ -7,7 +7,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202410\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202411\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissConfigurationReporter
 {
     /**

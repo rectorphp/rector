@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202410\Nette\Utils\Json;
+use RectorPrefix202411\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use RectorPrefix202410\Symfony\Component\Console\Command\Command;
-use RectorPrefix202410\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202410\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202410\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202410\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202411\Symfony\Component\Console\Command\Command;
+use RectorPrefix202411\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Style\SymfonyStyle;
 final class ListRulesCommand extends Command
 {
     /**

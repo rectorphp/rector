@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202410\React\Socket;
+namespace RectorPrefix202411\React\Socket;
 
-use RectorPrefix202410\React\Stream\DuplexStreamInterface;
+use RectorPrefix202411\React\Stream\DuplexStreamInterface;
 /**
  * Any incoming and outgoing connection is represented by this interface,
  * such as a normal TCP/IP connection.

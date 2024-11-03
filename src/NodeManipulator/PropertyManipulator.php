@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeManipulator;
 
-use RectorPrefix202410\Doctrine\ORM\Mapping\Table;
+use RectorPrefix202411\Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;

@@ -7,7 +7,7 @@ use PhpParser\NodeTraverser;
 use Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor;
 use Rector\Symfony\Configs\ValueObject\ServiceArguments;
 use Rector\Symfony\PhpParser\NamedSimplePhpParser;
-use RectorPrefix202410\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202411\Symfony\Component\Finder\SplFileInfo;
 final class ConfigServiceArgumentsResolver
 {
     /**

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\ValueObjectFactory;
 
-use RectorPrefix202410\Nette\Utils\FileSystem;
-use RectorPrefix202410\Nette\Utils\Json;
-use RectorPrefix202410\Nette\Utils\Strings;
+use RectorPrefix202411\Nette\Utils\FileSystem;
+use RectorPrefix202411\Nette\Utils\Json;
+use RectorPrefix202411\Nette\Utils\Strings;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;

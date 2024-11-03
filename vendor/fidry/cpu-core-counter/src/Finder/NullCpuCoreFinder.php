@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202410\Fidry\CpuCoreCounter\Finder;
+namespace RectorPrefix202411\Fidry\CpuCoreCounter\Finder;
 
 /**
  * This finder returns whatever value you gave to it. This is useful for testing.

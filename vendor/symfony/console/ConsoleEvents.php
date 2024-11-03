@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202410\Symfony\Component\Console;
+namespace RectorPrefix202411\Symfony\Component\Console;
 
-use RectorPrefix202410\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use RectorPrefix202410\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use RectorPrefix202410\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use RectorPrefix202410\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use RectorPrefix202411\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use RectorPrefix202411\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use RectorPrefix202411\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use RectorPrefix202411\Symfony\Component\Console\Event\ConsoleTerminateEvent;
 /**
  * Contains all events dispatched by an Application.
  *

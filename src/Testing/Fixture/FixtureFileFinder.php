@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
 use Iterator;
-use RectorPrefix202410\Symfony\Component\Finder\Finder;
+use RectorPrefix202411\Symfony\Component\Finder\Finder;
 final class FixtureFileFinder
 {
     /**

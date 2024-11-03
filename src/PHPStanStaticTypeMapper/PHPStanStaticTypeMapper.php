@@ -11,7 +11,7 @@ use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix202410\Webmozart\Assert\Assert;
+use RectorPrefix202411\Webmozart\Assert\Assert;
 final class PHPStanStaticTypeMapper
 {
     /**

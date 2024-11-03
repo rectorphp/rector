@@ -5,7 +5,7 @@ namespace Rector\Set\ValueObject;
 
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Set\Contract\SetInterface;
-use RectorPrefix202410\Webmozart\Assert\Assert;
+use RectorPrefix202411\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\React\Promise;
+namespace RectorPrefix202411\React\Promise;
 
 /**
  * @template T

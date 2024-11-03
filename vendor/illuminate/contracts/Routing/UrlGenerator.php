@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\Illuminate\Contracts\Routing;
+namespace RectorPrefix202411\Illuminate\Contracts\Routing;
 
 /**
  * @method string query(string $path, array $query = [], mixed $extra = [], bool|null $secure = null)

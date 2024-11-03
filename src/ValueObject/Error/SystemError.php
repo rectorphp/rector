@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\ValueObject\Error;
 
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202410\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202411\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     /**
@@ -74,7 +74,7 @@ final class SystemError implements SerializableInterface
      * @param mixed[] $json
      * @return $this
      */
-    public static function decode(array $json) : \RectorPrefix202410\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix202411\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[BridgeItem::MESSAGE], $json[BridgeItem::RELATIVE_FILE_PATH], $json[BridgeItem::LINE], $json[BridgeItem::RECTOR_CLASS]);
     }

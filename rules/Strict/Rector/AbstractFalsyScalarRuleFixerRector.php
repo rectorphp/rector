@@ -5,7 +5,7 @@ namespace Rector\Strict\Rector;
 
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractScopeAwareRector;
-use RectorPrefix202410\Webmozart\Assert\Assert;
+use RectorPrefix202411\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\BooleanInBooleanNotRuleFixerRectorTest
  *

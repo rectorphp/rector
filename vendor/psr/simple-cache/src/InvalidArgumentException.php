@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\Psr\SimpleCache;
+namespace RectorPrefix202411\Psr\SimpleCache;
 
 /**
  * Exception interface for invalid cache arguments.

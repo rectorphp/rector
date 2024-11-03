@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod;
 
-use RectorPrefix202410\Nette\Utils\Json;
+use RectorPrefix202411\Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;

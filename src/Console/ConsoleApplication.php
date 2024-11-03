@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202410\Composer\XdebugHandler\XdebugHandler;
+use RectorPrefix202411\Composer\XdebugHandler\XdebugHandler;
 use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
-use RectorPrefix202410\Symfony\Component\Console\Application;
-use RectorPrefix202410\Symfony\Component\Console\Command\Command;
-use RectorPrefix202410\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202410\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202410\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202410\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202410\Webmozart\Assert\Assert;
+use RectorPrefix202411\Symfony\Component\Console\Application;
+use RectorPrefix202411\Symfony\Component\Console\Command\Command;
+use RectorPrefix202411\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202411\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202411\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**

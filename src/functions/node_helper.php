@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202410;
+namespace RectorPrefix202411;
 
-use RectorPrefix202410\Illuminate\Container\Container;
+use RectorPrefix202411\Illuminate\Container\Container;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\Util\NodePrinter;
-use RectorPrefix202410\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
 if (!\function_exists('print_node')) {
     /**
      * @param Node|Node[] $node

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202410;
+namespace RectorPrefix202411;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;

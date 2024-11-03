@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\ValueObject;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use RectorPrefix202410\Webmozart\Assert\Assert;
+use RectorPrefix202411\Webmozart\Assert\Assert;
 final class Configuration
 {
     /**

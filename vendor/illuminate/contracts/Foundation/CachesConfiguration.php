@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202410\Illuminate\Contracts\Foundation;
+namespace RectorPrefix202411\Illuminate\Contracts\Foundation;
 
 interface CachesConfiguration
 {

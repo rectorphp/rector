@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Parser;
 
-use RectorPrefix202410\Nette\Utils\FileSystem;
+use RectorPrefix202411\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;

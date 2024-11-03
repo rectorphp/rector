@@ -8,12 +8,12 @@
  *
  * @generated
  */
-namespace RectorPrefix202410\Composer;
+namespace RectorPrefix202411\Composer;
 
 $GLOBALS['_composer_bin_dir'] = __DIR__;
 $GLOBALS['_composer_autoload_path'] = __DIR__ . '/..' . '/autoload.php';
 if (\PHP_VERSION_ID < 80000) {
-    if (!\class_exists('RectorPrefix202410\\Composer\\BinProxyWrapper')) {
+    if (!\class_exists('RectorPrefix202411\\Composer\\BinProxyWrapper')) {
         /**
          * @internal
          */
@@ -87,7 +87,7 @@ if (\PHP_VERSION_ID < 80000) {
             }
         }
     }
-    if (\function_exists('stream_get_wrappers') && \in_array('phpvfscomposer', \stream_get_wrappers(), \true) || \function_exists('stream_wrapper_register') && \stream_wrapper_register('phpvfscomposer', 'RectorPrefix202410\\Composer\\BinProxyWrapper')) {
+    if (\function_exists('stream_get_wrappers') && \in_array('phpvfscomposer', \stream_get_wrappers(), \true) || \function_exists('stream_wrapper_register') && \stream_wrapper_register('phpvfscomposer', 'RectorPrefix202411\\Composer\\BinProxyWrapper')) {
         return include "phpvfscomposer://" . __DIR__ . '/..' . '/nikic/php-parser/bin/php-parse';
     }
 }
