@@ -88,11 +88,15 @@ CODE_SAMPLE
             if (!$classStmt instanceof Property) {
                 continue;
             }
+            $property = $classStmt;
             // possibly used by child
-            if (!$isFinalClass && !$classStmt->isPrivate()) {
+            if (!$isFinalClass && !$property->isPrivate()) {
                 continue;
             }
-            $property = $classStmt;
+            // possibly used for caching or re-use
+            if ($property->isStatic()) {
+                continue;
+            }
             if ($this->isPropertyUsedOutsideSetUpClassMethod($node, $setUpClassMethod, $property)) {
                 continue;
             }
