@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -56,15 +57,23 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) < 2) {
+        $assertArgs = $node->getArgs();
+        if (\count($assertArgs) < 2) {
             return null;
         }
-        $right = $node->getArgs()[1]->value;
-        if ($right instanceof MethodCall && $right->name instanceof Identifier && $right->name->toLowerString() === 'count' && $right->getArgs() === []) {
-            $type = $this->getType($right->var);
+        $comparedExpr = $assertArgs[1]->value;
+        if ($comparedExpr instanceof FuncCall && $this->isName($comparedExpr->name, 'count')) {
+            $countArg = $comparedExpr->getArgs()[0];
+            $assertArgs[1] = new Arg($countArg->value);
+            $node->args = $assertArgs;
+            $node->name = new Identifier('assertCount');
+            return $node;
+        }
+        if ($comparedExpr instanceof MethodCall && $this->isName($comparedExpr->name, 'count') && $comparedExpr->getArgs() === []) {
+            $type = $this->getType($comparedExpr->var);
             if ((new ObjectType('Countable'))->isSuperTypeOf($type)->yes()) {
-                $args = $node->getArgs();
-                $args[1] = new Arg($right->var);
+                $args = $assertArgs;
+                $args[1] = new Arg($comparedExpr->var);
                 $node->args = $args;
                 $node->name = new Identifier('assertCount');
             }
