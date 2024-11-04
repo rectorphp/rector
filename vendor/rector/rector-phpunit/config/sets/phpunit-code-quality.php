@@ -28,6 +28,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\FlipAssertRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowSingleWillReturnCallbackRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector;
@@ -46,6 +47,7 @@ return static function (RectorConfig $rectorConfig) : void {
         TestWithToDataProviderRector::class,
         AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector::class,
         DataProviderArrayItemsNewLinedRector::class,
+        FlipAssertRector::class,
         // narrow with consecutive
         NarrowIdenticalWithConsecutiveRector::class,
         NarrowSingleWillReturnCallbackRector::class,

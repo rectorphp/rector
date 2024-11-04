@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
@@ -89,12 +90,7 @@ CODE_SAMPLE
                 continue;
             }
             $property = $classStmt;
-            // possibly used by child
-            if (!$isFinalClass && !$property->isPrivate()) {
-                continue;
-            }
-            // possibly used for caching or re-use
-            if ($property->isStatic()) {
+            if ($this->shouldSkipProperty($isFinalClass, $property)) {
                 continue;
             }
             if ($this->isPropertyUsedOutsideSetUpClassMethod($node, $setUpClassMethod, $property)) {
@@ -146,5 +142,17 @@ CODE_SAMPLE
             }
         }
         return $isPropertyUsed;
+    }
+    private function shouldSkipProperty(bool $isFinalClass, Property $property) : bool
+    {
+        // possibly used by child
+        if (!$isFinalClass && !$property->isPrivate()) {
+            return \true;
+        }
+        // possibly used for caching or re-use
+        if ($property->isStatic()) {
+            return \true;
+        }
+        return $property->props[0]->default instanceof Expr;
     }
 }
