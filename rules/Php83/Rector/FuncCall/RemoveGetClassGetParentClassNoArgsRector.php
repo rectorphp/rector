@@ -4,6 +4,10 @@ declare (strict_types=1);
 namespace Rector\Php83\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\VarLikeIdentifier;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -16,7 +20,7 @@ final class RemoveGetClassGetParentClassNoArgsRector extends AbstractRector impl
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        $r = new RuleDefinition('Replace calls to get_class() and get_parent_class() without arguments with self::class and parent::class.', [new CodeSample(<<<'OLD_CODE_SAMPLE'
+        return new RuleDefinition('Replace calls to get_class() and get_parent_class() without arguments with self::class and parent::class.', [new CodeSample(<<<'OLD_CODE_SAMPLE'
 class Example extends StdClass {
     public function whoAreYou() {
         return get_class() . ' daughter of ' . get_parent_class();
@@ -31,17 +35,16 @@ class Example extends StdClass {
 }
 NEW_CODE_SAMPLE
 )]);
-        return $r;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
-     * @param Node\Expr\FuncCall $node
+     * @param FuncCall $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -59,7 +62,7 @@ NEW_CODE_SAMPLE
             $target = 'parent';
         }
         if ($target !== null) {
-            return new Node\Expr\ClassConstFetch(new Node\Name([$target]), new Node\VarLikeIdentifier('class'));
+            return new ClassConstFetch(new Name([$target]), new VarLikeIdentifier('class'));
         }
         return null;
     }
