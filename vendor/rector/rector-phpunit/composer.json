@@ -15,7 +15,7 @@
         "symplify\/easy-coding-standard": "^12.3",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
-        "symplify\/vendor-patches": "^11.2",
+        "symplify\/vendor-patches": "^11.3",
         "tracy\/tracy": "^2.10",
         "tomasvotruba\/class-leak": "^1.0",
         "rector\/type-perfect": "^1.0",
