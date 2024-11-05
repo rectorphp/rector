@@ -1498,6 +1498,7 @@ class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
         'Rector\\DeadCode\\PhpDoc\\DeadReturnTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadReturnTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\DeadVarTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadVarTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\Guard\\StandaloneTypeRemovalGuard' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/Guard/StandaloneTypeRemovalGuard.php',
+        'Rector\\DeadCode\\PhpDoc\\Guard\\TemplateTypeRemovalGuard' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/Guard/TemplateTypeRemovalGuard.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\ParamTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/ParamTagRemover.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\ReturnTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/ReturnTagRemover.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\VarTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/VarTagRemover.php',

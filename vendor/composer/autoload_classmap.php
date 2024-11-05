@@ -1279,6 +1279,7 @@ return array(
     'Rector\\DeadCode\\PhpDoc\\DeadReturnTagValueNodeAnalyzer' => $baseDir . '/rules/DeadCode/PhpDoc/DeadReturnTagValueNodeAnalyzer.php',
     'Rector\\DeadCode\\PhpDoc\\DeadVarTagValueNodeAnalyzer' => $baseDir . '/rules/DeadCode/PhpDoc/DeadVarTagValueNodeAnalyzer.php',
     'Rector\\DeadCode\\PhpDoc\\Guard\\StandaloneTypeRemovalGuard' => $baseDir . '/rules/DeadCode/PhpDoc/Guard/StandaloneTypeRemovalGuard.php',
+    'Rector\\DeadCode\\PhpDoc\\Guard\\TemplateTypeRemovalGuard' => $baseDir . '/rules/DeadCode/PhpDoc/Guard/TemplateTypeRemovalGuard.php',
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\ParamTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/ParamTagRemover.php',
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\ReturnTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/ReturnTagRemover.php',
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\VarTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/VarTagRemover.php',

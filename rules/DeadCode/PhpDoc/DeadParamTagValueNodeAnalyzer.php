@@ -8,10 +8,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\Generic\TemplateType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard;
+use Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -60,7 +60,12 @@ final class DeadParamTagValueNodeAnalyzer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard
+     */
+    private $templateTypeRemovalGuard;
+    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard, StaticTypeMapper $staticTypeMapper, TemplateTypeRemovalGuard $templateTypeRemovalGuard)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
@@ -70,6 +75,7 @@ final class DeadParamTagValueNodeAnalyzer
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->standaloneTypeRemovalGuard = $standaloneTypeRemovalGuard;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->templateTypeRemovalGuard = $templateTypeRemovalGuard;
     }
     public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike) : bool
     {
@@ -84,7 +90,7 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $functionLike);
-        if ($docType instanceof TemplateType) {
+        if (!$this->templateTypeRemovalGuard->isLegal($docType)) {
             return \false;
         }
         if ($param->type instanceof Name && $this->nodeNameResolver->isName($param->type, 'object')) {
