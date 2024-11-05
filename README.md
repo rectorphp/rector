@@ -1,6 +1,6 @@
 # Rector - Instant Upgrades and Automated Refactoring
 
-[![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
+[![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector) [![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20Rector%20Guru-006BFF)](https://gurubase.io/g/rector)
 
 <br>
 
