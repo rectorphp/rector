@@ -21,6 +21,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\DoctrineEntityDocumentAnalyser;
 use Rector\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector\EntityDocumentCreateMockToDirectNewRectorTest
@@ -50,7 +51,34 @@ final class EntityDocumentCreateMockToDirectNewRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Move from value object mocking, to direct use of value object', []);
+        return new RuleDefinition('Move from entity mock, to direct use of class instance and setters', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeFileTest extends TestCase
+{
+    public function test()
+    {
+        $tableMock = $this->createMock(Table::class);
+
+        $tableMock->expects(self::once())
+            ->method('isLocked')
+            ->willReturn(true);
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeFileTest extends TestCase
+{
+    public function test()
+    {
+        $table = new Table();
+        $table->setLocked(true);
+    }
+}
+CODE_SAMPLE
+)]);
     }
     /**
      * @return array<class-string<Node>>
