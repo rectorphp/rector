@@ -131,6 +131,9 @@ CODE_SAMPLE
         if ($classReflection->hasMethod('__isset')) {
             return \true;
         }
+        if ($classReflection->hasMethod('__get')) {
+            return \true;
+        }
         if (!$classReflection->isClass()) {
             return \false;
         }
