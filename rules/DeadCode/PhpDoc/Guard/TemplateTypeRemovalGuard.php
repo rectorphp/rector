@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc\Guard;
 
+use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\Generic\TemplateType;
 final class TemplateTypeRemovalGuard
 {
     public function isLegal(Type $docType) : bool
