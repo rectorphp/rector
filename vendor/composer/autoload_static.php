@@ -2028,7 +2028,6 @@ class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',
-        'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\AssertIssetToAssertObjectHasPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/AssertIssetToAssertObjectHasPropertyRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\ExpectsMethodCallDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/ExpectsMethodCallDecorator.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
