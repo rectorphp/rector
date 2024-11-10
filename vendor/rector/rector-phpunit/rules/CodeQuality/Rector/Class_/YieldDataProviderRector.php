@@ -9,13 +9,15 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTransformer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractScopeAwareRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\YieldDataProviderRector\YieldDataProviderRectorTest
  */
-final class YieldDataProviderRector extends AbstractRector
+final class YieldDataProviderRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -46,12 +48,18 @@ final class YieldDataProviderRector extends AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(NodeTransformer $nodeTransformer, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
+     */
+    private $isClassMethodUsedAnalyzer;
+    public function __construct(NodeTransformer $nodeTransformer, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder, PhpDocInfoFactory $phpDocInfoFactory, IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer)
     {
         $this->nodeTransformer = $nodeTransformer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->dataProviderClassMethodFinder = $dataProviderClassMethodFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -91,7 +99,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Class_
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -101,6 +109,9 @@ CODE_SAMPLE
         foreach ($dataProviderClassMethods as $dataProviderClassMethod) {
             $array = $this->collectReturnArrayNodesFromClassMethod($dataProviderClassMethod);
             if (!$array instanceof Array_) {
+                continue;
+            }
+            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $dataProviderClassMethod, $scope)) {
                 continue;
             }
             $this->transformArrayToYieldsOnMethodNode($dataProviderClassMethod, $array);
