@@ -381,7 +381,7 @@ final class NodeTypeResolver
     }
     private function isUnionTypeable(Type $first, Type $second) : bool
     {
-        return !$first instanceof UnionType && !$second instanceof UnionType && !$second instanceof NullType;
+        return !$first instanceof UnionType && !$second instanceof UnionType && !$second->isNull()->yes();
     }
     private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType) : bool
     {

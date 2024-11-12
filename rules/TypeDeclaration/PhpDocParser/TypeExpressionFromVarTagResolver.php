@@ -24,7 +24,6 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
@@ -50,7 +49,7 @@ final class TypeExpressionFromVarTagResolver
                 $arg = new Arg($variable);
                 return new FuncCall(new Name($scalarTypeFunction), [$arg]);
             }
-            if ($scalarType instanceof NullType) {
+            if ($scalarType->isNull()->yes()) {
                 return new Identical($variable, new ConstFetch(new Name('null')));
             }
             if ($scalarType instanceof ConstantBooleanType) {

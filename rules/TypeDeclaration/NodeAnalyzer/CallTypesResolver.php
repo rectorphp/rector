@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -107,7 +106,7 @@ final class CallTypesResolver
         if (\count($staticTypeByArgumentPosition) !== 1) {
             return $staticTypeByArgumentPosition;
         }
-        if (!$staticTypeByArgumentPosition[0] instanceof NullType) {
+        if (!$staticTypeByArgumentPosition[0]->isNull()->yes()) {
             return $staticTypeByArgumentPosition;
         }
         return [new MixedType()];

@@ -8,7 +8,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
@@ -174,7 +173,7 @@ final class TypeComparator
     private function normalizeConstantBooleanType(Type $type) : Type
     {
         return TypeTraverser::map($type, static function (Type $type, callable $callable) : Type {
-            if ($type instanceof ConstantBooleanType) {
+            if ($type->isTrue()->yes() || $type->isFalse()->yes()) {
                 return new BooleanType();
             }
             return $callable($type);

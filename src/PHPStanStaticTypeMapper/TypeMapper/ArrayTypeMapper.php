@@ -176,7 +176,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         if (!$arrayType->getKeyType()->isInteger()->yes()) {
             return \false;
         }
-        return !$arrayType->getItemType() instanceof ArrayType;
+        return !$arrayType->getItemType()->isArray()->yes();
     }
     private function isClassStringArrayType(ArrayType $arrayType) : bool
     {

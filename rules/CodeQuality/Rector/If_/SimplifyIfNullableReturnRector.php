@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -200,10 +199,10 @@ CODE_SAMPLE
         if (\count($types) > 2) {
             return null;
         }
-        if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
+        if ($types[0] instanceof FullyQualifiedObjectType && $types[1]->isNull()->yes() && $className === $types[0]->getClassName()) {
             return $this->createDirectReturn($expression, $expr, $unionType);
         }
-        if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
+        if ($types[0]->isNull()->yes() && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
             return $this->createDirectReturn($expression, $expr, $unionType);
         }
         if ($this->isNotTypedNullable($types, $className)) {
@@ -219,7 +218,7 @@ CODE_SAMPLE
         if (!$types[0] instanceof ObjectType) {
             return \true;
         }
-        if (!$types[1] instanceof NullType) {
+        if (!$types[1]->isNull()->yes()) {
             return \true;
         }
         return $className !== $types[0]->getClassName();

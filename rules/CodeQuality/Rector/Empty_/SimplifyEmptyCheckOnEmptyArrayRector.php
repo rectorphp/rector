@@ -17,8 +17,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpParser\AstResolver;
@@ -113,7 +113,7 @@ CODE_SAMPLE
     }
     private function isAllowedExpr(Expr $expr, Scope $scope) : bool
     {
-        if (!$scope->getType($expr) instanceof ArrayType) {
+        if (!$scope->getType($expr)->isArray()->yes()) {
             return \false;
         }
         if ($expr instanceof Variable) {
@@ -136,7 +136,7 @@ CODE_SAMPLE
         $phpPropertyReflection = $classReflection->getNativeProperty($propertyName);
         $nativeType = $phpPropertyReflection->getNativeType();
         if (!$nativeType instanceof MixedType) {
-            return $nativeType instanceof ArrayType;
+            return $nativeType->isArray()->yes();
         }
         $property = $this->astResolver->resolvePropertyFromPropertyReflection($phpPropertyReflection);
         /**
@@ -149,6 +149,9 @@ CODE_SAMPLE
             return \false;
         }
         $type = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection, $this->file);
-        return $type instanceof ArrayType;
+        if (!$type instanceof Type) {
+            return \false;
+        }
+        return $type->isArray()->yes();
     }
 }

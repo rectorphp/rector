@@ -12,7 +12,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\CallableType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -164,7 +163,7 @@ final class UnionTypeMapper implements TypeMapperInterface
                 return null;
             }
             // special callable type only not allowed on property
-            if ($typeKind === TypeKind::PROPERTY && $unionedType instanceof CallableType) {
+            if ($typeKind === TypeKind::PROPERTY && $unionedType->isCallable()->yes()) {
                 return null;
             }
             $phpParserUnionedTypes[] = $phpParserNode;

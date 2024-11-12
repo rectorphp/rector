@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Php\PhpVersionProvider;
@@ -194,7 +193,7 @@ CODE_SAMPLE
     private function processSingleUnionType($node, UnionType $unionType, NullableType $nullableType)
     {
         $types = $unionType->getTypes();
-        $returnType = $types[0] instanceof ObjectType && $types[1] instanceof NullType ? new NullableType(new FullyQualified($types[0]->getClassName())) : $nullableType;
+        $returnType = $types[0] instanceof ObjectType && $types[1]->isNull()->yes() ? new NullableType(new FullyQualified($types[0]->getClassName())) : $nullableType;
         $node->returnType = $returnType;
         return $node;
     }

@@ -21,7 +21,6 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PhpParser\AstResolver;
@@ -82,7 +81,7 @@ final class CallerParamMatcher
         if ($this->typeComparator->isSubtype($defaultType, $callParamType)) {
             return $callParam->type;
         }
-        if (!$defaultType instanceof NullType) {
+        if (!$defaultType->isNull()->yes()) {
             return null;
         }
         if ($callParam->type instanceof Name || $callParam->type instanceof Identifier) {

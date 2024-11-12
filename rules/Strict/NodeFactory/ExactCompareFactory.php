@@ -20,7 +20,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
@@ -54,7 +53,7 @@ final class ExactCompareFactory
             return new Identical($expr, $this->nodeFactory->createFalse());
         } elseif ($exprType->isArray()->yes()) {
             return new Identical($expr, new Array_([]));
-        } elseif ($exprType instanceof NullType) {
+        } elseif ($exprType->isNull()->yes()) {
             return new Identical($expr, $this->nodeFactory->createNull());
         } elseif (!$exprType instanceof UnionType) {
             return null;

@@ -10,7 +10,6 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\ConstantType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -106,7 +105,7 @@ CODE_SAMPLE
     private function processVariableNum($stmt, Variable $numVariable) : ?Node
     {
         $staticType = $this->getType($numVariable);
-        if ($staticType instanceof ConstantType) {
+        if ($staticType->isConstantValue()->yes()) {
             if ($staticType instanceof ConstantIntegerType) {
                 if ($staticType->getValue() === 0) {
                     $stmt->num = null;

@@ -17,8 +17,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IntersectionType;
 use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
 use Rector\NodeAnalyzer\ExprAnalyzer;
@@ -104,10 +102,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($node->cond);
-        if (!$conditionStaticType instanceof ConstantBooleanType) {
-            return null;
-        }
-        if (!$conditionStaticType->getValue()) {
+        if (!$conditionStaticType->isTrue()->yes()) {
             return null;
         }
         if ($this->shouldSkipExpr($node->cond)) {
@@ -136,7 +131,7 @@ CODE_SAMPLE
             $type = $this->getType($variable);
             if ($type instanceof IntersectionType) {
                 foreach ($type->getTypes() as $subType) {
-                    if ($subType instanceof ArrayType) {
+                    if ($subType->isArray()->yes()) {
                         return \true;
                     }
                 }
@@ -155,10 +150,7 @@ CODE_SAMPLE
         }
         $booleanAnd = $if->cond;
         $leftType = $this->getType($booleanAnd->left);
-        if (!$leftType instanceof ConstantBooleanType) {
-            return null;
-        }
-        if (!$leftType->getValue()) {
+        if (!$leftType->isTrue()->yes()) {
             return null;
         }
         if (!$this->safeLeftTypeBooleanAndOrAnalyzer->isSafe($booleanAnd)) {

@@ -195,7 +195,7 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         if ($param->default instanceof Expr) {
             $defaultValueStaticType = $this->nodeTypeResolver->getType($param->default);
-            if ($defaultValueStaticType instanceof NullType) {
+            if ($defaultValueStaticType->isNull()->yes()) {
                 return \true;
             }
         }

@@ -28,7 +28,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\BooleanType;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractScopeAwareRector;
@@ -177,9 +176,11 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($functionReflection->getVariants() as $parametersAcceptorWithPhpDoc) {
-            return $parametersAcceptorWithPhpDoc->getNativeReturnType() instanceof BooleanType;
+            if (!$parametersAcceptorWithPhpDoc->getNativeReturnType()->isBoolean()->yes()) {
+                return \false;
+            }
         }
-        return \false;
+        return \true;
     }
     private function isBooleanOp(Expr $expr) : bool
     {

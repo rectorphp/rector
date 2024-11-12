@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\NullType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractScopeAwareRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -87,7 +86,7 @@ CODE_SAMPLE
             }
             $firstArgValue = $firstArg->value;
             $firstArgType = $this->getType($firstArgValue);
-            if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$firstArgType instanceof NullType) {
+            if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$firstArgType->isNull()->yes()) {
                 return null;
             }
             $notIdentical = new NotIdentical($firstArgValue, $this->nodeFactory->createNull());
