@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -262,7 +261,7 @@ CODE_SAMPLE
                 return \false;
             }
             // handle only simple arrays
-            if (!$arrayType->getKeyType() instanceof IntegerType) {
+            if (!$arrayType->getKeyType()->isInteger()->yes()) {
                 return \false;
             }
         }
