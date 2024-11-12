@@ -2166,6 +2166,7 @@ return array(
     'Rector\\StaticTypeMapper\\PhpParser\\NullableTypeNodeMapper' => $baseDir . '/src/StaticTypeMapper/PhpParser/NullableTypeNodeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\StringNodeMapper' => $baseDir . '/src/StaticTypeMapper/PhpParser/StringNodeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\UnionTypeNodeMapper' => $baseDir . '/src/StaticTypeMapper/PhpParser/UnionTypeNodeMapper.php',
+    'Rector\\StaticTypeMapper\\Resolver\\ClassNameFromObjectTypeResolver' => $baseDir . '/src/StaticTypeMapper/Resolver/ClassNameFromObjectTypeResolver.php',
     'Rector\\StaticTypeMapper\\StaticTypeMapper' => $baseDir . '/src/StaticTypeMapper/StaticTypeMapper.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\AliasedObjectType' => $baseDir . '/src/StaticTypeMapper/ValueObject/Type/AliasedObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedGenericObjectType' => $baseDir . '/src/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php',

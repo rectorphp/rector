@@ -2385,6 +2385,7 @@ class ComposerStaticInit4d4c37b878ce01a3ff505ba7def6aac7
         'Rector\\StaticTypeMapper\\PhpParser\\NullableTypeNodeMapper' => __DIR__ . '/../..' . '/src/StaticTypeMapper/PhpParser/NullableTypeNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\StringNodeMapper' => __DIR__ . '/../..' . '/src/StaticTypeMapper/PhpParser/StringNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\UnionTypeNodeMapper' => __DIR__ . '/../..' . '/src/StaticTypeMapper/PhpParser/UnionTypeNodeMapper.php',
+        'Rector\\StaticTypeMapper\\Resolver\\ClassNameFromObjectTypeResolver' => __DIR__ . '/../..' . '/src/StaticTypeMapper/Resolver/ClassNameFromObjectTypeResolver.php',
         'Rector\\StaticTypeMapper\\StaticTypeMapper' => __DIR__ . '/../..' . '/src/StaticTypeMapper/StaticTypeMapper.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\AliasedObjectType' => __DIR__ . '/../..' . '/src/StaticTypeMapper/ValueObject/Type/AliasedObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedGenericObjectType' => __DIR__ . '/../..' . '/src/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php',
