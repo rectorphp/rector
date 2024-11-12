@@ -3,11 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
-use Rector\Set\Contract\SetListInterface;
 /**
  * @api
  */
-final class SymfonySetList implements SetListInterface
+final class SymfonySetList
 {
     /**
      * @var string
@@ -94,6 +93,7 @@ final class SymfonySetList implements SetListInterface
      */
     public const SYMFONY_54 = __DIR__ . '/../../config/sets/symfony/symfony54.php';
     /**
+     * @deprecated Use ->withAttributesSets(symfony: true) in rector.php config instead
      * @var string
      */
     public const SYMFONY_52_VALIDATOR_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/symfony52-validator-attributes.php';
@@ -134,6 +134,7 @@ final class SymfonySetList implements SetListInterface
      */
     public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/sets/symfony/symfony-constructor-injection.php';
     /**
+     * @deprecated Use ->withAttributesSets(symfony: true) in rector.php config instead
      * @var string
      */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/annotations-to-attributes.php';

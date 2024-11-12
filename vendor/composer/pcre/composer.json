@@ -21,8 +21,8 @@
     },
     "require-dev": {
         "phpunit\/phpunit": "^8 || ^9",
-        "phpstan\/phpstan": "^1.11.10",
-        "phpstan\/phpstan-strict-rules": "^1.1"
+        "phpstan\/phpstan": "^1.12 || ^2",
+        "phpstan\/phpstan-strict-rules": "^1 || ^2"
     },
     "conflict": {
         "phpstan\/phpstan": "<1.11.10"

@@ -38,10 +38,6 @@ final class SystemError implements SerializableInterface
     {
         return $this->message;
     }
-    public function getFile() : ?string
-    {
-        return $this->relativeFilePath;
-    }
     public function getLine() : ?int
     {
         return $this->line;

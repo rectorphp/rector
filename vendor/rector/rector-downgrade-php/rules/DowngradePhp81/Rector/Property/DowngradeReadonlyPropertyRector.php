@@ -34,7 +34,7 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
     /**
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    protected $phpDocInfoFactory;
+    private $phpDocInfoFactory;
     /**
      * @var string
      */

@@ -13,7 +13,7 @@
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^10.5",
         "rector\/rector-src": "dev-main",
-        "rector\/type-perfect": "^0.1.8",
+        "rector\/type-perfect": "^1.0",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
         "symfony\/http-kernel": "~6.3",
@@ -25,8 +25,8 @@
         "symplify\/phpstan-extensions": "^11.4",
         "symplify\/phpstan-rules": "^13.0",
         "symplify\/vendor-patches": "^11.3",
-        "tomasvotruba\/class-leak": "^0.2",
-        "tomasvotruba\/unused-public": "^0.4",
+        "tomasvotruba\/class-leak": "^1.0",
+        "tomasvotruba\/unused-public": "^1.0",
         "tracy\/tracy": "^2.10"
     },
     "autoload": {

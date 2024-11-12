@@ -1882,7 +1882,6 @@ return array(
     'Rector\\Php71\\Rector\\Assign\\AssignArrayToStringRector' => $baseDir . '/rules/Php71/Rector/Assign/AssignArrayToStringRector.php',
     'Rector\\Php71\\Rector\\BinaryOp\\BinaryOpBetweenNumberAndStringRector' => $baseDir . '/rules/Php71/Rector/BinaryOp/BinaryOpBetweenNumberAndStringRector.php',
     'Rector\\Php71\\Rector\\BooleanOr\\IsIterableRector' => $baseDir . '/rules/Php71/Rector/BooleanOr/IsIterableRector.php',
-    'Rector\\Php71\\Rector\\ClassConst\\PublicConstantVisibilityRector' => $baseDir . '/rules/Php71/Rector/ClassConst/PublicConstantVisibilityRector.php',
     'Rector\\Php71\\Rector\\FuncCall\\RemoveExtraParametersRector' => $baseDir . '/rules/Php71/Rector/FuncCall/RemoveExtraParametersRector.php',
     'Rector\\Php71\\Rector\\List_\\ListToArrayDestructRector' => $baseDir . '/rules/Php71/Rector/List_/ListToArrayDestructRector.php',
     'Rector\\Php71\\Rector\\TryCatch\\MultiExceptionCatchRector' => $baseDir . '/rules/Php71/Rector/TryCatch/MultiExceptionCatchRector.php',
