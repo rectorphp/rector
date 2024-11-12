@@ -116,7 +116,7 @@ final class ExpectedNameResolver
             return null;
         }
         $returnedType = $this->nodeTypeResolver->getType($expr);
-        if (!$returnedType->isObject()->yes()) {
+        if (!$returnedType instanceof ObjectType) {
             return null;
         }
         if ($this->isDateTimeType($returnedType)) {
@@ -197,14 +197,11 @@ final class ExpectedNameResolver
     /**
      * Skip date time, as custom naming
      */
-    private function isDateTimeType(Type $type) : bool
+    private function isDateTimeType(ObjectType $objectType) : bool
     {
-        if (!$type instanceof ObjectType) {
-            return \false;
-        }
-        if ($type->isInstanceOf('DateTimeInterface')->yes()) {
+        if ($objectType->isInstanceOf('DateTimeInterface')->yes()) {
             return \true;
         }
-        return $type->isInstanceOf('DateTime')->yes();
+        return $objectType->isInstanceOf('DateTime')->yes();
     }
 }
