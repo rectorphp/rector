@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ThisType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 final class UnitializedPropertyAnalyzer
 {
@@ -52,10 +52,10 @@ final class UnitializedPropertyAnalyzer
         if ($varType instanceof ThisType) {
             $varType = $varType->getStaticObjectType();
         }
-        if (!$varType instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($varType);
+        if ($className === null) {
             return \false;
         }
-        $className = $varType->getClassName();
         $classLike = $this->astResolver->resolveClassFromName($className);
         if (!$classLike instanceof ClassLike) {
             return \false;

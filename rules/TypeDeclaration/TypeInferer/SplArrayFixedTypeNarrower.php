@@ -6,7 +6,7 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 final class SplArrayFixedTypeNarrower
 {
     public function narrow(Type $paramType) : Type
@@ -14,22 +14,23 @@ final class SplArrayFixedTypeNarrower
         if ($paramType->isSuperTypeOf(new ObjectType('SplFixedArray'))->no()) {
             return $paramType;
         }
-        if (!$paramType instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($paramType);
+        if ($className === null) {
             return $paramType;
         }
         if ($paramType instanceof GenericObjectType) {
             return $paramType;
         }
         $types = [];
-        if ($paramType->getClassName() === 'PhpCsFixer\\Tokenizer\\Tokens') {
+        if ($className === 'PhpCsFixer\\Tokenizer\\Tokens') {
             $types[] = new ObjectType('PhpCsFixer\\Tokenizer\\Token');
         }
-        if ($paramType->getClassName() === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
+        if ($className === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
             $types[] = new ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
         }
         if ($types === []) {
             return $paramType;
         }
-        return new GenericObjectType($paramType->getClassName(), $types);
+        return new GenericObjectType($className, $types);
     }
 }

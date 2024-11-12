@@ -18,9 +18,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\ValueObject\MethodName;
 final class TypeProvidingExprFromClassResolver
 {
@@ -107,7 +107,8 @@ final class TypeProvidingExprFromClassResolver
             return \false;
         }
         $readableType = TypeCombinator::removeNull($readableType);
-        if (!$readableType instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($readableType);
+        if ($className === null) {
             return \false;
         }
         return $readableType->equals($objectType);

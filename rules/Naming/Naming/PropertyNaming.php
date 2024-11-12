@@ -15,6 +15,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\Util\StringUtils;
@@ -238,7 +239,8 @@ final class PropertyNaming
     private function resolveClassNameFromType(Type $type) : ?string
     {
         $type = TypeCombinator::removeNull($type);
-        if (!$type instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($type);
+        if ($className === null) {
             return null;
         }
         if ($type instanceof SelfObjectType) {
@@ -251,6 +253,10 @@ final class PropertyNaming
         if ($type instanceof GenericObjectType) {
             return null;
         }
-        return $type instanceof AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
+        if ($type instanceof AliasedObjectType) {
+            return $className;
+        }
+        /** @var TypeWithClassName $type */
+        return $this->nodeTypeResolver->getFullyQualifiedClassName($type);
     }
 }

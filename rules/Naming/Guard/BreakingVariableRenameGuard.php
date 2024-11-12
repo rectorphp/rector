@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -22,6 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\Util\StringUtils;
 /**
  * This class check if a variable name change breaks existing code in class method
@@ -178,10 +178,11 @@ final class BreakingVariableRenameGuard
     {
         $type = $this->nodeTypeResolver->getType($param);
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
-        if (!$type instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($type);
+        if ($className === null) {
             return \false;
         }
-        if (!\is_a($type->getClassName(), DateTimeInterface::class, \true)) {
+        if (!\is_a($className, DateTimeInterface::class, \true)) {
             return \false;
         }
         /** @var string $currentName */

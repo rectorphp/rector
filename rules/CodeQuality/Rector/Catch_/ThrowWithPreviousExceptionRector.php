@@ -16,9 +16,9 @@ use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -163,7 +163,8 @@ CODE_SAMPLE
         $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         foreach ($parametersAcceptorWithPhpDocs->getParameters() as $position => $parameterReflectionWithPhpDoc) {
             $parameterType = $parameterReflectionWithPhpDoc->getType();
-            if (!$parameterType instanceof TypeWithClassName) {
+            $className = ClassNameFromObjectTypeResolver::resolve($parameterReflectionWithPhpDoc->getType());
+            if ($className === null) {
                 continue;
             }
             $objectType = new ObjectType('Throwable');

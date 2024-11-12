@@ -10,11 +10,11 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 /**
  * Can be local property, parent property etc.
  */
@@ -106,14 +106,14 @@ final class PropertyPresenceChecker
         if (!$propertyMetadata->getType() instanceof Type) {
             return null;
         }
-        if (!$propertyMetadata->getType() instanceof TypeWithClassName) {
+        if (ClassNameFromObjectTypeResolver::resolve($propertyMetadata->getType()) === null) {
             return null;
         }
-        if (!$phpPropertyReflection->getWritableType() instanceof TypeWithClassName) {
+        if (ClassNameFromObjectTypeResolver::resolve($phpPropertyReflection->getWritableType()) === null) {
             return null;
         }
-        $propertyObjectTypeWithClassName = $propertyMetadata->getType();
-        if (!$propertyObjectTypeWithClassName->equals($phpPropertyReflection->getWritableType())) {
+        $type = $propertyMetadata->getType();
+        if (!$type->equals($phpPropertyReflection->getWritableType())) {
             return null;
         }
         return $this->astResolver->resolvePropertyFromPropertyReflection($phpPropertyReflection);

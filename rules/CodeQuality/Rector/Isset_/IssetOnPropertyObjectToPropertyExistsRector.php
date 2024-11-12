@@ -20,10 +20,10 @@ use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -176,15 +176,16 @@ CODE_SAMPLE
     private function matchPropertyTypeClassReflection(PropertyFetch $propertyFetch) : ?ClassReflection
     {
         $propertyFetchVarType = $this->getType($propertyFetch->var);
-        if (!$propertyFetchVarType instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($propertyFetchVarType);
+        if ($className === null) {
             return null;
         }
-        if ($propertyFetchVarType->getClassName() === 'stdClass') {
+        if ($className === 'stdClass') {
             return null;
         }
-        if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
+        if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-        return $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
+        return $this->reflectionProvider->getClass($className);
     }
 }

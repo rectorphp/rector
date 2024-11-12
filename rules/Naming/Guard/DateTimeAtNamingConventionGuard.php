@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\Util\StringUtils;
 final class DateTimeAtNamingConventionGuard
 {
@@ -30,10 +30,11 @@ final class DateTimeAtNamingConventionGuard
     {
         $type = $this->nodeTypeResolver->getType($propertyRename->getProperty());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
-        if (!$type instanceof TypeWithClassName) {
+        $className = ClassNameFromObjectTypeResolver::resolve($type);
+        if ($className === null) {
             return \false;
         }
-        if (!\is_a($type->getClassName(), DateTimeInterface::class, \true)) {
+        if (!\is_a($className, DateTimeInterface::class, \true)) {
             return \false;
         }
         return StringUtils::isMatch($propertyRename->getCurrentName(), \Rector\Naming\Guard\BreakingVariableRenameGuard::AT_NAMING_REGEX);
