@@ -6,7 +6,7 @@ namespace Rector\Strict\Rector\Ternary;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Ternary;
-use PHPStan\Analyser\Scope;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -61,12 +61,13 @@ CODE_SAMPLE
     /**
      * @param Ternary $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Ternary
+    public function refactor(Node $node) : ?Ternary
     {
         // skip short ternary
         if (!$node->if instanceof Expr) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         $exprType = $scope->getNativeType($node->cond);
         $expr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
         if (!$expr instanceof Expr) {

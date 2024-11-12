@@ -6,7 +6,7 @@ namespace Rector\Strict\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Analyser\Scope;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -70,9 +70,10 @@ CODE_SAMPLE
     /**
      * @param If_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?If_
+    public function refactor(Node $node) : ?If_
     {
         $hasChanged = \false;
+        $scope = ScopeFetcher::fetch($node);
         // 1. if
         $ifCondExprType = $scope->getNativeType($node->cond);
         $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($ifCondExprType, $node->cond, $this->treatAsNonEmpty);

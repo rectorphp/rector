@@ -32,6 +32,7 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
      */
     private $docBlockUpdater;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

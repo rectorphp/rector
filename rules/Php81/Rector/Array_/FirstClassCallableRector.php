@@ -19,7 +19,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\PhpVersion;
@@ -29,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php81\Rector\Array_\FirstClassCallableRector\FirstClassCallableRectorTest
  */
-final class FirstClassCallableRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class FirstClassCallableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -94,11 +95,12 @@ CODE_SAMPLE
      * @param Property|ClassConst|Array_ $node
      * @return int|null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
-    public function refactorWithScope(Node $node, Scope $scope)
+    public function refactor(Node $node)
     {
         if ($node instanceof Property || $node instanceof ClassConst) {
             return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
         }
+        $scope = ScopeFetcher::fetch($node);
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node, $scope);
         if (!$arrayCallable instanceof ArrayCallable) {
             return null;

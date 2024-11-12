@@ -28,7 +28,8 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,7 +37,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector\DowngradeMatchToSwitchRectorTest
  */
-final class DowngradeMatchToSwitchRector extends AbstractScopeAwareRector
+final class DowngradeMatchToSwitchRector extends AbstractRector
 {
     /**
      * @readonly
@@ -94,11 +95,12 @@ CODE_SAMPLE
     /**
      * @param Echo_|Expression|Return_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         /** @var Match_|null $match */
         $match = null;
         $hasChanged = \false;
+        $scope = ScopeFetcher::fetch($node);
         $this->traverseNodesWithCallable($node, function (Node $subNode) use($node, &$match, &$hasChanged, $scope) {
             if (($subNode instanceof ArrayItem || $subNode instanceof Arg) && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
                 $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value, \true);
@@ -153,6 +155,7 @@ CODE_SAMPLE
         if (!$match instanceof Match_) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         if (!$this->isEqualScope($match, $scope)) {
             return null;
         }

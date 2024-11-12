@@ -6,14 +6,14 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Doctrine\NodeAnalyzer\MethodUniqueReturnedPropertyResolver;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  *  @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRectorTest
  */
-final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector extends AbstractScopeAwareRector
+final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector extends AbstractRector
 {
     /**
      * @readonly
@@ -121,12 +121,13 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
         $hasChanged = \false;
+        $scope = ScopeFetcher::fetch($node);
         foreach ($node->getMethods() as $classMethod) {
             if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod, $scope)) {
                 continue;

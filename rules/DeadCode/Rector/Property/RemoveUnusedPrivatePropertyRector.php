@@ -11,19 +11,18 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeTraverser;
-use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
  */
-final class RemoveUnusedPrivatePropertyRector extends AbstractScopeAwareRector
+final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
     /**
      * @readonly
@@ -71,7 +70,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;

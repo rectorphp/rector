@@ -19,7 +19,8 @@ use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Parser\InlineCodeParser;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\DowngradeStreamIsattyRectorTest
  */
-final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
+final class DowngradeStreamIsattyRector extends AbstractRector
 {
     /**
      * @readonly
@@ -106,7 +107,7 @@ CODE_SAMPLE
      * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?array
+    public function refactor(Node $node) : ?array
     {
         $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
             if (!$subNode instanceof FuncCall) {
@@ -126,6 +127,7 @@ CODE_SAMPLE
             return null;
         }
         $function = $this->createClosure();
+        $scope = ScopeFetcher::fetch($node);
         $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
         $assign = new Assign($variable, $function);
         $expr->name = $variable;

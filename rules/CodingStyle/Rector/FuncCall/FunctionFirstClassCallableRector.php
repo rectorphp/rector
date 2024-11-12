@@ -9,8 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
-use PHPStan\Analyser\Scope;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use ReflectionException;
@@ -21,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector\FunctionFirstClassCallableRectorTest
  */
-final class FunctionFirstClassCallableRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class FunctionFirstClassCallableRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition() : RuleDefinition
     {
@@ -53,7 +52,7 @@ CODE_SAMPLE
     {
         return [FuncCall::class];
     }
-    public function refactorWithScope(Node $node, Scope $scope) : ?FuncCall
+    public function refactor(Node $node) : ?FuncCall
     {
         if (!$node instanceof FuncCall) {
             return null;

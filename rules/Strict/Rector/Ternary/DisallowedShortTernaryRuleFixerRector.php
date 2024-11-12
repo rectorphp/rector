@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Analyser\Scope;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -66,13 +67,14 @@ CODE_SAMPLE
     /**
      * @param Ternary $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Ternary
+    public function refactor(Node $node) : ?Ternary
     {
         $this->hasChanged = \false;
         // skip non-short ternary
         if ($node->if instanceof Expr) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         // special case for reset() function
         if ($node->cond instanceof FuncCall && $this->isName($node->cond, 'reset')) {
             $this->refactorResetFuncCall($node, $node->cond, $scope);

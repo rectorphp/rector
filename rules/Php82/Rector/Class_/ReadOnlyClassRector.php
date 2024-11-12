@@ -17,8 +17,9 @@ use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php81\Enum\AttributeName;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\ValueObject\Visibility;
@@ -28,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php82\Rector\Class_\ReadOnlyClassRector\ReadOnlyClassRectorTest
  */
-final class ReadOnlyClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -89,8 +90,9 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
             return null;
         }

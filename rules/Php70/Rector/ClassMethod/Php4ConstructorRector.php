@@ -18,7 +18,8 @@ use Rector\Enum\ObjectReference;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -27,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
-final class Php4ConstructorRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class Php4ConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -79,7 +80,7 @@ CODE_SAMPLE
      * @param Class_ $node
      * @return \PhpParser\Node\Stmt\Class_|int|null
      */
-    public function refactorWithScope(Node $node, Scope $scope)
+    public function refactor(Node $node)
     {
         $className = $this->getName($node);
         if (!\is_string($className)) {
@@ -89,6 +90,7 @@ CODE_SAMPLE
         if (!$psr4ConstructorMethod instanceof ClassMethod) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         if (!$this->php4ConstructorClassMethodAnalyzer->detect($psr4ConstructorMethod, $scope)) {
             return null;
         }

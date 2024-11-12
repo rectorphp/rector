@@ -20,13 +20,14 @@ use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\ReservedKeywordAnalyzer;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\RemoveUnusedNonEmptyArrayBeforeForeachRectorTest
  */
-final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractScopeAwareRector
+final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
 {
     /**
      * @readonly
@@ -102,9 +103,10 @@ CODE_SAMPLE
      * @param If_|StmtsAwareInterface $node
      * @return Stmt[]|Foreach_|StmtsAwareInterface|null
      */
-    public function refactorWithScope(Node $node, Scope $scope)
+    public function refactor(Node $node)
     {
         if ($node instanceof If_) {
+            $scope = ScopeFetcher::fetch($node);
             return $this->refactorIf($node, $scope);
         }
         return $this->refactorStmtsAware($node);

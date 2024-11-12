@@ -15,17 +15,17 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
-use PHPStan\Analyser\Scope;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector\RemoveDoubleAssignRectorTest
  */
-final class RemoveDoubleAssignRector extends AbstractScopeAwareRector
+final class RemoveDoubleAssignRector extends AbstractRector
 {
     /**
      * @readonly
@@ -60,8 +60,9 @@ CODE_SAMPLE
     /**
      * @param Foreach_|FileWithoutNamespace|If_|Namespace_|ClassMethod|Function_|Closure $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         $stmts = $node->stmts;
         if ($stmts === null) {
             return null;

@@ -10,9 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
-use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
-final class GetClassOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class GetClassOnNullRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
@@ -60,7 +59,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {

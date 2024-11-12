@@ -18,7 +18,8 @@ use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Enum\ObjectReference;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -28,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
-final class StaticCallOnNonStaticToInstanceCallRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -107,8 +108,9 @@ CODE_SAMPLE
     /**
      * @param StaticCall $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         if ($node->name instanceof Expr) {
             return null;
         }

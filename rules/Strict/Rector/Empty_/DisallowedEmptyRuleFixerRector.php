@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Isset_;
 use PHPStan\Analyser\Scope;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeAnalyzer\ExprAnalyzer;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Strict\NodeAnalyzer\UnitializedPropertyAnalyzer;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
@@ -78,8 +79,9 @@ CODE_SAMPLE
     /**
      * @param Empty_|BooleanNot $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?\PhpParser\Node\Expr
+    public function refactor(Node $node) : ?\PhpParser\Node\Expr
     {
+        $scope = ScopeFetcher::fetch($node);
         if ($node instanceof BooleanNot) {
             return $this->refactorBooleanNot($node, $scope);
         }

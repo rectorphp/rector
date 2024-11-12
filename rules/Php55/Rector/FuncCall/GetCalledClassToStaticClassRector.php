@@ -5,9 +5,9 @@ namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Analyser\Scope;
 use Rector\Enum\ObjectReference;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\GetCalledClassToStaticClassRectorTest
  */
-final class GetCalledClassToStaticClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class GetCalledClassToStaticClassRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition() : RuleDefinition
     {
@@ -49,8 +49,9 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         if (!$this->isName($node, 'get_called_class')) {
             return null;
         }

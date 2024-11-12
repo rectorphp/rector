@@ -22,7 +22,8 @@ use PHPStan\Type\Type;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpParser\AstResolver;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector\SimplifyEmptyCheckOnEmptyArrayRectorTest
  */
-final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRector
+final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractRector
 {
     /**
      * @readonly
@@ -91,8 +92,9 @@ CODE_SAMPLE
     /**
      * @param Empty_|BooleanNot $node $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         if ($node instanceof BooleanNot) {
             if ($node->expr instanceof Empty_ && $this->isAllowedExpr($node->expr->expr, $scope)) {
                 return new NotIdentical($node->expr->expr, new Array_());

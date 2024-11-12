@@ -1955,6 +1955,7 @@ class ComposerStaticInit58d677395c7d7c6a1b0f093c876515de
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
         'Rector\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
+        'Rector\\PHPStan\\ScopeFetcher' => __DIR__ . '/../..' . '/src/PHPStan/ScopeFetcher.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DependsAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',

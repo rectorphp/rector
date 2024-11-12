@@ -13,8 +13,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Guard\ParamTypeAddGuard;
@@ -25,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector\ParamTypeByMethodCallTypeRectorTest
  */
-final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
+final class ParamTypeByMethodCallTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -128,8 +129,9 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
+        $scope = ScopeFetcher::fetch($node);
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
