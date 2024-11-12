@@ -185,6 +185,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($promotionCandidates as $promotionCandidate) {
             $param = $promotionCandidate->getParam();
             if ($this->shouldSkipParam($param)) {
@@ -200,6 +201,7 @@ CODE_SAMPLE
             if (!$this->renameProperty && $paramName !== $propertyName) {
                 continue;
             }
+            $hasChanged = \true;
             // remove property from class
             $propertyStmtKey = $property->getAttribute(AttributeKey::STMT_KEY);
             unset($node->stmts[$propertyStmtKey]);
@@ -233,6 +235,9 @@ CODE_SAMPLE
                 }
                 return new PropertyFetch(new Variable('this'), $propertyName);
             });
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
