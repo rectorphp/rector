@@ -31,7 +31,7 @@ final class TwigSetList
     /**
      * @var string
      */
-    public const TWIG_240 = __DIR__ . '/../../config/sets/twig/twig240.php';
+    public const TWIG_24 = __DIR__ . '/../../config/sets/twig/twig24.php';
     /**
      * @var string
      */

@@ -5,6 +5,7 @@ namespace Rector\Set;
 
 use Rector\Bridge\SetProviderCollector;
 use Rector\Composer\InstalledPackageResolver;
+use Rector\Set\Enum\SetGroup;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
 /**
  * @see \Rector\Tests\Set\SetManager\SetManagerTest
@@ -16,9 +17,15 @@ final class SetManager
      * @var \Rector\Bridge\SetProviderCollector
      */
     private $setProviderCollector;
-    public function __construct(SetProviderCollector $setProviderCollector)
+    /**
+     * @readonly
+     * @var \Rector\Composer\InstalledPackageResolver
+     */
+    private $installedPackageResolver;
+    public function __construct(SetProviderCollector $setProviderCollector, InstalledPackageResolver $installedPackageResolver)
     {
         $this->setProviderCollector = $setProviderCollector;
+        $this->installedPackageResolver = $installedPackageResolver;
     }
     /**
      * @return ComposerTriggeredSet[]
@@ -26,33 +33,27 @@ final class SetManager
     public function matchComposerTriggered(string $groupName) : array
     {
         $matchedSets = [];
-        foreach ($this->setProviderCollector->provideSets() as $set) {
-            if (!$set instanceof ComposerTriggeredSet) {
-                continue;
-            }
-            if ($set->getGroupName() === $groupName) {
-                $matchedSets[] = $set;
+        foreach ($this->setProviderCollector->provideComposerTriggeredSets() as $composerTriggeredSet) {
+            if ($composerTriggeredSet->getGroupName() === $groupName) {
+                $matchedSets[] = $composerTriggeredSet;
             }
         }
         return $matchedSets;
     }
     /**
-     * @param string[] $setGroups
+     * @param SetGroup::*[] $setGroups
      * @return string[]
      */
     public function matchBySetGroups(array $setGroups) : array
     {
-        $installedPackageResolver = new InstalledPackageResolver();
-        $installedComposerPackages = $installedPackageResolver->resolve(\getcwd());
+        $installedComposerPackages = $this->installedPackageResolver->resolve();
         $groupLoadedSets = [];
         foreach ($setGroups as $setGroup) {
             $composerTriggeredSets = $this->matchComposerTriggered($setGroup);
             foreach ($composerTriggeredSets as $composerTriggeredSet) {
                 if ($composerTriggeredSet->matchInstalledPackages($installedComposerPackages)) {
-                    // @todo add debug note somewhere
-                    // echo sprintf('Loaded "%s" set as it meets the conditions', $composerTriggeredSet->getSetFilePath());
                     // it matched composer package + version requirements → load set
-                    $groupLoadedSets[] = $composerTriggeredSet->getSetFilePath();
+                    $groupLoadedSets[] = \realpath($composerTriggeredSet->getSetFilePath());
                 }
             }
         }

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
+use RectorPrefix202411\Composer\Semver\Semver;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Set\Contract\SetInterface;
 use RectorPrefix202411\Webmozart\Assert\Assert;
@@ -62,7 +63,7 @@ final class ComposerTriggeredSet implements SetInterface
             if ($installedPackage->getName() !== $this->packageName) {
                 continue;
             }
-            return \version_compare($installedPackage->getVersion(), $this->version) !== -1;
+            return Semver::satisfies($installedPackage->getVersion(), '^' . $this->version);
         }
         return \false;
     }
