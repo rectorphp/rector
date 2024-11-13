@@ -9,15 +9,15 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTransformer;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder;
-use Rector\Rector\AbstractScopeAwareRector;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\YieldDataProviderRector\YieldDataProviderRectorTest
  */
-final class YieldDataProviderRector extends AbstractScopeAwareRector
+final class YieldDataProviderRector extends AbstractRector
 {
     /**
      * @readonly
@@ -99,7 +99,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Class_
+    public function refactor(Node $node) : ?Class_
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -111,6 +111,7 @@ CODE_SAMPLE
             if (!$array instanceof Array_) {
                 continue;
             }
+            $scope = ScopeFetcher::fetch($node);
             if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $dataProviderClassMethod, $scope)) {
                 continue;
             }

@@ -1603,6 +1603,7 @@ return array(
     'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => $baseDir . '/src/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
     'Rector\\NodeDecorator\\CreatedByRuleDecorator' => $baseDir . '/src/NodeDecorator/CreatedByRuleDecorator.php',
     'Rector\\NodeDecorator\\PropertyTypeDecorator' => $baseDir . '/src/NodeDecorator/PropertyTypeDecorator.php',
+    'Rector\\NodeDecorator\\StatementDepthAttributeDecorator' => $baseDir . '/src/NodeDecorator/StatementDepthAttributeDecorator.php',
     'Rector\\NodeFactory\\ClassFromEnumFactory' => $vendorDir . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
     'Rector\\NodeFactory\\DoctrineAnnotationFactory' => $vendorDir . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
     'Rector\\NodeFactory\\NamedVariableFactory' => $vendorDir . '/rector/rector-downgrade-php/src/NodeFactory/NamedVariableFactory.php',

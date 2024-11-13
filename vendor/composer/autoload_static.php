@@ -1822,6 +1822,7 @@ class ComposerStaticInit58d677395c7d7c6a1b0f093c876515de
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/src/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
         'Rector\\NodeDecorator\\CreatedByRuleDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/CreatedByRuleDecorator.php',
         'Rector\\NodeDecorator\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/PropertyTypeDecorator.php',
+        'Rector\\NodeDecorator\\StatementDepthAttributeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/StatementDepthAttributeDecorator.php',
         'Rector\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\NodeFactory\\NamedVariableFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/NamedVariableFactory.php',

@@ -1811,12 +1811,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "bd41d82d6db74e0abe63d2bae94c6e26dcbf7ce7"
+                "reference": "464dec2f831645a49dc3be86be76d2bfcaca8e74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/bd41d82d6db74e0abe63d2bae94c6e26dcbf7ce7",
-                "reference": "bd41d82d6db74e0abe63d2bae94c6e26dcbf7ce7",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/464dec2f831645a49dc3be86be76d2bfcaca8e74",
+                "reference": "464dec2f831645a49dc3be86be76d2bfcaca8e74",
                 "shasum": ""
             },
             "require": {
@@ -1840,7 +1840,7 @@
                 "tomasvotruba\/class-leak": "^1.1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-11-13T11:23:55+00:00",
+            "time": "2024-11-13T15:11:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1876,12 +1876,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "e82886fe05bbf8599b859b2fc97056b66423a294"
+                "reference": "2f1cf6dc83b38eee1bd8d0924a05ffedd33a8649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/e82886fe05bbf8599b859b2fc97056b66423a294",
-                "reference": "e82886fe05bbf8599b859b2fc97056b66423a294",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2f1cf6dc83b38eee1bd8d0924a05ffedd33a8649",
+                "reference": "2f1cf6dc83b38eee1bd8d0924a05ffedd33a8649",
                 "shasum": ""
             },
             "require": {
@@ -1910,7 +1910,7 @@
                 "tomasvotruba\/unused-public": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-11-13T13:14:27+00:00",
+            "time": "2024-11-13T15:09:32+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2008,17 +2008,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.14",
-            "version_normalized": "6.4.14.0",
+            "version": "v6.4.15",
+            "version_normalized": "6.4.15.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "897c2441ed4eec8a8a2c37b943427d24dba3f26b"
+                "reference": "f1fc6f47283e27336e7cebb9e8946c8de7bff9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/897c2441ed4eec8a8a2c37b943427d24dba3f26b",
-                "reference": "897c2441ed4eec8a8a2c37b943427d24dba3f26b",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/f1fc6f47283e27336e7cebb9e8946c8de7bff9bd",
+                "reference": "f1fc6f47283e27336e7cebb9e8946c8de7bff9bd",
                 "shasum": ""
             },
             "require": {
@@ -2051,7 +2051,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2024-11-05T15:34:40+00:00",
+            "time": "2024-11-06T14:19:14+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2090,7 +2090,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.14"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.15"
             },
             "funding": [
                 {
@@ -2399,23 +2399,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.4.14",
-            "version_normalized": "6.4.14.0",
+            "version": "v6.4.15",
+            "version_normalized": "6.4.15.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "25214adbb0996d18112548de20c281be9f27279f"
+                "reference": "3cb242f059c14ae08591c5c4087d1fe443564392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/25214adbb0996d18112548de20c281be9f27279f",
-                "reference": "25214adbb0996d18112548de20c281be9f27279f",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/3cb242f059c14ae08591c5c4087d1fe443564392",
+                "reference": "3cb242f059c14ae08591c5c4087d1fe443564392",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2024-11-06T09:25:01+00:00",
+            "time": "2024-11-06T14:19:14+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2443,7 +2443,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.14"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.15"
             },
             "funding": [
                 {
