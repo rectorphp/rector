@@ -2383,7 +2383,6 @@ return array(
     'Rector\\Testing\\Fixture\\FixtureTempFileDumper' => $baseDir . '/src/Testing/Fixture/FixtureTempFileDumper.php',
     'Rector\\Testing\\PHPUnit\\AbstractLazyTestCase' => $baseDir . '/src/Testing/PHPUnit/AbstractLazyTestCase.php',
     'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => $baseDir . '/src/Testing/PHPUnit/AbstractRectorTestCase.php',
-    'Rector\\Testing\\PHPUnit\\AbstractTestCase' => $baseDir . '/src/Testing/PHPUnit/AbstractTestCase.php',
     'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => $baseDir . '/src/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
     'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => $baseDir . '/src/Testing/PHPUnit/ValueObject/RectorTestResult.php',
     'Rector\\Testing\\TestingParser\\TestingParser' => $baseDir . '/src/Testing/TestingParser/TestingParser.php',

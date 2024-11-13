@@ -2602,7 +2602,6 @@ class ComposerStaticInit58d677395c7d7c6a1b0f093c876515de
         'Rector\\Testing\\Fixture\\FixtureTempFileDumper' => __DIR__ . '/../..' . '/src/Testing/Fixture/FixtureTempFileDumper.php',
         'Rector\\Testing\\PHPUnit\\AbstractLazyTestCase' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/AbstractLazyTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/AbstractRectorTestCase.php',
-        'Rector\\Testing\\PHPUnit\\AbstractTestCase' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/AbstractTestCase.php',
         'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
         'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/ValueObject/RectorTestResult.php',
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/src/Testing/TestingParser/TestingParser.php',
