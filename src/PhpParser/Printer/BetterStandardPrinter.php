@@ -106,8 +106,7 @@ final class BetterStandardPrinter extends Standard
      */
     public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace) : string
     {
-        $content = $this->pStmts($fileWithoutNamespace->stmts, \false);
-        return \ltrim($content);
+        return $this->pStmts($fileWithoutNamespace->stmts, \false);
     }
     protected function p(Node $node, $parentFormatPreserved = \false) : string
     {

@@ -11,7 +11,7 @@
         "phpstan\/phpstan": "^1.10",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^10.5",
-        "rector\/rector-src": "dev-main#e30c7af",
+        "rector\/rector-src": "dev-main",
         "rector\/type-perfect": "^1.0",
         "symplify\/easy-coding-standard": "^12.3",
         "symplify\/phpstan-extensions": "^11.4",
