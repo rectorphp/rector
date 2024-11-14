@@ -222,4 +222,10 @@ final class Option
      * @var string
      */
     public const EDITOR_URL = 'editor_url';
+    /**
+     * @internal To report composer based loaded sets
+     * @see \Rector\Configuration\RectorConfigBuilder::withComposerBased()
+     * @var string
+     */
+    public const COMPOSER_BASED_SETS = 'composer_based_sets';
 }

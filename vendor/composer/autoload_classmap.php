@@ -1032,7 +1032,6 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\UnionTypeNodePhpDocNodeVisitor' => $baseDir . '/src/BetterPhpDocParser/PhpDocNodeVisitor/UnionTypeNodePhpDocNodeVisitor.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ArrayItemClassNameDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ArrayItemClassNameDecorator.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php',
-    'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterTypeParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ConstExprClassNameDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ConstExprClassNameDecorator.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',

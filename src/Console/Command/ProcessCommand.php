@@ -10,6 +10,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Configuration\ConfigInitializer;
 use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\ExitCode;
 use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\ProcessConfigureDecorator;
@@ -151,6 +152,10 @@ EOF
             $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', \PHP_EOL . \PHP_EOL . ' - ', \implode(\PHP_EOL . ' - ', $paths)));
             return ExitCode::FAILURE;
         }
+        // show debug info
+        if ($configuration->isDebug()) {
+            $this->reportLoadedComposerBasedSets();
+        }
         // MAIN PHASE
         // 2. run Rector
         $processResult = $this->applicationFileProcessor->run($configuration, $input);
@@ -198,5 +203,17 @@ EOF
             return ExitCode::CHANGED_CODE;
         }
         return ExitCode::SUCCESS;
+    }
+    private function reportLoadedComposerBasedSets() : void
+    {
+        if (!SimpleParameterProvider::hasParameter(Option::COMPOSER_BASED_SETS)) {
+            return;
+        }
+        $composerBasedSets = SimpleParameterProvider::provideArrayParameter(Option::COMPOSER_BASED_SETS);
+        if ($composerBasedSets === []) {
+            return;
+        }
+        $this->symfonyStyle->writeln('[info] Sets loaded based on installed packages:');
+        $this->symfonyStyle->listing($composerBasedSets);
     }
 }
