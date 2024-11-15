@@ -13,7 +13,6 @@ use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\Reflection\BetterReflection\SourceLocator\CachingVisitor;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\FileProcessor;
@@ -215,7 +214,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string>
      */
-    private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, NodeScopeResolver::class, ReflectionProvider::class, CachingVisitor::class];
+    private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, NodeScopeResolver::class, ReflectionProvider::class];
     /**
      * @var array<class-string<OutputFormatterInterface>>
      */
