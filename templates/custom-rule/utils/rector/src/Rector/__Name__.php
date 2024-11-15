@@ -6,29 +6,12 @@ namespace Utils\Rector\Rector;
 
 use PhpParser\Node;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\__Name__\__Name__Test
  */
 final class __Name__ extends AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition('// @todo fill the description', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
-// @todo fill code before
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-// @todo fill code after
-CODE_SAMPLE
-            ),
-        ]);
-    }
-
     /**
      * @return array<class-string<Node>>
      */
