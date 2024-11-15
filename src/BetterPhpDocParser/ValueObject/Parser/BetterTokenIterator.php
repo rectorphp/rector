@@ -76,7 +76,7 @@ final class BetterTokenIterator extends TokenIterator
      */
     public function partialTokens(int $start, int $end) : array
     {
-        return \array_slice($this->getTokens(), $start, $end);
+        return \array_slice($this->getTokens(), $start, $end - $start + 1);
     }
     public function containsTokenType(int $type) : bool
     {
