@@ -2,6 +2,13 @@
 
 namespace RectorPrefix202411\Illuminate\Contracts\Pagination;
 
+/**
+ * @template TKey of array-key
+ *
+ * @template-covariant TValue
+ *
+ * @extends Paginator<TKey, TValue>
+ */
 interface LengthAwarePaginator extends Paginator
 {
     /**

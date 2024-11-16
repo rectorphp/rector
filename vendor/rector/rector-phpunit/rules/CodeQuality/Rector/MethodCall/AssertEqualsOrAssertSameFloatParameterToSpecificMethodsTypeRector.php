@@ -42,16 +42,12 @@ final class AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector ex
             // code before
             <<<'CODE_SAMPLE'
 $this->assertSame(10.20, $value);
-$this->assertEquals(10.20, $value);
 $this->assertEquals(10.200, $value);
-$this->assertSame(10, $value);
 CODE_SAMPLE
 ,
             <<<'CODE_SAMPLE'
 $this->assertEqualsWithDelta(10.20, $value, PHP_FLOAT_EPSILON);
-$this->assertEqualsWithDelta(10.20, $value, PHP_FLOAT_EPSILON);
 $this->assertEqualsWithDelta(10.200, $value, PHP_FLOAT_EPSILON);
-$this->assertSame(10, $value);
 CODE_SAMPLE
 
         )]);
@@ -79,10 +75,14 @@ CODE_SAMPLE
         if (!$firstValue instanceof DNumber) {
             return null;
         }
+        $customMessageArg = $args[2] ?? null;
         $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsWithDelta');
         $newMethodCall->args[0] = $args[0];
         $newMethodCall->args[1] = $args[1];
         $newMethodCall->args[2] = new Arg(new ConstFetch(new Name('PHP_FLOAT_EPSILON')));
+        if ($customMessageArg instanceof Arg) {
+            $newMethodCall->args[] = $customMessageArg;
+        }
         return $newMethodCall;
     }
     public function provideMinPhpVersion() : int
