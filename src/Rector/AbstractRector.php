@@ -22,6 +22,7 @@ use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeDecorator\CreatedByRuleDecorator;
@@ -128,6 +129,9 @@ CODE_SAMPLE;
     public final function enterNode(Node $node)
     {
         if (!$this->isMatchingNodeType($node)) {
+            return null;
+        }
+        if (\is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
             return null;
         }
         $filePath = $this->file->getFilePath();

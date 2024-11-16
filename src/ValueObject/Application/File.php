@@ -5,6 +5,8 @@ namespace Rector\ValueObject\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\InlineHTML;
+use PhpParser\NodeFinder;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\ValueObject\Reporting\FileDiff;
@@ -48,6 +50,11 @@ final class File
      * @var RectorWithLineChange[]
      */
     private $rectorWithLineChanges = [];
+    /**
+     * Cached result per file
+     * @var bool|null
+     */
+    private $containsHtml;
     public function __construct(string $filePath, string $fileContent)
     {
         $this->filePath = $filePath;
@@ -142,5 +149,14 @@ final class File
     public function getRectorWithLineChanges() : array
     {
         return $this->rectorWithLineChanges;
+    }
+    public function containsHTML() : bool
+    {
+        if ($this->containsHtml !== null) {
+            return $this->containsHtml;
+        }
+        $nodeFinder = new NodeFinder();
+        $this->containsHtml = (bool) $nodeFinder->findFirstInstanceOf($this->oldStmts, InlineHTML::class);
+        return $this->containsHtml;
     }
 }

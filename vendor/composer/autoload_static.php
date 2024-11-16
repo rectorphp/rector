@@ -1475,6 +1475,7 @@ class ComposerStaticInit58d677395c7d7c6a1b0f093c876515de
         'Rector\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
         'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
+        'Rector\\Contract\\Rector\\HTMLAverseRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/HTMLAverseRectorInterface.php',
         'Rector\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Contract\\Rector\\ScopeAwareRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
         'Rector\\CustomRules\\SimpleNodeDumper' => __DIR__ . '/../..' . '/src/CustomRules/SimpleNodeDumper.php',

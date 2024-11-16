@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Stmt\NewlineAfterStatementRector\NewlineAfterStatementRectorTest
  */
-final class NewlineAfterStatementRector extends AbstractRector
+final class NewlineAfterStatementRector extends AbstractRector implements HTMLAverseRectorInterface
 {
     /**
      * @var array<class-string<Node>>

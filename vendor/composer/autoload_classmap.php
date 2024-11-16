@@ -1256,6 +1256,7 @@ return array(
     'Rector\\Contract\\DependencyInjection\\ResetableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResetableInterface.php',
     'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => $baseDir . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
     'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',
+    'Rector\\Contract\\Rector\\HTMLAverseRectorInterface' => $baseDir . '/src/Contract/Rector/HTMLAverseRectorInterface.php',
     'Rector\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\Contract\\Rector\\ScopeAwareRectorInterface' => $baseDir . '/src/Contract/Rector/ScopeAwareRectorInterface.php',
     'Rector\\CustomRules\\SimpleNodeDumper' => $baseDir . '/src/CustomRules/SimpleNodeDumper.php',
