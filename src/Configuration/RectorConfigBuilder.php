@@ -686,11 +686,17 @@ final class RectorConfigBuilder
     }
     public function withSymfonyContainerXml(string $symfonyContainerXmlFile) : self
     {
+        if (\substr_compare($symfonyContainerXmlFile, '.xml', -\strlen('.xml')) !== 0) {
+            throw new InvalidConfigurationException(\sprintf('Provided dumped Symfony container must have "xml" suffix. "%s" given', $symfonyContainerXmlFile));
+        }
         $this->symfonyContainerXmlFile = $symfonyContainerXmlFile;
         return $this;
     }
     public function withSymfonyContainerPhp(string $symfonyContainerPhpFile) : self
     {
+        if (\substr_compare($symfonyContainerPhpFile, '.php', -\strlen('.php')) !== 0) {
+            throw new InvalidConfigurationException(\sprintf('Provided dumped Symfony container must have "php" suffix. "%s" given', $symfonyContainerPhpFile));
+        }
         $this->symfonyContainerPhpFile = $symfonyContainerPhpFile;
         return $this;
     }
