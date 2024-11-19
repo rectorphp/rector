@@ -385,6 +385,10 @@ final class RectorConfigBuilder
      */
     public function withAttributesSets(bool $symfony = \false, bool $doctrine = \false, bool $mongoDb = \false, bool $gedmo = \false, bool $phpunit = \false, bool $fosRest = \false, bool $jms = \false, bool $sensiolabs = \false, bool $all = \false) : self
     {
+        // if nothing is passed, enable all as convention in other method
+        if (\func_get_args() === []) {
+            $all = \true;
+        }
         if ($symfony || $all) {
             $this->sets[] = SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES;
         }
