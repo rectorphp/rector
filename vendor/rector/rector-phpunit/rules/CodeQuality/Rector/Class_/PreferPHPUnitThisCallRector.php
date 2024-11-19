@@ -24,6 +24,10 @@ final class PreferPHPUnitThisCallRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @var string[]
+     */
+    private const NON_ASSERT_STATIC_METHODS = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never'];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -71,11 +75,14 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
-            $isStatic = $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
-            if ($isStatic) {
+            $isInsideStaticFunctionLike = $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
+            if ($isInsideStaticFunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof StaticCall) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
                 return null;
             }
             $methodName = $this->getName($node->name);
@@ -85,10 +92,7 @@ CODE_SAMPLE
             if (!$this->isNames($node->class, ['static', 'self'])) {
                 return null;
             }
-            if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0) {
-                return null;
-            }
-            if ($node->isFirstClassCallable()) {
+            if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0 && !\in_array($methodName, self::NON_ASSERT_STATIC_METHODS)) {
                 return null;
             }
             $hasChanged = \true;
