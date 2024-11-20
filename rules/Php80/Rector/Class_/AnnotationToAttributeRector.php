@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -77,10 +78,14 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
     /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
@@ -90,6 +95,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -189,6 +195,10 @@ CODE_SAMPLE
                 if ($desiredTag !== $tag) {
                     continue;
                 }
+                // make sure the attribute class really exists to avoid error on early upgrade
+                if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
+                    continue;
+                }
                 $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
@@ -217,6 +227,10 @@ CODE_SAMPLE
             $doctrineTagValueNode = $phpDocChildNode->value;
             $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineTagValueNode);
             if (!$annotationToAttribute instanceof AnnotationToAttribute) {
+                continue;
+            }
+            // make sure the attribute class really exists to avoid error on early upgrade
+            if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
                 continue;
             }
             $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
