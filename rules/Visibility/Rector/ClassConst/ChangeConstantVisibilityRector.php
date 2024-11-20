@@ -21,13 +21,12 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
 {
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @var ChangeConstantVisibility[]
      */
-    private $classConstantVisibilityChanges = [];
+    private array $classConstantVisibilityChanges = [];
     public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;

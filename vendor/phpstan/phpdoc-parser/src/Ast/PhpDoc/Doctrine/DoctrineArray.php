@@ -10,7 +10,7 @@ class DoctrineArray implements Node
 {
     use NodeAttributes;
     /** @var list<DoctrineArrayItem> */
-    public $items;
+    public array $items;
     /**
      * @param list<DoctrineArrayItem> $items
      */

@@ -21,9 +21,8 @@ final class GetCalledClassToSelfClassRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ClassModifierChecker
      */
-    private $classModifierChecker;
+    private ClassModifierChecker $classModifierChecker;
     public function __construct(ClassModifierChecker $classModifierChecker)
     {
         $this->classModifierChecker = $classModifierChecker;

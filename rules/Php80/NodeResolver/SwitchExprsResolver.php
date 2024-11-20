@@ -5,12 +5,12 @@ namespace Rector\Php80\NodeResolver;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Throw_;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\ValueObject\CondAndExpr;
 final class SwitchExprsResolver
@@ -57,7 +57,9 @@ final class SwitchExprsResolver
                 $condExprs = $emptyCasesCond;
                 $condExprs[] = $case->cond;
             }
-            if ($expr instanceof Return_) {
+            if ($expr instanceof Throw_) {
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::THROW);
+            } elseif ($expr instanceof Return_) {
                 $returnedExpr = $expr->expr;
                 if (!$returnedExpr instanceof Expr) {
                     return [];
@@ -67,9 +69,6 @@ final class SwitchExprsResolver
                 $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN);
             } elseif ($expr instanceof Expr) {
                 $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL);
-            } elseif ($expr instanceof Throw_) {
-                $throwExpr = new Expr\Throw_($expr->expr);
-                $condAndExpr[] = new CondAndExpr($condExprs, $throwExpr, MatchKind::THROW);
             } else {
                 return [];
             }

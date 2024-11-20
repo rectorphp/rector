@@ -13,7 +13,7 @@ final class MemoryCacheStorage implements CacheStorageInterface
     /**
      * @var array<string, CacheItem>
      */
-    private $storage = [];
+    private array $storage = [];
     /**
      * @return null|mixed
      */

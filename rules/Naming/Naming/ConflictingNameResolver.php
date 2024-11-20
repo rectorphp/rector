@@ -16,33 +16,28 @@ final class ConflictingNameResolver
 {
     /**
      * @readonly
-     * @var \Rector\Naming\PhpArray\ArrayFilter
      */
-    private $arrayFilter;
+    private ArrayFilter $arrayFilter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $expectedNameResolver;
+    private \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
-    private $matchParamTypeExpectedNameResolver;
+    private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\FunctionLikeManipulator
      */
-    private $functionLikeManipulator;
+    private FunctionLikeManipulator $functionLikeManipulator;
     /**
      * @var array<int, string[]>
      */
-    private $conflictingVariableNamesByClassMethod = [];
+    private array $conflictingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->arrayFilter = $arrayFilter;

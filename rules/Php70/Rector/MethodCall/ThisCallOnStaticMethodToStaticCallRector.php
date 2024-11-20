@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Php70\Rector\MethodCall;
 
+use PhpParser\Node\Scalar\InterpolatedString;
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\Enum\ObjectReference;
@@ -29,18 +29,13 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
 {
     /**
      * @readonly
-     * @var \Rector\NodeCollector\StaticAnalyzer
      */
-    private $staticAnalyzer;
+    private StaticAnalyzer $staticAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ReflectionResolver $reflectionResolver;
+    private bool $hasChanged = \false;
     public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;
@@ -111,8 +106,8 @@ CODE_SAMPLE
     private function processThisToStatic(Class_ $class, ClassReflection $classReflection) : void
     {
         $this->traverseNodesWithCallable($class, function (Node $subNode) use($class, $classReflection) {
-            if ($subNode instanceof Encapsed) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if ($subNode instanceof InterpolatedString) {
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$subNode instanceof MethodCall) {
                 return null;

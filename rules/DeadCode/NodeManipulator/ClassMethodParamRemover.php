@@ -10,14 +10,12 @@ final class ClassMethodParamRemover
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
-    private $complexNodeRemover;
+    private ComplexNodeRemover $complexNodeRemover;
     public function __construct(ParamAnalyzer $paramAnalyzer, ComplexNodeRemover $complexNodeRemover)
     {
         $this->paramAnalyzer = $paramAnalyzer;

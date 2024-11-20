@@ -17,9 +17,8 @@ final class DowngradeMixedTypeTypedPropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $PropertyDecorator;
+    private PropertyDecorator $PropertyDecorator;
     public function __construct(PropertyDecorator $PropertyDecorator)
     {
         $this->PropertyDecorator = $PropertyDecorator;

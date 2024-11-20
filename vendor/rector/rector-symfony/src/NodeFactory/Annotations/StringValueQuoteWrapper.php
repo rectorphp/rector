@@ -10,9 +10,8 @@ final class StringValueQuoteWrapper
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
-    private $arrayParser;
+    private ArrayParser $arrayParser;
     public function __construct(ArrayParser $arrayParser)
     {
         $this->arrayParser = $arrayParser;

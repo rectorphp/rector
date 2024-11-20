@@ -9,14 +9,13 @@ final class ParentClassToTraits
 {
     /**
      * @readonly
-     * @var string
      */
-    private $parentType;
+    private string $parentType;
     /**
      * @var string[]
      * @readonly
      */
-    private $traitNames;
+    private array $traitNames;
     /**
      * @param string[] $traitNames
      */

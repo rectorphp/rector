@@ -8,14 +8,12 @@ final class ReplaceFuncCallArgumentDefaultValue implements ReplaceArgumentDefaul
 {
     /**
      * @readonly
-     * @var string
      */
-    private $function;
+    private string $function;
     /**
      * @readonly
-     * @var int
      */
-    private $position;
+    private int $position;
     /**
      * @readonly
      * @var mixed

@@ -23,10 +23,7 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\InvalidOptionExceptio
  */
 class ArrayInput extends Input
 {
-    /**
-     * @var mixed[]
-     */
-    private $parameters;
+    private array $parameters;
     public function __construct(array $parameters, ?InputDefinition $definition = null)
     {
         $this->parameters = $parameters;

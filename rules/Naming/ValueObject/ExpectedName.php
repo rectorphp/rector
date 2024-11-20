@@ -7,14 +7,12 @@ final class ExpectedName
 {
     /**
      * @readonly
-     * @var string
      */
-    private $name;
+    private string $name;
     /**
      * @readonly
-     * @var string
      */
-    private $singularized;
+    private string $singularized;
     public function __construct(string $name, string $singularized)
     {
         $this->name = $name;

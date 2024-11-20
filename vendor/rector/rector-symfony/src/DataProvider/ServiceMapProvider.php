@@ -14,13 +14,9 @@ final class ServiceMapProvider
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\ValueObjectFactory\ServiceMapFactory
      */
-    private $serviceMapFactory;
-    /**
-     * @var \Rector\Symfony\ValueObject\ServiceMap\ServiceMap|null
-     */
-    private $serviceMap;
+    private ServiceMapFactory $serviceMapFactory;
+    private ?ServiceMap $serviceMap = null;
     public function __construct(ServiceMapFactory $serviceMapFactory, ?ServiceMap $serviceMap = null)
     {
         $this->serviceMapFactory = $serviceMapFactory;

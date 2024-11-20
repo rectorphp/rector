@@ -16,14 +16,8 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\InvalidArgumentExcept
  */
 class TableCell
 {
-    /**
-     * @var string
-     */
-    private $value;
-    /**
-     * @var mixed[]
-     */
-    private $options = ['rowspan' => 1, 'colspan' => 1, 'style' => null];
+    private string $value;
+    private array $options = ['rowspan' => 1, 'colspan' => 1, 'style' => null];
     public function __construct(string $value = '', array $options = [])
     {
         $this->value = $value;

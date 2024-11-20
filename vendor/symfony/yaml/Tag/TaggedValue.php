@@ -16,10 +16,7 @@ namespace RectorPrefix202411\Symfony\Component\Yaml\Tag;
  */
 final class TaggedValue
 {
-    /**
-     * @var string
-     */
-    private $tag;
+    private string $tag;
     /**
      * @var mixed
      */

@@ -9,9 +9,8 @@ trait LoggerAwareTrait
 {
     /**
      * The logger instance.
-     * @var \Psr\Log\LoggerInterface|null
      */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
     /**
      * Sets a logger.
      */

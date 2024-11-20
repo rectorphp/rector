@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Expression;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,6 +47,6 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($assign->var, $assign->expr)) {
             return null;
         }
-        return NodeTraverser::REMOVE_NODE;
+        return NodeVisitor::REMOVE_NODE;
     }
 }

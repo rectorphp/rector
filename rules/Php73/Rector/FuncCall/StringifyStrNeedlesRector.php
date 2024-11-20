@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\Encapsed;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -65,7 +65,7 @@ CODE_SAMPLE
         if ($needleType->isString()->yes()) {
             return null;
         }
-        if ($needleArgValue instanceof Encapsed) {
+        if ($needleArgValue instanceof InterpolatedString) {
             return null;
         }
         $node->args[1]->value = new String_($node->args[1]->value);

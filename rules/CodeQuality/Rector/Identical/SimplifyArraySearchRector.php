@@ -22,14 +22,12 @@ final class SimplifyArraySearchRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\BinaryOpManipulator
      */
-    private $binaryOpManipulator;
+    private BinaryOpManipulator $binaryOpManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
@@ -56,9 +54,7 @@ final class SimplifyArraySearchRector extends AbstractRector
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, 'array_search');
-        }, function (Node $node) : bool {
-            return $node instanceof Expr && $this->valueResolver->isFalse($node);
-        });
+        }, fn(Node $node): bool => $node instanceof Expr && $this->valueResolver->isFalse($node));
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }

@@ -10,9 +10,8 @@ final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**
      * @readonly
-     * @var string
      */
-    private $preposition;
+    private string $preposition;
     public function __construct(string $name, ?TypeNode $typeNode, string $description, string $preposition)
     {
         $this->preposition = $preposition;

@@ -37,30 +37,12 @@ use RectorPrefix202411\Symfony\Component\Console\Terminal;
 class SymfonyStyle extends OutputStyle
 {
     public const MAX_LINE_LENGTH = 120;
-    /**
-     * @var \Symfony\Component\Console\Input\InputInterface
-     */
-    private $input;
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
-    /**
-     * @var \Symfony\Component\Console\Helper\SymfonyQuestionHelper
-     */
-    private $questionHelper;
-    /**
-     * @var \Symfony\Component\Console\Helper\ProgressBar
-     */
-    private $progressBar;
-    /**
-     * @var int
-     */
-    private $lineLength;
-    /**
-     * @var \Symfony\Component\Console\Output\TrimmedBufferOutput
-     */
-    private $bufferedOutput;
+    private InputInterface $input;
+    private OutputInterface $output;
+    private SymfonyQuestionHelper $questionHelper;
+    private ProgressBar $progressBar;
+    private int $lineLength;
+    private TrimmedBufferOutput $bufferedOutput;
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
@@ -107,9 +89,7 @@ class SymfonyStyle extends OutputStyle
     public function listing(array $elements)
     {
         $this->autoPrependText();
-        $elements = \array_map(function ($element) {
-            return \sprintf(' * %s', $element);
-        }, $elements);
+        $elements = \array_map(fn($element) => \sprintf(' * %s', $element), $elements);
         $this->writeln($elements);
         $this->newLine();
     }
@@ -334,7 +314,7 @@ class SymfonyStyle extends OutputStyle
         if ($this->input->isInteractive()) {
             $this->autoPrependBlock();
         }
-        $this->questionHelper = $this->questionHelper ?? new SymfonyQuestionHelper();
+        $this->questionHelper ??= new SymfonyQuestionHelper();
         $answer = $this->questionHelper->ask($this->input, $this, $question);
         if ($this->input->isInteractive()) {
             if ($this->output instanceof ConsoleSectionOutput) {

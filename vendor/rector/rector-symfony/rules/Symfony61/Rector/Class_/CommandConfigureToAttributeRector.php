@@ -32,14 +32,12 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
 {
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
-    private $phpAttributeGroupFactory;
+    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var array<string, string>
      */
@@ -150,7 +148,7 @@ CODE_SAMPLE
     private function findAndRemoveMethodExpr(ClassMethod $classMethod, string $methodName) : ?Expr
     {
         $expr = null;
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$expr, $methodName) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$expr, $methodName) : ?Expr {
             // find setName() method call
             if (!$node instanceof MethodCall) {
                 return null;

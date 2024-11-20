@@ -27,24 +27,20 @@ final class ExplicitRelationCollectionRector extends AbstractRector implements M
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
-    private $attrinationFinder;
+    private AttrinationFinder $attrinationFinder;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
-    private $constructorAssignDetector;
+    private ConstructorAssignDetector $constructorAssignDetector;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory
      */
-    private $arrayCollectionAssignFactory;
+    private ArrayCollectionAssignFactory $arrayCollectionAssignFactory;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassDependencyManipulator
      */
-    private $classDependencyManipulator;
+    private ClassDependencyManipulator $classDependencyManipulator;
     public function __construct(AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->attrinationFinder = $attrinationFinder;

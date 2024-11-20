@@ -9,9 +9,8 @@ final class DefaultDiffer
 {
     /**
      * @readonly
-     * @var \SebastianBergmann\Diff\Differ
      */
-    private $differ;
+    private Differ $differ;
     public function __construct()
     {
         $strictUnifiedDiffOutputBuilder = new StrictUnifiedDiffOutputBuilder(['fromFile' => 'Original', 'toFile' => 'New']);

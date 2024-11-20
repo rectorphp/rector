@@ -9,9 +9,8 @@ final class Cache
 {
     /**
      * @readonly
-     * @var \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
      */
-    private $cacheStorage;
+    private CacheStorageInterface $cacheStorage;
     public function __construct(CacheStorageInterface $cacheStorage)
     {
         $this->cacheStorage = $cacheStorage;

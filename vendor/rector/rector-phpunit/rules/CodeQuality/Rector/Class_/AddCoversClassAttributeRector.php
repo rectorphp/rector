@@ -26,24 +26,20 @@ final class AddCoversClassAttributeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
-    private $phpAttributeGroupFactory;
+    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(ReflectionProvider $reflectionProvider, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -119,9 +115,7 @@ CODE_SAMPLE
         $partCount = count($classNameParts);
         $classNameParts[$partCount - 1] = preg_replace(['#TestCase$#', '#Test$#'], '', $classNameParts[$partCount - 1]);
         $possibleTestClassNames = [implode('\\', $classNameParts)];
-        $partsWithoutTests = array_filter($classNameParts, static function (?string $part) : bool {
-            return $part === null ? \false : !in_array(strtolower($part), ['test', 'tests'], \true);
-        });
+        $partsWithoutTests = array_filter($classNameParts, static fn(?string $part): bool => $part === null ? \false : !in_array(strtolower($part), ['test', 'tests'], \true));
         $possibleTestClassNames[] = implode('\\', $partsWithoutTests);
         return $possibleTestClassNames;
     }

@@ -7,14 +7,13 @@ final class BootstrapConfigs
 {
     /**
      * @readonly
-     * @var string|null
      */
-    private $mainConfigFile;
+    private ?string $mainConfigFile;
     /**
      * @var string[]
      * @readonly
      */
-    private $setConfigFiles;
+    private array $setConfigFiles;
     /**
      * @param string[] $setConfigFiles
      */

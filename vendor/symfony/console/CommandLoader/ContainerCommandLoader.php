@@ -20,14 +20,8 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\CommandNotFoundExcept
  */
 class ContainerCommandLoader implements CommandLoaderInterface
 {
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-    /**
-     * @var mixed[]
-     */
-    private $commandMap;
+    private ContainerInterface $container;
+    private array $commandMap;
     /**
      * @param array $commandMap An array with command names as keys and service ids as values
      */

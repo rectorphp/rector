@@ -11,19 +11,16 @@ final class FileInfoMatcher
 {
     /**
      * @readonly
-     * @var \Rector\Skipper\FileSystem\FnMatchPathNormalizer
      */
-    private $fnMatchPathNormalizer;
+    private FnMatchPathNormalizer $fnMatchPathNormalizer;
     /**
      * @readonly
-     * @var \Rector\Skipper\Fnmatcher
      */
-    private $fnmatcher;
+    private Fnmatcher $fnmatcher;
     /**
      * @readonly
-     * @var \Rector\Skipper\RealpathMatcher
      */
-    private $realpathMatcher;
+    private RealpathMatcher $realpathMatcher;
     public function __construct(FnMatchPathNormalizer $fnMatchPathNormalizer, Fnmatcher $fnmatcher, RealpathMatcher $realpathMatcher)
     {
         $this->fnMatchPathNormalizer = $fnMatchPathNormalizer;

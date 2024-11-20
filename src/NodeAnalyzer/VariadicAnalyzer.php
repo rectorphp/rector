@@ -13,9 +13,8 @@ final class VariadicAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -36,9 +35,9 @@ final class VariadicAnalyzer
      */
     private function hasVariadicVariant($functionLikeReflection) : bool
     {
-        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
+        foreach ($functionLikeReflection->getVariants() as $variant) {
             // can be any number of arguments → nothing to limit here
-            if ($parametersAcceptor->isVariadic()) {
+            if ($variant->isVariadic()) {
                 return \true;
             }
         }

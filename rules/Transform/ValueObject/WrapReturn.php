@@ -9,19 +9,16 @@ final class WrapReturn
 {
     /**
      * @readonly
-     * @var string
      */
-    private $type;
+    private string $type;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var bool
      */
-    private $isArrayWrap;
+    private bool $isArrayWrap;
     public function __construct(string $type, string $method, bool $isArrayWrap)
     {
         $this->type = $type;

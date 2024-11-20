@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Storage implements ContextualAttribute
 {
-    /**
-     * @var string|null
-     */
-    public $disk;
+    public ?string $disk = null;
     /**
      * Create a new class instance.
      */

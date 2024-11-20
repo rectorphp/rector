@@ -9,19 +9,16 @@ final class RemoveMethodCallParam
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @readonly
-     * @var int
      */
-    private $paramPosition;
+    private int $paramPosition;
     public function __construct(string $class, string $methodName, int $paramPosition)
     {
         $this->class = $class;

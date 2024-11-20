@@ -22,14 +22,12 @@ final class AssertPropertyExistsRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
-    private $identifierManipulator;
+    private IdentifierManipulator $identifierManipulator;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @var array<string, string>
      */

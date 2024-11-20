@@ -26,33 +26,25 @@ final class RenameParamToMatchTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
-    private $breakingVariableRenameGuard;
+    private BreakingVariableRenameGuard $breakingVariableRenameGuard;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $expectedNameResolver;
+    private ExpectedNameResolver $expectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
-    private $matchParamTypeExpectedNameResolver;
+    private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\ValueObjectFactory\ParamRenameFactory
      */
-    private $paramRenameFactory;
+    private ParamRenameFactory $paramRenameFactory;
     /**
      * @readonly
-     * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
-    private $paramRenamer;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ParamRenamer $paramRenamer;
+    private bool $hasChanged = \false;
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, ParamRenamer $paramRenamer)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;

@@ -8,14 +8,13 @@ final class Tag implements TagInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $name;
+    private string $name;
     /**
      * @var array<string, mixed>
      * @readonly
      */
-    private $data = [];
+    private array $data = [];
     /**
      * @param array<string, mixed> $data
      */

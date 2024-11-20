@@ -10,12 +10,15 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 class Interface_ extends \PhpParser\Builder\Declaration
 {
-    protected $name;
-    protected $extends = [];
-    protected $constants = [];
-    protected $methods = [];
-    /** @var Node\AttributeGroup[] */
-    protected $attributeGroups = [];
+    protected string $name;
+    /** @var list<Name> */
+    protected array $extends = [];
+    /** @var list<Stmt\ClassConst> */
+    protected array $constants = [];
+    /** @var list<Stmt\ClassMethod> */
+    protected array $methods = [];
+    /** @var list<Node\AttributeGroup> */
+    protected array $attributeGroups = [];
     /**
      * Creates an interface builder.
      *

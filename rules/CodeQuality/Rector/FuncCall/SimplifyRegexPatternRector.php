@@ -17,9 +17,8 @@ final class SimplifyRegexPatternRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\Regex\RegexPatternDetector
      */
-    private $regexPatternDetector;
+    private RegexPatternDetector $regexPatternDetector;
     /**
      * @var array<string, string>
      */

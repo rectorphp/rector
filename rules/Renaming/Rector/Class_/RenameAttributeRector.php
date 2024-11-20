@@ -25,7 +25,7 @@ final class RenameAttributeRector extends AbstractRector implements Configurable
     /**
      * @var RenameAttribute[]
      */
-    private $renameAttributes = [];
+    private array $renameAttributes = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Rename attribute class names', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

@@ -8,18 +8,19 @@ use PhpParser\Node\Scalar;
 class String_ extends Scalar
 {
     /* For use in "kind" attribute */
-    const KIND_SINGLE_QUOTED = 1;
-    const KIND_DOUBLE_QUOTED = 2;
-    const KIND_HEREDOC = 3;
-    const KIND_NOWDOC = 4;
+    public const KIND_SINGLE_QUOTED = 1;
+    public const KIND_DOUBLE_QUOTED = 2;
+    public const KIND_HEREDOC = 3;
+    public const KIND_NOWDOC = 4;
     /** @var string String value */
-    public $value;
-    protected static $replacements = ['\\' => '\\', '$' => '$', 'n' => "\n", 'r' => "\r", 't' => "\t", 'f' => "\f", 'v' => "\v", 'e' => "\x1b"];
+    public string $value;
+    /** @var array<string, string> Escaped character to its decoded value */
+    protected static array $replacements = ['\\' => '\\', '$' => '$', 'n' => "\n", 'r' => "\r", 't' => "\t", 'f' => "\f", 'v' => "\v", 'e' => "\x1b"];
     /**
      * Constructs a string scalar node.
      *
-     * @param string $value      Value of the string
-     * @param array  $attributes Additional attributes
+     * @param string $value Value of the string
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(string $value, array $attributes = [])
     {
@@ -31,6 +32,7 @@ class String_ extends Scalar
         return ['value'];
     }
     /**
+     * @param array<string, mixed> $attributes
      * @param bool $parseUnicodeEscape Whether to parse PHP 7 \u escapes
      */
     public static function fromString(string $str, array $attributes = [], bool $parseUnicodeEscape = \true) : self
@@ -67,13 +69,13 @@ class String_ extends Scalar
      *
      * Parses escape sequences in strings (all string types apart from single quoted).
      *
-     * @param string      $str   String without quotes
+     * @param string $str String without quotes
      * @param null|string $quote Quote type
      * @param bool $parseUnicodeEscape Whether to parse PHP 7 \u escapes
      *
      * @return string String with escape sequences parsed
      */
-    public static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = \true) : string
+    public static function parseEscapeSequences(string $str, ?string $quote, bool $parseUnicodeEscape = \true) : string
     {
         if (null !== $quote) {
             $str = \str_replace('\\' . $quote, $quote, $str);
@@ -86,10 +88,14 @@ class String_ extends Scalar
             $str = $matches[1];
             if (isset(self::$replacements[$str])) {
                 return self::$replacements[$str];
-            } elseif ('x' === $str[0] || 'X' === $str[0]) {
+            }
+            if ('x' === $str[0] || 'X' === $str[0]) {
                 return \chr(\hexdec(\substr($str, 1)));
-            } elseif ('u' === $str[0]) {
-                return self::codePointToUtf8(\hexdec($matches[2]));
+            }
+            if ('u' === $str[0]) {
+                $dec = \hexdec($matches[2]);
+                // If it overflowed to float, treat as INT_MAX, it will throw an error anyway.
+                return self::codePointToUtf8(\is_int($dec) ? $dec : \PHP_INT_MAX);
             } else {
                 return \chr(\octdec($str));
             }

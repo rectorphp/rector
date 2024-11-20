@@ -5,16 +5,17 @@ namespace PhpParser\Builder;
 
 use PhpParser;
 use PhpParser\BuilderHelpers;
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 class Method extends \PhpParser\Builder\FunctionLike
 {
-    protected $name;
-    protected $flags = 0;
-    /** @var array|null */
-    protected $stmts = [];
-    /** @var Node\AttributeGroup[] */
-    protected $attributeGroups = [];
+    protected string $name;
+    protected int $flags = 0;
+    /** @var list<Stmt>|null */
+    protected ?array $stmts = [];
+    /** @var list<Node\AttributeGroup> */
+    protected array $attributeGroups = [];
     /**
      * Creates a method builder.
      *
@@ -31,7 +32,7 @@ class Method extends \PhpParser\Builder\FunctionLike
      */
     public function makePublic()
     {
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_PUBLIC);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::PUBLIC);
         return $this;
     }
     /**
@@ -41,7 +42,7 @@ class Method extends \PhpParser\Builder\FunctionLike
      */
     public function makeProtected()
     {
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_PROTECTED);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::PROTECTED);
         return $this;
     }
     /**
@@ -51,7 +52,7 @@ class Method extends \PhpParser\Builder\FunctionLike
      */
     public function makePrivate()
     {
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_PRIVATE);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::PRIVATE);
         return $this;
     }
     /**
@@ -61,7 +62,7 @@ class Method extends \PhpParser\Builder\FunctionLike
      */
     public function makeStatic()
     {
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_STATIC);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::STATIC);
         return $this;
     }
     /**
@@ -74,7 +75,7 @@ class Method extends \PhpParser\Builder\FunctionLike
         if (!empty($this->stmts)) {
             throw new \LogicException('Cannot make method with statements abstract');
         }
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_ABSTRACT);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::ABSTRACT);
         $this->stmts = null;
         // abstract methods don't have statements
         return $this;
@@ -86,7 +87,7 @@ class Method extends \PhpParser\Builder\FunctionLike
      */
     public function makeFinal()
     {
-        $this->flags = BuilderHelpers::addModifier($this->flags, Stmt\Class_::MODIFIER_FINAL);
+        $this->flags = BuilderHelpers::addModifier($this->flags, Modifiers::FINAL);
         return $this;
     }
     /**

@@ -33,29 +33,24 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
-    private $symfonyPhpClosureDetector;
+    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $filesystem;
+    private Filesystem $filesystem;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\MinimalSharedStringSolver
      */
-    private $minimalSharedStringSolver;
+    private MinimalSharedStringSolver $minimalSharedStringSolver;
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ReflectionProvider $reflectionProvider, Filesystem $filesystem, ValueResolver $valueResolver)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
@@ -115,9 +110,7 @@ CODE_SAMPLE
             return null;
         }
         $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCallExpressions);
-        $classNames = \array_map(static function (ClassNameAndFilePath $classNameAndFilePath) : string {
-            return $classNameAndFilePath->getClassName();
-        }, $classNamesAndFilesPaths);
+        $classNames = \array_map(static fn(ClassNameAndFilePath $classNameAndFilePath): string => $classNameAndFilePath->getClassName(), $classNamesAndFilesPaths);
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();

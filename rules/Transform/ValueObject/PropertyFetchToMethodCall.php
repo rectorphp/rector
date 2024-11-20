@@ -9,29 +9,25 @@ final class PropertyFetchToMethodCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldType;
+    private string $oldType;
     /**
      * @readonly
-     * @var string
      */
-    private $oldProperty;
+    private string $oldProperty;
     /**
      * @readonly
-     * @var string
      */
-    private $newGetMethod;
+    private string $newGetMethod;
     /**
      * @readonly
-     * @var string|null
      */
-    private $newSetMethod;
+    private ?string $newSetMethod = null;
     /**
      * @var mixed[]
      * @readonly
      */
-    private $newGetArguments = [];
+    private array $newGetArguments = [];
     /**
      * @param mixed[] $newGetArguments
      */

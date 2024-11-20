@@ -28,27 +28,21 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
 {
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
-    private $parentClassMethodTypeOverrideGuard;
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @var AddReturnTypeDeclaration[]
      */
-    private $methodReturnTypes = [];
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private array $methodReturnTypes = [];
+    private bool $hasChanged = \false;
     public function __construct(PhpVersionProvider $phpVersionProvider, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpVersionProvider = $phpVersionProvider;

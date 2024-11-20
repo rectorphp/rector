@@ -20,19 +20,19 @@ class ParseException extends RuntimeException
     /**
      * @var string
      */
-    private $rawMessage;
+    private string $rawMessage;
     /**
      * @var int
      */
-    private $parsedLine = -1;
+    private int $parsedLine = -1;
     /**
      * @var string|null
      */
-    private $snippet;
+    private ?string $snippet = null;
     /**
      * @var string|null
      */
-    private $parsedFile;
+    private ?string $parsedFile = null;
     /**
      * @param string      $rawMessage The error message
      * @param int         $parsedLine The line where the error occurred

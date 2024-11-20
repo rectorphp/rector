@@ -19,7 +19,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     /**
      * @var FuncCallToStaticCall[]
      */
-    private $funcCallsToStaticCalls = [];
+    private array $funcCallsToStaticCalls = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Turns defined function call to static method call.', [new ConfiguredCodeSample('view("...", []);', 'SomeClass::render("...", []);', [new FuncCallToStaticCall('view', 'SomeStaticClass', 'render')])]);

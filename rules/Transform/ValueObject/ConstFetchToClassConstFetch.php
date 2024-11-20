@@ -8,19 +8,16 @@ final class ConstFetchToClassConstFetch
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldConstName;
+    private string $oldConstName;
     /**
      * @readonly
-     * @var string
      */
-    private $newClassName;
+    private string $newClassName;
     /**
      * @readonly
-     * @var string
      */
-    private $newConstName;
+    private string $newConstName;
     public function __construct(string $oldConstName, string $newClassName, string $newConstName)
     {
         $this->oldConstName = $oldConstName;

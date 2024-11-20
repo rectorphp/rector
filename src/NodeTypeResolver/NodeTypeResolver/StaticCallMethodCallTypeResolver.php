@@ -26,13 +26,9 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
-    /**
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
+    private NodeNameResolver $nodeNameResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -12,7 +13,6 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Rector\AbstractRector;
@@ -164,7 +164,7 @@ CODE_SAMPLE
     }
     private function isZeroLNumber(Expr $expr) : bool
     {
-        if (!$expr instanceof LNumber) {
+        if (!$expr instanceof Int_) {
             return \false;
         }
         return $expr->value === 0;

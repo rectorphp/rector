@@ -22,14 +22,12 @@ final class IsCountableRector extends AbstractRector implements MinPhpVersionInt
 {
     /**
      * @readonly
-     * @var \Rector\Php71\IsArrayAndDualCheckToAble
      */
-    private $isArrayAndDualCheckToAble;
+    private IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, ReflectionProvider $reflectionProvider)
     {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;

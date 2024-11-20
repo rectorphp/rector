@@ -19,10 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
-    /**
-     * @var int
-     */
-    private $counter = 0;
+    private int $counter = 0;
     /**
      * Hack-ish way to reset counter for a new file, to avoid rising counter for each file
      *
@@ -54,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(Node $node) : ?Ternary
+    public function refactor(Node $node) : Ternary
     {
         $nullsafeVariable = $this->createNullsafeVariable();
         $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariable, $node->name, $node->getArgs()) : new PropertyFetch($nullsafeVariable, $node->name);

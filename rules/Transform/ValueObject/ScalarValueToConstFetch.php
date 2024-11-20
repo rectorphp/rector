@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 final class ScalarValueToConstFetch
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Scalar\DNumber|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\LNumber
+     * @var \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_
      */
     private $scalar;
     /**
@@ -21,7 +21,7 @@ final class ScalarValueToConstFetch
      */
     private $constFetch;
     /**
-     * @param \PhpParser\Node\Scalar\DNumber|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\LNumber $scalar
+     * @param \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_ $scalar
      * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $constFetch
      */
     public function __construct($scalar, $constFetch)
@@ -30,7 +30,7 @@ final class ScalarValueToConstFetch
         $this->constFetch = $constFetch;
     }
     /**
-     * @return \PhpParser\Node\Scalar\DNumber|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\LNumber
+     * @return \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_
      */
     public function getScalar()
     {

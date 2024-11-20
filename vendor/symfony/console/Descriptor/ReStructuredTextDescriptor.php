@@ -21,39 +21,18 @@ use RectorPrefix202411\Symfony\Component\String\UnicodeString;
 class ReStructuredTextDescriptor extends Descriptor
 {
     // <h1>
-    /**
-     * @var string
-     */
-    private $partChar = '=';
+    private string $partChar = '=';
     // <h2>
-    /**
-     * @var string
-     */
-    private $chapterChar = '-';
+    private string $chapterChar = '-';
     // <h3>
-    /**
-     * @var string
-     */
-    private $sectionChar = '~';
+    private string $sectionChar = '~';
     // <h4>
-    /**
-     * @var string
-     */
-    private $subsectionChar = '.';
+    private string $subsectionChar = '.';
     // <h5>
-    /**
-     * @var string
-     */
-    private $subsubsectionChar = '^';
+    private string $subsubsectionChar = '^';
     // <h6>
-    /**
-     * @var string
-     */
-    private $paragraphsChar = '"';
-    /**
-     * @var mixed[]
-     */
-    private $visibleNamespaces = [];
+    private string $paragraphsChar = '"';
+    private array $visibleNamespaces = [];
     public function describe(OutputInterface $output, object $object, array $options = []) : void
     {
         $decorated = $output->isDecorated();
@@ -108,18 +87,14 @@ class ReStructuredTextDescriptor extends Descriptor
     protected function describeCommand(Command $command, array $options = []) : void
     {
         if ($options['short'] ?? \false) {
-            $this->write('``' . $command->getName() . "``\n" . \str_repeat($this->subsectionChar, Helper::width($command->getName())) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . "Usage\n" . \str_repeat($this->paragraphsChar, 5) . "\n\n" . \array_reduce($command->getAliases(), static function ($carry, $usage) {
-                return $carry . '- ``' . $usage . '``' . "\n";
-            }));
+            $this->write('``' . $command->getName() . "``\n" . \str_repeat($this->subsectionChar, Helper::width($command->getName())) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . "Usage\n" . \str_repeat($this->paragraphsChar, 5) . "\n\n" . \array_reduce($command->getAliases(), static fn($carry, $usage) => $carry . '- ``' . $usage . '``' . "\n"));
             return;
         }
         $command->mergeApplicationDefinition(\false);
         foreach ($command->getAliases() as $alias) {
             $this->write('.. _' . $alias . ":\n\n");
         }
-        $this->write($command->getName() . "\n" . \str_repeat($this->subsectionChar, Helper::width($command->getName())) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . "Usage\n" . \str_repeat($this->subsubsectionChar, 5) . "\n\n" . \array_reduce(\array_merge([$command->getSynopsis()], $command->getAliases(), $command->getUsages()), static function ($carry, $usage) {
-            return $carry . '- ``' . $usage . '``' . "\n";
-        }));
+        $this->write($command->getName() . "\n" . \str_repeat($this->subsectionChar, Helper::width($command->getName())) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . "Usage\n" . \str_repeat($this->subsubsectionChar, 5) . "\n\n" . \array_reduce(\array_merge([$command->getSynopsis()], $command->getAliases(), $command->getUsages()), static fn($carry, $usage) => $carry . '- ``' . $usage . '``' . "\n"));
         if ($help = $command->getProcessedHelp()) {
             $this->write("\n");
             $this->write($help);
@@ -181,9 +156,7 @@ class ReStructuredTextDescriptor extends Descriptor
             }
             $commands = $this->removeAliasesAndHiddenCommands($commands);
             $this->write("\n\n");
-            $this->write(\implode("\n", \array_map(static function ($commandName) {
-                return \sprintf('- `%s`_', $commandName);
-            }, \array_keys($commands))));
+            $this->write(\implode("\n", \array_map(static fn($commandName) => \sprintf('- `%s`_', $commandName), \array_keys($commands))));
         }
     }
     private function getNonDefaultOptions(InputDefinition $definition) : array

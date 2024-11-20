@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Log implements ContextualAttribute
 {
-    /**
-     * @var string|null
-     */
-    public $channel;
+    public ?string $channel = null;
     /**
      * Create a new class instance.
      */

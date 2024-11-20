@@ -9,12 +9,12 @@ final class DowngradeAttributeToAnnotation
      * @var class-string
      * @readonly
      */
-    private $attributeClass;
+    private string $attributeClass;
     /**
      * @var class-string|string|null
      * @readonly
      */
-    private $tag;
+    private ?string $tag = null;
     /**
      * @param class-string $attributeClass
      * @param class-string|string|null $tag

@@ -14,17 +14,15 @@ final class ConfigInitializer
      * @var RectorInterface[]
      * @readonly
      */
-    private $rectors;
+    private array $rectors;
     /**
      * @readonly
-     * @var \Rector\FileSystem\InitFilePathsResolver
      */
-    private $initFilePathsResolver;
+    private InitFilePathsResolver $initFilePathsResolver;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @param RectorInterface[] $rectors
      */
@@ -63,9 +61,7 @@ final class ConfigInitializer
      */
     private function filterActiveRectors(array $rectors) : array
     {
-        return \array_filter($rectors, static function (RectorInterface $rector) : bool {
-            return !$rector instanceof PostRectorInterface;
-        });
+        return \array_filter($rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
     }
     private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory) : string
     {

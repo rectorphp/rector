@@ -28,10 +28,7 @@ final class LazyCommand extends Command
      * @var \Closure|\Symfony\Component\Console\Command\Command
      */
     private $command;
-    /**
-     * @var bool|null
-     */
-    private $isEnabled;
+    private ?bool $isEnabled;
     public function __construct(string $name, array $aliases, string $description, bool $isHidden, \Closure $commandFactory, ?bool $isEnabled = \true)
     {
         $this->setName($name)->setAliases($aliases)->setHidden($isHidden)->setDescription($description);

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
+use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\PropertyNaming;
@@ -13,19 +14,16 @@ final class MatchParamTypeExpectedNameResolver
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\PropertyNaming
      */
-    private $propertyNaming;
+    private PropertyNaming $propertyNaming;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     public function __construct(StaticTypeMapper $staticTypeMapper, PropertyNaming $propertyNaming, NodeTypeResolver $nodeTypeResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
@@ -35,7 +33,7 @@ final class MatchParamTypeExpectedNameResolver
     public function resolve(Param $param) : ?string
     {
         // nothing to verify
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return null;
         }
         // include nullable too

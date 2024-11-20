@@ -31,23 +31,20 @@ final class RenameFunctionLikeParamWithinCallLikeArgRector extends AbstractRecto
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
-    private $breakingVariableRenameGuard;
+    private BreakingVariableRenameGuard $breakingVariableRenameGuard;
     /**
      * @readonly
-     * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
-    private $paramRenamer;
+    private ParamRenamer $paramRenamer;
     /**
      * @readonly
-     * @var \Rector\Naming\ValueObjectFactory\ParamRenameFactory
      */
-    private $paramRenameFactory;
+    private ParamRenameFactory $paramRenameFactory;
     /**
      * @var RenameFunctionLikeParamWithinCallLikeArg[]
      */
-    private $renameFunctionLikeParamWithinCallLikeArgs = [];
+    private array $renameFunctionLikeParamWithinCallLikeArgs = [];
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ParamRenamer $paramRenamer, ParamRenameFactory $paramRenameFactory)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
@@ -167,7 +164,7 @@ CODE_SAMPLE
             return null;
         }
         // int positions shouldn't have names
-        if ($arg->name !== null) {
+        if ($arg->name instanceof Identifier) {
             return null;
         }
         return $arg;
@@ -175,7 +172,7 @@ CODE_SAMPLE
     private function processNamedArg(CallLike $callLike, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg) : ?Arg
     {
         $args = \array_filter($callLike->getArgs(), static function (Arg $arg) use($renameFunctionLikeParamWithinCallLikeArg) : bool {
-            if ($arg->name === null) {
+            if (!$arg->name instanceof Identifier) {
                 return \false;
             }
             return $arg->name->name === $renameFunctionLikeParamWithinCallLikeArg->getCallLikePosition();

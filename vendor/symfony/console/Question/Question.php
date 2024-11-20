@@ -19,46 +19,19 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\LogicException;
  */
 class Question
 {
-    /**
-     * @var string
-     */
-    private $question;
-    /**
-     * @var int|null
-     */
-    private $attempts;
-    /**
-     * @var bool
-     */
-    private $hidden = \false;
-    /**
-     * @var bool
-     */
-    private $hiddenFallback = \true;
-    /**
-     * @var \Closure|null
-     */
-    private $autocompleterCallback;
-    /**
-     * @var \Closure|null
-     */
-    private $validator;
+    private string $question;
+    private ?int $attempts = null;
+    private bool $hidden = \false;
+    private bool $hiddenFallback = \true;
+    private ?\Closure $autocompleterCallback = null;
+    private ?\Closure $validator = null;
     /**
      * @var bool|float|int|string|null
      */
     private $default;
-    /**
-     * @var \Closure|null
-     */
-    private $normalizer;
-    /**
-     * @var bool
-     */
-    private $trimmable = \true;
-    /**
-     * @var bool
-     */
-    private $multiline = \false;
+    private ?\Closure $normalizer = null;
+    private bool $trimmable = \true;
+    private bool $multiline = \false;
     /**
      * @param string                     $question The question to ask to the user
      * @param string|bool|int|float|null $default  The default answer to return if the user enters nothing
@@ -158,13 +131,11 @@ class Question
     {
         if (\is_array($values)) {
             $values = $this->isAssoc($values) ? \array_merge(\array_keys($values), \array_values($values)) : \array_values($values);
-            $callback = static function () use($values) {
-                return $values;
-            };
+            $callback = static fn() => $values;
         } elseif ($values instanceof \Traversable) {
             $callback = static function () use($values) {
                 static $valueCache;
-                return $valueCache = $valueCache ?? \iterator_to_array($values, \false);
+                return $valueCache ??= \iterator_to_array($values, \false);
             };
         } else {
             $callback = null;

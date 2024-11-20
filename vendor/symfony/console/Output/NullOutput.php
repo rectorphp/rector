@@ -22,10 +22,7 @@ use RectorPrefix202411\Symfony\Component\Console\Formatter\OutputFormatterInterf
  */
 class NullOutput implements OutputInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Formatter\NullOutputFormatter
-     */
-    private $formatter;
+    private NullOutputFormatter $formatter;
     /**
      * @return void
      */
@@ -36,7 +33,7 @@ class NullOutput implements OutputInterface
     public function getFormatter() : OutputFormatterInterface
     {
         // to comply with the interface we must return a OutputFormatterInterface
-        return $this->formatter = $this->formatter ?? new NullOutputFormatter();
+        return $this->formatter ??= new NullOutputFormatter();
     }
     /**
      * @return void

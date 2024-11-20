@@ -9,30 +9,36 @@ use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 class Function_ extends Node\Stmt implements FunctionLike, StmtsAwareInterface
 {
     /** @var bool Whether function returns by reference */
-    public $byRef;
+    public bool $byRef;
     /** @var Node\Identifier Name */
-    public $name;
+    public Node\Identifier $name;
     /** @var Node\Param[] Parameters */
-    public $params;
+    public array $params;
     /** @var null|Node\Identifier|Node\Name|Node\ComplexType Return type */
-    public $returnType;
+    public ?Node $returnType;
     /** @var Node\Stmt[] Statements */
-    public $stmts;
+    public array $stmts;
     /** @var Node\AttributeGroup[] PHP attribute groups */
-    public $attrGroups;
+    public array $attrGroups;
     /** @var Node\Name|null Namespaced name (if using NameResolver) */
-    public $namespacedName;
+    public ?Node\Name $namespacedName;
     /**
      * Constructs a function node.
      *
      * @param string|Node\Identifier $name Name
-     * @param array  $subNodes   Array of the following optional subnodes:
-     *                           'byRef'      => false  : Whether to return by reference
-     *                           'params'     => array(): Parameters
-     *                           'returnType' => null   : Return type
-     *                           'stmts'      => array(): Statements
-     *                           'attrGroups' => array(): PHP attribute groups
-     * @param array  $attributes Additional attributes
+     * @param array{
+     *     byRef?: bool,
+     *     params?: Node\Param[],
+     *     returnType?: null|Node\Identifier|Node\Name|Node\ComplexType,
+     *     stmts?: Node\Stmt[],
+     *     attrGroups?: Node\AttributeGroup[],
+     * } $subNodes Array of the following optional subnodes:
+     *             'byRef'      => false  : Whether to return by reference
+     *             'params'     => array(): Parameters
+     *             'returnType' => null   : Return type
+     *             'stmts'      => array(): Statements
+     *             'attrGroups' => array(): PHP attribute groups
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct($name, array $subNodes = [], array $attributes = [])
     {
@@ -40,8 +46,7 @@ class Function_ extends Node\Stmt implements FunctionLike, StmtsAwareInterface
         $this->byRef = $subNodes['byRef'] ?? \false;
         $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->params = $subNodes['params'] ?? [];
-        $returnType = $subNodes['returnType'] ?? null;
-        $this->returnType = \is_string($returnType) ? new Node\Identifier($returnType) : $returnType;
+        $this->returnType = $subNodes['returnType'] ?? null;
         $this->stmts = $subNodes['stmts'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }

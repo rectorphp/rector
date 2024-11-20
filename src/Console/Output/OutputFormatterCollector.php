@@ -10,7 +10,7 @@ final class OutputFormatterCollector
     /**
      * @var array<string, OutputFormatterInterface>
      */
-    private $outputFormatters = [];
+    private array $outputFormatters = [];
     /**
      * @param OutputFormatterInterface[] $outputFormatters
      */

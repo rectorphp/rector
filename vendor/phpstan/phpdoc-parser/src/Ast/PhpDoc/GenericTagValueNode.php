@@ -8,7 +8,7 @@ class GenericTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
 {
     use NodeAttributes;
     /** @var string (may be empty) */
-    public $value;
+    public string $value;
     public function __construct(string $value)
     {
         $this->value = $value;

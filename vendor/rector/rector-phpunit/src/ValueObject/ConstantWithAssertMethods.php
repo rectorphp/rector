@@ -7,19 +7,16 @@ final class ConstantWithAssertMethods
 {
     /**
      * @readonly
-     * @var string
      */
-    private $constant;
+    private string $constant;
     /**
      * @readonly
-     * @var string
      */
-    private $assetMethodName;
+    private string $assetMethodName;
     /**
      * @readonly
-     * @var string
      */
-    private $notAssertMethodName;
+    private string $notAssertMethodName;
     public function __construct(string $constant, string $assetMethodName, string $notAssertMethodName)
     {
         $this->constant = $constant;

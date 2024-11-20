@@ -10,14 +10,12 @@ final class NodeComparator
 {
     /**
      * @readonly
-     * @var \Rector\Comments\CommentRemover
      */
-    private $commentRemover;
+    private CommentRemover $commentRemover;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     public function __construct(CommentRemover $commentRemover, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->commentRemover = $commentRemover;

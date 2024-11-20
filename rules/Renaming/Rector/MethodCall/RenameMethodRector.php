@@ -34,23 +34,20 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassManipulator
      */
-    private $classManipulator;
+    private ClassManipulator $classManipulator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var MethodCallRenameInterface[]
      */
-    private $methodCallRenames = [];
+    private array $methodCallRenames = [];
     public function __construct(ClassManipulator $classManipulator, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
     {
         $this->classManipulator = $classManipulator;

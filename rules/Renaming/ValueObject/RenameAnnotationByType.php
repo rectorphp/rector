@@ -10,19 +10,16 @@ final class RenameAnnotationByType implements RenameAnnotationInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $type;
+    private string $type;
     /**
      * @readonly
-     * @var string
      */
-    private $oldAnnotation;
+    private string $oldAnnotation;
     /**
      * @readonly
-     * @var string
      */
-    private $newAnnotation;
+    private string $newAnnotation;
     public function __construct(string $type, string $oldAnnotation, string $newAnnotation)
     {
         $this->type = $type;

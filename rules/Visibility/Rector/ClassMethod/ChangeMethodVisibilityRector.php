@@ -22,18 +22,16 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
 {
     /**
      * @readonly
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
-    private $parentClassScopeResolver;
+    private ParentClassScopeResolver $parentClassScopeResolver;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @var ChangeMethodVisibility[]
      */
-    private $methodVisibilities = [];
+    private array $methodVisibilities = [];
     public function __construct(ParentClassScopeResolver $parentClassScopeResolver, VisibilityManipulator $visibilityManipulator)
     {
         $this->parentClassScopeResolver = $parentClassScopeResolver;

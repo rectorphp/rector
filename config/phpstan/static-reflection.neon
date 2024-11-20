@@ -1,9 +1,3 @@
-parameters:
-    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
-    featureToggles:
-        disableRuntimeReflectionProvider: false
-        nodeConnectingVisitorCompatibility: false
-
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
     - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator

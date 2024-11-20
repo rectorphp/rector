@@ -18,19 +18,18 @@ class RunCommandMessage
 {
     /**
      * @readonly
-     * @var string
      */
-    public $input;
+    public string $input;
     /**
      * @var bool
      * @readonly
      */
-    public $throwOnFailure = \true;
+    public bool $throwOnFailure = \true;
     /**
      * @var bool
      * @readonly
      */
-    public $catchExceptions = \false;
+    public bool $catchExceptions = \false;
     /**
      * @param bool $throwOnFailure  If the command has a non-zero exit code, throw {@see RunCommandFailedException}
      * @param bool $catchExceptions @see Application::setCatchExceptions()

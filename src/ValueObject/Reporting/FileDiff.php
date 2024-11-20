@@ -13,24 +13,21 @@ final class FileDiff implements SerializableInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $relativeFilePath;
+    private string $relativeFilePath;
     /**
      * @readonly
-     * @var string
      */
-    private $diff;
+    private string $diff;
     /**
      * @readonly
-     * @var string
      */
-    private $diffConsoleFormatted;
+    private string $diffConsoleFormatted;
     /**
      * @var RectorWithLineChange[]
      * @readonly
      */
-    private $rectorsWithLineChanges = [];
+    private array $rectorsWithLineChanges = [];
     /**
      * @var string
      * @se https://regex101.com/r/AUPIX4/1
@@ -114,9 +111,8 @@ final class FileDiff implements SerializableInterface
     }
     /**
      * @param array<string, mixed> $json
-     * @return $this
      */
-    public static function decode(array $json) : \RectorPrefix202411\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : self
     {
         $rectorWithLineChanges = [];
         foreach ($json[BridgeItem::RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {

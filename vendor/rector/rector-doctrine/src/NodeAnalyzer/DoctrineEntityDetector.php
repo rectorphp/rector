@@ -11,14 +11,12 @@ final class DoctrineEntityDetector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\DoctrineEntityAnalyzer
      */
-    private $doctrineEntityAnalyzer;
+    private DoctrineEntityAnalyzer $doctrineEntityAnalyzer;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(DoctrineEntityAnalyzer $doctrineEntityAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->doctrineEntityAnalyzer = $doctrineEntityAnalyzer;

@@ -26,23 +26,20 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
-    private $docBlockTagReplacer;
+    private DocBlockTagReplacer $docBlockTagReplacer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @var RenameAnnotationInterface[]
      */
-    private $renameAnnotations = [];
+    private array $renameAnnotations = [];
     public function __construct(DocBlockTagReplacer $docBlockTagReplacer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->docBlockTagReplacer = $docBlockTagReplacer;

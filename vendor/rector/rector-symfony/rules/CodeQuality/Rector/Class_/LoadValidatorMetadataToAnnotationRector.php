@@ -29,29 +29,24 @@ final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver
      */
-    private $methodCallAnnotationAssertResolver;
+    private MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver
      */
-    private $propertyAnnotationAssertResolver;
+    private PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver
      */
-    private $classAnnotationAssertResolver;
+    private ClassAnnotationAssertResolver $classAnnotationAssertResolver;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver, PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver, ClassAnnotationAssertResolver $classAnnotationAssertResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->methodCallAnnotationAssertResolver = $methodCallAnnotationAssertResolver;

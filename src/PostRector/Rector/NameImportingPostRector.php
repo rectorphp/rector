@@ -15,38 +15,35 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\Node\NameImporter
      */
-    private $nameImporter;
+    private NameImporter $nameImporter;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $useImportsResolver;
+    private UseImportsResolver $useImportsResolver;
     /**
      * @readonly
-     * @var \Rector\PostRector\Guard\AddUseStatementGuard
      */
-    private $addUseStatementGuard;
+    private AddUseStatementGuard $addUseStatementGuard;
     /**
      * @var array<Use_|GroupUse>
      */
-    private $currentUses = [];
+    private array $currentUses = [];
     public function __construct(NameImporter $nameImporter, UseImportsResolver $useImportsResolver, AddUseStatementGuard $addUseStatementGuard)
     {
         $this->nameImporter = $nameImporter;
         $this->useImportsResolver = $useImportsResolver;
         $this->addUseStatementGuard = $addUseStatementGuard;
     }
-    public function beforeTraverse(array $nodes)
+    /**
+     * @return Stmt[]
+     */
+    public function beforeTraverse(array $nodes) : array
     {
         $this->currentUses = $this->useImportsResolver->resolve();
         return $nodes;
     }
-    /**
-     * @return \PhpParser\Node|int|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node) : ?\PhpParser\Node
     {
         if (!$node instanceof FullyQualified) {
             return null;

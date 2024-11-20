@@ -11,13 +11,12 @@ final class AddUseStatementGuard
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var array<string, bool>
      */
-    private $shouldTraverseOnFiles = [];
+    private array $shouldTraverseOnFiles = [];
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;

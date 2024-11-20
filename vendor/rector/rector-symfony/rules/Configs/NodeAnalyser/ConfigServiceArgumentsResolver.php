@@ -12,19 +12,16 @@ final class ConfigServiceArgumentsResolver
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\PhpParser\NamedSimplePhpParser
      */
-    private $namedSimplePhpParser;
+    private NamedSimplePhpParser $namedSimplePhpParser;
     /**
      * @readonly
-     * @var \PhpParser\NodeTraverser
      */
-    private $nodeTraverser;
+    private NodeTraverser $nodeTraverser;
     /**
      * @readonly
-     * @var \Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor
      */
-    private $collectServiceArgumentsNodeVisitor;
+    private CollectServiceArgumentsNodeVisitor $collectServiceArgumentsNodeVisitor;
     public function __construct(NamedSimplePhpParser $namedSimplePhpParser)
     {
         $this->namedSimplePhpParser = $namedSimplePhpParser;

@@ -9,19 +9,17 @@ use function implode;
 class CallableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
-    /** @var IdentifierTypeNode */
-    public $identifier;
+    public \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifier;
     /** @var TemplateTagValueNode[] */
-    public $templateTypes;
+    public array $templateTypes;
     /** @var CallableTypeParameterNode[] */
-    public $parameters;
-    /** @var TypeNode */
-    public $returnType;
+    public array $parameters;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $returnType;
     /**
      * @param CallableTypeParameterNode[] $parameters
      * @param TemplateTagValueNode[]  $templateTypes
      */
-    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifier, array $parameters, \PHPStan\PhpDocParser\Ast\Type\TypeNode $returnType, array $templateTypes = [])
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifier, array $parameters, \PHPStan\PhpDocParser\Ast\Type\TypeNode $returnType, array $templateTypes)
     {
         $this->identifier = $identifier;
         $this->parameters = $parameters;

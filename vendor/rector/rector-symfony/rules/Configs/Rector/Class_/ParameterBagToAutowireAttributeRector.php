@@ -28,9 +28,8 @@ final class ParameterBagToAutowireAttributeRector extends AbstractRector impleme
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Configs\NodeFactory\AutowiredParamFactory
      */
-    private $autowiredParamFactory;
+    private AutowiredParamFactory $autowiredParamFactory;
     /**
      * @var string
      */

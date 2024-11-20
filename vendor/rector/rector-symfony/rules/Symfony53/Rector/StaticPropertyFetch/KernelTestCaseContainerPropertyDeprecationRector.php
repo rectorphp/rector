@@ -17,9 +17,8 @@ final class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRec
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer
      */
-    private $symfonyTestCaseAnalyzer;
+    private SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer;
     public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;

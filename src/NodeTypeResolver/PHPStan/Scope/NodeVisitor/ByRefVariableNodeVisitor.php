@@ -17,9 +17,8 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -64,7 +63,9 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
         foreach ($functionLike->getParams() as $param) {
             if ($param->byRef && $param->var instanceof Variable && !$param->var->name instanceof Expr) {
                 $param->var->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
-                $byRefVariableNames[] = $param->var->name;
+                /** @var string $paramVarName */
+                $paramVarName = $param->var->name;
+                $byRefVariableNames[] = $paramVarName;
             }
         }
         return $byRefVariableNames;
@@ -81,7 +82,9 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
         foreach ($functionLike->uses as $closureUse) {
             if ($closureUse->byRef && !$closureUse->var->name instanceof Expr) {
                 $closureUse->var->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
-                $byRefVariableNames[] = $closureUse->var->name;
+                /** @var string $closureVarName */
+                $closureVarName = $closureUse->var->name;
+                $byRefVariableNames[] = $closureVarName;
             }
         }
         return $byRefVariableNames;

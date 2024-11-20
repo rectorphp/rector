@@ -35,17 +35,13 @@ final class AutowireAttributeRector extends AbstractRector implements Configurab
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver
      */
-    private $configServiceArgumentsResolver;
+    private ConfigServiceArgumentsResolver $configServiceArgumentsResolver;
     /**
      * @var string
      */
     public const CONFIGS_DIRECTORY = 'configs_directory';
-    /**
-     * @var string|null
-     */
-    private $configsDirectory;
+    private ?string $configsDirectory = null;
     public function __construct(ConfigServiceArgumentsResolver $configServiceArgumentsResolver)
     {
         $this->configServiceArgumentsResolver = $configServiceArgumentsResolver;

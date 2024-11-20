@@ -10,24 +10,21 @@ final class AddParamTypeDeclaration
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @var int<0, max>
      * @readonly
      */
-    private $position;
+    private int $position;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type
      */
-    private $paramType;
+    private Type $paramType;
     /**
      * @param int<0, max> $position
      */

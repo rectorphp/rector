@@ -19,7 +19,7 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
     /**
      * @var MethodCallToPropertyFetch[]
      */
-    private $methodCallsToPropertyFetches = [];
+    private array $methodCallsToPropertyFetches = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Turns method call "$this->getFirstname()" to property fetch "$this->firstname"', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

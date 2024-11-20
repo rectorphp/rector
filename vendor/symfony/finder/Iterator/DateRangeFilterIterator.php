@@ -20,10 +20,7 @@ use RectorPrefix202411\Symfony\Component\Finder\Comparator\DateComparator;
  */
 class DateRangeFilterIterator extends \FilterIterator
 {
-    /**
-     * @var mixed[]
-     */
-    private $comparators = [];
+    private array $comparators = [];
     /**
      * @param \Iterator<string, \SplFileInfo> $iterator
      * @param DateComparator[]                $comparators

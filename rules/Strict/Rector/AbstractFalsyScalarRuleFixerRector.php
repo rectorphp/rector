@@ -18,10 +18,7 @@ abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector impleme
      * @var string
      */
     public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';
-    /**
-     * @var bool
-     */
-    protected $treatAsNonEmpty = \false;
+    protected bool $treatAsNonEmpty = \false;
     /**
      * @param mixed[] $configuration
      */

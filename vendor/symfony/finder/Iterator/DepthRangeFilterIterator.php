@@ -22,10 +22,7 @@ namespace RectorPrefix202411\Symfony\Component\Finder\Iterator;
  */
 class DepthRangeFilterIterator extends \FilterIterator
 {
-    /**
-     * @var int
-     */
-    private $minDepth = 0;
+    private int $minDepth = 0;
     /**
      * @param \RecursiveIteratorIterator<\RecursiveIterator<TKey, TValue>> $iterator The Iterator to filter
      * @param int                                                          $minDepth The min depth

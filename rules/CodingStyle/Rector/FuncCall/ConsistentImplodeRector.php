@@ -18,9 +18,8 @@ final class ConsistentImplodeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
-    private $stringTypeAnalyzer;
+    private StringTypeAnalyzer $stringTypeAnalyzer;
     public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;

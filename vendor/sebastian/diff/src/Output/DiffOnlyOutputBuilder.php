@@ -24,10 +24,7 @@ use RectorPrefix202411\SebastianBergmann\Diff\Differ;
  */
 final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
 {
-    /**
-     * @var string
-     */
-    private $header;
+    private string $header;
     public function __construct(string $header = "--- Original\n+++ New\n")
     {
         $this->header = $header;

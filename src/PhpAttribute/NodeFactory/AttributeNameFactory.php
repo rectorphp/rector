@@ -14,9 +14,8 @@ final class AttributeNameFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\UseAliasNameMatcher
      */
-    private $useAliasNameMatcher;
+    private UseAliasNameMatcher $useAliasNameMatcher;
     public function __construct(UseAliasNameMatcher $useAliasNameMatcher)
     {
         $this->useAliasNameMatcher = $useAliasNameMatcher;

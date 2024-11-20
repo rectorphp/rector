@@ -31,9 +31,8 @@ final class ColorConsoleDiffFormatter
     private const AT_START_REGEX = '#^(@.*)#';
     /**
      * @readonly
-     * @var string
      */
-    private $template;
+    private string $template;
     public function __construct()
     {
         $this->template = \sprintf('<comment>    ---------- begin diff ----------</comment>%s%%s%s<comment>    ----------- end diff -----------</comment>' . \PHP_EOL, \PHP_EOL, \PHP_EOL);

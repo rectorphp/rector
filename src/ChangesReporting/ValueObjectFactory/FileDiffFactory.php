@@ -13,19 +13,16 @@ final class FileDiffFactory
 {
     /**
      * @readonly
-     * @var \Rector\Differ\DefaultDiffer
      */
-    private $defaultDiffer;
+    private DefaultDiffer $defaultDiffer;
     /**
      * @readonly
-     * @var \Rector\Console\Formatter\ConsoleDiffer
      */
-    private $consoleDiffer;
+    private ConsoleDiffer $consoleDiffer;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     public function __construct(DefaultDiffer $defaultDiffer, ConsoleDiffer $consoleDiffer, FilePathHelper $filePathHelper)
     {
         $this->defaultDiffer = $defaultDiffer;

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Identical;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -14,7 +15,6 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\BinaryOpAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -33,14 +33,12 @@ final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInt
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\BinaryOpAnalyzer
      */
-    private $binaryOpAnalyzer;
+    private BinaryOpAnalyzer $binaryOpAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer, ValueResolver $valueResolver)
     {
         $this->binaryOpAnalyzer = $binaryOpAnalyzer;
@@ -204,7 +202,7 @@ CODE_SAMPLE
         if (!$substrOffset instanceof UnaryMinus) {
             return \false;
         }
-        if (!$substrOffset->expr instanceof LNumber) {
+        if (!$substrOffset->expr instanceof Int_) {
             return \false;
         }
         $lNumber = $substrOffset->expr;

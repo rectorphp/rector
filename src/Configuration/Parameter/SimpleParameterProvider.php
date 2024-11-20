@@ -14,7 +14,7 @@ final class SimpleParameterProvider
     /**
      * @var array<string, mixed>
      */
-    private static $parameters = [];
+    private static array $parameters = [];
     /**
      * @param Option::* $name
      * @param mixed $value

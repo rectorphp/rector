@@ -18,24 +18,20 @@ final class FormInstanceToFormClassConstFetchConverter
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover
      */
-    private $createFormTypeOptionsArgMover;
+    private CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver
      */
-    private $formTypeClassResolver;
+    private FormTypeClassResolver $formTypeClassResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->createFormTypeOptionsArgMover = $createFormTypeOptionsArgMover;

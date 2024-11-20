@@ -32,14 +32,12 @@ final class Php4ConstructorRector extends AbstractRector implements MinPhpVersio
 {
     /**
      * @readonly
-     * @var \Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer
      */
-    private $php4ConstructorClassMethodAnalyzer;
+    private Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
-    private $parentClassScopeResolver;
+    private ParentClassScopeResolver $parentClassScopeResolver;
     public function __construct(Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer, ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
@@ -78,9 +76,8 @@ CODE_SAMPLE
     }
     /**
      * @param Class_ $node
-     * @return \PhpParser\Node\Stmt\Class_|int|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Class_
     {
         $className = $this->getName($node);
         if (!\is_string($className)) {
@@ -109,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
         if (\count($classMethodStmts) === 1) {
-            $stmt = $psr4ConstructorMethod->stmts[0];
+            $stmt = $classMethodStmts[0];
             if (!$stmt instanceof Expression) {
                 return null;
             }

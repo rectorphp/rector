@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Authenticated implements ContextualAttribute
 {
-    /**
-     * @var string|null
-     */
-    public $guard;
+    public ?string $guard = null;
     /**
      * Create a new class instance.
      */

@@ -9,9 +9,8 @@ final class ClassModifierChecker
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private \Rector\Reflection\ReflectionResolver $reflectionResolver;
     public function __construct(\Rector\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;

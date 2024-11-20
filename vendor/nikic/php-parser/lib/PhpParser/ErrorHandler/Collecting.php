@@ -13,8 +13,8 @@ use PhpParser\ErrorHandler;
 class Collecting implements ErrorHandler
 {
     /** @var Error[] Collected errors */
-    private $errors = [];
-    public function handleError(Error $error)
+    private array $errors = [];
+    public function handleError(Error $error) : void
     {
         $this->errors[] = $error;
     }
@@ -29,8 +29,6 @@ class Collecting implements ErrorHandler
     }
     /**
      * Check whether there are any errors.
-     *
-     * @return bool
      */
     public function hasErrors() : bool
     {
@@ -39,7 +37,7 @@ class Collecting implements ErrorHandler
     /**
      * Reset/clear collected errors.
      */
-    public function clearErrors()
+    public function clearErrors() : void
     {
         $this->errors = [];
     }

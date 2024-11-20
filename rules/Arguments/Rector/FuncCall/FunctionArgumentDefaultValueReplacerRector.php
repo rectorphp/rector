@@ -19,13 +19,12 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
 {
     /**
      * @readonly
-     * @var \Rector\Arguments\ArgumentDefaultValueReplacer
      */
-    private $argumentDefaultValueReplacer;
+    private ArgumentDefaultValueReplacer $argumentDefaultValueReplacer;
     /**
      * @var ReplaceFuncCallArgumentDefaultValue[]
      */
-    private $replacedArguments = [];
+    private array $replacedArguments = [];
     public function __construct(ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;

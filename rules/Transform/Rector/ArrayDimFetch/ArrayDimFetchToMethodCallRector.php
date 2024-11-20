@@ -22,7 +22,7 @@ class ArrayDimFetchToMethodCallRector extends AbstractRector implements Configur
     /**
      * @var ArrayDimFetchToMethodCall[]
      */
-    private $arrayDimFetchToMethodCalls;
+    private array $arrayDimFetchToMethodCalls;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change array dim fetch to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

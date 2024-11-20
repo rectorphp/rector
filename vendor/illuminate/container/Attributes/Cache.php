@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Cache implements ContextualAttribute
 {
-    /**
-     * @var string|null
-     */
-    public $store;
+    public ?string $store = null;
     /**
      * Create a new class instance.
      */

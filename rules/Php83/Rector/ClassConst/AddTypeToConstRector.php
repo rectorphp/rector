@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php83\Rector\ClassConst;
 
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
@@ -13,8 +15,6 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -34,14 +34,12 @@ final class AddTypeToConstRector extends AbstractRector implements MinPhpVersion
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     public function __construct(ReflectionProvider $reflectionProvider, StaticTypeMapper $staticTypeMapper)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -147,10 +145,10 @@ CODE_SAMPLE
         if ($expr instanceof String_) {
             return new Identifier('string');
         }
-        if ($expr instanceof LNumber) {
+        if ($expr instanceof Int_) {
             return new Identifier('int');
         }
-        if ($expr instanceof DNumber) {
+        if ($expr instanceof Float_) {
             return new Identifier('float');
         }
         if ($expr instanceof ConstFetch || $expr instanceof ClassConstFetch) {
@@ -181,9 +179,7 @@ CODE_SAMPLE
             return [];
         }
         $currentClassReflection = $this->reflectionProvider->getClass($className);
-        return \array_filter($currentClassReflection->getAncestors(), static function (ClassReflection $classReflection) use($currentClassReflection) : bool {
-            return $currentClassReflection !== $classReflection;
-        });
+        return \array_filter($currentClassReflection->getAncestors(), static fn(ClassReflection $classReflection): bool => $currentClassReflection !== $classReflection);
     }
     private function canBeInherited(ClassConst $classConst, Class_ $class) : bool
     {

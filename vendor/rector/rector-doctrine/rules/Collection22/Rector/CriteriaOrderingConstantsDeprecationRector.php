@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Collection22\Rector;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -24,9 +24,8 @@ final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $criteriaObjectType;
+    private ObjectType $criteriaObjectType;
     public function __construct()
     {
         $this->criteriaObjectType = new ObjectType('Doctrine\\Common\\Collections\\Criteria');

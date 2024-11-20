@@ -9,24 +9,20 @@ final class ParamRename
 {
     /**
      * @readonly
-     * @var string
      */
-    private $currentName;
+    private string $currentName;
     /**
      * @readonly
-     * @var string
      */
-    private $expectedName;
+    private string $expectedName;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Variable
      */
-    private $variable;
+    private Variable $variable;
     /**
      * @readonly
-     * @var \PhpParser\Node\FunctionLike
      */
-    private $functionLike;
+    private FunctionLike $functionLike;
     public function __construct(string $currentName, string $expectedName, Variable $variable, FunctionLike $functionLike)
     {
         $this->currentName = $currentName;

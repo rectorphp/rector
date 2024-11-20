@@ -11,9 +11,8 @@ final class DoctrineDocBlockResolver
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
-    private $attrinationFinder;
+    private AttrinationFinder $attrinationFinder;
     public function __construct(AttrinationFinder $attrinationFinder)
     {
         $this->attrinationFinder = $attrinationFinder;

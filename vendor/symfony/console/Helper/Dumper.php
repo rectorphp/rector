@@ -19,22 +19,10 @@ use RectorPrefix202411\Symfony\Component\VarDumper\Dumper\CliDumper;
  */
 final class Dumper
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
-    /**
-     * @var \Symfony\Component\VarDumper\Dumper\CliDumper|null
-     */
-    private $dumper;
-    /**
-     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface|null
-     */
-    private $cloner;
-    /**
-     * @var \Closure
-     */
-    private $handler;
+    private OutputInterface $output;
+    private ?CliDumper $dumper;
+    private ?ClonerInterface $cloner;
+    private \Closure $handler;
     public function __construct(OutputInterface $output, ?CliDumper $dumper = null, ?ClonerInterface $cloner = null)
     {
         $this->output = $output;
@@ -42,9 +30,9 @@ final class Dumper
         $this->cloner = $cloner;
         if (\class_exists(CliDumper::class)) {
             $this->handler = function ($var) : string {
-                $dumper = $this->dumper = $this->dumper ?? new CliDumper(null, null, CliDumper::DUMP_LIGHT_ARRAY | CliDumper::DUMP_COMMA_SEPARATOR);
+                $dumper = $this->dumper ??= new CliDumper(null, null, CliDumper::DUMP_LIGHT_ARRAY | CliDumper::DUMP_COMMA_SEPARATOR);
                 $dumper->setColors($this->output->isDecorated());
-                return \rtrim($dumper->dump(($this->cloner = $this->cloner ?? new VarCloner())->cloneVar($var)->withRefHandles(\false), \true));
+                return \rtrim($dumper->dump(($this->cloner ??= new VarCloner())->cloneVar($var)->withRefHandles(\false), \true));
             };
         } else {
             $this->handler = function ($var) : string {

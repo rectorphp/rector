@@ -20,7 +20,7 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
     /**
      * @var RemoveFuncCallArg[]
      */
-    private $removedFunctionArguments = [];
+    private array $removedFunctionArguments = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove argument by position by function name', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

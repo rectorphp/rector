@@ -13,9 +13,8 @@ final class ForeachAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     public function __construct(NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;

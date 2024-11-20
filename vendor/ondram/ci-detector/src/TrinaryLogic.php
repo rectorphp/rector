@@ -15,11 +15,8 @@ final class TrinaryLogic
     private const MAYBE = 0;
     private const NO = -1;
     /** @var self[] */
-    private static $registry = [];
-    /**
-     * @var int
-     */
-    private $value;
+    private static array $registry = [];
+    private int $value;
     private function __construct(int $value)
     {
         $this->value = $value;
@@ -65,6 +62,6 @@ final class TrinaryLogic
     }
     private static function create(int $value) : self
     {
-        return self::$registry[$value] = self::$registry[$value] ?? new self($value);
+        return self::$registry[$value] ??= new self($value);
     }
 }

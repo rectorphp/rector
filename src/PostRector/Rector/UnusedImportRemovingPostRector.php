@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
+use PhpParser\Node\UseItem;
+use PhpParser\NodeVisitor;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
@@ -12,8 +14,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
-use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -22,14 +22,12 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -82,7 +80,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         $names = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace->stmts, static function (Node $node) use(&$names) {
             if ($node instanceof Use_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Name) {
                 return null;
@@ -112,9 +110,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             if ($comments === []) {
                 return null;
             }
-            $docs = \array_filter($comments, static function (Comment $comment) : bool {
-                return $comment instanceof Doc;
-            });
+            $docs = \array_filter($comments, static fn(Comment $comment): bool => $comment instanceof Doc);
             if ($docs === []) {
                 return null;
             }
@@ -150,9 +146,9 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
     /**
      * @param string[] $names
      */
-    private function isUseImportUsed(UseUse $useUse, bool $isCaseSensitive, array $names, ?string $namespaceName) : bool
+    private function isUseImportUsed(UseItem $useItem, bool $isCaseSensitive, array $names, ?string $namespaceName) : bool
     {
-        $comparedName = $useUse->alias instanceof Identifier ? $useUse->alias->toString() : $useUse->name->toString();
+        $comparedName = $useItem->alias instanceof Identifier ? $useItem->alias->toString() : $useItem->name->toString();
         if (!$isCaseSensitive) {
             $comparedName = \strtolower($comparedName);
         }

@@ -17,12 +17,12 @@ final class YamlToAttributeTransformer
      * @var ClassAttributeTransformerInterface[]
      * @readonly
      */
-    private $classAttributeTransformers;
+    private iterable $classAttributeTransformers;
     /**
      * @var PropertyAttributeTransformerInterface[]
      * @readonly
      */
-    private $propertyAttributeTransformers;
+    private iterable $propertyAttributeTransformers;
     /**
      * @param ClassAttributeTransformerInterface[] $classAttributeTransformers
      * @param PropertyAttributeTransformerInterface[] $propertyAttributeTransformers

@@ -10,10 +10,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Stringable;
 final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
 {
-    /**
-     * @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
-     */
-    public $identifierTypeNode;
+    public IdentifierTypeNode $identifierTypeNode;
     /**
      * @param ArrayItemNode[] $values
      */

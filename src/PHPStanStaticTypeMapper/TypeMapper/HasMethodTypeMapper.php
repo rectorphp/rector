@@ -15,9 +15,8 @@ final class HasMethodTypeMapper implements TypeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper
      */
-    private $objectWithoutClassTypeMapper;
+    private \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper;
     public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper)
     {
         $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;

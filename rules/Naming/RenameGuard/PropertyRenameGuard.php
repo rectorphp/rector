@@ -12,19 +12,16 @@ final class PropertyRenameGuard
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\DateTimeAtNamingConventionGuard
      */
-    private $dateTimeAtNamingConventionGuard;
+    private DateTimeAtNamingConventionGuard $dateTimeAtNamingConventionGuard;
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\HasMagicGetSetGuard
      */
-    private $hasMagicGetSetGuard;
+    private HasMagicGetSetGuard $hasMagicGetSetGuard;
     public function __construct(NodeTypeResolver $nodeTypeResolver, DateTimeAtNamingConventionGuard $dateTimeAtNamingConventionGuard, HasMagicGetSetGuard $hasMagicGetSetGuard)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

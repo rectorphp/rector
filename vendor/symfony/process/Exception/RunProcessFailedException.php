@@ -18,9 +18,8 @@ final class RunProcessFailedException extends RuntimeException
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Process\Messenger\RunProcessContext
      */
-    public $context;
+    public RunProcessContext $context;
     public function __construct(ProcessFailedException $exception, RunProcessContext $context)
     {
         $this->context = $context;

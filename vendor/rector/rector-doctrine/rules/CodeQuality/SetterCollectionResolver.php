@@ -25,34 +25,28 @@ final class SetterCollectionResolver
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\AssignManipulator
      */
-    private $assignManipulator;
+    private AssignManipulator $assignManipulator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver
      */
-    private $collectionVarTagValueNodeResolver;
+    private CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
-    private $collectionTypeFactory;
+    private CollectionTypeFactory $collectionTypeFactory;
     public function __construct(AssignManipulator $assignManipulator, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, StaticTypeMapper $staticTypeMapper, CollectionTypeFactory $collectionTypeFactory)
     {
         $this->assignManipulator = $assignManipulator;

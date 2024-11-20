@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Carbon\NodeFactory;
 
+use PhpParser\Node\Scalar\Int_;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 final class CarbonCallFactory
 {
@@ -32,7 +32,7 @@ final class CarbonCallFactory
         $string->value = Strings::replace($string->value, self::STATIC_DATE_REGEX);
         // Handle add/sub multiple times
         while ($match = Strings::match($string->value, self::PLUS_MINUS_COUNT_REGEX)) {
-            $methodCall = $this->createModifyMethodCall($carbonCall, new LNumber((int) $match['count']), $match['unit'], $match['operator']);
+            $methodCall = $this->createModifyMethodCall($carbonCall, new Int_((int) $match['count']), $match['unit'], $match['operator']);
             if ($methodCall instanceof MethodCall) {
                 $carbonCall = $methodCall;
                 $string->value = Strings::replace($string->value, self::PLUS_MINUS_COUNT_REGEX, '', 1);
@@ -50,7 +50,7 @@ final class CarbonCallFactory
                 return $carbonCall;
             }
             // If we fallback to a parse we want to include tomorrow/today/yesterday etc
-            if ($currentCall->name instanceof Identifier && $currentCall->name->name != 'now') {
+            if ($currentCall->name instanceof Identifier && $currentCall->name->name !== 'now') {
                 $rest .= ' ' . $currentCall->name->name;
             }
             $currentCall->name = new Identifier('parse');
@@ -68,7 +68,7 @@ final class CarbonCallFactory
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $carbonCall
      */
-    private function createModifyMethodCall($carbonCall, LNumber $countLNumber, string $unit, string $operator) : ?MethodCall
+    private function createModifyMethodCall($carbonCall, Int_ $int, string $unit, string $operator) : ?MethodCall
     {
         switch ($unit) {
             case 'sec':
@@ -120,7 +120,7 @@ final class CarbonCallFactory
             return null;
         }
         $methodName = $operator . \ucfirst($unit);
-        return new MethodCall($carbonCall, new Identifier($methodName), [new Arg($countLNumber)]);
+        return new MethodCall($carbonCall, new Identifier($methodName), [new Arg($int)]);
     }
     /**
      * @param MethodCall[] $callStack

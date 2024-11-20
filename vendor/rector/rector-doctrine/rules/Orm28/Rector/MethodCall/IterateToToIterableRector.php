@@ -119,9 +119,6 @@ CODE_SAMPLE
             if (!$node instanceof ArrayDimFetch) {
                 return null;
             }
-            if (!$node->var instanceof Expr) {
-                return null;
-            }
             if (!$this->isName($node->var, $itemName)) {
                 return null;
             }

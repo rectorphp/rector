@@ -17,9 +17,8 @@ final class ReduceAlwaysFalseIfOrRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer
      */
-    private $safeLeftTypeBooleanAndOrAnalyzer;
+    private SafeLeftTypeBooleanAndOrAnalyzer $safeLeftTypeBooleanAndOrAnalyzer;
     public function __construct(SafeLeftTypeBooleanAndOrAnalyzer $safeLeftTypeBooleanAndOrAnalyzer)
     {
         $this->safeLeftTypeBooleanAndOrAnalyzer = $safeLeftTypeBooleanAndOrAnalyzer;

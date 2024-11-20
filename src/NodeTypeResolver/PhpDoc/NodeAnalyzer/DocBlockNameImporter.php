@@ -11,9 +11,8 @@ final class DocBlockNameImporter
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor
      */
-    private $nameImportingPhpDocNodeVisitor;
+    private NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor;
     public function __construct(NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
     {
         $this->nameImportingPhpDocNodeVisitor = $nameImportingPhpDocNodeVisitor;

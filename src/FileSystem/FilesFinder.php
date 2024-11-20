@@ -18,34 +18,28 @@ final class FilesFinder
 {
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilesystemTweaker
      */
-    private $filesystemTweaker;
+    private \Rector\FileSystem\FilesystemTweaker $filesystemTweaker;
     /**
      * @readonly
-     * @var \Rector\Caching\UnchangedFilesFilter
      */
-    private $unchangedFilesFilter;
+    private UnchangedFilesFilter $unchangedFilesFilter;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FileAndDirectoryFilter
      */
-    private $fileAndDirectoryFilter;
+    private \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter;
     /**
      * @readonly
-     * @var \Rector\Skipper\Skipper\PathSkipper
      */
-    private $pathSkipper;
+    private PathSkipper $pathSkipper;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private \Rector\FileSystem\FilePathHelper $filePathHelper;
     /**
      * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
-    private $changedFilesDetector;
+    private ChangedFilesDetector $changedFilesDetector;
     public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector)
     {
         $this->filesystemTweaker = $filesystemTweaker;
@@ -65,12 +59,8 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
         $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filteredFilePaths = \array_map(function (string $filePath) : string {
-            return \realpath($filePath);
-        }, $filteredFilePaths);
-        $filteredFilePaths = \array_filter($filteredFilePaths, function (string $filePath) : bool {
-            return !$this->pathSkipper->shouldSkip($filePath);
-        });
+        $filteredFilePaths = \array_map(fn(string $filePath): string => \realpath($filePath), $filteredFilePaths);
+        $filteredFilePaths = \array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
         if ($suffixes !== []) {
             $fileWithExtensionsFilter = static function (string $filePath) use($suffixes) : bool {
                 $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);

@@ -20,9 +20,8 @@ final class ReturnTypeFromReturnCastRector extends AbstractRector implements Min
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddReturnTypeFromCast
      */
-    private $addReturnTypeFromCast;
+    private AddReturnTypeFromCast $addReturnTypeFromCast;
     public function __construct(AddReturnTypeFromCast $addReturnTypeFromCast)
     {
         $this->addReturnTypeFromCast = $addReturnTypeFromCast;

@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
@@ -19,24 +19,20 @@ final class NullTypeAssignDetector
 {
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
-    private $doctrineTypeAnalyzer;
+    private DoctrineTypeAnalyzer $doctrineTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
      */
-    private $propertyAssignMatcher;
+    private PropertyAssignMatcher $propertyAssignMatcher;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
@@ -56,7 +52,7 @@ final class NullTypeAssignDetector
             $staticType = $this->nodeTypeResolver->getType($expr);
             if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($staticType)) {
                 $needsNullType = \false;
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             return null;
         });

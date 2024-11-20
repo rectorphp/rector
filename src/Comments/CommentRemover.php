@@ -12,9 +12,8 @@ final class CommentRemover
 {
     /**
      * @readonly
-     * @var \Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser
      */
-    private $commentRemovingNodeTraverser;
+    private CommentRemovingNodeTraverser $commentRemovingNodeTraverser;
     public function __construct(CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
     {
         $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;

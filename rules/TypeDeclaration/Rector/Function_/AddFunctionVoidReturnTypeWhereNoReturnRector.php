@@ -19,9 +19,8 @@ final class AddFunctionVoidReturnTypeWhereNoReturnRector extends AbstractRector 
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
-    private $silentVoidResolver;
+    private SilentVoidResolver $silentVoidResolver;
     public function __construct(SilentVoidResolver $silentVoidResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;

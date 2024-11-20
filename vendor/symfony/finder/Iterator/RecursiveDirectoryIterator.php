@@ -21,27 +21,12 @@ use RectorPrefix202411\Symfony\Component\Finder\SplFileInfo;
  */
 class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
 {
-    /**
-     * @var bool
-     */
-    private $ignoreUnreadableDirs;
-    /**
-     * @var bool
-     */
-    private $ignoreFirstRewind = \true;
+    private bool $ignoreUnreadableDirs;
+    private bool $ignoreFirstRewind = \true;
     // these 3 properties take part of the performance optimization to avoid redoing the same work in all iterations
-    /**
-     * @var string
-     */
-    private $rootPath;
-    /**
-     * @var string
-     */
-    private $subPath;
-    /**
-     * @var string
-     */
-    private $directorySeparator = '/';
+    private string $rootPath;
+    private string $subPath;
+    private string $directorySeparator = '/';
     /**
      * @throws \RuntimeException
      */

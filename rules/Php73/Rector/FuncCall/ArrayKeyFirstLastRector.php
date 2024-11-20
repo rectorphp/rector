@@ -28,14 +28,12 @@ final class ArrayKeyFirstLastRector extends AbstractRector implements MinPhpVers
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var string
      */
@@ -99,10 +97,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var int $totalKeys */
-        \end($stmtsAware->stmts);
-        /** @var int $totalKeys */
-        $totalKeys = \key($stmtsAware->stmts);
-        \reset($stmtsAware->stmts);
+        $totalKeys = \array_key_last($stmtsAware->stmts);
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
             if (!isset($stmtsAware->stmts[$key], $stmtsAware->stmts[$key + 1])) {
                 break;

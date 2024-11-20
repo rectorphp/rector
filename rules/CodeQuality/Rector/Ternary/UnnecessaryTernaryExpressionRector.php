@@ -21,14 +21,12 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
-    private $assignAndBinaryMap;
+    private AssignAndBinaryMap $assignAndBinaryMap;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(AssignAndBinaryMap $assignAndBinaryMap, ValueResolver $valueResolver)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;

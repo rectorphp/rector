@@ -9,19 +9,16 @@ final class ReplaceParentCallByPropertyCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var string
      */
-    private $property;
+    private string $property;
     public function __construct(string $class, string $method, string $property)
     {
         $this->class = $class;

@@ -26,14 +26,12 @@ final class PropertyNaming
 {
     /**
      * @readonly
-     * @var \Rector\Naming\RectorNamingInflector
      */
-    private $rectorNamingInflector;
+    private RectorNamingInflector $rectorNamingInflector;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @var string[]
      */

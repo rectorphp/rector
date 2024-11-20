@@ -13,19 +13,16 @@ final class AddReturnTypeDeclaration
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type
      */
-    private $returnType;
+    private Type $returnType;
     public function __construct(string $class, string $method, Type $returnType)
     {
         $this->class = $class;

@@ -20,7 +20,7 @@ final class ConstFetchToClassConstFetchRector extends AbstractRector implements 
     /**
      * @var ConstFetchToClassConstFetch[]
      */
-    private $constFetchToClassConsts = [];
+    private array $constFetchToClassConsts = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change const fetch to class const fetch', [new ConfiguredCodeSample('$x = CONTEXT_COURSE', '$x = course::LEVEL', [new ConstFetchToClassConstFetch('CONTEXT_COURSE', 'course', 'LEVEL')])]);

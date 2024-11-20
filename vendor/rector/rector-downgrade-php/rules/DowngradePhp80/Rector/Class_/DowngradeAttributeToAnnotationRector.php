@@ -31,19 +31,16 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\NodeFactory\DoctrineAnnotationFactory
      */
-    private $doctrineAnnotationFactory;
+    private DoctrineAnnotationFactory $doctrineAnnotationFactory;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @var string[]
      */
@@ -51,11 +48,8 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
     /**
      * @var DowngradeAttributeToAnnotation[]
      */
-    private $attributesToAnnotations = [];
-    /**
-     * @var bool
-     */
-    private $isDowngraded = \false;
+    private array $attributesToAnnotations = [];
+    private bool $isDowngraded = \false;
     public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;
@@ -138,7 +132,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param mixed[] $configuration
+     * @param DowngradeAttributeToAnnotation[] $configuration
      */
     public function configure(array $configuration) : void
     {

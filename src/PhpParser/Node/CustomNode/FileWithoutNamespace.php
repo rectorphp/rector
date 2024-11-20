@@ -13,7 +13,7 @@ final class FileWithoutNamespace extends Stmt implements StmtsAwareInterface
     /**
      * @var Stmt[]
      */
-    public $stmts;
+    public array $stmts;
     /**
      * @param Stmt[] $stmts
      */

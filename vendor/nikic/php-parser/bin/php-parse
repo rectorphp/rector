@@ -21,23 +21,27 @@ if (empty($operations)) {
 if (empty($files)) {
     showHelp("Must specify at least one file.");
 }
-$lexer = new \PhpParser\Lexer\Emulative(['usedAttributes' => ['startLine', 'endLine', 'startFilePos', 'endFilePos', 'comments']]);
-$parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7, $lexer);
+$parser = (new \PhpParser\ParserFactory())->createForVersion($attributes['version']);
 $dumper = new \PhpParser\NodeDumper(['dumpComments' => \true, 'dumpPositions' => $attributes['with-positions']]);
 $prettyPrinter = new \PhpParser\PrettyPrinter\Standard();
 $traverser = new \PhpParser\NodeTraverser();
 $traverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
 foreach ($files as $file) {
-    if (\strpos($file, '<?php') === 0) {
-        $code = $file;
-        \fwrite(\STDERR, "====> Code {$code}\n");
+    if ($file === '-') {
+        $code = \file_get_contents('php://stdin');
+        \fwrite(\STDERR, "====> Stdin:\n");
     } else {
-        if (!\file_exists($file)) {
-            \fwrite(\STDERR, "File {$file} does not exist.\n");
-            exit(1);
+        if (\strpos($file, '<?php') === 0) {
+            $code = $file;
+            \fwrite(\STDERR, "====> Code {$code}\n");
+        } else {
+            if (!\file_exists($file)) {
+                \fwrite(\STDERR, "File {$file} does not exist.\n");
+                exit(1);
+            }
+            $code = \file_get_contents($file);
+            \fwrite(\STDERR, "====> File {$file}:\n");
         }
-        $code = \file_get_contents($file);
-        \fwrite(\STDERR, "====> File {$file}:\n");
     }
     if ($attributes['with-recovery']) {
         $errorHandler = new \PhpParser\ErrorHandler\Collecting();
@@ -90,7 +94,7 @@ function showHelp($error = '')
     if ($error) {
         \fwrite(\STDERR, $error . "\n\n");
     }
-    \fwrite($error ? \STDERR : \STDOUT, <<<OUTPUT
+    \fwrite($error ? \STDERR : \STDOUT, <<<'OUTPUT'
 Usage: php-parse [operations] file1.php [file2.php ...]
    or: php-parse [operations] "<?php code"
 Turn PHP source code into an abstract syntax tree.
@@ -98,13 +102,14 @@ Turn PHP source code into an abstract syntax tree.
 Operations is a list of the following options (--dump by default):
 
     -d, --dump              Dump nodes using NodeDumper
-    -p, --pretty-print      Pretty print file using PrettyPrinter\\Standard
+    -p, --pretty-print      Pretty print file using PrettyPrinter\Standard
     -j, --json-dump         Print json_encode() result
         --var-dump          var_dump() nodes (for exact structure)
-    -N, --resolve-names     Resolve names using NodeVisitor\\NameResolver
+    -N, --resolve-names     Resolve names using NodeVisitor\NameResolver
     -c, --with-column-info  Show column-numbers for errors (if available)
     -P, --with-positions    Show positions in node dumps
     -r, --with-recovery     Use parsing with error recovery
+        --version=VERSION   Target specific PHP version (default: newest)
     -h, --help              Display this page
 
 Example:
@@ -121,7 +126,7 @@ function parseArgs($args)
 {
     $operations = [];
     $files = [];
-    $attributes = ['with-column-info' => \false, 'with-positions' => \false, 'with-recovery' => \false];
+    $attributes = ['with-column-info' => \false, 'with-positions' => \false, 'with-recovery' => \false, 'version' => \PhpParser\PhpVersion::getNewestSupported()];
     \array_shift($args);
     $parseOptions = \true;
     foreach ($args as $arg) {
@@ -169,7 +174,9 @@ function parseArgs($args)
                 $parseOptions = \false;
                 break;
             default:
-                if ($arg[0] === '-') {
+                if (\preg_match('/^--version=(.*)$/', $arg, $matches)) {
+                    $attributes['version'] = \PhpParser\PhpVersion::fromString($matches[1]);
+                } elseif ($arg[0] === '-' && \strlen($arg[0]) > 1) {
                     showHelp("Invalid operation {$arg}.");
                 } else {
                     $files[] = $arg;

@@ -12,14 +12,12 @@ final class PhpVersionedFilter
 {
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\Php\PolyfillPackagesProvider
      */
-    private $polyfillPackagesProvider;
+    private PolyfillPackagesProvider $polyfillPackagesProvider;
     public function __construct(PhpVersionProvider $phpVersionProvider, PolyfillPackagesProvider $polyfillPackagesProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;

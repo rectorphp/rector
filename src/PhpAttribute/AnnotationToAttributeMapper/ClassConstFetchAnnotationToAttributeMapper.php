@@ -28,7 +28,7 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
     /**
      * @param string $value
      */
-    public function map($value) : \PhpParser\Node\Expr
+    public function map($value) : ClassConstFetch
     {
         [$class, $constant] = \explode('::', $value);
         return new ClassConstFetch(new Name($class), $constant);

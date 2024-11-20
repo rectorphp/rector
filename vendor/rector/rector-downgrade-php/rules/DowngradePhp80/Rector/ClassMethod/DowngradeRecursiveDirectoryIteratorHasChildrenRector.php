@@ -16,9 +16,8 @@ final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends Abstrac
 {
     /**
      * @readonly
-     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
-    private $familyRelationsAnalyzer;
+    private FamilyRelationsAnalyzer $familyRelationsAnalyzer;
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

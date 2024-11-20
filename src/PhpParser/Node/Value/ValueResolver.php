@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Node\Value;
 
+use PHPStan\Type\Type;
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Arg;
@@ -10,13 +11,15 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\MagicConst\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantScalarType;
-use PHPStan\Type\ConstantType;
 use Rector\Enum\ObjectReference;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ConstFetchAnalyzer;
@@ -35,38 +38,29 @@ final class ValueResolver
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ConstFetchAnalyzer
      */
-    private $constFetchAnalyzer;
+    private ConstFetchAnalyzer $constFetchAnalyzer;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\ClassReflectionAnalyzer
      */
-    private $classReflectionAnalyzer;
-    /**
-     * @var \PhpParser\ConstExprEvaluator|null
-     */
-    private $constExprEvaluator;
+    private ClassReflectionAnalyzer $classReflectionAnalyzer;
+    private ?ConstExprEvaluator $constExprEvaluator = null;
     public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -84,7 +78,7 @@ final class ValueResolver
         return $this->getValue($expr) === $value;
     }
     /**
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr $expr
+     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr|\PhpParser\Node\InterpolatedStringPart $expr
      * @return mixed
      */
     public function getValue($expr, bool $resolvedClassReference = \false)
@@ -115,10 +109,7 @@ final class ValueResolver
             return $this->nodeNameResolver->getName($expr);
         }
         $nodeStaticType = $this->nodeTypeResolver->getType($expr);
-        if ($nodeStaticType instanceof ConstantType) {
-            return $this->resolveConstantType($nodeStaticType);
-        }
-        return null;
+        return $this->resolveConstantType($nodeStaticType);
     }
     /**
      * @api symfony
@@ -166,14 +157,24 @@ final class ValueResolver
         return \true;
     }
     /**
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\InterpolatedStringPart $expr
      * @return mixed
      */
-    private function resolveExprValueForConst(Expr $expr)
+    private function resolveExprValueForConst($expr)
     {
         try {
             $constExprEvaluator = $this->getConstExprEvaluator();
             return $constExprEvaluator->evaluateDirectly($expr);
         } catch (ConstExprEvaluationException|TypeError $exception) {
+        }
+        if ($expr instanceof Class_) {
+            $type = $this->nodeTypeResolver->getNativeType($expr);
+            if ($type instanceof ConstantStringType) {
+                return $type->getValue();
+            }
+        }
+        if ($expr instanceof InterpolatedStringPart) {
+            return $expr->value;
         }
         return null;
     }
@@ -202,7 +203,6 @@ final class ValueResolver
     {
         $keys = [];
         foreach ($constantArrayType->getKeyTypes() as $i => $keyType) {
-            /** @var ConstantScalarType $keyType */
             $keys[$i] = $keyType->getValue();
         }
         $values = [];
@@ -291,7 +291,7 @@ final class ValueResolver
     /**
      * @return mixed
      */
-    private function resolveConstantType(ConstantType $constantType)
+    private function resolveConstantType(Type $constantType)
     {
         if ($constantType instanceof ConstantArrayType) {
             return $this->extractConstantArrayTypeValue($constantType);

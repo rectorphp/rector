@@ -39,8 +39,9 @@ CODE_SAMPLE
     }
     /**
      * @param LogicalOr|LogicalAnd $node
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         return $this->refactorLogicalToBoolean($node);
     }

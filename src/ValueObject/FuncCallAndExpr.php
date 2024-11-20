@@ -9,14 +9,12 @@ final class FuncCallAndExpr
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\FuncCall
      */
-    private $funcCall;
+    private FuncCall $funcCall;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $expr;
+    private Expr $expr;
     public function __construct(FuncCall $funcCall, Expr $expr)
     {
         $this->funcCall = $funcCall;

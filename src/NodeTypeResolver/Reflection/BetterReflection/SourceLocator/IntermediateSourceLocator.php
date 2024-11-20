@@ -14,9 +14,8 @@ final class IntermediateSourceLocator implements SourceLocator
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
-    private $dynamicSourceLocatorProvider;
+    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
     public function __construct(DynamicSourceLocatorProvider $dynamicSourceLocatorProvider)
     {
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;

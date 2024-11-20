@@ -8,18 +8,18 @@ use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 class TryCatch extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Stmt[] Statements */
-    public $stmts;
+    public array $stmts;
     /** @var Catch_[] Catches */
-    public $catches;
+    public array $catches;
     /** @var null|Finally_ Optional finally node */
-    public $finally;
+    public ?\PhpParser\Node\Stmt\Finally_ $finally;
     /**
      * Constructs a try catch node.
      *
-     * @param Node\Stmt[]   $stmts      Statements
-     * @param Catch_[]      $catches    Catches
-     * @param null|Finally_ $finally    Optional finally node
-     * @param array         $attributes Additional attributes
+     * @param Node\Stmt[] $stmts Statements
+     * @param Catch_[] $catches Catches
+     * @param null|Finally_ $finally Optional finally node
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(array $stmts, array $catches, ?\PhpParser\Node\Stmt\Finally_ $finally = null, array $attributes = [])
     {

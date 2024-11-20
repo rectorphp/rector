@@ -22,14 +22,12 @@ final class ContainerGetNameToTypeInTestsRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver
      */
-    private $serviceTypeMethodCallResolver;
+    private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;

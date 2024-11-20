@@ -17,14 +17,12 @@ final class PhpDocClassRenamer
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
-    private $classAnnotationMatcher;
+    private ClassAnnotationMatcher $classAnnotationMatcher;
     /**
      * @readonly
-     * @var \Rector\Renaming\Collector\RenamedNameCollector
      */
-    private $renamedNameCollector;
+    private RenamedNameCollector $renamedNameCollector;
     public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, RenamedNameCollector $renamedNameCollector)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;

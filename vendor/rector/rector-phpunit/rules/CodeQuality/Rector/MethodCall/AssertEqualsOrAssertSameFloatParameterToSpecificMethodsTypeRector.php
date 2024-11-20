@@ -8,7 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\Float_;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\AssertCallFactory;
 use Rector\Rector\AbstractRector;
@@ -23,14 +23,12 @@ final class AssertEqualsOrAssertSameFloatParameterToSpecificMethodsTypeRector ex
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeFactory\AssertCallFactory
      */
-    private $assertCallFactory;
+    private AssertCallFactory $assertCallFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->assertCallFactory = $assertCallFactory;
@@ -72,7 +70,7 @@ CODE_SAMPLE
         }
         $args = $node->getArgs();
         $firstValue = $args[0]->value;
-        if (!$firstValue instanceof DNumber) {
+        if (!$firstValue instanceof Float_) {
             return null;
         }
         $customMessageArg = $args[2] ?? null;

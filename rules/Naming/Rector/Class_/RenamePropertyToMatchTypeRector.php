@@ -23,28 +23,21 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer
      */
-    private $matchTypePropertyRenamer;
+    private MatchTypePropertyRenamer $matchTypePropertyRenamer;
     /**
      * @readonly
-     * @var \Rector\Naming\ValueObjectFactory\PropertyRenameFactory
      */
-    private $propertyRenameFactory;
+    private PropertyRenameFactory $propertyRenameFactory;
     /**
      * @readonly
-     * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
      */
-    private $matchPropertyTypeExpectedNameResolver;
+    private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
-    private $propertyPromotionRenamer;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private PropertyPromotionRenamer $propertyPromotionRenamer;
+    private bool $hasChanged = \false;
     public function __construct(MatchTypePropertyRenamer $matchTypePropertyRenamer, PropertyRenameFactory $propertyRenameFactory, MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, PropertyPromotionRenamer $propertyPromotionRenamer)
     {
         $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;

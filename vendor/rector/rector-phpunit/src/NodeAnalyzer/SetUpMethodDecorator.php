@@ -15,9 +15,8 @@ final class SetUpMethodDecorator
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     public function __construct(AstResolver $astResolver)
     {
         $this->astResolver = $astResolver;

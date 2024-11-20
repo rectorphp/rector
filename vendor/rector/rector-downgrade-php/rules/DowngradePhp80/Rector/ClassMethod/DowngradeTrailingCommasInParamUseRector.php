@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -21,9 +21,8 @@ final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
-    private $followedByCommaAnalyzer;
+    private FollowedByCommaAnalyzer $followedByCommaAnalyzer;
     public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
@@ -106,9 +105,7 @@ CODE_SAMPLE
      */
     private function cleanTrailingComma($node, array $array) : ?Node
     {
-        \end($array);
-        $lastPosition = \key($array);
-        \reset($array);
+        $lastPosition = \array_key_last($array);
         $last = $array[$lastPosition];
         if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
             return null;

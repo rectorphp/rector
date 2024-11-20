@@ -9,14 +9,12 @@ final class PathSkipper
 {
     /**
      * @readonly
-     * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
-    private $fileInfoMatcher;
+    private FileInfoMatcher $fileInfoMatcher;
     /**
      * @readonly
-     * @var \Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
-    private $skippedPathsResolver;
+    private SkippedPathsResolver $skippedPathsResolver;
     public function __construct(FileInfoMatcher $fileInfoMatcher, SkippedPathsResolver $skippedPathsResolver)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;

@@ -29,9 +29,8 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\NodeTransformer
      */
-    private $nodeTransformer;
+    private NodeTransformer $nodeTransformer;
     /**
      * @var string[]
      */

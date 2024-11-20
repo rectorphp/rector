@@ -10,19 +10,17 @@ final class AnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $tag;
+    private string $tag;
     /**
      * @readonly
-     * @var string|null
      */
-    private $attributeClass;
+    private ?string $attributeClass = null;
     /**
      * @var string[]
      * @readonly
      */
-    private $classReferenceFields = [];
+    private array $classReferenceFields = [];
     /**
      * @param string[] $classReferenceFields
      */

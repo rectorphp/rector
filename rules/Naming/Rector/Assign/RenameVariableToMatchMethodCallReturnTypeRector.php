@@ -30,44 +30,36 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
-    private $breakingVariableRenameGuard;
+    private BreakingVariableRenameGuard $breakingVariableRenameGuard;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $expectedNameResolver;
+    private ExpectedNameResolver $expectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\NamingConvention\NamingConventionAnalyzer
      */
-    private $namingConventionAnalyzer;
+    private NamingConventionAnalyzer $namingConventionAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Naming\PhpDoc\VarTagValueNodeRenamer
      */
-    private $varTagValueNodeRenamer;
+    private VarTagValueNodeRenamer $varTagValueNodeRenamer;
     /**
      * @readonly
-     * @var \Rector\Naming\Matcher\VariableAndCallAssignMatcher
      */
-    private $variableAndCallAssignMatcher;
+    private VariableAndCallAssignMatcher $variableAndCallAssignMatcher;
     /**
      * @readonly
-     * @var \Rector\Naming\VariableRenamer
      */
-    private $variableRenamer;
+    private VariableRenamer $variableRenamer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @var string
      * @see https://regex101.com/r/JG5w9j/1

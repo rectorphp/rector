@@ -19,7 +19,7 @@ final class MethodCallToStaticCallRector extends AbstractRector implements Confi
     /**
      * @var MethodCallToStaticCall[]
      */
-    private $methodCallsToStaticCalls = [];
+    private array $methodCallsToStaticCalls = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change method call to desired static call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

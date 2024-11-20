@@ -8,9 +8,8 @@ final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\
 {
     /**
      * @readonly
-     * @var string|null
      */
-    private $docContent;
+    private ?string $docContent;
     /**
      * @var callable(Node, string|null): (int|null|Node)
      */

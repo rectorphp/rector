@@ -13,9 +13,8 @@ final class MakePropertyPromotionGuard
 {
     /**
      * @readonly
-     * @var \Rector\Php74\Guard\PropertyTypeChangeGuard
      */
-    private $propertyTypeChangeGuard;
+    private PropertyTypeChangeGuard $propertyTypeChangeGuard;
     public function __construct(PropertyTypeChangeGuard $propertyTypeChangeGuard)
     {
         $this->propertyTypeChangeGuard = $propertyTypeChangeGuard;

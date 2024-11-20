@@ -17,9 +17,8 @@ final class RemoveUnreachableStatementRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\TerminatedNodeAnalyzer
      */
-    private $terminatedNodeAnalyzer;
+    private TerminatedNodeAnalyzer $terminatedNodeAnalyzer;
     public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;

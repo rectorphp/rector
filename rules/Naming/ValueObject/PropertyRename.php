@@ -5,48 +5,42 @@ namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\PropertyItem;
 use Rector\Validation\RectorAssert;
 final class PropertyRename
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\Property
      */
-    private $property;
+    private Property $property;
     /**
      * @readonly
-     * @var string
      */
-    private $expectedName;
+    private string $expectedName;
     /**
      * @readonly
-     * @var string
      */
-    private $currentName;
+    private string $currentName;
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\ClassLike
      */
-    private $classLike;
+    private ClassLike $classLike;
     /**
      * @readonly
-     * @var string
      */
-    private $classLikeName;
+    private string $classLikeName;
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\PropertyProperty
      */
-    private $propertyProperty;
-    public function __construct(Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyProperty $propertyProperty)
+    private PropertyItem $propertyItem;
+    public function __construct(Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyItem $propertyItem)
     {
         $this->property = $property;
         $this->expectedName = $expectedName;
         $this->currentName = $currentName;
         $this->classLike = $classLike;
         $this->classLikeName = $classLikeName;
-        $this->propertyProperty = $propertyProperty;
+        $this->propertyItem = $propertyItem;
         // name must be valid
         RectorAssert::propertyName($currentName);
         RectorAssert::propertyName($expectedName);
@@ -79,8 +73,8 @@ final class PropertyRename
     {
         return $this->classLikeName;
     }
-    public function getPropertyProperty() : PropertyProperty
+    public function getPropertyProperty() : PropertyItem
     {
-        return $this->propertyProperty;
+        return $this->propertyItem;
     }
 }

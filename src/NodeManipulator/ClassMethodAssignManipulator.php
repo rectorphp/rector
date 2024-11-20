@@ -13,18 +13,16 @@ final class ClassMethodAssignManipulator
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @var array<int, string[]>
      */
-    private $alreadyAddedClassMethodNames = [];
+    private array $alreadyAddedClassMethodNames = [];
     public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;

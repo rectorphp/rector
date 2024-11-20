@@ -21,9 +21,8 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @var string
      */
@@ -35,7 +34,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     /**
      * @var FunctionNameWithAssertMethods[]
      */
-    private $functionNamesWithAssertMethods = [];
+    private array $functionNamesWithAssertMethods = [];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;

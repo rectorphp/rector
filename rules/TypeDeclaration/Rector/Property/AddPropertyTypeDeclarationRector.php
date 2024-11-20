@@ -24,13 +24,12 @@ final class AddPropertyTypeDeclarationRector extends AbstractRector implements C
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @var AddPropertyTypeDeclaration[]
      */
-    private $addPropertyTypeDeclarations = [];
+    private array $addPropertyTypeDeclarations = [];
     public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;

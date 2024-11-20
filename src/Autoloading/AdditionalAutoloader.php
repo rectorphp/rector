@@ -15,9 +15,8 @@ final class AdditionalAutoloader
 {
     /**
      * @readonly
-     * @var \Rector\StaticReflection\DynamicSourceLocatorDecorator
      */
-    private $dynamicSourceLocatorDecorator;
+    private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator;
     public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;

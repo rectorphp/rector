@@ -21,24 +21,20 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
 {
     /**
      * @readonly
-     * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
-    private $classRenamer;
+    private ClassRenamer $classRenamer;
     /**
      * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesDataCollector;
+    private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
      * @readonly
-     * @var \Rector\CodingStyle\Application\UseImportsRemover
      */
-    private $useImportsRemover;
+    private UseImportsRemover $useImportsRemover;
     /**
      * @readonly
-     * @var \Rector\Renaming\Collector\RenamedNameCollector
      */
-    private $renamedNameCollector;
+    private RenamedNameCollector $renamedNameCollector;
     /**
      * @var \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
      */
@@ -46,7 +42,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     /**
      * @var array<string, string>
      */
-    private $oldToNewClasses = [];
+    private array $oldToNewClasses = [];
     public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, RenamedNameCollector $renamedNameCollector)
     {
         $this->classRenamer = $classRenamer;

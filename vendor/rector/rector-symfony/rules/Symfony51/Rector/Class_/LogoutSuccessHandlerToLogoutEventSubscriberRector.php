@@ -24,24 +24,20 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory
      */
-    private $onSuccessLogoutClassMethodFactory;
+    private OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
-    private $getSubscribedEventsClassMethodFactory;
+    private GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $successHandlerObjectType;
+    private ObjectType $successHandlerObjectType;
     public function __construct(OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer)
     {
         $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;

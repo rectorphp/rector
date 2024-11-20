@@ -5,8 +5,9 @@ namespace Rector\Symfony\SwiftMailer\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -35,11 +36,11 @@ final class SwiftMessageToEmailRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private $basicMapping = ['setSubject' => 'subject', 'setPriority' => 'priority'];
+    private array $basicMapping = ['setSubject' => 'subject', 'setPriority' => 'priority'];
     /**
      * @var array<string, ?string>
      */
-    private $addressesMapping = ['addBcc' => null, 'addCc' => null, 'addFrom' => null, 'addReplyTo' => null, 'addTo' => null, 'setBcc' => 'bcc', 'setCc' => 'cc', 'setFrom' => 'from', 'setReplyTo' => 'replyTo', 'setTo' => 'to'];
+    private array $addressesMapping = ['addBcc' => null, 'addCc' => null, 'addFrom' => null, 'addReplyTo' => null, 'addTo' => null, 'setBcc' => 'bcc', 'setCc' => 'cc', 'setFrom' => 'from', 'setReplyTo' => 'replyTo', 'setTo' => 'to'];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Convert \\Swift_Message into an \\Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
@@ -76,12 +77,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $this->traverseNodesWithCallable($node, function (Node $node) : ?Node {
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) : ?Node {
             if ($node instanceof ClassMethod && $node->returnType instanceof FullyQualified && $this->isName($node->returnType, self::SWIFT_MESSAGE_FQN)) {
                 $node->returnType = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = \true;
             }
             if ($node instanceof Param && $node->type instanceof FullyQualified && $this->isName($node->type, self::SWIFT_MESSAGE_FQN)) {
                 $node->type = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = \true;
             }
             if ($node instanceof New_) {
                 if (!$this->isName($node->class, self::SWIFT_MESSAGE_FQN)) {
@@ -93,6 +97,7 @@ CODE_SAMPLE
                 } else {
                     $node->class = new FullyQualified(self::EMAIL_FQN);
                 }
+                $hasChanged = \true;
             }
             if ($node instanceof MethodCall) {
                 $name = $this->getName($node->name);
@@ -104,6 +109,7 @@ CODE_SAMPLE
                     if (!$objectType->isInstanceOf(self::SWIFT_MESSAGE_FQN)->yes() && !$objectType->isInstanceOf(self::EMAIL_FQN)->yes()) {
                         return null;
                     }
+                    $hasChanged = \true;
                     $this->handleBasicMapping($node, $name);
                     $this->handleAddressMapping($node, $name);
                     $this->handleBody($node, $name);
@@ -117,6 +123,9 @@ CODE_SAMPLE
             }
             return $node;
         });
+        if (!$hasChanged) {
+            return null;
+        }
         return $node;
     }
     private function handleBasicMapping(MethodCall $methodCall, string $name) : void
@@ -141,7 +150,7 @@ CODE_SAMPLE
                 $newArgs = [];
                 foreach ($firstArg->value->items as $item) {
                     if ($item instanceof ArrayItem) {
-                        $newArgs[] = $this->nodeFactory->createArg($this->createAddress($item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg($item->value)]));
+                        $newArgs[] = $this->nodeFactory->createArg($this->createAddress($item->key instanceof Expr ? [new Arg($item->key), new Arg($item->value)] : [new Arg($item->value)]));
                     }
                 }
                 $methodCall->args = $newArgs;

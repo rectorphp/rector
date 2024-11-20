@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Config implements ContextualAttribute
 {
-    /**
-     * @var string
-     */
-    public $key;
+    public string $key;
     /**
      * @var mixed
      */

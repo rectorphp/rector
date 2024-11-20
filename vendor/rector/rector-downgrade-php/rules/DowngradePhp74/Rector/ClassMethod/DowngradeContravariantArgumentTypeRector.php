@@ -31,33 +31,25 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private StaticTypeMapper $staticTypeMapper;
+    private bool $hasChanged = \false;
     public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -141,7 +133,7 @@ CODE_SAMPLE
         if ($param->variadic) {
             return \false;
         }
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return \false;
         }
         // Don't consider for Union types
@@ -250,7 +242,7 @@ CODE_SAMPLE
      */
     private function decorateWithDocBlock($functionLike, Param $param) : void
     {
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return;
         }
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);

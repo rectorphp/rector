@@ -10,9 +10,8 @@ final class TokenIteratorFactory
 {
     /**
      * @readonly
-     * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
-    private $lexer;
+    private Lexer $lexer;
     public function __construct(Lexer $lexer)
     {
         $this->lexer = $lexer;

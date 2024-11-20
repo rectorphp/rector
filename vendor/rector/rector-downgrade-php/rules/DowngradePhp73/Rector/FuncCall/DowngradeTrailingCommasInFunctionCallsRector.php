@@ -20,9 +20,8 @@ final class DowngradeTrailingCommasInFunctionCallsRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
-    private $followedByCommaAnalyzer;
+    private FollowedByCommaAnalyzer $followedByCommaAnalyzer;
     public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;

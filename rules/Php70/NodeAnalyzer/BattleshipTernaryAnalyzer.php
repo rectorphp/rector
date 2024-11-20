@@ -15,14 +15,12 @@ final class BattleshipTernaryAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(NodeComparator $nodeComparator, ValueResolver $valueResolver)
     {
         $this->nodeComparator = $nodeComparator;

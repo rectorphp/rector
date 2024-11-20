@@ -17,10 +17,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\Question;
  */
 class ConfirmationQuestion extends Question
 {
-    /**
-     * @var string
-     */
-    private $trueAnswerRegex;
+    private string $trueAnswerRegex;
     /**
      * @param string $question        The question to ask to the user
      * @param bool   $default         The default answer to return, true or false

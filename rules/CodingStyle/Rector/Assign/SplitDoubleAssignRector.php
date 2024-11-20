@@ -87,7 +87,6 @@ CODE_SAMPLE
             if (!$assign->expr instanceof Assign) {
                 break;
             }
-            /** @var Expr $assign */
             $assign = $assign->expr;
         }
         return $expressions;

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
@@ -11,7 +12,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -26,19 +26,16 @@ final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard
      */
-    private $classMethodVisibilityGuard;
+    private ClassMethodVisibilityGuard $classMethodVisibilityGuard;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, ReflectionResolver $reflectionResolver)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
@@ -134,10 +131,10 @@ CODE_SAMPLE
                         return null;
                     }
                     $shouldSkip = \true;
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 });
                 if ($shouldSkip) {
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
                 return null;
             }
@@ -188,7 +185,7 @@ CODE_SAMPLE
                     return null;
                 }
                 $isInsideStaticClassMethod = \true;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             });
             if ($isInsideStaticClassMethod) {
                 return $isInsideStaticClassMethod;

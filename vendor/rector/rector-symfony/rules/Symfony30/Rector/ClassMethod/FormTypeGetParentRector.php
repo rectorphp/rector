@@ -21,9 +21,8 @@ final class FormTypeGetParentRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
-    private $formTypeStringToTypeProvider;
+    private FormTypeStringToTypeProvider $formTypeStringToTypeProvider;
     public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;

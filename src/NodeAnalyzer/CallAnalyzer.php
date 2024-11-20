@@ -19,9 +19,8 @@ final class CallAnalyzer
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var array<class-string<Expr>>
      */

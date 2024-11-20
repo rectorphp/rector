@@ -5,20 +5,20 @@ namespace PhpParser;
 
 class Comment implements \JsonSerializable
 {
-    protected $text;
-    protected $startLine;
-    protected $startFilePos;
-    protected $startTokenPos;
-    protected $endLine;
-    protected $endFilePos;
-    protected $endTokenPos;
+    protected string $text;
+    protected int $startLine;
+    protected int $startFilePos;
+    protected int $startTokenPos;
+    protected int $endLine;
+    protected int $endFilePos;
+    protected int $endTokenPos;
     /**
      * Constructs a comment node.
      *
-     * @param string $text          Comment text (including comment delimiters like /*)
-     * @param int    $startLine     Line number the comment started on
-     * @param int    $startFilePos  File offset the comment started on
-     * @param int    $startTokenPos Token offset the comment started on
+     * @param string $text Comment text (including comment delimiters like /*)
+     * @param int $startLine Line number the comment started on
+     * @param int $startFilePos File offset the comment started on
+     * @param int $startTokenPos Token offset the comment started on
      */
     public function __construct(string $text, int $startLine = -1, int $startFilePos = -1, int $startTokenPos = -1, int $endLine = -1, int $endFilePos = -1, int $endTokenPos = -1)
     {
@@ -43,6 +43,7 @@ class Comment implements \JsonSerializable
      * Gets the line number the comment started on.
      *
      * @return int Line number (or -1 if not available)
+     * @phpstan-return -1|positive-int
      */
     public function getStartLine() : int
     {
@@ -70,6 +71,7 @@ class Comment implements \JsonSerializable
      * Gets the line number the comment ends on.
      *
      * @return int Line number (or -1 if not available)
+     * @phpstan-return -1|positive-int
      */
     public function getEndLine() : int
     {
@@ -94,39 +96,6 @@ class Comment implements \JsonSerializable
         return $this->endTokenPos;
     }
     /**
-     * Gets the line number the comment started on.
-     *
-     * @deprecated Use getStartLine() instead
-     *
-     * @return int Line number
-     */
-    public function getLine() : int
-    {
-        return $this->startLine;
-    }
-    /**
-     * Gets the file offset the comment started on.
-     *
-     * @deprecated Use getStartFilePos() instead
-     *
-     * @return int File offset
-     */
-    public function getFilePos() : int
-    {
-        return $this->startFilePos;
-    }
-    /**
-     * Gets the token offset the comment started on.
-     *
-     * @deprecated Use getStartTokenPos() instead
-     *
-     * @return int Token offset
-     */
-    public function getTokenPos() : int
-    {
-        return $this->startTokenPos;
-    }
-    /**
      * Gets the comment text.
      *
      * @return string The comment text (including comment delimiters like /*)
@@ -140,19 +109,20 @@ class Comment implements \JsonSerializable
      *
      * "Reformatted" here means that we try to clean up the whitespace at the
      * starts of the lines. This is necessary because we receive the comments
-     * without trailing whitespace on the first line, but with trailing whitespace
+     * without leading whitespace on the first line, but with leading whitespace
      * on all subsequent lines.
      *
-     * @return mixed|string
+     * Additionally, this normalizes CRLF newlines to LF newlines.
      */
-    public function getReformattedText()
+    public function getReformattedText() : string
     {
-        $text = \trim($this->text);
+        $text = \str_replace("\r\n", "\n", $this->text);
         $newlinePos = \strpos($text, "\n");
         if (\false === $newlinePos) {
             // Single line comments don't need further processing
             return $text;
-        } elseif (\preg_match('((*BSR_ANYCRLF)(*ANYCRLF)^.*(?:\\R\\s+\\*.*)+$)', $text)) {
+        }
+        if (\preg_match('(^.*(?:\\n\\s+\\*.*)+$)', $text)) {
             // Multi line comment of the type
             //
             //     /*
@@ -161,8 +131,9 @@ class Comment implements \JsonSerializable
             //      */
             //
             // is handled by replacing the whitespace sequences before the * by a single space
-            return \preg_replace('(^\\s+\\*)m', ' *', $this->text);
-        } elseif (\preg_match('(^/\\*\\*?\\s*[\\r\\n])', $text) && \preg_match('(\\n(\\s*)\\*/$)', $text, $matches)) {
+            return \preg_replace('(^\\s+\\*)m', ' *', $text);
+        }
+        if (\preg_match('(^/\\*\\*?\\s*\\n)', $text) && \preg_match('(\\n(\\s*)\\*/$)', $text, $matches)) {
             // Multi line comment of the type
             //
             //    /*
@@ -174,7 +145,8 @@ class Comment implements \JsonSerializable
             // */ on all lines. So if the last line is "    */", then "    " is removed at the
             // start of all lines.
             return \preg_replace('(^' . \preg_quote($matches[1]) . ')m', '', $text);
-        } elseif (\preg_match('(^/\\*\\*?\\s*(?!\\s))', $text, $matches)) {
+        }
+        if (\preg_match('(^/\\*\\*?\\s*(?!\\s))', $text, $matches)) {
             // Multi line comment of the type
             //
             //     /* Some text.
@@ -202,7 +174,7 @@ class Comment implements \JsonSerializable
     private function getShortestWhitespacePrefixLen(string $str) : int
     {
         $lines = \explode("\n", $str);
-        $shortestPrefixLen = \INF;
+        $shortestPrefixLen = \PHP_INT_MAX;
         foreach ($lines as $line) {
             \preg_match('(^\\s*)', $line, $matches);
             $prefixLen = \strlen($matches[0]);
@@ -213,8 +185,7 @@ class Comment implements \JsonSerializable
         return $shortestPrefixLen;
     }
     /**
-     * @return       array
-     * @psalm-return array{nodeType:string, text:mixed, line:mixed, filePos:mixed}
+     * @return array{nodeType:string, text:mixed, line:mixed, filePos:mixed}
      */
     public function jsonSerialize() : array
     {

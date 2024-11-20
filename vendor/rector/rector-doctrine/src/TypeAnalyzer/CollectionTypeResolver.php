@@ -29,24 +29,20 @@ final class CollectionTypeResolver
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
-    private $nameScopeFactory;
+    private NameScopeFactory $nameScopeFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\PhpDoc\ShortClassExpander
      */
-    private $shortClassExpander;
+    private ShortClassExpander $shortClassExpander;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
-    private $attrinationFinder;
+    private AttrinationFinder $attrinationFinder;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver
      */
-    private $targetEntityResolver;
+    private TargetEntityResolver $targetEntityResolver;
     /**
      * @var string
      */

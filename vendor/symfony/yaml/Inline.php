@@ -23,30 +23,12 @@ use RectorPrefix202411\Symfony\Component\Yaml\Tag\TaggedValue;
 class Inline
 {
     public const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*+(?:\\\\.[^"\\\\]*+)*+)"|\'([^\']*+(?:\'\'[^\']*+)*+)\')';
-    /**
-     * @var int
-     */
-    public static $parsedLineNumber = -1;
-    /**
-     * @var string|null
-     */
-    public static $parsedFilename;
-    /**
-     * @var bool
-     */
-    private static $exceptionOnInvalidType = \false;
-    /**
-     * @var bool
-     */
-    private static $objectSupport = \false;
-    /**
-     * @var bool
-     */
-    private static $objectForMap = \false;
-    /**
-     * @var bool
-     */
-    private static $constantSupport = \false;
+    public static int $parsedLineNumber = -1;
+    public static ?string $parsedFilename = null;
+    private static bool $exceptionOnInvalidType = \false;
+    private static bool $objectSupport = \false;
+    private static bool $objectForMap = \false;
+    private static bool $constantSupport = \false;
     public static function initialize(int $flags, ?int $parsedLineNumber = null, ?string $parsedFilename = null) : void
     {
         self::$exceptionOnInvalidType = (bool) (Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE & $flags);

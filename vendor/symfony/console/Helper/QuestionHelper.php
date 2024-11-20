@@ -35,14 +35,8 @@ class QuestionHelper extends Helper
      * @var resource|null
      */
     private $inputStream;
-    /**
-     * @var bool
-     */
-    private static $stty = \true;
-    /**
-     * @var bool
-     */
-    private static $stdinIsInteractive;
+    private static bool $stty = \true;
+    private static bool $stdinIsInteractive;
     /**
      * Asks a question to the user.
      *
@@ -65,9 +59,7 @@ class QuestionHelper extends Helper
             if (!$question->getValidator()) {
                 return $this->doAsk($output, $question);
             }
-            $interviewer = function () use($output, $question) {
-                return $this->doAsk($output, $question);
-            };
+            $interviewer = fn() => $this->doAsk($output, $question);
             return $this->validateAttempts($interviewer, $output, $question);
         } catch (MissingInputException $exception) {
             $input->setInteractive(\false);
@@ -281,9 +273,7 @@ class QuestionHelper extends Helper
                         $output->write($remainingCharacters);
                         $fullChoice .= $remainingCharacters;
                         $i = \false === ($encoding = \mb_detect_encoding($fullChoice, null, \true)) ? \strlen($fullChoice) : \mb_strlen($fullChoice, $encoding);
-                        $matches = \array_filter($autocomplete($ret), function ($match) use($ret) {
-                            return '' === $ret || \strncmp($match, $ret, \strlen($ret)) === 0;
-                        });
+                        $matches = \array_filter($autocomplete($ret), fn($match) => '' === $ret || \strncmp($match, $ret, \strlen($ret)) === 0);
                         $numMatches = \count($matches);
                         $ofs = -1;
                     }

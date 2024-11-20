@@ -7,55 +7,50 @@ final class SymfonyRouteMetadata
 {
     /**
      * @readonly
-     * @var string
      */
-    private $name;
+    private string $name;
     /**
      * @readonly
-     * @var string
      */
-    private $path;
+    private string $path;
     /**
      * @var array<string, mixed>
      * @readonly
      */
-    private $defaults;
+    private array $defaults;
     /**
      * @var array<string, mixed>
      * @readonly
      */
-    private $requirements;
+    private array $requirements;
     /**
      * @readonly
-     * @var string
      */
-    private $host;
+    private string $host;
     /**
      * @var string[]
      * @readonly
      */
-    private $schemes;
+    private array $schemes;
     /**
      * @var string[]
      * @readonly
      */
-    private $methods;
+    private array $methods;
     /**
      * @readonly
-     * @var string
      */
-    private $condition;
+    private string $condition;
     /**
      * @var array<string, mixed>
      * @readonly
      */
-    private $options;
+    private array $options;
     /**
      * Format <class>::<method>
      * @readonly
-     * @var string|null
      */
-    private $controllerReference;
+    private ?string $controllerReference;
     /**
      * @param array<string, mixed> $defaults
      * @param array<string, mixed> $requirements

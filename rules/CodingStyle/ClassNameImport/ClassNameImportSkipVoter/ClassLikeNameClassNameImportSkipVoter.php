@@ -21,9 +21,8 @@ final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkip
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\ShortNameResolver
      */
-    private $shortNameResolver;
+    private ShortNameResolver $shortNameResolver;
     public function __construct(ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;

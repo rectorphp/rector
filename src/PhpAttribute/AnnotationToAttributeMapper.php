@@ -22,7 +22,7 @@ final class AnnotationToAttributeMapper
      * @var AnnotationToAttributeMapperInterface[]
      * @readonly
      */
-    private $annotationToAttributeMappers;
+    private array $annotationToAttributeMappers;
     /**
      * @param AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
      */

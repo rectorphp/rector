@@ -19,46 +19,19 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
 class ProgressIndicator
 {
     private const FORMATS = ['normal' => ' %indicator% %message%', 'normal_no_ansi' => ' %message%', 'verbose' => ' %indicator% %message% (%elapsed:6s%)', 'verbose_no_ansi' => ' %message% (%elapsed:6s%)', 'very_verbose' => ' %indicator% %message% (%elapsed:6s%, %memory:6s%)', 'very_verbose_no_ansi' => ' %message% (%elapsed:6s%, %memory:6s%)'];
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
-    /**
-     * @var int
-     */
-    private $startTime;
-    /**
-     * @var string|null
-     */
-    private $format;
-    /**
-     * @var string|null
-     */
-    private $message;
-    /**
-     * @var mixed[]
-     */
-    private $indicatorValues;
-    /**
-     * @var int
-     */
-    private $indicatorCurrent;
-    /**
-     * @var int
-     */
-    private $indicatorChangeInterval;
-    /**
-     * @var float
-     */
-    private $indicatorUpdateTime;
-    /**
-     * @var bool
-     */
-    private $started = \false;
+    private OutputInterface $output;
+    private int $startTime;
+    private ?string $format = null;
+    private ?string $message = null;
+    private array $indicatorValues;
+    private int $indicatorCurrent;
+    private int $indicatorChangeInterval;
+    private float $indicatorUpdateTime;
+    private bool $started = \false;
     /**
      * @var array<string, callable>
      */
-    private static $formatters;
+    private static array $formatters;
     /**
      * @param int        $indicatorChangeInterval Change interval in milliseconds
      * @param array|null $indicatorValues         Animated indicator characters
@@ -66,8 +39,8 @@ class ProgressIndicator
     public function __construct(OutputInterface $output, ?string $format = null, int $indicatorChangeInterval = 100, ?array $indicatorValues = null)
     {
         $this->output = $output;
-        $format = $format ?? $this->determineBestFormat();
-        $indicatorValues = $indicatorValues ?? ['-', '\\', '|', '/'];
+        $format ??= $this->determineBestFormat();
+        $indicatorValues ??= ['-', '\\', '|', '/'];
         $indicatorValues = \array_values($indicatorValues);
         if (2 > \count($indicatorValues)) {
             throw new InvalidArgumentException('Must have at least 2 indicator value characters.');
@@ -156,7 +129,7 @@ class ProgressIndicator
      */
     public static function setPlaceholderFormatterDefinition(string $name, callable $callable)
     {
-        self::$formatters = self::$formatters ?? self::initPlaceholderFormatters();
+        self::$formatters ??= self::initPlaceholderFormatters();
         self::$formatters[$name] = $callable;
     }
     /**
@@ -164,7 +137,7 @@ class ProgressIndicator
      */
     public static function getPlaceholderFormatterDefinition(string $name) : ?callable
     {
-        self::$formatters = self::$formatters ?? self::initPlaceholderFormatters();
+        self::$formatters ??= self::initPlaceholderFormatters();
         return self::$formatters[$name] ?? null;
     }
     private function display() : void
@@ -212,14 +185,6 @@ class ProgressIndicator
      */
     private static function initPlaceholderFormatters() : array
     {
-        return ['indicator' => function (self $indicator) {
-            return $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)];
-        }, 'message' => function (self $indicator) {
-            return $indicator->message;
-        }, 'elapsed' => function (self $indicator) {
-            return Helper::formatTime(\time() - $indicator->startTime, 2);
-        }, 'memory' => function () {
-            return Helper::formatMemory(\memory_get_usage(\true));
-        }];
+        return ['indicator' => fn(self $indicator) => $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)], 'message' => fn(self $indicator) => $indicator->message, 'elapsed' => fn(self $indicator) => Helper::formatTime(\time() - $indicator->startTime, 2), 'memory' => fn() => Helper::formatMemory(\memory_get_usage(\true))];
     }
 }

@@ -8,14 +8,12 @@ final class AssignToVariable
 {
     /**
      * @readonly
-     * @var string
      */
-    private $variableName;
+    private string $variableName;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $assignedExpr;
+    private Expr $assignedExpr;
     public function __construct(string $variableName, Expr $assignedExpr)
     {
         $this->variableName = $variableName;

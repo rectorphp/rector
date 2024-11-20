@@ -19,24 +19,20 @@ final class NameImporter
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
-    private $classNameImportSkipper;
+    private ClassNameImportSkipper $classNameImportSkipper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper
      */
-    private $fullyQualifiedNodeMapper;
+    private FullyQualifiedNodeMapper $fullyQualifiedNodeMapper;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
-    private $useNodesToAddCollector;
+    private UseNodesToAddCollector $useNodesToAddCollector;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\AliasNameResolver
      */
-    private $aliasNameResolver;
+    private AliasNameResolver $aliasNameResolver;
     public function __construct(ClassNameImportSkipper $classNameImportSkipper, FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, UseNodesToAddCollector $useNodesToAddCollector, AliasNameResolver $aliasNameResolver)
     {
         $this->classNameImportSkipper = $classNameImportSkipper;

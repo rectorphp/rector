@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
@@ -17,7 +18,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeTraverser;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\Rector\AbstractRector;
@@ -31,19 +31,16 @@ final class RemoveTypedPropertyDeadInstanceOfRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
-    private $constructorAssignDetector;
+    private ConstructorAssignDetector $constructorAssignDetector;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
-    private $promotedPropertyResolver;
+    private PromotedPropertyResolver $promotedPropertyResolver;
     public function __construct(IfManipulator $ifManipulator, ConstructorAssignDetector $constructorAssignDetector, PromotedPropertyResolver $promotedPropertyResolver)
     {
         $this->ifManipulator = $ifManipulator;
@@ -107,7 +104,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use(&$hasChanged, $class) {
             // avoid loop ifs
             if ($node instanceof While_ || $node instanceof Foreach_ || $node instanceof For_ || $node instanceof Do_) {
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if (!$node instanceof If_) {
                 return null;
@@ -158,10 +155,10 @@ CODE_SAMPLE
             return null;
         }
         if ($if->cond !== $instanceof) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         if ($if->stmts === []) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return $if->stmts;
     }
@@ -181,7 +178,7 @@ CODE_SAMPLE
         if (!$property instanceof Property) {
             return \true;
         }
-        return $property->type === null;
+        return !$property->type instanceof Node;
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch

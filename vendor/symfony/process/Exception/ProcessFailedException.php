@@ -18,10 +18,7 @@ use RectorPrefix202411\Symfony\Component\Process\Process;
  */
 class ProcessFailedException extends RuntimeException
 {
-    /**
-     * @var \Symfony\Component\Process\Process
-     */
-    private $process;
+    private Process $process;
     public function __construct(Process $process)
     {
         if ($process->isSuccessful()) {

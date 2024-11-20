@@ -12,9 +12,8 @@ final class CacheFactory
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $fileSystem;
+    private Filesystem $fileSystem;
     public function __construct(Filesystem $fileSystem)
     {
         $this->fileSystem = $fileSystem;

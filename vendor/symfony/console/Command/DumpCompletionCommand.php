@@ -32,10 +32,7 @@ final class DumpCompletionCommand extends Command
      * @deprecated since Symfony 6.1
      */
     protected static $defaultDescription = 'Dump the shell completion script';
-    /**
-     * @var mixed[]
-     */
-    private $supportedShells;
+    private array $supportedShells;
     protected function configure() : void
     {
         $fullCommand = $_SERVER['PHP_SELF'];

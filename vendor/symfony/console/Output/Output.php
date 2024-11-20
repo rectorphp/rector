@@ -27,14 +27,8 @@ use RectorPrefix202411\Symfony\Component\Console\Formatter\OutputFormatterInterf
  */
 abstract class Output implements OutputInterface
 {
-    /**
-     * @var int
-     */
-    private $verbosity;
-    /**
-     * @var \Symfony\Component\Console\Formatter\OutputFormatterInterface
-     */
-    private $formatter;
+    private int $verbosity;
+    private OutputFormatterInterface $formatter;
     /**
      * @param int|null                      $verbosity The verbosity level (one of the VERBOSITY constants in OutputInterface)
      * @param bool                          $decorated Whether to decorate messages

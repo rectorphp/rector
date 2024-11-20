@@ -24,29 +24,24 @@ final class ToManyRelationPropertyTypeResolver
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\PhpDoc\ShortClassExpander
      */
-    private $shortClassExpander;
+    private ShortClassExpander $shortClassExpander;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
-    private $attributeFinder;
+    private AttributeFinder $attributeFinder;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
-    private $collectionTypeFactory;
+    private CollectionTypeFactory $collectionTypeFactory;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;

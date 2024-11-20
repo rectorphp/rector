@@ -28,29 +28,24 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory
      */
-    private $symfonyRouteTagValueNodeFactory;
+    private SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $phpDocTagRemover;
+    private PhpDocTagRemover $phpDocTagRemover;
     /**
      * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesDataCollector;
+    private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @var string
      */

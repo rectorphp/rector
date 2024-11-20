@@ -25,9 +25,8 @@ final class WorkerCommandLineFactory
     private const EXCLUDED_OPTION_NAMES = ['output-format'];
     /**
      * @readonly
-     * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
      */
-    private $commandFromReflectionFactory;
+    private CommandFromReflectionFactory $commandFromReflectionFactory;
     public function __construct()
     {
         $this->commandFromReflectionFactory = new CommandFromReflectionFactory();

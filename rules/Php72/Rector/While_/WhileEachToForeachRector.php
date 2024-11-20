@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\While_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
@@ -22,9 +22,8 @@ final class WhileEachToForeachRector extends AbstractRector implements MinPhpVer
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\AssignManipulator
      */
-    private $assignManipulator;
+    private AssignManipulator $assignManipulator;
     public function __construct(AssignManipulator $assignManipulator)
     {
         $this->assignManipulator = $assignManipulator;
@@ -91,7 +90,7 @@ CODE_SAMPLE
             $arrayItem = \current($list->items);
             $isTrailingCommaLast = \true;
         }
-        $foreach = new Foreach_($foreachedExpr, $arrayItem, ['stmts' => $node->stmts]);
+        $foreach = new Foreach_($foreachedExpr, $arrayItem->value, ['stmts' => $node->stmts]);
         $this->mirrorComments($foreach, $node);
         // is key included? add it to foreach
         if ($list->items !== []) {

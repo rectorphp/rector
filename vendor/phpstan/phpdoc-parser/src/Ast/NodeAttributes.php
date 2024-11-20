@@ -7,7 +7,7 @@ use function array_key_exists;
 trait NodeAttributes
 {
     /** @var array<string, mixed> */
-    private $attributes = [];
+    private array $attributes = [];
     /**
      * @param mixed $value
      */

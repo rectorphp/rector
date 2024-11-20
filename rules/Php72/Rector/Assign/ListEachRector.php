@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
@@ -23,9 +23,8 @@ final class ListEachRector extends AbstractRector implements MinPhpVersionInterf
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\AssignManipulator
      */
-    private $assignManipulator;
+    private AssignManipulator $assignManipulator;
     public function __construct(AssignManipulator $assignManipulator)
     {
         $this->assignManipulator = $assignManipulator;

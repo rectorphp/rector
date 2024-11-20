@@ -21,19 +21,16 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
 {
     /**
      * @readonly
-     * @var \Rector\Php71\IsArrayAndDualCheckToAble
      */
-    private $isArrayAndDualCheckToAble;
+    private IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, ReflectionProvider $reflectionProvider, PhpVersionProvider $phpVersionProvider)
     {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;

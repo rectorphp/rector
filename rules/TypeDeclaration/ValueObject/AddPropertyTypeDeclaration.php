@@ -9,19 +9,16 @@ final class AddPropertyTypeDeclaration
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $propertyName;
+    private string $propertyName;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type
      */
-    private $type;
+    private Type $type;
     public function __construct(string $class, string $propertyName, Type $type)
     {
         $this->class = $class;

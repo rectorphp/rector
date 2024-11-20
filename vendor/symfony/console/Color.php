@@ -19,18 +19,9 @@ final class Color
     private const COLORS = ['black' => 0, 'red' => 1, 'green' => 2, 'yellow' => 3, 'blue' => 4, 'magenta' => 5, 'cyan' => 6, 'white' => 7, 'default' => 9];
     private const BRIGHT_COLORS = ['gray' => 0, 'bright-red' => 1, 'bright-green' => 2, 'bright-yellow' => 3, 'bright-blue' => 4, 'bright-magenta' => 5, 'bright-cyan' => 6, 'bright-white' => 7];
     private const AVAILABLE_OPTIONS = ['bold' => ['set' => 1, 'unset' => 22], 'underscore' => ['set' => 4, 'unset' => 24], 'blink' => ['set' => 5, 'unset' => 25], 'reverse' => ['set' => 7, 'unset' => 27], 'conceal' => ['set' => 8, 'unset' => 28]];
-    /**
-     * @var string
-     */
-    private $foreground;
-    /**
-     * @var string
-     */
-    private $background;
-    /**
-     * @var mixed[]
-     */
-    private $options = [];
+    private string $foreground;
+    private string $background;
+    private array $options = [];
     public function __construct(string $foreground = '', string $background = '', array $options = [])
     {
         $this->foreground = $this->parseColor($foreground);

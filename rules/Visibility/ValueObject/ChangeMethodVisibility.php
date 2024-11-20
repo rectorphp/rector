@@ -8,19 +8,16 @@ final class ChangeMethodVisibility
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var int
      */
-    private $visibility;
+    private int $visibility;
     public function __construct(string $class, string $method, int $visibility)
     {
         $this->class = $class;

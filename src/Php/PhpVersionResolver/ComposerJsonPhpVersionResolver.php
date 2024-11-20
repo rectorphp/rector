@@ -16,7 +16,7 @@ final class ComposerJsonPhpVersionResolver
     /**
      * @var array<string, PhpVersion::*|null>
      */
-    private static $cachedPhpVersions = [];
+    private static array $cachedPhpVersions = [];
     /**
      * @return PhpVersion::*
      */

@@ -23,7 +23,7 @@ final class SetProviderCollector
      * @var SetProviderInterface[]
      * @readonly
      */
-    private $setProviders;
+    private array $setProviders;
     /**
      * @param SetProviderInterface[] $extraSetProviders
      */
@@ -63,8 +63,6 @@ final class SetProviderCollector
      */
     public function provideComposerTriggeredSets() : array
     {
-        return \array_filter($this->provideSets(), function (SetInterface $set) : bool {
-            return $set instanceof ComposerTriggeredSet;
-        });
+        return \array_filter($this->provideSets(), fn(SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
     }
 }

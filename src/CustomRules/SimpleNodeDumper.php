@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\CustomRules;
 
+use PhpParser\Modifiers;
+use PhpParser\Node\UseItem;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 /**
  * Inspired by @see \PhpParser\NodeDumper
  */
@@ -31,7 +31,7 @@ final class SimpleNodeDumper
             return self::dumpSingleNode($node);
         }
         if (self::isStringList($node)) {
-            return \json_encode($node, 0);
+            return \json_encode($node, \JSON_THROW_ON_ERROR);
         }
         $result = '[';
         foreach ($node as $key => $value) {
@@ -75,25 +75,25 @@ final class SimpleNodeDumper
     private static function dumpFlags($flags) : string
     {
         $strs = [];
-        if (($flags & Class_::MODIFIER_PUBLIC) !== 0) {
+        if (($flags & Modifiers::PUBLIC) !== 0) {
             $strs[] = 'MODIFIER_PUBLIC';
         }
-        if (($flags & Class_::MODIFIER_PROTECTED) !== 0) {
+        if (($flags & Modifiers::PROTECTED) !== 0) {
             $strs[] = 'MODIFIER_PROTECTED';
         }
-        if (($flags & Class_::MODIFIER_PRIVATE) !== 0) {
+        if (($flags & Modifiers::PRIVATE) !== 0) {
             $strs[] = 'MODIFIER_PRIVATE';
         }
-        if (($flags & Class_::MODIFIER_ABSTRACT) !== 0) {
+        if (($flags & Modifiers::ABSTRACT) !== 0) {
             $strs[] = 'MODIFIER_ABSTRACT';
         }
-        if (($flags & Class_::MODIFIER_STATIC) !== 0) {
+        if (($flags & Modifiers::STATIC) !== 0) {
             $strs[] = 'MODIFIER_STATIC';
         }
-        if (($flags & Class_::MODIFIER_FINAL) !== 0) {
+        if (($flags & Modifiers::FINAL) !== 0) {
             $strs[] = 'MODIFIER_FINAL';
         }
-        if (($flags & Class_::MODIFIER_READONLY) !== 0) {
+        if (($flags & Modifiers::READONLY) !== 0) {
             $strs[] = 'MODIFIER_READONLY';
         }
         if ($strs !== []) {
@@ -132,7 +132,7 @@ final class SimpleNodeDumper
         } elseif ($node instanceof Identifier) {
             $result .= '( name: "' . $node->name . '" )';
         } elseif ($node instanceof Name) {
-            $result .= '( parts: ' . \json_encode($node->getParts(), 0) . ' )';
+            $result .= '( parts: ' . \json_encode($node->getParts(), \JSON_THROW_ON_ERROR) . ' )';
         } elseif ($node instanceof Scalar && $node->getSubNodeNames() === ['value']) {
             if (\is_string($node->value)) {
                 $result .= '( value: "' . $node->value . '" )';
@@ -155,7 +155,7 @@ final class SimpleNodeDumper
                         $result .= self::dumpFlags($value);
                     } elseif ($key === 'type' && $node instanceof Include_) {
                         $result .= self::dumpIncludeType($value);
-                    } elseif ($key === 'type' && ($node instanceof Use_ || $node instanceof UseUse || $node instanceof GroupUse)) {
+                    } elseif ($key === 'type' && ($node instanceof Use_ || $node instanceof UseItem || $node instanceof GroupUse)) {
                         $result .= self::dumpUseType($value);
                     } elseif (\is_string($value)) {
                         $result .= '"' . $value . '"';

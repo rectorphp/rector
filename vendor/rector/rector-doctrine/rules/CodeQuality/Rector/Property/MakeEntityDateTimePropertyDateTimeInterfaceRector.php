@@ -28,24 +28,20 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRe
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer
      */
-    private $docBlockClassRenamer;
+    private DocBlockClassRenamer $docBlockClassRenamer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\DoctrineEntityDetector
      */
-    private $doctrineEntityDetector;
+    private DoctrineEntityDetector $doctrineEntityDetector;
     public function __construct(DocBlockClassRenamer $docBlockClassRenamer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, DoctrineEntityDetector $doctrineEntityDetector)
     {
         $this->docBlockClassRenamer = $docBlockClassRenamer;

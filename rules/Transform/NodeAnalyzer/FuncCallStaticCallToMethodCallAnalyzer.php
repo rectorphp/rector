@@ -22,34 +22,28 @@ final class FuncCallStaticCallToMethodCallAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver
      */
-    private $typeProvidingExprFromClassResolver;
+    private TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\PropertyNaming
      */
-    private $propertyNaming;
+    private PropertyNaming $propertyNaming;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\Transform\NodeFactory\PropertyFetchFactory
      */
-    private $propertyFetchFactory;
+    private PropertyFetchFactory $propertyFetchFactory;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassDependencyManipulator
      */
-    private $classDependencyManipulator;
+    private ClassDependencyManipulator $classDependencyManipulator;
     public function __construct(TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, PropertyNaming $propertyNaming, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory, PropertyFetchFactory $propertyFetchFactory, ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;

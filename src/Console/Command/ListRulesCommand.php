@@ -18,19 +18,17 @@ final class ListRulesCommand extends Command
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
-    private $skippedClassResolver;
+    private SkippedClassResolver $skippedClassResolver;
     /**
      * @var RectorInterface[]
      * @readonly
      */
-    private $rectors;
+    private array $rectors;
     /**
      * @param RectorInterface[] $rectors
      */
@@ -73,12 +71,8 @@ final class ListRulesCommand extends Command
      */
     private function resolveRectorClasses() : array
     {
-        $customRectors = \array_filter($this->rectors, static function (RectorInterface $rector) : bool {
-            return !$rector instanceof PostRectorInterface;
-        });
-        $rectorClasses = \array_map(static function (RectorInterface $rector) : string {
-            return \get_class($rector);
-        }, $customRectors);
+        $customRectors = \array_filter($this->rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
+        $rectorClasses = \array_map(static fn(RectorInterface $rector): string => \get_class($rector), $customRectors);
         \sort($rectorClasses);
         return \array_unique($rectorClasses);
     }

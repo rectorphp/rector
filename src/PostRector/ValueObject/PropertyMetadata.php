@@ -3,26 +3,23 @@
 declare (strict_types=1);
 namespace Rector\PostRector\ValueObject;
 
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Modifiers;
 use PHPStan\Type\Type;
 final class PropertyMetadata
 {
     /**
      * @readonly
-     * @var string
      */
-    private $name;
+    private string $name;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type|null
      */
-    private $type;
+    private ?Type $type;
     /**
      * @readonly
-     * @var int
      */
-    private $flags = Class_::MODIFIER_PRIVATE;
-    public function __construct(string $name, ?Type $type, int $flags = Class_::MODIFIER_PRIVATE)
+    private int $flags = Modifiers::PRIVATE;
+    public function __construct(string $name, ?Type $type, int $flags = Modifiers::PRIVATE)
     {
         $this->name = $name;
         $this->type = $type;

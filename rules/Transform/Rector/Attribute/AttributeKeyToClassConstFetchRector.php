@@ -31,13 +31,12 @@ final class AttributeKeyToClassConstFetchRector extends AbstractRector implement
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var AttributeKeyToClassConstFetch[]
      */
-    private $attributeKeysToClassConstFetches = [];
+    private array $attributeKeysToClassConstFetches = [];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;

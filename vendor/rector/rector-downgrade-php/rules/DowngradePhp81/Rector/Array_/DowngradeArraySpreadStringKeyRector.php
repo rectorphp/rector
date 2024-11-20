@@ -4,11 +4,14 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp81\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\UnionType;
 use Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer;
 use Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory;
 use Rector\PHPStan\ScopeFetcher;
@@ -24,14 +27,12 @@ final class DowngradeArraySpreadStringKeyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory
      */
-    private $arrayMergeFromArraySpreadFactory;
+    private ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
-    private $arraySpreadAnalyzer;
+    private ArraySpreadAnalyzer $arraySpreadAnalyzer;
     public function __construct(ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, ArraySpreadAnalyzer $arraySpreadAnalyzer)
     {
         $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;
@@ -82,9 +83,16 @@ CODE_SAMPLE
                 continue;
             }
             $type = $this->nodeTypeResolver->getType($item->value);
-            if (!$type instanceof ArrayType) {
+            if (!$type->isArray()->yes()) {
                 continue;
             }
+            if ($type instanceof UnionType) {
+                continue;
+            }
+            if ($type instanceof IntersectionType) {
+                continue;
+            }
+            /** @var ArrayType|ConstantArrayType $type */
             $keyType = $type->getKeyType();
             if ($keyType instanceof IntegerType) {
                 return \true;

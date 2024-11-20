@@ -24,14 +24,12 @@ final class CallUserFuncArrayToVariadicRector extends AbstractRector implements 
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory
      */
-    private $arrayCallableToMethodCallFactory;
+    private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory, ValueResolver $valueResolver)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;

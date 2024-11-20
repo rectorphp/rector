@@ -15,9 +15,8 @@ final class UseImportsResolver
 {
     /**
      * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
      */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
     public function __construct(CurrentFileProvider $currentFileProvider)
     {
         $this->currentFileProvider = $currentFileProvider;
@@ -31,9 +30,7 @@ final class UseImportsResolver
         if (!$namespace instanceof Node) {
             return [];
         }
-        return \array_filter($namespace->stmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Use_ || $stmt instanceof GroupUse;
-        });
+        return \array_filter($namespace->stmts, static fn(Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse);
     }
     /**
      * @api
@@ -45,9 +42,7 @@ final class UseImportsResolver
         if (!$namespace instanceof Node) {
             return [];
         }
-        return \array_filter($namespace->stmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Use_;
-        });
+        return \array_filter($namespace->stmts, static fn(Stmt $stmt): bool => $stmt instanceof Use_);
     }
     /**
      * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $use
@@ -71,9 +66,7 @@ final class UseImportsResolver
             return null;
         }
         /** @var Namespace_[]|FileWithoutNamespace[] $namespaces */
-        $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace;
-        });
+        $namespaces = \array_filter($newStmts, static fn(Stmt $stmt): bool => $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace);
         // multiple namespaces is not supported
         if (\count($namespaces) !== 1) {
             return null;

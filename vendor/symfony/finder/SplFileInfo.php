@@ -17,14 +17,8 @@ namespace RectorPrefix202411\Symfony\Component\Finder;
  */
 class SplFileInfo extends \SplFileInfo
 {
-    /**
-     * @var string
-     */
-    private $relativePath;
-    /**
-     * @var string
-     */
-    private $relativePathname;
+    private string $relativePath;
+    private string $relativePathname;
     /**
      * @param string $file             The file name
      * @param string $relativePath     The relative path

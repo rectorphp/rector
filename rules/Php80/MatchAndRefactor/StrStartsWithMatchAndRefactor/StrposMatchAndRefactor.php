@@ -21,19 +21,16 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory
      */
-    private $strStartsWithFuncCallFactory;
+    private StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory;
     public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver, StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;

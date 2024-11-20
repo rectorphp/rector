@@ -16,14 +16,8 @@ namespace RectorPrefix202411\Symfony\Component\Console\Attribute;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsCommand
 {
-    /**
-     * @var string
-     */
-    public $name;
-    /**
-     * @var string|null
-     */
-    public $description;
+    public string $name;
+    public ?string $description = null;
     public function __construct(string $name, ?string $description = null, array $aliases = [], bool $hidden = \false)
     {
         $this->name = $name;

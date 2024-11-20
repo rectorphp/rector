@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeManipulator;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -13,26 +14,22 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodPropertyFetchManipulator
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\FunctionLikeManipulator
      */
-    private $functionLikeManipulator;
+    private \Rector\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator;
     public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, \Rector\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -53,7 +50,7 @@ final class ClassMethodPropertyFetchManipulator
         $assignedParamName = null;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$assignedParamName) : ?int {
             if ($node instanceof Class_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Assign) {
                 return null;
@@ -68,7 +65,7 @@ final class ClassMethodPropertyFetchManipulator
                 return null;
             }
             $assignedParamName = $this->nodeNameResolver->getName($node->expr);
-            return NodeTraverser::STOP_TRAVERSAL;
+            return NodeVisitor::STOP_TRAVERSAL;
         });
         /** @var string|null $assignedParamName */
         if ($assignedParamName === null) {
@@ -97,7 +94,7 @@ final class ClassMethodPropertyFetchManipulator
         $paramNames = $this->functionLikeManipulator->resolveParamNames($classMethod);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$assignExprs, $paramNames) : ?int {
             if ($node instanceof Class_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Assign) {
                 return null;

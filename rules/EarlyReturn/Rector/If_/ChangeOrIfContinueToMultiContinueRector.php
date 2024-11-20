@@ -19,9 +19,8 @@ final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     public function __construct(IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;

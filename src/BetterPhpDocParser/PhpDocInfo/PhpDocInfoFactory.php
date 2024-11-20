@@ -20,38 +20,32 @@ final class PhpDocInfoFactory
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeMapper
      */
-    private $phpDocNodeMapper;
+    private PhpDocNodeMapper $phpDocNodeMapper;
     /**
      * @readonly
-     * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
-    private $lexer;
+    private Lexer $lexer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser
      */
-    private $betterPhpDocParser;
+    private BetterPhpDocParser $betterPhpDocParser;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
-    private $annotationNaming;
+    private AnnotationNaming $annotationNaming;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
-    private $phpDocNodeByTypeFinder;
+    private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder;
     /**
      * @var array<int, PhpDocInfo>
      */
-    private $phpDocInfosByObjectId = [];
+    private array $phpDocInfosByObjectId = [];
     public function __construct(PhpDocNodeMapper $phpDocNodeMapper, Lexer $lexer, BetterPhpDocParser $betterPhpDocParser, StaticTypeMapper $staticTypeMapper, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNodeMapper = $phpDocNodeMapper;

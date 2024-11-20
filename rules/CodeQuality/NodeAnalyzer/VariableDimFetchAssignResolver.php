@@ -17,14 +17,12 @@ final class VariableDimFetchAssignResolver
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
@@ -68,9 +66,7 @@ final class VariableDimFetchAssignResolver
         if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $variable)) {
             return null;
         }
-        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use($variable) : bool {
-            return $this->nodeComparator->areNodesEqual($subNode, $variable);
-        });
+        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($subNode, $variable));
         if ($isFoundInExpr) {
             return null;
         }

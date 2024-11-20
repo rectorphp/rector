@@ -514,9 +514,7 @@ class Strings
                 while ($offset <= strlen($subject) - ($counter ? 1 : 0) && self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset])) {
                     $offset = $m[0][1] + \max(1, strlen($m[0][0]));
                     if (!$captureOffset) {
-                        $m = \array_map(function ($item) {
-                            return $item[0];
-                        }, $m);
+                        $m = \array_map(fn($item) => $item[0], $m);
                     } elseif ($utf8) {
                         $m = self::bytesToChars($subject, [$m])[0];
                     }
@@ -557,9 +555,7 @@ class Strings
             if ($utf8) {
                 $pattern .= 'u';
                 if ($captureOffset) {
-                    $replacement = function ($m) use($replacement, $subject) {
-                        return $replacement(self::bytesToChars($subject, [$m])[0]);
-                    };
+                    $replacement = fn($m) => $replacement(self::bytesToChars($subject, [$m])[0]);
                 }
             }
             if (PHP_VERSION_ID < 70400) {
@@ -572,9 +568,7 @@ return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $l
             $pattern = \array_keys($pattern);
         }
         if ($utf8) {
-            $pattern = \array_map(function ($item) {
-                return $item . 'u';
-            }, (array) $pattern);
+            $pattern = \array_map(fn($item) => $item . 'u', (array) $pattern);
         }
         return self::pcre('preg_replace', [$pattern, $replacement, $subject, $limit]);
     }

@@ -23,14 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NewlineBeforeNewAssignSetRector extends AbstractRector implements HTMLAverseRectorInterface
 {
-    /**
-     * @var string|null
-     */
-    private $previousStmtVariableName;
-    /**
-     * @var string|null
-     */
-    private $previousPreviousStmtVariableName;
+    private ?string $previousStmtVariableName = null;
+    private ?string $previousPreviousStmtVariableName = null;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add extra space before new assign set', [new CodeSample(<<<'CODE_SAMPLE'
@@ -162,6 +156,6 @@ CODE_SAMPLE
         }
         $previousNode = $node->stmts[$key - 1];
         $currentNode = $node->stmts[$key];
-        return \abs($currentNode->getLine() - $previousNode->getLine()) >= 2;
+        return \abs($currentNode->getStartLine() - $previousNode->getStartLine()) >= 2;
     }
 }

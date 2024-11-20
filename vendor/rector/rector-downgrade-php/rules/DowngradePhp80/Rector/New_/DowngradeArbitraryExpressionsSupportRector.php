@@ -30,14 +30,12 @@ final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeFactory\NamedVariableFactory
      */
-    private $namedVariableFactory;
+    private NamedVariableFactory $namedVariableFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(NamedVariableFactory $namedVariableFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->namedVariableFactory = $namedVariableFactory;
@@ -71,9 +69,9 @@ CODE_SAMPLE
     }
     /**
      * @param Expression $node
-     * @return Node\Stmt[]|null|Expression
+     * @return Expression[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?array
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstancesOf($node, [Assign::class]);
@@ -102,18 +100,18 @@ CODE_SAMPLE
         while ($previousTokenPos >= 0) {
             $token = $oldTokens[$previousTokenPos] ?? null;
             --$previousTokenPos;
-            if (!isset($token[0])) {
-                return $token === '(';
+            if ((string) $token === '(') {
+                return \true;
             }
-            if (!\in_array($token[0], [\T_COMMENT, \T_WHITESPACE], \true)) {
-                return $token === '(';
+            if (!\in_array((string) $token, [\T_COMMENT, \T_WHITESPACE], \true)) {
+                continue;
             }
         }
         return \false;
     }
     /**
      * @param Assign[] $assigns
-     * @return Node\Stmt[]|null
+     * @return Expression[]|null
      */
     private function refactorAssign(array $assigns, Expression $expression) : ?array
     {
@@ -148,7 +146,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return Node\Stmt[]|null
+     * @return Expression[]|null
      */
     private function refactorInstanceof(Instanceof_ $instanceof, Expression $expression) : ?array
     {

@@ -26,13 +26,12 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @var ParentClassToTraits[]
      */
-    private $parentClassToTraits = [];
+    private array $parentClassToTraits = [];
     public function __construct(ClassAnalyzer $classAnalyzer)
     {
         $this->classAnalyzer = $classAnalyzer;

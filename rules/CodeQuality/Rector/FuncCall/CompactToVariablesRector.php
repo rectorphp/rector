@@ -5,7 +5,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -23,9 +23,8 @@ final class CompactToVariablesRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodeQuality\CompactConverter
      */
-    private $compactConverter;
+    private CompactConverter $compactConverter;
     public function __construct(CompactConverter $compactConverter)
     {
         $this->compactConverter = $compactConverter;

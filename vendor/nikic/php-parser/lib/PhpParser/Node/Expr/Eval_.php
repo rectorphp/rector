@@ -7,12 +7,12 @@ use PhpParser\Node\Expr;
 class Eval_ extends Expr
 {
     /** @var Expr Expression */
-    public $expr;
+    public Expr $expr;
     /**
      * Constructs an eval() node.
      *
-     * @param Expr  $expr       Expression
-     * @param array $attributes Additional attributes
+     * @param Expr $expr Expression
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(Expr $expr, array $attributes = [])
     {

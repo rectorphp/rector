@@ -31,28 +31,21 @@ final class MixedTypeRector extends AbstractRector implements MinPhpVersionInter
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
-    private $classChildAnalyzer;
+    private ClassChildAnalyzer $classChildAnalyzer;
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
-    private $paramTagRemover;
+    private ParamTagRemover $paramTagRemover;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    private bool $hasChanged = \false;
     public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, ParamTagRemover $paramTagRemover, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->reflectionResolver = $reflectionResolver;

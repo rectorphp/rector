@@ -11,9 +11,8 @@ final class AliasNameResolver
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $useImportsResolver;
+    private \Rector\Naming\Naming\UseImportsResolver $useImportsResolver;
     public function __construct(\Rector\Naming\Naming\UseImportsResolver $useImportsResolver)
     {
         $this->useImportsResolver = $useImportsResolver;

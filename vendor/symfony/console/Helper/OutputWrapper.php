@@ -43,10 +43,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\Helper;
  */
 final class OutputWrapper
 {
-    /**
-     * @var bool
-     */
-    private $allowCutUrls = \false;
+    private bool $allowCutUrls = \false;
     private const TAG_OPEN_REGEX_SEGMENT = '[a-z](?:[^\\\\<>]*+ | \\\\.)*';
     private const TAG_CLOSE_REGEX_SEGMENT = '[a-z][^<>]*+';
     private const URL_PATTERN = 'https?://\\S+';

@@ -20,13 +20,12 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
 {
     /**
      * @readonly
-     * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
-    private $funcCallStaticCallToMethodCallAnalyzer;
+    private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer;
     /**
      * @var FuncCallToMethodCall[]
      */
-    private $funcNameToMethodCallNames = [];
+    private array $funcNameToMethodCallNames = [];
     public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
     {
         $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;

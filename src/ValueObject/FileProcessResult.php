@@ -12,12 +12,11 @@ final class FileProcessResult
      * @var SystemError[]
      * @readonly
      */
-    private $systemErrors;
+    private array $systemErrors;
     /**
      * @readonly
-     * @var \Rector\ValueObject\Reporting\FileDiff|null
      */
-    private $fileDiff;
+    private ?FileDiff $fileDiff;
     /**
      * @param SystemError[] $systemErrors
      */

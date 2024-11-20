@@ -4,18 +4,19 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
+use PhpParser\Node\DeclareItem;
 class Declare_ extends Node\Stmt
 {
-    /** @var DeclareDeclare[] List of declares */
-    public $declares;
+    /** @var DeclareItem[] List of declares */
+    public array $declares;
     /** @var Node\Stmt[]|null Statements */
-    public $stmts;
+    public ?array $stmts;
     /**
      * Constructs a declare node.
      *
-     * @param DeclareDeclare[] $declares   List of declares
-     * @param Node\Stmt[]|null $stmts      Statements
-     * @param array            $attributes Additional attributes
+     * @param DeclareItem[] $declares List of declares
+     * @param Node\Stmt[]|null $stmts Statements
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(array $declares, ?array $stmts = null, array $attributes = [])
     {

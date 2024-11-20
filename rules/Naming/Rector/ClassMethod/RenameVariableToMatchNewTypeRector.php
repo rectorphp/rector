@@ -22,24 +22,20 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
-    private $breakingVariableRenameGuard;
+    private BreakingVariableRenameGuard $breakingVariableRenameGuard;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $expectedNameResolver;
+    private ExpectedNameResolver $expectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\VariableRenamer
      */
-    private $variableRenamer;
+    private VariableRenamer $variableRenamer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, VariableRenamer $variableRenamer, BetterNodeFinder $betterNodeFinder)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
@@ -124,8 +120,6 @@ CODE_SAMPLE
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
-        return \array_filter($assigns, static function (Assign $assign) : bool {
-            return $assign->expr instanceof New_;
-        });
+        return \array_filter($assigns, static fn(Assign $assign): bool => $assign->expr instanceof New_);
     }
 }

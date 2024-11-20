@@ -20,9 +20,8 @@ final class DowngradePhp81ResourceReturnToObjectRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
-    private $objectToResourceReturn;
+    private ObjectToResourceReturn $objectToResourceReturn;
     /**
      * @var string[]|class-string<finfo>[]
      */

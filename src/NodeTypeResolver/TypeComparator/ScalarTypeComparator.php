@@ -52,7 +52,7 @@ final class ScalarTypeComparator
         if (!$firstType->isString()->yes()) {
             return \get_class($firstType) !== \get_class($secondType);
         }
-        if (!$secondType->isClassStringType()->yes()) {
+        if (!$secondType->isClassString()->yes()) {
             return \get_class($firstType) !== \get_class($secondType);
         }
         return \false;

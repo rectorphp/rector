@@ -9,24 +9,20 @@ final class StrStartsWith
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\FuncCall
      */
-    private $funcCall;
+    private FuncCall $funcCall;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $haystackExpr;
+    private Expr $haystackExpr;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $needleExpr;
+    private Expr $needleExpr;
     /**
      * @readonly
-     * @var bool
      */
-    private $isPositive;
+    private bool $isPositive;
     public function __construct(FuncCall $funcCall, Expr $haystackExpr, Expr $needleExpr, bool $isPositive)
     {
         $this->funcCall = $funcCall;

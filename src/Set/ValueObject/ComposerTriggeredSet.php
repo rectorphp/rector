@@ -14,24 +14,20 @@ final class ComposerTriggeredSet implements SetInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $groupName;
+    private string $groupName;
     /**
      * @readonly
-     * @var string
      */
-    private $packageName;
+    private string $packageName;
     /**
      * @readonly
-     * @var string
      */
-    private $version;
+    private string $version;
     /**
      * @readonly
-     * @var string
      */
-    private $setFilePath;
+    private string $setFilePath;
     /**
      * @var string
      * @see https://regex101.com/r/ioYomu/1

@@ -7,17 +7,22 @@ use PhpParser\Node;
 class Enum_ extends \PhpParser\Node\Stmt\ClassLike
 {
     /** @var null|Node\Identifier Scalar Type */
-    public $scalarType;
+    public ?Node $scalarType;
     /** @var Node\Name[] Names of implemented interfaces */
-    public $implements;
+    public array $implements;
     /**
-     * @param string|Node\Identifier|null $name       Name
-     * @param array                       $subNodes   Array of the following optional subnodes:
-     *                                                'scalarType'  => null    : Scalar type
-     *                                                'implements'  => array() : Names of implemented interfaces
-     *                                                'stmts'       => array() : Statements
-     *                                                'attrGroups'  => array() : PHP attribute groups
-     * @param array                       $attributes Additional attributes
+     * @param string|Node\Identifier|null $name Name
+     * @param array{
+     *     scalarType?: Node\Identifier|null,
+     *     implements?: Node\Name[],
+     *     stmts?: Node\Stmt[],
+     *     attrGroups?: Node\AttributeGroup[],
+     * } $subNodes Array of the following optional subnodes:
+     *             'scalarType'  => null    : Scalar type
+     *             'implements'  => array() : Names of implemented interfaces
+     *             'stmts'       => array() : Statements
+     *             'attrGroups'  => array() : PHP attribute groups
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct($name, array $subNodes = [], array $attributes = [])
     {

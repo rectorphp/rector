@@ -32,29 +32,24 @@ final class DowngradeEnumToConstantListClassRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeFactory\ClassFromEnumFactory
      */
-    private $classFromEnumFactory;
+    private ClassFromEnumFactory $classFromEnumFactory;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer
      */
-    private $enumAnalyzer;
+    private EnumAnalyzer $enumAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(ClassFromEnumFactory $classFromEnumFactory, ReflectionProvider $reflectionProvider, EnumAnalyzer $enumAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->classFromEnumFactory = $classFromEnumFactory;
@@ -136,7 +131,7 @@ CODE_SAMPLE
         $constTypeNode = new ConstTypeNode($constFetchNode);
         $paramName = '$' . $this->getName($param);
         $paramTypeNode = $isNullable ? new NullableTypeNode($constTypeNode) : $constTypeNode;
-        $paramTagValueNode = new ParamTagValueNode($paramTypeNode, \false, $paramName, '');
+        $paramTagValueNode = new ParamTagValueNode($paramTypeNode, \false, $paramName, '', \false);
         $phpDocInfo->addTagValueNode($paramTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }

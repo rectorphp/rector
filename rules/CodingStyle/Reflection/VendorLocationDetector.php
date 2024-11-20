@@ -10,9 +10,8 @@ final class VendorLocationDetector
 {
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     public function __construct(FilePathHelper $filePathHelper)
     {
         $this->filePathHelper = $filePathHelper;

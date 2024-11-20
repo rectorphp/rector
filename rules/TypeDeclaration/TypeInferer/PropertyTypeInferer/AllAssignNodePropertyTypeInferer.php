@@ -17,24 +17,20 @@ final class AllAssignNodePropertyTypeInferer
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
-    private $assignToPropertyTypeInferer;
+    private AssignToPropertyTypeInferer $assignToPropertyTypeInferer;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(AssignToPropertyTypeInferer $assignToPropertyTypeInferer, NodeNameResolver $nodeNameResolver, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
@@ -46,9 +42,7 @@ final class AllAssignNodePropertyTypeInferer
     {
         if ($classReflection->getFileName() === $file->getFilePath()) {
             $className = $classReflection->getName();
-            $classLike = $this->betterNodeFinder->findFirst($file->getNewStmts(), function (Node $node) use($className) : bool {
-                return $node instanceof ClassLike && $this->nodeNameResolver->isName($node, $className);
-            });
+            $classLike = $this->betterNodeFinder->findFirst($file->getNewStmts(), fn(Node $node): bool => $node instanceof ClassLike && $this->nodeNameResolver->isName($node, $className));
         } else {
             $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
         }

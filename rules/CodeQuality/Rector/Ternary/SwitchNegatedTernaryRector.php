@@ -61,10 +61,17 @@ CODE_SAMPLE
             return null;
         }
         $node->cond = $node->cond->expr;
-        [$node->if, $node->else] = [$node->else, $node->if];
+        $else = clone $node->else;
+        $if = clone $node->if;
+        $node->else = $if;
+        $node->if = $else;
         if ($node->if instanceof Ternary) {
             $ternary = $node->if;
             $ternary->setAttribute(AttributeKey::KIND, 'wrapped_with_brackets');
+            $ternary->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+        if ($node->else instanceof Ternary) {
+            $ternary = $node->else;
             $ternary->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         return $node;

@@ -32,23 +32,17 @@ final class DowngradeStreamIsattyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\InlineCodeParser
      */
-    private $inlineCodeParser;
+    private InlineCodeParser $inlineCodeParser;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
      */
-    private $variableNaming;
+    private VariableNaming $variableNaming;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
-    private $exprInTopStmtMatcher;
-    /**
-     * @var \PhpParser\Node\Expr\Closure|null
-     */
-    private $cachedClosure;
+    private ExprInTopStmtMatcher $exprInTopStmtMatcher;
+    private ?Closure $cachedClosure = null;
     public function __construct(InlineCodeParser $inlineCodeParser, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;

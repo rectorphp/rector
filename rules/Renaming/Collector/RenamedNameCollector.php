@@ -8,7 +8,7 @@ final class RenamedNameCollector
     /**
      * @var string[]
      */
-    private $names = [];
+    private array $names = [];
     public function add(string $name) : void
     {
         $this->names[] = $name;

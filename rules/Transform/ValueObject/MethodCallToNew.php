@@ -8,19 +8,17 @@ final class MethodCallToNew
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $objectType;
+    private ObjectType $objectType;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @var class-string
      * @readonly
      */
-    private $newClassString;
+    private string $newClassString;
     /**
      * @param class-string $newClassString
      */

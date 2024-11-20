@@ -14,13 +14,12 @@ final class ProcessPool
 {
     /**
      * @readonly
-     * @var \React\Socket\TcpServer
      */
-    private $tcpServer;
+    private TcpServer $tcpServer;
     /**
      * @var array<string, ParallelProcess>
      */
-    private $processes = [];
+    private array $processes = [];
     public function __construct(TcpServer $tcpServer)
     {
         $this->tcpServer = $tcpServer;

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp81\NodeAnalyzer;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 final class ArraySpreadAnalyzer
 {
     public function isArrayWithUnpack(Array_ $array) : bool

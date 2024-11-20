@@ -19,19 +19,16 @@ final class RemoveUselessReturnTagRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
-    private $returnTagRemover;
+    private ReturnTagRemover $returnTagRemover;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(ReturnTagRemover $returnTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->returnTagRemover = $returnTagRemover;

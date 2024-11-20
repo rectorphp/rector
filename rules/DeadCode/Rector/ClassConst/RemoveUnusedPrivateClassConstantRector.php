@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeManipulator\ClassConstManipulator;
 use Rector\PHPStan\ScopeFetcher;
@@ -20,14 +20,12 @@ final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassConstManipulator
      */
-    private $classConstManipulator;
+    private ClassConstManipulator $classConstManipulator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(ClassConstManipulator $classConstManipulator, ReflectionResolver $reflectionResolver)
     {
         $this->classConstManipulator = $classConstManipulator;
@@ -77,7 +75,7 @@ CODE_SAMPLE
         if ($this->classConstManipulator->hasClassConstFetch($node, $classReflection)) {
             return null;
         }
-        return NodeTraverser::REMOVE_NODE;
+        return NodeVisitor::REMOVE_NODE;
     }
     private function shouldSkipClassConst(ClassConst $classConst) : bool
     {

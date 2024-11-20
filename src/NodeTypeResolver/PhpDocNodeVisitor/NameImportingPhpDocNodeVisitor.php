@@ -28,37 +28,26 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
-    private $classNameImportSkipper;
+    private ClassNameImportSkipper $classNameImportSkipper;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
-    private $useNodesToAddCollector;
+    private UseNodesToAddCollector $useNodesToAddCollector;
     /**
      * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
      */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper
      */
-    private $identifierPhpDocTypeMapper;
-    /**
-     * @var PhpParserNode|null
-     */
-    private $currentPhpParserNode;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
+    private ?PhpParserNode $currentPhpParserNode = null;
+    private bool $hasChanged = \false;
     public function __construct(ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider, IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
     {
         $this->classNameImportSkipper = $classNameImportSkipper;

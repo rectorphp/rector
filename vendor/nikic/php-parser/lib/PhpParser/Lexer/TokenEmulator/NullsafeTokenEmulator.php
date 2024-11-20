@@ -3,12 +3,13 @@
 declare (strict_types=1);
 namespace PhpParser\Lexer\TokenEmulator;
 
-use PhpParser\Lexer\Emulative;
+use PhpParser\PhpVersion;
+use PhpParser\Token;
 final class NullsafeTokenEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
 {
-    public function getPhpVersion() : string
+    public function getPhpVersion() : PhpVersion
     {
-        return Emulative::PHP_8_0;
+        return PhpVersion::fromComponents(8, 0);
     }
     public function isEmulationNeeded(string $code) : bool
     {
@@ -18,25 +19,23 @@ final class NullsafeTokenEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEm
     {
         // We need to manually iterate and manage a count because we'll change
         // the tokens array on the way
-        $line = 1;
         for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
-            if ($tokens[$i] === '?' && isset($tokens[$i + 1]) && $tokens[$i + 1][0] === \T_OBJECT_OPERATOR) {
-                \array_splice($tokens, $i, 2, [[\T_NULLSAFE_OBJECT_OPERATOR, '?->', $line]]);
+            $token = $tokens[$i];
+            if ((\is_array($token) ? $token[1] : $token) === '?' && isset($tokens[$i + 1]) && (\is_array($tokens[$i + 1]) ? $tokens[$i + 1][0] : $tokens[$i + 1]) === \T_OBJECT_OPERATOR) {
+                \array_splice($tokens, $i, 2, [new Token(\T_NULLSAFE_OBJECT_OPERATOR, '?->', $token->line, $token->pos)]);
                 $c--;
                 continue;
             }
             // Handle ?-> inside encapsed string.
-            if ($tokens[$i][0] === \T_ENCAPSED_AND_WHITESPACE && isset($tokens[$i - 1]) && $tokens[$i - 1][0] === \T_VARIABLE && \preg_match('/^\\?->([a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*)/', $tokens[$i][1], $matches)) {
-                $replacement = [[\T_NULLSAFE_OBJECT_OPERATOR, '?->', $line], [\T_STRING, $matches[1], $line]];
-                if (\strlen($matches[0]) !== \strlen($tokens[$i][1])) {
-                    $replacement[] = [\T_ENCAPSED_AND_WHITESPACE, \substr($tokens[$i][1], \strlen($matches[0])), $line];
+            if ((\is_array($token) ? $token[0] : $token) === \T_ENCAPSED_AND_WHITESPACE && isset($tokens[$i - 1]) && (\is_array($tokens[$i - 1]) ? $tokens[$i - 1][0] : $tokens[$i - 1]) === \T_VARIABLE && \preg_match('/^\\?->([a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*)/', \is_array($token) ? $token[1] : $token, $matches)) {
+                $replacement = [new Token(\T_NULLSAFE_OBJECT_OPERATOR, '?->', $token->line, $token->pos), new Token(\T_STRING, $matches[1], $token->line, $token->pos + 3)];
+                $matchLen = \strlen($matches[0]);
+                if ($matchLen !== \strlen(\is_array($token) ? $token[1] : $token)) {
+                    $replacement[] = new Token(\T_ENCAPSED_AND_WHITESPACE, \substr(\is_array($token) ? $token[1] : $token, $matchLen), $token->line, $token->pos + $matchLen);
                 }
                 \array_splice($tokens, $i, 1, $replacement);
                 $c += \count($replacement) - 1;
                 continue;
-            }
-            if (\is_array($tokens[$i])) {
-                $line += \substr_count($tokens[$i][1], "\n");
             }
         }
         return $tokens;

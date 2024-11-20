@@ -23,14 +23,12 @@ final class DowngradePhp72JsonConstRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner
      */
-    private $jsonConstCleaner;
+    private JsonConstCleaner $jsonConstCleaner;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\DefineFuncCallAnalyzer
      */
-    private $defineFuncCallAnalyzer;
+    private DefineFuncCallAnalyzer $defineFuncCallAnalyzer;
     /**
      * @var string
      */
@@ -63,7 +61,7 @@ CODE_SAMPLE
     }
     /**
      * @param ConstFetch|BitwiseOr|If_ $node
-     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt\If_|null|int
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt\If_|null
      */
     public function refactor(Node $node)
     {

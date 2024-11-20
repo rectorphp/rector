@@ -20,18 +20,9 @@ use RectorPrefix202411\Symfony\Component\Process\Process;
  */
 class UnixPipes extends AbstractPipes
 {
-    /**
-     * @var bool|null
-     */
-    private $ttyMode;
-    /**
-     * @var bool
-     */
-    private $ptyMode;
-    /**
-     * @var bool
-     */
-    private $haveReadSupport;
+    private ?bool $ttyMode;
+    private bool $ptyMode;
+    private bool $haveReadSupport;
     /**
      * @param mixed $input
      */

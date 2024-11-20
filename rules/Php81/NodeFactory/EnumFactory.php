@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Php81\NodeFactory;
 
+use PhpParser\Node\Scalar\Int_;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -26,29 +26,24 @@ final class EnumFactory
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \PhpParser\BuilderFactory
      */
-    private $builderFactory;
+    private BuilderFactory $builderFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var string
      * @see https://stackoverflow.com/a/2560017
@@ -163,10 +158,10 @@ final class EnumFactory
             if (!$item instanceof ArrayItem) {
                 continue;
             }
-            if (!$item->key instanceof LNumber && !$item->key instanceof String_) {
+            if (!$item->key instanceof Int_ && !$item->key instanceof String_) {
                 continue;
             }
-            if (!$item->value instanceof LNumber && !$item->value instanceof String_) {
+            if (!$item->value instanceof Int_ && !$item->value instanceof String_) {
                 continue;
             }
             $mapping[$item->key->value] = $item->value->value;
@@ -178,9 +173,7 @@ final class EnumFactory
      */
     private function getIdentifierTypeFromMappings(array $mapping) : string
     {
-        $callableGetType = static function ($value) : string {
-            return \gettype($value);
-        };
+        $callableGetType = static fn($value): string => \gettype($value);
         $valueTypes = \array_map($callableGetType, $mapping);
         $uniqueValueTypes = \array_unique($valueTypes);
         if (\count($uniqueValueTypes) === 1) {

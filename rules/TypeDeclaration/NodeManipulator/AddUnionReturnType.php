@@ -17,19 +17,16 @@ final class AddUnionReturnType
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
-    private $returnTypeInferer;
+    private ReturnTypeInferer $returnTypeInferer;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper
      */
-    private $unionTypeMapper;
+    private UnionTypeMapper $unionTypeMapper;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $classMethodReturnTypeOverrideGuard;
+    private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
     public function __construct(ReturnTypeInferer $returnTypeInferer, UnionTypeMapper $unionTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
         $this->returnTypeInferer = $returnTypeInferer;

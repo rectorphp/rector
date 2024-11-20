@@ -20,9 +20,8 @@ final class ReturnTypeFromStrictNativeCallRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddReturnTypeFromStrictNativeCall
      */
-    private $addReturnTypeFromStrictNativeCall;
+    private AddReturnTypeFromStrictNativeCall $addReturnTypeFromStrictNativeCall;
     public function __construct(AddReturnTypeFromStrictNativeCall $addReturnTypeFromStrictNativeCall)
     {
         $this->addReturnTypeFromStrictNativeCall = $addReturnTypeFromStrictNativeCall;

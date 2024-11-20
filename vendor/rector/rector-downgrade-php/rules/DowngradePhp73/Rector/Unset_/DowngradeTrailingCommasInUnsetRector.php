@@ -17,9 +17,8 @@ final class DowngradeTrailingCommasInUnsetRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
-    private $followedByCommaAnalyzer;
+    private FollowedByCommaAnalyzer $followedByCommaAnalyzer;
     public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
@@ -53,9 +52,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         if ($node->vars !== []) {
-            \end($node->vars);
-            $lastArgumentPosition = \key($node->vars);
-            \reset($node->vars);
+            $lastArgumentPosition = \array_key_last($node->vars);
             $last = $node->vars[$lastArgumentPosition];
             if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
                 return null;

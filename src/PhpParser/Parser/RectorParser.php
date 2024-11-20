@@ -3,26 +3,26 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Parser;
 
-use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
+use PhpParser\ParserFactory;
+use PhpParser\PhpVersion;
 use PHPStan\Parser\Parser;
 use Rector\PhpParser\ValueObject\StmtsAndTokens;
+use Rector\Util\Reflection\PrivatesAccessor;
 final class RectorParser
 {
     /**
      * @readonly
-     * @var \PhpParser\Lexer
      */
-    private $lexer;
+    private Parser $parser;
     /**
      * @readonly
-     * @var \PHPStan\Parser\Parser
      */
-    private $parser;
-    public function __construct(Lexer $lexer, Parser $parser)
+    private PrivatesAccessor $privatesAccessor;
+    public function __construct(Parser $parser, PrivatesAccessor $privatesAccessor)
     {
-        $this->lexer = $lexer;
         $this->parser = $parser;
+        $this->privatesAccessor = $privatesAccessor;
     }
     /**
      * @api used by rector-symfony
@@ -40,10 +40,24 @@ final class RectorParser
     {
         return $this->parser->parseString($fileContent);
     }
-    public function parseFileContentToStmtsAndTokens(string $fileContent) : StmtsAndTokens
+    public function parseFileContentToStmtsAndTokens(string $fileContent, bool $forNewestSupportedVersion = \true) : StmtsAndTokens
     {
-        $stmts = $this->parser->parseString($fileContent);
-        $tokens = $this->lexer->getTokens();
+        if (!$forNewestSupportedVersion) {
+            // don't directly change PHPStan Parser service
+            // to avoid reuse on next file
+            $phpstanParser = clone $this->parser;
+            $parserFactory = new ParserFactory();
+            $parser = $parserFactory->createForVersion(PhpVersion::fromString('7.0'));
+            $this->privatesAccessor->setPrivateProperty($phpstanParser, 'parser', $parser);
+            return $this->resolveStmtsAndTokens($phpstanParser, $fileContent);
+        }
+        return $this->resolveStmtsAndTokens($this->parser, $fileContent);
+    }
+    private function resolveStmtsAndTokens(Parser $parser, string $fileContent) : StmtsAndTokens
+    {
+        $stmts = $parser->parseString($fileContent);
+        $innerParser = $this->privatesAccessor->getPrivateProperty($parser, 'parser');
+        $tokens = $innerParser->getTokens();
         return new StmtsAndTokens($stmts, $tokens);
     }
 }

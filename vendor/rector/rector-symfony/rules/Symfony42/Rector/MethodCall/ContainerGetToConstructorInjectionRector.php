@@ -29,19 +29,16 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer
      */
-    private $dependencyInjectionMethodCallAnalyzer;
+    private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassDependencyManipulator
      */
-    private $classDependencyManipulator;
+    private ClassDependencyManipulator $classDependencyManipulator;
     public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;

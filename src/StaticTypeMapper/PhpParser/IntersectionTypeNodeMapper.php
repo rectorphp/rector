@@ -16,19 +16,16 @@ final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper
      */
-    private $fullyQualifiedNodeMapper;
+    private \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpParser\NameNodeMapper
      */
-    private $nameNodeMapper;
+    private \Rector\StaticTypeMapper\PhpParser\NameNodeMapper $nameNodeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper
      */
-    private $identifierNodeMapper;
+    private \Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper $identifierNodeMapper;
     public function __construct(\Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, \Rector\StaticTypeMapper\PhpParser\NameNodeMapper $nameNodeMapper, \Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper $identifierNodeMapper)
     {
         $this->fullyQualifiedNodeMapper = $fullyQualifiedNodeMapper;

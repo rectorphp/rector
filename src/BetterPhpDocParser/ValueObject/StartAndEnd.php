@@ -8,14 +8,12 @@ final class StartAndEnd
 {
     /**
      * @readonly
-     * @var int
      */
-    private $start;
+    private int $start;
     /**
      * @readonly
-     * @var int
      */
-    private $end;
+    private int $end;
     public function __construct(int $start, int $end)
     {
         $this->start = $start;

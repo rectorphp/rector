@@ -11,12 +11,12 @@ final class ProcessResult
     /**
      * @var SystemError[]
      */
-    private $systemErrors;
+    private array $systemErrors;
     /**
      * @var FileDiff[]
      * @readonly
      */
-    private $fileDiffs;
+    private array $fileDiffs;
     /**
      * @param SystemError[] $systemErrors
      * @param FileDiff[] $fileDiffs

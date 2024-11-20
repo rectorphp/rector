@@ -44,54 +44,44 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver
      */
-    private $promotedPropertyCandidateResolver;
+    private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\VariableRenamer
      */
-    private $variableRenamer;
+    private VariableRenamer $variableRenamer;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\DocBlock\PropertyPromotionDocBlockMerger
      */
-    private $propertyPromotionDocBlockMerger;
+    private PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger;
     /**
      * @readonly
-     * @var \Rector\Php80\Guard\MakePropertyPromotionGuard
      */
-    private $makePropertyPromotionGuard;
+    private MakePropertyPromotionGuard $makePropertyPromotionGuard;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
-    private $propertyPromotionRenamer;
+    private PropertyPromotionRenamer $propertyPromotionRenamer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @api
      * @var string
@@ -109,14 +99,12 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      *  - protected/public modifier property when property typed
      *
      * Set to true will allow change whether property is typed or not as far as not forbidden, eg: callable type, null type, etc.
-     * @var bool
      */
-    private $inlinePublic = \false;
+    private bool $inlinePublic = \false;
     /**
      * Set to false will skip property promotion when parameter and property have different names.
-     * @var bool
      */
-    private $renameProperty = \true;
+    private bool $renameProperty = \true;
     public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver, PropertyPromotionRenamer $propertyPromotionRenamer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;

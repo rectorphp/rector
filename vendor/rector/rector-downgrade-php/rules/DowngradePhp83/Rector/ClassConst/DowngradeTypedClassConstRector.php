@@ -18,9 +18,8 @@ final class DowngradeTypedClassConstRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $propertyDecorator;
+    private PropertyDecorator $propertyDecorator;
     public function __construct(PropertyDecorator $propertyDecorator)
     {
         $this->propertyDecorator = $propertyDecorator;

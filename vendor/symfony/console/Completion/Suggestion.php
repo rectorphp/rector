@@ -19,14 +19,12 @@ class Suggestion
 {
     /**
      * @readonly
-     * @var string
      */
-    private $value;
+    private string $value;
     /**
      * @readonly
-     * @var string
      */
-    private $description = '';
+    private string $description = '';
     public function __construct(string $value, string $description = '')
     {
         $this->value = $value;

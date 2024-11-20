@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Dbal40\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
@@ -70,7 +69,7 @@ CODE_SAMPLE
         }
         $node->name = new Identifier('with');
         $firstArg = $node->getArgs()[0];
-        $firstArg->value = new ArrayItem($firstArg->value, null, \false, [], \true);
+        $firstArg->unpack = \true;
         return $node;
     }
 }

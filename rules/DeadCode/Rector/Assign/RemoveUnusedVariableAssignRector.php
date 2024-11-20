@@ -32,29 +32,24 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php\ReservedKeywordAnalyzer
      */
-    private $reservedKeywordAnalyzer;
+    private ReservedKeywordAnalyzer $reservedKeywordAnalyzer;
     /**
      * @readonly
-     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
-    private $sideEffectNodeDetector;
+    private SideEffectNodeDetector $sideEffectNodeDetector;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\VariableAnalyzer
      */
-    private $variableAnalyzer;
+    private VariableAnalyzer $variableAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private StmtsManipulator $stmtsManipulator;
     public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder, StmtsManipulator $stmtsManipulator)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
@@ -141,9 +136,7 @@ CODE_SAMPLE
     }
     private function hasCallLikeInAssignExpr(Expr $expr, Scope $scope) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) use($scope) : bool {
-            return $this->sideEffectNodeDetector->detectCallExpr($subNode, $scope);
-        });
+        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->sideEffectNodeDetector->detectCallExpr($subNode, $scope));
     }
     /**
      * @param Stmt[] $stmts

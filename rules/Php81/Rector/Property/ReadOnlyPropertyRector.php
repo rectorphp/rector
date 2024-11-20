@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php81\Rector\Property;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -13,7 +14,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -40,39 +40,32 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyManipulator
      */
-    private $propertyManipulator;
+    private PropertyManipulator $propertyManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyFetchAssignManipulator
      */
-    private $propertyFetchAssignManipulator;
+    private PropertyFetchAssignManipulator $propertyFetchAssignManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
     {
         $this->propertyManipulator = $propertyManipulator;
@@ -166,7 +159,7 @@ CODE_SAMPLE
         if ($property->props[0]->default instanceof Expr) {
             return null;
         }
-        if ($property->type === null) {
+        if (!$property->type instanceof Node) {
             return null;
         }
         if ($property->isStatic()) {
@@ -213,7 +206,7 @@ CODE_SAMPLE
         if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
         }
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return null;
         }
         // early check not property promotion and already readonly
@@ -253,7 +246,7 @@ CODE_SAMPLE
             }
             if ($this->nodeComparator->areNodesEqual($propertyFetch, $node->var)) {
                 $isAssigned = \true;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             return null;
         });

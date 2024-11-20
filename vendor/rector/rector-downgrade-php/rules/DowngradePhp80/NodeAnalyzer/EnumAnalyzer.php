@@ -18,14 +18,12 @@ final class EnumAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     public function __construct(AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;

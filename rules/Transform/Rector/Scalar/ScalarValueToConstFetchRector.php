@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Transform\Rector\Scalar;
 
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
@@ -25,7 +25,7 @@ class ScalarValueToConstFetchRector extends AbstractRector implements Configurab
     /**
      * @var ScalarValueToConstFetch[]
      */
-    private $scalarValueToConstFetches;
+    private array $scalarValueToConstFetches;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replaces Scalar values with a ConstFetch or ClassConstFetch', [new ConfiguredCodeSample(<<<'SAMPLE'
@@ -34,14 +34,14 @@ SAMPLE
 , <<<'SAMPLE'
 $var = \SomeClass::FOOBAR_INT;
 SAMPLE
-, [new ScalarValueToConstFetch(new LNumber(10), new ClassConstFetch(new FullyQualified('SomeClass'), new Identifier('FOOBAR_INT')))])]);
+, [new ScalarValueToConstFetch(new Int_(10), new ClassConstFetch(new FullyQualified('SomeClass'), new Identifier('FOOBAR_INT')))])]);
     }
     public function getNodeTypes() : array
     {
-        return [String_::class, DNumber::class, LNumber::class];
+        return [String_::class, Float_::class, Int_::class];
     }
     /**
-     * @param String_|DNumber|LNumber $node
+     * @param String_|Float_|Int_ $node
      * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch|null
      */
     public function refactor(Node $node)

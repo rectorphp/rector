@@ -5,7 +5,7 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\FunctionVariantWithPhpDocs;
+use PHPStan\Reflection\ExtendedFunctionVariant;
 use PHPStan\Type\MixedType;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -14,19 +14,16 @@ final class ClassMethodReturnVendorLockResolver
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
      */
-    private $magicClassMethodAnalyzer;
+    private MagicClassMethodAnalyzer $magicClassMethodAnalyzer;
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -64,7 +61,7 @@ final class ClassMethodReturnVendorLockResolver
             }
             $parentClassMethodReflection = $ancestorClassReflections->getNativeMethod($methodName);
             $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
-            if (!$parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
+            if (!$parametersAcceptor instanceof ExtendedFunctionVariant) {
                 continue;
             }
             // here we count only on strict types, not on docs

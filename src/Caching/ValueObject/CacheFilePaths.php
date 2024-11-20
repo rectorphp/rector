@@ -7,19 +7,16 @@ final class CacheFilePaths
 {
     /**
      * @readonly
-     * @var string
      */
-    private $firstDirectory;
+    private string $firstDirectory;
     /**
      * @readonly
-     * @var string
      */
-    private $secondDirectory;
+    private string $secondDirectory;
     /**
      * @readonly
-     * @var string
      */
-    private $filePath;
+    private string $filePath;
     public function __construct(string $firstDirectory, string $secondDirectory, string $filePath)
     {
         $this->firstDirectory = $firstDirectory;

@@ -18,24 +18,12 @@ use RectorPrefix202411\Symfony\Component\Process\Exception\InvalidArgumentExcept
  */
 abstract class AbstractPipes implements PipesInterface
 {
-    /**
-     * @var mixed[]
-     */
-    public $pipes = [];
-    /**
-     * @var string
-     */
-    private $inputBuffer = '';
+    public array $pipes = [];
+    private string $inputBuffer = '';
     /** @var resource|string|\Iterator */
     private $input;
-    /**
-     * @var bool
-     */
-    private $blocked = \true;
-    /**
-     * @var string|null
-     */
-    private $lastError;
+    private bool $blocked = \true;
+    private ?string $lastError = null;
     /**
      * @param resource|string|\Iterator $input
      */

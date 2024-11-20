@@ -21,14 +21,12 @@ final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRecto
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
-    private $constructorAssignDetector;
+    private ConstructorAssignDetector $constructorAssignDetector;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(ConstructorAssignDetector $constructorAssignDetector, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
@@ -85,7 +83,7 @@ CODE_SAMPLE
     }
     private function shouldSkipProperty(Property $property, Class_ $class) : bool
     {
-        if ($property->type === null) {
+        if (!$property->type instanceof Node) {
             return \true;
         }
         if (\count($property->props) > 1) {

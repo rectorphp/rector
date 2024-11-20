@@ -188,10 +188,10 @@ final class BuilderHelpers
             return new Expr\ConstFetch(new Name($value ? 'true' : 'false'));
         }
         if (\is_int($value)) {
-            return new Scalar\LNumber($value);
+            return new Scalar\Int_($value);
         }
         if (\is_float($value)) {
-            return new Scalar\DNumber($value);
+            return new Scalar\Float_($value);
         }
         if (\is_string($value)) {
             return new Scalar\String_($value);
@@ -202,10 +202,10 @@ final class BuilderHelpers
             foreach ($value as $itemKey => $itemValue) {
                 // for consecutive, numeric keys don't generate keys
                 if (null !== $lastKey && ++$lastKey === $itemKey) {
-                    $items[] = new Expr\ArrayItem(self::normalizeValue($itemValue));
+                    $items[] = new \PhpParser\Node\ArrayItem(self::normalizeValue($itemValue));
                 } else {
                     $lastKey = null;
-                    $items[] = new Expr\ArrayItem(self::normalizeValue($itemValue), self::normalizeValue($itemKey));
+                    $items[] = new \PhpParser\Node\ArrayItem(self::normalizeValue($itemValue), self::normalizeValue($itemKey));
                 }
             }
             return new Expr\Array_($items);
@@ -253,13 +253,13 @@ final class BuilderHelpers
      * Adds a modifier and returns new modifier bitmask.
      *
      * @param int $modifiers Existing modifiers
-     * @param int $modifier  Modifier to set
+     * @param int $modifier Modifier to set
      *
      * @return int New modifiers
      */
     public static function addModifier(int $modifiers, int $modifier) : int
     {
-        Stmt\Class_::verifyModifier($modifiers, $modifier);
+        \PhpParser\Modifiers::verifyModifier($modifiers, $modifier);
         return $modifiers | $modifier;
     }
     /**
@@ -268,7 +268,7 @@ final class BuilderHelpers
      */
     public static function addClassModifier(int $existingModifiers, int $modifierToSet) : int
     {
-        Stmt\Class_::verifyClassModifier($existingModifiers, $modifierToSet);
+        \PhpParser\Modifiers::verifyClassModifier($existingModifiers, $modifierToSet);
         return $existingModifiers | $modifierToSet;
     }
 }

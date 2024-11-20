@@ -9,18 +9,16 @@ final class NestedAnnotationToAttribute implements AnnotationToAttributeInterfac
 {
     /**
      * @readonly
-     * @var string
      */
-    private $tag;
+    private string $tag;
     /**
      * @readonly
-     * @var bool
      */
-    private $removeOriginal = \false;
+    private bool $removeOriginal = \false;
     /**
      * @var AnnotationPropertyToAttributeClass[]
      */
-    private $annotationPropertiesToAttributeClasses = [];
+    private array $annotationPropertiesToAttributeClasses = [];
     /**
      * @param array<string, string>|string[]|AnnotationPropertyToAttributeClass[] $annotationPropertiesToAttributeClasses
      */

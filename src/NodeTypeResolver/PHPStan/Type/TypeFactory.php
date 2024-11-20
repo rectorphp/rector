@@ -23,9 +23,8 @@ final class TypeFactory
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
-    private $typeHasher;
+    private TypeHasher $typeHasher;
     public function __construct(TypeHasher $typeHasher)
     {
         $this->typeHasher = $typeHasher;
@@ -143,7 +142,17 @@ final class TypeFactory
         if (\count($types) === 1) {
             return $types[0];
         }
-        return new UnionType($types);
+        $unionType = new UnionType($types);
+        if ($unionType->isFloat()->yes()) {
+            return new IntegerType();
+        }
+        if ($unionType->isString()->yes()) {
+            return new StringType();
+        }
+        if ($unionType->isInteger()->yes()) {
+            return new IntegerType();
+        }
+        return $unionType;
     }
     private function removeValueFromConstantType(Type $type) : Type
     {

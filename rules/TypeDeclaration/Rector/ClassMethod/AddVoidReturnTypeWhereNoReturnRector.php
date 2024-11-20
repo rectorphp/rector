@@ -6,7 +6,8 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -22,19 +23,16 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
-    private $silentVoidResolver;
+    private SilentVoidResolver $silentVoidResolver;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
      */
-    private $classMethodReturnVendorLockResolver;
+    private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\ClassModifierChecker
      */
-    private $classModifierChecker;
+    private ClassModifierChecker $classModifierChecker;
     public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ClassModifierChecker $classModifierChecker)
     {
         $this->silentVoidResolver = $silentVoidResolver;
@@ -124,7 +122,7 @@ CODE_SAMPLE
             return \false;
         }
         $onlyStmt = $classMethod->stmts[0] ?? null;
-        return $onlyStmt instanceof Throw_;
+        return $onlyStmt instanceof Expression && $onlyStmt->expr instanceof Throw_;
     }
     private function isNotFinalAndEmpty(ClassMethod $classMethod) : bool
     {

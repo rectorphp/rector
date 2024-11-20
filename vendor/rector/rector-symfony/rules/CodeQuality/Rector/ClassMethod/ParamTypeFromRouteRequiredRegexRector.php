@@ -20,19 +20,16 @@ final class ParamTypeFromRouteRequiredRegexRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
-    private $controllerAnalyzer;
+    private ControllerAnalyzer $controllerAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver
      */
-    private $routeRequiredParamNameToTypesResolver;
+    private RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     public function __construct(ControllerAnalyzer $controllerAnalyzer, RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
@@ -103,7 +100,7 @@ CODE_SAMPLE
             if (!$param instanceof Param) {
                 continue;
             }
-            if ($param->type !== null) {
+            if ($param->type instanceof Node) {
                 continue;
             }
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);

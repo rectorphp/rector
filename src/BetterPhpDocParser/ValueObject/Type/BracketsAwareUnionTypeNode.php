@@ -10,9 +10,8 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
 {
     /**
      * @readonly
-     * @var bool
      */
-    private $isWrappedInBrackets = \false;
+    private bool $isWrappedInBrackets = \false;
     /**
      * @param TypeNode[] $types
      */

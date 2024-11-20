@@ -10,7 +10,7 @@ class IntersectionTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
     /** @var TypeNode[] */
-    public $types;
+    public array $types;
     /**
      * @param TypeNode[] $types
      */

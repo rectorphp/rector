@@ -43,46 +43,39 @@ final class AstResolver
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\PhpParser\SmartPhpParser
      */
-    private $smartPhpParser;
+    private SmartPhpParser $smartPhpParser;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
-    private $nodeScopeAndMetadataDecorator;
+    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\MethodReflectionResolver
      */
-    private $methodReflectionResolver;
+    private MethodReflectionResolver $methodReflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, when no statements could be parsed from the file.
      *
      * @var array<string, Stmt[]|null>
      */
-    private $parsedFileNodes = [];
+    private array $parsedFileNodes = [];
     public function __construct(SmartPhpParser $smartPhpParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;

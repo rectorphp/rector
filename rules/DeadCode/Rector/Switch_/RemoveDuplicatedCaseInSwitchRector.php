@@ -16,10 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedCaseInSwitchRector extends AbstractRector
 {
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private bool $hasChanged = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('2 following switch keys with identical  will be reduced to one result', [new CodeSample(<<<'CODE_SAMPLE'

@@ -18,7 +18,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -31,19 +31,17 @@ final class NodeNameResolver
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
-    private $classNaming;
+    private ClassNaming $classNaming;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\CallAnalyzer
      */
-    private $callAnalyzer;
+    private CallAnalyzer $callAnalyzer;
     /**
      * @var NodeNameResolverInterface[]
      * @readonly
      */
-    private $nodeNameResolvers = [];
+    private iterable $nodeNameResolvers = [];
     /**
      * Used to check if a string might contain a regex or fnmatch pattern
      */
@@ -51,7 +49,7 @@ final class NodeNameResolver
     /**
      * @var array<string, NodeNameResolverInterface|null>
      */
-    private $nodeNameResolversByClass = [];
+    private array $nodeNameResolversByClass = [];
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
@@ -98,7 +96,7 @@ final class NodeNameResolver
      * @return ($node is Param ? string :
      *  ($node is ClassMethod ? string :
      *  ($node is Property ? string :
-     *  ($node is PropertyProperty ? string :
+     *  ($node is PropertyItem ? string :
      *  ($node is Trait_ ? string :
      *  ($node is Interface_ ? string :
      *  ($node is Const_ ? string :

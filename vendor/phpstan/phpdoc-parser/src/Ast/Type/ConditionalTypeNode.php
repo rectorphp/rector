@@ -8,16 +8,11 @@ use function sprintf;
 class ConditionalTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $subjectType;
-    /** @var TypeNode */
-    public $targetType;
-    /** @var TypeNode */
-    public $if;
-    /** @var TypeNode */
-    public $else;
-    /** @var bool */
-    public $negated;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $subjectType;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $targetType;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $if;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $else;
+    public bool $negated;
     public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $subjectType, \PHPStan\PhpDocParser\Ast\Type\TypeNode $targetType, \PHPStan\PhpDocParser\Ast\Type\TypeNode $if, \PHPStan\PhpDocParser\Ast\Type\TypeNode $else, bool $negated)
     {
         $this->subjectType = $subjectType;

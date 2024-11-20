@@ -23,13 +23,9 @@ final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRul
 {
     /**
      * @readonly
-     * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
-    private $exactCompareFactory;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ExactCompareFactory $exactCompareFactory;
+    private bool $hasChanged = \false;
     public function __construct(ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;

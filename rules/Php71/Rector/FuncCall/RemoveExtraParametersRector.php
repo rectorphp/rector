@@ -27,14 +27,12 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\VariadicAnalyzer
      */
-    private $variadicAnalyzer;
+    private VariadicAnalyzer $variadicAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(VariadicAnalyzer $variadicAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->variadicAnalyzer = $variadicAnalyzer;
@@ -140,8 +138,8 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
     private function resolveMaximumAllowedParameterCount($functionLikeReflection) : int
     {
         $parameterCounts = [0];
-        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
-            $parameterCounts[] = \count($parametersAcceptor->getParameters());
+        foreach ($functionLikeReflection->getVariants() as $variant) {
+            $parameterCounts[] = \count($variant->getParameters());
         }
         return \max($parameterCounts);
     }

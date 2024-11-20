@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace PhpParser\Lexer\TokenEmulator;
 
-use PhpParser\Lexer\Emulative;
+use PhpParser\PhpVersion;
 final class EnumTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulator
 {
-    public function getPhpVersion() : string
+    public function getPhpVersion() : PhpVersion
     {
-        return Emulative::PHP_8_1;
+        return PhpVersion::fromComponents(8, 1);
     }
     public function getKeywordString() : string
     {
@@ -20,6 +20,6 @@ final class EnumTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmul
     }
     protected function isKeywordContext(array $tokens, int $pos) : bool
     {
-        return parent::isKeywordContext($tokens, $pos) && isset($tokens[$pos + 2]) && $tokens[$pos + 1][0] === \T_WHITESPACE && $tokens[$pos + 2][0] === \T_STRING;
+        return parent::isKeywordContext($tokens, $pos) && isset($tokens[$pos + 2]) && (\is_array($tokens[$pos + 1]) ? $tokens[$pos + 1][0] : $tokens[$pos + 1]) === \T_WHITESPACE && (\is_array($tokens[$pos + 2]) ? $tokens[$pos + 2][0] : $tokens[$pos + 2]) === \T_STRING;
     }
 }

@@ -28,9 +28,8 @@ final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRecto
 {
     /**
      * @readonly
-     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
-    private $arrayCallableMethodMatcher;
+    private ArrayCallableMethodMatcher $arrayCallableMethodMatcher;
     public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;

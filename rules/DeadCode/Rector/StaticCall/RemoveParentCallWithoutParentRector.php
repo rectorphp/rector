@@ -25,19 +25,16 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassMethodManipulator
      */
-    private $classMethodManipulator;
+    private ClassMethodManipulator $classMethodManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(ClassMethodManipulator $classMethodManipulator, ClassAnalyzer $classAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->classMethodManipulator = $classMethodManipulator;

@@ -574,9 +574,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function wrap(Closure $callback, array $parameters = [])
     {
-        return function () use($callback, $parameters) {
-            return $this->call($callback, $parameters);
-        };
+        return fn() => $this->call($callback, $parameters);
     }
     /**
      * Call the given Closure / class@method and inject its dependencies.
@@ -622,9 +620,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function factory($abstract)
     {
-        return function () use($abstract) {
-            return $this->make($abstract);
-        };
+        return fn() => $this->make($abstract);
     }
     /**
      * An alias function name for make().
@@ -871,7 +867,7 @@ class Container implements ArrayAccess, ContainerContract
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
-            $result = $result ?? (\is_null(Util::getParameterClassName($dependency)) ? $this->resolvePrimitive($dependency) : $this->resolveClass($dependency));
+            $result ??= \is_null(Util::getParameterClassName($dependency)) ? $this->resolvePrimitive($dependency) : $this->resolveClass($dependency);
             $this->fireAfterResolvingAttributeCallbacks(\method_exists($dependency, 'getAttributes') ? $dependency->getAttributes() : [], $result);
             if ($dependency->isVariadic()) {
                 $results = \array_merge($results, $result);
@@ -971,9 +967,7 @@ class Container implements ArrayAccess, ContainerContract
         if (!\is_array($concrete = $this->getContextualConcrete($abstract))) {
             return $this->make($className);
         }
-        return \array_map(function ($abstract) {
-            return $this->resolve($abstract);
-        }, $concrete);
+        return \array_map(fn($abstract) => $this->resolve($abstract), $concrete);
     }
     /**
      * Resolve a dependency based on an attribute.
@@ -1297,7 +1291,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public static function getInstance()
     {
-        return static::$instance = static::$instance ?? new static();
+        return static::$instance ??= new static();
     }
     /**
      * Set the shared instance of the container.
@@ -1339,9 +1333,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function offsetSet($key, $value) : void
     {
-        $this->bind($key, $value instanceof Closure ? $value : function () use($value) {
-            return $value;
-        });
+        $this->bind($key, $value instanceof Closure ? $value : fn() => $value);
     }
     /**
      * Unset the value at a given offset.

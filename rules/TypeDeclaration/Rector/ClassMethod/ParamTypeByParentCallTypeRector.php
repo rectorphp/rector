@@ -24,19 +24,16 @@ final class ParamTypeByParentCallTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
-    private $callerParamMatcher;
+    private CallerParamMatcher $callerParamMatcher;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(CallerParamMatcher $callerParamMatcher, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->callerParamMatcher = $callerParamMatcher;
@@ -109,7 +106,7 @@ CODE_SAMPLE
             if (!$parentParam instanceof Param) {
                 continue;
             }
-            if ($parentParam->type === null) {
+            if (!$parentParam->type instanceof Node) {
                 continue;
             }
             // mimic type

@@ -12,19 +12,16 @@ final class ClassMethodParamVendorLockResolver
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;

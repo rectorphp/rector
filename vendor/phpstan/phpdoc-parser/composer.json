@@ -3,17 +3,17 @@
     "description": "PHPDoc parser with support for nullable, intersection and generic types",
     "license": "MIT",
     "require": {
-        "php": "^7.2 || ^8.0"
+        "php": "^7.4 || ^8.0"
     },
     "require-dev": {
         "doctrine\/annotations": "^2.0",
-        "nikic\/php-parser": "^4.15",
+        "nikic\/php-parser": "^5.3.0",
         "php-parallel-lint\/php-parallel-lint": "^1.2",
         "phpstan\/extension-installer": "^1.0",
-        "phpstan\/phpstan": "^1.5",
-        "phpstan\/phpstan-phpunit": "^1.1",
-        "phpstan\/phpstan-strict-rules": "^1.0",
-        "phpunit\/phpunit": "^9.5",
+        "phpstan\/phpstan": "^2.0",
+        "phpstan\/phpstan-phpunit": "^2.0",
+        "phpstan\/phpstan-strict-rules": "^2.0",
+        "phpunit\/phpunit": "^9.6",
         "symfony\/process": "^5.2"
     },
     "config": {

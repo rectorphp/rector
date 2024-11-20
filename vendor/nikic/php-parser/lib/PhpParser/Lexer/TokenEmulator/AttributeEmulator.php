@@ -3,12 +3,13 @@
 declare (strict_types=1);
 namespace PhpParser\Lexer\TokenEmulator;
 
-use PhpParser\Lexer\Emulative;
+use PhpParser\PhpVersion;
+use PhpParser\Token;
 final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
 {
-    public function getPhpVersion() : string
+    public function getPhpVersion() : PhpVersion
     {
-        return Emulative::PHP_8_0;
+        return PhpVersion::fromComponents(8, 0);
     }
     public function isEmulationNeeded(string $code) : bool
     {
@@ -18,15 +19,12 @@ final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulat
     {
         // We need to manually iterate and manage a count because we'll change
         // the tokens array on the way.
-        $line = 1;
         for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
-            if ($tokens[$i] === '#' && isset($tokens[$i + 1]) && $tokens[$i + 1] === '[') {
-                \array_splice($tokens, $i, 2, [[\T_ATTRIBUTE, '#[', $line]]);
+            $token = $tokens[$i];
+            if ((\is_array($token) ? $token[1] : $token) === '#' && isset($tokens[$i + 1]) && (\is_array($tokens[$i + 1]) ? $tokens[$i + 1][1] : $tokens[$i + 1]) === '[') {
+                \array_splice($tokens, $i, 2, [new Token(\T_ATTRIBUTE, '#[', $token->line, $token->pos)]);
                 $c--;
                 continue;
-            }
-            if (\is_array($tokens[$i])) {
-                $line += \substr_count($tokens[$i][1], "\n");
             }
         }
         return $tokens;

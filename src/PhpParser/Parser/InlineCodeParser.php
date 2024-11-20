@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Parser;
 
+use PhpParser\Node\Scalar\InterpolatedString;
 use RectorPrefix202411\Nette\Utils\FileSystem;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -17,19 +17,16 @@ final class InlineCodeParser
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\SimplePhpParser
      */
-    private $simplePhpParser;
+    private \Rector\PhpParser\Parser\SimplePhpParser $simplePhpParser;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var string
      * @see https://regex101.com/r/dwe4OW/1
@@ -92,15 +89,11 @@ final class InlineCodeParser
     {
         if ($expr instanceof String_) {
             if (!StringUtils::isMatch($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX)) {
-                return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static function (array $match) : string {
-                    return '"' . $match['backreference'] . '"';
-                });
+                return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static fn(array $match): string => '"' . $match['backreference'] . '"');
             }
-            return Strings::replace($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX, static function (array $match) : string {
-                return '"\\' . $match['backreference'] . '"';
-            });
+            return Strings::replace($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX, static fn(array $match): string => '"\\' . $match['backreference'] . '"');
         }
-        if ($expr instanceof Encapsed) {
+        if ($expr instanceof InterpolatedString) {
             return $this->resolveEncapsedValue($expr);
         }
         if ($expr instanceof Concat) {
@@ -118,11 +111,11 @@ final class InlineCodeParser
         $code = StringUtils::isMatch($code, self::ENDING_SEMI_COLON_REGEX) ? $code : $code . ';';
         return $this->simplePhpParser->parseString($code);
     }
-    private function resolveEncapsedValue(Encapsed $encapsed) : string
+    private function resolveEncapsedValue(InterpolatedString $interpolatedString) : string
     {
         $value = '';
         $isRequirePrint = \false;
-        foreach ($encapsed->parts as $part) {
+        foreach ($interpolatedString->parts as $part) {
             $partValue = (string) $this->valueResolver->getValue($part);
             if (\substr_compare($partValue, "'", -\strlen("'")) === 0) {
                 $isRequirePrint = \true;
@@ -130,7 +123,7 @@ final class InlineCodeParser
             }
             $value .= $partValue;
         }
-        $printedExpr = $isRequirePrint ? $this->betterStandardPrinter->print($encapsed) : $value;
+        $printedExpr = $isRequirePrint ? $this->betterStandardPrinter->print($interpolatedString) : $value;
         // remove "
         $printedExpr = \trim($printedExpr, '""');
         // use \$ → $
@@ -147,8 +140,6 @@ final class InlineCodeParser
             $concat->right->value .= '.';
         }
         $string = $this->stringify($concat->left) . $this->stringify($concat->right);
-        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static function (array $match) {
-            return $match['variable'];
-        });
+        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static fn(array $match) => $match['variable']);
     }
 }

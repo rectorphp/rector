@@ -22,7 +22,7 @@ class MethodCallToNewRector extends AbstractRector implements ConfigurableRector
     /**
      * @var MethodCallToNew[]
      */
-    private $methodCallToNew;
+    private array $methodCallToNew;
     /**
      * @param MethodCallToNew[] $configuration
      */

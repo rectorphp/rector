@@ -24,19 +24,16 @@ final class SimplifyConditionsRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
-    private $assignAndBinaryMap;
+    private AssignAndBinaryMap $assignAndBinaryMap;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\BinaryOpManipulator
      */
-    private $binaryOpManipulator;
+    private BinaryOpManipulator $binaryOpManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
@@ -76,11 +73,7 @@ final class SimplifyConditionsRector extends AbstractRector
     }
     private function processIdenticalAndNotIdentical(Identical $identical) : ?Node
     {
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static function (Node $node) : bool {
-            return $node instanceof Identical || $node instanceof NotIdentical;
-        }, function (Node $node) : bool {
-            return $node instanceof Expr && $this->valueResolver->isTrueOrFalse($node);
-        });
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static fn(Node $node): bool => $node instanceof Identical || $node instanceof NotIdentical, fn(Node $node): bool => $node instanceof Expr && $this->valueResolver->isTrueOrFalse($node));
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return $twoNodeMatch;
         }

@@ -47,102 +47,42 @@ class Process implements \IteratorAggregate
     // Use this flag to skip STDOUT while iterating
     public const ITER_SKIP_ERR = 8;
     // Use this flag to skip STDERR while iterating
-    /**
-     * @var \Closure|null
-     */
-    private $callback;
+    private ?\Closure $callback = null;
     /**
      * @var mixed[]|string
      */
     private $commandline;
-    /**
-     * @var string|null
-     */
-    private $cwd;
-    /**
-     * @var mixed[]
-     */
-    private $env = [];
+    private ?string $cwd;
+    private array $env = [];
     /** @var resource|string|\Iterator|null */
     private $input;
-    /**
-     * @var float|null
-     */
-    private $starttime;
-    /**
-     * @var float|null
-     */
-    private $lastOutputTime;
-    /**
-     * @var float|null
-     */
-    private $timeout;
-    /**
-     * @var float|null
-     */
-    private $idleTimeout;
-    /**
-     * @var int|null
-     */
-    private $exitcode;
-    /**
-     * @var mixed[]
-     */
-    private $fallbackStatus = [];
-    /**
-     * @var mixed[]
-     */
-    private $processInformation;
-    /**
-     * @var bool
-     */
-    private $outputDisabled = \false;
+    private ?float $starttime = null;
+    private ?float $lastOutputTime = null;
+    private ?float $timeout = null;
+    private ?float $idleTimeout = null;
+    private ?int $exitcode = null;
+    private array $fallbackStatus = [];
+    private array $processInformation;
+    private bool $outputDisabled = \false;
     /** @var resource */
     private $stdout;
     /** @var resource */
     private $stderr;
     /** @var resource|null */
     private $process;
-    /**
-     * @var string
-     */
-    private $status = self::STATUS_READY;
-    /**
-     * @var int
-     */
-    private $incrementalOutputOffset = 0;
-    /**
-     * @var int
-     */
-    private $incrementalErrorOutputOffset = 0;
-    /**
-     * @var bool
-     */
-    private $tty = \false;
-    /**
-     * @var bool
-     */
-    private $pty;
-    /**
-     * @var mixed[]
-     */
-    private $options = ['suppress_errors' => \true, 'bypass_shell' => \true];
+    private string $status = self::STATUS_READY;
+    private int $incrementalOutputOffset = 0;
+    private int $incrementalErrorOutputOffset = 0;
+    private bool $tty = \false;
+    private bool $pty;
+    private array $options = ['suppress_errors' => \true, 'bypass_shell' => \true];
     /**
      * @var \Symfony\Component\Process\Pipes\WindowsPipes|\Symfony\Component\Process\Pipes\UnixPipes
      */
     private $processPipes;
-    /**
-     * @var int|null
-     */
-    private $latestSignal;
-    /**
-     * @var int|null
-     */
-    private $cachedExitCode;
-    /**
-     * @var bool|null
-     */
-    private static $sigchild;
+    private ?int $latestSignal = null;
+    private ?int $cachedExitCode = null;
+    private static ?bool $sigchild = null;
     /**
      * Exit codes translation table.
      *
@@ -1117,7 +1057,7 @@ class Process implements \IteratorAggregate
     public static function isTtySupported() : bool
     {
         static $isTtySupported;
-        return $isTtySupported = $isTtySupported ?? '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT) && @\is_writable('/dev/tty');
+        return $isTtySupported ??= '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT) && @\is_writable('/dev/tty');
     }
     /**
      * Returns whether PTY is supported on the current operating system.
@@ -1159,9 +1099,7 @@ class Process implements \IteratorAggregate
     protected function buildCallback(?callable $callback = null) : \Closure
     {
         if ($this->outputDisabled) {
-            return function ($type, $data) use($callback) : bool {
-                return null !== $callback && $callback($type, $data);
-            };
+            return fn($type, $data): bool => null !== $callback && $callback($type, $data);
         }
         $out = self::OUT;
         return function ($type, $data) use($callback, $out) : bool {

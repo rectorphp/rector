@@ -16,14 +16,12 @@ final class ParamTagRemover
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
      */
-    private $deadParamTagValueNodeAnalyzer;
+    private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     public function __construct(DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;

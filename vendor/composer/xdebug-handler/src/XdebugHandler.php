@@ -239,7 +239,7 @@ class XdebugHandler
         }
         $this->tryEnableSignals();
         $this->notify(Status::RESTARTING, $displayCmd);
-        $process = \proc_open(\is_array($cmd) ? \implode(' ', \array_map('escapeshellarg', $cmd)) : $cmd, [], $pipes);
+        $process = \proc_open($cmd, [], $pipes);
         if (\is_resource($process)) {
             $exitCode = \proc_close($process);
         }

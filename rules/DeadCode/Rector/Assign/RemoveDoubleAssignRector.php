@@ -23,14 +23,12 @@ final class RemoveDoubleAssignRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
-    private $sideEffectNodeDetector;
+    private SideEffectNodeDetector $sideEffectNodeDetector;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(SideEffectNodeDetector $sideEffectNodeDetector, BetterNodeFinder $betterNodeFinder)
     {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
@@ -110,8 +108,6 @@ CODE_SAMPLE
     }
     private function isSelfReferencing(Assign $assign) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use($assign) : bool {
-            return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
-        });
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode));
     }
 }

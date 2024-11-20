@@ -43,8 +43,6 @@ final class PolyfillPackagesProvider
      */
     private function filterPolyfillPackages(array $require) : array
     {
-        return \array_filter(\array_keys($require), static function (string $packageName) : bool {
-            return \strncmp($packageName, 'symfony/polyfill-', \strlen('symfony/polyfill-')) === 0;
-        });
+        return \array_filter(\array_keys($require), static fn(string $packageName): bool => \strncmp($packageName, 'symfony/polyfill-', \strlen('symfony/polyfill-')) === 0);
     }
 }

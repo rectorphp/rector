@@ -7,19 +7,16 @@ final class RegisteredService
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @readonly
-     * @var string|null
      */
-    private $alias;
+    private ?string $alias;
     /**
      * @readonly
-     * @var string|null
      */
-    private $tag;
+    private ?string $tag;
     public function __construct(string $className, ?string $alias, ?string $tag)
     {
         $this->className = $className;

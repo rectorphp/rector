@@ -41,158 +41,90 @@ final class RectorConfigBuilder
     /**
      * @var string[]
      */
-    private $paths = [];
+    private array $paths = [];
     /**
      * @var string[]
      */
-    private $sets = [];
+    private array $sets = [];
     /**
      * @var array<mixed>
      */
-    private $skip = [];
+    private array $skip = [];
     /**
      * @var array<class-string<RectorInterface>>
      */
-    private $rules = [];
+    private array $rules = [];
     /**
      * @var array<class-string<ConfigurableRectorInterface>, mixed[]>
      */
-    private $rulesWithConfigurations = [];
+    private array $rulesWithConfigurations = [];
     /**
      * @var string[]
      */
-    private $fileExtensions = [];
+    private array $fileExtensions = [];
     /**
      * @var null|class-string<CacheStorageInterface>
      */
-    private $cacheClass;
-    /**
-     * @var string|null
-     */
-    private $cacheDirectory;
-    /**
-     * @var string|null
-     */
-    private $containerCacheDirectory;
-    /**
-     * @var bool|null
-     */
-    private $parallel;
-    /**
-     * @var int
-     */
-    private $parallelTimeoutSeconds = 120;
-    /**
-     * @var int
-     */
-    private $parallelMaxNumberOfProcess = 16;
-    /**
-     * @var int
-     */
-    private $parallelJobSize = 16;
-    /**
-     * @var bool
-     */
-    private $importNames = \false;
-    /**
-     * @var bool
-     */
-    private $importDocBlockNames = \false;
-    /**
-     * @var bool
-     */
-    private $importShortClasses = \true;
-    /**
-     * @var bool
-     */
-    private $removeUnusedImports = \false;
-    /**
-     * @var bool
-     */
-    private $noDiffs = \false;
-    /**
-     * @var string|null
-     */
-    private $memoryLimit;
+    private ?string $cacheClass = null;
+    private ?string $cacheDirectory = null;
+    private ?string $containerCacheDirectory = null;
+    private ?bool $parallel = null;
+    private int $parallelTimeoutSeconds = 120;
+    private int $parallelMaxNumberOfProcess = 16;
+    private int $parallelJobSize = 16;
+    private bool $importNames = \false;
+    private bool $importDocBlockNames = \false;
+    private bool $importShortClasses = \true;
+    private bool $removeUnusedImports = \false;
+    private bool $noDiffs = \false;
+    private ?string $memoryLimit = null;
     /**
      * @var string[]
      */
-    private $autoloadPaths = [];
+    private array $autoloadPaths = [];
     /**
      * @var string[]
      */
-    private $bootstrapFiles = [];
-    /**
-     * @var string
-     */
-    private $indentChar = ' ';
-    /**
-     * @var int
-     */
-    private $indentSize = 4;
+    private array $bootstrapFiles = [];
+    private string $indentChar = ' ';
+    private int $indentSize = 4;
     /**
      * @var string[]
      */
-    private $phpstanConfigs = [];
+    private array $phpstanConfigs = [];
     /**
      * @var null|PhpVersion::*
      */
-    private $phpVersion;
-    /**
-     * @var string|null
-     */
-    private $symfonyContainerXmlFile;
-    /**
-     * @var string|null
-     */
-    private $symfonyContainerPhpFile;
+    private ?int $phpVersion = null;
+    private ?string $symfonyContainerXmlFile = null;
+    private ?string $symfonyContainerPhpFile = null;
     /**
      * To make sure type declarations set and level are not duplicated,
      * as both contain same rules
-     * @var bool|null
      */
-    private $isTypeCoverageLevelUsed;
-    /**
-     * @var bool|null
-     */
-    private $isDeadCodeLevelUsed;
-    /**
-     * @var bool|null
-     */
-    private $isCodeQualityLevelUsed;
-    /**
-     * @var bool|null
-     */
-    private $isFluentNewLine;
+    private ?bool $isTypeCoverageLevelUsed = null;
+    private ?bool $isDeadCodeLevelUsed = null;
+    private ?bool $isCodeQualityLevelUsed = null;
+    private ?bool $isFluentNewLine = null;
     /**
      * @var RegisteredService[]
      */
-    private $registerServices = [];
+    private array $registerServices = [];
     /**
      * @var array<SetGroup::*>
      */
-    private $setGroups = [];
-    /**
-     * @var bool|null
-     */
-    private $reportingRealPath;
+    private array $setGroups = [];
+    private ?bool $reportingRealPath = null;
     /**
      * @var string[]
      */
-    private $groupLoadedSets = [];
-    /**
-     * @var string|null
-     */
-    private $editorUrl;
+    private array $groupLoadedSets = [];
+    private ?string $editorUrl = null;
     /**
      * @api soon to be used
-     * @var bool|null
      */
-    private $isWithPhpSetsUsed;
-    /**
-     * @var bool|null
-     */
-    private $isWithPhpLevelUsed;
+    private ?bool $isWithPhpSetsUsed = null;
+    private ?bool $isWithPhpLevelUsed = null;
     public function __invoke(RectorConfig $rectorConfig) : void
     {
         if ($this->setGroups !== []) {

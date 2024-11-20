@@ -18,13 +18,12 @@ final class RenameStringRector extends AbstractRector implements ConfigurableRec
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var array<string, string>
      */
-    private $stringChanges = [];
+    private array $stringChanges = [];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;

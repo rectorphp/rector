@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -23,9 +24,8 @@ final class SetUpBeforeClassToSetUpRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -117,18 +117,18 @@ CODE_SAMPLE
             return null;
         }
         // remove static flag
-        $setUpBeforeClassMethod->flags -= Class_::MODIFIER_STATIC;
+        $setUpBeforeClassMethod->flags -= Modifiers::STATIC;
         // remove public flag
-        $setUpBeforeClassMethod->flags -= Class_::MODIFIER_PUBLIC;
+        $setUpBeforeClassMethod->flags -= Modifiers::PUBLIC;
         // make protected
-        $setUpBeforeClassMethod->flags += Class_::MODIFIER_PROTECTED;
+        $setUpBeforeClassMethod->flags += Modifiers::PROTECTED;
         $setUpBeforeClassMethod->name = new Identifier('setUp');
         foreach ($node->getProperties() as $property) {
             if (!$property->isStatic()) {
                 continue;
             }
             if ($this->isNames($property, $changedPropertyNames)) {
-                $property->flags -= Class_::MODIFIER_STATIC;
+                $property->flags -= Modifiers::STATIC;
             }
         }
         // replace same property access in the class

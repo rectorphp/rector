@@ -19,9 +19,8 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\BinaryOpManipulator
      */
-    private $binaryOpManipulator;
+    private BinaryOpManipulator $binaryOpManipulator;
     public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
@@ -45,11 +44,7 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
         if (!$node->cond instanceof NotIdentical && !$node->cond instanceof Identical) {
             return null;
         }
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($node->cond, function (Node $leftNode) use($node) : bool {
-            return $this->nodeComparator->areNodesEqual($leftNode, $node->if);
-        }, function (Node $leftNode) use($node) : bool {
-            return $this->nodeComparator->areNodesEqual($leftNode, $node->else);
-        });
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($node->cond, fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->if), fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->else));
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }

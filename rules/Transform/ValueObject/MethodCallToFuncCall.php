@@ -7,19 +7,16 @@ final class MethodCallToFuncCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $objectType;
+    private string $objectType;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @readonly
-     * @var string
      */
-    private $functionName;
+    private string $functionName;
     public function __construct(string $objectType, string $methodName, string $functionName)
     {
         $this->objectType = $objectType;

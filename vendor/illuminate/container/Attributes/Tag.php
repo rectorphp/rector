@@ -9,10 +9,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class Tag implements ContextualAttribute
 {
-    /**
-     * @var string
-     */
-    public $tag;
+    public string $tag;
     public function __construct(string $tag)
     {
         $this->tag = $tag;

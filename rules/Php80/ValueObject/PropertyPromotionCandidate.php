@@ -13,19 +13,16 @@ final class PropertyPromotionCandidate
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\Property
      */
-    private $property;
+    private Property $property;
     /**
      * @readonly
-     * @var \PhpParser\Node\Param
      */
-    private $param;
+    private Param $param;
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\Expression
      */
-    private $expression;
+    private Expression $expression;
     public function __construct(Property $property, Param $param, Expression $expression)
     {
         $this->property = $property;

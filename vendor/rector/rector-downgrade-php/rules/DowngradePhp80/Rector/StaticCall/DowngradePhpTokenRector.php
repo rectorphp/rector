@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -85,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($methodCall->var)]);
-        $arrayDimFetch = new ArrayDimFetch($methodCall->var, new LNumber(0));
+        $arrayDimFetch = new ArrayDimFetch($methodCall->var, new Int_(0));
         $tokenGetNameFuncCall = new FuncCall(new Name('token_name'), [new Arg($arrayDimFetch)]);
         return new Ternary($isArrayFuncCall, $tokenGetNameFuncCall, $this->nodeFactory->createNull());
     }
@@ -99,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($propertyFetch->var)]);
-        $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, $propertyFetchName === 'id' ? new LNumber(0) : new LNumber(1));
+        $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, $propertyFetchName === 'id' ? new Int_(0) : new Int_(1));
         return new Ternary($isArrayFuncCall, $arrayDimFetch, $propertyFetch->var);
     }
 }

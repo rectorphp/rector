@@ -19,14 +19,12 @@ final class RedirectToRouteRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
-    private $controllerAnalyzer;
+    private ControllerAnalyzer $controllerAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(ControllerAnalyzer $controllerAnalyzer, ValueResolver $valueResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;

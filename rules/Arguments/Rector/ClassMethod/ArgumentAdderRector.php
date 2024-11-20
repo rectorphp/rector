@@ -37,32 +37,25 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
 {
     /**
      * @readonly
-     * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
-    private $argumentAddingScope;
+    private ArgumentAddingScope $argumentAddingScope;
     /**
      * @readonly
-     * @var \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector
      */
-    private $changedArgumentsDetector;
+    private ChangedArgumentsDetector $changedArgumentsDetector;
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @var ArgumentAdder[]|ArgumentAdderWithoutDefaultValue[]
      */
-    private $addedArguments = [];
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private array $addedArguments = [];
+    private bool $hasChanged = \false;
     public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->argumentAddingScope = $argumentAddingScope;

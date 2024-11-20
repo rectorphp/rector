@@ -9,14 +9,13 @@ final class SprintfStringAndArgs
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Scalar\String_
      */
-    private $string;
+    private String_ $string;
     /**
      * @var Expr[]
      * @readonly
      */
-    private $arrayItems;
+    private array $arrayItems;
     /**
      * @param Expr[] $arrayItems
      */

@@ -31,14 +31,12 @@ final class ChangedNodeScopeRefresher
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ScopeAnalyzer
      */
-    private $scopeAnalyzer;
+    private ScopeAnalyzer $scopeAnalyzer;
     public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;

@@ -20,9 +20,8 @@ final class ReturnTypeFromStrictParamRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddReturnTypeFromParam
      */
-    private $addReturnTypeFromParam;
+    private AddReturnTypeFromParam $addReturnTypeFromParam;
     public function __construct(AddReturnTypeFromParam $addReturnTypeFromParam)
     {
         $this->addReturnTypeFromParam = $addReturnTypeFromParam;

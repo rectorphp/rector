@@ -168,14 +168,8 @@ final class Iterables
     {
         return new class(self::toIterator($iterable)) implements \IteratorAggregate
         {
-            /**
-             * @var \Iterator
-             */
-            private $iterator;
-            /**
-             * @var mixed[]
-             */
-            private $cache = [];
+            private \Iterator $iterator;
+            private array $cache = [];
             public function __construct(\Iterator $iterator, array $cache = [])
             {
                 $this->iterator = $iterator;

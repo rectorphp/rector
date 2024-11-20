@@ -82,7 +82,7 @@ CODE_SAMPLE
             if ($i === $condEndTokenPos) {
                 return \false;
             }
-            if (\in_array($oldTokens[$i], ['{', ':'], \true)) {
+            if (\in_array((string) $oldTokens[$i], ['{', ':'], \true)) {
                 // all good
                 return \true;
             }

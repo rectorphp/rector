@@ -8,9 +8,8 @@ final class AnnotationPropertyToAttributeClass
 {
     /**
      * @readonly
-     * @var string
      */
-    private $attributeClass;
+    private string $attributeClass;
     /**
      * @readonly
      * @var int|string|null
@@ -18,9 +17,8 @@ final class AnnotationPropertyToAttributeClass
     private $annotationProperty = null;
     /**
      * @readonly
-     * @var bool
      */
-    private $doesNeedNewImport = \false;
+    private bool $doesNeedNewImport = \false;
     /**
      * @param string|int|null $annotationProperty
      */

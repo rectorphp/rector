@@ -40,14 +40,12 @@ final class DowngradeArrayKeyFirstLastRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
      */
-    private $variableNaming;
+    private VariableNaming $variableNaming;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
-    private $exprInTopStmtMatcher;
+    private ExprInTopStmtMatcher $exprInTopStmtMatcher;
     public function __construct(VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->variableNaming = $variableNaming;

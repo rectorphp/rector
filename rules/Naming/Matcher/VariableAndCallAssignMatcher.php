@@ -16,19 +16,16 @@ final class VariableAndCallAssignMatcher
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Matcher\CallMatcher
      */
-    private $callMatcher;
+    private \Rector\Naming\Matcher\CallMatcher $callMatcher;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(\Rector\Naming\Matcher\CallMatcher $callMatcher, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->callMatcher = $callMatcher;
@@ -51,9 +48,7 @@ final class VariableAndCallAssignMatcher
         if ($variableName === null) {
             return null;
         }
-        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->isFirstClassCallable() ? [] : $call->getArgs(), function (Node $subNode) use($variableName) : bool {
-            return $subNode instanceof Variable && $this->nodeNameResolver->isName($subNode, $variableName);
-        });
+        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->isFirstClassCallable() ? [] : $call->getArgs(), fn(Node $subNode): bool => $subNode instanceof Variable && $this->nodeNameResolver->isName($subNode, $variableName));
         if ($isVariableFoundInCallArgs) {
             return null;
         }

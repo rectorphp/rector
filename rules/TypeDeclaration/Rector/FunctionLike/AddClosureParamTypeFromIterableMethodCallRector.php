@@ -31,24 +31,20 @@ final class AddClosureParamTypeFromIterableMethodCallRector extends AbstractRect
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Reflection\MethodReflectionResolver
      */
-    private $methodReflectionResolver;
+    private MethodReflectionResolver $methodReflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
-    private $typeUnwrapper;
+    private TypeUnwrapper $typeUnwrapper;
     public function __construct(TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, MethodReflectionResolver $methodReflectionResolver, TypeUnwrapper $typeUnwrapper)
     {
         $this->typeComparator = $typeComparator;

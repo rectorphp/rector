@@ -20,18 +20,13 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
 {
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
-    private $attributeArrayNameInliner;
-    /**
-     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
-     */
-    private $annotationToAttributeMapper;
+    private AttributeArrayNameInliner $attributeArrayNameInliner;
+    private AnnotationToAttributeMapper $annotationToAttributeMapper;
     public function __construct(PhpVersionProvider $phpVersionProvider, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->phpVersionProvider = $phpVersionProvider;
@@ -57,7 +52,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
     /**
      * @param DoctrineAnnotationTagValueNode $value
      */
-    public function map($value) : \PhpParser\Node\Expr
+    public function map($value) : New_
     {
         $annotationShortName = $this->resolveAnnotationName($value);
         $values = $value->getValues();

@@ -19,14 +19,12 @@ final class RemoveUselessParamTagRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
-    private $paramTagRemover;
+    private ParamTagRemover $paramTagRemover;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(ParamTagRemover $paramTagRemover, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->paramTagRemover = $paramTagRemover;

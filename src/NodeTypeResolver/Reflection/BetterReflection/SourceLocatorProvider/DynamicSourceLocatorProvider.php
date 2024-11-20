@@ -17,26 +17,21 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
      */
-    private $fileNodesFetcher;
+    private FileNodesFetcher $fileNodesFetcher;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory
      */
-    private $optimizedDirectorySourceLocatorFactory;
+    private OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory;
     /**
      * @var string[]
      */
-    private $filePaths = [];
+    private array $filePaths = [];
     /**
      * @var string[]
      */
-    private $directories = [];
-    /**
-     * @var \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator|null
-     */
-    private $aggregateSourceLocator;
+    private array $directories = [];
+    private ?AggregateSourceLocator $aggregateSourceLocator = null;
     public function __construct(FileNodesFetcher $fileNodesFetcher, OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;

@@ -22,10 +22,7 @@ use RectorPrefix202411\Symfony\Component\Lock\Store\SemaphoreStore;
  */
 trait LockableTrait
 {
-    /**
-     * @var \Symfony\Component\Lock\LockInterface|null
-     */
-    private $lock;
+    private ?LockInterface $lock = null;
     /**
      * Locks a command.
      */

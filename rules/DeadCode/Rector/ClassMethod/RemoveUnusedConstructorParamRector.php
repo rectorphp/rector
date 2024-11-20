@@ -21,19 +21,16 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeManipulator\ClassMethodParamRemover
      */
-    private $classMethodParamRemover;
+    private ClassMethodParamRemover $classMethodParamRemover;
     public function __construct(ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver, ClassMethodParamRemover $classMethodParamRemover)
     {
         $this->paramAnalyzer = $paramAnalyzer;

@@ -13,9 +13,8 @@ final class InflectorSingularResolver
 {
     /**
      * @readonly
-     * @var \Doctrine\Inflector\Inflector
      */
-    private $inflector;
+    private Inflector $inflector;
     /**
      * @var array<string, string>
      */

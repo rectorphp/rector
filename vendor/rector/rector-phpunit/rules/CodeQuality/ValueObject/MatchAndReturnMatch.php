@@ -11,14 +11,12 @@ final class MatchAndReturnMatch
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Match_
      */
-    private $consecutiveMatch;
+    private Match_ $consecutiveMatch;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Match_|null
      */
-    private $willReturnMatch;
+    private ?Match_ $willReturnMatch;
     public function __construct(Match_ $consecutiveMatch, ?Match_ $willReturnMatch)
     {
         $this->consecutiveMatch = $consecutiveMatch;

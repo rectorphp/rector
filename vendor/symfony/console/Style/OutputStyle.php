@@ -21,10 +21,7 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class OutputStyle implements OutputInterface, StyleInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
+    private OutputInterface $output;
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;

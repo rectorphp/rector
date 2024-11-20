@@ -33,24 +33,20 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector imp
 {
     /**
      * @readonly
-     * @var \Rector\NodeCollector\StaticAnalyzer
      */
-    private $staticAnalyzer;
+    private StaticAnalyzer $staticAnalyzer;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
-    private $parentClassScopeResolver;
+    private ParentClassScopeResolver $parentClassScopeResolver;
     public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;

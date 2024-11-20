@@ -14,15 +14,13 @@ use function substr;
 class TokenIterator
 {
     /** @var list<array{string, int, int}> */
-    private $tokens;
-    /** @var int */
-    private $index;
+    private array $tokens;
+    private int $index;
     /** @var int[] */
-    private $savePoints = [];
+    private array $savePoints = [];
     /** @var list<int> */
-    private $skippedTokenTypes = [Lexer::TOKEN_HORIZONTAL_WS];
-    /** @var string|null */
-    private $newline = null;
+    private array $skippedTokenTypes = [Lexer::TOKEN_HORIZONTAL_WS];
+    private ?string $newline = null;
     /**
      * @param list<array{string, int, int}> $tokens
      */

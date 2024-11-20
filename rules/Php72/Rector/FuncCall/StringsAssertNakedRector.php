@@ -21,9 +21,8 @@ final class StringsAssertNakedRector extends AbstractRector implements MinPhpVer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\SimplePhpParser
      */
-    private $simplePhpParser;
+    private SimplePhpParser $simplePhpParser;
     public function __construct(SimplePhpParser $simplePhpParser)
     {
         $this->simplePhpParser = $simplePhpParser;

@@ -15,19 +15,16 @@ final class Skipper
 {
     /**
      * @readonly
-     * @var \Rector\ProcessAnalyzer\RectifiedAnalyzer
      */
-    private $rectifiedAnalyzer;
+    private RectifiedAnalyzer $rectifiedAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Skipper\Skipper\PathSkipper
      */
-    private $pathSkipper;
+    private \Rector\Skipper\Skipper\PathSkipper $pathSkipper;
     /**
      * @readonly
-     * @var \Rector\Skipper\SkipVoter\ClassSkipVoter
      */
-    private $classSkipVoter;
+    private ClassSkipVoter $classSkipVoter;
     public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;

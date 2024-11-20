@@ -24,13 +24,12 @@ final class StaticCallToMethodCallRector extends AbstractRector implements Confi
 {
     /**
      * @readonly
-     * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
-    private $funcCallStaticCallToMethodCallAnalyzer;
+    private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer;
     /**
      * @var StaticCallToMethodCall[]
      */
-    private $staticCallsToMethodCalls = [];
+    private array $staticCallsToMethodCalls = [];
     public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
     {
         $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;

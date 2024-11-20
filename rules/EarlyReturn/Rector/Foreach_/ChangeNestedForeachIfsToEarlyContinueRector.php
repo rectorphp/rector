@@ -26,14 +26,12 @@ final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
-    private $conditionInverter;
+    private ConditionInverter $conditionInverter;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->conditionInverter = $conditionInverter;
@@ -95,6 +93,9 @@ CODE_SAMPLE
         $nestedIfsWithOnlyNonReturn = $this->ifManipulator->collectNestedIfsWithNonBreaking($node);
         if (\count($nestedIfsWithOnlyNonReturn) < 2) {
             return null;
+        }
+        foreach ($nestedIfsWithOnlyNonReturn as $nestedIfWithOnlyNonReturn) {
+            $nestedIfWithOnlyNonReturn->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         return $this->processNestedIfsWithNonBreaking($node, $nestedIfsWithOnlyNonReturn);
     }

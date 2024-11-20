@@ -14,14 +14,12 @@ final class ConstructorManipulator
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassInsertManipulator
      */
-    private $classInsertManipulator;
+    private ClassInsertManipulator $classInsertManipulator;
     public function __construct(NodeFactory $nodeFactory, ClassInsertManipulator $classInsertManipulator)
     {
         $this->nodeFactory = $nodeFactory;

@@ -28,14 +28,12 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
     private const DATAMAPPER_CLASS = 'Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\DataMapper';
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $objectType;
+    private ObjectType $objectType;
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $dataMapperObjectType;
+    private ObjectType $dataMapperObjectType;
     public function __construct()
     {
         $this->objectType = new ObjectType(self::DATAMAPPER_INTERFACE);

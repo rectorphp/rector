@@ -17,24 +17,20 @@ final class TestingParser
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\RectorParser
      */
-    private $rectorParser;
+    private RectorParser $rectorParser;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
-    private $nodeScopeAndMetadataDecorator;
+    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
     /**
      * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
      */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
-    private $dynamicSourceLocatorProvider;
+    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
     public function __construct(RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorProvider $dynamicSourceLocatorProvider)
     {
         $this->rectorParser = $rectorParser;

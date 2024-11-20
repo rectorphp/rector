@@ -70,78 +70,24 @@ use RectorPrefix202411\Symfony\Contracts\Service\ResetInterface;
  */
 class Application implements ResetInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $commands = [];
-    /**
-     * @var bool
-     */
-    private $wantHelps = \false;
-    /**
-     * @var \Symfony\Component\Console\Command\Command|null
-     */
-    private $runningCommand;
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var string
-     */
-    private $version;
-    /**
-     * @var \Symfony\Component\Console\CommandLoader\CommandLoaderInterface|null
-     */
-    private $commandLoader;
-    /**
-     * @var bool
-     */
-    private $catchExceptions = \true;
-    /**
-     * @var bool
-     */
-    private $catchErrors = \false;
-    /**
-     * @var bool
-     */
-    private $autoExit = \true;
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition
-     */
-    private $definition;
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
-     */
-    private $helperSet;
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface|null
-     */
-    private $dispatcher;
-    /**
-     * @var \Symfony\Component\Console\Terminal
-     */
-    private $terminal;
-    /**
-     * @var string
-     */
-    private $defaultCommand;
-    /**
-     * @var bool
-     */
-    private $singleCommand = \false;
-    /**
-     * @var bool
-     */
-    private $initialized = \false;
-    /**
-     * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry|null
-     */
-    private $signalRegistry;
-    /**
-     * @var mixed[]
-     */
-    private $signalsToDispatchEvent = [];
+    private array $commands = [];
+    private bool $wantHelps = \false;
+    private ?Command $runningCommand = null;
+    private string $name;
+    private string $version;
+    private ?CommandLoaderInterface $commandLoader = null;
+    private bool $catchExceptions = \true;
+    private bool $catchErrors = \false;
+    private bool $autoExit = \true;
+    private InputDefinition $definition;
+    private HelperSet $helperSet;
+    private ?EventDispatcherInterface $dispatcher = null;
+    private Terminal $terminal;
+    private string $defaultCommand;
+    private bool $singleCommand = \false;
+    private bool $initialized = \false;
+    private ?SignalRegistry $signalRegistry = null;
+    private array $signalsToDispatchEvent = [];
     public function __construct(string $name = 'UNKNOWN', string $version = 'UNKNOWN')
     {
         $this->name = $name;
@@ -194,8 +140,8 @@ class Application implements ResetInterface
             @\putenv('LINES=' . $this->terminal->getHeight());
             @\putenv('COLUMNS=' . $this->terminal->getWidth());
         }
-        $input = $input ?? new ArgvInput();
-        $output = $output ?? new ConsoleOutput();
+        $input ??= new ArgvInput();
+        $output ??= new ConsoleOutput();
         $renderException = function (\Throwable $e) use($output) {
             if ($output instanceof ConsoleOutputInterface) {
                 $this->renderThrowable($e, $output->getErrorOutput());
@@ -352,7 +298,7 @@ class Application implements ResetInterface
      */
     public function getHelperSet() : HelperSet
     {
-        return $this->helperSet = $this->helperSet ?? $this->getDefaultHelperSet();
+        return $this->helperSet ??= $this->getDefaultHelperSet();
     }
     /**
      * @return void
@@ -366,7 +312,7 @@ class Application implements ResetInterface
      */
     public function getDefinition() : InputDefinition
     {
-        $this->definition = $this->definition ?? $this->getDefaultInputDefinition();
+        $this->definition ??= $this->getDefaultInputDefinition();
         if ($this->singleCommand) {
             $inputDefinition = $this->definition;
             $inputDefinition->setArguments();
@@ -663,9 +609,7 @@ class Application implements ResetInterface
             $message = \sprintf('Command "%s" is not defined.', $name);
             if ($alternatives = $this->findAlternatives($name, $allCommands)) {
                 // remove hidden commands
-                $alternatives = \array_filter($alternatives, function ($name) {
-                    return !$this->get($name)->isHidden();
-                });
+                $alternatives = \array_filter($alternatives, fn($name) => !$this->get($name)->isHidden());
                 if (1 == \count($alternatives)) {
                     $message .= "\n\nDid you mean this?\n    ";
                 } else {
@@ -787,9 +731,7 @@ class Application implements ResetInterface
                 $len = 0;
             }
             if (\strpos($message, "@anonymous\x00") !== \false) {
-                $message = \preg_replace_callback('/[a-zA-Z_\\x7f-\\xff][\\\\a-zA-Z0-9_\\x7f-\\xff]*+@anonymous\\x00.*?\\.php(?:0x?|:[0-9]++\\$)?[0-9a-fA-F]++/', function ($m) {
-                    return \class_exists($m[0], \false) ? ((\get_parent_class($m[0]) ?: \key(\class_implements($m[0]))) ?: 'class') . '@anonymous' : $m[0];
-                }, $message);
+                $message = \preg_replace_callback('/[a-zA-Z_\\x7f-\\xff][\\\\a-zA-Z0-9_\\x7f-\\xff]*+@anonymous\\x00.*?\\.php(?:0x?|:[0-9]++\\$)?[0-9a-fA-F]++/', fn($m) => \class_exists($m[0], \false) ? ((\get_parent_class($m[0]) ?: \key(\class_implements($m[0]))) ?: 'class') . '@anonymous' : $m[0], $message);
             }
             $width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : \PHP_INT_MAX;
             $lines = [];
@@ -911,9 +853,7 @@ class Application implements ResetInterface
             if (Terminal::hasSttyAvailable()) {
                 $sttyMode = \shell_exec('stty -g');
                 foreach ([\SIGINT, \SIGTERM] as $signal) {
-                    $this->signalRegistry->register($signal, static function () use($sttyMode) {
-                        return \shell_exec('stty ' . $sttyMode);
-                    });
+                    $this->signalRegistry->register($signal, static fn() => \shell_exec('stty ' . $sttyMode));
                 }
             }
             if ($this->dispatcher) {
@@ -1074,9 +1014,7 @@ class Application implements ResetInterface
                 $alternatives[$item] = isset($alternatives[$item]) ? $alternatives[$item] - $lev : $lev;
             }
         }
-        $alternatives = \array_filter($alternatives, function ($lev) use($threshold) {
-            return $lev < 2 * $threshold;
-        });
+        $alternatives = \array_filter($alternatives, fn($lev) => $lev < 2 * $threshold);
         \ksort($alternatives, \SORT_NATURAL | \SORT_FLAG_CASE);
         return \array_keys($alternatives);
     }

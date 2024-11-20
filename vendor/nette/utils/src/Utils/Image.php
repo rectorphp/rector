@@ -113,10 +113,7 @@ class Image
     public const JPEG = ImageType::JPEG, PNG = ImageType::PNG, GIF = ImageType::GIF, WEBP = ImageType::WEBP, AVIF = ImageType::AVIF, BMP = ImageType::BMP;
     public const EmptyGIF = "GIF89a\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;";
     private const Formats = [ImageType::JPEG => 'jpeg', ImageType::PNG => 'png', ImageType::GIF => 'gif', ImageType::WEBP => 'webp', ImageType::AVIF => 'avif', ImageType::BMP => 'bmp'];
-    /**
-     * @var \GdImage
-     */
-    private $image;
+    private \GdImage $image;
     /**
      * Returns RGB color (0..255) and transparency (0..127).
      * @deprecated use ImageColor::rgb()
@@ -551,7 +548,7 @@ class Image
      */
     public function save(string $file, ?int $quality = null, ?int $type = null) : void
     {
-        $type = $type ?? self::extensionToType(\pathinfo($file, \PATHINFO_EXTENSION));
+        $type ??= self::extensionToType(\pathinfo($file, \PATHINFO_EXTENSION));
         $this->output($type, $quality, $file);
     }
     /**

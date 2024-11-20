@@ -35,19 +35,16 @@ final class AddClosureParamTypeFromArgRector extends AbstractRector implements C
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var int
      */
@@ -55,7 +52,7 @@ final class AddClosureParamTypeFromArgRector extends AbstractRector implements C
     /**
      * @var AddClosureParamTypeFromArg[]
      */
-    private $addClosureParamTypeFromArgs = [];
+    private array $addClosureParamTypeFromArgs = [];
     public function __construct(TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, ReflectionProvider $reflectionProvider)
     {
         $this->typeComparator = $typeComparator;

@@ -23,24 +23,20 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard
      */
-    private $classMethodVisibilityGuard;
+    private ClassMethodVisibilityGuard $classMethodVisibilityGuard;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Privatization\Guard\OverrideByParentClassGuard
      */
-    private $overrideByParentClassGuard;
+    private OverrideByParentClassGuard $overrideByParentClassGuard;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;

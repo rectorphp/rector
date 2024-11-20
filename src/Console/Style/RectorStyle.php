@@ -11,10 +11,7 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202411\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorStyle extends SymfonyStyle
 {
-    /**
-     * @var \Symfony\Component\Console\Helper\ProgressBar|null
-     */
-    private $progressBar;
+    private ?ProgressBar $progressBar = null;
     /**
      * @var bool|null
      */

@@ -30,59 +30,48 @@ final class ProcessCommand extends Command
 {
     /**
      * @readonly
-     * @var \Rector\Autoloading\AdditionalAutoloader
      */
-    private $additionalAutoloader;
+    private AdditionalAutoloader $additionalAutoloader;
     /**
      * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
-    private $changedFilesDetector;
+    private ChangedFilesDetector $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Configuration\ConfigInitializer
      */
-    private $configInitializer;
+    private ConfigInitializer $configInitializer;
     /**
      * @readonly
-     * @var \Rector\Application\ApplicationFileProcessor
      */
-    private $applicationFileProcessor;
+    private ApplicationFileProcessor $applicationFileProcessor;
     /**
      * @readonly
-     * @var \Rector\StaticReflection\DynamicSourceLocatorDecorator
      */
-    private $dynamicSourceLocatorDecorator;
+    private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator;
     /**
      * @readonly
-     * @var \Rector\Console\Output\OutputFormatterCollector
      */
-    private $outputFormatterCollector;
+    private OutputFormatterCollector $outputFormatterCollector;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\Util\MemoryLimiter
      */
-    private $memoryLimiter;
+    private MemoryLimiter $memoryLimiter;
     /**
      * @readonly
-     * @var \Rector\Configuration\ConfigurationFactory
      */
-    private $configurationFactory;
+    private ConfigurationFactory $configurationFactory;
     /**
      * @readonly
-     * @var \Rector\Reporting\DeprecatedRulesReporter
      */
-    private $deprecatedRulesReporter;
+    private DeprecatedRulesReporter $deprecatedRulesReporter;
     /**
      * @readonly
-     * @var \Rector\Reporting\MissConfigurationReporter
      */
-    private $missConfigurationReporter;
+    private MissConfigurationReporter $missConfigurationReporter;
     public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter)
     {
         $this->additionalAutoloader = $additionalAutoloader;

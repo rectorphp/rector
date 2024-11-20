@@ -14,9 +14,8 @@ final class EregToPcreTransformer
 {
     /**
      * @readonly
-     * @var string
      */
-    private $pcreDelimiter = '#';
+    private string $pcreDelimiter = '#';
     /**
      * @var array<string, string>
      */
@@ -54,11 +53,11 @@ final class EregToPcreTransformer
     /**
      * @var array<string, string>
      */
-    private $icache = [];
+    private array $icache = [];
     /**
      * @var array<string, string>
      */
-    private $cache = [];
+    private array $cache = [];
     /**
      * Change this via services configuratoin in rector.php if you need it
      * Single type is chosen to prevent every regular with different delimiter.

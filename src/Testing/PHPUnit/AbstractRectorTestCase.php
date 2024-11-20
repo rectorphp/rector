@@ -32,22 +32,13 @@ use Rector\Util\Reflection\PrivatesAccessor;
  */
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLazyTestCase implements RectorTestInterface
 {
-    /**
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
-     */
-    private $dynamicSourceLocatorProvider;
-    /**
-     * @var \Rector\Application\ApplicationFileProcessor
-     */
-    private $applicationFileProcessor;
-    /**
-     * @var string|null
-     */
-    private $inputFilePath;
+    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
+    private ApplicationFileProcessor $applicationFileProcessor;
+    private ?string $inputFilePath = null;
     /**
      * @var array<string, true>
      */
-    private static $cacheByRuleAndConfig = [];
+    private static array $cacheByRuleAndConfig = [];
     /**
      * Restore default parameters
      */

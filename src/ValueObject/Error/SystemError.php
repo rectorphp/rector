@@ -9,9 +9,8 @@ final class SystemError implements SerializableInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $message;
+    private string $message;
     /**
      * @readonly
      * @var string|null
@@ -68,9 +67,8 @@ final class SystemError implements SerializableInterface
     }
     /**
      * @param mixed[] $json
-     * @return $this
      */
-    public static function decode(array $json) : \RectorPrefix202411\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : self
     {
         return new self($json[BridgeItem::MESSAGE], $json[BridgeItem::RELATIVE_FILE_PATH], $json[BridgeItem::LINE], $json[BridgeItem::RECTOR_CLASS]);
     }

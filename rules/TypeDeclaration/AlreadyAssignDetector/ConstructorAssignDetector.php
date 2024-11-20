@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -16,7 +17,6 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeDecorator\StatementDepthAttributeDecorator;
@@ -31,34 +31,28 @@ final class ConstructorAssignDetector
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
      */
-    private $propertyAssignMatcher;
+    private PropertyAssignMatcher $propertyAssignMatcher;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
-    private $autowiredClassMethodOrPropertyAnalyzer;
+    private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
-    private $propertyFetchAnalyzer;
+    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -84,7 +78,7 @@ final class ConstructorAssignDetector
             $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor, $allowConditional) : ?int {
                 if ($this->isIfElseAssign($node, $propertyName)) {
                     $isAssignedInConstructor = \true;
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
                 $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
                 if (!$expr instanceof Expr) {
@@ -95,19 +89,19 @@ final class ConstructorAssignDetector
                 // is merged in assign?
                 if ($this->isPropertyUsedInAssign($assign, $propertyName)) {
                     $isAssignedInConstructor = \false;
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
                 $isFirstLevelStatement = $assign->getAttribute(AttributeKey::IS_FIRST_LEVEL_STATEMENT);
                 // cannot be nested
                 if ($isFirstLevelStatement !== \true) {
                     if ($allowConditional) {
                         $isAssignedInConstructor = \true;
-                        return NodeTraverser::STOP_TRAVERSAL;
+                        return NodeVisitor::STOP_TRAVERSAL;
                     }
                     return null;
                 }
                 $isAssignedInConstructor = \true;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             });
         }
         if (!$isAssignedInConstructor) {

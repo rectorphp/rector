@@ -9,19 +9,16 @@ final class EventReferenceToMethodNameWithPriority implements EventReferenceToMe
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\ClassConstFetch
      */
-    private $classConstFetch;
+    private ClassConstFetch $classConstFetch;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @readonly
-     * @var int
      */
-    private $priority;
+    private int $priority;
     public function __construct(ClassConstFetch $classConstFetch, string $methodName, int $priority)
     {
         $this->classConstFetch = $classConstFetch;

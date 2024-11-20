@@ -22,7 +22,7 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
     /**
      * @var array<string, string>
      */
-    private $interfaceByTrait = [];
+    private array $interfaceByTrait = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add interface by used trait', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

@@ -29,13 +29,13 @@ use RectorPrefix202411\Webmozart\Assert\Assert;
 final class RectorConfig extends Container
 {
     /**
-     * @var array<class-string<ConfigurableRectorInterface>, mixed[]>>
+     * @var array<class-string<ConfigurableRectorInterface>, mixed[]>
      */
-    private $ruleConfigurations = [];
+    private array $ruleConfigurations = [];
     /**
      * @var string[]
      */
-    private $autotagInterfaces = [Command::class, ResetableInterface::class];
+    private array $autotagInterfaces = [Command::class, ResetableInterface::class];
     public static function configure() : RectorConfigBuilder
     {
         return new RectorConfigBuilder();

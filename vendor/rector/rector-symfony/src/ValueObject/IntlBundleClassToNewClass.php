@@ -9,19 +9,17 @@ final class IntlBundleClassToNewClass
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldClass;
+    private string $oldClass;
     /**
      * @readonly
-     * @var string
      */
-    private $newClass;
+    private string $newClass;
     /**
      * @var array<string, string>
      * @readonly
      */
-    private $oldToNewMethods;
+    private array $oldToNewMethods;
     /**
      * @param array<string, string> $oldToNewMethods
      */

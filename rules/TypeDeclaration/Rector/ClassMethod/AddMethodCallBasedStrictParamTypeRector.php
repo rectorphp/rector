@@ -20,19 +20,16 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver
      */
-    private $callTypesResolver;
+    private CallTypesResolver $callTypesResolver;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter
      */
-    private $classMethodParamTypeCompleter;
+    private ClassMethodParamTypeCompleter $classMethodParamTypeCompleter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\NodeFinder\LocalMethodCallFinder
      */
-    private $localMethodCallFinder;
+    private LocalMethodCallFinder $localMethodCallFinder;
     /**
      * @var int
      */

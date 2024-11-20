@@ -26,39 +26,32 @@ final class DeadReturnTagValueNodeAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
-    private $genericTypeNodeAnalyzer;
+    private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
      */
-    private $mixedArrayTypeNodeAnalyzer;
+    private MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard
      */
-    private $standaloneTypeRemovalGuard;
+    private StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard
      */
-    private $templateTypeRemovalGuard;
+    private TemplateTypeRemovalGuard $templateTypeRemovalGuard;
     public function __construct(TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper, TemplateTypeRemovalGuard $templateTypeRemovalGuard)
     {
         $this->typeComparator = $typeComparator;

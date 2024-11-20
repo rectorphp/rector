@@ -35,39 +35,32 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
-    private $symfonyPhpClosureDetector;
+    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher
      */
-    private $symfonyClosureExtensionMatcher;
+    private SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\PropertyNaming
      */
-    private $propertyNaming;
+    private PropertyNaming $propertyNaming;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\Configs\ConfigArrayHandler\NestedConfigCallsFactory
      */
-    private $nestedConfigCallsFactory;
+    private NestedConfigCallsFactory $nestedConfigCallsFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessDecisionManagerConfigArrayHandler
      */
-    private $securityAccessDecisionManagerConfigArrayHandler;
+    private SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler;
     /**
      * @readonly
-     * @var \Rector\Symfony\CodeQuality\NodeFactory\SymfonyClosureFactory
      */
-    private $symfonyClosureFactory;
+    private SymfonyClosureFactory $symfonyClosureFactory;
     /**
      * @var array<string, string>
      */

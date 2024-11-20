@@ -14,9 +14,8 @@ final class SkippedPathsResolver
 {
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     /**
      * @var null|string[]
      */

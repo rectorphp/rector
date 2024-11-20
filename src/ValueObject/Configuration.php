@@ -9,39 +9,34 @@ final class Configuration
 {
     /**
      * @readonly
-     * @var bool
      */
-    private $isDryRun = \false;
+    private bool $isDryRun = \false;
     /**
      * @readonly
-     * @var bool
      */
-    private $showProgressBar = \true;
+    private bool $showProgressBar = \true;
     /**
      * @readonly
-     * @var bool
      */
-    private $shouldClearCache = \false;
+    private bool $shouldClearCache = \false;
     /**
      * @readonly
-     * @var string
      */
-    private $outputFormat = ConsoleOutputFormatter::NAME;
+    private string $outputFormat = ConsoleOutputFormatter::NAME;
     /**
      * @var string[]
      * @readonly
      */
-    private $fileExtensions = ['php'];
+    private array $fileExtensions = ['php'];
     /**
      * @var string[]
      * @readonly
      */
-    private $paths = [];
+    private array $paths = [];
     /**
      * @readonly
-     * @var bool
      */
-    private $showDiffs = \true;
+    private bool $showDiffs = \true;
     /**
      * @readonly
      * @var string|null
@@ -54,9 +49,8 @@ final class Configuration
     private $parallelIdentifier = null;
     /**
      * @readonly
-     * @var bool
      */
-    private $isParallel = \false;
+    private bool $isParallel = \false;
     /**
      * @readonly
      * @var string|null
@@ -64,14 +58,12 @@ final class Configuration
     private $memoryLimit = null;
     /**
      * @readonly
-     * @var bool
      */
-    private $isDebug = \false;
+    private bool $isDebug = \false;
     /**
      * @readonly
-     * @var bool
      */
-    private $reportingWithRealPath = \false;
+    private bool $reportingWithRealPath = \false;
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths

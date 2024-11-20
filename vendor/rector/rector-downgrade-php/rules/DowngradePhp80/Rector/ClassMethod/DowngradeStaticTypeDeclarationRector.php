@@ -19,14 +19,12 @@ final class DowngradeStaticTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator
      */
-    private $phpDocFromTypeDeclarationDecorator;
+    private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, ReflectionResolver $reflectionResolver)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;

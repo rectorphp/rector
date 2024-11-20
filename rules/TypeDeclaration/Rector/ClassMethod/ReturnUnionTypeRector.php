@@ -20,9 +20,8 @@ final class ReturnUnionTypeRector extends AbstractRector implements MinPhpVersio
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddUnionReturnType
      */
-    private $addUnionReturnType;
+    private AddUnionReturnType $addUnionReturnType;
     public function __construct(AddUnionReturnType $addUnionReturnType)
     {
         $this->addUnionReturnType = $addUnionReturnType;

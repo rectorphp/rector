@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
+use PhpParser\Node\UseItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\ValueObject\UsedImports;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -17,19 +17,16 @@ final class UsedImportsResolver
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\UseImportsTraverser
      */
-    private $useImportsTraverser;
+    private \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -53,10 +50,10 @@ final class UsedImportsResolver
         $usedConstImports = [];
         $usedFunctionImports = [];
         /** @param Use_::TYPE_* $useType */
-        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseUse $useUse, string $name) use(&$usedImports, &$usedFunctionImports, &$usedConstImports) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use(&$usedImports, &$usedFunctionImports, &$usedConstImports) : void {
             if ($useType === Use_::TYPE_NORMAL) {
-                if ($useUse->alias instanceof Identifier) {
-                    $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
+                if ($useItem->alias instanceof Identifier) {
+                    $usedImports[] = new AliasedObjectType($useItem->alias->toString(), $name);
                 } else {
                     $usedImports[] = new FullyQualifiedObjectType($name);
                 }

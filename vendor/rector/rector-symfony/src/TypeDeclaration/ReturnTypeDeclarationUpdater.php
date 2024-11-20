@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\TypeDeclaration;
 
+use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -19,24 +20,20 @@ final class ReturnTypeDeclarationUpdater
 {
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     public function __construct(PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpVersionProvider = $phpVersionProvider;
@@ -78,7 +75,7 @@ final class ReturnTypeDeclarationUpdater
         }
         $objectType = new ObjectType($className);
         // change return type
-        if ($classMethod->returnType !== null) {
+        if ($classMethod->returnType instanceof Node) {
             $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
             if ($objectType->isSuperTypeOf($returnType)->yes()) {
                 return;

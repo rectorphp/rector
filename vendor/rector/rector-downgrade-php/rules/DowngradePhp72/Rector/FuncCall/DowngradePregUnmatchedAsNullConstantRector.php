@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassConst;
@@ -32,19 +32,16 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner
      */
-    private $bitwiseFlagCleaner;
+    private BitwiseFlagCleaner $bitwiseFlagCleaner;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
      */
-    private $regexFuncAnalyzer;
+    private RegexFuncAnalyzer $regexFuncAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @see https://www.php.net/manual/en/function.preg-match.php
      * @var string
@@ -138,7 +135,7 @@ CODE_SAMPLE
             if (!$this->isName($singleClassConst->value, self::UNMATCHED_NULL_FLAG)) {
                 continue;
             }
-            $classConst->consts[$key]->value = new LNumber(512);
+            $classConst->consts[$key]->value = new Int_(512);
             return $classConst;
         }
         return null;

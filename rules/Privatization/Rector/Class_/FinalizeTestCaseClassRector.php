@@ -18,14 +18,12 @@ final class FinalizeTestCaseClassRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     public function __construct(ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator)
     {
         $this->reflectionProvider = $reflectionProvider;

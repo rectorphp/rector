@@ -15,9 +15,8 @@ final class SimplePhpParameterReflection implements ParameterReflection
 {
     /**
      * @readonly
-     * @var \ReflectionParameter
      */
-    private $reflectionParameter;
+    private ReflectionParameter $reflectionParameter;
     public function __construct(ReflectionFunction $reflectionFunction, int $position)
     {
         $this->reflectionParameter = $reflectionFunction->getParameters()[$position];

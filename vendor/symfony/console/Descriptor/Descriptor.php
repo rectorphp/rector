@@ -24,10 +24,7 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class Descriptor implements DescriptorInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    protected $output;
+    protected OutputInterface $output;
     public function describe(OutputInterface $output, object $object, array $options = []) : void
     {
         $this->output = $output;

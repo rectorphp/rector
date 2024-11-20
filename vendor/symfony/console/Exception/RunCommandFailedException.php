@@ -18,9 +18,8 @@ final class RunCommandFailedException extends RuntimeException
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Messenger\RunCommandContext
      */
-    public $context;
+    public RunCommandContext $context;
     /**
      * @param \Throwable|string $exception
      */

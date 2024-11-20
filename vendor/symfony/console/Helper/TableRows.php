@@ -15,10 +15,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\Helper;
  */
 class TableRows implements \IteratorAggregate
 {
-    /**
-     * @var \Closure
-     */
-    private $generator;
+    private \Closure $generator;
     public function __construct(\Closure $generator)
     {
         $this->generator = $generator;

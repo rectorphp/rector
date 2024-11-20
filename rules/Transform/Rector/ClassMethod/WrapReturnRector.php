@@ -6,7 +6,7 @@ namespace Rector\Transform\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -24,7 +24,7 @@ final class WrapReturnRector extends AbstractRector implements ConfigurableRecto
     /**
      * @var WrapReturn[]
      */
-    private $typeMethodWraps = [];
+    private array $typeMethodWraps = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Wrap return value of specific method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

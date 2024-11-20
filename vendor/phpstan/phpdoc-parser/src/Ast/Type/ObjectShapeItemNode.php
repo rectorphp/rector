@@ -4,17 +4,16 @@ declare (strict_types=1);
 namespace PHPStan\PhpDocParser\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function sprintf;
-class ObjectShapeItemNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
+class ObjectShapeItemNode implements Node
 {
     use NodeAttributes;
     /** @var ConstExprStringNode|IdentifierTypeNode */
     public $keyName;
-    /** @var bool */
-    public $optional;
-    /** @var TypeNode */
-    public $valueType;
+    public bool $optional;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $valueType;
     /**
      * @param ConstExprStringNode|IdentifierTypeNode $keyName
      */

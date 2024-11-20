@@ -11,9 +11,8 @@ final class PropertyAssignMatcher
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
-    private $propertyFetchAnalyzer;
+    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;

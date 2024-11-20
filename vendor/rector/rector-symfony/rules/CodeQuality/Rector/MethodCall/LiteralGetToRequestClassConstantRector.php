@@ -20,14 +20,12 @@ final class LiteralGetToRequestClassConstantRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer
      */
-    private $literalCallLikeConstFetchReplacer;
+    private LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer, ReflectionProvider $reflectionProvider)
     {
         $this->literalCallLikeConstFetchReplacer = $literalCallLikeConstFetchReplacer;

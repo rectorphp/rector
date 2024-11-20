@@ -15,13 +15,12 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Bridge\Symfony\ContainerServiceProvider
      */
-    private $containerServiceProvider;
+    private ContainerServiceProvider $containerServiceProvider;
     /**
      * @var SymfonyRouteMetadata[]
      */
-    private $symfonyRouteMetadatas = [];
+    private array $symfonyRouteMetadatas = [];
     public function __construct(ContainerServiceProvider $containerServiceProvider)
     {
         $this->containerServiceProvider = $containerServiceProvider;

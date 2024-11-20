@@ -14,15 +14,9 @@ use RectorPrefix202411\Nette;
 final class Type
 {
     /** @var array<int, string|self> */
-    private $types;
-    /**
-     * @var bool
-     */
-    private $simple;
-    /**
-     * @var string
-     */
-    private $kind;
+    private array $types;
+    private bool $simple;
+    private string $kind;
     // | &
     /**
      * Creates a Type object based on reflection. Resolves self, static and parent to the actual class name.
@@ -43,9 +37,7 @@ final class Type
             $name = self::resolve($type->getName(), $of);
             return $asObject ? new self($type->allowsNull() && $name !== 'mixed' ? [$name, 'null'] : [$name]) : $name;
         } elseif ($type instanceof \ReflectionUnionType || $type instanceof \ReflectionIntersectionType) {
-            return new self(\array_map(function ($t) use($of) {
-                return self::fromReflectionType($t, $of, \false);
-            }, $type->getTypes()), $type instanceof \ReflectionUnionType ? '|' : '&');
+            return new self(\array_map(fn($t) => self::fromReflectionType($t, $of, \false), $type->getTypes()), $type instanceof \ReflectionUnionType ? '|' : '&');
         } else {
             throw new Nette\InvalidStateException('Unexpected type of ' . Reflection::toString($of));
         }
@@ -117,9 +109,7 @@ final class Type
      */
     public function getNames() : array
     {
-        return \array_map(function ($t) {
-            return $t instanceof self ? $t->getNames() : $t;
-        }, $this->types);
+        return \array_map(fn($t) => $t instanceof self ? $t->getNames() : $t, $this->types);
     }
     /**
      * Returns the array of subtypes that make up the compound type as Type objects:
@@ -127,9 +117,7 @@ final class Type
      */
     public function getTypes() : array
     {
-        return \array_map(function ($t) {
-            return $t instanceof self ? $t : new self([$t]);
-        }, $this->types);
+        return \array_map(fn($t) => $t instanceof self ? $t : new self([$t]), $this->types);
     }
     /**
      * Returns the type name for simple types, otherwise null.
@@ -194,22 +182,14 @@ final class Type
             return \true;
         }
         $subtype = self::fromString($subtype);
-        return $subtype->isUnion() ? Arrays::every($subtype->types, function ($t) {
-            return $this->allows2($t instanceof self ? $t->types : [$t]);
-        }) : $this->allows2($subtype->types);
+        return $subtype->isUnion() ? Arrays::every($subtype->types, fn($t) => $this->allows2($t instanceof self ? $t->types : [$t])) : $this->allows2($subtype->types);
     }
     private function allows2(array $subtypes) : bool
     {
-        return $this->isUnion() ? Arrays::some($this->types, function ($t) use($subtypes) {
-            return $this->allows3($t instanceof self ? $t->types : [$t], $subtypes);
-        }) : $this->allows3($this->types, $subtypes);
+        return $this->isUnion() ? Arrays::some($this->types, fn($t) => $this->allows3($t instanceof self ? $t->types : [$t], $subtypes)) : $this->allows3($this->types, $subtypes);
     }
     private function allows3(array $types, array $subtypes) : bool
     {
-        return Arrays::every($types, function ($type) use($subtypes) {
-            return Arrays::some($subtypes, function ($subtype) use($type) {
-                return Validators::isBuiltinType($type) ? \strcasecmp($type, $subtype) === 0 : \is_a($subtype, $type, \true);
-            });
-        });
+        return Arrays::every($types, fn($type) => Arrays::some($subtypes, fn($subtype) => Validators::isBuiltinType($type) ? \strcasecmp($type, $subtype) === 0 : \is_a($subtype, $type, \true)));
     }
 }

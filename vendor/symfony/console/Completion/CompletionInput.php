@@ -28,26 +28,11 @@ final class CompletionInput extends ArgvInput
     public const TYPE_OPTION_VALUE = 'option_value';
     public const TYPE_OPTION_NAME = 'option_name';
     public const TYPE_NONE = 'none';
-    /**
-     * @var mixed[]
-     */
-    private $tokens;
-    /**
-     * @var int
-     */
-    private $currentIndex;
-    /**
-     * @var string
-     */
-    private $completionType;
-    /**
-     * @var string|null
-     */
-    private $completionName;
-    /**
-     * @var string
-     */
-    private $completionValue = '';
+    private array $tokens;
+    private int $currentIndex;
+    private string $completionType;
+    private ?string $completionName = null;
+    private string $completionValue = '';
     /**
      * Converts a terminal string into tokens.
      *
@@ -111,9 +96,7 @@ final class CompletionInput extends ArgvInput
             $argumentValue = $this->arguments[$argumentName];
             $this->completionName = $argumentName;
             if (\is_array($argumentValue)) {
-                \end($argumentValue);
-                $this->completionValue = $argumentValue ? $argumentValue[\key($argumentValue)] : null;
-                \reset($argumentValue);
+                $this->completionValue = $argumentValue ? $argumentValue[\array_key_last($argumentValue)] : null;
             } else {
                 $this->completionValue = $argumentValue;
             }

@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ConstFetch;
 
+use PhpParser\NodeVisitor;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\NodeTraverser;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersion;
@@ -25,9 +25,8 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @var PhpVersion::*|null
      */
@@ -126,11 +125,11 @@ CODE_SAMPLE
     private function refactorSmallerLeft(Smaller $smaller) : ?int
     {
         $value = $smaller->right;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion >= $value->value) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return null;
     }
@@ -140,14 +139,14 @@ CODE_SAMPLE
     private function refactorSmallerRight(Smaller $smaller, If_ $if)
     {
         $value = $smaller->left;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return $if->stmts;
     }
@@ -157,25 +156,25 @@ CODE_SAMPLE
     private function refactorGreaterOrEqualLeft(GreaterOrEqual $greaterOrEqual, If_ $if)
     {
         $value = $greaterOrEqual->right;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return $if->stmts;
     }
     private function refactorGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual) : ?int
     {
         $value = $greaterOrEqual->left;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion >= $value->value) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return null;
     }
@@ -198,25 +197,25 @@ CODE_SAMPLE
     private function refactorGreaterLeft(Greater $greater, If_ $if)
     {
         $value = $greater->right;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return $if->stmts;
     }
     private function refactorGreaterRight(Greater $greater) : ?int
     {
         $value = $greater->left;
-        if (!$value instanceof LNumber) {
+        if (!$value instanceof Int_) {
             return null;
         }
         if ($this->phpVersion >= $value->value) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return null;
     }

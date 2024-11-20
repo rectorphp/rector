@@ -17,14 +17,12 @@ final class ExpectExceptionMethodCallFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper
      */
-    private $phpDocValueToNodeMapper;
+    private PhpDocValueToNodeMapper $phpDocValueToNodeMapper;
     public function __construct(NodeFactory $nodeFactory, PhpDocValueToNodeMapper $phpDocValueToNodeMapper)
     {
         $this->nodeFactory = $nodeFactory;

@@ -9,24 +9,20 @@ final class RenameStaticMethod
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldClass;
+    private string $oldClass;
     /**
      * @readonly
-     * @var string
      */
-    private $oldMethod;
+    private string $oldMethod;
     /**
      * @readonly
-     * @var string
      */
-    private $newClass;
+    private string $newClass;
     /**
      * @readonly
-     * @var string
      */
-    private $newMethod;
+    private string $newMethod;
     public function __construct(string $oldClass, string $oldMethod, string $newClass, string $newMethod)
     {
         $this->oldClass = $oldClass;

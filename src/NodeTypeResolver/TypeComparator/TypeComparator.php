@@ -25,34 +25,28 @@ final class TypeComparator
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
-    private $typeHasher;
+    private TypeHasher $typeHasher;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeNormalizer
      */
-    private $typeNormalizer;
+    private TypeNormalizer $typeNormalizer;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator
      */
-    private $arrayTypeComparator;
+    private \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator
      */
-    private $scalarTypeComparator;
+    private \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, ReflectionResolver $reflectionResolver)
     {
         $this->typeHasher = $typeHasher;

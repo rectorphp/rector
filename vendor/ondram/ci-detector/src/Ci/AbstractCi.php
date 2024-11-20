@@ -9,10 +9,7 @@ use RectorPrefix202411\OndraM\CiDetector\Env;
  */
 abstract class AbstractCi implements CiInterface
 {
-    /**
-     * @var \OndraM\CiDetector\Env
-     */
-    protected $env;
+    protected Env $env;
     public function __construct(Env $env)
     {
         $this->env = $env;

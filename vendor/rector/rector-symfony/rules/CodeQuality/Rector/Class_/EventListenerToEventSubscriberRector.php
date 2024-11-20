@@ -24,24 +24,20 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider
      */
-    private $listenerServiceDefinitionProvider;
+    private ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
-    private $getSubscribedEventsClassMethodFactory;
+    private GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
      * @var string
      */
@@ -66,7 +62,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     /**
      * @var EventNameToClassAndConstant[]
      */
-    private $eventNamesToClassConstants = [];
+    private array $eventNamesToClassConstants = [];
     public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;

@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -44,49 +44,40 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer
      */
-    private $arrayUnionResponseTypeAnalyzer;
+    private ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater
      */
-    private $returnTypeDeclarationUpdater;
+    private ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\ThisRenderFactory
      */
-    private $thisRenderFactory;
+    private ThisRenderFactory $thisRenderFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $phpDocTagRemover;
+    private PhpDocTagRemover $phpDocTagRemover;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFinder\EmptyReturnNodeFinder
      */
-    private $emptyReturnNodeFinder;
+    private EmptyReturnNodeFinder $emptyReturnNodeFinder;
     /**
      * @readonly
-     * @var \Rector\Symfony\Annotation\AnnotationAnalyzer
      */
-    private $annotationAnalyzer;
+    private AnnotationAnalyzer $annotationAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, ThisRenderFactory $thisRenderFactory, PhpDocTagRemover $phpDocTagRemover, EmptyReturnNodeFinder $emptyReturnNodeFinder, AnnotationAnalyzer $annotationAnalyzer, DocBlockUpdater $docBlockUpdater, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
@@ -193,7 +184,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($classMethod, function (Node $node) use($templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod, &$hasChanged) : ?int {
             // keep as similar type
             if ($node instanceof Closure || $node instanceof Function_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof StmtsAwareInterface) {
                 return null;

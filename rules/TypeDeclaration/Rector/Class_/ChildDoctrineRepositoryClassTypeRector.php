@@ -14,7 +14,6 @@ use PhpParser\NodeFinder;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -30,19 +29,16 @@ final class ChildDoctrineRepositoryClassTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \PhpParser\NodeFinder
      */
-    private $nodeFinder;
+    private NodeFinder $nodeFinder;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, NodeFinder $nodeFinder, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -143,10 +139,6 @@ CODE_SAMPLE
         }
         $extendsTagValueNode = $extendsTagValuePhpDocNodes[0]->value;
         if (!$extendsTagValueNode instanceof ExtendsTagValueNode) {
-            return null;
-        }
-        // we look for generic type class
-        if (!$extendsTagValueNode->type instanceof GenericTypeNode) {
             return null;
         }
         $genericTypeNode = $extendsTagValueNode->type;

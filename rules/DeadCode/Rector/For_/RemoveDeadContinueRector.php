@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\For_;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
@@ -61,9 +61,7 @@ CODE_SAMPLE
         if ($stmts === []) {
             return \false;
         }
-        \end($stmts);
-        $lastKey = \key($stmts);
-        \reset($stmts);
+        $lastKey = \array_key_last($stmts);
         $lastStmt = $stmts[$lastKey];
         return $this->isRemovable($lastStmt);
     }
@@ -72,7 +70,7 @@ CODE_SAMPLE
         if (!$stmt instanceof Continue_) {
             return \false;
         }
-        if ($stmt->num instanceof LNumber) {
+        if ($stmt->num instanceof Int_) {
             return $stmt->num->value < 2;
         }
         return \true;

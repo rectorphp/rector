@@ -6,7 +6,6 @@ namespace Rector\Symfony\Symfony62\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
@@ -32,32 +31,22 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Helper\MessengerHelper
      */
-    private $messengerHelper;
+    private MessengerHelper $messengerHelper;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeManipulator\ClassManipulator
      */
-    private $classManipulator;
+    private ClassManipulator $classManipulator;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
-    /**
-     * @var \PhpParser\Node\Stmt\Class_
-     */
-    private $subscriberClass;
-    /**
-     * @var string
-     */
-    private $newInvokeMethodName;
+    private ValueResolver $valueResolver;
+    private Class_ $subscriberClass;
+    private string $newInvokeMethodName;
     public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer, ValueResolver $valueResolver)
     {
         $this->messengerHelper = $messengerHelper;
@@ -186,7 +175,7 @@ CODE_SAMPLE
     private function parseArguments(Array_ $array, string &$method) : array
     {
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem || !$item->key instanceof Expr || !$item->value instanceof Expr) {
+            if (!$item->value instanceof Expr) {
                 continue;
             }
             $key = (string) $this->valueResolver->getValue($item->key);

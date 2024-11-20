@@ -19,9 +19,8 @@ final class DowngradeFreadFwriteFalsyToNegationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var string[]
      */

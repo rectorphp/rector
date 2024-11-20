@@ -18,14 +18,12 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
-    private $currentTokenIteratorProvider;
+    private CurrentTokenIteratorProvider $currentTokenIteratorProvider;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
-    private $attributeMirrorer;
+    private AttributeMirrorer $attributeMirrorer;
     public function __construct(CurrentTokenIteratorProvider $currentTokenIteratorProvider, AttributeMirrorer $attributeMirrorer)
     {
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;

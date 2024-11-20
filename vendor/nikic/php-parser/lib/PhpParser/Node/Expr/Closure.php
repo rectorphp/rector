@@ -4,37 +4,46 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
 use PhpParser\Node\FunctionLike;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 class Closure extends Expr implements FunctionLike, StmtsAwareInterface
 {
     /** @var bool Whether the closure is static */
-    public $static;
+    public bool $static;
     /** @var bool Whether to return by reference */
-    public $byRef;
+    public bool $byRef;
     /** @var Node\Param[] Parameters */
-    public $params;
+    public array $params;
     /** @var ClosureUse[] use()s */
-    public $uses;
+    public array $uses;
     /** @var null|Node\Identifier|Node\Name|Node\ComplexType Return type */
-    public $returnType;
+    public ?Node $returnType;
     /** @var Node\Stmt[] Statements */
-    public $stmts;
+    public array $stmts;
     /** @var Node\AttributeGroup[] PHP attribute groups */
-    public $attrGroups;
+    public array $attrGroups;
     /**
      * Constructs a lambda function node.
      *
-     * @param array $subNodes   Array of the following optional subnodes:
-     *                          'static'     => false  : Whether the closure is static
-     *                          'byRef'      => false  : Whether to return by reference
-     *                          'params'     => array(): Parameters
-     *                          'uses'       => array(): use()s
-     *                          'returnType' => null   : Return type
-     *                          'stmts'      => array(): Statements
-     *                          'attrGroups' => array(): PHP attributes groups
-     * @param array $attributes Additional attributes
+     * @param array{
+     *     static?: bool,
+     *     byRef?: bool,
+     *     params?: Node\Param[],
+     *     uses?: ClosureUse[],
+     *     returnType?: null|Node\Identifier|Node\Name|Node\ComplexType,
+     *     stmts?: Node\Stmt[],
+     *     attrGroups?: Node\AttributeGroup[],
+     * } $subNodes Array of the following optional subnodes:
+     *             'static'     => false  : Whether the closure is static
+     *             'byRef'      => false  : Whether to return by reference
+     *             'params'     => array(): Parameters
+     *             'uses'       => array(): use()s
+     *             'returnType' => null   : Return type
+     *             'stmts'      => array(): Statements
+     *             'attrGroups' => array(): PHP attributes groups
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(array $subNodes = [], array $attributes = [])
     {
@@ -43,8 +52,7 @@ class Closure extends Expr implements FunctionLike, StmtsAwareInterface
         $this->byRef = $subNodes['byRef'] ?? \false;
         $this->params = $subNodes['params'] ?? [];
         $this->uses = $subNodes['uses'] ?? [];
-        $returnType = $subNodes['returnType'] ?? null;
-        $this->returnType = \is_string($returnType) ? new Node\Identifier($returnType) : $returnType;
+        $this->returnType = $subNodes['returnType'] ?? null;
         $this->stmts = $subNodes['stmts'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }

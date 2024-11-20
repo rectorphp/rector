@@ -15,14 +15,12 @@ final class SymfonyClosureExtensionMatcher
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

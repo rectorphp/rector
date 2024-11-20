@@ -18,9 +18,8 @@ final class ActionSuffixRemoverRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
-    private $controllerMethodAnalyzer;
+    private ControllerMethodAnalyzer $controllerMethodAnalyzer;
     public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer)
     {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;

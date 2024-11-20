@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -31,24 +31,20 @@ final class DowngradeArraySpreadRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory
      */
-    private $arrayMergeFromArraySpreadFactory;
+    private ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
-    private $arraySpreadAnalyzer;
+    private ArraySpreadAnalyzer $arraySpreadAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, ArraySpreadAnalyzer $arraySpreadAnalyzer, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;

@@ -23,19 +23,13 @@ use RectorPrefix202411\Symfony\Component\Finder\SplFileInfo;
 class ExcludeDirectoryFilterIterator extends \FilterIterator implements \RecursiveIterator
 {
     /** @var \Iterator<string, SplFileInfo> */
-    private $iterator;
-    /**
-     * @var bool
-     */
-    private $isRecursive;
+    private \Iterator $iterator;
+    private bool $isRecursive;
     /** @var array<string, true> */
-    private $excludedDirs = [];
-    /**
-     * @var string|null
-     */
-    private $excludedPattern;
+    private array $excludedDirs = [];
+    private ?string $excludedPattern = null;
     /** @var list<callable(SplFileInfo):bool> */
-    private $pruneFilters = [];
+    private array $pruneFilters = [];
     /**
      * @param \Iterator<string, SplFileInfo>          $iterator    The Iterator to filter
      * @param list<string|callable(SplFileInfo):bool> $directories An array of directories to exclude

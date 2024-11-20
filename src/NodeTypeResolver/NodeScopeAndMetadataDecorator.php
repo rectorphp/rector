@@ -12,19 +12,16 @@ final class NodeScopeAndMetadataDecorator
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
      */
-    private $fileWithoutNamespaceNodeTraverser;
+    private FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser;
     /**
      * @readonly
-     * @var \PhpParser\NodeTraverser
      */
-    private $nodeTraverser;
+    private NodeTraverser $nodeTraverser;
     public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;

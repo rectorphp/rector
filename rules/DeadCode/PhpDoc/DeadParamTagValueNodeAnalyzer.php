@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
+use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -22,49 +23,40 @@ final class DeadParamTagValueNodeAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
-    private $genericTypeNodeAnalyzer;
+    private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
      */
-    private $mixedArrayTypeNodeAnalyzer;
+    private MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard
      */
-    private $standaloneTypeRemovalGuard;
+    private StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard
      */
-    private $templateTypeRemovalGuard;
+    private TemplateTypeRemovalGuard $templateTypeRemovalGuard;
     public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard, StaticTypeMapper $staticTypeMapper, TemplateTypeRemovalGuard $templateTypeRemovalGuard)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -83,7 +75,7 @@ final class DeadParamTagValueNodeAnalyzer
         if (!$param instanceof Param) {
             return \false;
         }
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return \false;
         }
         if ($paramTagValueNode->description !== '') {

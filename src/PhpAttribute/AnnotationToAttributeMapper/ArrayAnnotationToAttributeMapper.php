@@ -5,7 +5,7 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -21,13 +21,9 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
-    /**
-     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
-     */
-    private $annotationToAttributeMapper;
+    private ValueResolver $valueResolver;
+    private AnnotationToAttributeMapper $annotationToAttributeMapper;
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;

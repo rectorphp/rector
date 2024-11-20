@@ -30,54 +30,44 @@ final class FileProcessor
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\NodeTraverser\RectorNodeTraverser
      */
-    private $rectorNodeTraverser;
+    private RectorNodeTraverser $rectorNodeTraverser;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
-    private $fileDiffFactory;
+    private FileDiffFactory $fileDiffFactory;
     /**
      * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
-    private $changedFilesDetector;
+    private ChangedFilesDetector $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
-    private $errorFactory;
+    private ErrorFactory $errorFactory;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     /**
      * @readonly
-     * @var \Rector\PostRector\Application\PostFileProcessor
      */
-    private $postFileProcessor;
+    private PostFileProcessor $postFileProcessor;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\RectorParser
      */
-    private $rectorParser;
+    private RectorParser $rectorParser;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
-    private $nodeScopeAndMetadataDecorator;
+    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
     /**
      * @var string
      * @see https://regex101.com/r/llm7XZ/1
@@ -138,7 +128,11 @@ final class FileProcessor
     private function parseFileAndDecorateNodes(File $file) : ?SystemError
     {
         try {
-            $this->parseFileNodes($file);
+            try {
+                $this->parseFileNodes($file);
+            } catch (ParserErrorsException $exception) {
+                $this->parseFileNodes($file, \false);
+            }
         } catch (ShouldNotHappenException $shouldNotHappenException) {
             throw $shouldNotHappenException;
         } catch (AnalysedCodeException $analysedCodeException) {
@@ -173,14 +167,14 @@ final class FileProcessor
              * Handle new line or space before <?php or InlineHTML node wiped on print format preserving
              * On very first content level
              */
-            $ltrimOriginalFileContent = \ltrim($file->getOriginalFileContent());
-            if ($ltrimOriginalFileContent === $newContent) {
+            $originalFileContent = $file->getOriginalFileContent();
+            if ($originalFileContent === $newContent) {
                 return;
             }
             // handle space before <?php
-            $ltrimNewContent = Strings::replace($newContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
-            $ltrimOriginalFileContent = Strings::replace($ltrimOriginalFileContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
-            if ($ltrimOriginalFileContent === $ltrimNewContent) {
+            $strippedNewContent = Strings::replace($newContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
+            $strippedOriginalFileContent = Strings::replace($originalFileContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
+            if ($strippedOriginalFileContent === $strippedNewContent) {
                 return;
             }
         }
@@ -194,10 +188,10 @@ final class FileProcessor
         }
         FileSystem::write($filePath, $newContent, null);
     }
-    private function parseFileNodes(File $file) : void
+    private function parseFileNodes(File $file, bool $forNewestSupportedVersion = \true) : void
     {
         // store tokens by original file content, so we don't have to print them right now
-        $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent());
+        $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent(), $forNewestSupportedVersion);
         $oldStmts = $stmtsAndTokens->getStmts();
         $oldTokens = $stmtsAndTokens->getTokens();
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file->getFilePath(), $oldStmts);

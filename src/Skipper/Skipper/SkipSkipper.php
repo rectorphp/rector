@@ -8,9 +8,8 @@ final class SkipSkipper
 {
     /**
      * @readonly
-     * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
-    private $fileInfoMatcher;
+    private FileInfoMatcher $fileInfoMatcher;
     public function __construct(FileInfoMatcher $fileInfoMatcher)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;

@@ -20,14 +20,12 @@ final class ArgumentDefaultValueReplacer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver)
     {
         $this->nodeFactory = $nodeFactory;

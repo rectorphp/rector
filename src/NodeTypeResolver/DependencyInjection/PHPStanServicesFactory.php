@@ -41,9 +41,8 @@ in your included phpstan configuration.
 MESSAGE_ERROR;
     /**
      * @readonly
-     * @var \PHPStan\DependencyInjection\Container
      */
-    private $container;
+    private Container $container;
     public function __construct()
     {
         $containerFactory = new ContainerFactory(\getcwd());

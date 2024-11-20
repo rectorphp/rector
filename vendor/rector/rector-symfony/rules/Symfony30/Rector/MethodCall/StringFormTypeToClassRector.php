@@ -21,14 +21,12 @@ final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
-    private $formAddMethodCallAnalyzer;
+    private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
-    private $formTypeStringToTypeProvider;
+    private FormTypeStringToTypeProvider $formTypeStringToTypeProvider;
     /**
      * @var string
      */

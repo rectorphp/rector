@@ -13,30 +13,12 @@ use RectorPrefix202411\Composer\Util\Filesystem as ComposerFilesystem;
  */
 final class PluginInstaller
 {
-    /**
-     * @var \Rector\RectorInstaller\Filesystem
-     */
-    private $filesystem;
-    /**
-     * @var \Composer\Repository\InstalledRepositoryInterface
-     */
-    private $localRepository;
-    /**
-     * @var \Composer\IO\IOInterface
-     */
-    private $io;
-    /**
-     * @var \Composer\Installer\InstallationManager
-     */
-    private $installationManager;
-    /**
-     * @var ComposerFilesystem
-     */
-    private $composerFilesystem;
-    /**
-     * @var string
-     */
-    private $configurationFile;
+    private \Rector\RectorInstaller\Filesystem $filesystem;
+    private InstalledRepositoryInterface $localRepository;
+    private IOInterface $io;
+    private InstallationManager $installationManager;
+    private ComposerFilesystem $composerFilesystem;
+    private string $configurationFile;
     /**
      * @var string
      */
@@ -45,10 +27,7 @@ final class PluginInstaller
      * @var string
      */
     public const RECTOR_EXTRA_KEY = 'rector';
-    /**
-     * @var string
-     */
-    private static $generatedFileTemplate = <<<'CODE_SAMPLE'
+    private static string $generatedFileTemplate = <<<'CODE_SAMPLE'
 <?php
 
 declare(strict_types = 1);

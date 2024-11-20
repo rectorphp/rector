@@ -34,29 +34,24 @@ final class PhpDocTypeChanger
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory
      */
-    private $paramPhpDocNodeFactory;
+    private ParamPhpDocNodeFactory $paramPhpDocNodeFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Guard\NewPhpDocFromPHPStanTypeGuard
      */
-    private $newPhpDocFromPHPStanTypeGuard;
+    private NewPhpDocFromPHPStanTypeGuard $newPhpDocFromPHPStanTypeGuard;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @var array<class-string<Node>>
      */

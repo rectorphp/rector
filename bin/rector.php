@@ -29,7 +29,7 @@ final class AutoloadIncluder
     /**
      * @var string[]
      */
-    private $alreadyLoadedAutoloadFiles = [];
+    private array $alreadyLoadedAutoloadFiles = [];
     public function includeDependencyOrRepositoryVendorAutoloadIfExists() : void
     {
         // Rector's vendor is already loaded

@@ -10,19 +10,16 @@ final class RenameClassConstFetch implements RenameClassConstFetchInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldClass;
+    private string $oldClass;
     /**
      * @readonly
-     * @var string
      */
-    private $oldConstant;
+    private string $oldConstant;
     /**
      * @readonly
-     * @var string
      */
-    private $newConstant;
+    private string $newConstant;
     public function __construct(string $oldClass, string $oldConstant, string $newConstant)
     {
         $this->oldClass = $oldClass;

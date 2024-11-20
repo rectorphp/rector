@@ -19,14 +19,12 @@ final class DowngradeTypedPropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $propertyDecorator;
+    private PropertyDecorator $propertyDecorator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(PropertyDecorator $propertyDecorator, ValueResolver $valueResolver)
     {
         $this->propertyDecorator = $propertyDecorator;

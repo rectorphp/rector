@@ -15,14 +15,12 @@ final class UnnamedArgumentResolver
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs
      */
-    private $namedToUnnamedArgs;
+    private \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs $namedToUnnamedArgs;
     public function __construct(NodeNameResolver $nodeNameResolver, \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs $namedToUnnamedArgs)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -35,8 +33,8 @@ final class UnnamedArgumentResolver
      */
     public function resolveFromReflection($functionLikeReflection, array $currentArgs) : array
     {
-        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($functionLikeReflection->getVariants());
-        $parameters = $parametersAcceptorWithPhpDocs->getParameters();
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($functionLikeReflection->getVariants());
+        $parameters = $extendedParametersAcceptor->getParameters();
         if ($functionLikeReflection instanceof NativeFunctionReflection) {
             $functionLikeReflection = new ReflectionFunction($functionLikeReflection->getName());
         }

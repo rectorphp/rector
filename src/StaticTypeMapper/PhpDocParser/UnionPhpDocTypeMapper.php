@@ -20,24 +20,20 @@ final class UnionPhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
-    private $typeFactory;
+    private TypeFactory $typeFactory;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper
      */
-    private $identifierPhpDocTypeMapper;
+    private \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper
      */
-    private $intersectionPhpDocTypeMapper;
+    private \Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper $intersectionPhpDocTypeMapper;
     /**
      * @readonly
-     * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
-    private $typeNodeResolver;
+    private TypeNodeResolver $typeNodeResolver;
     public function __construct(TypeFactory $typeFactory, \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper, \Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper $intersectionPhpDocTypeMapper, TypeNodeResolver $typeNodeResolver)
     {
         $this->typeFactory = $typeFactory;

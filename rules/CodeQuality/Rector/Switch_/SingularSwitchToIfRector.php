@@ -21,9 +21,8 @@ final class SingularSwitchToIfRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
-    private $switchManipulator;
+    private SwitchManipulator $switchManipulator;
     public function __construct(SwitchManipulator $switchManipulator)
     {
         $this->switchManipulator = $switchManipulator;
@@ -81,9 +80,7 @@ CODE_SAMPLE
         // only default → basically unwrap
         if (!$onlyCase->cond instanceof Expr) {
             // remove default clause because it cause syntax error
-            return \array_filter($onlyCase->stmts, static function (Stmt $stmt) : bool {
-                return !$stmt instanceof Break_;
-            });
+            return \array_filter($onlyCase->stmts, static fn(Stmt $stmt): bool => !$stmt instanceof Break_);
         }
         $if = new If_(new Identical($node->cond, $onlyCase->cond));
         $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);

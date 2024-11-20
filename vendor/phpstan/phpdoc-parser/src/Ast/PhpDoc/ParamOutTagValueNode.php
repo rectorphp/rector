@@ -9,12 +9,10 @@ use function trim;
 class ParamOutTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $type;
-    /** @var string */
-    public $parameterName;
+    public TypeNode $type;
+    public string $parameterName;
     /** @var string (may be empty) */
-    public $description;
+    public string $description;
     public function __construct(TypeNode $type, string $parameterName, string $description)
     {
         $this->type = $type;

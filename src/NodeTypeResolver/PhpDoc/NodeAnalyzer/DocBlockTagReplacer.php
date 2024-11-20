@@ -11,9 +11,8 @@ final class DocBlockTagReplacer
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
-    private $annotationNaming;
+    private AnnotationNaming $annotationNaming;
     public function __construct(AnnotationNaming $annotationNaming)
     {
         $this->annotationNaming = $annotationNaming;

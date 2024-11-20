@@ -19,26 +19,11 @@ use Traversable;
  */
 final class Chunk implements IteratorAggregate
 {
-    /**
-     * @var int
-     */
-    private $start;
-    /**
-     * @var int
-     */
-    private $startRange;
-    /**
-     * @var int
-     */
-    private $end;
-    /**
-     * @var int
-     */
-    private $endRange;
-    /**
-     * @var mixed[]
-     */
-    private $lines;
+    private int $start;
+    private int $startRange;
+    private int $end;
+    private int $endRange;
+    private array $lines;
     public function __construct(int $start = 0, int $startRange = 1, int $end = 0, int $endRange = 1, array $lines = [])
     {
         $this->start = $start;

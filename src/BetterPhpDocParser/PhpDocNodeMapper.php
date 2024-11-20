@@ -18,19 +18,17 @@ final class PhpDocNodeMapper
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
-    private $currentTokenIteratorProvider;
+    private CurrentTokenIteratorProvider $currentTokenIteratorProvider;
     /**
      * @var BasePhpDocNodeVisitorInterface[]
      * @readonly
      */
-    private $phpDocNodeVisitors;
+    private array $phpDocNodeVisitors;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser
      */
-    private $phpDocNodeTraverser;
+    private PhpDocNodeTraverser $phpDocNodeTraverser;
     /**
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */

@@ -45,29 +45,24 @@ final class BoolReturnTypeFromBooleanStrictReturnsRector extends AbstractRector 
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $classMethodReturnTypeOverrideGuard;
+    private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
-    private $returnAnalyzer;
+    private ReturnAnalyzer $returnAnalyzer;
     public function __construct(ReflectionProvider $reflectionProvider, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -177,8 +172,8 @@ CODE_SAMPLE
         if (!$functionReflection->isBuiltin()) {
             return \false;
         }
-        foreach ($functionReflection->getVariants() as $parametersAcceptorWithPhpDoc) {
-            if (!$parametersAcceptorWithPhpDoc->getNativeReturnType()->isBoolean()->yes()) {
+        foreach ($functionReflection->getVariants() as $variant) {
+            if (!$variant->getNativeReturnType()->isBoolean()->yes()) {
                 return \false;
             }
         }

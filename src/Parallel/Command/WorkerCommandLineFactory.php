@@ -18,14 +18,12 @@ final class WorkerCommandLineFactory
 {
     /**
      * @readonly
-     * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
      */
-    private $commandFromReflectionFactory;
+    private CommandFromReflectionFactory $commandFromReflectionFactory;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     /**
      * @var string
      */

@@ -14,9 +14,8 @@ final class ProjectPackageVersionResolver
 {
     /**
      * @readonly
-     * @var \Rector\Composer\InstalledPackageResolver
      */
-    private $installedPackageResolver;
+    private InstalledPackageResolver $installedPackageResolver;
     public function __construct()
     {
         $this->installedPackageResolver = new InstalledPackageResolver(\getcwd());

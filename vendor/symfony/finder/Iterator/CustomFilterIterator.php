@@ -22,10 +22,7 @@ namespace RectorPrefix202411\Symfony\Component\Finder\Iterator;
  */
 class CustomFilterIterator extends \FilterIterator
 {
-    /**
-     * @var mixed[]
-     */
-    private $filters = [];
+    private array $filters = [];
     /**
      * @param \Iterator<string, \SplFileInfo> $iterator The Iterator to filter
      * @param callable[]                      $filters  An array of PHP callbacks

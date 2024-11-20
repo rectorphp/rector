@@ -21,24 +21,20 @@ final class RemoveUnusedPublicMethodParameterRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector
      */
-    private $variadicFunctionLikeDetector;
+    private VariadicFunctionLikeDetector $variadicFunctionLikeDetector;
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeManipulator\ClassMethodParamRemover
      */
-    private $classMethodParamRemover;
+    private ClassMethodParamRemover $classMethodParamRemover;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
      */
-    private $magicClassMethodAnalyzer;
+    private MagicClassMethodAnalyzer $magicClassMethodAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     public function __construct(VariadicFunctionLikeDetector $variadicFunctionLikeDetector, ClassMethodParamRemover $classMethodParamRemover, MagicClassMethodAnalyzer $magicClassMethodAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;

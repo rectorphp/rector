@@ -30,24 +30,20 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeResolver\RequireOptionalParamResolver
      */
-    private $requireOptionalParamResolver;
+    private RequireOptionalParamResolver $requireOptionalParamResolver;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeResolver\ArgumentSorter
      */
-    private $argumentSorter;
+    private ArgumentSorter $argumentSorter;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
      */
-    private $vendorLocationDetector;
+    private VendorLocationDetector $vendorLocationDetector;
     /**
      * @var string
      */

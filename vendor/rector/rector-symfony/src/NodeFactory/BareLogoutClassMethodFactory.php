@@ -15,14 +15,12 @@ final class BareLogoutClassMethodFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     public function __construct(NodeFactory $nodeFactory, PhpVersionProvider $phpVersionProvider)
     {
         $this->nodeFactory = $nodeFactory;

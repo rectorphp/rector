@@ -21,9 +21,8 @@ final class DateTimeInstanceToCarbonRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Carbon\NodeFactory\CarbonCallFactory
      */
-    private $carbonCallFactory;
+    private CarbonCallFactory $carbonCallFactory;
     public function __construct(CarbonCallFactory $carbonCallFactory)
     {
         $this->carbonCallFactory = $carbonCallFactory;

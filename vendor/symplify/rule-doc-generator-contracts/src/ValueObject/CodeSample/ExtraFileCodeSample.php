@@ -8,9 +8,8 @@ final class ExtraFileCodeSample extends AbstractCodeSample
 {
     /**
      * @readonly
-     * @var string
      */
-    private $extraFile;
+    private string $extraFile;
     public function __construct(string $badCode, string $goodCode, string $extraFile)
     {
         $this->extraFile = $extraFile;

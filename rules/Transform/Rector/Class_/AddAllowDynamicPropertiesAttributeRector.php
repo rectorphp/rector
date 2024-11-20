@@ -26,28 +26,24 @@ final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector impl
 {
     /**
      * @readonly
-     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
-    private $familyRelationsAnalyzer;
+    private FamilyRelationsAnalyzer $familyRelationsAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
-    private $phpAttributeGroupFactory;
+    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var array<array-key, string>
      */
-    private $transformOnNamespaces = [];
+    private array $transformOnNamespaces = [];
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
@@ -144,9 +140,7 @@ CODE_SAMPLE
     }
     private function isExistsWithWildCards(string $className) : bool
     {
-        $wildcardTransformOnNamespaces = \array_filter($this->transformOnNamespaces, static function (string $transformOnNamespace) : bool {
-            return \strpos($transformOnNamespace, '*') !== \false;
-        });
+        $wildcardTransformOnNamespaces = \array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => \strpos($transformOnNamespace, '*') !== \false);
         foreach ($wildcardTransformOnNamespaces as $wildcardTransformOnNamespace) {
             if (!\fnmatch($wildcardTransformOnNamespace, $className, \FNM_NOESCAPE)) {
                 continue;
@@ -157,9 +151,7 @@ CODE_SAMPLE
     }
     private function isExistsWithClassName(string $className) : bool
     {
-        $transformedClassNames = \array_filter($this->transformOnNamespaces, static function (string $transformOnNamespace) : bool {
-            return \strpos($transformOnNamespace, '*') === \false;
-        });
+        $transformedClassNames = \array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => \strpos($transformOnNamespace, '*') === \false);
         foreach ($transformedClassNames as $transformedClassName) {
             if (!$this->nodeNameResolver->isStringName($className, $transformedClassName)) {
                 continue;

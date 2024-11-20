@@ -11,21 +11,14 @@ final class RuleDefinition
 {
     /**
      * @readonly
-     * @var string
      */
-    private $description;
-    /**
-     * @var string|null
-     */
-    private $ruleClass;
-    /**
-     * @var string|null
-     */
-    private $ruleFilePath;
+    private string $description;
+    private ?string $ruleClass = null;
+    private ?string $ruleFilePath = null;
     /**
      * @var CodeSampleInterface[]
      */
-    private $codeSamples = [];
+    private array $codeSamples = [];
     /**
      * @param CodeSampleInterface[] $codeSamples
      */

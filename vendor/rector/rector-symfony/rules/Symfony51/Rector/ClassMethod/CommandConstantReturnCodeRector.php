@@ -5,7 +5,7 @@ namespace Rector\Symfony\Symfony51\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
@@ -24,14 +24,12 @@ final class CommandConstantReturnCodeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -87,7 +85,7 @@ CODE_SAMPLE
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, [Return_::class]);
         foreach ($returns as $return) {
-            if (!$return->expr instanceof LNumber) {
+            if (!$return->expr instanceof Int_) {
                 continue;
             }
             $classConstFetch = $this->convertNumberToConstant($return->expr);
@@ -102,11 +100,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function convertNumberToConstant(LNumber $lNumber) : ?ClassConstFetch
+    private function convertNumberToConstant(Int_ $int) : ?ClassConstFetch
     {
-        if (!isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value])) {
+        if (!isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value])) {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch('Symfony\\Component\\Console\\Command\\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value]);
+        return $this->nodeFactory->createClassConstFetch('Symfony\\Component\\Console\\Command\\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value]);
     }
 }

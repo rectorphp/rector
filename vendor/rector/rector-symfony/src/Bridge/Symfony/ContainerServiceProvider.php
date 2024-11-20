@@ -10,10 +10,7 @@ use RectorPrefix202411\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix202411\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
-    /**
-     * @var object|null
-     */
-    private $container;
+    private ?object $container = null;
     public function provideByName(string $serviceName) : object
     {
         /** @var Container $symfonyContainer */

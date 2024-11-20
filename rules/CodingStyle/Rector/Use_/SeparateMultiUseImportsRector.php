@@ -105,7 +105,7 @@ CODE_SAMPLE
         foreach ($traitUse->traits as $singleTraitUse) {
             $adaptation = [];
             foreach ($traitUse->adaptations as $traitAdaptation) {
-                if ($traitAdaptation instanceof Alias && $traitAdaptation->trait && $traitAdaptation->trait instanceof Name && $traitAdaptation->trait->toString() === $singleTraitUse->toString()) {
+                if ($traitAdaptation instanceof Alias && $traitAdaptation->trait instanceof Name && $traitAdaptation->trait->toString() === $singleTraitUse->toString()) {
                     $adaptation[] = $traitAdaptation;
                 }
             }

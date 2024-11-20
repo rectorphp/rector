@@ -36,66 +36,24 @@ class Table
     private const DISPLAY_ORIENTATION_DEFAULT = 'default';
     private const DISPLAY_ORIENTATION_HORIZONTAL = 'horizontal';
     private const DISPLAY_ORIENTATION_VERTICAL = 'vertical';
-    /**
-     * @var string|null
-     */
-    private $headerTitle;
-    /**
-     * @var string|null
-     */
-    private $footerTitle;
-    /**
-     * @var mixed[]
-     */
-    private $headers = [];
-    /**
-     * @var mixed[]
-     */
-    private $rows = [];
-    /**
-     * @var mixed[]
-     */
-    private $effectiveColumnWidths = [];
-    /**
-     * @var int
-     */
-    private $numberOfColumns;
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
-    /**
-     * @var \Symfony\Component\Console\Helper\TableStyle
-     */
-    private $style;
-    /**
-     * @var mixed[]
-     */
-    private $columnStyles = [];
-    /**
-     * @var mixed[]
-     */
-    private $columnWidths = [];
-    /**
-     * @var mixed[]
-     */
-    private $columnMaxWidths = [];
-    /**
-     * @var bool
-     */
-    private $rendered = \false;
-    /**
-     * @var string
-     */
-    private $displayOrientation = self::DISPLAY_ORIENTATION_DEFAULT;
-    /**
-     * @var mixed[]
-     */
-    private static $styles;
+    private ?string $headerTitle = null;
+    private ?string $footerTitle = null;
+    private array $headers = [];
+    private array $rows = [];
+    private array $effectiveColumnWidths = [];
+    private int $numberOfColumns;
+    private OutputInterface $output;
+    private TableStyle $style;
+    private array $columnStyles = [];
+    private array $columnWidths = [];
+    private array $columnMaxWidths = [];
+    private bool $rendered = \false;
+    private string $displayOrientation = self::DISPLAY_ORIENTATION_DEFAULT;
+    private static array $styles;
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
-        self::$styles = self::$styles ?? self::initStyles();
+        self::$styles ??= self::initStyles();
         $this->setStyle('default');
     }
     /**
@@ -105,7 +63,7 @@ class Table
      */
     public static function setStyleDefinition(string $name, TableStyle $style)
     {
-        self::$styles = self::$styles ?? self::initStyles();
+        self::$styles ??= self::initStyles();
         self::$styles[$name] = $style;
     }
     /**
@@ -113,7 +71,7 @@ class Table
      */
     public static function getStyleDefinition(string $name) : TableStyle
     {
-        self::$styles = self::$styles ?? self::initStyles();
+        self::$styles ??= self::initStyles();
         if (!isset(self::$styles[$name])) {
             throw new InvalidArgumentException(\sprintf('Style "%s" is not defined.', $name));
         }
@@ -317,9 +275,7 @@ class Table
     public function render()
     {
         $divider = new TableSeparator();
-        $isCellWithColspan = static function ($cell) {
-            return $cell instanceof TableCell && $cell->getColspan() >= 2;
-        };
+        $isCellWithColspan = static fn($cell) => $cell instanceof TableCell && $cell->getColspan() >= 2;
         $horizontal = self::DISPLAY_ORIENTATION_HORIZONTAL === $this->displayOrientation;
         $vertical = self::DISPLAY_ORIENTATION_VERTICAL === $this->displayOrientation;
         $rows = [];
@@ -341,9 +297,7 @@ class Table
             }
         } elseif ($vertical) {
             $formatter = $this->output->getFormatter();
-            $maxHeaderLength = \array_reduce($this->headers[0] ?? [], static function ($max, $header) use($formatter) {
-                return \max($max, Helper::width(Helper::removeDecoration($formatter, $header)));
-            }, 0);
+            $maxHeaderLength = \array_reduce($this->headers[0] ?? [], static fn($max, $header) => \max($max, Helper::width(Helper::removeDecoration($formatter, $header))), 0);
             foreach ($this->rows as $row) {
                 if ($row instanceof TableSeparator) {
                     continue;

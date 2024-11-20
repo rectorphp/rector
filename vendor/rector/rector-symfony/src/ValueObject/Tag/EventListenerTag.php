@@ -8,19 +8,16 @@ final class EventListenerTag implements TagInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $event;
+    private string $event;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var int
      */
-    private $priority;
+    private int $priority;
     public function __construct(string $event, string $method, int $priority)
     {
         $this->event = $event;

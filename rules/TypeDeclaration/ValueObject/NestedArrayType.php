@@ -9,19 +9,16 @@ final class NestedArrayType
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\Type
      */
-    private $type;
+    private Type $type;
     /**
      * @readonly
-     * @var int
      */
-    private $arrayNestingLevel;
+    private int $arrayNestingLevel;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type|null
      */
-    private $keyType;
+    private ?Type $keyType = null;
     public function __construct(Type $type, int $arrayNestingLevel, ?Type $keyType = null)
     {
         $this->type = $type;

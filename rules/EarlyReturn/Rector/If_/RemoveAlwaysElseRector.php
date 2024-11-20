@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -91,7 +91,7 @@ CODE_SAMPLE
             // If the last statement in the `elseif` breaks flow, merge it into the original `if` and stop processing
             if ($this->doesLastStatementBreakFlow($currentElseIf)) {
                 $this->updateIfWithElseIf($if, $currentElseIf);
-                $nodesToReturn = \array_merge(\is_array($nodesToReturn) ? $nodesToReturn : \iterator_to_array($nodesToReturn), [$if], $this->getStatementsElseIfs($if));
+                $nodesToReturn = \array_merge($nodesToReturn, [$if], $this->getStatementsElseIfs($if));
                 break;
             }
             $isLastElseIf = $if->elseifs === [];
@@ -141,7 +141,7 @@ CODE_SAMPLE
             }
             return \false;
         }
-        return !($lastStmt instanceof Return_ || $lastStmt instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
+        return !($lastStmt instanceof Return_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node

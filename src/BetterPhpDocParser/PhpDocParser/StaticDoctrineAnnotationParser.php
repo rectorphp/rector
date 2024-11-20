@@ -22,14 +22,12 @@ final class StaticDoctrineAnnotationParser
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser
      */
-    private $plainValueParser;
+    private PlainValueParser $plainValueParser;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
-    private $arrayParser;
+    private ArrayParser $arrayParser;
     /**
      * @var string
      * @see https://regex101.com/r/Pthg5d/1

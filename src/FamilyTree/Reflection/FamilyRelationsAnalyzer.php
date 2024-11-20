@@ -13,14 +13,12 @@ final class FamilyRelationsAnalyzer
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     public function __construct(ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -41,9 +39,7 @@ final class FamilyRelationsAnalyzer
             }
             $classReflection = $this->reflectionProvider->getClass($fullName);
             $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-            return \array_map(static function (ClassReflection $classReflection) : string {
-                return $classReflection->getName();
-            }, $ancestors);
+            return \array_map(static fn(ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
         }
         if ($classOrName instanceof Interface_) {
             foreach ($classOrName->extends as $extendInterfaceName) {

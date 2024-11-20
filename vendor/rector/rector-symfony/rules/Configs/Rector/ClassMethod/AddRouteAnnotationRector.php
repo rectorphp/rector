@@ -28,29 +28,24 @@ final class AddRouteAnnotationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface
      */
-    private $symfonyRoutesProvider;
+    private SymfonyRoutesProviderInterface $symfonyRoutesProvider;
     /**
      * @readonly
-     * @var \Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory
      */
-    private $symfonyRouteTagValueNodeFactory;
+    private SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
-    private $arrayParser;
+    private ArrayParser $arrayParser;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     public function __construct(SymfonyRoutesProviderInterface $symfonyRoutesProvider, SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, ArrayParser $arrayParser, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
     {
         $this->symfonyRoutesProvider = $symfonyRoutesProvider;

@@ -23,14 +23,12 @@ final class PregReplaceEModifierRector extends AbstractRector implements MinPhpV
 {
     /**
      * @readonly
-     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
-    private $anonymousFunctionFactory;
+    private AnonymousFunctionFactory $anonymousFunctionFactory;
     /**
      * @readonly
-     * @var \Rector\Php55\RegexMatcher
      */
-    private $regexMatcher;
+    private RegexMatcher $regexMatcher;
     public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, RegexMatcher $regexMatcher)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;

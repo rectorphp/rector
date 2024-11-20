@@ -193,7 +193,7 @@ if (!function_exists('mb_chr')) {
     function mb_chr(?int $codepoint, ?string $encoding = null) { return p\Mbstring::mb_chr((int) $codepoint, $encoding); }
 }
 if (!function_exists('mb_scrub')) {
-    function mb_scrub(?string $string, ?string $encoding = null): string { $encoding = $encoding ?? mb_internal_encoding(); return mb_convert_encoding((string) $string, $encoding, $encoding); }
+    function mb_scrub(?string $string, ?string $encoding = null): string { $encoding ??= mb_internal_encoding(); return mb_convert_encoding((string) $string, $encoding, $encoding); }
 }
 if (!function_exists('mb_str_split')) {
     function mb_str_split(?string $string, ?int $length = 1, ?string $encoding = null): array { return p\Mbstring::mb_str_split((string) $string, (int) $length, $encoding); }

@@ -12,13 +12,12 @@ final class EntityMapping
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @var array<string, mixed>
      */
-    private $entityMapping;
+    private array $entityMapping;
     /**
      * @param array<string, mixed> $propertyMapping
      */

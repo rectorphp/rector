@@ -14,9 +14,8 @@ final class TableClassAttributeTransformer implements ClassAttributeTransformerI
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @var string
      */

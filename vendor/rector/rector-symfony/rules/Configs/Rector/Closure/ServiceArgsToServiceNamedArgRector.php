@@ -5,9 +5,9 @@ namespace Rector\Symfony\Configs\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
@@ -28,19 +28,16 @@ final class ServiceArgsToServiceNamedArgRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
-    private $symfonyPhpClosureDetector;
+    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ReflectionProvider $reflectionProvider, ValueResolver $valueResolver)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
@@ -143,8 +140,8 @@ CODE_SAMPLE
         }
         $constructorParameterNames = [];
         $extendedMethodReflection = $serviceClassReflection->getConstructor();
-        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
-        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflectionWithPhpDoc) {
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
+        foreach ($extendedParametersAcceptor->getParameters() as $parameterReflectionWithPhpDoc) {
             /** @var PhpParameterReflection $parameterReflectionWithPhpDoc */
             $constructorParameterNames[] = '$' . $parameterReflectionWithPhpDoc->getName();
         }

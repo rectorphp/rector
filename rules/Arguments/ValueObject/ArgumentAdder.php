@@ -10,24 +10,20 @@ final class ArgumentAdder
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var int
      */
-    private $position;
+    private int $position;
     /**
      * @readonly
-     * @var string|null
      */
-    private $argumentName;
+    private ?string $argumentName = null;
     /**
      * @var mixed|null
      */
@@ -39,9 +35,8 @@ final class ArgumentAdder
     private $argumentType = null;
     /**
      * @readonly
-     * @var string|null
      */
-    private $scope;
+    private ?string $scope = null;
     /**
      * @param mixed|null $argumentDefaultValue
      */

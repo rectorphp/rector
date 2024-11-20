@@ -24,50 +24,17 @@ class Parser
     public const TAG_PATTERN = '(?P<tag>![\\w!.\\/:-]+)';
     public const BLOCK_SCALAR_HEADER_PATTERN = '(?P<separator>\\||>)(?P<modifiers>\\+|\\-|\\d+|\\+\\d+|\\-\\d+|\\d+\\+|\\d+\\-)?(?P<comments> +#.*)?';
     public const REFERENCE_PATTERN = '#^&(?P<ref>[^ ]++) *+(?P<value>.*)#u';
-    /**
-     * @var string|null
-     */
-    private $filename;
-    /**
-     * @var int
-     */
-    private $offset = 0;
-    /**
-     * @var int
-     */
-    private $numberOfParsedLines = 0;
-    /**
-     * @var int|null
-     */
-    private $totalNumberOfLines;
-    /**
-     * @var mixed[]
-     */
-    private $lines = [];
-    /**
-     * @var int
-     */
-    private $currentLineNb = -1;
-    /**
-     * @var string
-     */
-    private $currentLine = '';
-    /**
-     * @var mixed[]
-     */
-    private $refs = [];
-    /**
-     * @var mixed[]
-     */
-    private $skippedLineNumbers = [];
-    /**
-     * @var mixed[]
-     */
-    private $locallySkippedLineNumbers = [];
-    /**
-     * @var mixed[]
-     */
-    private $refsBeingParsed = [];
+    private ?string $filename = null;
+    private int $offset = 0;
+    private int $numberOfParsedLines = 0;
+    private ?int $totalNumberOfLines = null;
+    private array $lines = [];
+    private int $currentLineNb = -1;
+    private string $currentLine = '';
+    private array $refs = [];
+    private array $skippedLineNumbers = [];
+    private array $locallySkippedLineNumbers = [];
+    private array $refsBeingParsed = [];
     /**
      * Parses a YAML file into a PHP value.
      *
@@ -133,7 +100,7 @@ class Parser
         $this->lines = \explode("\n", $value);
         $this->numberOfParsedLines = \count($this->lines);
         $this->locallySkippedLineNumbers = [];
-        $this->totalNumberOfLines = $this->totalNumberOfLines ?? $this->numberOfParsedLines;
+        $this->totalNumberOfLines ??= $this->numberOfParsedLines;
         if (!$this->moveToNextLine()) {
             return null;
         }

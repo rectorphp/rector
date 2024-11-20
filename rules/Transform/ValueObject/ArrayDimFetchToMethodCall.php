@@ -8,14 +8,12 @@ class ArrayDimFetchToMethodCall
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
      */
-    private $objectType;
+    private ObjectType $objectType;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     public function __construct(ObjectType $objectType, string $method)
     {
         $this->objectType = $objectType;

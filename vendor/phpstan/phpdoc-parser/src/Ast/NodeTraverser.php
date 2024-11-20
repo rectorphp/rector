@@ -57,9 +57,9 @@ final class NodeTraverser
      */
     public const DONT_TRAVERSE_CURRENT_AND_CHILDREN = 4;
     /** @var list<NodeVisitor> Visitors */
-    private $visitors = [];
+    private array $visitors = [];
     /** @var bool Whether traversal should be stopped */
-    private $stopTraversal;
+    private bool $stopTraversal;
     /**
      * @param list<NodeVisitor> $visitors
      */

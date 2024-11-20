@@ -19,10 +19,7 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\CommandNotFoundExcept
  */
 class FactoryCommandLoader implements CommandLoaderInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $factories;
+    private array $factories;
     /**
      * @param callable[] $factories Indexed by command names
      */

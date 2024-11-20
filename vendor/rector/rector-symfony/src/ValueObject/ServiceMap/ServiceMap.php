@@ -12,7 +12,7 @@ final class ServiceMap
      * @var ServiceDefinition[]
      * @readonly
      */
-    private $services;
+    private array $services;
     /**
      * @param ServiceDefinition[] $services
      */

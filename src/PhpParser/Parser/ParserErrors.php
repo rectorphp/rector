@@ -8,14 +8,12 @@ final class ParserErrors
 {
     /**
      * @readonly
-     * @var string
      */
-    private $message;
+    private string $message;
     /**
      * @readonly
-     * @var int
      */
-    private $line;
+    private int $line;
     public function __construct(ParserErrorsException $parserErrorsException)
     {
         $this->message = $parserErrorsException->getMessage();

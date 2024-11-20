@@ -24,10 +24,7 @@ use RectorPrefix202411\Symfony\Contracts\Service\Attribute\SubscribedService;
  */
 trait ServiceMethodsSubscriberTrait
 {
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
     public static function getSubscribedServices() : array
     {
         $services = \method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
@@ -46,8 +43,8 @@ trait ServiceMethodsSubscriberTrait
             }
             /* @var SubscribedService $attribute */
             $attribute = $attribute->newInstance();
-            $attribute->key = $attribute->key ?? self::class . '::' . $method->name;
-            $attribute->type = $attribute->type ?? ($returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType);
+            $attribute->key ??= self::class . '::' . $method->name;
+            $attribute->type ??= $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
             $attribute->nullable = $returnType->allowsNull();
             if ($attribute->attributes) {
                 $services[] = $attribute;

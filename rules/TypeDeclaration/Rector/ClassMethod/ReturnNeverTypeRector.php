@@ -21,14 +21,12 @@ final class ReturnNeverTypeRector extends AbstractRector implements MinPhpVersio
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddNeverReturnType
      */
-    private $addNeverReturnType;
+    private AddNeverReturnType $addNeverReturnType;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(AddNeverReturnType $addNeverReturnType, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->addNeverReturnType = $addNeverReturnType;

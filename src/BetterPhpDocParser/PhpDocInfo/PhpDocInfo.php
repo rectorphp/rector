@@ -41,47 +41,37 @@ final class PhpDocInfo
 {
     /**
      * @readonly
-     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
-    private $phpDocNode;
+    private PhpDocNode $phpDocNode;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator
      */
-    private $betterTokenIterator;
+    private BetterTokenIterator $betterTokenIterator;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \PhpParser\Node
      */
-    private $node;
+    private \PhpParser\Node $node;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
-    private $annotationNaming;
+    private AnnotationNaming $annotationNaming;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
-    private $phpDocNodeByTypeFinder;
+    private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder;
     /**
      * @var array<class-string<PhpDocTagValueNode>, string>
      */
     private const TAGS_TYPES_TO_NAMES = [ReturnTagValueNode::class => '@return', ParamTagValueNode::class => '@param', VarTagValueNode::class => '@var', MethodTagValueNode::class => '@method', PropertyTagValueNode::class => '@property', ExtendsTagValueNode::class => '@extends', ImplementsTagValueNode::class => '@implements'];
-    /**
-     * @var bool
-     */
-    private $isSingleLine = \false;
+    private bool $isSingleLine = \false;
     /**
      * @readonly
-     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
-    private $originalPhpDocNode;
+    private PhpDocNode $originalPhpDocNode;
     public function __construct(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNode = $phpDocNode;
@@ -138,9 +128,7 @@ final class PhpDocInfo
         }
         $tags = $this->phpDocNode->getTags();
         $name = $this->annotationNaming->normalizeName($name);
-        $tags = \array_filter($tags, static function (PhpDocTagNode $phpDocTagNode) use($name) : bool {
-            return $phpDocTagNode->name === $name;
-        });
+        $tags = \array_filter($tags, static fn(PhpDocTagNode $phpDocTagNode): bool => $phpDocTagNode->name === $name);
         return \array_values($tags);
     }
     public function getParamType(string $name) : Type

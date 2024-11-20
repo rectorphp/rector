@@ -25,39 +25,32 @@ final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector 
 {
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $classMethodReturnTypeOverrideGuard;
+    private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
-    private $doctrineDocBlockResolver;
+    private DoctrineDocBlockResolver $doctrineDocBlockResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver
      */
-    private $collectionTypeResolver;
+    private CollectionTypeResolver $collectionTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
-    private $collectionTypeFactory;
+    private CollectionTypeFactory $collectionTypeFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\MethodUniqueReturnedPropertyResolver
      */
-    private $methodUniqueReturnedPropertyResolver;
+    private MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver;
     public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpDocInfoFactory $phpDocInfoFactory, DoctrineDocBlockResolver $doctrineDocBlockResolver, PhpDocTypeChanger $phpDocTypeChanger, CollectionTypeResolver $collectionTypeResolver, CollectionTypeFactory $collectionTypeFactory, MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;

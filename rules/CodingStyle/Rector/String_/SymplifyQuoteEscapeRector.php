@@ -26,10 +26,7 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
      * @see https://regex101.com/r/lGUhRb/1
      */
     private const HAS_NON_PRINTABLE_CHARS = '#[\\x00-\\x1F\\x80-\\xFF]#';
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private bool $hasChanged = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Prefer quote that are not inside the string', [new CodeSample(<<<'CODE_SAMPLE'

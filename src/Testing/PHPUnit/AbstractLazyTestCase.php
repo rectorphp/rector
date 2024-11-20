@@ -8,10 +8,7 @@ use Rector\Config\RectorConfig;
 use Rector\DependencyInjection\LazyContainerFactory;
 abstract class AbstractLazyTestCase extends TestCase
 {
-    /**
-     * @var \Rector\Config\RectorConfig|null
-     */
-    protected static $rectorConfig;
+    protected static ?RectorConfig $rectorConfig = null;
     /**
      * @api
      * @param string[] $configFiles

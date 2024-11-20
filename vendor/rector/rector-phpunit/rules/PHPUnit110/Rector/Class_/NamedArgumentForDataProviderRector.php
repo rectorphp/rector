@@ -26,9 +26,8 @@ final class NamedArgumentForDataProviderRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -188,7 +187,7 @@ CODE_SAMPLE
         $needToSetAllKeyNames = \false;
         $allArrayKeyNames = [];
         foreach ($array->items as $arrayItem) {
-            if ((($nullsafeVariable1 = $arrayItem) ? $nullsafeVariable1->key : null) instanceof String_) {
+            if ($arrayItem->key instanceof String_) {
                 $needToSetAllKeyNames = \true;
                 $allArrayKeyNames[] = $arrayItem->key->value;
             }
@@ -198,9 +197,6 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($array->items as $arrayIndex => $arrayItem) {
-            if ($arrayItem === null) {
-                continue;
-            }
             if (!isset($dataProviderNameMapping[$arrayIndex])) {
                 continue;
             }
@@ -231,15 +227,15 @@ CODE_SAMPLE
             if ($stmt instanceof Return_ && $stmt->expr instanceof Array_) {
                 $dataProviderTestCases = $stmt->expr;
                 foreach ($dataProviderTestCases->items as $dataProviderTestCase) {
-                    $arrayItem = ($nullsafeVariable2 = $dataProviderTestCase) ? $nullsafeVariable2->value : null;
+                    $arrayItem = $dataProviderTestCase->value;
                     if ($arrayItem instanceof Array_) {
                         (yield $arrayItem);
                     }
-                    $variableName = $arrayItem === null ? null : $this->getName($arrayItem);
+                    $variableName = $this->getName($arrayItem);
                     if ($arrayItem instanceof Variable && $variableName !== null && isset($resolvedVariables[$variableName])) {
                         $dataProviderList = $resolvedVariables[$variableName];
                         foreach ($dataProviderList->items as $dataProviderItem) {
-                            if ((($nullsafeVariable3 = $dataProviderItem) ? $nullsafeVariable3->value : null) instanceof Array_) {
+                            if ($dataProviderItem->value instanceof Array_) {
                                 (yield $dataProviderItem->value);
                             }
                         }

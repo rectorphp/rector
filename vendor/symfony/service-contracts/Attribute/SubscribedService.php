@@ -28,17 +28,17 @@ final class SubscribedService
     /**
      * @var string|null
      */
-    public $key;
+    public ?string $key = null;
     /**
      * @var class-string|null
      */
-    public $type;
+    public ?string $type = null;
     /**
      * @var bool
      */
-    public $nullable = \false;
+    public bool $nullable = \false;
     /** @var object[] */
-    public $attributes;
+    public array $attributes;
     /**
      * @param string|null       $key        The key to use for the service
      * @param class-string|null $type       The service class

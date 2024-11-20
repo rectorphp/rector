@@ -15,9 +15,8 @@ final class VariableAndCallAssign
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Variable
      */
-    private $variable;
+    private Variable $variable;
     /**
      * @readonly
      * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
@@ -25,14 +24,12 @@ final class VariableAndCallAssign
     private $expr;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Assign
      */
-    private $assign;
+    private Assign $assign;
     /**
      * @readonly
-     * @var string
      */
-    private $variableName;
+    private string $variableName;
     /**
      * @readonly
      * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure

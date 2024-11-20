@@ -8,12 +8,12 @@ use PhpParser\Node\Stmt;
 class Label extends Stmt
 {
     /** @var Identifier Name */
-    public $name;
+    public Identifier $name;
     /**
      * Constructs a label node.
      *
-     * @param string|Identifier $name       Name
-     * @param array             $attributes Additional attributes
+     * @param string|Identifier $name Name
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct($name, array $attributes = [])
     {

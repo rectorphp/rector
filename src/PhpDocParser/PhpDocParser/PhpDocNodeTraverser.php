@@ -61,11 +61,11 @@ final class PhpDocNodeTraverser
     /**
      * @var bool Whether traversal should be stopped
      */
-    private $stopTraversal = \false;
+    private bool $stopTraversal = \false;
     /**
      * @var PhpDocNodeVisitorInterface[]
      */
-    private $phpDocNodeVisitors = [];
+    private array $phpDocNodeVisitors = [];
     public function addPhpDocNodeVisitor(PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
     {
         $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
@@ -119,7 +119,7 @@ final class PhpDocNodeTraverser
                         } elseif ($return === self::STOP_TRAVERSAL) {
                             $this->stopTraversal = \true;
                         } elseif ($return === self::NODE_REMOVE) {
-                            $subNode = null;
+                            unset($subNode);
                             continue 2;
                         } else {
                             throw new InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));

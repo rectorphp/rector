@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -54,7 +54,7 @@ final class MbStrrposEncodingArgumentPositionRector extends AbstractRector imple
             return null;
         }
         $node->args[3] = $node->args[2];
-        $node->args[2] = new Arg(new LNumber(0));
+        $node->args[2] = new Arg(new Int_(0));
         return $node;
     }
 }

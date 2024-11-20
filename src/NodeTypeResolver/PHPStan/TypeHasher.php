@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan;
 
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\ConstantType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -35,7 +34,7 @@ final class TypeHasher
         if ($type instanceof TypeWithClassName) {
             return $this->resolveUniqueTypeWithClassNameHash($type);
         }
-        if ($type instanceof ConstantType) {
+        if ($type->isConstantValue()->yes()) {
             return \get_class($type);
         }
         $type = $this->normalizeObjectType($type);

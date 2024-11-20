@@ -10,9 +10,8 @@ final class UseImportsRemover
 {
     /**
      * @readonly
-     * @var \Rector\Renaming\Collector\RenamedNameCollector
      */
-    private $renamedNameCollector;
+    private RenamedNameCollector $renamedNameCollector;
     public function __construct(RenamedNameCollector $renamedNameCollector)
     {
         $this->renamedNameCollector = $renamedNameCollector;

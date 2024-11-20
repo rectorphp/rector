@@ -9,19 +9,16 @@ final class MethodCallToPropertyFetch
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldType;
+    private string $oldType;
     /**
      * @readonly
-     * @var string
      */
-    private $oldMethod;
+    private string $oldMethod;
     /**
      * @readonly
-     * @var string
      */
-    private $newProperty;
+    private string $newProperty;
     public function __construct(string $oldType, string $oldMethod, string $newProperty)
     {
         $this->oldType = $oldType;

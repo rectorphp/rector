@@ -30,39 +30,32 @@ final class ParamTypeByMethodCallTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
-    private $callerParamMatcher;
+    private CallerParamMatcher $callerParamMatcher;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
-    private $parentClassMethodTypeOverrideGuard;
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\Guard\ParamTypeAddGuard
      */
-    private $paramTypeAddGuard;
+    private ParamTypeAddGuard $paramTypeAddGuard;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
-    private $phpParserNodeMapper;
+    private PhpParserNodeMapper $phpParserNodeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
-    private $typeFactory;
+    private TypeFactory $typeFactory;
     public function __construct(CallerParamMatcher $callerParamMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard, BetterNodeFinder $betterNodeFinder, PhpParserNodeMapper $phpParserNodeMapper, StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory)
     {
         $this->callerParamMatcher = $callerParamMatcher;
@@ -159,7 +152,7 @@ CODE_SAMPLE
     private function shouldSkipParam(Param $param, ClassMethod $classMethod) : bool
     {
         // already has type, skip
-        if ($param->type !== null) {
+        if ($param->type instanceof Node) {
             return \true;
         }
         if ($param->variadic) {

@@ -13,10 +13,7 @@ namespace RectorPrefix202411\Nette\Utils;
  */
 final class ReflectionMethod extends \ReflectionMethod
 {
-    /**
-     * @var \ReflectionClass
-     */
-    private $originalClass;
+    private \ReflectionClass $originalClass;
     /**
      * @param object|string $objectOrMethod
      */

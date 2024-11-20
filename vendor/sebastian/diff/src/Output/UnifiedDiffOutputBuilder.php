@@ -27,27 +27,14 @@ use RectorPrefix202411\SebastianBergmann\Diff\Differ;
  */
 final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
 {
-    /**
-     * @var bool
-     */
-    private $collapseRanges = \true;
-    /**
-     * @var int
-     */
-    private $commonLineThreshold = 6;
+    private bool $collapseRanges = \true;
+    private int $commonLineThreshold = 6;
     /**
      * @psalm-var positive-int
-     * @var int
      */
-    private $contextLines = 3;
-    /**
-     * @var string
-     */
-    private $header;
-    /**
-     * @var bool
-     */
-    private $addLineNumbers;
+    private int $contextLines = 3;
+    private string $header;
+    private bool $addLineNumbers;
     public function __construct(string $header = "--- Original\n+++ New\n", bool $addLineNumbers = \false)
     {
         $this->header = $header;

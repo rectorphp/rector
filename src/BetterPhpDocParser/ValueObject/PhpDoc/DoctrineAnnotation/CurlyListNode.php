@@ -12,7 +12,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
      * @var ArrayItemNode[]
      * @readonly
      */
-    private $arrayItemNodes = [];
+    private array $arrayItemNodes = [];
     /**
      * @param ArrayItemNode[] $arrayItemNodes
      */
@@ -33,9 +33,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
     private function implode(array $array) : string
     {
         $itemContents = '';
-        \end($array);
-        $lastItemKey = \key($array);
-        \reset($array);
+        $lastItemKey = \array_key_last($array);
         foreach ($array as $key => $value) {
             if (\is_int($key)) {
                 $itemContents .= (string) $value;

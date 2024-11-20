@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
@@ -22,14 +23,12 @@ final class CombineIfRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
-    private $commentsMerger;
+    private CommentsMerger $commentsMerger;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(CommentsMerger $commentsMerger, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->commentsMerger = $commentsMerger;
@@ -84,6 +83,13 @@ CODE_SAMPLE
             return null;
         }
         $node->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $cond = $node->cond;
+        while ($cond instanceof BinaryOp) {
+            if (!$cond->right instanceof BinaryOp) {
+                $cond->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
+            $cond = $cond->right;
+        }
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
         $this->commentsMerger->keepComments($node, [$subIf]);

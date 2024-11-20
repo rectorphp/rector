@@ -10,24 +10,20 @@ final class ArgumentAdderWithoutDefaultValue
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var int
      */
-    private $position;
+    private int $position;
     /**
      * @readonly
-     * @var string|null
      */
-    private $argumentName;
+    private ?string $argumentName = null;
     /**
      * @readonly
      * @var \PHPStan\Type\Type|null
@@ -35,9 +31,8 @@ final class ArgumentAdderWithoutDefaultValue
     private $argumentType = null;
     /**
      * @readonly
-     * @var string|null
      */
-    private $scope;
+    private ?string $scope = null;
     public function __construct(string $class, string $method, int $position, ?string $argumentName = null, ?\PHPStan\Type\Type $argumentType = null, ?string $scope = null)
     {
         $this->class = $class;

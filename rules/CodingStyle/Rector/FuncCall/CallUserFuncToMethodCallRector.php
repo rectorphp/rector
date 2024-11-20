@@ -18,9 +18,8 @@ final class CallUserFuncToMethodCallRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory
      */
-    private $arrayCallableToMethodCallFactory;
+    private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory;
     public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;

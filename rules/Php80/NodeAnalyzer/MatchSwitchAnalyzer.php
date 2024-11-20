@@ -8,11 +8,11 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Throw_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -22,24 +22,20 @@ final class MatchSwitchAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\SwitchAnalyzer
      */
-    private $switchAnalyzer;
+    private \Rector\Php80\NodeAnalyzer\SwitchAnalyzer $switchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     public function __construct(\Rector\Php80\NodeAnalyzer\SwitchAnalyzer $switchAnalyzer, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->switchAnalyzer = $switchAnalyzer;
@@ -83,7 +79,7 @@ final class MatchSwitchAnalyzer
         if ($this->isNextStmtReturnWithExpr($switch, $nextStmt)) {
             return \false;
         }
-        return !$nextStmt instanceof Throw_;
+        return !($nextStmt instanceof Expression && $nextStmt->expr instanceof Throw_);
     }
     /**
      * @param CondAndExpr[] $condAndExprs
@@ -158,9 +154,7 @@ final class MatchSwitchAnalyzer
         }
         foreach ($switch->cases as $case) {
             /** @var Expression[] $expressions */
-            $expressions = \array_filter($case->stmts, static function (Node $node) : bool {
-                return $node instanceof Expression;
-            });
+            $expressions = \array_filter($case->stmts, static fn(Node $node): bool => $node instanceof Expression);
             foreach ($expressions as $expression) {
                 if (!$expression->expr instanceof Assign) {
                     continue;

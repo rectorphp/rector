@@ -10,9 +10,8 @@ final class ScopeFactory
 {
     /**
      * @readonly
-     * @var PHPStanScopeFactory
      */
-    private $phpStanScopeFactory;
+    private PHPStanScopeFactory $phpStanScopeFactory;
     public function __construct(PHPStanScopeFactory $phpStanScopeFactory)
     {
         $this->phpStanScopeFactory = $phpStanScopeFactory;

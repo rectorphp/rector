@@ -23,7 +23,7 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
     /**
      * @var IntlBundleClassToNewClass[]
      */
-    private $intlBundleClassesToNewClasses = [];
+    private array $intlBundleClassesToNewClasses = [];
     public function __construct()
     {
         $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\\Component\\Intl\\ResourceBundle\\LanguageBundleInterface', 'Symfony\\Component\\Intl\\Languages', ['getLanguageNames' => 'getNames', 'getLanguageName' => 'getName']);

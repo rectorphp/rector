@@ -19,9 +19,8 @@ final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer
      */
-    private $closureArrowFunctionAnalyzer;
+    private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer;
     public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;

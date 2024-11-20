@@ -22,9 +22,8 @@ final class BooleanInIfConditionRuleFixerRector extends AbstractFalsyScalarRuleF
 {
     /**
      * @readonly
-     * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
-    private $exactCompareFactory;
+    private ExactCompareFactory $exactCompareFactory;
     public function __construct(ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;

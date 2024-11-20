@@ -31,54 +31,44 @@ final class ApplicationFileProcessor
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilesFinder
      */
-    private $filesFinder;
+    private FilesFinder $filesFinder;
     /**
      * @readonly
-     * @var \Rector\Parallel\Application\ParallelFileProcessor
      */
-    private $parallelFileProcessor;
+    private ParallelFileProcessor $parallelFileProcessor;
     /**
      * @readonly
-     * @var \Symplify\EasyParallel\ScheduleFactory
      */
-    private $scheduleFactory;
+    private ScheduleFactory $scheduleFactory;
     /**
      * @readonly
-     * @var \Symplify\EasyParallel\CpuCoreCountProvider
      */
-    private $cpuCoreCountProvider;
+    private CpuCoreCountProvider $cpuCoreCountProvider;
     /**
      * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
-    private $changedFilesDetector;
+    private ChangedFilesDetector $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
      */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Application\FileProcessor
      */
-    private $fileProcessor;
+    private \Rector\Application\FileProcessor $fileProcessor;
     /**
      * @readonly
-     * @var \Rector\Util\ArrayParametersMerger
      */
-    private $arrayParametersMerger;
+    private ArrayParametersMerger $arrayParametersMerger;
     /**
      * @readonly
-     * @var \Rector\Reporting\MissConfigurationReporter
      */
-    private $missConfigurationReporter;
+    private MissConfigurationReporter $missConfigurationReporter;
     /**
      * @var string
      */
@@ -86,7 +76,7 @@ final class ApplicationFileProcessor
     /**
      * @var SystemError[]
      */
-    private $systemErrors = [];
+    private array $systemErrors = [];
     public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter)
     {
         $this->symfonyStyle = $symfonyStyle;

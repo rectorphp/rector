@@ -31,34 +31,28 @@ final class PhpNestedAttributeGroupFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
-    private $annotationToAttributeMapper;
+    private AnnotationToAttributeMapper $annotationToAttributeMapper;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\AttributeNameFactory
      */
-    private $attributeNameFactory;
+    private \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
-    private $namedArgsFactory;
+    private \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
-    private $attributeArrayNameInliner;
+    private AttributeArrayNameInliner $attributeArrayNameInliner;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
-    private $tokenIteratorFactory;
+    private TokenIteratorFactory $tokenIteratorFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
      */
-    private $staticDoctrineAnnotationParser;
+    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
     public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, AttributeArrayNameInliner $attributeArrayNameInliner, TokenIteratorFactory $tokenIteratorFactory, StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;

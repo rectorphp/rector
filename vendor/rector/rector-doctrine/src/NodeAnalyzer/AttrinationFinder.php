@@ -18,14 +18,12 @@ final class AttrinationFinder
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
-    private $attributeFinder;
+    private \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;

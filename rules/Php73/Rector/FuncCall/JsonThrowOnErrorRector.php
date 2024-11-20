@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -25,18 +25,13 @@ final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersi
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private BetterNodeFinder $betterNodeFinder;
+    private bool $hasChanged = \false;
     public function __construct(ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->valueResolver = $valueResolver;
@@ -67,9 +62,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         // if found, skip it :)
-        $hasJsonErrorFuncCall = (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) : bool {
-            return $this->isNames($node, ['json_last_error', 'json_last_error_msg']);
-        });
+        $hasJsonErrorFuncCall = (bool) $this->betterNodeFinder->findFirst($node, fn(Node $node): bool => $this->isNames($node, ['json_last_error', 'json_last_error_msg']));
         if ($hasJsonErrorFuncCall) {
             return null;
         }
@@ -103,7 +96,7 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        if ($funcCall->args === null) {
+        if ($funcCall->args === []) {
             return \true;
         }
         foreach ($funcCall->args as $arg) {
@@ -135,7 +128,7 @@ CODE_SAMPLE
             $funcCall->args[1] = new Arg($this->nodeFactory->createNull());
         }
         if (!isset($funcCall->args[2])) {
-            $funcCall->args[2] = new Arg(new LNumber(512));
+            $funcCall->args[2] = new Arg(new Int_(512));
         }
         $this->hasChanged = \true;
         $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));

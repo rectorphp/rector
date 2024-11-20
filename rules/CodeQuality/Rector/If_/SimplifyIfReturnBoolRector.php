@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
@@ -28,24 +29,20 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
-    private $commentsMerger;
+    private CommentsMerger $commentsMerger;
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeManipulator\ExprBoolCaster
      */
-    private $exprBoolCaster;
+    private ExprBoolCaster $exprBoolCaster;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster, BetterStandardPrinter $betterStandardPrinter, ValueResolver $valueResolver)
     {
         $this->commentsMerger = $commentsMerger;
@@ -101,6 +98,7 @@ CODE_SAMPLE
             if (!$innerIfInnerNode instanceof Expr) {
                 continue;
             }
+            $if->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $newReturn = $this->resolveReturn($innerIfInnerNode, $if, $return);
             if (!$newReturn instanceof Return_) {
                 continue;

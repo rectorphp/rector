@@ -16,10 +16,7 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
  */
 final class Cursor
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
+    private OutputInterface $output;
     /** @var resource */
     private $input;
     /**
@@ -154,7 +151,7 @@ final class Cursor
     public function getCurrentPosition() : array
     {
         static $isTtySupported;
-        if (!($isTtySupported = $isTtySupported ?? '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT))) {
+        if (!($isTtySupported ??= '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT))) {
             return [1, 1];
         }
         $sttyMode = \shell_exec('stty -g');

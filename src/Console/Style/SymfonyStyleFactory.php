@@ -12,9 +12,8 @@ final class SymfonyStyleFactory
 {
     /**
      * @readonly
-     * @var \Rector\Util\Reflection\PrivatesAccessor
      */
-    private $privatesAccessor;
+    private PrivatesAccessor $privatesAccessor;
     public function __construct(PrivatesAccessor $privatesAccessor)
     {
         $this->privatesAccessor = $privatesAccessor;

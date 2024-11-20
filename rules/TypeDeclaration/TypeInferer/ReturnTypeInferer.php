@@ -17,14 +17,12 @@ final class ReturnTypeInferer
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeNormalizer
      */
-    private $typeNormalizer;
+    private TypeNormalizer $typeNormalizer;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInfererTypeInferer
      */
-    private $returnedNodesReturnTypeInfererTypeInferer;
+    private ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer;
     public function __construct(TypeNormalizer $typeNormalizer, ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer)
     {
         $this->typeNormalizer = $typeNormalizer;

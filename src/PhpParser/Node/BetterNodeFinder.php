@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Node;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -15,7 +16,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -27,24 +27,20 @@ final class BetterNodeFinder
 {
     /**
      * @readonly
-     * @var \PhpParser\NodeFinder
      */
-    private $nodeFinder;
+    private NodeFinder $nodeFinder;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFinder = $nodeFinder;
@@ -147,9 +143,7 @@ final class BetterNodeFinder
     public function findFirstNonAnonymousClass(array $nodes) : ?Node
     {
         // skip anonymous classes
-        return $this->findFirst($nodes, function (Node $node) : bool {
-            return $node instanceof Class_ && !$this->classAnalyzer->isAnonymousClass($node);
-        });
+        return $this->findFirst($nodes, fn(Node $node): bool => $node instanceof Class_ && !$this->classAnalyzer->isAnonymousClass($node));
     }
     /**
      * @param Node|Node[] $nodes
@@ -172,12 +166,12 @@ final class BetterNodeFinder
         $isFoundNode = \false;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, static function (Node $subNode) use($types, &$isFoundNode) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($types as $type) {
                 if ($subNode instanceof $type) {
                     $isFoundNode = \true;
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
             }
             return null;
@@ -193,18 +187,17 @@ final class BetterNodeFinder
         $returns = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $subNode) use(&$returns) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if ($subNode instanceof Yield_ || $subNode instanceof YieldFrom) {
                 $returns = [];
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if ($subNode instanceof Return_) {
                 $returns[] = $subNode;
             }
             return null;
         });
-        Assert::allIsInstanceOf($returns, Return_::class);
         return $returns;
     }
     /**
@@ -228,7 +221,7 @@ final class BetterNodeFinder
         $foundNodes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($types, &$foundNodes) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($types as $type) {
                 if ($subNode instanceof $type) {
@@ -271,9 +264,9 @@ final class BetterNodeFinder
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 if ($foundNode instanceof $subNode && $subNode === $foundNode) {
                     $scopedNode = $subNode;
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$foundNode instanceof $subNode) {
                 return null;
@@ -283,7 +276,7 @@ final class BetterNodeFinder
             $scopedFoundNode = $this->findFirst($subNode, $filter);
             if ($scopedFoundNode === $subNode) {
                 $scopedNode = $subNode;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             return null;
         });
@@ -297,8 +290,6 @@ final class BetterNodeFinder
     private function findInstanceOfName($nodes, string $type, string $name) : ?Node
     {
         Assert::isAOf($type, Node::class);
-        return $this->nodeFinder->findFirst($nodes, function (Node $node) use($type, $name) : bool {
-            return $node instanceof $type && $this->nodeNameResolver->isName($node, $name);
-        });
+        return $this->nodeFinder->findFirst($nodes, fn(Node $node): bool => $node instanceof $type && $this->nodeNameResolver->isName($node, $name));
     }
 }

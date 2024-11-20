@@ -21,7 +21,7 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\InvalidArgumentExcept
 class HelperSet implements \IteratorAggregate
 {
     /** @var array<string, HelperInterface> */
-    private $helpers = [];
+    private array $helpers = [];
     /**
      * @param HelperInterface[] $helpers
      */

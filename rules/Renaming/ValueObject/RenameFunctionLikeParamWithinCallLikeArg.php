@@ -9,14 +9,12 @@ final class RenameFunctionLikeParamWithinCallLikeArg
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @var int<0, max>|string
      * @readonly
@@ -26,12 +24,11 @@ final class RenameFunctionLikeParamWithinCallLikeArg
      * @var int<0, max>
      * @readonly
      */
-    private $functionLikePosition;
+    private int $functionLikePosition;
     /**
      * @readonly
-     * @var string
      */
-    private $newParamName;
+    private string $newParamName;
     /**
      * @param int<0, max>|string $callLikePosition
      * @param int<0, max> $functionLikePosition

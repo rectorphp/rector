@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Property;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
@@ -10,7 +11,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\TraitUse;
-use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -26,19 +26,16 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\NodeFinder\PropertyFetchFinder
      */
-    private $propertyFetchFinder;
+    private PropertyFetchFinder $propertyFetchFinder;
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
      */
-    private $propertyWriteonlyAnalyzer;
+    private PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(PropertyFetchFinder $propertyFetchFinder, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
@@ -153,7 +150,7 @@ CODE_SAMPLE
                 return null;
             }
             if ($node instanceof Expression) {
-                return NodeTraverser::REMOVE_NODE;
+                return NodeVisitor::REMOVE_NODE;
             }
             $node->expr = $node->expr->expr;
             return $node;

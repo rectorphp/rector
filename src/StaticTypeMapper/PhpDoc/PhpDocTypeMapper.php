@@ -19,12 +19,11 @@ final class PhpDocTypeMapper
      * @var PhpDocTypeMapperInterface[]
      * @readonly
      */
-    private $phpDocTypeMappers;
+    private array $phpDocTypeMappers;
     /**
      * @readonly
-     * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
-    private $typeNodeResolver;
+    private TypeNodeResolver $typeNodeResolver;
     /**
      * @param PhpDocTypeMapperInterface[] $phpDocTypeMappers
      */

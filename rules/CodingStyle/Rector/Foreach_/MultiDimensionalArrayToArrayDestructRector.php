@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Foreach_;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -26,9 +26,8 @@ final class MultiDimensionalArrayToArrayDestructRector extends AbstractRector im
 {
     /**
      * @readonly
-     * @var \PhpParser\NodeFinder
      */
-    private $nodeFinder;
+    private NodeFinder $nodeFinder;
     public function __construct(NodeFinder $nodeFinder)
     {
         $this->nodeFinder = $nodeFinder;
@@ -110,7 +109,7 @@ CODE_SAMPLE
             $dim = $traverseNode->dim;
             if (!$dim instanceof String_) {
                 $createdDestructedVariables = [];
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             $destructedVariable = $this->getDestructedVariableName($usedVariableNames, $dim);
             $createdDestructedVariables[$dim->value] = $destructedVariable;
@@ -122,15 +121,13 @@ CODE_SAMPLE
      * Get all variable names which are used in the foreach tree. We need this so that we don't create array destructor
      * with variable name which is already used somewhere bellow
      *
-     * @return list<string>
+     * @return string[]
      */
     private function getUsedVariableNamesInForeachTree(Foreach_ $foreach) : array
     {
         /** @var list<Variable> $variableNodes */
         $variableNodes = $this->nodeFinder->findInstanceOf($foreach, Variable::class);
-        return \array_unique(\array_map(function (Variable $variable) : string {
-            return (string) $this->getName($variable);
-        }, $variableNodes));
+        return \array_unique(\array_map(fn(Variable $variable): string => (string) $this->getName($variable), $variableNodes));
     }
     /**
      * Get variable name that will be used for destructor syntax. If variable name is already occupied
@@ -140,7 +137,7 @@ CODE_SAMPLE
      */
     private function getDestructedVariableName(array $usedVariableNames, String_ $string) : string
     {
-        $desiredVariableName = (string) $string->value;
+        $desiredVariableName = $string->value;
         if (\in_array($desiredVariableName, $usedVariableNames, \true) === \false) {
             return $desiredVariableName;
         }

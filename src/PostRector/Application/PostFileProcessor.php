@@ -22,43 +22,36 @@ final class PostFileProcessor implements ResetableInterface
 {
     /**
      * @readonly
-     * @var \Rector\Skipper\Skipper\Skipper
      */
-    private $skipper;
+    private Skipper $skipper;
     /**
      * @readonly
-     * @var \Rector\PostRector\Rector\UseAddingPostRector
      */
-    private $useAddingPostRector;
+    private UseAddingPostRector $useAddingPostRector;
     /**
      * @readonly
-     * @var \Rector\PostRector\Rector\NameImportingPostRector
      */
-    private $nameImportingPostRector;
+    private NameImportingPostRector $nameImportingPostRector;
     /**
      * @readonly
-     * @var \Rector\PostRector\Rector\ClassRenamingPostRector
      */
-    private $classRenamingPostRector;
+    private ClassRenamingPostRector $classRenamingPostRector;
     /**
      * @readonly
-     * @var \Rector\PostRector\Rector\DocblockNameImportingPostRector
      */
-    private $docblockNameImportingPostRector;
+    private DocblockNameImportingPostRector $docblockNameImportingPostRector;
     /**
      * @readonly
-     * @var \Rector\PostRector\Rector\UnusedImportRemovingPostRector
      */
-    private $unusedImportRemovingPostRector;
+    private UnusedImportRemovingPostRector $unusedImportRemovingPostRector;
     /**
      * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesDataCollector;
+    private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
      * @var PostRectorInterface[]
      */
-    private $postRectors = [];
+    private array $postRectors = [];
     public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector, RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->skipper = $skipper;

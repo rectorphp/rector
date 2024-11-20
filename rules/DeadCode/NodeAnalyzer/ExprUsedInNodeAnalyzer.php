@@ -13,14 +13,12 @@ final class ExprUsedInNodeAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer
      */
-    private $usedVariableNameAnalyzer;
+    private \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\CompactFuncCallAnalyzer
      */
-    private $compactFuncCallAnalyzer;
+    private CompactFuncCallAnalyzer $compactFuncCallAnalyzer;
     public function __construct(\Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, CompactFuncCallAnalyzer $compactFuncCallAnalyzer)
     {
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;

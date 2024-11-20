@@ -13,14 +13,12 @@ final class AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @var int<0, max>|string
      * @readonly
@@ -30,12 +28,11 @@ final class AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration
      * @var int<0, max>
      * @readonly
      */
-    private $functionLikePosition;
+    private int $functionLikePosition;
     /**
      * @readonly
-     * @var \PHPStan\Type\Type
      */
-    private $paramType;
+    private Type $paramType;
     /**
      * @param int<0, max>|string $callLikePosition
      * @param int<0, max> $functionLikePosition

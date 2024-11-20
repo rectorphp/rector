@@ -49,9 +49,8 @@ CODE_SAMPLE
     }
     /**
      * @param Ternary|MethodCall $node
-     * @return \PhpParser\Node\Expr\Ternary|null|int
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Expr\Ternary
     {
         if ($node instanceof Ternary) {
             if ($node->if instanceof Expr && $node->cond instanceof FuncCall && $this->isName($node->cond, 'method_exists')) {

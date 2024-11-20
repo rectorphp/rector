@@ -13,9 +13,9 @@ For the complete list of supported PHPDoc features check out PHPStan documentati
 
 * [PHPDoc Basics](https://phpstan.org/writing-php-code/phpdocs-basics) (list of PHPDoc tags)
 * [PHPDoc Types](https://phpstan.org/writing-php-code/phpdoc-types) (list of PHPDoc types)
-* [phpdoc-parser API Reference](https://phpstan.github.io/phpdoc-parser/1.23.x/namespace-PHPStan.PhpDocParser.html) with all the AST node types etc.
+* [phpdoc-parser API Reference](https://phpstan.github.io/phpdoc-parser/2.0.x/namespace-PHPStan.PhpDocParser.html) with all the AST node types etc.
 
-This parser also supports parsing [Doctrine Annotations](https://github.com/doctrine/annotations). The AST nodes live in the [PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine namespace](https://phpstan.github.io/phpdoc-parser/1.23.x/namespace-PHPStan.PhpDocParser.Ast.PhpDoc.Doctrine.html). The support needs to be turned on by setting `bool $parseDoctrineAnnotations` to `true` in `Lexer` and `PhpDocParser` class constructors.
+This parser also supports parsing [Doctrine Annotations](https://github.com/doctrine/annotations). The AST nodes live in the [PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine namespace](https://phpstan.github.io/phpdoc-parser/2.0.x/namespace-PHPStan.PhpDocParser.Ast.PhpDoc.Doctrine.html).
 
 ## Installation
 
@@ -34,6 +34,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -41,10 +42,11 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 
 // basic setup
 
-$lexer = new Lexer();
-$constExprParser = new ConstExprParser();
-$typeParser = new TypeParser($constExprParser);
-$phpDocParser = new PhpDocParser($typeParser, $constExprParser);
+$config = new ParserConfig(usedAttributes: []);
+$lexer = new Lexer($config);
+$constExprParser = new ConstExprParser($config);
+$typeParser = new TypeParser($config, $constExprParser);
+$phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
 
 // parsing and reading a PHPDoc string
 
@@ -72,6 +74,7 @@ use PHPStan\PhpDocParser\Ast\NodeVisitor\CloningVisitor;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -80,12 +83,11 @@ use PHPStan\PhpDocParser\Printer\Printer;
 
 // basic setup with enabled required lexer attributes
 
-$usedAttributes = ['lines' => true, 'indexes' => true];
-
-$lexer = new Lexer();
-$constExprParser = new ConstExprParser(true, true, $usedAttributes);
-$typeParser = new TypeParser($constExprParser, true, $usedAttributes);
-$phpDocParser = new PhpDocParser($typeParser, $constExprParser, true, true, $usedAttributes);
+$config = new ParserConfig(usedAttributes: ['lines' => true, 'indexes' => true]);
+$lexer = new Lexer($config);
+$constExprParser = new ConstExprParser($config);
+$typeParser = new TypeParser($config, $constExprParser);
+$phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
 
 $tokens = new TokenIterator($lexer->tokenize('/** @param Lorem $a */'));
 $phpDocNode = $phpDocParser->parse($tokens); // PhpDocNode

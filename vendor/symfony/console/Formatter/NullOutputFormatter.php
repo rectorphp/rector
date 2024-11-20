@@ -15,10 +15,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\Formatter;
  */
 final class NullOutputFormatter implements OutputFormatterInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Formatter\NullOutputFormatterStyle
-     */
-    private $style;
+    private NullOutputFormatterStyle $style;
     public function format(?string $message) : ?string
     {
         return null;
@@ -26,7 +23,7 @@ final class NullOutputFormatter implements OutputFormatterInterface
     public function getStyle(string $name) : OutputFormatterStyleInterface
     {
         // to comply with the interface we must return a OutputFormatterStyleInterface
-        return $this->style = $this->style ?? new NullOutputFormatterStyle();
+        return $this->style ??= new NullOutputFormatterStyle();
     }
     public function hasStyle(string $name) : bool
     {

@@ -8,9 +8,8 @@ final class ComposerJsonAwareCodeSample extends AbstractCodeSample
 {
     /**
      * @readonly
-     * @var string
      */
-    private $composerJson;
+    private string $composerJson;
     public function __construct(string $badCode, string $goodCode, string $composerJson)
     {
         $this->composerJson = $composerJson;

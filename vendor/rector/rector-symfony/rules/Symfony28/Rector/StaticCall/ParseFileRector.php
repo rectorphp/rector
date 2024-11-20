@@ -23,9 +23,8 @@ final class ParseFileRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     /**
      * @var string
      * @changelog https://regex101.com/r/ZaY42i/1

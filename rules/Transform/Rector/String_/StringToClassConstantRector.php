@@ -19,13 +19,12 @@ final class StringToClassConstantRector extends AbstractRector implements Config
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var StringToClassConstant[]
      */
-    private $stringsToClassConstants = [];
+    private array $stringsToClassConstants = [];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
@@ -70,7 +69,7 @@ CODE_SAMPLE
             }
             return $this->nodeFactory->createClassConstFetch($stringToClassConstant->getClass(), $stringToClassConstant->getConstant());
         }
-        return $node;
+        return null;
     }
     /**
      * @param mixed[] $configuration

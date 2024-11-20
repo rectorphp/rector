@@ -46,9 +46,8 @@ final class AssignAndBinaryMap
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @var array<class-string<BinaryOp>, class-string<BinaryOp>>
      */
@@ -60,7 +59,7 @@ final class AssignAndBinaryMap
     /**
      * @var array<class-string<BinaryOp>, class-string<AssignOp>>
      */
-    private $binaryOpToAssignClasses = [];
+    private array $binaryOpToAssignClasses = [];
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

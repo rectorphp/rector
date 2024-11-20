@@ -17,9 +17,8 @@ final class CombinedAssignRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
-    private $assignAndBinaryMap;
+    private AssignAndBinaryMap $assignAndBinaryMap;
     public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;

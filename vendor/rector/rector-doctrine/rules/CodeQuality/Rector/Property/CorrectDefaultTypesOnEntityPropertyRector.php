@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
+use PhpParser\Node\PropertyItem;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
@@ -30,14 +30,12 @@ final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -116,14 +114,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorToBoolType(PropertyProperty $propertyProperty, Property $property) : ?Property
+    private function refactorToBoolType(PropertyItem $propertyItem, Property $property) : ?Property
     {
-        if (!$propertyProperty->default instanceof Expr) {
+        if (!$propertyItem->default instanceof Expr) {
             return null;
         }
-        $defaultExpr = $propertyProperty->default;
+        $defaultExpr = $propertyItem->default;
         if ($defaultExpr instanceof String_) {
-            $propertyProperty->default = (bool) $defaultExpr->value ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
+            $propertyItem->default = (bool) $defaultExpr->value ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
             return $property;
         }
         if ($defaultExpr instanceof ConstFetch || $defaultExpr instanceof ClassConstFetch) {
@@ -132,17 +130,17 @@ CODE_SAMPLE
         }
         throw new NotImplementedYetException();
     }
-    private function refactorToIntType(PropertyProperty $propertyProperty, Property $property) : ?Property
+    private function refactorToIntType(PropertyItem $propertyItem, Property $property) : ?Property
     {
-        if (!$propertyProperty->default instanceof Expr) {
+        if (!$propertyItem->default instanceof Expr) {
             return null;
         }
-        $defaultExpr = $propertyProperty->default;
+        $defaultExpr = $propertyItem->default;
         if ($defaultExpr instanceof String_) {
-            $propertyProperty->default = new LNumber((int) $defaultExpr->value);
+            $propertyItem->default = new Int_((int) $defaultExpr->value);
             return $property;
         }
-        if ($defaultExpr instanceof LNumber) {
+        if ($defaultExpr instanceof Int_) {
             // already correct
             return null;
         }

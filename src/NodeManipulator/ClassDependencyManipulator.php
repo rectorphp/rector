@@ -30,49 +30,40 @@ final class ClassDependencyManipulator
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassInsertManipulator
      */
-    private $classInsertManipulator;
+    private \Rector\NodeManipulator\ClassInsertManipulator $classInsertManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassMethodAssignManipulator
      */
-    private $classMethodAssignManipulator;
+    private \Rector\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private \Rector\NodeManipulator\StmtsManipulator $stmtsManipulator;
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyPresenceChecker
      */
-    private $propertyPresenceChecker;
+    private PropertyPresenceChecker $propertyPresenceChecker;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
-    private $autowiredClassMethodOrPropertyAnalyzer;
+    private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(\Rector\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, NodeFactory $nodeFactory, \Rector\NodeManipulator\StmtsManipulator $stmtsManipulator, PhpVersionProvider $phpVersionProvider, PropertyPresenceChecker $propertyPresenceChecker, NodeNameResolver $nodeNameResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->classInsertManipulator = $classInsertManipulator;

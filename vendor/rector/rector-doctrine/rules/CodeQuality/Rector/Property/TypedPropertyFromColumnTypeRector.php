@@ -27,29 +27,24 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector implements 
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator
      */
-    private $propertyTypeDecorator;
+    private PropertyTypeDecorator $propertyTypeDecorator;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver
      */
-    private $columnPropertyTypeResolver;
+    private ColumnPropertyTypeResolver $columnPropertyTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver
      */
-    private $nullabilityColumnPropertyTypeResolver;
+    private NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;

@@ -12,9 +12,8 @@ final class MatcherInvocationCountMethodCallNodeFactory
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\Composer\ProjectPackageVersionResolver
      */
-    private $projectPackageVersionResolver;
+    private ProjectPackageVersionResolver $projectPackageVersionResolver;
     public function __construct(ProjectPackageVersionResolver $projectPackageVersionResolver)
     {
         $this->projectPackageVersionResolver = $projectPackageVersionResolver;

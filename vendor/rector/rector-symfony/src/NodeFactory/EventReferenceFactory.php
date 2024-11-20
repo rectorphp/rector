@@ -13,14 +13,12 @@ final class EventReferenceFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;

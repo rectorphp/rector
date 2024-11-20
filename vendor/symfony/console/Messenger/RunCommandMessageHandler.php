@@ -22,9 +22,8 @@ final class RunCommandMessageHandler
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Application
      */
-    private $application;
+    private Application $application;
     public function __construct(Application $application)
     {
         $this->application = $application;

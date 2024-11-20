@@ -12,19 +12,16 @@ final class Set implements SetInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $groupName;
+    private string $groupName;
     /**
      * @readonly
-     * @var string
      */
-    private $setName;
+    private string $setName;
     /**
      * @readonly
-     * @var string
      */
-    private $setFilePath;
+    private string $setFilePath;
     public function __construct(string $groupName, string $setName, string $setFilePath)
     {
         $this->groupName = $groupName;

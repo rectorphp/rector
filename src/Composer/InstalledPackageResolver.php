@@ -15,13 +15,12 @@ final class InstalledPackageResolver
 {
     /**
      * @readonly
-     * @var string|null
      */
-    private $projectDirectory;
+    private ?string $projectDirectory = null;
     /**
      * @var InstalledPackage[]
      */
-    private $resolvedInstalledPackages = [];
+    private array $resolvedInstalledPackages = [];
     public function __construct(?string $projectDirectory = null)
     {
         $this->projectDirectory = $projectDirectory;

@@ -14,19 +14,16 @@ final class DynamicSourceLocatorDecorator
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
-    private $dynamicSourceLocatorProvider;
+    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FileAndDirectoryFilter
      */
-    private $fileAndDirectoryFilter;
+    private FileAndDirectoryFilter $fileAndDirectoryFilter;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilesystemTweaker
      */
-    private $filesystemTweaker;
+    private FilesystemTweaker $filesystemTweaker;
     public function __construct(DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, FileAndDirectoryFilter $fileAndDirectoryFilter, FilesystemTweaker $filesystemTweaker)
     {
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;

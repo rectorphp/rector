@@ -19,9 +19,8 @@ final class MyCLabsClassToEnumRector extends AbstractRector implements MinPhpVer
 {
     /**
      * @readonly
-     * @var \Rector\Php81\NodeFactory\EnumFactory
      */
-    private $enumFactory;
+    private EnumFactory $enumFactory;
     public function __construct(EnumFactory $enumFactory)
     {
         $this->enumFactory = $enumFactory;

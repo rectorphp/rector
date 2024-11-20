@@ -3,33 +3,34 @@
 declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
 class ClassConst extends Node\Stmt
 {
     /** @var int Modifiers */
-    public $flags;
+    public int $flags;
     /** @var Node\Const_[] Constant declarations */
-    public $consts;
+    public array $consts;
     /** @var Node\AttributeGroup[] PHP attribute groups */
-    public $attrGroups;
+    public array $attrGroups;
     /** @var Node\Identifier|Node\Name|Node\ComplexType|null Type declaration */
-    public $type;
+    public ?Node $type;
     /**
      * Constructs a class const list node.
      *
-     * @param Node\Const_[]                                          $consts     Constant declarations
-     * @param int                                                    $flags      Modifiers
-     * @param array                                                  $attributes Additional attributes
-     * @param Node\AttributeGroup[]                                  $attrGroups PHP attribute groups
-     * @param null|string|Node\Identifier|Node\Name|Node\ComplexType $type       Type declaration
+     * @param Node\Const_[] $consts Constant declarations
+     * @param int $flags Modifiers
+     * @param array<string, mixed> $attributes Additional attributes
+     * @param list<Node\AttributeGroup> $attrGroups PHP attribute groups
+     * @param null|Node\Identifier|Node\Name|Node\ComplexType $type Type declaration
      */
-    public function __construct(array $consts, int $flags = 0, array $attributes = [], array $attrGroups = [], $type = null)
+    public function __construct(array $consts, int $flags = 0, array $attributes = [], array $attrGroups = [], ?Node $type = null)
     {
         $this->attributes = $attributes;
         $this->flags = $flags;
         $this->consts = $consts;
         $this->attrGroups = $attrGroups;
-        $this->type = \is_string($type) ? new Node\Identifier($type) : $type;
+        $this->type = $type;
     }
     public function getSubNodeNames() : array
     {
@@ -37,39 +38,31 @@ class ClassConst extends Node\Stmt
     }
     /**
      * Whether constant is explicitly or implicitly public.
-     *
-     * @return bool
      */
     public function isPublic() : bool
     {
-        return ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC) !== 0 || ($this->flags & \PhpParser\Node\Stmt\Class_::VISIBILITY_MODIFIER_MASK) === 0;
+        return ($this->flags & Modifiers::PUBLIC) !== 0 || ($this->flags & Modifiers::VISIBILITY_MASK) === 0;
     }
     /**
      * Whether constant is protected.
-     *
-     * @return bool
      */
     public function isProtected() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED);
+        return (bool) ($this->flags & Modifiers::PROTECTED);
     }
     /**
      * Whether constant is private.
-     *
-     * @return bool
      */
     public function isPrivate() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        return (bool) ($this->flags & Modifiers::PRIVATE);
     }
     /**
      * Whether constant is final.
-     *
-     * @return bool
      */
     public function isFinal() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL);
+        return (bool) ($this->flags & Modifiers::FINAL);
     }
     public function getType() : string
     {

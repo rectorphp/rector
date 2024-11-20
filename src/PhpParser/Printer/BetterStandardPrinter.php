@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Printer;
 
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -17,11 +19,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\EncapsedStringPart;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;
@@ -106,14 +105,14 @@ final class BetterStandardPrinter extends Standard
      */
     public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace) : string
     {
-        return $this->pStmts($fileWithoutNamespace->stmts, \false);
+        return $this->pStmts($fileWithoutNamespace->stmts);
     }
-    protected function p(Node $node, $parentFormatPreserved = \false) : string
+    protected function p(Node $node, int $precedence = self::MAX_PRECEDENCE, int $lhsPrecedence = self::MAX_PRECEDENCE, bool $parentFormatPreserved = \false) : string
     {
         while ($node instanceof AlwaysRememberedExpr) {
             $node = $node->getExpr();
         }
-        $content = parent::p($node, $parentFormatPreserved);
+        $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
     }
     protected function pAttributeGroup(AttributeGroup $attributeGroup) : string
@@ -125,16 +124,16 @@ final class BetterStandardPrinter extends Standard
         }
         return $ret;
     }
-    protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction) : string
+    protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction, int $precedence, int $lhsPrecedence) : string
     {
         if (!$arrowFunction->hasAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
-            return parent::pExpr_ArrowFunction($arrowFunction);
+            return parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
         }
         $expr = $arrowFunction->expr;
         /** @var Comment[] $comments */
         $comments = $expr->getAttribute(AttributeKey::COMMENTS) ?? [];
         if ($comments === []) {
-            return parent::pExpr_ArrowFunction($arrowFunction);
+            return parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
         }
         $indent = $this->resolveIndentSpaces();
         $text = "\n" . $indent;
@@ -142,7 +141,7 @@ final class BetterStandardPrinter extends Standard
             $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
             $text .= $commentText . "\n";
         }
-        return $this->pAttrGroups($arrowFunction->attrGroups, \true) . ($arrowFunction->static ? 'static ' : '') . 'fn' . ($arrowFunction->byRef ? '&' : '') . '(' . $this->pCommaSeparated($arrowFunction->params) . ')' . ($arrowFunction->returnType instanceof Node ? ': ' . $this->p($arrowFunction->returnType) : '') . ' =>' . $text . $indent . $this->p($arrowFunction->expr);
+        return $this->pPrefixOp(ArrowFunction::class, $this->pAttrGroups($arrowFunction->attrGroups, \true) . $this->pStatic($arrowFunction->static) . 'fn' . ($arrowFunction->byRef ? '&' : '') . '(' . $this->pMaybeMultiline($arrowFunction->params, $this->phpVersion->supportsTrailingCommaInParamList()) . ')' . ($arrowFunction->returnType instanceof Node ? ': ' . $this->p($arrowFunction->returnType) : '') . ' =>' . $text . $indent, $arrowFunction->expr, $precedence, $lhsPrecedence);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
@@ -181,13 +180,12 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param mixed[] $nodes
      * @param mixed[] $origNodes
-     * @param int|null $fixup
      */
-    protected function pArray(array $nodes, array $origNodes, int &$pos, int $indentAdjustment, string $parentNodeType, string $subNodeName, $fixup) : ?string
+    protected function pArray(array $nodes, array $origNodes, int &$pos, int $indentAdjustment, string $parentNodeClass, string $subNodeName, ?int $fixup) : ?string
     {
         // reindex positions for printer
         $nodes = \array_values($nodes);
-        $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeType, $subNodeName, $fixup);
+        $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeClass, $subNodeName, $fixup);
         if ($content === null) {
             return $content;
         }
@@ -212,12 +210,12 @@ final class BetterStandardPrinter extends Standard
     /**
      * Emulates 1_000 in PHP 7.3- version
      */
-    protected function pScalar_DNumber(DNumber $dNumber) : string
+    protected function pScalar_Float(Float_ $float) : string
     {
-        if ($this->shouldPrintNewRawValue($dNumber)) {
-            return (string) $dNumber->getAttribute(AttributeKey::RAW_VALUE);
+        if ($this->shouldPrintNewRawValue($float)) {
+            return (string) $float->getAttribute(AttributeKey::RAW_VALUE);
         }
-        return parent::pScalar_DNumber($dNumber);
+        return parent::pScalar_Float($float);
     }
     /**
      * Add space:
@@ -231,13 +229,13 @@ final class BetterStandardPrinter extends Standard
         if ($closure->uses === []) {
             return $closureContent;
         }
-        return \str_replace(' use(', ' use (', (string) $closureContent);
+        return \str_replace(' use(', ' use (', $closureContent);
     }
     /**
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
-    protected function pExpr_Yield(Yield_ $yield) : string
+    protected function pExpr_Yield(Yield_ $yield, int $precedence, int $lhsPrecedence) : string
     {
         if (!$yield->value instanceof Expr) {
             return 'yield';
@@ -267,6 +265,12 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pScalar_String(String_ $string) : string
     {
+        if ($string->getAttribute(AttributeKey::DOC_INDENTATION) === '__REMOVED__') {
+            $content = parent::pScalar_String($string);
+            $lines = \explode("\n", $content);
+            $trimmedLines = \array_map('ltrim', $lines);
+            return \implode("\n", $trimmedLines);
+        }
         $isRegularPattern = (bool) $string->getAttribute(AttributeKey::IS_REGULAR_PATTERN, \false);
         if (!$isRegularPattern) {
             return parent::pScalar_String($string);
@@ -302,19 +306,24 @@ final class BetterStandardPrinter extends Standard
         $declareString = parent::pStmt_Declare($declare);
         return Strings::replace($declareString, '#\\s+#');
     }
-    protected function pExpr_Ternary(Ternary $ternary) : string
+    protected function pExpr_Ternary(Ternary $ternary, int $precedence, int $lhsPrecedence) : string
     {
         $kind = $ternary->getAttribute(AttributeKey::KIND);
         if ($kind === 'wrapped_with_brackets') {
-            $pExprTernary = parent::pExpr_Ternary($ternary);
+            $pExprTernary = parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
             return '(' . $pExprTernary . ')';
         }
-        return parent::pExpr_Ternary($ternary);
+        return parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
     }
-    protected function pScalar_EncapsedStringPart(EncapsedStringPart $encapsedStringPart) : string
+    protected function pScalar_InterpolatedString(InterpolatedString $interpolatedString) : string
     {
-        // parent throws exception, but we need to compare string
-        return '`' . $encapsedStringPart->value . '`';
+        $content = parent::pScalar_InterpolatedString($interpolatedString);
+        if ($interpolatedString->getAttribute(AttributeKey::DOC_INDENTATION) === '__REMOVED__') {
+            $lines = \explode("\n", $content);
+            $trimmedLines = \array_map('ltrim', $lines);
+            return \implode("\n", $trimmedLines);
+        }
+        return $content;
     }
     protected function pCommaSeparated(array $nodes) : string
     {
@@ -329,32 +338,15 @@ final class BetterStandardPrinter extends Standard
         return $result;
     }
     /**
-     * Override parent pModifiers to set position of final and abstract modifier early, so instead of
-     *
-     *      public final const MY_CONSTANT = "Hello world!";
-     *
-     * it should be
-     *
-     *      final public const MY_CONSTANT = "Hello world!";
-     *
-     * @see https://github.com/rectorphp/rector/issues/6963
-     * @see https://github.com/nikic/PHP-Parser/pull/826
-     */
-    protected function pModifiers(int $modifiers) : string
-    {
-        return (($modifiers & Class_::MODIFIER_FINAL) !== 0 ? 'final ' : '') . (($modifiers & Class_::MODIFIER_ABSTRACT) !== 0 ? 'abstract ' : '') . (($modifiers & Class_::MODIFIER_PUBLIC) !== 0 ? 'public ' : '') . (($modifiers & Class_::MODIFIER_PROTECTED) !== 0 ? 'protected ' : '') . (($modifiers & Class_::MODIFIER_PRIVATE) !== 0 ? 'private ' : '') . (($modifiers & Class_::MODIFIER_STATIC) !== 0 ? 'static ' : '') . (($modifiers & Class_::MODIFIER_READONLY) !== 0 ? 'readonly ' : '');
-    }
-    /**
      * Invoke re-print even if only raw value was changed.
      * That allows PHPStan to use int strict types, while changing the value with literal "_"
-     * @return int|string
      */
-    protected function pScalar_LNumber(LNumber $lNumber)
+    protected function pScalar_Int(Int_ $int) : string
     {
-        if ($this->shouldPrintNewRawValue($lNumber)) {
-            return (string) $lNumber->getAttribute(AttributeKey::RAW_VALUE);
+        if ($this->shouldPrintNewRawValue($int)) {
+            return (string) $int->getAttribute(AttributeKey::RAW_VALUE);
         }
-        return parent::pScalar_LNumber($lNumber);
+        return parent::pScalar_Int($int);
     }
     protected function pExpr_MethodCall(MethodCall $methodCall) : string
     {
@@ -392,7 +384,7 @@ final class BetterStandardPrinter extends Standard
         return SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
     }
     /**
-     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
+     * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $lNumber
      */
     private function shouldPrintNewRawValue($lNumber) : bool
     {

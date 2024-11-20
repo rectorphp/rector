@@ -12,19 +12,16 @@ final class MatchPropertyTypeConflictingNameGuard
 {
     /**
      * @readonly
-     * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
      */
-    private $matchPropertyTypeExpectedNameResolver;
+    private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\PhpArray\ArrayFilter
      */
-    private $arrayFilter;
+    private ArrayFilter $arrayFilter;
     public function __construct(MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, NodeNameResolver $nodeNameResolver, ArrayFilter $arrayFilter)
     {
         $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;

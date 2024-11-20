@@ -21,24 +21,20 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
 {
     /**
      * @readonly
-     * @var \Rector\Naming\ExpectedNameResolver\InflectorSingularResolver
      */
-    private $inflectorSingularResolver;
+    private InflectorSingularResolver $inflectorSingularResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
-    private $propertyFetchAnalyzer;
+    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private StmtsManipulator $stmtsManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(InflectorSingularResolver $inflectorSingularResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, StmtsManipulator $stmtsManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;

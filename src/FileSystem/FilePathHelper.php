@@ -14,9 +14,8 @@ final class FilePathHelper
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $filesystem;
+    private Filesystem $filesystem;
     /**
      * @see https://regex101.com/r/d4F5Fm/1
      * @var string

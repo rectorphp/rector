@@ -24,27 +24,18 @@ final class ParallelProcess
 {
     /**
      * @readonly
-     * @var string
      */
-    private $command;
+    private string $command;
     /**
      * @readonly
-     * @var \React\EventLoop\LoopInterface
      */
-    private $loop;
+    private LoopInterface $loop;
     /**
      * @readonly
-     * @var int
      */
-    private $timetoutInSeconds;
-    /**
-     * @var \React\ChildProcess\Process
-     */
-    private $process;
-    /**
-     * @var \Clue\React\NDJson\Encoder
-     */
-    private $encoder;
+    private int $timetoutInSeconds;
+    private Process $process;
+    private Encoder $encoder;
     /**
      * @var resource|null
      */
@@ -57,10 +48,7 @@ final class ParallelProcess
      * @var callable(Throwable): void
      */
     private $onError;
-    /**
-     * @var \React\EventLoop\TimerInterface|null
-     */
-    private $timer;
+    private ?TimerInterface $timer = null;
     public function __construct(string $command, LoopInterface $loop, int $timetoutInSeconds)
     {
         $this->command = $command;

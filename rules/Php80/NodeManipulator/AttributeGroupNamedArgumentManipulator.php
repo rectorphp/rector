@@ -12,7 +12,7 @@ final class AttributeGroupNamedArgumentManipulator
      * @var ConverterAttributeDecoratorInterface[]
      * @readonly
      */
-    private $converterAttributeDecorators;
+    private array $converterAttributeDecorators;
     /**
      * @param ConverterAttributeDecoratorInterface[] $converterAttributeDecorators
      */

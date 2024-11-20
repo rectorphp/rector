@@ -22,29 +22,20 @@ class Finder implements \IteratorAggregate
 {
     use Nette\SmartObject;
     /** @var array<array{string, string}> */
-    private $find = [];
+    private array $find = [];
     /** @var string[] */
-    private $in = [];
+    private array $in = [];
     /** @var \Closure[] */
-    private $filters = [];
+    private array $filters = [];
     /** @var \Closure[] */
-    private $descentFilters = [];
+    private array $descentFilters = [];
     /** @var array<string|self> */
-    private $appends = [];
-    /**
-     * @var bool
-     */
-    private $childFirst = \false;
+    private array $appends = [];
+    private bool $childFirst = \false;
     /** @var ?callable */
     private $sort;
-    /**
-     * @var int
-     */
-    private $maxDepth = -1;
-    /**
-     * @var bool
-     */
-    private $ignoreUnreadableDirs = \true;
+    private int $maxDepth = -1;
+    private bool $ignoreUnreadableDirs = \true;
     /**
      * Begins search for files and directories matching mask.
      * @param string|mixed[] $masks
@@ -184,9 +175,7 @@ class Finder implements \IteratorAggregate
      */
     public function sortByName()
     {
-        $this->sort = function (FileInfo $a, FileInfo $b) : int {
-            return \strnatcmp($a->getBasename(), $b->getBasename());
-        };
+        $this->sort = fn(FileInfo $a, FileInfo $b): int => \strnatcmp($a->getBasename(), $b->getBasename());
         return $this;
     }
     /**
@@ -219,9 +208,7 @@ class Finder implements \IteratorAggregate
             }
             $end = $m[3];
             $re = $this->buildPattern($m[2]);
-            $filter = function (FileInfo $file) use($end, $re) : bool {
-                return $end && !$file->isDir() || !\preg_match($re, FileSystem::unixSlashes($file->getRelativePathname()));
-            };
+            $filter = fn(FileInfo $file): bool => $end && !$file->isDir() || !\preg_match($re, FileSystem::unixSlashes($file->getRelativePathname()));
             $this->descentFilter($filter);
             if ($end !== '/*') {
                 $this->filter($filter);
@@ -274,9 +261,7 @@ class Finder implements \IteratorAggregate
             $size *= $units[\strtolower($unit)];
             $operator = $operator ?: '=';
         }
-        return $this->filter(function (FileInfo $file) use($operator, $size) : bool {
-            return !$file->isFile() || Helpers::compare($file->getSize(), $operator, $size);
-        });
+        return $this->filter(fn(FileInfo $file): bool => !$file->isFile() || Helpers::compare($file->getSize(), $operator, $size));
     }
     /**
      * Restricts the search by modified time. $operator accepts "[operator] [date]" example: >1978-01-23
@@ -294,9 +279,7 @@ class Finder implements \IteratorAggregate
             $operator = $operator ?: '=';
         }
         $date = DateTime::from($date)->format('U');
-        return $this->filter(function (FileInfo $file) use($operator, $date) : bool {
-            return !$file->isFile() || Helpers::compare($file->getMTime(), $operator, $date);
-        });
+        return $this->filter(fn(FileInfo $file): bool => !$file->isFile() || Helpers::compare($file->getMTime(), $operator, $date));
     }
     /********************* iterator generator ****************d*g**/
     /**
@@ -388,7 +371,7 @@ class Finder implements \IteratorAggregate
     {
         foreach ($filters as $filter) {
             $res =& $cache[\spl_object_id($filter)];
-            $res = $res ?? $filter($file);
+            $res ??= $filter($file);
             if (!$res) {
                 return \false;
             }
@@ -415,7 +398,7 @@ class Finder implements \IteratorAggregate
             }
             foreach ($splits as [$base, $rest, $recursive]) {
                 $base = $base === '' ? '.' : $base;
-                $dirs = $dirCache[$base] = $dirCache[$base] ?? (\strpbrk($base, '*?[') ? \glob($base, \GLOB_NOSORT | \GLOB_ONLYDIR | \GLOB_NOESCAPE) : [\strtr($base, ['[[]' => '[', '[]]' => ']'])]);
+                $dirs = $dirCache[$base] ??= \strpbrk($base, '*?[') ? \glob($base, \GLOB_NOSORT | \GLOB_ONLYDIR | \GLOB_NOESCAPE) : [\strtr($base, ['[[]' => '[', '[]]' => ']'])];
                 // unescape [ and ]
                 if (!$dirs) {
                     throw new Nette\InvalidStateException(\sprintf("Directory '%s' does not exist.", \rtrim($base, '/\\')));

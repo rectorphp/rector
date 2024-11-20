@@ -19,7 +19,7 @@ final class FunctionNameResolver implements NodeNameResolverInterface
     /**
      * @param Function_ $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope) : string
     {
         $bareName = (string) $node->name;
         if (!$scope instanceof Scope) {

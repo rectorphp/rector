@@ -21,19 +21,16 @@ final class Diff implements IteratorAggregate
 {
     /**
      * @psalm-var non-empty-string
-     * @var string
      */
-    private $from;
+    private string $from;
     /**
      * @psalm-var non-empty-string
-     * @var string
      */
-    private $to;
+    private string $to;
     /**
      * @psalm-var list<Chunk>
-     * @var mixed[]
      */
-    private $chunks;
+    private array $chunks;
     /**
      * @psalm-param non-empty-string $from
      * @psalm-param non-empty-string $to

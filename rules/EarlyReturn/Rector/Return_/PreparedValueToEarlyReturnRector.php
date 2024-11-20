@@ -26,14 +26,12 @@ final class PreparedValueToEarlyReturnRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(IfManipulator $ifManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->ifManipulator = $ifManipulator;
@@ -163,9 +161,7 @@ CODE_SAMPLE
         }
         foreach ($bareSingleAssignIfs as $bareSingleAssignIf) {
             $assign = $bareSingleAssignIf->getAssign();
-            $isVariableUsed = (bool) $this->betterNodeFinder->findFirst([$bareSingleAssignIf->getIfCondExpr(), $assign->expr], function (Node $node) use($returnedExpr) : bool {
-                return $this->nodeComparator->areNodesEqual($node, $returnedExpr);
-            });
+            $isVariableUsed = (bool) $this->betterNodeFinder->findFirst([$bareSingleAssignIf->getIfCondExpr(), $assign->expr], fn(Node $node): bool => $this->nodeComparator->areNodesEqual($node, $returnedExpr));
             if ($isVariableUsed) {
                 return \false;
             }

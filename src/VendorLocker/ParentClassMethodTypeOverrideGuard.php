@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\VendorLocker;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -17,29 +18,24 @@ final class ParentClassMethodTypeOverrideGuard
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
-    private $typeComparator;
+    private TypeComparator $typeComparator;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Reflection\ClassReflectionAnalyzer
      */
-    private $classReflectionAnalyzer;
+    private ClassReflectionAnalyzer $classReflectionAnalyzer;
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -75,7 +71,7 @@ final class ParentClassMethodTypeOverrideGuard
     }
     public function shouldSkipReturnTypeChange(ClassMethod $classMethod, Type $parentType) : bool
     {
-        if ($classMethod->returnType === null) {
+        if (!$classMethod->returnType instanceof Node) {
             return \false;
         }
         $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);

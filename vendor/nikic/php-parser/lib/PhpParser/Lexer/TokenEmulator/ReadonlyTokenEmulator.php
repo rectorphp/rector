@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace PhpParser\Lexer\TokenEmulator;
 
-use PhpParser\Lexer\Emulative;
+use PhpParser\PhpVersion;
 final class ReadonlyTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulator
 {
-    public function getPhpVersion() : string
+    public function getPhpVersion() : PhpVersion
     {
-        return Emulative::PHP_8_1;
+        return PhpVersion::fromComponents(8, 1);
     }
     public function getKeywordString() : string
     {
@@ -24,6 +24,6 @@ final class ReadonlyTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Keyword
             return \false;
         }
         // Support "function readonly("
-        return !(isset($tokens[$pos + 1]) && ($tokens[$pos + 1][0] === '(' || $tokens[$pos + 1][0] === \T_WHITESPACE && isset($tokens[$pos + 2]) && $tokens[$pos + 2][0] === '('));
+        return !(isset($tokens[$pos + 1]) && ((\is_array($tokens[$pos + 1]) ? $tokens[$pos + 1][1] : $tokens[$pos + 1]) === '(' || (\is_array($tokens[$pos + 1]) ? $tokens[$pos + 1][0] : $tokens[$pos + 1]) === \T_WHITESPACE && isset($tokens[$pos + 2]) && (\is_array($tokens[$pos + 2]) ? $tokens[$pos + 2][1] : $tokens[$pos + 2]) === '('));
     }
 }

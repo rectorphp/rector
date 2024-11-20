@@ -15,14 +15,12 @@ final class ShortClassExpander
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
-    private $objectTypeSpecifier;
+    private ObjectTypeSpecifier $objectTypeSpecifier;
     /**
      * @var string
      * @see https://regex101.com/r/548EJJ/1

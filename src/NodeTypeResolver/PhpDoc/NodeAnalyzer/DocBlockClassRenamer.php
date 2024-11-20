@@ -12,9 +12,8 @@ final class DocBlockClassRenamer
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
-    private $classRenamePhpDocNodeVisitor;
+    private ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor;
     public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
     {
         $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;

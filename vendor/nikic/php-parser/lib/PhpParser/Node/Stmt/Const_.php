@@ -7,12 +7,12 @@ use PhpParser\Node;
 class Const_ extends Node\Stmt
 {
     /** @var Node\Const_[] Constant declarations */
-    public $consts;
+    public array $consts;
     /**
      * Constructs a const list node.
      *
-     * @param Node\Const_[] $consts     Constant declarations
-     * @param array         $attributes Additional attributes
+     * @param Node\Const_[] $consts Constant declarations
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(array $consts, array $attributes = [])
     {

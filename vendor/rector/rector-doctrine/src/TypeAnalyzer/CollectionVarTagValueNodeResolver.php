@@ -13,14 +13,12 @@ final class CollectionVarTagValueNodeResolver
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
-    private $attributeFinder;
+    private AttributeFinder $attributeFinder;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, AttributeFinder $attributeFinder)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;

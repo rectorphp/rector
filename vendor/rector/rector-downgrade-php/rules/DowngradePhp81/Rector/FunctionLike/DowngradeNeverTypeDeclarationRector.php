@@ -21,9 +21,8 @@ final class DowngradeNeverTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator
      */
-    private $phpDocFromTypeDeclarationDecorator;
+    private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator;
     public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;

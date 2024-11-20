@@ -15,9 +15,8 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
      */
-    private $scalarStringToTypeMapper;
+    private ScalarStringToTypeMapper $scalarStringToTypeMapper;
     public function __construct(ScalarStringToTypeMapper $scalarStringToTypeMapper)
     {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;

@@ -15,14 +15,8 @@ namespace RectorPrefix202411\Symfony\Component\Finder\Comparator;
  */
 class Comparator
 {
-    /**
-     * @var string
-     */
-    private $target;
-    /**
-     * @var string
-     */
-    private $operator;
+    private string $target;
+    private string $operator;
     public function __construct(string $target, string $operator = '==')
     {
         if (!\in_array($operator, ['>', '<', '>=', '<=', '==', '!='])) {

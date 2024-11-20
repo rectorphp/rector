@@ -11,14 +11,12 @@ final class FormCollectionAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->valueResolver = $valueResolver;

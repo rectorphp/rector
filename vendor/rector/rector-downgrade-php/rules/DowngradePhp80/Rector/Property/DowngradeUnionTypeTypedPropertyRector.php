@@ -17,9 +17,8 @@ final class DowngradeUnionTypeTypedPropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $PropertyDecorator;
+    private PropertyDecorator $PropertyDecorator;
     public function __construct(PropertyDecorator $PropertyDecorator)
     {
         $this->PropertyDecorator = $PropertyDecorator;
@@ -67,7 +66,7 @@ CODE_SAMPLE
     }
     private function shouldRemoveProperty(Property $property) : bool
     {
-        if ($property->type === null) {
+        if (!$property->type instanceof Node) {
             return \false;
         }
         // Check it is the union type

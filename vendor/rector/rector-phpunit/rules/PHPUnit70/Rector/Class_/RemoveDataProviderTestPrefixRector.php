@@ -22,19 +22,16 @@ final class RemoveDataProviderTestPrefixRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder
      */
-    private $dataProviderClassMethodFinder;
+    private DataProviderClassMethodFinder $dataProviderClassMethodFinder;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PhpDoc\DataProviderMethodRenamer
      */
-    private $dataProviderMethodRenamer;
+    private DataProviderMethodRenamer $dataProviderMethodRenamer;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder, DataProviderMethodRenamer $dataProviderMethodRenamer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;

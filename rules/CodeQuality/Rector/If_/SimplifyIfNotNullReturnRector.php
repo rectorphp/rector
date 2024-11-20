@@ -21,14 +21,12 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(IfManipulator $ifManipulator, ValueResolver $valueResolver)
     {
         $this->ifManipulator = $ifManipulator;

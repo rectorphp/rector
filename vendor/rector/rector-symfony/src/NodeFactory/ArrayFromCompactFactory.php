@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -13,9 +13,8 @@ final class ArrayFromCompactFactory
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\FuncCallManipulator
      */
-    private $funcCallManipulator;
+    private FuncCallManipulator $funcCallManipulator;
     public function __construct(FuncCallManipulator $funcCallManipulator)
     {
         $this->funcCallManipulator = $funcCallManipulator;

@@ -9,19 +9,16 @@ final class ArrayCallable
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $callerExpr;
+    private Expr $callerExpr;
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     public function __construct(Expr $callerExpr, string $class, string $method)
     {
         $this->callerExpr = $callerExpr;

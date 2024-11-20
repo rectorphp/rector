@@ -20,9 +20,8 @@ final class StringifyDefineRector extends AbstractRector implements MinPhpVersio
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
-    private $stringTypeAnalyzer;
+    private StringTypeAnalyzer $stringTypeAnalyzer;
     public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;

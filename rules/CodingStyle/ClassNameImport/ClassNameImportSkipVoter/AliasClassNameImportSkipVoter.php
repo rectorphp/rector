@@ -21,9 +21,8 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\AliasUsesResolver
      */
-    private $aliasUsesResolver;
+    private AliasUsesResolver $aliasUsesResolver;
     public function __construct(AliasUsesResolver $aliasUsesResolver)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;

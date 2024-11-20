@@ -18,14 +18,12 @@ final class TemplateGuesser
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\BundleClassResolver
      */
-    private $bundleClassResolver;
+    private BundleClassResolver $bundleClassResolver;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @var string
      * @see https://regex101.com/r/yZAUAC/1

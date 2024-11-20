@@ -11,9 +11,8 @@ final class NestedAttrGroupsFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\PhpNestedAttributeGroupFactory
      */
-    private $phpNestedAttributeGroupFactory;
+    private PhpNestedAttributeGroupFactory $phpNestedAttributeGroupFactory;
     public function __construct(PhpNestedAttributeGroupFactory $phpNestedAttributeGroupFactory)
     {
         $this->phpNestedAttributeGroupFactory = $phpNestedAttributeGroupFactory;

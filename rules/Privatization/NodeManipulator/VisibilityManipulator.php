@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Privatization\NodeManipulator;
 
+use PhpParser\Modifiers;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -39,7 +40,7 @@ final class VisibilityManipulator
         if (!$node->isStatic()) {
             return;
         }
-        $node->flags -= Class_::MODIFIER_STATIC;
+        $node->flags -= Modifiers::STATIC;
     }
     /**
      * @api
@@ -50,7 +51,7 @@ final class VisibilityManipulator
         if (!$node->isAbstract()) {
             return;
         }
-        $node->flags -= Class_::MODIFIER_ABSTRACT;
+        $node->flags -= Modifiers::ABSTRACT;
     }
     /**
      * @api
@@ -69,7 +70,7 @@ final class VisibilityManipulator
         if (!$node->isFinal()) {
             return;
         }
-        $node->flags -= Class_::MODIFIER_FINAL;
+        $node->flags -= Modifiers::FINAL;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
@@ -107,7 +108,7 @@ final class VisibilityManipulator
      */
     public function removeFinal($node) : void
     {
-        $node->flags -= Class_::MODIFIER_FINAL;
+        $node->flags -= Modifiers::FINAL;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
@@ -163,14 +164,14 @@ final class VisibilityManipulator
             return;
         }
         if ($node->isPublic()) {
-            $node->flags |= Class_::MODIFIER_PUBLIC;
-            $node->flags -= Class_::MODIFIER_PUBLIC;
+            $node->flags |= Modifiers::PUBLIC;
+            $node->flags -= Modifiers::PUBLIC;
         }
         if ($node->isProtected()) {
-            $node->flags -= Class_::MODIFIER_PROTECTED;
+            $node->flags -= Modifiers::PROTECTED;
         }
         if ($node->isPrivate()) {
-            $node->flags -= Class_::MODIFIER_PRIVATE;
+            $node->flags -= Modifiers::PRIVATE;
         }
     }
     /**

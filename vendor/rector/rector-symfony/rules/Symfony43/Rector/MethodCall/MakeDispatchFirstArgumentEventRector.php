@@ -24,14 +24,12 @@ final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
-    private $stringTypeAnalyzer;
+    private StringTypeAnalyzer $stringTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(StringTypeAnalyzer $stringTypeAnalyzer, ValueResolver $valueResolver)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;

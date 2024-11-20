@@ -19,9 +19,8 @@ final class AddClosureNeverReturnTypeRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeManipulator\AddNeverReturnType
      */
-    private $addNeverReturnType;
+    private AddNeverReturnType $addNeverReturnType;
     public function __construct(AddNeverReturnType $addNeverReturnType)
     {
         $this->addNeverReturnType = $addNeverReturnType;

@@ -10,19 +10,16 @@ final class MethodCallRename implements MethodCallRenameInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $oldMethod;
+    private string $oldMethod;
     /**
      * @readonly
-     * @var string
      */
-    private $newMethod;
+    private string $newMethod;
     public function __construct(string $class, string $oldMethod, string $newMethod)
     {
         $this->class = $class;

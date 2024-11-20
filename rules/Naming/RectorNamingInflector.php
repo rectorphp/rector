@@ -9,9 +9,8 @@ final class RectorNamingInflector
 {
     /**
      * @readonly
-     * @var \Doctrine\Inflector\Inflector
      */
-    private $inflector;
+    private Inflector $inflector;
     /**
      * @var string
      * @see https://regex101.com/r/VqVvke/3

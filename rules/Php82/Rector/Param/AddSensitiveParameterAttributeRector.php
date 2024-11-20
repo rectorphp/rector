@@ -23,14 +23,13 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     public const SENSITIVE_PARAMETERS = 'sensitive_parameters';
     /**
      * @var string[]
      */
-    private $sensitiveParameters = [];
+    private array $sensitiveParameters = [];
     public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;

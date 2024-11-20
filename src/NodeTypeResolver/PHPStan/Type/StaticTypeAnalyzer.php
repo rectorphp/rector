@@ -15,9 +15,8 @@ final class StaticTypeAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
-    private $unionTypeAnalyzer;
+    private UnionTypeAnalyzer $unionTypeAnalyzer;
     public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer)
     {
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;

@@ -36,24 +36,20 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
-    private $objectTypeSpecifier;
+    private ObjectTypeSpecifier $objectTypeSpecifier;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
      */
-    private $scalarStringToTypeMapper;
+    private ScalarStringToTypeMapper $scalarStringToTypeMapper;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ScalarStringToTypeMapper $scalarStringToTypeMapper, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
@@ -103,6 +99,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
                 $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
                 return new UnionType($scalarTypes);
             }
+            $identifierTypeNode->name = \ltrim($identifierTypeNode->name, '@');
             $objectType = new ObjectType($identifierTypeNode->name);
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);

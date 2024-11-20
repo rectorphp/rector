@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace PhpParser\NodeVisitor;
 
-use function array_pop;
-use function count;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+use function array_pop;
+use function count;
 /**
  * Visitor that connects a child node to its parent node.
  *
@@ -18,7 +18,7 @@ final class ParentConnectingVisitor extends NodeVisitorAbstract
     /**
      * @var Node[]
      */
-    private $stack = [];
+    private array $stack = [];
     public function beforeTraverse(array $nodes)
     {
         $this->stack = [];

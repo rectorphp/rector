@@ -19,9 +19,8 @@ final class ParenthesizeNestedTernaryRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\Php74\Tokenizer\ParenthesizedNestedTernaryAnalyzer
      */
-    private $parenthesizedNestedTernaryAnalyzer;
+    private ParenthesizedNestedTernaryAnalyzer $parenthesizedNestedTernaryAnalyzer;
     public function __construct(ParenthesizedNestedTernaryAnalyzer $parenthesizedNestedTernaryAnalyzer)
     {
         $this->parenthesizedNestedTernaryAnalyzer = $parenthesizedNestedTernaryAnalyzer;
@@ -57,7 +56,7 @@ CODE_SAMPLE
                 return null;
             }
             // re-print with brackets
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $node->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             return $node;
         }
         return null;

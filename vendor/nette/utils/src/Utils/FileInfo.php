@@ -14,10 +14,7 @@ use RectorPrefix202411\Nette;
  */
 final class FileInfo extends \SplFileInfo
 {
-    /**
-     * @var string
-     */
-    private $relativePath;
+    private string $relativePath;
     public function __construct(string $file, string $relativePath = '')
     {
         parent::__construct($file);

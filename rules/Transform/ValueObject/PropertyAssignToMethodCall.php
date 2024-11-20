@@ -9,19 +9,16 @@ final class PropertyAssignToMethodCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $oldPropertyName;
+    private string $oldPropertyName;
     /**
      * @readonly
-     * @var string
      */
-    private $newMethodName;
+    private string $newMethodName;
     public function __construct(string $class, string $oldPropertyName, string $newMethodName)
     {
         $this->class = $class;

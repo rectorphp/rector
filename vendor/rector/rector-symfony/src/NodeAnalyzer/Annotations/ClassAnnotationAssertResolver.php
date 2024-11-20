@@ -13,14 +13,12 @@ final class ClassAnnotationAssertResolver
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher
      */
-    private $stmtMethodCallMatcher;
+    private \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher $stmtMethodCallMatcher;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory
      */
-    private $doctrineAnnotationFromNewFactory;
+    private DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory;
     public function __construct(\Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher $stmtMethodCallMatcher, DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory)
     {
         $this->stmtMethodCallMatcher = $stmtMethodCallMatcher;

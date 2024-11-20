@@ -17,9 +17,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @var string
      */

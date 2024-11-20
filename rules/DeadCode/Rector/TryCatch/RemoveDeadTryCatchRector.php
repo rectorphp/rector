@@ -3,13 +3,14 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\TryCatch;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\NodeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -53,7 +54,7 @@ CODE_SAMPLE
     }
     /**
      * @param TryCatch $node
-     * @return Stmt[]|null|TryCatch|int
+     * @return Stmt[]|null|int
      */
     public function refactor(Node $node)
     {
@@ -63,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isEmpty($node->stmts)) {
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         if (\count($node->catches) !== 1) {
             return null;
@@ -73,10 +74,10 @@ CODE_SAMPLE
             return null;
         }
         $onlyCatchStmt = $onlyCatch->stmts[0];
-        if (!$onlyCatchStmt instanceof Throw_) {
+        if (!($onlyCatchStmt instanceof Expression && $onlyCatchStmt->expr instanceof Throw_)) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($onlyCatch->var, $onlyCatchStmt->expr)) {
+        if (!$this->nodeComparator->areNodesEqual($onlyCatch->var, $onlyCatchStmt->expr->expr)) {
             return null;
         }
         return $node->stmts;

@@ -24,19 +24,16 @@ final class DowngradeNamedArgumentRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver
      */
-    private $unnamedArgumentResolver;
+    private UnnamedArgumentResolver $unnamedArgumentResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ArgsAnalyzer
      */
-    private $argsAnalyzer;
+    private ArgsAnalyzer $argsAnalyzer;
     public function __construct(ReflectionResolver $reflectionResolver, UnnamedArgumentResolver $unnamedArgumentResolver, ArgsAnalyzer $argsAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;

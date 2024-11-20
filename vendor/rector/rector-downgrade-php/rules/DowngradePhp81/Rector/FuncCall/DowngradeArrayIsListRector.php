@@ -31,18 +31,13 @@ final class DowngradeArrayIsListRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Parser\InlineCodeParser
      */
-    private $inlineCodeParser;
+    private InlineCodeParser $inlineCodeParser;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
-    private $exprInTopStmtMatcher;
-    /**
-     * @var \PhpParser\Node\Expr\Closure|null
-     */
-    private $cachedClosure;
+    private ExprInTopStmtMatcher $exprInTopStmtMatcher;
+    private ?Closure $cachedClosure = null;
     public function __construct(InlineCodeParser $inlineCodeParser, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;

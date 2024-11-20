@@ -43,18 +43,12 @@ class InputOption
      * The option may have either positive or negative value (e.g. --ansi or --no-ansi).
      */
     public const VALUE_NEGATABLE = 16;
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
     /**
      * @var mixed[]|string|null
      */
     private $shortcut;
-    /**
-     * @var int
-     */
-    private $mode;
+    private int $mode;
     /**
      * @var mixed[]|bool|float|int|string|null
      */
@@ -63,10 +57,7 @@ class InputOption
      * @var mixed[]|\Closure
      */
     private $suggestedValues;
-    /**
-     * @var string
-     */
-    private $description;
+    private string $description;
     /**
      * @param string|array|null                                                             $shortcut        The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
      * @param int|null                                                                      $mode            The option mode: One of the VALUE_* constants

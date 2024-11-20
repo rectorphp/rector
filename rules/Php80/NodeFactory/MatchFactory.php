@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -20,19 +20,16 @@ final class MatchFactory
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeFactory\MatchArmsFactory
      */
-    private $matchArmsFactory;
+    private \Rector\Php80\NodeFactory\MatchArmsFactory $matchArmsFactory;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer
      */
-    private $matchSwitchAnalyzer;
+    private MatchSwitchAnalyzer $matchSwitchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Comparing\NodeComparator
      */
-    private $nodeComparator;
+    private NodeComparator $nodeComparator;
     public function __construct(\Rector\Php80\NodeFactory\MatchArmsFactory $matchArmsFactory, MatchSwitchAnalyzer $matchSwitchAnalyzer, NodeComparator $nodeComparator)
     {
         $this->matchArmsFactory = $matchArmsFactory;
@@ -48,8 +45,8 @@ final class MatchFactory
         // is default value missing? maybe it can be found in next stmt
         if (!$this->matchSwitchAnalyzer->hasCondsAndExprDefaultValue($condAndExprs)) {
             // 1. is followed by throws stmts?
-            if ($nextStmt instanceof ThrowsStmt) {
-                $throw = new Throw_($nextStmt->expr);
+            if ($nextStmt instanceof Expression && $nextStmt->expr instanceof Throw_) {
+                $throw = $nextStmt->expr;
                 $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
                 $shouldRemoteNextStmt = \true;
             }

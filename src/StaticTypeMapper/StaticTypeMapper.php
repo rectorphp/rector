@@ -30,24 +30,20 @@ final class StaticTypeMapper
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
-    private $nameScopeFactory;
+    private NameScopeFactory $nameScopeFactory;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
-    private $phpStanStaticTypeMapper;
+    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
      */
-    private $phpDocTypeMapper;
+    private PhpDocTypeMapper $phpDocTypeMapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
-    private $phpParserNodeMapper;
+    private PhpParserNodeMapper $phpParserNodeMapper;
     public function __construct(NameScopeFactory $nameScopeFactory, PHPStanStaticTypeMapper $phpStanStaticTypeMapper, PhpDocTypeMapper $phpDocTypeMapper, PhpParserNodeMapper $phpParserNodeMapper)
     {
         $this->nameScopeFactory = $nameScopeFactory;

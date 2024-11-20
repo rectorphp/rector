@@ -12,9 +12,8 @@ final class ReturnTagRemover
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer
      */
-    private $deadReturnTagValueNodeAnalyzer;
+    private DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer;
     public function __construct(DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer)
     {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;

@@ -6,7 +6,7 @@ namespace Rector\DowngradePhp80\Rector\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\MagicConst;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -58,7 +58,7 @@ CODE_SAMPLE
         if (!$arrayDimFetch->dim instanceof Expr) {
             return \true;
         }
-        if ($arrayDimFetch->var instanceof Encapsed) {
+        if ($arrayDimFetch->var instanceof InterpolatedString) {
             return $this->hasParentheses($arrayDimFetch);
         }
         if ($arrayDimFetch->var instanceof MagicConst) {
@@ -81,7 +81,7 @@ CODE_SAMPLE
             if (!isset($oldTokens[$i])) {
                 continue;
             }
-            if ($oldTokens[$i] !== ')') {
+            if ((string) $oldTokens[$i] !== ')') {
                 continue;
             }
             return \true;

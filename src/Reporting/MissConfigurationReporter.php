@@ -12,14 +12,12 @@ final class MissConfigurationReporter
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @readonly
-     * @var \Rector\Configuration\VendorMissAnalyseGuard
      */
-    private $vendorMissAnalyseGuard;
+    private VendorMissAnalyseGuard $vendorMissAnalyseGuard;
     public function __construct(SymfonyStyle $symfonyStyle, VendorMissAnalyseGuard $vendorMissAnalyseGuard)
     {
         $this->symfonyStyle = $symfonyStyle;

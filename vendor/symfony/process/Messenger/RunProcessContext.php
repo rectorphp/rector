@@ -18,24 +18,20 @@ final class RunProcessContext
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Process\Messenger\RunProcessMessage
      */
-    public $message;
+    public RunProcessMessage $message;
     /**
      * @readonly
-     * @var int|null
      */
-    public $exitCode;
+    public ?int $exitCode;
     /**
      * @readonly
-     * @var string|null
      */
-    public $output;
+    public ?string $output;
     /**
      * @readonly
-     * @var string|null
      */
-    public $errorOutput;
+    public ?string $errorOutput;
     public function __construct(RunProcessMessage $message, Process $process)
     {
         $this->message = $message;

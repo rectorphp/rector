@@ -13,14 +13,12 @@ final class DateTimeAtNamingConventionGuard
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
-    private $typeUnwrapper;
+    private TypeUnwrapper $typeUnwrapper;
     public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

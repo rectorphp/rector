@@ -18,14 +18,12 @@ final class NamedToUnnamedArgs
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
-    private $defaultParameterValueResolver;
+    private DefaultParameterValueResolver $defaultParameterValueResolver;
     public function __construct(NodeNameResolver $nodeNameResolver, DefaultParameterValueResolver $defaultParameterValueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

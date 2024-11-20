@@ -29,24 +29,20 @@ final class PhpDocInfoPrinter
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector
      */
-    private $emptyPhpDocDetector;
+    private \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector $emptyPhpDocDetector;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\DocBlockInliner
      */
-    private $docBlockInliner;
+    private \Rector\BetterPhpDocParser\Printer\DocBlockInliner $docBlockInliner;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver
      */
-    private $removeNodesStartAndEndResolver;
+    private \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor
      */
-    private $changedPhpDocNodeVisitor;
+    private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor;
     /**
      * @var string
      * @see https://regex101.com/r/Ab0Vey/1
@@ -70,27 +66,17 @@ final class PhpDocInfoPrinter
      * @see https://regex101.com/r/ME5Fcn/1
      */
     private const NEW_LINE_WITH_SPACE_REGEX = "# (?<new_line>\r\n|\n)#";
-    /**
-     * @var int
-     */
-    private $tokenCount = 0;
-    /**
-     * @var int
-     */
-    private $currentTokenPosition = 0;
+    private int $tokenCount = 0;
+    private int $currentTokenPosition = 0;
     /**
      * @var mixed[]
      */
-    private $tokens = [];
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo|null
-     */
-    private $phpDocInfo;
+    private array $tokens = [];
+    private ?PhpDocInfo $phpDocInfo = null;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser
      */
-    private $changedPhpDocNodeTraverser;
+    private PhpDocNodeTraverser $changedPhpDocNodeTraverser;
     public function __construct(\Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector $emptyPhpDocDetector, \Rector\BetterPhpDocParser\Printer\DocBlockInliner $docBlockInliner, \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver, ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor)
     {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
@@ -179,9 +165,7 @@ final class PhpDocInfoPrinter
         if (\strncmp($output, '/**', \strlen('/**')) === 0 && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
-        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static function (array $match) {
-            return $match['new_line'];
-        });
+        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static fn(array $match) => $match['new_line']);
     }
     private function hasDocblockStart(string $output) : bool
     {

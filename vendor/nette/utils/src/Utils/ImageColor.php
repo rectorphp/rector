@@ -13,22 +13,10 @@ use RectorPrefix202411\Nette;
  */
 class ImageColor
 {
-    /**
-     * @var int
-     */
-    public $red;
-    /**
-     * @var int
-     */
-    public $green;
-    /**
-     * @var int
-     */
-    public $blue;
-    /**
-     * @var float
-     */
-    public $opacity = 1;
+    public int $red;
+    public int $green;
+    public int $blue;
+    public float $opacity = 1;
     public static function rgb(int $red, int $green, int $blue, float $opacity = 1) : self
     {
         return new self($red, $green, $blue, $opacity);

@@ -15,14 +15,12 @@ final class CoalesePropertyAssignMatcher
 {
     /**
      * @readonly
-     * @var \Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer
      */
-    private $complexNewAnalyzer;
+    private \Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer, NodeNameResolver $nodeNameResolver)
     {
         $this->complexNewAnalyzer = $complexNewAnalyzer;

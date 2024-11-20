@@ -53,34 +53,28 @@ final class NodeTypeResolver
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
-    private $objectTypeSpecifier;
+    private ObjectTypeSpecifier $objectTypeSpecifier;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector
      */
-    private $genericClassStringTypeCorrector;
+    private GenericClassStringTypeCorrector $genericClassStringTypeCorrector;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector
      */
-    private $accessoryNonEmptyStringTypeCorrector;
+    private AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector;
     /**
      * @readonly
-     * @var \Rector\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesDataCollector;
+    private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
      * @var string
      */
@@ -88,7 +82,7 @@ final class NodeTypeResolver
     /**
      * @var array<class-string<Node>, NodeTypeResolverInterface>
      */
-    private $nodeTypeResolvers = [];
+    private array $nodeTypeResolvers = [];
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */

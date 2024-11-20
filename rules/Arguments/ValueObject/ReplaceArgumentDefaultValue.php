@@ -10,19 +10,17 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @var int<0, max>
      * @readonly
      */
-    private $position;
+    private int $position;
     /**
      * @readonly
      * @var mixed

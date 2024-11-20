@@ -9,19 +9,16 @@ final class RenameProperty
 {
     /**
      * @readonly
-     * @var string
      */
-    private $type;
+    private string $type;
     /**
      * @readonly
-     * @var string
      */
-    private $oldProperty;
+    private string $oldProperty;
     /**
      * @readonly
-     * @var string
      */
-    private $newProperty;
+    private string $newProperty;
     public function __construct(string $type, string $oldProperty, string $newProperty)
     {
         $this->type = $type;

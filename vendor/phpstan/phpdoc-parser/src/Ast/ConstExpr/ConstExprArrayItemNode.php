@@ -8,10 +8,8 @@ use function sprintf;
 class ConstExprArrayItemNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
 {
     use NodeAttributes;
-    /** @var ConstExprNode|null */
-    public $key;
-    /** @var ConstExprNode */
-    public $value;
+    public ?\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $key = null;
+    public \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $value;
     public function __construct(?\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $key, \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $value)
     {
         $this->key = $key;

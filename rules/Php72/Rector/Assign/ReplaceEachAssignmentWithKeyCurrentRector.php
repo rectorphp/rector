@@ -98,9 +98,7 @@ CODE_SAMPLE
     private function createNewStmts(Expr $assignVariable, Expr $eachedVariable) : array
     {
         $exprs = [$this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY), $this->nodeFactory->createFuncCall('next', [new Arg($eachedVariable)])];
-        return \array_map(static function (Expr $expr) : Expression {
-            return new Expression($expr);
-        }, $exprs);
+        return \array_map(static fn(Expr $expr): Expression => new Expression($expr), $exprs);
     }
     /**
      * @param string|int $dimValue

@@ -10,12 +10,12 @@ final class StmtsAndTokens
      * @var Stmt[]
      * @readonly
      */
-    private $stmts;
+    private array $stmts;
     /**
      * @var array<int, (array{int, string, int} | string)>
      * @readonly
      */
-    private $tokens;
+    private array $tokens;
     /**
      * @param Stmt[] $stmts
      * @param array<int, array{int, string, int}|string> $tokens

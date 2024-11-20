@@ -27,19 +27,16 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
 {
     /**
      * @readonly
-     * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
-    private $exactCompareFactory;
+    private ExactCompareFactory $exactCompareFactory;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
-    private $exprAnalyzer;
+    private ExprAnalyzer $exprAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Strict\NodeAnalyzer\UnitializedPropertyAnalyzer
      */
-    private $unitializedPropertyAnalyzer;
+    private UnitializedPropertyAnalyzer $unitializedPropertyAnalyzer;
     public function __construct(ExactCompareFactory $exactCompareFactory, ExprAnalyzer $exprAnalyzer, UnitializedPropertyAnalyzer $unitializedPropertyAnalyzer)
     {
         $this->exactCompareFactory = $exactCompareFactory;

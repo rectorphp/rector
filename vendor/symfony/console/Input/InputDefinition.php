@@ -26,34 +26,13 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\LogicException;
  */
 class InputDefinition
 {
-    /**
-     * @var mixed[]
-     */
-    private $arguments = [];
-    /**
-     * @var int
-     */
-    private $requiredCount = 0;
-    /**
-     * @var \Symfony\Component\Console\Input\InputArgument|null
-     */
-    private $lastArrayArgument;
-    /**
-     * @var \Symfony\Component\Console\Input\InputArgument|null
-     */
-    private $lastOptionalArgument;
-    /**
-     * @var mixed[]
-     */
-    private $options = [];
-    /**
-     * @var mixed[]
-     */
-    private $negations = [];
-    /**
-     * @var mixed[]
-     */
-    private $shortcuts = [];
+    private array $arguments = [];
+    private int $requiredCount = 0;
+    private ?InputArgument $lastArrayArgument = null;
+    private ?InputArgument $lastOptionalArgument = null;
+    private array $options = [];
+    private array $negations = [];
+    private array $shortcuts = [];
     /**
      * @param array $definition An array of InputArgument and InputOption instance
      */

@@ -7,17 +7,17 @@ use PhpParser\NodeAbstract;
 class Const_ extends NodeAbstract
 {
     /** @var Identifier Name */
-    public $name;
+    public \PhpParser\Node\Identifier $name;
     /** @var Expr Value */
-    public $value;
+    public \PhpParser\Node\Expr $value;
     /** @var Name|null Namespaced name (if using NameResolver) */
-    public $namespacedName;
+    public ?\PhpParser\Node\Name $namespacedName;
     /**
      * Constructs a const node for use in class const and const statements.
      *
-     * @param string|Identifier $name       Name
-     * @param Expr              $value      Value
-     * @param array             $attributes Additional attributes
+     * @param string|Identifier $name Name
+     * @param Expr $value Value
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct($name, \PhpParser\Node\Expr $value, array $attributes = [])
     {

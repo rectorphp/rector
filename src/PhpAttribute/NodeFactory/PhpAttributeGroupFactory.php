@@ -8,7 +8,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -27,36 +27,31 @@ final class PhpAttributeGroupFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
-    private $annotationToAttributeMapper;
+    private AnnotationToAttributeMapper $annotationToAttributeMapper;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\AttributeNameFactory
      */
-    private $attributeNameFactory;
+    private \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
-    private $namedArgsFactory;
+    private \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
-    private $attributeArrayNameInliner;
+    private \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster $annotationToAttributeIntegerValueCaster;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster
      */
-    private $annotationToAttributeIntegerValueCaster;
-    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, AttributeArrayNameInliner $attributeArrayNameInliner, \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster $annotationToAttributeIntegerValueCaster)
+    private AttributeArrayNameInliner $attributeArrayNameInliner;
+    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster $annotationToAttributeIntegerValueCaster, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
         $this->namedArgsFactory = $namedArgsFactory;
-        $this->attributeArrayNameInliner = $attributeArrayNameInliner;
         $this->annotationToAttributeIntegerValueCaster = $annotationToAttributeIntegerValueCaster;
+        $this->attributeArrayNameInliner = $attributeArrayNameInliner;
     }
     public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute) : AttributeGroup
     {

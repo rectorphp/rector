@@ -7,19 +7,17 @@ final class AnnotationWithValueToAttribute
 {
     /**
      * @readonly
-     * @var string
      */
-    private $annotationName;
+    private string $annotationName;
     /**
      * @readonly
-     * @var string
      */
-    private $attributeClass;
+    private string $attributeClass;
     /**
      * @var array<mixed, mixed>
      * @readonly
      */
-    private $valueMap = [];
+    private array $valueMap = [];
     /**
      * @param array<mixed, mixed> $valueMap
      */

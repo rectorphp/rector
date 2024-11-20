@@ -30,19 +30,16 @@ final class EntityDocumentCreateMockToDirectNewRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\CodeQuality\NodeAnalyser\DoctrineEntityDocumentAnalyser
      */
-    private $doctrineEntityDocumentAnalyser;
+    private DoctrineEntityDocumentAnalyser $doctrineEntityDocumentAnalyser;
     public function __construct(ValueResolver $valueResolver, ReflectionProvider $reflectionProvider, DoctrineEntityDocumentAnalyser $doctrineEntityDocumentAnalyser)
     {
         $this->valueResolver = $valueResolver;

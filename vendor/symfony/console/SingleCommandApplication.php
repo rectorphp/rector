@@ -18,18 +18,9 @@ use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
  */
 class SingleCommandApplication extends Command
 {
-    /**
-     * @var string
-     */
-    private $version = 'UNKNOWN';
-    /**
-     * @var bool
-     */
-    private $autoExit = \true;
-    /**
-     * @var bool
-     */
-    private $running = \false;
+    private string $version = 'UNKNOWN';
+    private bool $autoExit = \true;
+    private bool $running = \false;
     /**
      * @return $this
      */

@@ -6,7 +6,7 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\FunctionVariantWithPhpDocs;
+use PHPStan\Reflection\ExtendedFunctionVariant;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use Rector\FileSystem\FilePathHelper;
@@ -18,24 +18,20 @@ final class ClassMethodReturnTypeOverrideGuard
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
-    private $parentClassMethodTypeOverrideGuard;
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\FileSystem\FilePathHelper
      */
-    private $filePathHelper;
+    private FilePathHelper $filePathHelper;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\MagicClassMethodAnalyzer
      */
-    private $magicClassMethodAnalyzer;
+    private MagicClassMethodAnalyzer $magicClassMethodAnalyzer;
     public function __construct(ReflectionResolver $reflectionResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -73,7 +69,7 @@ final class ClassMethodReturnTypeOverrideGuard
             return !$this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($parentClassMethodReflection, $classMethod, $scope);
-        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
+        if ($parametersAcceptor instanceof ExtendedFunctionVariant && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
             return \false;
         }
         $classReflection = $parentClassMethodReflection->getDeclaringClass();

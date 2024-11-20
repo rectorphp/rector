@@ -23,9 +23,8 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
@@ -84,7 +83,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if (!$ternary->if instanceof Expr) {
             return null;
         }
-        if ($isset->vars === null) {
+        if ($isset->vars === []) {
             return null;
         }
         // none or multiple isset values cannot be handled here

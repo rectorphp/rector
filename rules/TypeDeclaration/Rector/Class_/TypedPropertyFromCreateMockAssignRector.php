@@ -25,19 +25,16 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
-    private $assignToPropertyTypeInferer;
+    private AssignToPropertyTypeInferer $assignToPropertyTypeInferer;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
-    private $constructorAssignDetector;
+    private ConstructorAssignDetector $constructorAssignDetector;
     /**
      * @var string
      */

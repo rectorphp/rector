@@ -39,34 +39,28 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractRector implements
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $classMethodReturnTypeOverrideGuard;
+    private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
-    private $returnTypeInferer;
+    private ReturnTypeInferer $returnTypeInferer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
-    private $returnAnalyzer;
+    private ReturnAnalyzer $returnAnalyzer;
     public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -165,7 +159,7 @@ CODE_SAMPLE
         // always returns array
         $node->returnType = new Identifier('array');
         // add more precise array type if suitable
-        if ($returnType instanceof ArrayType && $this->shouldAddReturnArrayDocType($returnType)) {
+        if ($this->shouldAddReturnArrayDocType($returnType)) {
             $this->changeReturnType($node, $returnType);
         }
         return $node;
@@ -182,8 +176,9 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $arrayType
      */
-    private function changeReturnType($node, ArrayType $arrayType) : void
+    private function changeReturnType($node, $arrayType) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // skip already filled type, on purpose
@@ -256,7 +251,10 @@ CODE_SAMPLE
         }
         return $variables;
     }
-    private function shouldAddReturnArrayDocType(ArrayType $arrayType) : bool
+    /**
+     * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $arrayType
+     */
+    private function shouldAddReturnArrayDocType($arrayType) : bool
     {
         if ($arrayType instanceof ConstantArrayType) {
             if ($arrayType->getItemType() instanceof NeverType) {

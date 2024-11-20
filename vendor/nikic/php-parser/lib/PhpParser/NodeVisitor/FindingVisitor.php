@@ -14,7 +14,7 @@ class FindingVisitor extends NodeVisitorAbstract
     /** @var callable Filter callback */
     protected $filterCallback;
     /** @var Node[] Found nodes */
-    protected $foundNodes;
+    protected array $foundNodes;
     public function __construct(callable $filterCallback)
     {
         $this->filterCallback = $filterCallback;
@@ -30,7 +30,7 @@ class FindingVisitor extends NodeVisitorAbstract
     {
         return $this->foundNodes;
     }
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes) : ?array
     {
         $this->foundNodes = [];
         return null;

@@ -5,10 +5,11 @@ namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use RectorPrefix202411\Nette\Utils\Json;
 use RectorPrefix202411\Nette\Utils\Strings;
+use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -33,33 +34,25 @@ final class TestWithToDataProviderRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $phpDocTagRemover;
+    private PhpDocTagRemover $phpDocTagRemover;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassInsertManipulator
      */
-    private $classInsertManipulator;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ClassInsertManipulator $classInsertManipulator;
+    private bool $hasChanged = \false;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, ClassInsertManipulator $classInsertManipulator)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -167,7 +160,7 @@ CODE_SAMPLE
             $returnValue = new Array_($arrayItemsSingleLine);
         }
         $providerMethod = new ClassMethod($dataProviderName);
-        $providerMethod->flags = Class_::MODIFIER_PUBLIC;
+        $providerMethod->flags = Modifiers::PUBLIC;
         $providerMethod->stmts[] = new Return_($returnValue);
         $this->classInsertManipulator->addAsFirstMethod($class, $providerMethod);
     }

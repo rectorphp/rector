@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php70\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -21,9 +21,8 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var array<string, string>
      */
@@ -58,7 +57,7 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
                 if ($newFunctionName === 'random_int') {
                     $args = $node->getArgs();
                     if ($args === []) {
-                        $node->args[0] = new Arg(new LNumber(0));
+                        $node->args[0] = new Arg(new Int_(0));
                         $node->args[1] = new Arg($this->nodeFactory->createFuncCall('mt_getrandmax'));
                     } elseif (\count($args) === 2) {
                         $minValue = $this->valueResolver->getValue($args[0]->value);

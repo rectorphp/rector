@@ -88,24 +88,24 @@ use const PREG_SET_ORDER;
 final class Printer
 {
     /** @var Differ<Node> */
-    private $differ;
+    private \PHPStan\PhpDocParser\Printer\Differ $differ;
     /**
      * Map From "{$class}->{$subNode}" to string that should be inserted
      * between elements of this list subnode
      *
      * @var array<string, string>
      */
-    private $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', CallableTypeNode::class . '->templateTypes' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', ', DoctrineArray::class . '->items' => ', ', DoctrineAnnotation::class . '->arguments' => ', '];
+    private array $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', CallableTypeNode::class . '->templateTypes' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', ', DoctrineArray::class . '->items' => ', ', DoctrineAnnotation::class . '->arguments' => ', '];
     /**
      * [$find, $extraLeft, $extraRight]
      *
      * @var array<string, array{string|null, string, string}>
      */
-    private $emptyListInsertionMap = [CallableTypeNode::class . '->parameters' => ['(', '', ''], ArrayShapeNode::class . '->items' => ['{', '', ''], ObjectShapeNode::class . '->items' => ['{', '', ''], DoctrineArray::class . '->items' => ['{', '', ''], DoctrineAnnotation::class . '->arguments' => ['(', '', '']];
+    private array $emptyListInsertionMap = [CallableTypeNode::class . '->parameters' => ['(', '', ''], ArrayShapeNode::class . '->items' => ['{', '', ''], ObjectShapeNode::class . '->items' => ['{', '', ''], DoctrineArray::class . '->items' => ['{', '', ''], DoctrineAnnotation::class . '->arguments' => ['(', '', '']];
     /** @var array<string, list<class-string<TypeNode>>> */
-    private $parenthesesMap = [CallableTypeNode::class . '->returnType' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class], ArrayTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, ConstTypeNode::class, NullableTypeNode::class], OffsetAccessTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, NullableTypeNode::class]];
+    private array $parenthesesMap = [CallableTypeNode::class . '->returnType' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class], ArrayTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, ConstTypeNode::class, NullableTypeNode::class], OffsetAccessTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, NullableTypeNode::class]];
     /** @var array<string, list<class-string<TypeNode>>> */
-    private $parenthesesListMap = [IntersectionTypeNode::class . '->types' => [IntersectionTypeNode::class, UnionTypeNode::class, NullableTypeNode::class], UnionTypeNode::class . '->types' => [IntersectionTypeNode::class, UnionTypeNode::class, NullableTypeNode::class]];
+    private array $parenthesesListMap = [IntersectionTypeNode::class . '->types' => [IntersectionTypeNode::class, UnionTypeNode::class, NullableTypeNode::class], UnionTypeNode::class . '->types' => [IntersectionTypeNode::class, UnionTypeNode::class, NullableTypeNode::class]];
     public function printFormatPreserving(PhpDocNode $node, PhpDocNode $originalNode, TokenIterator $originalTokens) : string
     {
         $this->differ = new \PHPStan\PhpDocParser\Printer\Differ(static function ($a, $b) {
@@ -179,6 +179,18 @@ final class Printer
         if ($node instanceof DoctrineArrayItem) {
             return (string) $node;
         }
+        if ($node instanceof ArrayShapeItemNode) {
+            if ($node->keyName !== null) {
+                return sprintf('%s%s: %s', $this->print($node->keyName), $node->optional ? '?' : '', $this->printType($node->valueType));
+            }
+            return $this->printType($node->valueType);
+        }
+        if ($node instanceof ObjectShapeItemNode) {
+            if ($node->keyName !== null) {
+                return sprintf('%s%s: %s', $this->print($node->keyName), $node->optional ? '?' : '', $this->printType($node->valueType));
+            }
+            return $this->printType($node->valueType);
+        }
         throw new LogicException(sprintf('Unknown node type %s', get_class($node)));
     }
     private function printTagValue(PhpDocTagValueNode $node) : string
@@ -210,13 +222,9 @@ final class Printer
         if ($node instanceof MethodTagValueNode) {
             $static = $node->isStatic ? 'static ' : '';
             $returnType = $node->returnType !== null ? $this->printType($node->returnType) . ' ' : '';
-            $parameters = implode(', ', array_map(function (MethodTagValueParameterNode $parameter) : string {
-                return $this->print($parameter);
-            }, $node->parameters));
+            $parameters = implode(', ', array_map(fn(MethodTagValueParameterNode $parameter): string => $this->print($parameter), $node->parameters));
             $description = $node->description !== '' ? " {$node->description}" : '';
-            $templateTypes = count($node->templateTypes) > 0 ? '<' . implode(', ', array_map(function (TemplateTagValueNode $templateTag) : string {
-                return $this->print($templateTag);
-            }, $node->templateTypes)) . '>' : '';
+            $templateTypes = count($node->templateTypes) > 0 ? '<' . implode(', ', array_map(fn(TemplateTagValueNode $templateTag): string => $this->print($templateTag), $node->templateTypes)) . '>' : '';
             return "{$static}{$returnType}{$node->methodName}{$templateTypes}({$parameters}){$description}";
         }
         if ($node instanceof MixinTagValueNode) {
@@ -295,19 +303,11 @@ final class Printer
     private function printType(TypeNode $node) : string
     {
         if ($node instanceof ArrayShapeNode) {
-            $items = array_map(function (ArrayShapeItemNode $item) : string {
-                return $this->printType($item);
-            }, $node->items);
+            $items = array_map(fn(ArrayShapeItemNode $item): string => $this->print($item), $node->items);
             if (!$node->sealed) {
                 $items[] = '...' . ($node->unsealedType === null ? '' : $this->print($node->unsealedType));
             }
             return $node->kind . '{' . implode(', ', $items) . '}';
-        }
-        if ($node instanceof ArrayShapeItemNode) {
-            if ($node->keyName !== null) {
-                return sprintf('%s%s: %s', $this->print($node->keyName), $node->optional ? '?' : '', $this->printType($node->valueType));
-            }
-            return $this->printType($node->valueType);
         }
         if ($node instanceof ArrayTypeNode) {
             return $this->printOffsetAccessType($node->type) . '[]';
@@ -318,12 +318,8 @@ final class Printer
             } else {
                 $returnType = $this->printType($node->returnType);
             }
-            $template = $node->templateTypes !== [] ? '<' . implode(', ', array_map(function (TemplateTagValueNode $templateNode) : string {
-                return $this->print($templateNode);
-            }, $node->templateTypes)) . '>' : '';
-            $parameters = implode(', ', array_map(function (CallableTypeParameterNode $parameterNode) : string {
-                return $this->print($parameterNode);
-            }, $node->parameters));
+            $template = $node->templateTypes !== [] ? '<' . implode(', ', array_map(fn(TemplateTagValueNode $templateNode): string => $this->print($templateNode), $node->templateTypes)) . '>' : '';
+            $parameters = implode(', ', array_map(fn(CallableTypeParameterNode $parameterNode): string => $this->print($parameterNode), $node->parameters));
             return "{$node->identifier}{$template}({$parameters}): {$returnType}";
         }
         if ($node instanceof ConditionalTypeForParameterNode) {
@@ -373,16 +369,8 @@ final class Printer
             return '?' . $this->printType($node->type);
         }
         if ($node instanceof ObjectShapeNode) {
-            $items = array_map(function (ObjectShapeItemNode $item) : string {
-                return $this->printType($item);
-            }, $node->items);
+            $items = array_map(fn(ObjectShapeItemNode $item): string => $this->print($item), $node->items);
             return 'object{' . implode(', ', $items) . '}';
-        }
-        if ($node instanceof ObjectShapeItemNode) {
-            if ($node->keyName !== null) {
-                return sprintf('%s%s: %s', $this->print($node->keyName), $node->optional ? '?' : '', $this->printType($node->valueType));
-            }
-            return $this->printType($node->valueType);
         }
         if ($node instanceof OffsetAccessTypeNode) {
             return $this->printOffsetAccessType($node->type) . '[' . $this->printType($node->offset) . ']';
@@ -434,7 +422,9 @@ final class Printer
                 if (!$newNode instanceof Node || !$originalNode instanceof Node) {
                     return null;
                 }
+                /** @var int $itemStartPos */
                 $itemStartPos = $originalNode->getAttribute(Attribute::START_INDEX);
+                /** @var int $itemEndPos */
                 $itemEndPos = $originalNode->getAttribute(Attribute::END_INDEX);
                 if ($itemStartPos < 0 || $itemEndPos < 0 || $itemStartPos < $tokenIndex) {
                     throw new LogicException();
@@ -484,6 +474,7 @@ final class Printer
                     $delayedAdd[] = $newNode;
                     continue;
                 }
+                /** @var int $itemEndPos */
                 $itemEndPos = $tokenIndex - 1;
                 if ($insertNewline) {
                     $result .= $insertStr . sprintf('%s%s*%s', $originalTokens->getDetectedNewline() ?? "\n", $beforeAsteriskIndent, $afterAsteriskIndent);
@@ -503,7 +494,9 @@ final class Printer
                 if (!$originalNode instanceof Node) {
                     return null;
                 }
+                /** @var int $itemStartPos */
                 $itemStartPos = $originalNode->getAttribute(Attribute::START_INDEX);
+                /** @var int $itemEndPos */
                 $itemEndPos = $originalNode->getAttribute(Attribute::END_INDEX);
                 if ($itemStartPos < 0 || $itemEndPos < 0) {
                     throw new LogicException();
@@ -555,7 +548,7 @@ final class Printer
         return $result;
     }
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes
      * @return array{bool, string, string}
      */
     private function isMultiline(int $initialIndex, array $nodes, TokenIterator $originalTokens) : array

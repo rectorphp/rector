@@ -20,7 +20,7 @@ final class RemoveMethodCallParamRector extends AbstractRector implements Config
     /**
      * @var RemoveMethodCallParam[]
      */
-    private $removeMethodCallParams = [];
+    private array $removeMethodCallParams = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove parameter of method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -11,7 +12,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\NodeTraverser;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -25,14 +25,12 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
-    private $foreachAnalyzer;
+    private ForeachAnalyzer $foreachAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(ForeachAnalyzer $foreachAnalyzer, ValueResolver $valueResolver)
     {
         $this->foreachAnalyzer = $foreachAnalyzer;
@@ -116,12 +114,12 @@ CODE_SAMPLE
             if ($subNode instanceof Assign && $subNode->var instanceof ArrayDimFetch) {
                 $isAppend = $this->isNames($subNode->var->var, $emptyArrayVariables);
                 if ($isAppend) {
-                    return NodeTraverser::STOP_TRAVERSAL;
+                    return NodeVisitor::STOP_TRAVERSAL;
                 }
             }
             if ($subNode instanceof Assign && $subNode->var instanceof Variable && $this->isNames($subNode->var, $emptyArrayVariables) && !$this->valueResolver->isValue($subNode->expr, [])) {
                 $isAppend = \true;
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             return null;
         });

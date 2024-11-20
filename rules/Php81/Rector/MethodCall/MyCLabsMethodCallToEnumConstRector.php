@@ -26,9 +26,8 @@ final class MyCLabsMethodCallToEnumConstRector extends AbstractRector implements
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var string[]
      */

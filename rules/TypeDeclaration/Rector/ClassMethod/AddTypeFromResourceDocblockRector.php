@@ -32,33 +32,25 @@ final class AddTypeFromResourceDocblockRector extends AbstractRector implements 
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $phpDocTagRemover;
-    /**
-     * @var string
-     */
-    private $newTypeFromResourceDoc;
+    private PhpDocTagRemover $phpDocTagRemover;
+    private string $newTypeFromResourceDoc;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper, PhpDocTagRemover $phpDocTagRemover)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;

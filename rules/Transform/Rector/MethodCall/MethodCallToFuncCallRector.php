@@ -22,7 +22,7 @@ final class MethodCallToFuncCallRector extends AbstractRector implements Configu
     /**
      * @var MethodCallToFuncCall[]
      */
-    private $methodCallsToFuncCalls = [];
+    private array $methodCallsToFuncCalls = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change method call to function call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

@@ -14,14 +14,12 @@ final class RectorBetterReflectionSourceLocatorFactory
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory
      */
-    private $betterReflectionSourceLocatorFactory;
+    private BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
      */
-    private $intermediateSourceLocator;
+    private IntermediateSourceLocator $intermediateSourceLocator;
     public function __construct(BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory, IntermediateSourceLocator $intermediateSourceLocator)
     {
         $this->betterReflectionSourceLocatorFactory = $betterReflectionSourceLocatorFactory;

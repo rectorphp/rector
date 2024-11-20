@@ -19,14 +19,12 @@ final class ClassMethodParamTypeCompleter
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
      */
-    private $classMethodParamVendorLockResolver;
+    private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver;
     public function __construct(StaticTypeMapper $staticTypeMapper, ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;

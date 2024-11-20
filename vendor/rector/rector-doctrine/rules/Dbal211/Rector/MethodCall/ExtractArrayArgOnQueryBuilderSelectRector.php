@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Dbal211\Rector\MethodCall;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -74,7 +74,7 @@ CODE_SAMPLE
             if (!$value instanceof ArrayItem) {
                 return null;
             }
-            $newArgs[] = new Arg($value);
+            $newArgs[] = new Arg($value->value);
         }
         $node->args = $newArgs;
         return $node;

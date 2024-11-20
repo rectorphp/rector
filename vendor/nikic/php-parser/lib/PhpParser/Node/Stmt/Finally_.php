@@ -4,15 +4,16 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class Finally_ extends Node\Stmt implements \Rector\Contract\PhpParser\Node\StmtsAwareInterface
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+class Finally_ extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Stmt[] Statements */
-    public $stmts;
+    public array $stmts;
     /**
      * Constructs a finally node.
      *
-     * @param Node\Stmt[] $stmts      Statements
-     * @param array       $attributes Additional attributes
+     * @param Node\Stmt[] $stmts Statements
+     * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(array $stmts = [], array $attributes = [])
     {

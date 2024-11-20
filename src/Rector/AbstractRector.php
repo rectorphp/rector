@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Rector;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -11,9 +12,8 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
@@ -48,56 +48,23 @@ A) Direct return null for no change:
 
 B) Remove the Node:
 
-    return NodeTraverser::REMOVE_NODE;
+    return \\PhpParser\\NodeVisitor::REMOVE_NODE;
 CODE_SAMPLE;
-    /**
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    protected $nodeNameResolver;
-    /**
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    protected $nodeTypeResolver;
-    /**
-     * @var \Rector\PhpParser\Node\NodeFactory
-     */
-    protected $nodeFactory;
-    /**
-     * @var \Rector\PhpParser\Comparing\NodeComparator
-     */
-    protected $nodeComparator;
-    /**
-     * @var \Rector\ValueObject\Application\File
-     */
-    protected $file;
-    /**
-     * @var \Rector\Skipper\Skipper\Skipper
-     */
-    protected $skipper;
-    /**
-     * @var \Rector\Application\ChangedNodeScopeRefresher
-     */
-    private $changedNodeScopeRefresher;
-    /**
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    /**
-     * @var \Rector\Application\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
+    protected NodeNameResolver $nodeNameResolver;
+    protected NodeTypeResolver $nodeTypeResolver;
+    protected NodeFactory $nodeFactory;
+    protected NodeComparator $nodeComparator;
+    protected File $file;
+    protected Skipper $skipper;
+    private ChangedNodeScopeRefresher $changedNodeScopeRefresher;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
+    private CurrentFileProvider $currentFileProvider;
     /**
      * @var array<int, Node[]>
      */
-    private $nodesToReturn = [];
-    /**
-     * @var \Rector\NodeDecorator\CreatedByRuleDecorator
-     */
-    private $createdByRuleDecorator;
-    /**
-     * @var int|null
-     */
-    private $toBeRemovedNodeId;
+    private array $nodesToReturn = [];
+    private CreatedByRuleDecorator $createdByRuleDecorator;
+    private ?int $toBeRemovedNodeId = null;
     public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -143,16 +110,16 @@ CODE_SAMPLE;
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         $refactoredNode = $this->refactor($node);
         // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
-        if ($refactoredNode === NodeTraverser::REMOVE_NODE) {
+        if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
             $this->toBeRemovedNodeId = \spl_object_id($originalNode);
             // notify this rule changing code
-            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
+            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
             return $originalNode;
         }
         if (\is_int($refactoredNode)) {
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
-            if (!\in_array($refactoredNode, [NodeTraverser::DONT_TRAVERSE_CHILDREN, NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
+            if (!\in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
                 // notify this rule changing code
                 $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
                 $this->file->addRectorClassWithLine($rectorWithLineChange);
@@ -184,7 +151,7 @@ CODE_SAMPLE;
         $objectId = \spl_object_id($node);
         if ($this->toBeRemovedNodeId === $objectId) {
             $this->toBeRemovedNodeId = null;
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
         return $this->nodesToReturn[$objectId] ?? $node;
     }
@@ -206,7 +173,7 @@ CODE_SAMPLE;
      * @return ($node is Node\Param ? string :
      *  ($node is ClassMethod ? string :
      *  ($node is Property ? string :
-     *  ($node is PropertyProperty ? string :
+     *  ($node is PropertyItem ? string :
      *  ($node is Trait_ ? string :
      *  ($node is Interface_ ? string :
      *  ($node is Const_ ? string :
@@ -266,9 +233,7 @@ CODE_SAMPLE;
         //    1. registered in getNodesTypes() method
         //    2. different with current node type, as already decorated above
         //
-        $otherTypes = \array_filter($this->getNodeTypes(), static function (string $nodeType) use($node) : bool {
-            return $nodeType !== \get_class($node);
-        });
+        $otherTypes = \array_filter($this->getNodeTypes(), static fn(string $nodeType): bool => $nodeType !== \get_class($node));
         if ($otherTypes === []) {
             return;
         }
@@ -286,7 +251,7 @@ CODE_SAMPLE;
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
-        $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
+        $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);

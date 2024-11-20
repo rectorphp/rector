@@ -20,9 +20,8 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @see http://php.net/manual/en/reserved.constants.php
      * @var string[]

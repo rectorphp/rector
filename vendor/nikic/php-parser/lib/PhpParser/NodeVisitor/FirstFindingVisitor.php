@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 /**
  * This visitor can be used to find the first node satisfying some criterion determined by
@@ -15,7 +15,7 @@ class FirstFindingVisitor extends NodeVisitorAbstract
     /** @var callable Filter callback */
     protected $filterCallback;
     /** @var null|Node Found node */
-    protected $foundNode;
+    protected ?Node $foundNode;
     public function __construct(callable $filterCallback)
     {
         $this->filterCallback = $filterCallback;
@@ -27,11 +27,11 @@ class FirstFindingVisitor extends NodeVisitorAbstract
      *
      * @return null|Node Found node (or null if not found)
      */
-    public function getFoundNode()
+    public function getFoundNode() : ?Node
     {
         return $this->foundNode;
     }
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes) : ?array
     {
         $this->foundNode = null;
         return null;
@@ -41,7 +41,7 @@ class FirstFindingVisitor extends NodeVisitorAbstract
         $filterCallback = $this->filterCallback;
         if ($filterCallback($node)) {
             $this->foundNode = $node;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return NodeVisitor::STOP_TRAVERSAL;
         }
         return null;
     }

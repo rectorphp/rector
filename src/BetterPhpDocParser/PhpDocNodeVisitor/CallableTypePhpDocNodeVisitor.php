@@ -13,9 +13,8 @@ final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor impl
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
-    private $attributeMirrorer;
+    private AttributeMirrorer $attributeMirrorer;
     public function __construct(AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
@@ -28,7 +27,7 @@ final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor impl
         if ($node instanceof SpacingAwareCallableTypeNode) {
             return null;
         }
-        $spacingAwareCallableTypeNode = new SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
+        $spacingAwareCallableTypeNode = new SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType, []);
         $this->attributeMirrorer->mirror($node, $spacingAwareCallableTypeNode);
         return $spacingAwareCallableTypeNode;
     }

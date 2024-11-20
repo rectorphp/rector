@@ -17,7 +17,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDo
     /**
      * @var Node[]
      */
-    private $stack = [];
+    private array $stack = [];
     public function beforeTraverse(Node $node) : void
     {
         $this->stack = [$node];

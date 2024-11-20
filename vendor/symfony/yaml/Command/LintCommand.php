@@ -33,26 +33,11 @@ use RectorPrefix202411\Symfony\Component\Yaml\Yaml;
  */
 class LintCommand extends Command
 {
-    /**
-     * @var \Symfony\Component\Yaml\Parser
-     */
-    private $parser;
-    /**
-     * @var string|null
-     */
-    private $format;
-    /**
-     * @var bool
-     */
-    private $displayCorrectFiles;
-    /**
-     * @var \Closure|null
-     */
-    private $directoryIteratorProvider;
-    /**
-     * @var \Closure|null
-     */
-    private $isReadableProvider;
+    private Parser $parser;
+    private ?string $format = null;
+    private bool $displayCorrectFiles;
+    private ?\Closure $directoryIteratorProvider;
+    private ?\Closure $isReadableProvider;
     public function __construct(?string $name = null, ?callable $directoryIteratorProvider = null, ?callable $isReadableProvider = null)
     {
         parent::__construct($name);
@@ -207,13 +192,11 @@ EOF
     }
     private function getParser() : Parser
     {
-        return $this->parser = $this->parser ?? new Parser();
+        return $this->parser ??= new Parser();
     }
     private function getDirectoryIterator(string $directory) : iterable
     {
-        $default = function ($directory) {
-            return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), \RecursiveIteratorIterator::LEAVES_ONLY);
-        };
+        $default = fn($directory) => new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), \RecursiveIteratorIterator::LEAVES_ONLY);
         if (null !== $this->directoryIteratorProvider) {
             return ($this->directoryIteratorProvider)($directory, $default);
         }

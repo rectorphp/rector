@@ -24,26 +24,11 @@ use RectorPrefix202411\Symfony\Component\Process\Process;
  */
 class WindowsPipes extends AbstractPipes
 {
-    /**
-     * @var mixed[]
-     */
-    private $files = [];
-    /**
-     * @var mixed[]
-     */
-    private $fileHandles = [];
-    /**
-     * @var mixed[]
-     */
-    private $lockHandles = [];
-    /**
-     * @var mixed[]
-     */
-    private $readBytes = [Process::STDOUT => 0, Process::STDERR => 0];
-    /**
-     * @var bool
-     */
-    private $haveReadSupport;
+    private array $files = [];
+    private array $fileHandles = [];
+    private array $lockHandles = [];
+    private array $readBytes = [Process::STDOUT => 0, Process::STDERR => 0];
+    private bool $haveReadSupport;
     /**
      * @param mixed $input
      */

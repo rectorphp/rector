@@ -11,17 +11,17 @@ final class UsedImports
      * @var array<(FullyQualifiedObjectType | AliasedObjectType)>
      * @readonly
      */
-    private $useImports;
+    private array $useImports;
     /**
      * @var FullyQualifiedObjectType[]
      * @readonly
      */
-    private $functionImports;
+    private array $functionImports;
     /**
      * @var FullyQualifiedObjectType[]
      * @readonly
      */
-    private $constantImports;
+    private array $constantImports;
     /**
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $useImports
      * @param FullyQualifiedObjectType[] $functionImports

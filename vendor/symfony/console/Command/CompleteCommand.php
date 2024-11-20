@@ -38,14 +38,8 @@ final class CompleteCommand extends Command
      * @deprecated since Symfony 6.1
      */
     protected static $defaultDescription = 'Internal command to provide shell completion suggestions';
-    /**
-     * @var mixed[]
-     */
-    private $completionOutputs;
-    /**
-     * @var bool
-     */
-    private $isDebug = \false;
+    private array $completionOutputs;
+    private bool $isDebug = \false;
     /**
      * @param array<string, class-string<CompletionOutputInterface>> $completionOutputs A list of additional completion outputs, with shell name as key and FQCN as value
      */
@@ -110,9 +104,7 @@ final class CompleteCommand extends Command
             $completionOutput = new $completionOutput();
             $this->log('<info>Suggestions:</>');
             if ($options = $suggestions->getOptionSuggestions()) {
-                $this->log('  --' . \implode(' --', \array_map(function ($o) {
-                    return $o->getName();
-                }, $options)));
+                $this->log('  --' . \implode(' --', \array_map(fn($o) => $o->getName(), $options)));
             } elseif ($values = $suggestions->getValueSuggestions()) {
                 $this->log('  ' . \implode(' ', $values));
             } else {

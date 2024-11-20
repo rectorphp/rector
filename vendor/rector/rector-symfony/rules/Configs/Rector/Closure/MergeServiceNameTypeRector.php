@@ -19,18 +19,13 @@ final class MergeServiceNameTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
-    private $symfonyPhpClosureDetector;
+    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ValueResolver $valueResolver;
+    private bool $hasChanged = \false;
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ValueResolver $valueResolver)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;

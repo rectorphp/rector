@@ -9,10 +9,9 @@ use function trim;
 class ReturnTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $type;
+    public TypeNode $type;
     /** @var string (may be empty) */
-    public $description;
+    public string $description;
     public function __construct(TypeNode $type, string $description)
     {
         $this->type = $type;

@@ -18,10 +18,7 @@ use RectorPrefix202411\Symfony\Component\Process\Process;
  */
 final class ProcessSignaledException extends RuntimeException
 {
-    /**
-     * @var \Symfony\Component\Process\Process
-     */
-    private $process;
+    private Process $process;
     public function __construct(Process $process)
     {
         $this->process = $process;

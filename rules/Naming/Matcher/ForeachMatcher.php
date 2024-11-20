@@ -15,14 +15,12 @@ final class ForeachMatcher
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\Matcher\CallMatcher
      */
-    private $callMatcher;
+    private \Rector\Naming\Matcher\CallMatcher $callMatcher;
     public function __construct(NodeNameResolver $nodeNameResolver, \Rector\Naming\Matcher\CallMatcher $callMatcher)
     {
         $this->nodeNameResolver = $nodeNameResolver;

@@ -21,30 +21,18 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\CommandNotFoundExcept
 class ApplicationDescription
 {
     public const GLOBAL_NAMESPACE = '_global';
-    /**
-     * @var \Symfony\Component\Console\Application
-     */
-    private $application;
-    /**
-     * @var string|null
-     */
-    private $namespace;
-    /**
-     * @var bool
-     */
-    private $showHidden;
-    /**
-     * @var mixed[]
-     */
-    private $namespaces;
+    private Application $application;
+    private ?string $namespace;
+    private bool $showHidden;
+    private array $namespaces;
     /**
      * @var array<string, Command>
      */
-    private $commands;
+    private array $commands;
     /**
      * @var array<string, Command>
      */
-    private $aliases = [];
+    private array $aliases = [];
     public function __construct(Application $application, ?string $namespace = null, bool $showHidden = \false)
     {
         $this->application = $application;

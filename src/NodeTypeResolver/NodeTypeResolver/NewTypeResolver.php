@@ -26,14 +26,12 @@ final class NewTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     public function __construct(NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;

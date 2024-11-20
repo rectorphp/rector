@@ -28,14 +28,12 @@ final class ExplicitNullableParamTypeRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     public function __construct(ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->valueResolver = $valueResolver;

@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class RouteParameter implements ContextualAttribute
 {
-    /**
-     * @var string
-     */
-    public $parameter;
+    public string $parameter;
     /**
      * Create a new class instance.
      */

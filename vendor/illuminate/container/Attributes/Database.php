@@ -8,10 +8,7 @@ use RectorPrefix202411\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Database implements ContextualAttribute
 {
-    /**
-     * @var string|null
-     */
-    public $connection;
+    public ?string $connection = null;
     /**
      * Create a new class instance.
      */

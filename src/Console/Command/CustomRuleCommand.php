@@ -21,9 +21,8 @@ final class CustomRuleCommand extends Command
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @see https://regex101.com/r/2eP4rw/1
      * @var string

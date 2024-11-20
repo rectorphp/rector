@@ -6,8 +6,8 @@ namespace Rector\DowngradePhp73\Rector\FuncCall;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Exception\ShouldNotHappenException;
@@ -29,10 +29,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
      * @var array<int, int|string|bool>
      */
     private const ARGUMENT_DEFAULT_VALUES = [2 => 0, 3 => '', 4 => '', 5 => \false, 6 => \false];
-    /**
-     * @var int
-     */
-    private $highestIndex = 1;
+    private int $highestIndex = 1;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Convert setcookie option array to arguments', [new CodeSample(<<<'CODE_SAMPLE'

@@ -6,11 +6,11 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
-use PhpParser\Node\Expr\Throw_ as ExprThrow_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -26,14 +26,12 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(IfManipulator $ifManipulator, ValueResolver $valueResolver)
     {
         $this->ifManipulator = $ifManipulator;
@@ -117,9 +115,9 @@ CODE_SAMPLE
             if (!$hasChanged) {
                 continue;
             }
-            if ($stmt instanceof Throw_) {
+            if ($stmt instanceof Expression && $stmt->expr instanceof Throw_) {
                 unset($node->stmts[$key]);
-                $appendExpr = new ExprThrow_($stmt->expr);
+                $appendExpr = $stmt->expr;
                 continue;
             }
             if (!$this->isReturnNull($stmt)) {

@@ -20,9 +20,8 @@ final class DowngradeNonCapturingCatchesRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
      */
-    private $variableNaming;
+    private VariableNaming $variableNaming;
     public function __construct(VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;

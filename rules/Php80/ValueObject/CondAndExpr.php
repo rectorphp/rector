@@ -14,14 +14,13 @@ final class CondAndExpr
     private $condExprs;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr
      */
-    private $expr;
+    private Expr $expr;
     /**
      * @var MatchKind::*
      * @readonly
      */
-    private $matchKind;
+    private string $matchKind;
     /**
      * @param Expr[]|null $condExprs
      * @param MatchKind::* $matchKind

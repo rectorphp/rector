@@ -8,19 +8,16 @@ final class StringToClassConstant
 {
     /**
      * @readonly
-     * @var string
      */
-    private $string;
+    private string $string;
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $constant;
+    private string $constant;
     public function __construct(string $string, string $class, string $constant)
     {
         $this->string = $string;

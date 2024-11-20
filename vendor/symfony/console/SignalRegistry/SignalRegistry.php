@@ -12,10 +12,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\SignalRegistry;
 
 final class SignalRegistry
 {
-    /**
-     * @var mixed[]
-     */
-    private $signalHandlers = [];
+    private array $signalHandlers = [];
     public function __construct()
     {
         if (\function_exists('pcntl_async_signals')) {

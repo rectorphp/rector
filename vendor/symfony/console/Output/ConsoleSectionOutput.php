@@ -19,26 +19,11 @@ use RectorPrefix202411\Symfony\Component\Console\Terminal;
  */
 class ConsoleSectionOutput extends StreamOutput
 {
-    /**
-     * @var mixed[]
-     */
-    private $content = [];
-    /**
-     * @var int
-     */
-    private $lines = 0;
-    /**
-     * @var mixed[]
-     */
-    private $sections;
-    /**
-     * @var \Symfony\Component\Console\Terminal
-     */
-    private $terminal;
-    /**
-     * @var int
-     */
-    private $maxHeight = 0;
+    private array $content = [];
+    private int $lines = 0;
+    private array $sections;
+    private Terminal $terminal;
+    private int $maxHeight = 0;
     /**
      * @param resource               $stream
      * @param ConsoleSectionOutput[] $sections

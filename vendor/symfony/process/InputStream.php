@@ -20,18 +20,9 @@ use RectorPrefix202411\Symfony\Component\Process\Exception\RuntimeException;
  */
 class InputStream implements \IteratorAggregate
 {
-    /**
-     * @var \Closure|null
-     */
-    private $onEmpty;
-    /**
-     * @var mixed[]
-     */
-    private $input = [];
-    /**
-     * @var bool
-     */
-    private $open = \true;
+    private ?\Closure $onEmpty = null;
+    private array $input = [];
+    private bool $open = \true;
     /**
      * Sets a callback that is called when the write buffer becomes empty.
      *

@@ -16,9 +16,8 @@ final class StaticClosureRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\Guard\StaticGuard
      */
-    private $staticGuard;
+    private StaticGuard $staticGuard;
     public function __construct(StaticGuard $staticGuard)
     {
         $this->staticGuard = $staticGuard;

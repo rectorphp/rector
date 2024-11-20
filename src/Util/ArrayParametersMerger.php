@@ -17,9 +17,7 @@ final class ArrayParametersMerger
     public function merge($left, $right)
     {
         if (\is_array($left) && \is_array($right)) {
-            return $this->mergeLeftToRightWithCallable($left, $right, function ($leftValue, $rightValue) {
-                return $this->merge($leftValue, $rightValue);
-            });
+            return $this->mergeLeftToRightWithCallable($left, $right, fn($leftValue, $rightValue) => $this->merge($leftValue, $rightValue));
         }
         if ($left !== null) {
             return $left;

@@ -14,26 +14,24 @@ final class UseNodesToAddCollector
 {
     /**
      * @readonly
-     * @var \Rector\Application\Provider\CurrentFileProvider
      */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $useImportsResolver;
+    private UseImportsResolver $useImportsResolver;
     /**
      * @var array<string, FullyQualifiedObjectType[]>
      */
-    private $constantUseImportTypesInFilePath = [];
+    private array $constantUseImportTypesInFilePath = [];
     /**
      * @var array<string, FullyQualifiedObjectType[]>
      */
-    private $functionUseImportTypesInFilePath = [];
+    private array $functionUseImportTypesInFilePath = [];
     /**
      * @var array<string, FullyQualifiedObjectType[]>
      */
-    private $useImportTypesInFilePath = [];
+    private array $useImportTypesInFilePath = [];
     public function __construct(CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver)
     {
         $this->currentFileProvider = $currentFileProvider;

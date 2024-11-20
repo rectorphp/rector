@@ -63,9 +63,8 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|Ternary|Instanceof_ $node
-     * @return \PhpParser\Node|null|int
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof Instanceof_) {
             return $this->refactorInstanceof($node);

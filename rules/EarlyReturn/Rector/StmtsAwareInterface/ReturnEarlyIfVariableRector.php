@@ -26,14 +26,12 @@ final class ReturnEarlyIfVariableRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\VariableAnalyzer
      */
-    private $variableAnalyzer;
+    private VariableAnalyzer $variableAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     public function __construct(VariableAnalyzer $variableAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->variableAnalyzer = $variableAnalyzer;

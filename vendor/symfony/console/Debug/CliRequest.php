@@ -20,9 +20,8 @@ final class CliRequest extends Request
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Command\TraceableCommand
      */
-    public $command;
+    public TraceableCommand $command;
     public function __construct(TraceableCommand $command)
     {
         $this->command = $command;
@@ -48,9 +47,8 @@ final class CliRequest extends Request
         {
             /**
              * @readonly
-             * @var int
              */
-            private $exitCode;
+            private int $exitCode;
             public function __construct(int $exitCode)
             {
                 $this->exitCode = $exitCode;

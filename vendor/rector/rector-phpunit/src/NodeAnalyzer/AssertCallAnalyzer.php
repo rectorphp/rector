@@ -19,29 +19,24 @@ final class AssertCallAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\AstResolver
      */
-    private $astResolver;
+    private AstResolver $astResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Printer\BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @var int
      */
@@ -53,12 +48,11 @@ final class AssertCallAnalyzer
     /**
      * @var array<string, bool>
      */
-    private $containsAssertCallByClassMethod = [];
+    private array $containsAssertCallByClassMethod = [];
     /**
      * This should prevent segfaults while going too deep into to parsed code. Without it, it might end-up with segfault
-     * @var int
      */
-    private $classMethodNestingLevel = 0;
+    private int $classMethodNestingLevel = 0;
     public function __construct(AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;

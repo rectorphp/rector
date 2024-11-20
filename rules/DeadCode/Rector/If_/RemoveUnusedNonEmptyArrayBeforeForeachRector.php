@@ -31,29 +31,24 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeManipulator\CountManipulator
      */
-    private $countManipulator;
+    private CountManipulator $countManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\DeadCode\UselessIfCondBeforeForeachDetector
      */
-    private $uselessIfCondBeforeForeachDetector;
+    private UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector;
     /**
      * @readonly
-     * @var \Rector\Php\ReservedKeywordAnalyzer
      */
-    private $reservedKeywordAnalyzer;
+    private ReservedKeywordAnalyzer $reservedKeywordAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
-    private $propertyFetchAnalyzer;
+    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     public function __construct(CountManipulator $countManipulator, IfManipulator $ifManipulator, UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector, ReservedKeywordAnalyzer $reservedKeywordAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->countManipulator = $countManipulator;
@@ -101,7 +96,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_|StmtsAwareInterface $node
-     * @return Stmt[]|Foreach_|StmtsAwareInterface|null
+     * @return Foreach_|StmtsAwareInterface|null
      */
     public function refactor(Node $node)
     {
@@ -200,7 +195,7 @@ CODE_SAMPLE
     }
     private function shouldSkipForeachExpr(Expr $foreachExpr, Scope $scope) : bool
     {
-        if ($foreachExpr instanceof ArrayDimFetch && $foreachExpr->dim !== null) {
+        if ($foreachExpr instanceof ArrayDimFetch && $foreachExpr->dim instanceof Expr) {
             $exprType = $this->nodeTypeResolver->getNativeType($foreachExpr->var);
             $dimType = $this->nodeTypeResolver->getNativeType($foreachExpr->dim);
             if (!$exprType->hasOffsetValueType($dimType)->yes()) {

@@ -22,9 +22,8 @@ final class RemoveDeadConditionAboveReturnRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
-    private $sideEffectNodeDetector;
+    private SideEffectNodeDetector $sideEffectNodeDetector;
     public function __construct(SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;

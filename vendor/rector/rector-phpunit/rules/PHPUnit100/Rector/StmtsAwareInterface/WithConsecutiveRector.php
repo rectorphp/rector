@@ -11,14 +11,14 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PHPUnit\Enum\ConsecutiveMethodName;
 use Rector\PHPUnit\Enum\ConsecutiveVariable;
@@ -37,34 +37,28 @@ final class WithConsecutiveRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PHPUnit100\NodeFactory\WillReturnCallbackFactory
      */
-    private $willReturnCallbackFactory;
+    private WillReturnCallbackFactory $willReturnCallbackFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\MethodCallRemover
      */
-    private $methodCallRemover;
+    private MethodCallRemover $methodCallRemover;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeFinder\MethodCallNodeFinder
      */
-    private $methodCallNodeFinder;
+    private MethodCallNodeFinder $methodCallNodeFinder;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator
      */
-    private $expectsMethodCallDecorator;
+    private \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator $expectsMethodCallDecorator;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\PHPUnit100\NodeDecorator\WillReturnIfNodeDecorator
      */
-    private $willReturnIfNodeDecorator;
+    private WillReturnIfNodeDecorator $willReturnIfNodeDecorator;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, WillReturnCallbackFactory $willReturnCallbackFactory, MethodCallRemover $methodCallRemover, MethodCallNodeFinder $methodCallNodeFinder, \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator $expectsMethodCallDecorator, WillReturnIfNodeDecorator $willReturnIfNodeDecorator)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -126,6 +120,7 @@ CODE_SAMPLE
     }
     /**
      * @param Expression $node
+     * @return null|Stmt[]|Expression
      */
     public function refactor(Node $node)
     {
@@ -164,7 +159,7 @@ CODE_SAMPLE
         if ($willThrowException instanceof MethodCall) {
             $this->methodCallRemover->removeMethodCall($node, ConsecutiveMethodName::WILL_THROW_EXCEPTION);
             $expr = $this->getFirstArgValue($willThrowException);
-            $returnStmt = new Throw_($expr);
+            $returnStmt = new Expression(new Throw_($expr));
         }
         $willReturnReferenceArgument = $this->methodCallNodeFinder->findByName($node, ConsecutiveMethodName::WILL_RETURN_REFERENCE);
         $referenceVariable = null;
@@ -178,8 +173,8 @@ CODE_SAMPLE
         $expectsCall = $this->expectsMethodCallDecorator->decorate($node);
         if (!$expectsCall instanceof MethodCall && !$expectsCall instanceof StaticCall) {
             // fallback to default by case count
-            $lNumber = new LNumber(\count($withConsecutiveMethodCall->args));
-            $expectsCall = new MethodCall(new Variable('this'), new Identifier('exactly'), [new Arg($lNumber)]);
+            $int = new Int_(\count($withConsecutiveMethodCall->args));
+            $expectsCall = new MethodCall(new Variable('this'), new Identifier('exactly'), [new Arg($int)]);
         }
         // 2. does willReturnCallback() exist? just merge them together
         $existingWillReturnCallback = $this->methodCallNodeFinder->findByName($node, ConsecutiveMethodName::WILL_RETURN_CALLBACK);
@@ -191,10 +186,11 @@ CODE_SAMPLE
     }
     /**
      * @return Stmt[]
+     * @param \PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|null $returnStmt
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expectsCall
      */
-    private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt, $referenceVariable, $expectsCall, Expression $expression, ?MethodCall $willReturnOnConsecutiveMethodCall) : array
+    private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, $returnStmt, $referenceVariable, $expectsCall, Expression $expression, ?MethodCall $willReturnOnConsecutiveMethodCall) : array
     {
         $closure = $this->willReturnCallbackFactory->createClosure($withConsecutiveMethodCall, $returnStmt, $referenceVariable);
         $withConsecutiveMethodCall->name = new Identifier(ConsecutiveMethodName::WILL_RETURN_CALLBACK);

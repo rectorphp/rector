@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\PHPStan;
 
+use PhpParser\Node\UseItem;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -31,19 +31,16 @@ final class ObjectTypeSpecifier
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $useImportsResolver;
+    private UseImportsResolver $useImportsResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
-    private $nameScopeFactory;
+    private NameScopeFactory $nameScopeFactory;
     public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, NameScopeFactory $nameScopeFactory)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -65,6 +62,9 @@ final class ObjectTypeSpecifier
             return $shortenedObjectType;
         }
         $className = \ltrim($objectType->getClassName(), '\\');
+        if (\strncmp($objectType->getClassName(), '\\', \strlen('\\')) === 0) {
+            return new FullyQualifiedObjectType($className);
+        }
         if ($this->reflectionProvider->hasClass($className)) {
             return new FullyQualifiedObjectType($className);
         }
@@ -135,6 +135,9 @@ final class ObjectTypeSpecifier
         if ($useName === $className) {
             return new AliasedObjectType($alias, $fullyQualifiedName);
         }
+        if (\strncmp($className, $alias . '\\', \strlen($alias . '\\')) === 0) {
+            return new AliasedObjectType($alias, $fullyQualifiedName . \ltrim($className, $alias));
+        }
         return null;
     }
     /**
@@ -171,17 +174,17 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function matchPartialNamespaceObjectType(string $prefix, ObjectType $objectType, UseUse $useUse) : ?ShortenedObjectType
+    private function matchPartialNamespaceObjectType(string $prefix, ObjectType $objectType, UseItem $useItem) : ?ShortenedObjectType
     {
+        if ($objectType->getClassName() === $useItem->name->getLast()) {
+            return new ShortenedObjectType($objectType->getClassName(), $prefix . $useItem->name->toString());
+        }
         // partial namespace
-        if (\strncmp($objectType->getClassName(), $useUse->name->getLast() . '\\', \strlen($useUse->name->getLast() . '\\')) !== 0) {
+        if (\strncmp($objectType->getClassName(), $useItem->name->getLast() . '\\', \strlen($useItem->name->getLast() . '\\')) !== 0) {
             return null;
         }
         $classNameWithoutLastUsePart = Strings::after($objectType->getClassName(), '\\', 1);
-        $connectedClassName = $prefix . $useUse->name->toString() . '\\' . $classNameWithoutLastUsePart;
-        if (!$this->reflectionProvider->hasClass($connectedClassName)) {
-            return null;
-        }
+        $connectedClassName = $prefix . $useItem->name->toString() . '\\' . $classNameWithoutLastUsePart;
         if ($objectType->getClassName() === $connectedClassName) {
             return null;
         }
@@ -190,17 +193,17 @@ final class ObjectTypeSpecifier
     /**
      * @return FullyQualifiedObjectType|ShortenedObjectType|null
      */
-    private function matchClassWithLastUseImportPart(string $prefix, ObjectType $objectType, UseUse $useUse) : ?ObjectType
+    private function matchClassWithLastUseImportPart(string $prefix, ObjectType $objectType, UseItem $useItem) : ?ObjectType
     {
-        if ($useUse->name->getLast() !== $objectType->getClassName()) {
+        if ($useItem->name->getLast() !== $objectType->getClassName()) {
             return null;
         }
-        if (!$this->reflectionProvider->hasClass($prefix . $useUse->name->toString())) {
+        if (!$this->reflectionProvider->hasClass($prefix . $useItem->name->toString())) {
             return null;
         }
-        if ($objectType->getClassName() === $prefix . $useUse->name->toString()) {
+        if ($objectType->getClassName() === $prefix . $useItem->name->toString()) {
             return new FullyQualifiedObjectType($objectType->getClassName());
         }
-        return new ShortenedObjectType($objectType->getClassName(), $prefix . $useUse->name->toString());
+        return new ShortenedObjectType($objectType->getClassName(), $prefix . $useItem->name->toString());
     }
 }

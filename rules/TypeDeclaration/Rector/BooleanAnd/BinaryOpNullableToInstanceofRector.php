@@ -22,9 +22,8 @@ final class BinaryOpNullableToInstanceofRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer
      */
-    private $nullableTypeAnalyzer;
+    private NullableTypeAnalyzer $nullableTypeAnalyzer;
     public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer)
     {
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;

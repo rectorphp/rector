@@ -17,9 +17,8 @@ final class DowngradePreviouslyImplementedInterfaceRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
-    private $familyRelationsAnalyzer;
+    private FamilyRelationsAnalyzer $familyRelationsAnalyzer;
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

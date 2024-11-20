@@ -25,19 +25,16 @@ final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
      */
-    private $isClassMethodUsedAnalyzer;
+    private IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
@@ -88,9 +85,7 @@ CODE_SAMPLE
         if ($classMethods === []) {
             return null;
         }
-        $filter = static function (ClassMethod $classMethod) : bool {
-            return $classMethod->isPrivate();
-        };
+        $filter = static fn(ClassMethod $classMethod): bool => $classMethod->isPrivate();
         $privateMethods = \array_filter($classMethods, $filter);
         if ($privateMethods === []) {
             return null;

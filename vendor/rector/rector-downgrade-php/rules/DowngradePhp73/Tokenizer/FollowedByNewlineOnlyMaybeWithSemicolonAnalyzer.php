@@ -11,9 +11,9 @@ final class FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer
     {
         $oldTokens = $file->getOldTokens();
         $nextTokenPosition = $node->getEndTokenPos() + 1;
-        if (isset($oldTokens[$nextTokenPosition]) && $oldTokens[$nextTokenPosition] === ';') {
+        if (isset($oldTokens[$nextTokenPosition]) && (string) $oldTokens[$nextTokenPosition] === ';') {
             ++$nextTokenPosition;
         }
-        return !isset($oldTokens[$nextTokenPosition]) || isset($oldTokens[$nextTokenPosition][1]) && \strncmp($oldTokens[$nextTokenPosition][1], "\n", \strlen("\n")) === 0;
+        return !isset($oldTokens[$nextTokenPosition]) || isset($oldTokens[$nextTokenPosition]) && \strncmp((string) $oldTokens[$nextTokenPosition], "\n", \strlen("\n")) === 0;
     }
 }

@@ -29,14 +29,12 @@ final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionI
 {
     /**
      * @readonly
-     * @var \Rector\Php70\NodeAnalyzer\BattleshipTernaryAnalyzer
      */
-    private $battleshipTernaryAnalyzer;
+    private BattleshipTernaryAnalyzer $battleshipTernaryAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(BattleshipTernaryAnalyzer $battleshipTernaryAnalyzer, ValueResolver $valueResolver)
     {
         $this->battleshipTernaryAnalyzer = $battleshipTernaryAnalyzer;

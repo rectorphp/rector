@@ -21,13 +21,12 @@ final class ReplaceServiceArgumentRector extends AbstractRector implements Confi
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @var ReplaceServiceArgument[]
      */
-    private $replaceServiceArguments = [];
+    private array $replaceServiceArguments = [];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;

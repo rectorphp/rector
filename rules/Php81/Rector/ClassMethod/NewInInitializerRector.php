@@ -28,24 +28,20 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
-    private $classChildAnalyzer;
+    private ClassChildAnalyzer $classChildAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php81\NodeAnalyzer\CoalesePropertyAssignMatcher
      */
-    private $coalesePropertyAssignMatcher;
+    private CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private StmtsManipulator $stmtsManipulator;
     public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher, StmtsManipulator $stmtsManipulator)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -182,8 +178,6 @@ CODE_SAMPLE
         if ($classMethod->stmts === null || $classMethod->stmts === []) {
             return [];
         }
-        return \array_filter($classMethod->params, static function (Param $param) : bool {
-            return $param->type instanceof NullableType;
-        });
+        return \array_filter($classMethod->params, static fn(Param $param): bool => $param->type instanceof NullableType);
     }
 }

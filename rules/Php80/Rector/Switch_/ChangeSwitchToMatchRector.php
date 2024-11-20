@@ -32,19 +32,16 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeResolver\SwitchExprsResolver
      */
-    private $switchExprsResolver;
+    private SwitchExprsResolver $switchExprsResolver;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer
      */
-    private $matchSwitchAnalyzer;
+    private MatchSwitchAnalyzer $matchSwitchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeFactory\MatchFactory
      */
-    private $matchFactory;
+    private MatchFactory $matchFactory;
     public function __construct(SwitchExprsResolver $switchExprsResolver, MatchSwitchAnalyzer $matchSwitchAnalyzer, MatchFactory $matchFactory)
     {
         $this->switchExprsResolver = $switchExprsResolver;
@@ -140,6 +137,12 @@ CODE_SAMPLE
             }
             if (!$hasDefaultValue) {
                 continue;
+            }
+            foreach ($match->arms as $arm) {
+                if ($arm->conds === null) {
+                    continue;
+                }
+                $arm->conds = \array_values($arm->conds);
             }
             $node->stmts[$key] = $isReturn ? new Return_($match) : new Expression($match);
             $this->mirrorComments($node->stmts[$key], $stmt);

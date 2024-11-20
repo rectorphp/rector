@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Cast;
 
+use PHPStan\Type\Constant\ConstantArrayType;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast;
@@ -36,19 +37,16 @@ final class RecastingRemovalRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyFetchAnalyzer
      */
-    private $propertyFetchAnalyzer;
+    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
-    private $exprAnalyzer;
+    private ExprAnalyzer $exprAnalyzer;
     /**
      * @var array<class-string<Node>, class-string<Type>>
      */
@@ -96,6 +94,15 @@ CODE_SAMPLE
         $nodeType = $this->nodeTypeResolver->getNativeType($node->expr);
         if ($nodeType instanceof MixedType) {
             return null;
+        }
+        if ($nodeType instanceof ConstantArrayType && $nodeClass === Array_::class) {
+            if ($this->shouldSkip($node->expr)) {
+                return null;
+            }
+            if ($this->shouldSkipCall($node->expr)) {
+                return null;
+            }
+            return $node->expr;
         }
         $sameNodeType = self::CAST_CLASS_TO_NODE_TYPE[$nodeClass];
         if (!$nodeType instanceof $sameNodeType) {

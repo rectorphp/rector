@@ -8,10 +8,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private bool $hasChanged = \false;
     public function beforeTraverse(Node $node) : void
     {
         $this->hasChanged = \false;

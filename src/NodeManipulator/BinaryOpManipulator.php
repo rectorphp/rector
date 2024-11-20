@@ -16,9 +16,8 @@ final class BinaryOpManipulator
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
-    private $assignAndBinaryMap;
+    private AssignAndBinaryMap $assignAndBinaryMap;
     public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
@@ -117,9 +116,7 @@ final class BinaryOpManipulator
         if (\is_callable($condition)) {
             return $condition;
         }
-        return static function (Node $node) use($condition) : bool {
-            return $node instanceof $condition;
-        };
+        return static fn(Node $node): bool => $node instanceof $condition;
     }
     /**
      * @return class-string<BinaryOp>|null

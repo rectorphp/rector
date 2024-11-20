@@ -21,102 +21,30 @@ use RectorPrefix202411\Symfony\Component\Console\Exception\LogicException;
  */
 class TableStyle
 {
-    /**
-     * @var string
-     */
-    private $paddingChar = ' ';
-    /**
-     * @var string
-     */
-    private $horizontalOutsideBorderChar = '-';
-    /**
-     * @var string
-     */
-    private $horizontalInsideBorderChar = '-';
-    /**
-     * @var string
-     */
-    private $verticalOutsideBorderChar = '|';
-    /**
-     * @var string
-     */
-    private $verticalInsideBorderChar = '|';
-    /**
-     * @var string
-     */
-    private $crossingChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopRightChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopMidChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopLeftChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingMidRightChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingBottomRightChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingBottomMidChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingBottomLeftChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingMidLeftChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopLeftBottomChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopMidBottomChar = '+';
-    /**
-     * @var string
-     */
-    private $crossingTopRightBottomChar = '+';
-    /**
-     * @var string
-     */
-    private $headerTitleFormat = '<fg=black;bg=white;options=bold> %s </>';
-    /**
-     * @var string
-     */
-    private $footerTitleFormat = '<fg=black;bg=white;options=bold> %s </>';
-    /**
-     * @var string
-     */
-    private $cellHeaderFormat = '<info>%s</info>';
-    /**
-     * @var string
-     */
-    private $cellRowFormat = '%s';
-    /**
-     * @var string
-     */
-    private $cellRowContentFormat = ' %s ';
-    /**
-     * @var string
-     */
-    private $borderFormat = '%s';
-    /**
-     * @var int
-     */
-    private $padType = \STR_PAD_RIGHT;
+    private string $paddingChar = ' ';
+    private string $horizontalOutsideBorderChar = '-';
+    private string $horizontalInsideBorderChar = '-';
+    private string $verticalOutsideBorderChar = '|';
+    private string $verticalInsideBorderChar = '|';
+    private string $crossingChar = '+';
+    private string $crossingTopRightChar = '+';
+    private string $crossingTopMidChar = '+';
+    private string $crossingTopLeftChar = '+';
+    private string $crossingMidRightChar = '+';
+    private string $crossingBottomRightChar = '+';
+    private string $crossingBottomMidChar = '+';
+    private string $crossingBottomLeftChar = '+';
+    private string $crossingMidLeftChar = '+';
+    private string $crossingTopLeftBottomChar = '+';
+    private string $crossingTopMidBottomChar = '+';
+    private string $crossingTopRightBottomChar = '+';
+    private string $headerTitleFormat = '<fg=black;bg=white;options=bold> %s </>';
+    private string $footerTitleFormat = '<fg=black;bg=white;options=bold> %s </>';
+    private string $cellHeaderFormat = '<info>%s</info>';
+    private string $cellRowFormat = '%s';
+    private string $cellRowContentFormat = ' %s ';
+    private string $borderFormat = '%s';
+    private int $padType = \STR_PAD_RIGHT;
     /**
      * Sets padding character, used for cell padding.
      *

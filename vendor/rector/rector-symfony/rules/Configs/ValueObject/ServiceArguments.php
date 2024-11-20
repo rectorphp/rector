@@ -8,19 +8,18 @@ final class ServiceArguments
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @var array<(string | int), (string | Expr)>
      * @readonly
      */
-    private $params;
+    private array $params;
     /**
      * @var array<(string | int), (string | Expr)>
      * @readonly
      */
-    private $envs;
+    private array $envs;
     /**
      * @param array<string|int, string|Expr> $params
      * @param array<string|int, string|Expr> $envs

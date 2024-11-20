@@ -10,19 +10,16 @@ final class ClassSkipVoter
 {
     /**
      * @readonly
-     * @var \Rector\Skipper\Skipper\SkipSkipper
      */
-    private $skipSkipper;
+    private SkipSkipper $skipSkipper;
     /**
      * @readonly
-     * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
-    private $skippedClassResolver;
+    private SkippedClassResolver $skippedClassResolver;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     public function __construct(SkipSkipper $skipSkipper, SkippedClassResolver $skippedClassResolver, ReflectionProvider $reflectionProvider)
     {
         $this->skipSkipper = $skipSkipper;

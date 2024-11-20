@@ -26,31 +26,22 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $useImportsResolver;
+    private UseImportsResolver $useImportsResolver;
     /**
      * @readonly
-     * @var \Rector\Renaming\Collector\RenamedNameCollector
      */
-    private $renamedNameCollector;
+    private RenamedNameCollector $renamedNameCollector;
     /**
      * @var OldToNewType[]
      */
-    private $oldToNewTypes = [];
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
-     * @var PhpNode|null
-     */
-    private $currentPhpNode;
+    private array $oldToNewTypes = [];
+    private bool $hasChanged = \false;
+    private ?PhpNode $currentPhpNode = null;
     public function __construct(StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver, RenamedNameCollector $renamedNameCollector)
     {
         $this->staticTypeMapper = $staticTypeMapper;

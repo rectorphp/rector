@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -32,34 +32,28 @@ final class GetSubscribedEventsClassMethodFactory
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
-    private $visibilityManipulator;
+    private VisibilityManipulator $visibilityManipulator;
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\EventReferenceFactory
      */
-    private $eventReferenceFactory;
+    private \Rector\Symfony\NodeFactory\EventReferenceFactory $eventReferenceFactory;
     /**
      * @var string
      */
@@ -119,7 +113,7 @@ final class GetSubscribedEventsClassMethodFactory
         if ($priority !== null && $priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($priority));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new Int_($priority));
             return new ArrayItem($methodNameWithPriorityArray, $expr);
         }
         return new ArrayItem(new String_($methodName), $expr);
@@ -214,7 +208,7 @@ final class GetSubscribedEventsClassMethodFactory
         if ($eventListenerTag->getPriority() !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($eventListenerTag->getMethod()));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($eventListenerTag->getPriority()));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new Int_($eventListenerTag->getPriority()));
             return new ArrayItem($methodNameWithPriorityArray);
         }
         return new ArrayItem(new String_($eventListenerTag->getMethod()));

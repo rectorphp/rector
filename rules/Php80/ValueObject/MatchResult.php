@@ -8,14 +8,12 @@ final class MatchResult
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Match_
      */
-    private $match;
+    private Match_ $match;
     /**
      * @readonly
-     * @var bool
      */
-    private $shouldRemoveNextStmt;
+    private bool $shouldRemoveNextStmt;
     public function __construct(Match_ $match, bool $shouldRemoveNextStmt)
     {
         $this->match = $match;

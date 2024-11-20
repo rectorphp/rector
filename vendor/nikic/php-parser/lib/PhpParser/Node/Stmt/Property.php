@@ -3,85 +3,102 @@
 declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\PropertyItem;
 class Property extends Node\Stmt
 {
     /** @var int Modifiers */
-    public $flags;
-    /** @var PropertyProperty[] Properties */
-    public $props;
+    public int $flags;
+    /** @var PropertyItem[] Properties */
+    public array $props;
     /** @var null|Identifier|Name|ComplexType Type declaration */
-    public $type;
+    public ?Node $type;
     /** @var Node\AttributeGroup[] PHP attribute groups */
-    public $attrGroups;
+    public array $attrGroups;
+    /** @var Node\PropertyHook[] Property hooks */
+    public array $hooks;
     /**
      * Constructs a class property list node.
      *
-     * @param int                                     $flags      Modifiers
-     * @param PropertyProperty[]                      $props      Properties
-     * @param array                                   $attributes Additional attributes
-     * @param null|string|Identifier|Name|ComplexType $type       Type declaration
-     * @param Node\AttributeGroup[]                   $attrGroups PHP attribute groups
+     * @param int $flags Modifiers
+     * @param PropertyItem[] $props Properties
+     * @param array<string, mixed> $attributes Additional attributes
+     * @param null|Identifier|Name|ComplexType $type Type declaration
+     * @param Node\AttributeGroup[] $attrGroups PHP attribute groups
+     * @param Node\PropertyHook[] $hooks Property hooks
      */
-    public function __construct(int $flags, array $props, array $attributes = [], $type = null, array $attrGroups = [])
+    public function __construct(int $flags, array $props, array $attributes = [], ?Node $type = null, array $attrGroups = [], array $hooks = [])
     {
         $this->attributes = $attributes;
         $this->flags = $flags;
         $this->props = $props;
-        $this->type = \is_string($type) ? new Identifier($type) : $type;
+        $this->type = $type;
         $this->attrGroups = $attrGroups;
+        $this->hooks = $hooks;
     }
     public function getSubNodeNames() : array
     {
-        return ['attrGroups', 'flags', 'type', 'props'];
+        return ['attrGroups', 'flags', 'type', 'props', 'hooks'];
     }
     /**
      * Whether the property is explicitly or implicitly public.
-     *
-     * @return bool
      */
     public function isPublic() : bool
     {
-        return ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC) !== 0 || ($this->flags & \PhpParser\Node\Stmt\Class_::VISIBILITY_MODIFIER_MASK) === 0;
+        return ($this->flags & Modifiers::PUBLIC) !== 0 || ($this->flags & Modifiers::VISIBILITY_MASK) === 0;
     }
     /**
      * Whether the property is protected.
-     *
-     * @return bool
      */
     public function isProtected() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED);
+        return (bool) ($this->flags & Modifiers::PROTECTED);
     }
     /**
      * Whether the property is private.
-     *
-     * @return bool
      */
     public function isPrivate() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        return (bool) ($this->flags & Modifiers::PRIVATE);
     }
     /**
      * Whether the property is static.
-     *
-     * @return bool
      */
     public function isStatic() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC);
+        return (bool) ($this->flags & Modifiers::STATIC);
     }
     /**
      * Whether the property is readonly.
-     *
-     * @return bool
      */
     public function isReadonly() : bool
     {
-        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY);
+        return (bool) ($this->flags & Modifiers::READONLY);
+    }
+    /**
+     * Whether the property has explicit public(set) visibility.
+     */
+    public function isPublicSet() : bool
+    {
+        return (bool) ($this->flags & Modifiers::PUBLIC_SET);
+    }
+    /**
+     * Whether the property has explicit protected(set) visibility.
+     */
+    public function isProtectedSet() : bool
+    {
+        return (bool) ($this->flags & Modifiers::PROTECTED_SET);
+    }
+    /**
+     * Whether the property has explicit private(set) visibility.
+     */
+    public function isPrivateSet() : bool
+    {
+        return (bool) ($this->flags & Modifiers::PRIVATE_SET);
     }
     public function getType() : string
     {

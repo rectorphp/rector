@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -36,10 +36,7 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      * @var int
      */
     private const DEFAULT_LIMIT_VALUE = 1000000;
-    /**
-     * @var int
-     */
-    private $limitValue = self::DEFAULT_LIMIT_VALUE;
+    private int $limitValue = self::DEFAULT_LIMIT_VALUE;
     /**
      * @param mixed[] $configuration
      */
@@ -78,10 +75,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [LNumber::class, DNumber::class];
+        return [Int_::class, Float_::class];
     }
     /**
-     * @param LNumber|DNumber $node
+     * @param Int_|Float_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -113,7 +110,7 @@ CODE_SAMPLE
         return PhpVersionFeature::LITERAL_SEPARATOR;
     }
     /**
-     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $node
      * @param mixed $rawValue
      */
     private function shouldSkip($node, $rawValue) : bool
@@ -129,7 +126,7 @@ CODE_SAMPLE
             return \true;
         }
         $kind = $node->getAttribute(AttributeKey::KIND);
-        if (\in_array($kind, [LNumber::KIND_BIN, LNumber::KIND_OCT, LNumber::KIND_HEX], \true)) {
+        if (\in_array($kind, [Int_::KIND_BIN, Int_::KIND_OCT, Int_::KIND_HEX], \true)) {
             return \true;
         }
         // e+/e-

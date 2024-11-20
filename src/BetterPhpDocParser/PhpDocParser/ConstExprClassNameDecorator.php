@@ -19,14 +19,12 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
-    private $nameScopeFactory;
+    private NameScopeFactory $nameScopeFactory;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser
      */
-    private $phpDocNodeTraverser;
+    private PhpDocNodeTraverser $phpDocNodeTraverser;
     public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
     {
         $this->nameScopeFactory = $nameScopeFactory;

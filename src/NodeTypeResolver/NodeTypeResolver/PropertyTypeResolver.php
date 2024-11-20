@@ -19,9 +19,8 @@ final class PropertyTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
      */
-    private $propertyFetchTypeResolver;
+    private \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver $propertyFetchTypeResolver;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver $propertyFetchTypeResolver)
     {
         $this->propertyFetchTypeResolver = $propertyFetchTypeResolver;

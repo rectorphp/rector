@@ -23,10 +23,7 @@ use RectorPrefix202411\Nette;
 class CachingIterator extends \CachingIterator implements \Countable
 {
     use Nette\SmartObject;
-    /**
-     * @var int
-     */
-    private $counter = 0;
+    private int $counter = 0;
     /**
      * @param iterable|\stdClass $iterable
      */

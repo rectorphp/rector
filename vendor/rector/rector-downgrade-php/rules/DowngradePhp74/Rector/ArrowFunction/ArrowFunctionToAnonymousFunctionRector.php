@@ -4,14 +4,15 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ArrowFunction;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -28,14 +29,12 @@ final class ArrowFunctionToAnonymousFunctionRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
-    private $anonymousFunctionFactory;
+    private AnonymousFunctionFactory $anonymousFunctionFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
@@ -82,24 +81,21 @@ CODE_SAMPLE
         $stmts = [new Return_($node->expr)];
         $anonymousFunctionFactory = $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
         if ($node->expr instanceof Assign && $node->expr->expr instanceof Variable) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst($anonymousFunctionFactory->uses, function (Node $subNode) use($node) : bool {
-                return $subNode instanceof Variable && $this->nodeComparator->areNodesEqual($subNode, $node->expr->expr);
-            });
+            $isFound = (bool) $this->betterNodeFinder->findFirst($anonymousFunctionFactory->uses, fn(Node $subNode): bool => $subNode instanceof Variable && $this->nodeComparator->areNodesEqual($subNode, $node->expr->expr));
             if (!$isFound) {
                 $anonymousFunctionFactory->uses[] = new ClosureUse($node->expr->expr);
             }
         }
         // downgrade "return throw"
-        $this->traverseNodesWithCallable($anonymousFunctionFactory, static function (Node $node) : ?Throw_ {
+        $this->traverseNodesWithCallable($anonymousFunctionFactory, static function (Node $node) : ?Expression {
             if (!$node instanceof Return_) {
                 return null;
             }
-            if (!$node->expr instanceof Node\Expr\Throw_) {
+            if (!$node->expr instanceof Throw_) {
                 return null;
             }
-            $throw = $node->expr;
             // throw expr to throw stmts
-            return new Throw_($throw->expr);
+            return new Expression($node->expr);
         });
         $this->appendUsesFromInsertedVariable($node->expr, $anonymousFunctionFactory);
         return $anonymousFunctionFactory;

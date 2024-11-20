@@ -30,34 +30,28 @@ final class BreakingVariableRenameGuard
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\ConflictingNameResolver
      */
-    private $conflictingNameResolver;
+    private ConflictingNameResolver $conflictingNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\OverridenExistingNamesResolver
      */
-    private $overridenExistingNamesResolver;
+    private OverridenExistingNamesResolver $overridenExistingNamesResolver;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
-    private $typeUnwrapper;
+    private TypeUnwrapper $typeUnwrapper;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @var string
      * @see https://regex101.com/r/1pKLgf/1

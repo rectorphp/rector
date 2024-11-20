@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\List_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;

@@ -17,10 +17,7 @@ namespace RectorPrefix202411\Symfony\Component\Console\Exception;
  */
 class CommandNotFoundException extends \InvalidArgumentException implements ExceptionInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $alternatives;
+    private array $alternatives;
     /**
      * @param string          $message      Exception message to throw
      * @param string[]        $alternatives List of similar defined names

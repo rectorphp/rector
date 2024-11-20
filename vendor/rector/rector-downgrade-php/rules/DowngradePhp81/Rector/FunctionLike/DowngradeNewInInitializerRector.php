@@ -42,14 +42,12 @@ final class DowngradeNewInInitializerRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
-    private $anonymousFunctionFactory;
+    private AnonymousFunctionFactory $anonymousFunctionFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
@@ -162,7 +160,7 @@ CODE_SAMPLE
         if ($functionLike->stmts === null) {
             return $functionLike;
         }
-        $functionLike->stmts = $functionLike->stmts ?? [];
+        $functionLike->stmts ??= [];
         $functionLike->stmts = \array_merge($stmts, $functionLike->stmts);
         return $functionLike;
     }

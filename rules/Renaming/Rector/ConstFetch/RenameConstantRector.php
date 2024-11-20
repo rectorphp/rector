@@ -20,7 +20,7 @@ final class RenameConstantRector extends AbstractRector implements ConfigurableR
     /**
      * @var array<string, string>
      */
-    private $oldToNewConstants = [];
+    private array $oldToNewConstants = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replace constant by new ones', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

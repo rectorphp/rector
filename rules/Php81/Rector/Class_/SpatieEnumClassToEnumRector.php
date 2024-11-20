@@ -21,17 +21,13 @@ final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhp
 {
     /**
      * @readonly
-     * @var \Rector\Php81\NodeFactory\EnumFactory
      */
-    private $enumFactory;
+    private EnumFactory $enumFactory;
     /**
      * @var string
      */
     public const TO_UPPER_SNAKE_CASE = 'toUpperSnakeCase';
-    /**
-     * @var bool
-     */
-    private $toUpperSnakeCase = \false;
+    private bool $toUpperSnakeCase = \false;
     public function __construct(EnumFactory $enumFactory)
     {
         $this->enumFactory = $enumFactory;

@@ -10,19 +10,16 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $oldMethod;
+    private string $oldMethod;
     /**
      * @readonly
-     * @var string
      */
-    private $newMethod;
+    private string $newMethod;
     /**
      * @readonly
      * @var mixed

@@ -14,14 +14,12 @@ final class SetManager
 {
     /**
      * @readonly
-     * @var \Rector\Bridge\SetProviderCollector
      */
-    private $setProviderCollector;
+    private SetProviderCollector $setProviderCollector;
     /**
      * @readonly
-     * @var \Rector\Composer\InstalledPackageResolver
      */
-    private $installedPackageResolver;
+    private InstalledPackageResolver $installedPackageResolver;
     public function __construct(SetProviderCollector $setProviderCollector, InstalledPackageResolver $installedPackageResolver)
     {
         $this->setProviderCollector = $setProviderCollector;

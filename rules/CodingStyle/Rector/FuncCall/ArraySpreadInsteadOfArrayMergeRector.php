@@ -7,11 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector;
@@ -27,14 +28,12 @@ final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
-    private $arrayTypeAnalyzer;
+    private ArrayTypeAnalyzer $arrayTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php\PhpVersionProvider
      */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
     public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer, PhpVersionProvider $phpVersionProvider)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
@@ -126,12 +125,15 @@ CODE_SAMPLE
             return \true;
         }
         $arrayStaticType = $this->getType($expr);
-        if (!$arrayStaticType instanceof ArrayType) {
+        if (!$arrayStaticType->isArray()->yes()) {
             return \true;
         }
         return !$this->isArrayKeyTypeAllowed($arrayStaticType);
     }
-    private function isArrayKeyTypeAllowed(ArrayType $arrayType) : bool
+    /**
+     * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $arrayType
+     */
+    private function isArrayKeyTypeAllowed($arrayType) : bool
     {
         if ($arrayType->getKeyType()->isInteger()->yes()) {
             return \true;

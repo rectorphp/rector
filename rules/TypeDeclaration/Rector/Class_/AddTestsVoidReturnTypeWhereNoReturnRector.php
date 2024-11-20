@@ -20,14 +20,12 @@ final class AddTestsVoidReturnTypeWhereNoReturnRector extends AbstractRector imp
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
-    private $silentVoidResolver;
+    private SilentVoidResolver $silentVoidResolver;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, SilentVoidResolver $silentVoidResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;

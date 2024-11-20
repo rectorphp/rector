@@ -15,12 +15,12 @@ final class FollowedByCommaAnalyzer
         while (isset($oldTokens[$nextTokenPosition])) {
             $currentToken = $oldTokens[$nextTokenPosition];
             // only space
-            if (\is_array($currentToken) || StringUtils::isMatch($currentToken, '#\\s+#')) {
+            if (StringUtils::isMatch((string) $currentToken, '#\\s+#')) {
                 ++$nextTokenPosition;
                 continue;
             }
             // without comma
-            if (\in_array($currentToken, ['(', ')', ';'], \true)) {
+            if (\in_array((string) $currentToken, ['(', ')', ';'], \true)) {
                 return \false;
             }
             break;

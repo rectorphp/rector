@@ -48,62 +48,20 @@ class Command
      * @deprecated since Symfony 6.1, use the AsCommand attribute instead
      */
     protected static $defaultDescription;
-    /**
-     * @var \Symfony\Component\Console\Application|null
-     */
-    private $application;
-    /**
-     * @var string|null
-     */
-    private $name;
-    /**
-     * @var string|null
-     */
-    private $processTitle;
-    /**
-     * @var mixed[]
-     */
-    private $aliases = [];
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition
-     */
-    private $definition;
-    /**
-     * @var bool
-     */
-    private $hidden = \false;
-    /**
-     * @var string
-     */
-    private $help = '';
-    /**
-     * @var string
-     */
-    private $description = '';
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition|null
-     */
-    private $fullDefinition;
-    /**
-     * @var bool
-     */
-    private $ignoreValidationErrors = \false;
-    /**
-     * @var \Closure|null
-     */
-    private $code;
-    /**
-     * @var mixed[]
-     */
-    private $synopsis = [];
-    /**
-     * @var mixed[]
-     */
-    private $usages = [];
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet|null
-     */
-    private $helperSet;
+    private ?Application $application = null;
+    private ?string $name = null;
+    private ?string $processTitle = null;
+    private array $aliases = [];
+    private InputDefinition $definition;
+    private bool $hidden = \false;
+    private string $help = '';
+    private string $description = '';
+    private ?InputDefinition $fullDefinition = null;
+    private bool $ignoreValidationErrors = \false;
+    private ?\Closure $code = null;
+    private array $synopsis = [];
+    private array $usages = [];
+    private ?HelperSet $helperSet = null;
     public static function getDefaultName() : ?string
     {
         $class = static::class;

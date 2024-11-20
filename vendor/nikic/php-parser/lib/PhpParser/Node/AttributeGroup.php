@@ -3,15 +3,14 @@
 declare (strict_types=1);
 namespace PhpParser\Node;
 
-use PhpParser\Node;
 use PhpParser\NodeAbstract;
 class AttributeGroup extends NodeAbstract
 {
     /** @var Attribute[] Attributes */
-    public $attrs;
+    public array $attrs;
     /**
      * @param Attribute[] $attrs PHP attributes
-     * @param array $attributes Additional node attributes
+     * @param array<string, mixed> $attributes Additional node attributes
      */
     public function __construct(array $attrs, array $attributes = [])
     {

@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use PHPStan\PhpDocParser\ParserConfig;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -30,19 +31,17 @@ final class BetterPhpDocParser extends PhpDocParser
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
-    private $tokenIteratorFactory;
+    private TokenIteratorFactory $tokenIteratorFactory;
     /**
      * @var PhpDocNodeDecoratorInterface[]
      * @readonly
      */
-    private $phpDocNodeDecorators;
+    private array $phpDocNodeDecorators;
     /**
      * @readonly
-     * @var \Rector\Util\Reflection\PrivatesAccessor
      */
-    private $privatesAccessor;
+    private PrivatesAccessor $privatesAccessor;
     /**
      * @var string
      * @see https://regex101.com/r/JDzr0c/1
@@ -56,26 +55,18 @@ final class BetterPhpDocParser extends PhpDocParser
     /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
      */
-    public function __construct(TypeParser $typeParser, ConstExprParser $constExprParser, TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, PrivatesAccessor $privatesAccessor)
+    public function __construct(ParserConfig $parserConfig, TypeParser $typeParser, ConstExprParser $constExprParser, TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, PrivatesAccessor $privatesAccessor)
     {
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->phpDocNodeDecorators = $phpDocNodeDecorators;
         $this->privatesAccessor = $privatesAccessor;
         parent::__construct(
+            // ParserConfig
+            $parserConfig,
             // TypeParser
             $typeParser,
             // ConstExprParser
-            $constExprParser,
-            // requireWhitespaceBeforeDescription
-            \false,
-            // preserveTypeAliasesWithInvalidTypes
-            \false,
-            // usedAttributes
-            ['lines' => \true, 'indexes' => \true],
-            // parseDoctrineAnnotations
-            \false,
-            // textBetweenTagsBelongsToDescription, default to false, exists since 1.23.0
-            \true
+            $constExprParser
         );
     }
     public function parseWithNode(BetterTokenIterator $betterTokenIterator, Node $node) : PhpDocNode
@@ -117,16 +108,12 @@ final class BetterPhpDocParser extends PhpDocParser
         $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
         $endPosition = $tokenIterator->currentPosition();
         if ($isPrecededByHorizontalWhitespace && \property_exists($phpDocTagValueNode, 'description')) {
-            $phpDocTagValueNode->description = Strings::replace((string) $phpDocTagValueNode->description, self::NEW_LINE_REGEX, static function (array $match) : string {
-                return $match['new_line'] . ' * ';
-            });
+            $phpDocTagValueNode->description = Strings::replace((string) $phpDocTagValueNode->description, self::NEW_LINE_REGEX, static fn(array $match): string => $match['new_line'] . ' * ');
         }
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         if ($phpDocTagValueNode instanceof GenericTagValueNode) {
-            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static function (array $match) {
-                return $match['new_line'];
-            });
+            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match) => $match['new_line']);
         }
         return $phpDocTagValueNode;
     }

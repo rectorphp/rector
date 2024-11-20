@@ -20,18 +20,9 @@ use function RectorPrefix202411\Symfony\Component\String\b;
  */
 class OutputFormatter implements WrappableOutputFormatterInterface
 {
-    /**
-     * @var bool
-     */
-    private $decorated;
-    /**
-     * @var mixed[]
-     */
-    private $styles = [];
-    /**
-     * @var \Symfony\Component\Console\Formatter\OutputFormatterStyleStack
-     */
-    private $styleStack;
+    private bool $decorated;
+    private array $styles = [];
+    private OutputFormatterStyleStack $styleStack;
     public function __clone()
     {
         $this->styleStack = clone $this->styleStack;

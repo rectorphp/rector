@@ -13,13 +13,12 @@ final class EntityMappingResolver
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $reflectionProvider;
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var EntityMapping[]
      */
-    private $entityMappings = [];
+    private array $entityMappings = [];
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;

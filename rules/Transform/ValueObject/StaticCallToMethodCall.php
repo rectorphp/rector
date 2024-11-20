@@ -12,24 +12,20 @@ final class StaticCallToMethodCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $staticClass;
+    private string $staticClass;
     /**
      * @readonly
-     * @var string
      */
-    private $staticMethod;
+    private string $staticMethod;
     /**
      * @readonly
-     * @var string
      */
-    private $classType;
+    private string $classType;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     public function __construct(string $staticClass, string $staticMethod, string $classType, string $methodName)
     {
         $this->staticClass = $staticClass;

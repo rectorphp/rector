@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\FuncCall;
 
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -25,14 +25,12 @@ final class MoneyFormatToNumberFormatRector extends AbstractRector implements Mi
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ArgsAnalyzer
      */
-    private $argsAnalyzer;
+    private ArgsAnalyzer $argsAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver)
     {
         $this->argsAnalyzer = $argsAnalyzer;
@@ -82,9 +80,9 @@ CODE_SAMPLE
     }
     private function warpInNumberFormatFuncCall(FuncCall $funcCall, Expr $expr) : FuncCall
     {
-        $roundFuncCall = $this->nodeFactory->createFuncCall('round', [$expr, new LNumber(2), new ConstFetch(new Name('PHP_ROUND_HALF_ODD'))]);
+        $roundFuncCall = $this->nodeFactory->createFuncCall('round', [$expr, new Int_(2), new ConstFetch(new Name('PHP_ROUND_HALF_ODD'))]);
         $funcCall->name = new Name('number_format');
-        $funcCall->args = [new Arg($roundFuncCall), new Arg(new LNumber(2)), new Arg(new String_('.')), new Arg(new String_(''))];
+        $funcCall->args = [new Arg($roundFuncCall), new Arg(new Int_(2)), new Arg(new String_('.')), new Arg(new String_(''))];
         return $funcCall;
     }
 }

@@ -33,49 +33,40 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
-    private $collectionTypeFactory;
+    private CollectionTypeFactory $collectionTypeFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver
      */
-    private $collectionTypeResolver;
+    private CollectionTypeResolver $collectionTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver
      */
-    private $collectionVarTagValueNodeResolver;
+    private CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
-    private $phpDocTypeChanger;
+    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
-    private $doctrineDocBlockResolver;
+    private DoctrineDocBlockResolver $doctrineDocBlockResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
-    private $attributeFinder;
+    private AttributeFinder $attributeFinder;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver
      */
-    private $targetEntityResolver;
+    private TargetEntityResolver $targetEntityResolver;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\CodeQuality\SetterCollectionResolver
      */
-    private $setterCollectionResolver;
+    private SetterCollectionResolver $setterCollectionResolver;
     public function __construct(CollectionTypeFactory $collectionTypeFactory, CollectionTypeResolver $collectionTypeResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, PhpDocTypeChanger $phpDocTypeChanger, DoctrineDocBlockResolver $doctrineDocBlockResolver, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver, PhpDocInfoFactory $phpDocInfoFactory, SetterCollectionResolver $setterCollectionResolver)
     {
         $this->collectionTypeFactory = $collectionTypeFactory;

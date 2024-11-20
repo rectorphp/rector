@@ -9,14 +9,12 @@ final class EventReferenceToMethodName implements EventReferenceToMethodNameInte
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\ClassConstFetch
      */
-    private $classConstFetch;
+    private ClassConstFetch $classConstFetch;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     public function __construct(ClassConstFetch $classConstFetch, string $methodName)
     {
         $this->classConstFetch = $classConstFetch;

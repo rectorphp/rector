@@ -16,23 +16,20 @@ final class OverridenExistingNamesResolver
 {
     /**
      * @readonly
-     * @var \Rector\Naming\PhpArray\ArrayFilter
      */
-    private $arrayFilter;
+    private ArrayFilter $arrayFilter;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @var array<int, array<int, string>>
      */
-    private $overridenExistingVariableNamesByClassMethod = [];
+    private array $overridenExistingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->arrayFilter = $arrayFilter;
@@ -89,7 +86,6 @@ final class OverridenExistingNamesResolver
             }
             $currentlyUsedNames[] = $currentVariableName;
         }
-        $currentlyUsedNames = \array_values($currentlyUsedNames);
         $currentlyUsedNames = $this->arrayFilter->filterWithAtLeastTwoOccurences($currentlyUsedNames);
         $this->overridenExistingVariableNamesByClassMethod[$classMethodId] = $currentlyUsedNames;
         return $currentlyUsedNames;

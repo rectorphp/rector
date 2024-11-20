@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -26,29 +26,24 @@ final class ThisRenderFactory
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\ArrayFromCompactFactory
      */
-    private $arrayFromCompactFactory;
+    private \Rector\Symfony\NodeFactory\ArrayFromCompactFactory $arrayFromCompactFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\Helper\TemplateGuesser
      */
-    private $templateGuesser;
+    private TemplateGuesser $templateGuesser;
     public function __construct(\Rector\Symfony\NodeFactory\ArrayFromCompactFactory $arrayFromCompactFactory, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, TemplateGuesser $templateGuesser)
     {
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;

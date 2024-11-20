@@ -23,14 +23,12 @@ final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private StmtsManipulator $stmtsManipulator;
     public function __construct(IfManipulator $ifManipulator, StmtsManipulator $stmtsManipulator)
     {
         $this->ifManipulator = $ifManipulator;
@@ -97,9 +95,7 @@ CODE_SAMPLE
             if (!$this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($if, $stmt->expr)) {
                 continue;
             }
-            \end($if->stmts);
-            $lastIfStmtKey = \key($if->stmts);
-            \reset($if->stmts);
+            $lastIfStmtKey = \array_key_last($if->stmts);
             /** @var Assign $assign */
             $assign = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
             $returnLastIf = new Return_($assign->expr);
@@ -116,7 +112,7 @@ CODE_SAMPLE
             $stmt->expr = $assign->expr;
             $lastStmt = \array_pop($node->stmts);
             $elseStmtsExceptLast = \array_slice($elseStmts, 0, -1);
-            $node->stmts = \array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
+            $node->stmts = [...$node->stmts, ...$elseStmtsExceptLast, $lastStmt];
             return $node;
         }
         return null;

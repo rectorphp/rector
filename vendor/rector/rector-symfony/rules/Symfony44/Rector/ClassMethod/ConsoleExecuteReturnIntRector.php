@@ -10,11 +10,10 @@ use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\TerminatedNodeAnalyzer;
@@ -30,18 +29,13 @@ final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\TerminatedNodeAnalyzer
      */
-    private $terminatedNodeAnalyzer;
+    private TerminatedNodeAnalyzer $terminatedNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ValueResolver $valueResolver;
+    private bool $hasChanged = \false;
     public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer, ValueResolver $valueResolver)
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;
@@ -102,7 +96,7 @@ CODE_SAMPLE
     private function refactorReturnTypeDeclaration(ClassMethod $classMethod) : void
     {
         // already set
-        if ($classMethod->returnType !== null && $this->isName($classMethod->returnType, 'int')) {
+        if ($classMethod->returnType instanceof Node && $this->isName($classMethod->returnType, 'int')) {
             return;
         }
         $classMethod->returnType = new Identifier('int');
@@ -116,7 +110,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) : ?int {
             // skip anonymous class/function
             if ($node instanceof FunctionLike || $node instanceof Class_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Return_) {
                 return null;
@@ -160,11 +154,8 @@ CODE_SAMPLE
     }
     private function processReturn0ToMethod(ClassMethod $classMethod) : void
     {
-        $stmts = (array) $classMethod->stmts;
-        \end($stmts);
-        $lastKey = \key($stmts);
-        \reset($stmts);
-        $return = new Return_(new LNumber(0));
+        $lastKey = \array_key_last((array) $classMethod->stmts);
+        $return = new Return_(new \PhpParser\Node\Scalar\Int_(0));
         if ($lastKey !== null && (isset($classMethod->stmts[$lastKey]) && $this->terminatedNodeAnalyzer->isAlwaysTerminated($classMethod, $classMethod->stmts[$lastKey], $return))) {
             return;
         }
@@ -173,15 +164,15 @@ CODE_SAMPLE
     private function setReturnTo0InsteadOfNull(Return_ $return) : void
     {
         if (!$return->expr instanceof Expr) {
-            $return->expr = new LNumber(0);
+            $return->expr = new \PhpParser\Node\Scalar\Int_(0);
             return;
         }
         if ($this->valueResolver->isNull($return->expr)) {
-            $return->expr = new LNumber(0);
+            $return->expr = new \PhpParser\Node\Scalar\Int_(0);
             return;
         }
         if ($return->expr instanceof Coalesce && $this->valueResolver->isNull($return->expr->right)) {
-            $return->expr->right = new LNumber(0);
+            $return->expr->right = new \PhpParser\Node\Scalar\Int_(0);
             return;
         }
         if ($return->expr instanceof Ternary) {
@@ -199,11 +190,11 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         if ($ternary->if instanceof Expr && $this->valueResolver->isNull($ternary->if)) {
-            $ternary->if = new LNumber(0);
+            $ternary->if = new \PhpParser\Node\Scalar\Int_(0);
             $hasChanged = \true;
         }
         if ($this->valueResolver->isNull($ternary->else)) {
-            $ternary->else = new LNumber(0);
+            $ternary->else = new \PhpParser\Node\Scalar\Int_(0);
             $hasChanged = \true;
         }
         return $hasChanged;

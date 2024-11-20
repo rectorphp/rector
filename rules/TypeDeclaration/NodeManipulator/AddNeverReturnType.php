@@ -11,7 +11,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
@@ -23,29 +24,24 @@ final class AddNeverReturnType
 {
     /**
      * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $classMethodReturnTypeOverrideGuard;
+    private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\Reflection\ClassModifierChecker
      */
-    private $classModifierChecker;
+    private ClassModifierChecker $classModifierChecker;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer
      */
-    private $neverFuncCallAnalyzer;
+    private NeverFuncCallAnalyzer $neverFuncCallAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ClassModifierChecker $classModifierChecker, BetterNodeFinder $betterNodeFinder, NeverFuncCallAnalyzer $neverFuncCallAnalyzer, NodeNameResolver $nodeNameResolver)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -103,7 +99,7 @@ final class AddNeverReturnType
      */
     private function hasNeverNodesOrNeverFuncCalls($node) : bool
     {
-        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [Throw_::class]);
+        $hasNeverNodes = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn(Node $subNode): bool => $subNode instanceof Expression && $subNode->expr instanceof Throw_);
         if ($hasNeverNodes) {
             return \true;
         }

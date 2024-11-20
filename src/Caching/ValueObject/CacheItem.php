@@ -11,9 +11,8 @@ final class CacheItem
 {
     /**
      * @readonly
-     * @var string
      */
-    private $variableKey;
+    private string $variableKey;
     /**
      * @readonly
      * @var mixed

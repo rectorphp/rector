@@ -11,9 +11,8 @@ final class NodePrinter
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
     /**
      * @var string
      * @see https://regex101.com/r/Fe8n73/1
@@ -42,12 +41,8 @@ final class NodePrinter
     private function addConsoleColors(string $contents) : string
     {
         // decorate class names
-        $colorContents = Strings::replace($contents, self::CLASS_NAME_REGEX, static function (array $match) : string {
-            return '<fg=green>' . $match['class_name'] . '</>(';
-        });
+        $colorContents = Strings::replace($contents, self::CLASS_NAME_REGEX, static fn(array $match): string => '<fg=green>' . $match['class_name'] . '</>(');
         // decorate keys
-        return Strings::replace($colorContents, self::PROPERTY_KEY_REGEX, static function (array $match) : string {
-            return '<fg=yellow>' . $match['key'] . '</>:';
-        });
+        return Strings::replace($colorContents, self::PROPERTY_KEY_REGEX, static fn(array $match): string => '<fg=yellow>' . $match['key'] . '</>:');
     }
 }

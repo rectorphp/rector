@@ -16,14 +16,12 @@ final class SwitchAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
-    private $typeFactory;
+    private TypeFactory $typeFactory;
     public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -76,9 +74,7 @@ final class SwitchAnalyzer
             if (!$case->cond instanceof Expr) {
                 continue;
             }
-            $stmtsWithoutBreak = \array_filter($case->stmts, static function (Node $node) : bool {
-                return !$node instanceof Break_;
-            });
+            $stmtsWithoutBreak = \array_filter($case->stmts, static fn(Node $node): bool => !$node instanceof Break_);
             if (\count($stmtsWithoutBreak) !== 1) {
                 return \false;
             }
@@ -89,9 +85,7 @@ final class SwitchAnalyzer
     {
         foreach ($switch->cases as $case) {
             if (!$case->cond instanceof Expr) {
-                $stmtsWithoutBreak = \array_filter($case->stmts, static function (Node $node) : bool {
-                    return !$node instanceof Break_;
-                });
+                $stmtsWithoutBreak = \array_filter($case->stmts, static fn(Node $node): bool => !$node instanceof Break_);
                 return \count($stmtsWithoutBreak) === 1;
             }
         }

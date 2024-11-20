@@ -10,9 +10,8 @@ final class FormTypeStringToTypeProvider
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
-    private $serviceMapProvider;
+    private ServiceMapProvider $serviceMapProvider;
     /**
      * @var array<string, string>
      */
@@ -20,7 +19,7 @@ final class FormTypeStringToTypeProvider
     /**
      * @var array<string, string>
      */
-    private $customServiceFormTypeByAlias = [];
+    private array $customServiceFormTypeByAlias = [];
     public function __construct(ServiceMapProvider $serviceMapProvider)
     {
         $this->serviceMapProvider = $serviceMapProvider;

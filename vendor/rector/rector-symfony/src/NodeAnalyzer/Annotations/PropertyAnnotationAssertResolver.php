@@ -13,19 +13,16 @@ final class PropertyAnnotationAssertResolver
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory
      */
-    private $doctrineAnnotationFromNewFactory;
+    private DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher
      */
-    private $stmtMethodCallMatcher;
+    private \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher $stmtMethodCallMatcher;
     public function __construct(ValueResolver $valueResolver, DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory, \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher $stmtMethodCallMatcher)
     {
         $this->valueResolver = $valueResolver;

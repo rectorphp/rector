@@ -25,18 +25,16 @@ final class YamlToAttributeDoctrineMappingRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\CodeQuality\EntityMappingResolver
      */
-    private $entityMappingResolver;
+    private EntityMappingResolver $entityMappingResolver;
     /**
      * @readonly
-     * @var \Rector\Doctrine\CodeQuality\AttributeTransformer\YamlToAttributeTransformer
      */
-    private $yamlToAttributeTransformer;
+    private YamlToAttributeTransformer $yamlToAttributeTransformer;
     /**
      * @var string[]
      */
-    private $yamlMappingDirectories = [];
+    private array $yamlMappingDirectories = [];
     public function __construct(EntityMappingResolver $entityMappingResolver, YamlToAttributeTransformer $yamlToAttributeTransformer)
     {
         $this->entityMappingResolver = $entityMappingResolver;

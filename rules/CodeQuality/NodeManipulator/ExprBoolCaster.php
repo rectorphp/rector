@@ -19,24 +19,20 @@ final class ExprBoolCaster
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
-    private $typeUnwrapper;
+    private TypeUnwrapper $typeUnwrapper;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer
      */
-    private $staticTypeAnalyzer;
+    private StaticTypeAnalyzer $staticTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\NodeFactory
      */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
     public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper, StaticTypeAnalyzer $staticTypeAnalyzer, NodeFactory $nodeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

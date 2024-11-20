@@ -15,18 +15,16 @@ final class SimplePhpParser
 {
     /**
      * @readonly
-     * @var \PhpParser\Parser
      */
-    private $phpParser;
+    private Parser $phpParser;
     /**
      * @readonly
-     * @var \PhpParser\NodeTraverser
      */
-    private $nodeTraverser;
+    private NodeTraverser $nodeTraverser;
     public function __construct()
     {
         $parserFactory = new ParserFactory();
-        $this->phpParser = $parserFactory->create(ParserFactory::ONLY_PHP7);
+        $this->phpParser = $parserFactory->createForNewestSupportedVersion();
         $this->nodeTraverser = new NodeTraverser();
         $this->nodeTraverser->addVisitor(new AssignedToNodeVisitor());
     }

@@ -88,9 +88,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        \end($node->stmts);
-        $totalKeys = \key($node->stmts);
-        \reset($node->stmts);
+        $totalKeys = \array_key_last($node->stmts);
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
             if (!isset($node->stmts[$key], $node->stmts[$key + 1])) {
                 break;

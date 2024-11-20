@@ -27,29 +27,24 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\ClassMethodManipulator
      */
-    private $classMethodManipulator;
+    private ClassMethodManipulator $classMethodManipulator;
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator
      */
-    private $controllerClassMethodManipulator;
+    private ControllerClassMethodManipulator $controllerClassMethodManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ParamAnalyzer
      */
-    private $paramAnalyzer;
+    private ParamAnalyzer $paramAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     public function __construct(ClassMethodManipulator $classMethodManipulator, ControllerClassMethodManipulator $controllerClassMethodManipulator, ParamAnalyzer $paramAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->classMethodManipulator = $classMethodManipulator;

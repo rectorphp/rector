@@ -29,56 +29,27 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
 {
     /**
      * @readonly
-     * @var \Symfony\Component\Stopwatch\Stopwatch
      */
-    private $stopwatch;
+    private Stopwatch $stopwatch;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Command\Command
      */
-    public $command;
-    /**
-     * @var int
-     */
-    public $exitCode;
-    /**
-     * @var int|null
-     */
-    public $interruptedBySignal;
-    /**
-     * @var bool
-     */
-    public $ignoreValidation;
-    /**
-     * @var bool
-     */
-    public $isInteractive = \false;
-    /**
-     * @var string
-     */
-    public $duration = 'n/a';
-    /**
-     * @var string
-     */
-    public $maxMemoryUsage = 'n/a';
-    /**
-     * @var \Symfony\Component\Console\Input\InputInterface
-     */
-    public $input;
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    public $output;
+    public Command $command;
+    public int $exitCode;
+    public ?int $interruptedBySignal = null;
+    public bool $ignoreValidation;
+    public bool $isInteractive = \false;
+    public string $duration = 'n/a';
+    public string $maxMemoryUsage = 'n/a';
+    public InputInterface $input;
+    public OutputInterface $output;
     /** @var array<string, mixed> */
-    public $arguments;
+    public array $arguments;
     /** @var array<string, mixed> */
-    public $options;
+    public array $options;
     /** @var array<string, mixed> */
-    public $interactiveInputs = [];
-    /**
-     * @var mixed[]
-     */
-    public $handledSignals = [];
+    public array $interactiveInputs = [];
+    public array $handledSignals = [];
     public function __construct(Command $command, Stopwatch $stopwatch)
     {
         $this->stopwatch = $stopwatch;

@@ -5,8 +5,8 @@ namespace Rector\Symfony\Symfony44\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
@@ -24,14 +24,12 @@ final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ArgsAnalyzer
      */
-    private $argsAnalyzer;
+    private ArgsAnalyzer $argsAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
-    private $controllerAnalyzer;
+    private ControllerAnalyzer $controllerAnalyzer;
     public function __construct(ArgsAnalyzer $argsAnalyzer, ControllerAnalyzer $controllerAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\ClassMethod;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -31,9 +32,8 @@ final class CreateMockToAnonymousClassRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -197,6 +197,6 @@ CODE_SAMPLE
             throw new NotImplementedYetException();
         }
         $returnedExpr = $methodCall->getArgs()[0]->value;
-        return new ClassMethod($methodName, ['flags' => Class_::MODIFIER_PUBLIC, 'stmts' => [new Return_($returnedExpr)]]);
+        return new ClassMethod($methodName, ['flags' => Modifiers::PUBLIC, 'stmts' => [new Return_($returnedExpr)]]);
     }
 }

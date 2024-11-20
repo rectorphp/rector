@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute;
 
+use PhpParser\Node\UseItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
@@ -24,7 +24,7 @@ final class UseAliasNameMatcher
             foreach ($use->uses as $useUse) {
                 // we need to use original use statement
                 $originalUseUseNode = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
-                if (!$originalUseUseNode instanceof UseUse) {
+                if (!$originalUseUseNode instanceof UseItem) {
                     continue;
                 }
                 if (!$originalUseUseNode->alias instanceof Identifier) {

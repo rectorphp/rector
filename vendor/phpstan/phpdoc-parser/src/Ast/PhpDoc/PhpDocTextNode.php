@@ -7,8 +7,7 @@ use PHPStan\PhpDocParser\Ast\NodeAttributes;
 class PhpDocTextNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
 {
     use NodeAttributes;
-    /** @var string */
-    public $text;
+    public string $text;
     public function __construct(string $text)
     {
         $this->text = $text;

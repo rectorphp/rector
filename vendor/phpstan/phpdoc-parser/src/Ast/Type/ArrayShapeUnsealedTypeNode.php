@@ -9,10 +9,8 @@ use function sprintf;
 class ArrayShapeUnsealedTypeNode implements Node
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $valueType;
-    /** @var TypeNode|null */
-    public $keyType;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $valueType;
+    public ?\PHPStan\PhpDocParser\Ast\Type\TypeNode $keyType = null;
     public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $valueType, ?\PHPStan\PhpDocParser\Ast\Type\TypeNode $keyType)
     {
         $this->valueType = $valueType;

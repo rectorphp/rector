@@ -12,13 +12,12 @@ final class NamedSimplePhpParser
 {
     /**
      * @readonly
-     * @var \PhpParser\Parser
      */
-    private $phpParser;
+    private Parser $phpParser;
     public function __construct()
     {
         $parserFactory = new ParserFactory();
-        $this->phpParser = $parserFactory->create(ParserFactory::ONLY_PHP7);
+        $this->phpParser = $parserFactory->createForNewestSupportedVersion();
     }
     /**
      * @return Stmt[]

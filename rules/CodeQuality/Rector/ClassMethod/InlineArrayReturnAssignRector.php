@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
@@ -27,14 +27,12 @@ final class InlineArrayReturnAssignRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver
      */
-    private $variableDimFetchAssignResolver;
+    private VariableDimFetchAssignResolver $variableDimFetchAssignResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(VariableDimFetchAssignResolver $variableDimFetchAssignResolver, ValueResolver $valueResolver)
     {
         $this->variableDimFetchAssignResolver = $variableDimFetchAssignResolver;
@@ -150,9 +148,7 @@ CODE_SAMPLE
      */
     private function areAssignExclusiveToDimFetch(array $stmts) : bool
     {
-        \end($stmts);
-        $lastKey = \key($stmts);
-        \reset($stmts);
+        $lastKey = \array_key_last($stmts);
         foreach ($stmts as $key => $stmt) {
             if ($key === $lastKey) {
                 // skip last item

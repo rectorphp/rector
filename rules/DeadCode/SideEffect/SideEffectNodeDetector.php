@@ -23,14 +23,12 @@ final class SideEffectNodeDetector
 {
     /**
      * @readonly
-     * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
-    private $pureFunctionDetector;
+    private \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var array<class-string<Expr>>
      */
@@ -45,9 +43,7 @@ final class SideEffectNodeDetector
         if ($expr instanceof Assign) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) use($scope) : bool {
-            return $this->detectCallExpr($subNode, $scope);
-        });
+        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->detectCallExpr($subNode, $scope));
     }
     public function detectCallExpr(Node $node, Scope $scope) : bool
     {

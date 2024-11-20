@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
+use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -64,7 +64,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
             if ($node instanceof Ternary) {
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if (!$node instanceof FuncCall) {
                 return null;

@@ -16,23 +16,20 @@ final class ChangedFilesDetector
 {
     /**
      * @readonly
-     * @var \Rector\Caching\Config\FileHashComputer
      */
-    private $fileHashComputer;
+    private FileHashComputer $fileHashComputer;
     /**
      * @readonly
-     * @var \Rector\Caching\Cache
      */
-    private $cache;
+    private Cache $cache;
     /**
      * @readonly
-     * @var \Rector\Util\FileHasher
      */
-    private $fileHasher;
+    private FileHasher $fileHasher;
     /**
      * @var array<string, true>
      */
-    private $cachableFiles = [];
+    private array $cachableFiles = [];
     public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher)
     {
         $this->fileHashComputer = $fileHashComputer;

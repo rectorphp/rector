@@ -29,33 +29,26 @@ final class SimplifyUselessVariableRector extends AbstractRector implements Conf
 {
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\AssignAndBinaryMap
      */
-    private $assignAndBinaryMap;
+    private AssignAndBinaryMap $assignAndBinaryMap;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\VariableAnalyzer
      */
-    private $variableAnalyzer;
+    private VariableAnalyzer $variableAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\CallAnalyzer
      */
-    private $callAnalyzer;
+    private CallAnalyzer $callAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @api
      * @var string
      */
     public const ONLY_DIRECT_ASSIGN = 'only_direct_assign';
-    /**
-     * @var bool
-     */
-    private $onlyDirectAssign = \false;
+    private bool $onlyDirectAssign = \false;
     public function __construct(AssignAndBinaryMap $assignAndBinaryMap, VariableAnalyzer $variableAnalyzer, CallAnalyzer $callAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;

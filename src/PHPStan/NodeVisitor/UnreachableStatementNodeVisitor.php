@@ -16,19 +16,16 @@ final class UnreachableStatementNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
     /**
      * @readonly
-     * @var string
      */
-    private $filePath;
+    private string $filePath;
     /**
      * @readonly
-     * @var \PHPStan\Analyser\MutatingScope
      */
-    private $mutatingScope;
+    private MutatingScope $mutatingScope;
     public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, string $filePath, MutatingScope $mutatingScope)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;

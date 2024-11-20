@@ -9,19 +9,16 @@ final class StaticCallToFuncCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @readonly
-     * @var string
      */
-    private $function;
+    private string $function;
     public function __construct(string $class, string $method, string $function)
     {
         $this->class = $class;

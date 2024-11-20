@@ -22,19 +22,16 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector implements 
 {
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\StmtsManipulator
      */
-    private $stmtsManipulator;
+    private StmtsManipulator $stmtsManipulator;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
-     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
-    private $exprUsedInNodeAnalyzer;
+    private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer;
     public function __construct(StmtsManipulator $stmtsManipulator, BetterNodeFinder $betterNodeFinder, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->stmtsManipulator = $stmtsManipulator;
@@ -94,9 +91,7 @@ CODE_SAMPLE
                 }
                 /** @var string $variableName */
                 $variableName = $this->getName($caughtVar);
-                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst($catch->stmts, function (Node $subNode) use($caughtVar) : bool {
-                    return $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar);
-                });
+                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst($catch->stmts, fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar));
                 if ($isFoundInCatchStmts) {
                     continue;
                 }

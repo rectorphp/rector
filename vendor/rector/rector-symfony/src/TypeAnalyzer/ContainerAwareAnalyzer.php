@@ -10,13 +10,12 @@ final class ContainerAwareAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @var ObjectType[]
      */
-    private $getMethodAwareObjectTypes = [];
+    private array $getMethodAwareObjectTypes = [];
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

@@ -27,14 +27,8 @@ use RectorPrefix202411\Symfony\Component\Console\Formatter\OutputFormatterInterf
  */
 class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $stderr;
-    /**
-     * @var mixed[]
-     */
-    private $consoleSectionOutputs = [];
+    private OutputInterface $stderr;
+    private array $consoleSectionOutputs = [];
     /**
      * @param int                           $verbosity The verbosity level (one of the VERBOSITY constants in OutputInterface)
      * @param bool|null                     $decorated Whether to decorate messages (null for auto-guessing)

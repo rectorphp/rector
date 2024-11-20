@@ -7,10 +7,8 @@ use PHPStan\PhpDocParser\Ast\NodeAttributes;
 class OffsetAccessTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $type;
-    /** @var TypeNode */
-    public $offset;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $type;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $offset;
     public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type, \PHPStan\PhpDocParser\Ast\Type\TypeNode $offset)
     {
         $this->type = $type;

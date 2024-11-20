@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
+use PHPStan\Reflection\ExtendedParametersAcceptor;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -14,15 +17,12 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\Native\NativeMethodReflection;
-use PHPStan\Reflection\ParametersAcceptorWithPhpDocs;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
@@ -38,19 +38,16 @@ final class ReturnStrictTypeAnalyzer
 {
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper
      */
-    private $typeNodeUnwrapper;
+    private TypeNodeUnwrapper $typeNodeUnwrapper;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     public function __construct(ReflectionResolver $reflectionResolver, TypeNodeUnwrapper $typeNodeUnwrapper, StaticTypeMapper $staticTypeMapper)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -75,7 +72,7 @@ final class ReturnStrictTypeAnalyzer
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
             } elseif ($returnedExpr instanceof ClassConstFetch) {
                 $returnNode = $this->resolveConstFetchReturnNode($returnedExpr, $scope);
-            } elseif ($returnedExpr instanceof Array_ || $returnedExpr instanceof String_ || $returnedExpr instanceof LNumber || $returnedExpr instanceof DNumber) {
+            } elseif ($returnedExpr instanceof Array_ || $returnedExpr instanceof String_ || $returnedExpr instanceof Int_ || $returnedExpr instanceof Float_) {
                 $returnNode = $this->resolveLiteralReturnNode($returnedExpr, $scope);
             } else {
                 return [];
@@ -120,7 +117,7 @@ final class ReturnStrictTypeAnalyzer
         $parametersAcceptorWithPhpDocs = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $call, $scope);
         if ($methodReflection instanceof NativeFunctionReflection || $methodReflection instanceof NativeMethodReflection) {
             $returnType = $parametersAcceptorWithPhpDocs->getReturnType();
-        } elseif ($parametersAcceptorWithPhpDocs instanceof ParametersAcceptorWithPhpDocs) {
+        } elseif ($parametersAcceptorWithPhpDocs instanceof ExtendedParametersAcceptor) {
             // native return type is needed, as docblock can be false
             $returnType = $parametersAcceptorWithPhpDocs->getNativeReturnType();
         } else {

@@ -5,11 +5,12 @@ namespace PhpParser;
 
 abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
 {
-    protected $attributes;
+    /** @var array<string, mixed> Attributes */
+    protected array $attributes;
     /**
      * Creates a Node.
      *
-     * @param array $attributes Array of attributes
+     * @param array<string, mixed> $attributes Array of attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -19,6 +20,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      * Gets line the node started in (alias of getStartLine).
      *
      * @return int Start line (or -1 if not available)
+     * @phpstan-return -1|positive-int
      */
     public function getLine() : int
     {
@@ -30,6 +32,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      * Requires the 'startLine' attribute to be enabled in the lexer (enabled by default).
      *
      * @return int Start line (or -1 if not available)
+     * @phpstan-return -1|positive-int
      */
     public function getStartLine() : int
     {
@@ -41,6 +44,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      * Requires the 'endLine' attribute to be enabled in the lexer (enabled by default).
      *
      * @return int End line (or -1 if not available)
+     * @phpstan-return -1|positive-int
      */
     public function getEndLine() : int
     {
@@ -110,7 +114,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      *
      * @return null|Comment\Doc Doc comment object or null
      */
-    public function getDocComment()
+    public function getDocComment() : ?\PhpParser\Comment\Doc
     {
         $comments = $this->getComments();
         for ($i = \count($comments) - 1; $i >= 0; $i--) {
@@ -128,7 +132,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      *
      * @param Comment\Doc $docComment Doc comment to set
      */
-    public function setDocComment(\PhpParser\Comment\Doc $docComment)
+    public function setDocComment(\PhpParser\Comment\Doc $docComment) : void
     {
         $comments = $this->getComments();
         for ($i = \count($comments) - 1; $i >= 0; $i--) {
@@ -143,7 +147,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
         $comments[] = $docComment;
         $this->setAttribute('comments', $comments);
     }
-    public function setAttribute(string $key, $value)
+    public function setAttribute(string $key, $value) : void
     {
         $this->attributes[$key] = $value;
     }
@@ -162,12 +166,12 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
     {
         return $this->attributes;
     }
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes) : void
     {
         $this->attributes = $attributes;
     }
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize() : array
     {

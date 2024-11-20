@@ -35,24 +35,20 @@ final class WorkerCommand extends Command
 {
     /**
      * @readonly
-     * @var \Rector\StaticReflection\DynamicSourceLocatorDecorator
      */
-    private $dynamicSourceLocatorDecorator;
+    private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator;
     /**
      * @readonly
-     * @var \Rector\Application\ApplicationFileProcessor
      */
-    private $applicationFileProcessor;
+    private ApplicationFileProcessor $applicationFileProcessor;
     /**
      * @readonly
-     * @var \Rector\Util\MemoryLimiter
      */
-    private $memoryLimiter;
+    private MemoryLimiter $memoryLimiter;
     /**
      * @readonly
-     * @var \Rector\Configuration\ConfigurationFactory
      */
-    private $configurationFactory;
+    private ConfigurationFactory $configurationFactory;
     /**
      * @var string
      */

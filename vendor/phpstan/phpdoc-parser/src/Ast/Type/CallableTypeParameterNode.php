@@ -9,16 +9,12 @@ use function trim;
 class CallableTypeParameterNode implements Node
 {
     use NodeAttributes;
-    /** @var TypeNode */
-    public $type;
-    /** @var bool */
-    public $isReference;
-    /** @var bool */
-    public $isVariadic;
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $type;
+    public bool $isReference;
+    public bool $isVariadic;
     /** @var string (may be empty) */
-    public $parameterName;
-    /** @var bool */
-    public $isOptional;
+    public string $parameterName;
+    public bool $isOptional;
     public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type, bool $isReference, bool $isVariadic, string $parameterName, bool $isOptional)
     {
         $this->type = $type;

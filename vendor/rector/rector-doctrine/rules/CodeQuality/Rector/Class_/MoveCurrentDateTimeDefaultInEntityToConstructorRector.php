@@ -33,38 +33,29 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
 {
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeManipulator\ConstructorManipulator
      */
-    private $constructorManipulator;
+    private ConstructorManipulator $constructorManipulator;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeFactory\ValueAssignFactory
      */
-    private $valueAssignFactory;
+    private ValueAssignFactory $valueAssignFactory;
     /**
      * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer
      */
-    private $constructorAssignPropertyAnalyzer;
+    private ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
+    private ValueResolver $valueResolver;
+    private bool $hasChanged = \false;
     public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
     {
         $this->constructorManipulator = $constructorManipulator;

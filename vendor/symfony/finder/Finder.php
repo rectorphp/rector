@@ -42,90 +42,30 @@ class Finder implements \IteratorAggregate, \Countable
     public const IGNORE_VCS_FILES = 1;
     public const IGNORE_DOT_FILES = 2;
     public const IGNORE_VCS_IGNORED_FILES = 4;
-    /**
-     * @var int
-     */
-    private $mode = 0;
-    /**
-     * @var mixed[]
-     */
-    private $names = [];
-    /**
-     * @var mixed[]
-     */
-    private $notNames = [];
-    /**
-     * @var mixed[]
-     */
-    private $exclude = [];
-    /**
-     * @var mixed[]
-     */
-    private $filters = [];
-    /**
-     * @var mixed[]
-     */
-    private $pruneFilters = [];
-    /**
-     * @var mixed[]
-     */
-    private $depths = [];
-    /**
-     * @var mixed[]
-     */
-    private $sizes = [];
-    /**
-     * @var bool
-     */
-    private $followLinks = \false;
-    /**
-     * @var bool
-     */
-    private $reverseSorting = \false;
+    private int $mode = 0;
+    private array $names = [];
+    private array $notNames = [];
+    private array $exclude = [];
+    private array $filters = [];
+    private array $pruneFilters = [];
+    private array $depths = [];
+    private array $sizes = [];
+    private bool $followLinks = \false;
+    private bool $reverseSorting = \false;
     /**
      * @var \Closure|int|false
      */
     private $sort = \false;
-    /**
-     * @var int
-     */
-    private $ignore = 0;
-    /**
-     * @var mixed[]
-     */
-    private $dirs = [];
-    /**
-     * @var mixed[]
-     */
-    private $dates = [];
-    /**
-     * @var mixed[]
-     */
-    private $iterators = [];
-    /**
-     * @var mixed[]
-     */
-    private $contains = [];
-    /**
-     * @var mixed[]
-     */
-    private $notContains = [];
-    /**
-     * @var mixed[]
-     */
-    private $paths = [];
-    /**
-     * @var mixed[]
-     */
-    private $notPaths = [];
-    /**
-     * @var bool
-     */
-    private $ignoreUnreadableDirs = \false;
-    /**
-     * @var mixed[]
-     */
-    private static $vcsPatterns = ['.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg'];
+    private int $ignore = 0;
+    private array $dirs = [];
+    private array $dates = [];
+    private array $iterators = [];
+    private array $contains = [];
+    private array $notContains = [];
+    private array $paths = [];
+    private array $notPaths = [];
+    private bool $ignoreUnreadableDirs = \false;
+    private static array $vcsPatterns = ['.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg'];
     public function __construct()
     {
         $this->ignore = static::IGNORE_VCS_FILES | static::IGNORE_DOT_FILES;
@@ -672,9 +612,7 @@ class Finder implements \IteratorAggregate, \Countable
         }
         $iterator = new \AppendIterator();
         foreach ($this->dirs as $dir) {
-            $iterator->append(new \IteratorIterator(new LazyIterator(function () use($dir) {
-                return $this->searchInDirectory($dir);
-            })));
+            $iterator->append(new \IteratorIterator(new LazyIterator(fn() => $this->searchInDirectory($dir))));
         }
         foreach ($this->iterators as $it) {
             $iterator->append($it);

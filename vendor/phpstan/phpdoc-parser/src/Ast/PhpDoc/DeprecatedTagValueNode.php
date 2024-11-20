@@ -9,7 +9,7 @@ class DeprecatedTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocT
 {
     use NodeAttributes;
     /** @var string (may be empty) */
-    public $description;
+    public string $description;
     public function __construct(string $description)
     {
         $this->description = $description;

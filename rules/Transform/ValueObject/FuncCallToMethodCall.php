@@ -9,19 +9,16 @@ final class FuncCallToMethodCall
 {
     /**
      * @readonly
-     * @var string
      */
-    private $oldFuncName;
+    private string $oldFuncName;
     /**
      * @readonly
-     * @var string
      */
-    private $newClassName;
+    private string $newClassName;
     /**
      * @readonly
-     * @var string
      */
-    private $newMethodName;
+    private string $newMethodName;
     public function __construct(string $oldFuncName, string $newClassName, string $newMethodName)
     {
         $this->oldFuncName = $oldFuncName;

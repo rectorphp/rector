@@ -13,9 +13,8 @@ final class DocBlockUpdater
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter
      */
-    private $phpDocInfoPrinter;
+    private PhpDocInfoPrinter $phpDocInfoPrinter;
     public function __construct(PhpDocInfoPrinter $phpDocInfoPrinter)
     {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -37,9 +36,7 @@ final class DocBlockUpdater
     }
     private function setCommentsAttribute(Node $node) : void
     {
-        $comments = \array_filter($node->getComments(), static function (Comment $comment) : bool {
-            return !$comment instanceof Doc;
-        });
+        $comments = \array_filter($node->getComments(), static fn(Comment $comment): bool => !$comment instanceof Doc);
         $node->setAttribute(AttributeKey::COMMENTS, $comments);
     }
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo) : string

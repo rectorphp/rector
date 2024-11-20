@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php71\Rector\BinaryOp;
 
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
@@ -10,8 +12,6 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\MagicConst\Line;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -28,9 +28,8 @@ final class BinaryOpBetweenNumberAndStringRector extends AbstractRector implemen
 {
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\ExprAnalyzer
      */
-    private $exprAnalyzer;
+    private ExprAnalyzer $exprAnalyzer;
     public function __construct(ExprAnalyzer $exprAnalyzer)
     {
         $this->exprAnalyzer = $exprAnalyzer;
@@ -88,11 +87,11 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isStringOrStaticNonNumericString($node->left) && $this->nodeTypeResolver->isNumberType($node->right)) {
-            $node->left = $this->nodeTypeResolver->getNativeType($node->right)->isInteger()->yes() ? new LNumber(0) : new DNumber(0);
+            $node->left = $this->nodeTypeResolver->getNativeType($node->right)->isInteger()->yes() ? new Int_(0) : new Float_(0);
             return $node;
         }
         if ($this->isStringOrStaticNonNumericString($node->right) && $this->nodeTypeResolver->isNumberType($node->left)) {
-            $node->right = $this->nodeTypeResolver->getNativeType($node->left)->isInteger()->yes() ? new LNumber(0) : new DNumber(0);
+            $node->right = $this->nodeTypeResolver->getNativeType($node->left)->isInteger()->yes() ? new Int_(0) : new Float_(0);
             return $node;
         }
         return null;

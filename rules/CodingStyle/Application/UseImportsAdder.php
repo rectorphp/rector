@@ -22,14 +22,12 @@ final class UseImportsAdder
 {
     /**
      * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\UsedImportsResolver
      */
-    private $usedImportsResolver;
+    private UsedImportsResolver $usedImportsResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
-    private $typeFactory;
+    private TypeFactory $typeFactory;
     public function __construct(UsedImportsResolver $usedImportsResolver, TypeFactory $typeFactory)
     {
         $this->usedImportsResolver = $usedImportsResolver;

@@ -20,17 +20,10 @@ final class PlainValueParser
 {
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
-    private $classAnnotationMatcher;
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
-     */
-    private $staticDoctrineAnnotationParser;
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
-     */
-    private $arrayParser;
+    private ClassAnnotationMatcher $classAnnotationMatcher;
+    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
+    private \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser $arrayParser;
     public function __construct(ClassAnnotationMatcher $classAnnotationMatcher)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;

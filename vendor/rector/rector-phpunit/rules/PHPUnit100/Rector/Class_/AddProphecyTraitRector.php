@@ -25,19 +25,16 @@ final class AddProphecyTraitRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Reflection\ReflectionResolver
      */
-    private $reflectionResolver;
+    private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\BetterNodeFinder
      */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var string
      */
@@ -98,9 +95,7 @@ CODE_SAMPLE
     }
     private function shouldSkipClass(Class_ $class) : bool
     {
-        $hasProphesizeMethodCall = (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) : bool {
-            return $this->testsNodeAnalyzer->isAssertMethodCallName($node, 'prophesize');
-        });
+        $hasProphesizeMethodCall = (bool) $this->betterNodeFinder->findFirst($class, fn(Node $node): bool => $this->testsNodeAnalyzer->isAssertMethodCallName($node, 'prophesize'));
         if (!$hasProphesizeMethodCall) {
             return \true;
         }

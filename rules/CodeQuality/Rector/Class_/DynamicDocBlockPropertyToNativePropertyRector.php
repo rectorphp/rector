@@ -31,39 +31,32 @@ final class DynamicDocBlockPropertyToNativePropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $phpDocTagRemover;
+    private PhpDocTagRemover $phpDocTagRemover;
     /**
      * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
-    private $docBlockUpdater;
+    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeFactory\TypedPropertyFactory
      */
-    private $typedPropertyFactory;
+    private TypedPropertyFactory $typedPropertyFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $testsNodeAnalyzer;
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpParser\Node\Value\ValueResolver
      */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
     public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, TypedPropertyFactory $typedPropertyFactory, TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
@@ -173,10 +166,10 @@ CODE_SAMPLE
                 continue;
             }
             // is property already defined?
-            if ($class->getProperty($propertyName)) {
+            if ($class->getProperty($propertyName) instanceof Property) {
                 // improve exising one type if needed
                 $existingProperty = $class->getProperty($propertyName);
-                if ($existingProperty->type !== null) {
+                if ($existingProperty->type instanceof Node) {
                     continue;
                 }
                 $defaultValue = $existingProperty->props[0]->default;

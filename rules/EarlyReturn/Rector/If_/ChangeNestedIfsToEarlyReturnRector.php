@@ -21,14 +21,12 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
-    private $conditionInverter;
+    private ConditionInverter $conditionInverter;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\IfManipulator
      */
-    private $ifManipulator;
+    private IfManipulator $ifManipulator;
     public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->conditionInverter = $conditionInverter;

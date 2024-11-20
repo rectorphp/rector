@@ -9,24 +9,22 @@ final class AddClosureParamTypeFromArg
 {
     /**
      * @readonly
-     * @var string
      */
-    private $className;
+    private string $className;
     /**
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private string $methodName;
     /**
      * @var int<0, max>
      * @readonly
      */
-    private $callLikePosition;
+    private int $callLikePosition;
     /**
      * @var int<0, max>
      * @readonly
      */
-    private $functionLikePosition;
+    private int $functionLikePosition;
     /**
      * @param int<0, max> $callLikePosition
      * @param int<0, max> $functionLikePosition

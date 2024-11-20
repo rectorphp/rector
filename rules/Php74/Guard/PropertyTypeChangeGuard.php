@@ -13,24 +13,20 @@ final class PropertyTypeChangeGuard
 {
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\PropertyAnalyzer
      */
-    private $propertyAnalyzer;
+    private PropertyAnalyzer $propertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeManipulator\PropertyManipulator
      */
-    private $propertyManipulator;
+    private PropertyManipulator $propertyManipulator;
     /**
      * @readonly
-     * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
      */
-    private $parentPropertyLookupGuard;
+    private ParentPropertyLookupGuard $parentPropertyLookupGuard;
     public function __construct(NodeNameResolver $nodeNameResolver, PropertyAnalyzer $propertyAnalyzer, PropertyManipulator $propertyManipulator, ParentPropertyLookupGuard $parentPropertyLookupGuard)
     {
         $this->nodeNameResolver = $nodeNameResolver;

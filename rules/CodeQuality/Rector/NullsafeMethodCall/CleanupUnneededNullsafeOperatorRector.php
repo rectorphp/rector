@@ -25,9 +25,8 @@ final class CleanupUnneededNullsafeOperatorRector extends AbstractRector impleme
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer
      */
-    private $returnStrictTypeAnalyzer;
+    private ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer;
     public function __construct(ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer)
     {
         $this->returnStrictTypeAnalyzer = $returnStrictTypeAnalyzer;

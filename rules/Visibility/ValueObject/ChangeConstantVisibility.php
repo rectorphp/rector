@@ -9,19 +9,16 @@ final class ChangeConstantVisibility
 {
     /**
      * @readonly
-     * @var string
      */
-    private $class;
+    private string $class;
     /**
      * @readonly
-     * @var string
      */
-    private $constant;
+    private string $constant;
     /**
      * @readonly
-     * @var int
      */
-    private $visibility;
+    private int $visibility;
     public function __construct(string $class, string $constant, int $visibility)
     {
         $this->class = $class;

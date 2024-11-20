@@ -37,9 +37,8 @@ final class ParallelFileProcessor
 {
     /**
      * @readonly
-     * @var \Rector\Parallel\Command\WorkerCommandLineFactory
      */
-    private $workerCommandLineFactory;
+    private WorkerCommandLineFactory $workerCommandLineFactory;
     /**
      * @var int
      */

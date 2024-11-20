@@ -20,7 +20,7 @@ final class FuncCallToConstFetchRector extends AbstractRector implements Configu
     /**
      * @var string[]
      */
-    private $functionsToConstants = [];
+    private array $functionsToConstants = [];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes use of function calls to use constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'

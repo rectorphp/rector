@@ -9,8 +9,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 class TraitUse implements Builder
 {
-    protected $traits = [];
-    protected $adaptations = [];
+    /** @var Node\Name[] */
+    protected array $traits = [];
+    /** @var Stmt\TraitUseAdaptation[] */
+    protected array $adaptations = [];
     /**
      * Creates a trait use builder.
      *

@@ -22,24 +22,20 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Helper\MessengerHelper
      */
-    private $messengerHelper;
+    private MessengerHelper $messengerHelper;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeManipulator\ClassManipulator
      */
-    private $classManipulator;
+    private ClassManipulator $classManipulator;
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
-    private $classAnalyzer;
+    private ClassAnalyzer $classAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $phpAttributeAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->messengerHelper = $messengerHelper;

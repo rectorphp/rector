@@ -10,16 +10,11 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 class MethodTagValueParameterNode implements Node
 {
     use NodeAttributes;
-    /** @var TypeNode|null */
-    public $type;
-    /** @var bool */
-    public $isReference;
-    /** @var bool */
-    public $isVariadic;
-    /** @var string */
-    public $parameterName;
-    /** @var ConstExprNode|null */
-    public $defaultValue;
+    public ?TypeNode $type = null;
+    public bool $isReference;
+    public bool $isVariadic;
+    public string $parameterName;
+    public ?ConstExprNode $defaultValue = null;
     public function __construct(?TypeNode $type, bool $isReference, bool $isVariadic, string $parameterName, ?ConstExprNode $defaultValue)
     {
         $this->type = $type;
