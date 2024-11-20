@@ -73,8 +73,8 @@ final class TypeNormalizer
             if ($this->isConstantArrayNever($traversedType)) {
                 \assert($traversedType instanceof ConstantArrayType);
                 // not sure why, but with direct new node everything gets nulled to MixedType
-                $this->privatesAccessor->setPrivateProperty($traversedType, 'keyType', new MixedType());
-                $this->privatesAccessor->setPrivateProperty($traversedType, 'itemType', new MixedType());
+                $this->privatesAccessor->setPrivateProperty($traversedType, 'keyTypes', [new MixedType()]);
+                $this->privatesAccessor->setPrivateProperty($traversedType, 'valueTypes', [new MixedType()]);
                 return $traversedType;
             }
             if ($traversedType instanceof NeverType) {
