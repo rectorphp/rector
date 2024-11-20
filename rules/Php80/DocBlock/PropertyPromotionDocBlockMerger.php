@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php80\DocBlock;
 
-use PhpParser\Node;
 use PhpParser\Comment;
+use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;

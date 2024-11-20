@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Exit_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
@@ -27,9 +27,9 @@ use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;

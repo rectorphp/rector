@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
+use PhpParser\Node;
+use PhpParser\Node\InterpolatedStringPart;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantFloatType;

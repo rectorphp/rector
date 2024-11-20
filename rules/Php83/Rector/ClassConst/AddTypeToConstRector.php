@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php83\Rector\ClassConst;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
@@ -15,6 +13,8 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;

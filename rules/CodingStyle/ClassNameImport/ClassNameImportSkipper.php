@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node\UseItem;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UseItem;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;

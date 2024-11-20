@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;

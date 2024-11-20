@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Guard;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Ternary;
@@ -11,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeVisitor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;

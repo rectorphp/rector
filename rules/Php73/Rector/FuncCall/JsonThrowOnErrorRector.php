@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Int_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;

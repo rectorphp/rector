@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\NodeFactory;
 
 use PhpParser\Modifiers;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\PropertyItem;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 final class MissingPropertiesFactory
 {

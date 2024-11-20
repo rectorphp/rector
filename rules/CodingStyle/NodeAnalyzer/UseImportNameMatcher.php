@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\NodeAnalyzer;
 
-use PhpParser\Node\UseItem;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UseItem;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;

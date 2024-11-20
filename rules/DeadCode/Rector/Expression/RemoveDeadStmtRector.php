@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Expression;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\NodeVisitor;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;

@@ -3,11 +3,10 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Array_;
@@ -18,6 +17,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeVisitor;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

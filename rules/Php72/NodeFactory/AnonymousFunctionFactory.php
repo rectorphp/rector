@@ -3,10 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use PhpParser\Node\ClosureUse;
-use PhpParser\Node\Scalar\Int_;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -16,6 +15,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;

@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeVisitor;
 use Rector\DeadCode\ConditionEvaluator;
 use Rector\DeadCode\ConditionResolver;
 use Rector\DeadCode\Contract\ConditionInterface;

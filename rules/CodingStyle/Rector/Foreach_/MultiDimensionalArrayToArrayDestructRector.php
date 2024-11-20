@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Foreach_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeFinder;
+use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;

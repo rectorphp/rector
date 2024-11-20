@@ -3,10 +3,9 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use PHPStan\Type\ObjectType;
-use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineTagValueNode;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -15,6 +14,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;

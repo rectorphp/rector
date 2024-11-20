@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;

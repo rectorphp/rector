@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Scalar\Int_;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;

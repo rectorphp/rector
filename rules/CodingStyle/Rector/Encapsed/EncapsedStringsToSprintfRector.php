@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\InterpolatedStringPart;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -13,7 +11,9 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Type;
 use Rector\Contract\Rector\ConfigurableRectorInterface;

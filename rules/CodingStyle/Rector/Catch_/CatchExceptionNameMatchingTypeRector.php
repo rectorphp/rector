@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Catch_;
 
-use PhpParser\NodeVisitor;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -16,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\PropertyNaming;

@@ -5,14 +5,14 @@ namespace Rector\TypeDeclaration\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;

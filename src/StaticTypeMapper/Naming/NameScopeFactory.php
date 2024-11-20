@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\Naming;
 
-use PhpParser\Node\UseItem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UseItem;
 use PHPStan\Analyser\NameScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;

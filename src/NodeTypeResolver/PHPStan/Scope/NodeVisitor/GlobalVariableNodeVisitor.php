@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Global_;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\NodeCollector\NodeAnalyzer;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\String_;

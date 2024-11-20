@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Naming\Rector\Foreach_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeVisitor;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\ForeachMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
@@ -12,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeVisitor;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;

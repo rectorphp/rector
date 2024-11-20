@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php71\Rector\Assign;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -17,6 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;

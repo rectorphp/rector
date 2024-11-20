@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -31,6 +30,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;

@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\NodeVisitor;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;

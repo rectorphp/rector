@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Php74\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Comparing\NodeComparator;

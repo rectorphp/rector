@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ConstFetch;
 
-use PhpParser\NodeVisitor;
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeVisitor;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersion;

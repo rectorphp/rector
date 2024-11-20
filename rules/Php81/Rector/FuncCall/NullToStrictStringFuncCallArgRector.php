@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php81\Rector\FuncCall;
 
-use PhpParser\Node\Scalar\InterpolatedString;
-use PHPStan\Reflection\Native\ExtendedNativeParameterReflection;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -13,10 +11,12 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\Native\ExtendedNativeParameterReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\ErrorType;

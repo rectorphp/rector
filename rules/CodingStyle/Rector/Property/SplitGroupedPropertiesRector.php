@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\PropertyItem;
+use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

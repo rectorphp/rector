@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
-use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\InterpolatedString;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;

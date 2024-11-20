@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;

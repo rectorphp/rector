@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\NodeManipulator;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
+use PhpParser\NodeVisitor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariadicFunctionLikeDetector

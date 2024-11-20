@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeManipulator\ClassConstManipulator;
 use Rector\PHPStan\ScopeFetcher;

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\For_;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;

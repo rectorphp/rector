@@ -3,11 +3,9 @@
 declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
@@ -16,6 +14,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;

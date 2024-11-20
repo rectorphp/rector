@@ -3,12 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php52\Rector\Switch_;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Class_;
@@ -19,6 +18,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;

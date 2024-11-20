@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
@@ -14,6 +13,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;

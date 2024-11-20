@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -26,6 +25,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

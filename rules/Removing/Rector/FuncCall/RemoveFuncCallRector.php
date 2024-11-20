@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Removing\Rector\FuncCall;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;

@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ClassModifierChecker;

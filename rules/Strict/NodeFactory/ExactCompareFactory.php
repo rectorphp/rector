@@ -3,11 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Strict\NodeFactory;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -19,6 +18,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;

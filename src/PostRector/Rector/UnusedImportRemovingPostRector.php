@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use PhpParser\Node\UseItem;
-use PhpParser\NodeVisitor;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
@@ -14,6 +12,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UseItem;
+use PhpParser\NodeVisitor;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;

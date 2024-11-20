@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\StmtsAwareInterface;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\DeclareItem;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;

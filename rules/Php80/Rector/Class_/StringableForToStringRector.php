@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
@@ -15,6 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeVisitor;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;

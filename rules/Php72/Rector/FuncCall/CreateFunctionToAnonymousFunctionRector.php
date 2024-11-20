@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
-use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -13,6 +12,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;

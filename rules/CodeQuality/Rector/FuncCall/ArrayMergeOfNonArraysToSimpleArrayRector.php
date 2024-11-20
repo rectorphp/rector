@@ -5,8 +5,8 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

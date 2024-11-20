@@ -3,12 +3,11 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use PHPStan\Parser\ParserErrorsException;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
@@ -59,6 +58,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
+use PHPStan\Parser\ParserErrorsException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;

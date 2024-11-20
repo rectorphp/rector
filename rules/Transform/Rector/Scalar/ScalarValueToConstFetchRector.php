@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Transform\Rector\Scalar;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;

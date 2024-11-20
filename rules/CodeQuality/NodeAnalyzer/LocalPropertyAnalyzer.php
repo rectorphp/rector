@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\NodeAnalyzer;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -14,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;

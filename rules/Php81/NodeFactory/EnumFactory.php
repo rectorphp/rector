@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Php81\NodeFactory;
 
-use PhpParser\Node\Scalar\Int_;
 use RectorPrefix202411\Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;

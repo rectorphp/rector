@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -14,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Int_;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;

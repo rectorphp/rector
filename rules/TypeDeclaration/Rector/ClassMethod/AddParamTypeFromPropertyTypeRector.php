@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\Type;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;

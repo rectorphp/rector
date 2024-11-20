@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\InterpolatedString;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

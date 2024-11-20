@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Node;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -16,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use PhpParser\NodeVisitor;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;

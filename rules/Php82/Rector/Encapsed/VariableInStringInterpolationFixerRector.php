@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php82\Rector\Encapsed;
 
-use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\InterpolatedString;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;

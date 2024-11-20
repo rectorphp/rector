@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php70\Rector\Break_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\FunctionLike;
@@ -11,6 +10,7 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\NodeVisitor;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;

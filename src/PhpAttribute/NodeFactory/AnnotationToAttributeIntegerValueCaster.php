@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\NodeFactory;
 
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParameterReflection;

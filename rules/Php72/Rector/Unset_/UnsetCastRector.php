@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Php72\Rector\Unset_;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Unset_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;

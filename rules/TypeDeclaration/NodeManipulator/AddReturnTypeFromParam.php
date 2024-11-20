@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeManipulator;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -16,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeCombinator;

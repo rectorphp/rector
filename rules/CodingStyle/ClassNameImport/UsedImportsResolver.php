@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node\UseItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UseItem;
 use Rector\CodingStyle\ClassNameImport\ValueObject\UsedImports;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeVisitor;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;

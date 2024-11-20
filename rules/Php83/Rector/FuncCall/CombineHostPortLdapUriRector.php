@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php83\Rector\FuncCall;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\InterpolatedStringPart;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractRector;

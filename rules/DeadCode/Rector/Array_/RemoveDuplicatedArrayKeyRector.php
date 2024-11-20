@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
