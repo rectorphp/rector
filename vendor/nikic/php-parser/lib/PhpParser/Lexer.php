@@ -28,7 +28,7 @@ class Lexer
             $errorHandler = new \PhpParser\ErrorHandler\Throwing();
         }
         $scream = \ini_set('xdebug.scream', '0');
-        $tokens = @\token_get_all($code);
+        $tokens = @\PhpParser\Token::tokenize($code);
         $this->postprocessTokens($tokens, $errorHandler);
         if (\false !== $scream) {
             \ini_set('xdebug.scream', $scream);
@@ -37,7 +37,7 @@ class Lexer
     }
     private function handleInvalidCharacter(\PhpParser\Token $token, \PhpParser\ErrorHandler $errorHandler) : void
     {
-        $chr = \is_array($token) ? $token[1] : $token;
+        $chr = $token->text;
         if ($chr === "\x00") {
             // PHP cuts error message after null byte, so need special case
             $errorMsg = 'Unexpected null byte';
@@ -48,7 +48,7 @@ class Lexer
     }
     private function isUnterminatedComment(\PhpParser\Token $token) : bool
     {
-        return $token->is([\T_COMMENT, \T_DOC_COMMENT]) && \substr(\is_array($token) ? $token[1] : $token, 0, 2) === '/*' && \substr(\is_array($token) ? $token[1] : $token, -2) !== '*/';
+        return $token->is([\T_COMMENT, \T_DOC_COMMENT]) && \substr($token->text, 0, 2) === '/*' && \substr($token->text, -2) !== '*/';
     }
     /**
      * @param list<Token> $tokens
@@ -68,16 +68,16 @@ class Lexer
         }
         for ($i = 0; $i < $numTokens; $i++) {
             $token = $tokens[$i];
-            if ((\is_array($token) ? $token[0] : $token) === \T_BAD_CHARACTER) {
+            if ($token->id === \T_BAD_CHARACTER) {
                 $this->handleInvalidCharacter($token, $errorHandler);
             }
-            if ((\is_array($token) ? $token[0] : $token) === \ord('&')) {
+            if ($token->id === \ord('&')) {
                 $next = $i + 1;
-                while (isset($tokens[$next]) && (\is_array($tokens[$next]) ? $tokens[$next][0] : $tokens[$next]) === \T_WHITESPACE) {
+                while (isset($tokens[$next]) && $tokens[$next]->id === \T_WHITESPACE) {
                     $next++;
                 }
                 $followedByVarOrVarArg = isset($tokens[$next]) && $tokens[$next]->is([\T_VARIABLE, \T_ELLIPSIS]);
-                \is_array($token) ? $token[0] : ($token = $followedByVarOrVarArg ? \T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG : \T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG);
+                $token->id = $followedByVarOrVarArg ? \T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG : \T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG;
             }
         }
         // Check for unterminated comment

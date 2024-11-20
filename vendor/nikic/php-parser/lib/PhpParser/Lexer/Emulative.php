@@ -115,7 +115,7 @@ class Emulative extends Lexer
             $token->pos += $posDelta;
             $token->line += $lineDelta;
             $localPosDelta = 0;
-            $len = \strlen(\is_array($token) ? $token[1] : $token);
+            $len = \strlen($token->text);
             while ($patchPos >= $pos && $patchPos < $pos + $len) {
                 $patchTextLen = \strlen($patchText);
                 if ($patchType === 'remove') {
@@ -126,18 +126,18 @@ class Emulative extends Lexer
                         $c--;
                     } else {
                         // Remove from token string
-                        \is_array($token) ? $token[1] : ($token = \substr_replace(\is_array($token) ? $token[1] : $token, '', $patchPos - $pos + $localPosDelta, $patchTextLen));
+                        $token->text = \substr_replace($token->text, '', $patchPos - $pos + $localPosDelta, $patchTextLen);
                         $localPosDelta -= $patchTextLen;
                     }
                     $lineDelta -= \substr_count($patchText, "\n");
                 } elseif ($patchType === 'add') {
                     // Insert into the token string
-                    \is_array($token) ? $token[1] : ($token = \substr_replace(\is_array($token) ? $token[1] : $token, $patchText, $patchPos - $pos + $localPosDelta, 0));
+                    $token->text = \substr_replace($token->text, $patchText, $patchPos - $pos + $localPosDelta, 0);
                     $localPosDelta += $patchTextLen;
                     $lineDelta += \substr_count($patchText, "\n");
                 } elseif ($patchType === 'replace') {
                     // Replace inside the token string
-                    \is_array($token) ? $token[1] : ($token = \substr_replace(\is_array($token) ? $token[1] : $token, $patchText, $patchPos - $pos + $localPosDelta, $patchTextLen));
+                    $token->text = \substr_replace($token->text, $patchText, $patchPos - $pos + $localPosDelta, $patchTextLen);
                 } else {
                     \assert(\false);
                 }

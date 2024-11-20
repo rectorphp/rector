@@ -19,9 +19,9 @@ class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
     {
         for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
             $token = $tokens[$i];
-            if ((\is_array($token) ? $token[0] : $token) == \T_LNUMBER && (\is_array($token) ? $token[1] : $token) === '0' && isset($tokens[$i + 1]) && (\is_array($tokens[$i + 1]) ? $tokens[$i + 1][0] : $tokens[$i + 1]) == \T_STRING && \preg_match('/[oO][0-7]+(?:_[0-7]+)*/', \is_array($tokens[$i + 1]) ? $tokens[$i + 1][1] : $tokens[$i + 1])) {
-                $tokenKind = $this->resolveIntegerOrFloatToken(\is_array($tokens[$i + 1]) ? $tokens[$i + 1][1] : $tokens[$i + 1]);
-                \array_splice($tokens, $i, 2, [new Token($tokenKind, '0' . (\is_array($tokens[$i + 1]) ? $tokens[$i + 1][1] : $tokens[$i + 1]), $token->line, $token->pos)]);
+            if ($token->id == \T_LNUMBER && $token->text === '0' && isset($tokens[$i + 1]) && $tokens[$i + 1]->id == \T_STRING && \preg_match('/[oO][0-7]+(?:_[0-7]+)*/', $tokens[$i + 1]->text)) {
+                $tokenKind = $this->resolveIntegerOrFloatToken($tokens[$i + 1]->text);
+                \array_splice($tokens, $i, 2, [new Token($tokenKind, '0' . $tokens[$i + 1]->text, $token->line, $token->pos)]);
                 $c--;
             }
         }

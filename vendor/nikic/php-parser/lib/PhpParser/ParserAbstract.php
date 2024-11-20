@@ -217,10 +217,10 @@ abstract class ParserAbstract implements \PhpParser\Parser
                 if ($symbol === self::SYMBOL_NONE) {
                     do {
                         $token = $this->tokens[++$this->tokenPos];
-                        $tokenId = \is_array($token) ? $token[0] : $token;
+                        $tokenId = $token->id;
                     } while (isset($this->dropTokens[$tokenId]));
                     // Map the lexer token id to the internally used symbols.
-                    $tokenValue = \is_array($token) ? $token[1] : $token;
+                    $tokenValue = $token->text;
                     if (!isset($this->phpTokenToSymbol[$tokenId])) {
                         throw new \RangeException(\sprintf('The lexer returned an invalid token (id=%d, value=%s)', $tokenId, $tokenValue));
                     }
@@ -740,8 +740,8 @@ abstract class ParserAbstract implements \PhpParser\Parser
     }
     protected function createCommentFromToken(\PhpParser\Token $token, int $tokenPos) : \PhpParser\Comment
     {
-        \assert((\is_array($token) ? $token[0] : $token) === \T_COMMENT || (\is_array($token) ? $token[0] : $token) == \T_DOC_COMMENT);
-        return \T_DOC_COMMENT === (\is_array($token) ? $token[0] : $token) ? new \PhpParser\Comment\Doc(\is_array($token) ? $token[1] : $token, $token->line, $token->pos, $tokenPos, $token->getEndLine(), $token->getEndPos() - 1, $tokenPos) : new \PhpParser\Comment(\is_array($token) ? $token[1] : $token, $token->line, $token->pos, $tokenPos, $token->getEndLine(), $token->getEndPos() - 1, $tokenPos);
+        \assert($token->id === \T_COMMENT || $token->id == \T_DOC_COMMENT);
+        return \T_DOC_COMMENT === $token->id ? new \PhpParser\Comment\Doc($token->text, $token->line, $token->pos, $tokenPos, $token->getEndLine(), $token->getEndPos() - 1, $tokenPos) : new \PhpParser\Comment($token->text, $token->line, $token->pos, $tokenPos, $token->getEndLine(), $token->getEndPos() - 1, $tokenPos);
     }
     /**
      * Get last comment before the given token position, if any
@@ -750,10 +750,10 @@ abstract class ParserAbstract implements \PhpParser\Parser
     {
         while (--$tokenPos >= 0) {
             $token = $this->tokens[$tokenPos];
-            if (!isset($this->dropTokens[\is_array($token) ? $token[0] : $token])) {
+            if (!isset($this->dropTokens[$token->id])) {
                 break;
             }
-            if ((\is_array($token) ? $token[0] : $token) === \T_COMMENT || (\is_array($token) ? $token[0] : $token) === \T_DOC_COMMENT) {
+            if ($token->id === \T_COMMENT || $token->id === \T_DOC_COMMENT) {
                 return $this->createCommentFromToken($token, $tokenPos);
             }
         }
@@ -787,17 +787,17 @@ abstract class ParserAbstract implements \PhpParser\Parser
         $nextToken = $this->tokens[$this->tokenPos + 1];
         $this->tokenPos = \count($this->tokens) - 2;
         // Return text after __halt_compiler.
-        return (\is_array($nextToken) ? $nextToken[0] : $nextToken) === \T_INLINE_HTML ? \is_array($nextToken) ? $nextToken[1] : $nextToken : '';
+        return $nextToken->id === \T_INLINE_HTML ? $nextToken->text : '';
     }
     protected function inlineHtmlHasLeadingNewline(int $stackPos) : bool
     {
         $tokenPos = $this->tokenStartStack[$stackPos];
         $token = $this->tokens[$tokenPos];
-        \assert((\is_array($token) ? $token[0] : $token) == \T_INLINE_HTML);
+        \assert($token->id == \T_INLINE_HTML);
         if ($tokenPos > 0) {
             $prevToken = $this->tokens[$tokenPos - 1];
-            \assert((\is_array($prevToken) ? $prevToken[0] : $prevToken) == \T_CLOSE_TAG);
-            return \false !== \strpos(\is_array($prevToken) ? $prevToken[1] : $prevToken, "\n") || \false !== \strpos(\is_array($prevToken) ? $prevToken[1] : $prevToken, "\r");
+            \assert($prevToken->id == \T_CLOSE_TAG);
+            return \false !== \strpos($prevToken->text, "\n") || \false !== \strpos($prevToken->text, "\r");
         }
         return \true;
     }

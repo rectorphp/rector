@@ -26,7 +26,7 @@ class CommentAnnotatingVisitor extends NodeVisitorAbstract
         // Collect positions of comments. We use this to avoid traversing parts of the AST where
         // there are no comments.
         foreach ($tokens as $i => $token) {
-            if ((\is_array($token) ? $token[0] : $token) === \T_COMMENT || (\is_array($token) ? $token[0] : $token) === \T_DOC_COMMENT) {
+            if ($token->id === \T_COMMENT || $token->id === \T_DOC_COMMENT) {
                 $this->commentPositions[] = $i;
             }
         }
@@ -44,15 +44,15 @@ class CommentAnnotatingVisitor extends NodeVisitorAbstract
             $comments = [];
             while (--$pos >= $oldPos) {
                 $token = $this->tokens[$pos];
-                if ((\is_array($token) ? $token[0] : $token) === \T_DOC_COMMENT) {
-                    $comments[] = new Comment\Doc(\is_array($token) ? $token[1] : $token, $token->line, $token->pos, $pos, $token->getEndLine(), $token->getEndPos() - 1, $pos);
+                if ($token->id === \T_DOC_COMMENT) {
+                    $comments[] = new Comment\Doc($token->text, $token->line, $token->pos, $pos, $token->getEndLine(), $token->getEndPos() - 1, $pos);
                     continue;
                 }
-                if ((\is_array($token) ? $token[0] : $token) === \T_COMMENT) {
-                    $comments[] = new Comment(\is_array($token) ? $token[1] : $token, $token->line, $token->pos, $pos, $token->getEndLine(), $token->getEndPos() - 1, $pos);
+                if ($token->id === \T_COMMENT) {
+                    $comments[] = new Comment($token->text, $token->line, $token->pos, $pos, $token->getEndLine(), $token->getEndPos() - 1, $pos);
                     continue;
                 }
-                if ((\is_array($token) ? $token[0] : $token) !== \T_WHITESPACE) {
+                if ($token->id !== \T_WHITESPACE) {
                     break;
                 }
             }

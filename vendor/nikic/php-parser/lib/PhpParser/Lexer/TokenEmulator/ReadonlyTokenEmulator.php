@@ -24,6 +24,6 @@ final class ReadonlyTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Keyword
             return \false;
         }
         // Support "function readonly("
-        return !(isset($tokens[$pos + 1]) && ((\is_array($tokens[$pos + 1]) ? $tokens[$pos + 1][1] : $tokens[$pos + 1]) === '(' || (\is_array($tokens[$pos + 1]) ? $tokens[$pos + 1][0] : $tokens[$pos + 1]) === \T_WHITESPACE && isset($tokens[$pos + 2]) && (\is_array($tokens[$pos + 2]) ? $tokens[$pos + 2][1] : $tokens[$pos + 2]) === '('));
+        return !(isset($tokens[$pos + 1]) && ($tokens[$pos + 1]->text === '(' || $tokens[$pos + 1]->id === \T_WHITESPACE && isset($tokens[$pos + 2]) && $tokens[$pos + 2]->text === '('));
     }
 }

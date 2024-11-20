@@ -19,14 +19,14 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
         if ($prevToken === null) {
             return \false;
         }
-        return (\is_array($prevToken) ? $prevToken[0] : $prevToken) !== \T_OBJECT_OPERATOR && (\is_array($prevToken) ? $prevToken[0] : $prevToken) !== \T_NULLSAFE_OBJECT_OPERATOR;
+        return $prevToken->id !== \T_OBJECT_OPERATOR && $prevToken->id !== \T_NULLSAFE_OBJECT_OPERATOR;
     }
     public function emulate(string $code, array $tokens) : array
     {
         $keywordString = $this->getKeywordString();
         foreach ($tokens as $i => $token) {
-            if ((\is_array($token) ? $token[0] : $token) === \T_STRING && \strtolower(\is_array($token) ? $token[1] : $token) === $keywordString && $this->isKeywordContext($tokens, $i)) {
-                \is_array($token) ? $token[0] : ($token = $this->getKeywordToken());
+            if ($token->id === \T_STRING && \strtolower($token->text) === $keywordString && $this->isKeywordContext($tokens, $i)) {
+                $token->id = $this->getKeywordToken();
             }
         }
         return $tokens;
@@ -35,7 +35,7 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
     private function getPreviousNonSpaceToken(array $tokens, int $start) : ?Token
     {
         for ($i = $start - 1; $i >= 0; --$i) {
-            if ((\is_array($tokens[$i]) ? $tokens[$i][0] : $tokens[$i]) === \T_WHITESPACE) {
+            if ($tokens[$i]->id === \T_WHITESPACE) {
                 continue;
             }
             return $tokens[$i];
@@ -46,8 +46,8 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
     {
         $keywordToken = $this->getKeywordToken();
         foreach ($tokens as $token) {
-            if ((\is_array($token) ? $token[0] : $token) === $keywordToken) {
-                \is_array($token) ? $token[0] : ($token = \T_STRING);
+            if ($token->id === $keywordToken) {
+                $token->id = \T_STRING;
             }
         }
         return $tokens;

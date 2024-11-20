@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -74,6 +75,9 @@ CODE_SAMPLE
         if (!$this->isObjectType($staticCall->class, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
+        if ($this->skipPhpParserInternalToken($this->getType($staticCall->class))) {
+            return null;
+        }
         return new FuncCall(new Name('token_get_all'), $staticCall->args);
     }
     private function refactorMethodCall(MethodCall $methodCall) : ?Ternary
@@ -82,6 +86,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->isObjectType($methodCall->var, new ObjectType(self::PHP_TOKEN))) {
+            return null;
+        }
+        if ($this->skipPhpParserInternalToken($this->getType($methodCall->var))) {
             return null;
         }
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($methodCall->var)]);
@@ -98,8 +105,18 @@ CODE_SAMPLE
         if (!$this->isObjectType($propertyFetch->var, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
+        if ($this->skipPhpParserInternalToken($this->getType($propertyFetch->var))) {
+            return null;
+        }
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($propertyFetch->var)]);
         $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, $propertyFetchName === 'id' ? new Int_(0) : new Int_(1));
         return new Ternary($isArrayFuncCall, $arrayDimFetch, $propertyFetch->var);
+    }
+    private function skipPhpParserInternalToken(Type $type) : bool
+    {
+        if ($type instanceof ObjectType) {
+            return $type->isInstanceOf('PhpParser\\Internal\\TokenPolyfill')->yes();
+        }
+        return \false;
     }
 }

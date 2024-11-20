@@ -21,7 +21,7 @@ final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulat
         // the tokens array on the way.
         for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
             $token = $tokens[$i];
-            if ((\is_array($token) ? $token[1] : $token) === '#' && isset($tokens[$i + 1]) && (\is_array($tokens[$i + 1]) ? $tokens[$i + 1][1] : $tokens[$i + 1]) === '[') {
+            if ($token->text === '#' && isset($tokens[$i + 1]) && $tokens[$i + 1]->text === '[') {
                 \array_splice($tokens, $i, 2, [new Token(\T_ATTRIBUTE, '#[', $token->line, $token->pos)]);
                 $c--;
                 continue;
