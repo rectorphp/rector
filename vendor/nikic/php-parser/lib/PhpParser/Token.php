@@ -11,11 +11,11 @@ class Token extends \PhpParser\Internal\TokenPolyfill
     /** Get (exclusive) zero-based end position of the token. */
     public function getEndPos() : int
     {
-        return $this->pos + \strlen(\is_array($this) ? $this[1] : $this);
+        return $this->pos + \strlen($this->text);
     }
     /** Get 1-based end line number of the token. */
     public function getEndLine() : int
     {
-        return $this->line + \substr_count(\is_array($this) ? $this[1] : $this, "\n");
+        return $this->line + \substr_count($this->text, "\n");
     }
 }
