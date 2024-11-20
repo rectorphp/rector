@@ -14,14 +14,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
@@ -48,21 +46,6 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \\t]+$#m';
-    /**
-     * @see https://regex101.com/r/qZiqGo/13
-     * @var string
-     */
-    private const REPLACE_COLON_WITH_SPACE_REGEX = '#(^.*function .*\\(.*\\)) : #';
-    public function __construct()
-    {
-        parent::__construct(['shortArraySyntax' => \true]);
-        // print return type double colon right after the bracket "function(): string"
-        $this->initializeInsertionMap();
-        $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', \false, ': ', null];
-        $this->insertionMap['Stmt_Function->returnType'] = [')', \false, ': ', null];
-        $this->insertionMap['Expr_Closure->returnType'] = [')', \false, ': ', null];
-        $this->insertionMap['Expr_ArrowFunction->returnType'] = [')', \false, ': ', null];
-    }
     /**
      * @param Node[] $stmts
      * @param Node[] $origStmts
@@ -218,20 +201,6 @@ final class BetterStandardPrinter extends Standard
         return parent::pScalar_Float($float);
     }
     /**
-     * Add space:
-     * "use("
-     * ↓
-     * "use ("
-     */
-    protected function pExpr_Closure(Closure $closure) : string
-    {
-        $closureContent = parent::pExpr_Closure($closure);
-        if ($closure->uses === []) {
-            return $closureContent;
-        }
-        return \str_replace(' use(', ' use (', $closureContent);
-    }
-    /**
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
@@ -283,20 +252,6 @@ final class BetterStandardPrinter extends Standard
             return $this->wrapValueWith($string, "'");
         }
         return parent::pScalar_String($string);
-    }
-    /**
-     * "...$params) : ReturnType"
-     * ↓
-     * "...$params): ReturnType"
-     */
-    protected function pStmt_ClassMethod(ClassMethod $classMethod) : string
-    {
-        $content = parent::pStmt_ClassMethod($classMethod);
-        if (!$classMethod->returnType instanceof Node) {
-            return $content;
-        }
-        // this approach is chosen, to keep changes in parent pStmt_ClassMethod() updated
-        return Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
     }
     /**
      * It remove all spaces extra to parent
