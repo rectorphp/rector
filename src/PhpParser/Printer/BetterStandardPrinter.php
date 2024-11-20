@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
@@ -325,6 +326,13 @@ final class BetterStandardPrinter extends Standard
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    /**
+     * @api magic method in parent
+     */
+    public function pInterpolatedStringPart(InterpolatedStringPart $interpolatedStringPart) : string
+    {
+        return $interpolatedStringPart->value;
     }
     private function resolveIndentSpaces() : string
     {
