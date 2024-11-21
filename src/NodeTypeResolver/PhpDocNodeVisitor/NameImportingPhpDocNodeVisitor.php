@@ -21,6 +21,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\ValueObject\Application\File;
@@ -178,7 +179,11 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             if (!$staticType instanceof ObjectType) {
                 return;
             }
-            $staticType = new FullyQualifiedObjectType($staticType->getClassName());
+            if ($staticType instanceof AliasedObjectType || $staticType instanceof ShortenedObjectType) {
+                $staticType = new FullyQualifiedObjectType($staticType->getFullyQualifiedName());
+            } else {
+                $staticType = new FullyQualifiedObjectType($staticType->getClassName());
+            }
         }
         $file = $this->currentFileProvider->getFile();
         if (!$file instanceof File) {
@@ -211,7 +216,11 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             if (!$staticType instanceof ObjectType) {
                 return null;
             }
-            $staticType = new FullyQualifiedObjectType($staticType->getClassName());
+            if ($staticType instanceof AliasedObjectType || $staticType instanceof ShortenedObjectType) {
+                $staticType = new FullyQualifiedObjectType($staticType->getFullyQualifiedName());
+            } else {
+                $staticType = new FullyQualifiedObjectType($staticType->getClassName());
+            }
         }
         $file = $this->currentFileProvider->getFile();
         if (!$file instanceof File) {
