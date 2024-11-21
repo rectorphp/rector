@@ -98,7 +98,7 @@ CODE_SAMPLE
         if ($node->elseifs !== []) {
             return null;
         }
-        $conditionStaticType = $this->getType($node->cond);
+        $conditionStaticType = $this->nodeTypeResolver->getNativeType($node->cond);
         if (!$conditionStaticType->isTrue()->yes()) {
             return null;
         }
@@ -125,7 +125,7 @@ CODE_SAMPLE
             if ($this->exprAnalyzer->isNonTypedFromParam($variable)) {
                 return \true;
             }
-            $type = $this->getType($variable);
+            $type = $this->nodeTypeResolver->getNativeType($variable);
             if ($type instanceof IntersectionType) {
                 foreach ($type->getTypes() as $subType) {
                     if ($subType->isArray()->yes()) {
