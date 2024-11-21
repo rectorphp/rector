@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
@@ -77,6 +78,11 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
         if ($node instanceof PostDec || $node instanceof PostInc || $node instanceof PreDec || $node instanceof PreInc) {
             $node->var->setAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \true);
+            return null;
+        }
+        if ($node instanceof BooleanAnd) {
+            $node->right->setAttribute(AttributeKey::IS_RIGHT_AND, \true);
+            return null;
         }
         $this->processContextInClass($node);
         return null;
