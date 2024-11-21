@@ -8,7 +8,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsedImports
 {
     /**
-     * @var array<(FullyQualifiedObjectType | AliasedObjectType)>
+     * @var array<FullyQualifiedObjectType|AliasedObjectType>
      * @readonly
      */
     private array $useImports;

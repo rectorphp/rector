@@ -39,7 +39,9 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
         }
         $startAndEnd = $this->resolveStardAndEnd($node);
         if (!$startAndEnd instanceof StartAndEnd) {
-            return null;
+            $firstKey = \array_key_first($node->types);
+            $lastKey = \array_key_last($node->types);
+            $startAndEnd = new StartAndEnd($node->types[$firstKey]->getAttribute('startIndex'), $node->types[$lastKey]->getAttribute('endIndex'));
         }
         $betterTokenProvider = $this->currentTokenIteratorProvider->provide();
         $isWrappedInCurlyBrackets = $this->isWrappedInCurlyBrackets($betterTokenProvider, $startAndEnd);

@@ -12,7 +12,7 @@ final class StmtsAndTokens
      */
     private array $stmts;
     /**
-     * @var array<int, (array{int, string, int} | string)>
+     * @var array<int, array{int, string, int}|string>
      * @readonly
      */
     private array $tokens;

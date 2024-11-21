@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 final class DataProviderNodes
 {
     /**
-     * @var array<array-key, (Attribute | PhpDocTagNode)>
+     * @var array<array-key, Attribute|PhpDocTagNode>
      * @readonly
      */
     public array $nodes;

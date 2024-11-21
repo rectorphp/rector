@@ -11,12 +11,12 @@ final class ServiceArguments
      */
     private string $className;
     /**
-     * @var array<(string | int), (string | Expr)>
+     * @var array<string|int, string|Expr>
      * @readonly
      */
     private array $params;
     /**
-     * @var array<(string | int), (string | Expr)>
+     * @var array<string|int, string|Expr>
      * @readonly
      */
     private array $envs;
