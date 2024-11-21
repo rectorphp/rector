@@ -73,9 +73,9 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
     private const NEWLINE_ANNOTATION_FQCN_REGEX = '#\\r?\\n@\\\\#';
     /**
      * @var string
-     * @see https://regex101.com/r/3zXEh7/2
+     * @see https://regex101.com/r/3zXEh7/1
      */
-    private const STAR_COMMENT_REGEX = '#^[ \\t]+\\*#ms';
+    private const STAR_COMMENT_REGEX = '#^\\s*\\*#ms';
     public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, TokenIteratorFactory $tokenIteratorFactory, AttributeMirrorer $attributeMirrorer, ObjectTypeSpecifier $objectTypeSpecifier)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
