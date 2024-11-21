@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -88,6 +90,9 @@ final class ChangedNodeScopeRefresher
         }
         if ($node instanceof Expr) {
             return [new Expression($node)];
+        }
+        if ($node instanceof ArrayItem) {
+            return [new Expression(new Array_([$node]))];
         }
         $errorMessage = \sprintf('Complete parent node of "%s" be a stmt.', \get_class($node));
         throw new ShouldNotHappenException($errorMessage);
