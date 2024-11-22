@@ -150,6 +150,7 @@ CODE_SAMPLE
         /** @var string $classMethodName */
         $classMethodName = $this->getName($classMethod->name);
         // Private methods should be ignored
+        $shouldAddOverride = \false;
         foreach ($parentClassReflections as $parentClassReflection) {
             if (!$parentClassReflection->hasNativeMethod($classMethod->name->toString())) {
                 continue;
@@ -160,14 +161,20 @@ CODE_SAMPLE
             }
             $parentMethod = $parentClassReflection->getNativeMethod($classMethodName);
             if ($parentMethod->isPrivate()) {
-                continue;
+                // early stop as already private
+                $shouldAddOverride = \false;
+                return;
             }
             if ($this->shouldSkipParentClassMethod($parentClassReflection, $classMethod)) {
-                continue;
+                // early stop as already skipped
+                $shouldAddOverride = \false;
+                return;
             }
+            $shouldAddOverride = \true;
+        }
+        if ($shouldAddOverride) {
             $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(self::OVERRIDE_CLASS))]);
             $this->hasChanged = \true;
-            return;
         }
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
@@ -192,8 +199,11 @@ CODE_SAMPLE
         if (!$parentClassMethod instanceof ClassMethod) {
             return \true;
         }
-        if ($parentClassMethod->isAbstract()) {
+        if ($parentClassReflection->isTrait() && !$parentClassMethod->isAbstract()) {
             return \true;
+        }
+        if ($parentClassMethod->isAbstract()) {
+            return !$parentClassReflection->isTrait();
         }
         // has any stmts?
         if ($parentClassMethod->stmts === null || $parentClassMethod->stmts === []) {
