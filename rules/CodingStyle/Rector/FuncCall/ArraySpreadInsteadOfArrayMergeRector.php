@@ -125,7 +125,7 @@ CODE_SAMPLE
             return \true;
         }
         $arrayStaticType = $this->getType($expr);
-        if (!$arrayStaticType->isArray()->yes()) {
+        if (!$arrayStaticType instanceof ArrayType && !$arrayStaticType instanceof ConstantArrayType) {
             return \true;
         }
         return !$this->isArrayKeyTypeAllowed($arrayStaticType);

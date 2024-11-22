@@ -153,7 +153,7 @@ CODE_SAMPLE
      */
     private function processAddArrayReturnType($node, Type $returnType)
     {
-        if (!$returnType->isArray()->yes()) {
+        if (!$returnType instanceof ArrayType && !$returnType instanceof ConstantArrayType) {
             return null;
         }
         // always returns array
