@@ -194,6 +194,6 @@ CODE_SAMPLE
                 }
             }
         }
-        return \false;
+        return $this->propertyWriteonlyAnalyzer->hasClassDynamicPropertyNames($class);
     }
 }
