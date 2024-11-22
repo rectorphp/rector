@@ -155,7 +155,7 @@ CODE_SAMPLE
                 $assign = new AssignCoalesce($param->var, $default);
             }
             // recheck after
-            if ($isConstructor) {
+            if ($isConstructor && $param->type !== null) {
                 $param->type = $this->ensureNullableType($param->type);
             }
             $stmts[] = new Expression($assign);
