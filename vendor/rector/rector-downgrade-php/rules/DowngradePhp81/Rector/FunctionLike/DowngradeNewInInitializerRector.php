@@ -154,6 +154,10 @@ CODE_SAMPLE
             } else {
                 $assign = new AssignCoalesce($param->var, $default);
             }
+            // recheck after
+            if ($isConstructor) {
+                $param->type = $this->ensureNullableType($param->type);
+            }
             $stmts[] = new Expression($assign);
             $param->default = $this->nodeFactory->createNull();
         }
@@ -177,23 +181,17 @@ CODE_SAMPLE
             return new NullableType($type);
         }
         if ($type instanceof UnionType) {
-            if (!$this->hasNull($type)) {
-                $type->types[] = new Name('null');
+            foreach ($type->types as $typeChild) {
+                if (!$typeChild instanceof Identifier) {
+                    continue;
+                }
+                if ($typeChild->toLowerString() === 'null') {
+                    return $type;
+                }
             }
+            $type->types[] = new Identifier('null');
             return $type;
         }
         throw new ShouldNotHappenException();
-    }
-    private function hasNull(UnionType $unionType) : bool
-    {
-        foreach ($unionType->types as $type) {
-            if (!$type instanceof Identifier) {
-                continue;
-            }
-            if ($type->toLowerString() === 'null') {
-                return \true;
-            }
-        }
-        return \false;
     }
 }
