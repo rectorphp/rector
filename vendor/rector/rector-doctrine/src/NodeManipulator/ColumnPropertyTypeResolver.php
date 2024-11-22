@@ -48,9 +48,9 @@ final class ColumnPropertyTypeResolver
      * @param array<string, Type> $doctrineTypeToScalarType
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, AttributeFinder $attributeFinder, ?array $doctrineTypeToScalarType = null)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, AttributeFinder $attributeFinder, array $doctrineTypeToScalarType = null)
     {
-        $this->doctrineTypeToScalarType = $doctrineTypeToScalarType ?? [
+        $doctrineTypeToScalarType ??= [
             'tinyint' => new BooleanType(),
             'boolean' => new BooleanType(),
             // integers
