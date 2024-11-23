@@ -56,13 +56,16 @@ above commands in a docker container:
 
 ```bash
 # Build the docker image
-docker compose build
+docker compose build --pull
+
+# Install dependencies
+docker compose run --rm php composer install
 
 # Run the entire CI suite
-docker compose run php composer complete-check
+docker compose run --rm php composer complete-check
 
 # Fix the coding standards
-docker compose run php composer fix-cs
+docker compose run --rm php composer fix-cs
 ```
 
 ## TroubleShooting
