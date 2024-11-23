@@ -78,10 +78,6 @@ final class AttributeKey
      */
     public const DO_NOT_CHANGE = 'do_not_change';
     /**
-     * @var string
-     */
-    public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
-    /**
      * Helps with infinite loop detection
      * @var string
      */

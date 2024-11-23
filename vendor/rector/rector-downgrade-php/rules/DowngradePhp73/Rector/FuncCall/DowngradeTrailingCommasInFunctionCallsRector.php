@@ -79,7 +79,6 @@ CODE_SAMPLE
             return null;
         }
         // remove comma
-        $lastArg->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
