@@ -37,11 +37,6 @@ use Rector\Util\NewLineSplitter;
 final class BetterStandardPrinter extends Standard
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/DrsMY4/1
-     */
-    private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|\$)#";
-    /**
      * Remove extra spaces before new Nop_ nodes
      * @see https://regex101.com/r/iSvroO/1
      * @var string
@@ -181,19 +176,6 @@ final class BetterStandardPrinter extends Standard
             return $content;
         }
         return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
-    }
-    /**
-     * Do not preslash all slashes (parent behavior), but only those:
-     *
-     * - followed by "\"
-     * - by "'"
-     * - or the end of the string
-     *
-     * Prevents `Vendor\Class` => `Vendor\\Class`.
-     */
-    protected function pSingleQuotedString(string $string) : string
-    {
-        return "'" . Strings::replace($string, self::QUOTED_SLASH_REGEX, '\\\\$0') . "'";
     }
     /**
      * Emulates 1_000 in PHP 7.3- version
