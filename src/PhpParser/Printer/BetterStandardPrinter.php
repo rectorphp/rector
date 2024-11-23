@@ -241,9 +241,7 @@ final class BetterStandardPrinter extends Standard
     {
         if ($string->getAttribute(AttributeKey::DOC_INDENTATION) === '__REMOVED__') {
             $content = parent::pScalar_String($string);
-            $lines = NewLineSplitter::split($content);
-            $trimmedLines = \array_map('ltrim', $lines);
-            return \implode("\n", $trimmedLines);
+            return $this->cleanStartIndentationOnHeredocNowDoc($content);
         }
         $isRegularPattern = (bool) $string->getAttribute(AttributeKey::IS_REGULAR_PATTERN, \false);
         if (!$isRegularPattern) {
@@ -279,9 +277,7 @@ final class BetterStandardPrinter extends Standard
     {
         $content = parent::pScalar_InterpolatedString($interpolatedString);
         if ($interpolatedString->getAttribute(AttributeKey::DOC_INDENTATION) === '__REMOVED__') {
-            $lines = NewLineSplitter::split($content);
-            $trimmedLines = \array_map('ltrim', $lines);
-            return \implode("\n", $trimmedLines);
+            return $this->cleanStartIndentationOnHeredocNowDoc($content);
         }
         return $content;
     }
@@ -330,6 +326,12 @@ final class BetterStandardPrinter extends Standard
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    private function cleanStartIndentationOnHeredocNowDoc(string $content) : string
+    {
+        $lines = NewLineSplitter::split($content);
+        $trimmedLines = \array_map('ltrim', $lines);
+        return \implode("\n", $trimmedLines);
     }
     private function resolveIndentSpaces() : string
     {
