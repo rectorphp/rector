@@ -263,18 +263,6 @@ final class BetterStandardPrinter extends Standard
         }
         return $content;
     }
-    protected function pCommaSeparated(array $nodes) : string
-    {
-        $result = parent::pCommaSeparated($nodes);
-        $last = \end($nodes);
-        if ($last instanceof Node) {
-            $trailingComma = $last->getAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA);
-            if ($trailingComma === \false) {
-                $result = \rtrim($result, ',');
-            }
-        }
-        return $result;
-    }
     /**
      * Invoke re-print even if only raw value was changed.
      * That allows PHPStan to use int strict types, while changing the value with literal "_"
