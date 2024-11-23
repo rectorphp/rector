@@ -55,7 +55,7 @@ final class TypeNormalizer
         } elseif ($type->getIterableValueType() instanceof UnionType) {
             $this->collectNestedArrayTypeFromUnionType($type->getIterableValueType(), $arrayNesting);
         } else {
-            $this->collectedNestedArrayTypes[] = new NestedArrayType($type->getIterableValueType(), $arrayNesting, $type->getKeyType());
+            $this->collectedNestedArrayTypes[] = new NestedArrayType($type->getIterableValueType(), $arrayNesting, $type->getIterableKeyType());
         }
         return $this->createUnionedTypesFromArrayTypes($this->collectedNestedArrayTypes);
     }
@@ -80,7 +80,7 @@ final class TypeNormalizer
     }
     private function isConstantArrayNever(Type $type) : bool
     {
-        return $type instanceof ConstantArrayType && $type->getKeyType() instanceof NeverType && $type->getIterableValueType() instanceof NeverType;
+        return $type instanceof ConstantArrayType && $type->getIterableKeyType() instanceof NeverType && $type->getIterableValueType() instanceof NeverType;
     }
     private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting) : void
     {

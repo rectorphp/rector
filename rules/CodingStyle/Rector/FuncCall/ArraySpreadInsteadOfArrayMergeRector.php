@@ -135,7 +135,7 @@ CODE_SAMPLE
      */
     private function isArrayKeyTypeAllowed($arrayType) : bool
     {
-        if ($arrayType->getKeyType()->isInteger()->yes()) {
+        if ($arrayType->getIterableKeyType()->isInteger()->yes()) {
             return \true;
         }
         // php 8.1+ allow mixed key: int, string, and null

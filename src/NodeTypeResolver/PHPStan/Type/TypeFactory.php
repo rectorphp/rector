@@ -177,7 +177,7 @@ final class TypeFactory
     private function unwrapConstantArrayTypes(ConstantArrayType $constantArrayType) : array
     {
         $unwrappedTypes = [];
-        $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getKeyType());
+        $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getIterableKeyType());
         $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getIterableValueType());
         foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
             $nestedFlattenKeyType = $flattenKeyTypes[$position] ?? null;

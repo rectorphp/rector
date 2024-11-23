@@ -20,8 +20,8 @@ final class ArrayTypeComparator
         if (!$checkedType instanceof ConstantArrayType && !$mainType instanceof ConstantArrayType) {
             return $mainType->isSuperTypeOf($checkedType)->yes();
         }
-        $checkedKeyType = $checkedType->getKeyType();
-        $mainKeyType = $mainType->getKeyType();
+        $checkedKeyType = $checkedType->getIterableKeyType();
+        $mainKeyType = $mainType->getIterableKeyType();
         if (!$mainKeyType instanceof MixedType && $mainKeyType->isSuperTypeOf($checkedKeyType)->yes()) {
             return \true;
         }
