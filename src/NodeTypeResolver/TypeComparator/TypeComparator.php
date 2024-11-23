@@ -147,8 +147,8 @@ final class TypeComparator
         if (!$secondType instanceof ArrayType) {
             return \false;
         }
-        $firstArrayItemType = $firstType->getItemType();
-        $secondArrayItemType = $secondType->getItemType();
+        $firstArrayItemType = $firstType->getIterableValueType();
+        $secondArrayItemType = $secondType->getIterableValueType();
         return $this->isMutualObjectSubtypes($firstArrayItemType, $secondArrayItemType);
     }
     private function isMutualObjectSubtypes(Type $firstArrayItemType, Type $secondArrayItemType) : bool

@@ -25,8 +25,8 @@ final class ArrayTypeComparator
         if (!$mainKeyType instanceof MixedType && $mainKeyType->isSuperTypeOf($checkedKeyType)->yes()) {
             return \true;
         }
-        $checkedItemType = $checkedType->getItemType();
-        $mainItemType = $mainType->getItemType();
+        $checkedItemType = $checkedType->getIterableValueType();
+        $mainItemType = $mainType->getIterableValueType();
         return $checkedItemType->isSuperTypeOf($mainItemType)->yes();
     }
 }

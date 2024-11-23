@@ -84,7 +84,7 @@ CODE_SAMPLE
         if (!$firstValueStaticType instanceof ConstantArrayType) {
             return null;
         }
-        if ($firstValueStaticType->getItemType() instanceof MixedType) {
+        if ($firstValueStaticType->getIterableValueType() instanceof MixedType) {
             return null;
         }
         return $this->refactorAssignArray($firstValueStaticType);

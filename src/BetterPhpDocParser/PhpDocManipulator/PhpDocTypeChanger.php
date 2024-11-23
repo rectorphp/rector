@@ -79,7 +79,7 @@ final class PhpDocTypeChanger
             return;
         }
         // prevent existing type override by mixed
-        if (!$phpDocInfo->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
+        if (!$phpDocInfo->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getIterableValueType() instanceof NeverType) {
             return;
         }
         if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {

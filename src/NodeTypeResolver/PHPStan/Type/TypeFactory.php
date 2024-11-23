@@ -178,7 +178,7 @@ final class TypeFactory
     {
         $unwrappedTypes = [];
         $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getKeyType());
-        $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getItemType());
+        $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getIterableValueType());
         foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
             $nestedFlattenKeyType = $flattenKeyTypes[$position] ?? null;
             if (!$nestedFlattenKeyType instanceof Type) {

@@ -310,7 +310,7 @@ final class NodeTypeResolver
     private function resolveArrayDimFetchType(ArrayDimFetch $arrayDimFetch, Scope $scope, Type $originalNativeType) : Type
     {
         $nativeVariableType = $scope->getNativeType($arrayDimFetch->var);
-        if ($nativeVariableType instanceof MixedType || $nativeVariableType instanceof ArrayType && $nativeVariableType->getItemType() instanceof MixedType) {
+        if ($nativeVariableType instanceof MixedType || $nativeVariableType instanceof ArrayType && $nativeVariableType->getIterableValueType() instanceof MixedType) {
             return $originalNativeType;
         }
         $type = $scope->getType($arrayDimFetch);
