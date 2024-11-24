@@ -10,13 +10,10 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\Util\StringUtils;
 /**
@@ -28,10 +25,6 @@ final class PropertyNaming
      * @readonly
      */
     private RectorNamingInflector $rectorNamingInflector;
-    /**
-     * @readonly
-     */
-    private NodeTypeResolver $nodeTypeResolver;
     /**
      * @var string[]
      */
@@ -54,10 +47,9 @@ final class PropertyNaming
      * @var string
      */
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
-    public function __construct(RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(RectorNamingInflector $rectorNamingInflector)
     {
         $this->rectorNamingInflector = $rectorNamingInflector;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function getExpectedNameFromMethodName(string $methodName) : ?ExpectedName
     {
@@ -251,10 +243,6 @@ final class PropertyNaming
         if ($type instanceof GenericObjectType) {
             return null;
         }
-        if ($type instanceof AliasedObjectType) {
-            return $className;
-        }
-        /** @var TypeWithClassName $type */
-        return $this->nodeTypeResolver->getFullyQualifiedClassName($type);
+        return $className;
     }
 }
