@@ -17,8 +17,6 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * @implements NodeTypeResolverInterface<StaticCall|MethodCall>
  */
@@ -66,9 +64,6 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
             $callerType = $this->nodeTypeResolver->getType($node->var);
         } else {
             $callerType = $this->nodeTypeResolver->getType($node->class);
-        }
-        if ($callerType instanceof AliasedObjectType) {
-            $callerType = new FullyQualifiedObjectType($callerType->getFullyQualifiedName());
         }
         foreach ($callerType->getObjectClassReflections() as $objectClassReflection) {
             $classMethodReturnType = $this->resolveClassMethodReturnType($objectClassReflection, $node, $methodName, $scope);
