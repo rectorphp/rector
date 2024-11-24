@@ -30,6 +30,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\ValueObject\MethodName;
 final class ReflectionResolver
@@ -139,7 +140,7 @@ final class ReflectionResolver
     public function resolveMethodReflectionFromStaticCall(StaticCall $staticCall) : ?MethodReflection
     {
         $objectType = $this->nodeTypeResolver->getType($staticCall->class);
-        if ($objectType instanceof ShortenedObjectType) {
+        if ($objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType) {
             /** @var array<class-string> $classNames */
             $classNames = [$objectType->getFullyQualifiedName()];
         } else {
