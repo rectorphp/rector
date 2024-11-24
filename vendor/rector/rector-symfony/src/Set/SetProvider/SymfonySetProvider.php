@@ -41,6 +41,7 @@ final class SymfonySetProvider implements SetProviderInterface
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '6.4', __DIR__ . '/../../../config/sets/symfony/symfony64.php'),
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '7.0', __DIR__ . '/../../../config/sets/symfony/symfony70.php'),
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '7.1', __DIR__ . '/../../../config/sets/symfony/symfony71.php'),
+            new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/*', '7.2', __DIR__ . '/../../../config/sets/symfony/symfony72.php'),
             new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/symfony/configs.php'),
             new Set(SetGroup::SYMFONY, 'Code Quality', __DIR__ . '/../../../config/sets/symfony/symfony-code-quality.php'),
             new Set(SetGroup::SYMFONY, 'Constructor Injection', __DIR__ . '/../../../config/sets/symfony/symfony-constructor-injection.php'),
