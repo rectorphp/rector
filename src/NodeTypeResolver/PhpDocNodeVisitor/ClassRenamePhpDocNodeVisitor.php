@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
@@ -60,12 +59,13 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         /** @var \PhpParser\Node $currentPhpNode */
         $currentPhpNode = $this->currentPhpNode;
-        $identifier = clone $node;
-        $identifierName = $identifier->name;
-        $identifier->name = $this->resolveNamespacedName($identifier, $currentPhpNode, $node->name);
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifier, $currentPhpNode);
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $currentPhpNode);
+        // non object type and @template is to not be renamed
+        if (!$staticType instanceof ObjectType || $staticType instanceof TemplateObjectType) {
+            return null;
+        }
         // make sure to compare FQNs
-        $objectType = $this->ensureFQCNObject($staticType, $identifierName);
+        $objectType = $this->ensureFQCNObject($staticType, $node->name);
         foreach ($this->oldToNewTypes as $oldToNewType) {
             /** @var ObjectType $oldType */
             $oldType = $oldToNewType->getOldType();
@@ -95,32 +95,14 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     {
         return $this->hasChanged;
     }
-    private function resolveNamespacedName(IdentifierTypeNode $identifierTypeNode, PhpNode $phpNode, string $name) : string
+    private function ensureFQCNObject(ObjectType $objectType, string $identiferName) : ObjectType
     {
-        if (\strncmp($name, '\\', \strlen('\\')) === 0) {
-            return $name;
-        }
-        if (\strpos($name, '\\') !== \false) {
-            return $name;
-        }
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpNode);
-        // @template is to not be renamed
-        if ($staticType instanceof TemplateObjectType) {
-            return '';
-        }
-        return $name;
-    }
-    /**
-     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\Type
-     */
-    private function ensureFQCNObject(Type $type, string $identiferName)
-    {
-        if ($type instanceof ShortenedObjectType && \strncmp($identiferName, '\\', \strlen('\\')) === 0) {
+        if ($objectType instanceof ShortenedObjectType && \strncmp($identiferName, '\\', \strlen('\\')) === 0) {
             return new ObjectType(\ltrim($identiferName, '\\'));
         }
-        if ($type instanceof ShortenedObjectType || $type instanceof AliasedObjectType) {
-            return new ObjectType($type->getFullyQualifiedName());
+        if ($objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType) {
+            return new ObjectType($objectType->getFullyQualifiedName());
         }
-        return $type;
+        return $objectType;
     }
 }
