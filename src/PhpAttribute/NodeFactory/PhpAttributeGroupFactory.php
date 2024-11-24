@@ -53,17 +53,21 @@ final class PhpAttributeGroupFactory
         $this->annotationToAttributeIntegerValueCaster = $annotationToAttributeIntegerValueCaster;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
     }
-    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute) : AttributeGroup
+    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute, ?string $value = null) : AttributeGroup
     {
-        return $this->createFromClass($annotationToAttribute->getAttributeClass());
+        return $this->createFromClass($annotationToAttribute->getAttributeClass(), $value);
     }
     /**
      * @param AttributeName::*|string $attributeClass
      */
-    public function createFromClass(string $attributeClass) : AttributeGroup
+    public function createFromClass(string $attributeClass, ?string $value = null) : AttributeGroup
     {
         $fullyQualified = new FullyQualified($attributeClass);
         $attribute = new Attribute($fullyQualified);
+        if ($value !== null && $value !== '') {
+            $arg = new Arg(new String_($value));
+            $attribute->args = [$arg];
+        }
         return new AttributeGroup([$attribute]);
     }
     /**

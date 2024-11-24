@@ -199,7 +199,7 @@ CODE_SAMPLE
                 if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
                     continue;
                 }
-                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
+                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $annotationToAttribute->getUseValueAsAttributeArgument() ? (string) $docNode->value : null);
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
