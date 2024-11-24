@@ -12,6 +12,7 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -60,7 +61,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
             return new Name('self');
         }
         if ($type instanceof ShortenedObjectType || $type instanceof AliasedObjectType) {
-            return new Name($type->getClassName());
+            return new Name($type->getClassName(), [AttributeKey::NAMESPACED_NAME => $type->getFullyQualifiedName()]);
         }
         if ($type instanceof FullyQualifiedObjectType) {
             $className = $type->getClassName();
