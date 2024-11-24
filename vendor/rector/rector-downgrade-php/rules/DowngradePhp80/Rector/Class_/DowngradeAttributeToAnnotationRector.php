@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Class_;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Param;
@@ -18,6 +19,8 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\NodeFactory\DoctrineAnnotationFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -42,6 +45,10 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
     /**
+     * @readonly
+     */
+    private BetterStandardPrinter $betterStandardPrinter;
+    /**
      * @var string[]
      */
     private const SKIPPED_ATTRIBUTES = ['Attribute', 'ReturnTypeWillChange', 'AllowDynamicProperties'];
@@ -50,11 +57,12 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
      */
     private array $attributesToAnnotations = [];
     private bool $isDowngraded = \false;
-    public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -101,9 +109,16 @@ CODE_SAMPLE
         }
         $this->isDowngraded = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $attributesAsComments = [];
+        $oldTokens = $this->file->getOldTokens();
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
                 if ($this->shouldSkipAttribute($attribute)) {
+                    if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && \strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
+                        $print = $this->betterStandardPrinter->print($attrGroup);
+                        $attributesAsComments[] = new Comment($print);
+                        unset($attrGroup->attrs[$key]);
+                    }
                     continue;
                 }
                 $attributeToAnnotation = $this->matchAttributeToAnnotation($attribute, $this->attributesToAnnotations);
@@ -126,6 +141,11 @@ CODE_SAMPLE
         }
         // cleanup empty attr groups
         $this->cleanupEmptyAttrGroups($node);
+        if ($attributesAsComments !== []) {
+            $this->isDowngraded = \true;
+            $currentComments = $node->getAttribute(AttributeKey::COMMENTS) ?? [];
+            $node->setAttribute(AttributeKey::COMMENTS, \array_merge($currentComments, $attributesAsComments));
+        }
         if (!$this->isDowngraded) {
             return null;
         }
