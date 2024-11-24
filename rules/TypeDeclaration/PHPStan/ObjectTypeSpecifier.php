@@ -129,14 +129,14 @@ final class ObjectTypeSpecifier
     {
         // A. is alias in use statement matching this class alias
         if ($alias === $className) {
-            return new AliasedObjectType($alias, $fullyQualifiedName);
+            return new AliasedObjectType($className, $fullyQualifiedName);
         }
         // B. is aliased classes matching the class name
         if ($useName === $className) {
-            return new AliasedObjectType($alias, $fullyQualifiedName);
+            return new AliasedObjectType($className, $fullyQualifiedName);
         }
         if (\strncmp($className, $alias . '\\', \strlen($alias . '\\')) === 0) {
-            return new AliasedObjectType($alias, $fullyQualifiedName . \ltrim($className, $alias));
+            return new AliasedObjectType($className, $fullyQualifiedName . \ltrim($className, $alias));
         }
         return null;
     }
