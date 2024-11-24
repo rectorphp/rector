@@ -90,9 +90,11 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
         if ($loweredName === 'iterable') {
             return new IterableType(new MixedType(), new MixedType());
         }
+        $withPreslash = \false;
         if (\strncmp($identifierTypeNode->name, '\\', \strlen('\\')) === 0) {
             $typeWithoutPreslash = Strings::substring($identifierTypeNode->name, 1);
             $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
+            $withPreslash = \true;
         } else {
             if ($identifierTypeNode->name === 'scalar') {
                 // pseudo type, see https://www.php.net/manual/en/language.types.intro.php
@@ -103,7 +105,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
             $objectType = new ObjectType($identifierTypeNode->name);
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);
+        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope, $withPreslash);
     }
     /**
      * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType

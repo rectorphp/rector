@@ -4,19 +4,14 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
 use PhpParser\Node as PhpNode;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
-use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\UseImportsResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use Rector\Renaming\Collector\RenamedNameCollector;
@@ -32,10 +27,6 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     /**
      * @readonly
      */
-    private UseImportsResolver $useImportsResolver;
-    /**
-     * @readonly
-     */
     private RenamedNameCollector $renamedNameCollector;
     /**
      * @var OldToNewType[]
@@ -43,10 +34,9 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private array $oldToNewTypes = [];
     private bool $hasChanged = \false;
     private ?PhpNode $currentPhpNode = null;
-    public function __construct(StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver, RenamedNameCollector $renamedNameCollector)
+    public function __construct(StaticTypeMapper $staticTypeMapper, RenamedNameCollector $renamedNameCollector)
     {
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->useImportsResolver = $useImportsResolver;
         $this->renamedNameCollector = $renamedNameCollector;
     }
     public function setCurrentPhpNode(PhpNode $phpNode) : void
@@ -114,50 +104,9 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return $name;
         }
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpNode);
-        if (!$staticType instanceof ObjectType) {
-            return $name;
-        }
-        if ($staticType instanceof ShortenedObjectType || $staticType instanceof AliasedObjectType) {
-            return $name;
-        }
-        $uses = $this->useImportsResolver->resolve();
-        $originalNode = $phpNode->getAttribute(AttributeKey::ORIGINAL_NODE);
-        $scope = $originalNode instanceof PhpNode ? $originalNode->getAttribute(AttributeKey::SCOPE) : $phpNode->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            if (!$originalNode instanceof PhpNode) {
-                return $this->resolveNamefromUse($uses, $name);
-            }
+        // @template is to not be renamed
+        if ($staticType instanceof TemplateObjectType) {
             return '';
-        }
-        $namespaceName = $scope->getNamespace();
-        if ($namespaceName === null) {
-            return $this->resolveNamefromUse($uses, $name);
-        }
-        if ($uses === []) {
-            return $namespaceName . '\\' . $name;
-        }
-        $nameFromUse = $this->resolveNamefromUse($uses, $name);
-        if ($nameFromUse !== $name) {
-            return $nameFromUse;
-        }
-        return $namespaceName . '\\' . $nameFromUse;
-    }
-    /**
-     * @param array<Use_|GroupUse> $uses
-     */
-    private function resolveNamefromUse(array $uses, string $name) : string
-    {
-        foreach ($uses as $use) {
-            $prefix = $this->useImportsResolver->resolvePrefix($use);
-            foreach ($use->uses as $useUse) {
-                if ($useUse->alias instanceof Identifier) {
-                    continue;
-                }
-                $lastName = $useUse->name->getLast();
-                if ($lastName === $name) {
-                    return $prefix . $useUse->name->toString();
-                }
-            }
         }
         return $name;
     }

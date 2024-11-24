@@ -50,7 +50,7 @@ final class ObjectTypeSpecifier
     /**
      * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType|\PHPStan\Type\Generic\TemplateType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope)
+    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope, bool $withPreslash = \false)
     {
         $uses = $this->useImportsResolver->resolve();
         $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
@@ -69,6 +69,7 @@ final class ObjectTypeSpecifier
             return new FullyQualifiedObjectType($className);
         }
         // probably in same namespace
+        $namespaceName = null;
         if ($scope instanceof Scope) {
             $namespaceName = $scope->getNamespace();
             if ($namespaceName !== null) {
@@ -77,8 +78,6 @@ final class ObjectTypeSpecifier
                     return new FullyQualifiedObjectType($newClassName);
                 }
             }
-        }
-        if ($scope instanceof Scope) {
             $classReflection = $scope->getClassReflection();
             if ($classReflection instanceof ClassReflection) {
                 $templateTags = $classReflection->getTemplateTags();
@@ -86,18 +85,31 @@ final class ObjectTypeSpecifier
                 $templateTypeScope = $nameScope->getTemplateTypeScope();
                 if (!$templateTypeScope instanceof TemplateTypeScope) {
                     // invalid type
-                    return new NonExistingObjectType($className);
+                    return $this->resolveNamespacedNonExistingObjectType($namespaceName, $className, $withPreslash);
                 }
                 $currentTemplateTag = $templateTags[$className] ?? null;
                 if ($currentTemplateTag === null) {
                     // invalid type
-                    return new NonExistingObjectType($className);
+                    return $this->resolveNamespacedNonExistingObjectType($namespaceName, $className, $withPreslash);
                 }
                 return TemplateTypeFactory::create($templateTypeScope, $currentTemplateTag->getName(), $currentTemplateTag->getBound(), $currentTemplateTag->getVariance());
             }
         }
         // invalid type
-        return new NonExistingObjectType($className);
+        return $this->resolveNamespacedNonExistingObjectType($namespaceName, $className, $withPreslash);
+    }
+    private function resolveNamespacedNonExistingObjectType(?string $namespacedName, string $className, bool $withPreslash) : NonExistingObjectType
+    {
+        if ($namespacedName === null) {
+            return new NonExistingObjectType($className);
+        }
+        if ($withPreslash) {
+            return new NonExistingObjectType($className);
+        }
+        if (\strpos($className, '\\') !== \false) {
+            return new NonExistingObjectType($className);
+        }
+        return new NonExistingObjectType($namespacedName . '\\' . $className);
     }
     /**
      * @param array<Use_|GroupUse> $uses
