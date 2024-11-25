@@ -123,4 +123,8 @@ final class SetList
      * @var string
      */
     public const CARBON = __DIR__ . '/../../../config/set/datetime-to-carbon.php';
+    /**
+     * @var string
+     */
+    public const BEHAT_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../../config/set/behat-annotations-to-attributes.php';
 }
