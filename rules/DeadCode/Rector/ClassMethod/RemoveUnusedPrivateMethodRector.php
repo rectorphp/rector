@@ -8,9 +8,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
@@ -35,11 +39,21 @@ final class RemoveUnusedPrivateMethodRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
+    public function __construct(IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -95,11 +109,15 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        $collectionTestMethodsUsesPrivateProvider = $this->collectTestMethodsUsesPrivateDataProvider($classReflection, $node, $classMethods);
         foreach ($privateMethods as $privateMethod) {
             if ($this->shouldSkip($privateMethod, $classReflection)) {
                 continue;
             }
             if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $privateMethod, $scope)) {
+                continue;
+            }
+            if (\in_array($this->getName($privateMethod), $collectionTestMethodsUsesPrivateProvider, \true)) {
                 continue;
             }
             unset($node->stmts[$privateMethod->getAttribute(AttributeKey::STMT_KEY)]);
@@ -109,6 +127,50 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param ClassMethod[] $classMethods
+     * @return string[]
+     */
+    private function collectTestMethodsUsesPrivateDataProvider(ClassReflection $classReflection, Class_ $class, array $classMethods) : array
+    {
+        if (!$classReflection->isSubClassOf('PHPUnit\\Framework\\TestCase')) {
+            return [];
+        }
+        $privateMethods = [];
+        foreach ($classMethods as $classMethod) {
+            // test method only public, but may use private data provider
+            // so verify @dataProvider and #[\PHPUnit\Framework\Attributes\DataProvider] only on public methods
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            if ($phpDocInfo->hasByName('dataProvider')) {
+                $dataProvider = $phpDocInfo->getByName('dataProvider');
+                if ($dataProvider instanceof PhpDocTagNode && $dataProvider->value instanceof GenericTagValueNode) {
+                    $dataProviderMethod = $class->getMethod($dataProvider->value->value);
+                    if ($dataProviderMethod instanceof ClassMethod && $dataProviderMethod->isPrivate()) {
+                        $privateMethods[] = $dataProvider->value->value;
+                    }
+                }
+            }
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\\Framework\\Attributes\\DataProvider')) {
+                foreach ($classMethod->attrGroups as $attrGroup) {
+                    foreach ($attrGroup->attrs as $attr) {
+                        if ($attr->name->toString() === 'PHPUnit\\Framework\\Attributes\\DataProvider') {
+                            $argValue = $attr->args[0]->value->value ?? '';
+                            if (\is_string($argValue)) {
+                                $dataProviderMethod = $class->getMethod($argValue);
+                                if ($dataProviderMethod instanceof ClassMethod && $dataProviderMethod->isPrivate()) {
+                                    $privateMethods[] = $argValue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $privateMethods;
     }
     private function shouldSkip(ClassMethod $classMethod, ?ClassReflection $classReflection) : bool
     {
