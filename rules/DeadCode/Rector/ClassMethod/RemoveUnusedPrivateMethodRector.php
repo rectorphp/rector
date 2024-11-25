@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -144,8 +145,8 @@ CODE_SAMPLE
             if (!$classMethod->isPublic()) {
                 continue;
             }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            if ($phpDocInfo->hasByName('dataProvider')) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+            if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByName('dataProvider')) {
                 $dataProvider = $phpDocInfo->getByName('dataProvider');
                 if ($dataProvider instanceof PhpDocTagNode && $dataProvider->value instanceof GenericTagValueNode) {
                     $dataProviderMethod = $class->getMethod($dataProvider->value->value);
