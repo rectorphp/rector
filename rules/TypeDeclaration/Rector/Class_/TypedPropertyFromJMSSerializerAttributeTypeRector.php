@@ -24,6 +24,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -66,10 +67,6 @@ final class TypedPropertyFromJMSSerializerAttributeTypeRector extends AbstractRe
      * @readonly
      */
     private ConstructorAssignDetector $constructorAssignDetector;
-    /**
-     * @var string
-     */
-    private const JMS_TYPE = 'JMS\\Serializer\\Annotation\\Type';
     public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, ValueResolver $valueResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, ScalarStringToTypeMapper $scalarStringToTypeMapper, StaticTypeMapper $staticTypeMapper, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
@@ -124,7 +121,7 @@ CODE_SAMPLE
             if ($property->type instanceof Node) {
                 continue;
             }
-            if (!$this->phpAttributeAnalyzer->hasPhpAttribute($property, self::JMS_TYPE)) {
+            if (!$this->phpAttributeAnalyzer->hasPhpAttribute($property, AssignToPropertyTypeInferer::JMS_TYPE)) {
                 continue;
             }
             if (!$classReflection instanceof ClassReflection) {
@@ -147,7 +144,7 @@ CODE_SAMPLE
             $typeValue = null;
             foreach ($property->attrGroups as $attrGroup) {
                 foreach ($attrGroup->attrs as $attr) {
-                    if ($attr->name->toString() === self::JMS_TYPE) {
+                    if ($attr->name->toString() === AssignToPropertyTypeInferer::JMS_TYPE) {
                         $typeValue = $this->valueResolver->getValue($attr->args[0]->value);
                         break;
                     }
