@@ -74,6 +74,7 @@ class ParentClass
 {
     public function foo()
     {
+        echo 'default';
     }
 }
 
@@ -81,6 +82,7 @@ final class ChildClass extends ParentClass
 {
     public function foo()
     {
+        echo 'override default';
     }
 }
 CODE_SAMPLE
@@ -89,6 +91,7 @@ class ParentClass
 {
     public function foo()
     {
+        echo 'default';
     }
 }
 
@@ -97,6 +100,7 @@ final class ChildClass extends ParentClass
     #[\Override]
     public function foo()
     {
+        echo 'override default';
     }
 }
 CODE_SAMPLE
@@ -161,16 +165,13 @@ CODE_SAMPLE
             }
             $parentMethod = $parentClassReflection->getNativeMethod($classMethodName);
             if ($parentMethod->isPrivate()) {
-                // early stop as already private
-                $shouldAddOverride = \false;
-                return;
+                break;
             }
             if ($this->shouldSkipParentClassMethod($parentClassReflection, $classMethod)) {
-                // early stop as already skipped
-                $shouldAddOverride = \false;
-                return;
+                continue;
             }
             $shouldAddOverride = \true;
+            break;
         }
         if ($shouldAddOverride) {
             $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(self::OVERRIDE_CLASS))]);
@@ -199,11 +200,14 @@ CODE_SAMPLE
         if (!$parentClassMethod instanceof ClassMethod) {
             return \true;
         }
+        // non-abstract trait can't have #[\Override]
         if ($parentClassReflection->isTrait() && !$parentClassMethod->isAbstract()) {
             return \true;
         }
+        // just override abstract method also skipped on purpose
+        // only grand child of abstract method that parent has content will have
         if ($parentClassMethod->isAbstract()) {
-            return !$parentClassReflection->isTrait();
+            return \true;
         }
         // has any stmts?
         if ($parentClassMethod->stmts === null || $parentClassMethod->stmts === []) {
