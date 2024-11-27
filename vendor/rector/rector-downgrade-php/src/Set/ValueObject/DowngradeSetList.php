@@ -37,4 +37,8 @@ final class DowngradeSetList
      * @var string
      */
     public const PHP_83 = __DIR__ . '/../../../config/set/downgrade-php83.php';
+    /**
+     * @var string
+     */
+    public const PHP_84 = __DIR__ . '/../../../config/set/downgrade-php84.php';
 }
