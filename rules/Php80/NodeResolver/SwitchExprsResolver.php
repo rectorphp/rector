@@ -41,6 +41,7 @@ final class SwitchExprsResolver
                 continue;
             }
             $expr = $case->stmts[0];
+            $comments = $expr->getComments();
             if ($expr instanceof Expression) {
                 $expr = $expr->expr;
             }
@@ -58,17 +59,17 @@ final class SwitchExprsResolver
                 $condExprs[] = $case->cond;
             }
             if ($expr instanceof Throw_) {
-                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::THROW);
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::THROW, $comments);
             } elseif ($expr instanceof Return_) {
                 $returnedExpr = $expr->expr;
                 if (!$returnedExpr instanceof Expr) {
                     return [];
                 }
-                $condAndExpr[] = new CondAndExpr($condExprs, $returnedExpr, MatchKind::RETURN);
+                $condAndExpr[] = new CondAndExpr($condExprs, $returnedExpr, MatchKind::RETURN, $comments);
             } elseif ($expr instanceof Assign) {
-                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN);
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN, $comments);
             } elseif ($expr instanceof Expr) {
-                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL);
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL, $comments);
             } else {
                 return [];
             }

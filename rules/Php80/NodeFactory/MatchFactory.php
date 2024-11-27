@@ -62,7 +62,7 @@ final class MatchFactory
                     return null;
                 }
                 $shouldRemoteNextStmt = !$expr instanceof Expr;
-                $condAndExprs[] = new CondAndExpr([], $nextStmt->expr, MatchKind::RETURN);
+                $condAndExprs[] = new CondAndExpr([], $nextStmt->expr, MatchKind::RETURN, $nextStmt->getComments());
             }
         }
         $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
