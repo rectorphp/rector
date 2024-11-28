@@ -115,7 +115,7 @@ CODE_SAMPLE
                 $stmtKey = $psr4ConstructorMethod->getAttribute(AttributeKey::STMT_KEY);
                 unset($node->stmts[$stmtKey]);
             }
-            if ($this->isLocalMethodCallNamed($classMethodStmt->expr, $parentClassName)) {
+            if ($this->isLocalMethodCallNamed($classMethodStmt->expr, $parentClassName) && !$node->getMethod($parentClassName) instanceof ClassMethod) {
                 /** @var MethodCall $expr */
                 $expr = $classMethodStmt->expr;
                 $classMethodStmt->expr = new StaticCall(new FullyQualified($parentClassName), new Identifier(MethodName::CONSTRUCT), $expr->args);
