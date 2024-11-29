@@ -24,8 +24,8 @@ final class PhpVersionedFilter
         $this->polyfillPackagesProvider = $polyfillPackagesProvider;
     }
     /**
-     * @param array<RectorInterface> $rectors
-     * @return array<RectorInterface>
+     * @param list<RectorInterface> $rectors
+     * @return list<RectorInterface>
      */
     public function filter(array $rectors) : array
     {

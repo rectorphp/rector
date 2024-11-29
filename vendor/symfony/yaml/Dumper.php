@@ -21,23 +21,26 @@ use RectorPrefix202411\Symfony\Component\Yaml\Tag\TaggedValue;
 class Dumper
 {
     /**
-     * The amount of spaces to use for indentation of nested nodes.
+     * @var int
      */
-    private int $indentation;
+    private int $indentation = 4;
+    /**
+     * @param int $indentation The amount of spaces to use for indentation of nested nodes
+     */
     public function __construct(int $indentation = 4)
     {
+        $this->indentation = $indentation;
         if ($indentation < 1) {
             throw new \InvalidArgumentException('The indentation must be greater than zero.');
         }
-        $this->indentation = $indentation;
     }
     /**
      * Dumps a PHP value to YAML.
      *
-     * @param mixed $input  The PHP value
-     * @param int   $inline The level where you switch to inline YAML
-     * @param int   $indent The level of indentation (used internally)
-     * @param int   $flags  A bit field of Yaml::DUMP_* constants to customize the dumped YAML string
+     * @param mixed                     $input  The PHP value
+     * @param int                       $inline The level where you switch to inline YAML
+     * @param int                       $indent The level of indentation (used internally)
+     * @param int-mask-of<Yaml::DUMP_*> $flags  A bit field of Yaml::DUMP_* constants to customize the dumped YAML string
      */
     public function dump($input, int $inline = 0, int $indent = 0, int $flags = 0) : string
     {

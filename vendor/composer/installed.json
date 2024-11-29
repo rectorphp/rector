@@ -2537,21 +2537,22 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.1.6",
-            "version_normalized": "7.1.6.0",
+            "version": "v7.2.0",
+            "version_normalized": "7.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "3ced3f29e4f0d6bce2170ff26719f1fe9aacc671"
+                "reference": "099581e99f557e9f16b43c5916c26380b54abb22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/3ced3f29e4f0d6bce2170ff26719f1fe9aacc671",
-                "reference": "3ced3f29e4f0d6bce2170ff26719f1fe9aacc671",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/099581e99f557e9f16b43c5916c26380b54abb22",
+                "reference": "099581e99f557e9f16b43c5916c26380b54abb22",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
+                "symfony\/deprecation-contracts": "^2.5|^3.0",
                 "symfony\/polyfill-ctype": "^1.8"
             },
             "conflict": {
@@ -2560,7 +2561,7 @@
             "require-dev": {
                 "symfony\/console": "^6.4|^7.0"
             },
-            "time": "2024-09-25T14:20:29+00:00",
+            "time": "2024-10-23T06:56:12+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -2591,7 +2592,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.1.6"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.2.0"
             },
             "funding": [
                 {

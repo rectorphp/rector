@@ -510,7 +510,7 @@ class Inline
                 $value = \substr($scalar, 1);
             }
             // an unquoted *
-            if (\false === $value || '' === $value) {
+            if ('' === $value) {
                 throw new ParseException('A reference must contain at least one character.', self::$parsedLineNumber + 1, $value, self::$parsedFilename);
             }
             if (!\array_key_exists($value, $references)) {
@@ -531,7 +531,7 @@ class Inline
             case '!' === $scalar[0]:
                 switch (\true) {
                     case \strncmp($scalar, '!!str ', \strlen('!!str ')) === 0:
-                        $s = (string) \substr($scalar, 6);
+                        $s = \substr($scalar, 6);
                         if (\in_array($s[0] ?? '', ['"', "'"], \true)) {
                             $isQuotedString = \true;
                             $s = self::parseQuotedScalar($s);
