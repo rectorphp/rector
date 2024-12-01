@@ -46,15 +46,36 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [NullsafeMethodCall::class, NullsafePropertyFetch::class];
+        return [MethodCall::class, PropertyFetch::class, NullsafeMethodCall::class, NullsafePropertyFetch::class];
     }
     /**
-     * @param NullsafeMethodCall|NullsafePropertyFetch $node
+     * @param MethodCall|NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(Node $node) : Ternary
+    public function refactor(Node $node) : ?Ternary
     {
+        if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
+            if ($node->var instanceof NullsafeMethodCall || $node->var instanceof NullsafePropertyFetch) {
+                $nullsafeVariable = $this->createNullsafeVariable();
+                $assign = new Assign($nullsafeVariable, $node->var->var);
+                if ($node instanceof MethodCall) {
+                    if ($node->var instanceof NullsafeMethodCall) {
+                        $methodCallOrPropertyFetch = new MethodCall(new MethodCall($nullsafeVariable, $node->var->name, $node->var->args), $node->name, $node->args);
+                        return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
+                    }
+                    $methodCallOrPropertyFetch = new MethodCall(new PropertyFetch($nullsafeVariable, $node->var->name), $node->name, $node->args);
+                    return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
+                }
+                if ($node->var instanceof NullsafeMethodCall) {
+                    $methodCallOrPropertyFetch = new PropertyFetch(new MethodCall($nullsafeVariable, $node->var->name, $node->var->args), $node->name);
+                    return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
+                }
+                $methodCallOrPropertyFetch = new PropertyFetch(new PropertyFetch($nullsafeVariable, $node->var->name), $node->name);
+                return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
+            }
+            return null;
+        }
         $nullsafeVariable = $this->createNullsafeVariable();
-        $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariable, $node->name, $node->getArgs()) : new PropertyFetch($nullsafeVariable, $node->name);
+        $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariable, $node->name, $node->args) : new PropertyFetch($nullsafeVariable, $node->name);
         $assign = new Assign($nullsafeVariable, $node->var);
         return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
     }
