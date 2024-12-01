@@ -22,6 +22,7 @@ use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Node\Expr\AlwaysRememberedExpr;
@@ -343,12 +344,18 @@ final class BetterStandardPrinter extends Standard
      */
     private function containsNop(array $nodes) : bool
     {
+        $hasNop = \false;
         foreach ($nodes as $node) {
+            // early false when visited Node is InlineHTML
+            if ($node instanceof InlineHTML) {
+                return \false;
+            }
+            // use flag to avoid next is InlineHTML that returns early
             if ($node instanceof Nop) {
-                return \true;
+                $hasNop = \true;
             }
         }
-        return \false;
+        return $hasNop;
     }
     private function wrapValueWith(String_ $string, string $wrap) : string
     {

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202412\Nette\Utils\FileSystem;
-use RectorPrefix202412\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Parser\ParserErrorsException;
 use Rector\Caching\Detector\ChangedFilesDetector;
@@ -23,7 +22,6 @@ use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
-use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202412\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
@@ -68,11 +66,6 @@ final class FileProcessor
      * @readonly
      */
     private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
-    /**
-     * @var string
-     * @see https://regex101.com/r/llm7XZ/1
-     */
-    private const OPEN_TAG_SPACED_REGEX = '#^[ \\t]+<\\?php#m';
     public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -157,26 +150,6 @@ final class FileProcessor
     {
         // only save to string first, no need to print to file when not needed
         $newContent = $this->betterStandardPrinter->printFormatPreserving($file->getNewStmts(), $file->getOldStmts(), $file->getOldTokens());
-        /**
-         * When no diff applied, the PostRector may still change the content, that's why printing still needed
-         * On printing, the space may be wiped, these below check compare with original file content used to verify
-         * that no change actually needed
-         */
-        if (!$file->getFileDiff() instanceof FileDiff) {
-            /**
-             * exact compare with original file content
-             */
-            $originalFileContent = $file->getOriginalFileContent();
-            if ($originalFileContent === $newContent) {
-                return;
-            }
-            // handle space before <?php
-            $strippedNewContent = Strings::replace($newContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
-            $strippedOriginalFileContent = Strings::replace($originalFileContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
-            if ($strippedOriginalFileContent === $strippedNewContent) {
-                return;
-            }
-        }
         // change file content early to make $file->hasChanged() based on new content
         $file->changeFileContent($newContent);
         if ($configuration->isDryRun()) {

@@ -32,7 +32,8 @@ final class ServiceTypeMethodCallResolver
         if (!isset($methodCall->args[0])) {
             return new MixedType();
         }
-        $argument = $methodCall->getArgs()[0]->value;
+        $firstArg = $methodCall->getArgs()[0];
+        $argument = $firstArg->value;
         $serviceMap = $this->serviceMapProvider->provide();
         if ($argument instanceof String_) {
             return $serviceMap->getServiceType($argument->value);

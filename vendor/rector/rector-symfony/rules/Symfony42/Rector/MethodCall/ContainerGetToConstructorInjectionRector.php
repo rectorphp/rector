@@ -6,18 +6,14 @@ namespace Rector\Symfony\Symfony42\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\DependencyInjection\NodeDecorator\CommandConstructorDecorator;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
-use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,11 +35,16 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector
      * @readonly
      */
     private ClassDependencyManipulator $classDependencyManipulator;
-    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassDependencyManipulator $classDependencyManipulator)
+    /**
+     * @readonly
+     */
+    private CommandConstructorDecorator $commandConstructorDecorator;
+    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassDependencyManipulator $classDependencyManipulator, CommandConstructorDecorator $commandConstructorDecorator)
     {
         $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->commandConstructorDecorator = $commandConstructorDecorator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -123,23 +124,7 @@ CODE_SAMPLE
         foreach ($propertyMetadatas as $propertyMetadata) {
             $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
         }
-        $this->decorateCommandConstructor($class);
+        $this->commandConstructorDecorator->decorate($class);
         return $node;
-    }
-    private function decorateCommandConstructor(Class_ $class) : void
-    {
-        // special case for command to keep parent constructor call
-        if (!$this->isObjectType($class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
-            return;
-        }
-        $constuctClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constuctClassMethod instanceof ClassMethod) {
-            return;
-        }
-        // empty stmts? add parent::__construct() to setup command
-        if ((array) $constuctClassMethod->stmts === []) {
-            $parentConstructStaticCall = new StaticCall(new Name('parent'), '__construct');
-            $constuctClassMethod->stmts[] = new Expression($parentConstructStaticCall);
-        }
     }
 }
