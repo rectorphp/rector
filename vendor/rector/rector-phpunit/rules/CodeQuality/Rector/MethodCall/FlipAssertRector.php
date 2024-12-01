@@ -31,7 +31,7 @@ final class FlipAssertRector extends AbstractRector
         return new RuleDefinition('Turns accidentally flipped assert order to right one, with expected expr to left', [new CodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202411;
+namespace RectorPrefix202412;
 
 use PHPUnit\Framework\TestCase;
 class SomeTest extends TestCase
@@ -47,7 +47,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202411;
+namespace RectorPrefix202412;
 
 use PHPUnit\Framework\TestCase;
 class SomeTest extends TestCase

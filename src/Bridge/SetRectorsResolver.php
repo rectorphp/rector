@@ -5,7 +5,7 @@ namespace Rector\Bridge;
 
 use Rector\Config\RectorConfig;
 use Rector\Contract\Rector\RectorInterface;
-use RectorPrefix202411\Webmozart\Assert\Assert;
+use RectorPrefix202412\Webmozart\Assert\Assert;
 /**
  * @api
  * @experimental since 1.1.2

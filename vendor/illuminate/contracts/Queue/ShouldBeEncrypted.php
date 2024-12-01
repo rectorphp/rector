@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202411\Illuminate\Contracts\Queue;
+namespace RectorPrefix202412\Illuminate\Contracts\Queue;
 
 interface ShouldBeEncrypted
 {

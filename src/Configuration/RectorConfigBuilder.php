@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use RectorPrefix202411\Nette\Utils\FileSystem;
+use RectorPrefix202412\Nette\Utils\FileSystem;
 use Rector\Bridge\SetProviderCollector;
 use Rector\Bridge\SetRectorsResolver;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -31,8 +31,8 @@ use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202411\Symfony\Component\Finder\Finder;
-use RectorPrefix202411\Webmozart\Assert\Assert;
+use RectorPrefix202412\Symfony\Component\Finder\Finder;
+use RectorPrefix202412\Webmozart\Assert\Assert;
 /**
  * @api
  */

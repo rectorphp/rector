@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202411\Illuminate\Container;
+namespace RectorPrefix202412\Illuminate\Container;
 
 use Exception;
-use RectorPrefix202411\Psr\Container\NotFoundExceptionInterface;
+use RectorPrefix202412\Psr\Container\NotFoundExceptionInterface;
 class EntryNotFoundException extends Exception implements NotFoundExceptionInterface
 {
     //

@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202411\Nette\Utils\FileSystem;
-use RectorPrefix202411\OndraM\CiDetector\CiDetector;
+use RectorPrefix202412\Nette\Utils\FileSystem;
+use RectorPrefix202412\OndraM\CiDetector\CiDetector;
 use Rector\Git\RepositoryHelper;
-use RectorPrefix202411\Symfony\Component\Console\Command\Command;
-use RectorPrefix202411\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202411\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202411\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202412\Symfony\Component\Console\Command\Command;
+use RectorPrefix202412\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202412\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202412\Symfony\Component\Console\Style\SymfonyStyle;
 use function sprintf;
 final class SetupCICommand extends Command
 {

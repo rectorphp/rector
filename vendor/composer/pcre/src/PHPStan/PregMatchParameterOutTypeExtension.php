@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202411\Composer\Pcre\PHPStan;
+namespace RectorPrefix202412\Composer\Pcre\PHPStan;
 
-use RectorPrefix202411\Composer\Pcre\Preg;
+use RectorPrefix202412\Composer\Pcre\Preg;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;

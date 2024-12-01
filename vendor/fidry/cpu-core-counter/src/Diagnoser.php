@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202411\Fidry\CpuCoreCounter;
+namespace RectorPrefix202412\Fidry\CpuCoreCounter;
 
-use RectorPrefix202411\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use RectorPrefix202412\Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use function array_map;
 use function explode;
 use function implode;

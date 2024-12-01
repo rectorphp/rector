@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\ValueObject\Error;
 
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202411\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202412\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     /**
