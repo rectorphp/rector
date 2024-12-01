@@ -18,9 +18,9 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\ControllerGetByTypeToConstructorInjectionRector\ControllerGetByTypeToConstructorInjectionRectorTest
+ * @see \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\GetBySymfonyStringToConstructorInjectionRector\GetBySymfonyStringToConstructorInjectionRectorTest
  */
-final class ControllerGetByTypeToConstructorInjectionRector extends AbstractRector
+final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @readonly
@@ -29,42 +29,45 @@ final class ControllerGetByTypeToConstructorInjectionRector extends AbstractRect
     /**
      * @readonly
      */
-    private PropertyNaming $propertyNaming;
+    private ThisGetTypeMatcher $thisGetTypeMatcher;
     /**
      * @readonly
      */
-    private ThisGetTypeMatcher $thisGetTypeMatcher;
-    public function __construct(ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming, ThisGetTypeMatcher $thisGetTypeMatcher)
+    private PropertyNaming $propertyNaming;
+    /**
+     * @var array<string, string>
+     */
+    private const SYMFONY_NAME_TO_TYPE_MAP = ['validator' => SymfonyClass::VALIDATOR_INTERFACE, 'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE, 'logger' => SymfonyClass::LOGGER_INTERFACE, 'jms_serializer' => SymfonyClass::SERIALIZER_INTERFACE];
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator, ThisGetTypeMatcher $thisGetTypeMatcher, PropertyNaming $propertyNaming)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
-        $this->propertyNaming = $propertyNaming;
         $this->thisGetTypeMatcher = $thisGetTypeMatcher;
+        $this->propertyNaming = $propertyNaming;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('From `$container->get(SomeType::class)` in controllers to constructor injection (step 1/x)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Converts typical Symfony services like $this->get("validator") in commands/controllers to constructor injection (step 3/x)', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-final class SomeCommand extends Controller
+final class SomeController extends Controller
 {
     public function someMethod()
     {
-        $someType = $this->get(SomeType::class);
+        $someType = $this->get('validator');
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class SomeCommand extends Controller
+final class SomeController extends Controller
 {
-    public function __construct(private SomeType $someType)
-    {
-    }
+    public function __construct(private ValidatorInterface $validator)
 
     public function someMethod()
     {
-        $someType = $this->someType;
+        $someType = $this->validator;
     }
 }
 CODE_SAMPLE
@@ -90,12 +93,16 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            $className = $this->thisGetTypeMatcher->match($node);
-            if (!\is_string($className)) {
+            $serviceName = $this->thisGetTypeMatcher->matchString($node);
+            if (!\is_string($serviceName)) {
                 return null;
             }
-            $propertyName = $this->propertyNaming->fqnToVariableName($className);
-            $propertyMetadata = new PropertyMetadata($propertyName, new FullyQualifiedObjectType($className));
+            $serviceType = self::SYMFONY_NAME_TO_TYPE_MAP[$serviceName] ?? null;
+            if ($serviceType === null) {
+                return null;
+            }
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyMetadata = new PropertyMetadata($propertyName, new FullyQualifiedObjectType($serviceType));
             $propertyMetadatas[] = $propertyMetadata;
             return $this->nodeFactory->createPropertyFetch('this', $propertyMetadata->getName());
         });
@@ -109,14 +116,13 @@ CODE_SAMPLE
     }
     private function shouldSkipClass(Class_ $class) : bool
     {
-        // keep it safe
-        if (!$class->isFinal()) {
-            return \true;
-        }
         $scope = ScopeFetcher::fetch($class);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return \true;
+        }
+        if ($classReflection->isSubclassOf(SymfonyClass::CONTAINER_AWARE_COMMAND)) {
+            return \false;
         }
         return !$classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
     }

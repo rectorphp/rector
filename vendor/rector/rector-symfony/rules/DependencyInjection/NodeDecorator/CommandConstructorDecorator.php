@@ -13,6 +13,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\ValueObject\MethodName;
 final class CommandConstructorDecorator
 {
+    /**
+     * @readonly
+     */
     private NodeTypeResolver $nodeTypeResolver;
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {

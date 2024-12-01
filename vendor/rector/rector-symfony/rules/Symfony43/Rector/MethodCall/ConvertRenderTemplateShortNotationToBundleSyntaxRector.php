@@ -34,7 +34,10 @@ final class ConvertRenderTemplateShortNotationToBundleSyntaxRector extends Abstr
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change Twig template short name to bundle syntax in render calls from controllers', [new CodeSample(<<<'CODE_SAMPLE'
-class BaseController extends Controller {
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class BaseController extends Controller
+{
     function indexAction()
     {
         $this->render('appBundle:Landing\Main:index.html.twig');
@@ -42,7 +45,10 @@ class BaseController extends Controller {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class BaseController extends Controller {
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class BaseController extends Controller
+{
     function indexAction()
     {
         $this->render('@app/Landing/Main/index.html.twig');

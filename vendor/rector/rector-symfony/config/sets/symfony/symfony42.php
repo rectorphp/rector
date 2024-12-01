@@ -16,7 +16,6 @@ use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Symfony42\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
@@ -39,11 +38,11 @@ return static function (RectorConfig $rectorConfig) : void {
         'Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerAwareCommand' => 'Symfony\\Component\\Console\\Command\\Command',
         'Symfony\\Component\\Translation\\TranslatorInterface' => 'Symfony\\Contracts\\Translation\\TranslatorInterface',
     ]);
-    # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, @see https://github.com/rectorphp/rector/issues/1629
-    $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
-    # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
-    $rectorConfig->rule(StringToArrayArgumentProcessRector::class);
-    $rectorConfig->rule(RootNodeTreeBuilderRector::class);
+    $rectorConfig->rules([
+        # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
+        StringToArrayArgumentProcessRector::class,
+        RootNodeTreeBuilderRector::class,
+    ]);
     $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('Symfony\\Component\\DomCrawler\\Crawler', 'children', 0, null, null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Component\\Finder\\Finder', 'sortByName', 0, null, \false, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Bridge\\Monolog\\Processor\\DebugProcessor', 'getLogs', 0, null, null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Bridge\\Monolog\\Processor\\DebugProcessor', 'countErrors', 0, 'default_value', null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Bridge\\Monolog\\Logger', 'getLogs', 0, 'default_value', null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Bridge\\Monolog\\Logger', 'countErrors', 0, 'default_value', null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Component\\Serializer\\Normalizer', 'handleCircularReference', 1, null, null, null, ArgumentAddingScope::SCOPE_METHOD_CALL), new ArgumentAdder('Symfony\\Component\\Serializer\\Normalizer', 'handleCircularReference', 2, null, null, null, ArgumentAddingScope::SCOPE_METHOD_CALL)]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Symfony\\Component\\Cache\\CacheItem', 'getPreviousTags', 'getMetadata'), new MethodCallRename('Symfony\\Component\\Form\\AbstractTypeExtension', 'getExtendedType', 'getExtendedTypes')]);
     $iterableType = new IterableType(new MixedType(), new MixedType());
