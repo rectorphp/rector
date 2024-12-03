@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "rector\/rector-src": "dev-main",
-        "phpunit\/phpunit": "^10.5",
+        "phpunit\/phpunit": "^11.4",
         "phpstan\/phpstan": "^2.0",
         "symplify\/easy-coding-standard": "^12.3",
         "phpstan\/extension-installer": "^1.4",

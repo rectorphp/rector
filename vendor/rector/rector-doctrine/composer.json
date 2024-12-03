@@ -14,7 +14,7 @@
         "phpstan\/phpstan": "^2.0",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
-        "phpunit\/phpunit": "^10.5",
+        "phpunit\/phpunit": "^11.4",
         "rector\/rector-src": "dev-main",
         "symplify\/easy-coding-standard": "^12.3",
         "symplify\/vendor-patches": "^11.3",
