@@ -6,7 +6,6 @@ namespace Rector\Contract\Rector;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 interface RectorInterface extends NodeVisitor
 {
     /**
