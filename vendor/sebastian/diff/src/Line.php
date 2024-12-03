@@ -43,18 +43,4 @@ final class Line
     {
         return $this->type === self::UNCHANGED;
     }
-    /**
-     * @deprecated
-     */
-    public function getContent() : string
-    {
-        return $this->content;
-    }
-    /**
-     * @deprecated
-     */
-    public function getType() : int
-    {
-        return $this->type;
-    }
 }

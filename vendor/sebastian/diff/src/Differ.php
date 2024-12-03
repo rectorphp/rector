@@ -42,8 +42,8 @@ final class Differ
         $this->outputBuilder = $outputBuilder;
     }
     /**
-     * @param mixed[]|string $from
-     * @param mixed[]|string $to
+     * @param list<string>|string $from
+     * @param list<string>|string $to
      */
     public function diff($from, $to, ?LongestCommonSubsequenceCalculator $lcs = null) : string
     {
@@ -51,8 +51,8 @@ final class Differ
         return $this->outputBuilder->getDiff($diff);
     }
     /**
-     * @param mixed[]|string $from
-     * @param mixed[]|string $to
+     * @param list<string>|string $from
+     * @param list<string>|string $to
      */
     public function diffToArray($from, $to, ?LongestCommonSubsequenceCalculator $lcs = null) : array
     {

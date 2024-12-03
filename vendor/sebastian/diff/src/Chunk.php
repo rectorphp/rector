@@ -23,7 +23,13 @@ final class Chunk implements IteratorAggregate
     private int $startRange;
     private int $end;
     private int $endRange;
+    /**
+     * @var list<Line>
+     */
     private array $lines;
+    /**
+     * @param list<Line> $lines
+     */
     public function __construct(int $start = 0, int $startRange = 1, int $end = 0, int $endRange = 1, array $lines = [])
     {
         $this->start = $start;
@@ -49,14 +55,14 @@ final class Chunk implements IteratorAggregate
         return $this->endRange;
     }
     /**
-     * @psalm-return list<Line>
+     * @return list<Line>
      */
     public function lines() : array
     {
         return $this->lines;
     }
     /**
-     * @psalm-param list<Line> $lines
+     * @param list<Line> $lines
      */
     public function setLines(array $lines) : void
     {
@@ -66,43 +72,6 @@ final class Chunk implements IteratorAggregate
             }
         }
         $this->lines = $lines;
-    }
-    /**
-     * @deprecated Use start() instead
-     */
-    public function getStart() : int
-    {
-        return $this->start;
-    }
-    /**
-     * @deprecated Use startRange() instead
-     */
-    public function getStartRange() : int
-    {
-        return $this->startRange;
-    }
-    /**
-     * @deprecated Use end() instead
-     */
-    public function getEnd() : int
-    {
-        return $this->end;
-    }
-    /**
-     * @deprecated Use endRange() instead
-     */
-    public function getEndRange() : int
-    {
-        return $this->endRange;
-    }
-    /**
-     * @psalm-return list<Line>
-     *
-     * @deprecated Use lines() instead
-     */
-    public function getLines() : array
-    {
-        return $this->lines;
     }
     public function getIterator() : Traversable
     {

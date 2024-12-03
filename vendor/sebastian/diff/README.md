@@ -1,6 +1,5 @@
 [![Latest Stable Version](https://poser.pugx.org/sebastian/diff/v/stable.png)](https://packagist.org/packages/sebastian/diff)
 [![CI Status](https://github.com/sebastianbergmann/diff/workflows/CI/badge.svg)](https://github.com/sebastianbergmann/diff/actions)
-[![Type Coverage](https://shepherd.dev/github/sebastianbergmann/diff/coverage.svg)](https://shepherd.dev/github/sebastianbergmann/diff)
 [![codecov](https://codecov.io/gh/sebastianbergmann/diff/branch/main/graph/badge.svg)](https://codecov.io/gh/sebastianbergmann/diff)
 
 # sebastian/diff
