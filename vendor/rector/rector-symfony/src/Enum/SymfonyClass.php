@@ -37,4 +37,16 @@ final class SymfonyClass
      * @var string
      */
     public const SERIALIZER_INTERFACE = 'JMS\\Serializer\\SerializerInterface';
+    /**
+     * @var string
+     */
+    public const KERNEL_EVENTS_CLASS = 'Symfony\\Component\\HttpKernel\\KernelEvents';
+    /**
+     * @var string
+     */
+    public const CONSOLE_EVENTS_CLASS = 'Symfony\\Component\\Console\\ConsoleEvents';
+    /**
+     * @var string
+     */
+    public const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface';
 }

@@ -9,4 +9,8 @@ final class SymfonyAttribute
      * @var string
      */
     public const AUTOWIRE = 'Symfony\\Component\\DependencyInjection\\Attribute\\Autowire';
+    /**
+     * @var string
+     */
+    public const EVENT_LISTENER_ATTRIBUTE = 'Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener';
 }
