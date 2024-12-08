@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\Variable;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
@@ -42,22 +41,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ArrayDimFetch::class, Variable::class];
+        return [Variable::class];
     }
     /**
-     * @param ArrayDimFetch|Variable $node
+     * @param Variable $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof ArrayDimFetch) {
-            if (!$node->var instanceof Variable) {
-                return null;
-            }
-            if (!$node->var->name instanceof Variable) {
-                return null;
-            }
-            return new Variable(new ArrayDimFetch($node->var->name, $node->dim));
-        }
         $nodeName = $node->name;
         if (!$nodeName instanceof PropertyFetch && !$nodeName instanceof Variable) {
             return null;
