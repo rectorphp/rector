@@ -216,6 +216,9 @@ CODE_SAMPLE
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
             return null;
         }
+        if ($param->byRef) {
+            return null;
+        }
         if ($this->paramAnalyzer->isParamReassign($classMethod, $param)) {
             return null;
         }
