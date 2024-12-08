@@ -53,7 +53,7 @@ CODE_SAMPLE
             if (!$node->var instanceof Variable) {
                 return null;
             }
-            if (\is_string($node->var->name)) {
+            if (!$node->var->name instanceof Variable) {
                 return null;
             }
             return new Variable(new ArrayDimFetch($node->var->name, $node->dim));
