@@ -255,9 +255,11 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         }
         if ($values !== '') {
             $values = Strings::replace($values, self::STAR_COMMENT_REGEX);
-            $values = \strncmp($values, '(', \strlen('(')) === 0 ? \str_replace("'", '"', $values) : '(' . $values . ')';
-            if ($phpDocTagNode->value instanceof DoctrineTagValueNode && $phpDocTagNode->value->description !== '') {
-                $values .= $phpDocTagNode->value->description;
+            if ($phpDocTagNode->value instanceof DoctrineTagValueNode) {
+                $values = '(' . $values . ')';
+                if ($phpDocTagNode->value->description !== '') {
+                    $values .= $phpDocTagNode->value->description;
+                }
             }
         }
         $genericTagValueNode = new GenericTagValueNode($values);
