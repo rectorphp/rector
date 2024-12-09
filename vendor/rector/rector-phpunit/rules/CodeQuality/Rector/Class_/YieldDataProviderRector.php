@@ -14,6 +14,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTransformer;
@@ -55,7 +56,11 @@ final class YieldDataProviderRector extends AbstractRector
      * @readonly
      */
     private PhpDocTypeChanger $phpDocTypeChanger;
-    public function __construct(NodeTransformer $nodeTransformer, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder, PhpDocInfoFactory $phpDocInfoFactory, IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer, PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @readonly
+     */
+    private DocBlockUpdater $docBlockUpdater;
+    public function __construct(NodeTransformer $nodeTransformer, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder, PhpDocInfoFactory $phpDocInfoFactory, IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, DocBlockUpdater $docBlockUpdater)
     {
         $this->nodeTransformer = $nodeTransformer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -63,6 +68,7 @@ final class YieldDataProviderRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -170,6 +176,7 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, new GenericObjectType('Iterator', [$keyType, $itemType]));
         } else {
             $phpDocInfo->removeByType(ReturnTagValueNode::class);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
         }
     }
 }
