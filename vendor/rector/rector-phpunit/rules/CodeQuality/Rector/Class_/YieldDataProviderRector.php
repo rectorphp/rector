@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -173,7 +172,7 @@ CODE_SAMPLE
         if (!$phpDocInfo->getReturnTagValue() instanceof ReturnTagValueNode) {
             return;
         }
-        if ($phpDocInfo->getReturnType() instanceof ArrayType) {
+        if ($phpDocInfo->getReturnType()->isArray()->yes()) {
             $keyType = $phpDocInfo->getReturnType()->getIterableKeyType();
             $itemType = $phpDocInfo->getReturnType()->getIterableValueType();
             $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, new GenericObjectType('Iterator', [$keyType, $itemType]));
