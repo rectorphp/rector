@@ -8,7 +8,7 @@ Rector instantly upgrades and refactors the PHP code of your application.  It ca
 
 ### 1. Instant Upgrades
 
-Rector now supports upgrades from PHP 5.3 to 8.2 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), and [Doctrine](https://github.com/rectorphp/rector-doctrine). Do you want to **be constantly on the latest PHP and Framework without effort**?
+Rector now supports upgrades from PHP 5.3 to 8.4 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), and [Doctrine](https://github.com/rectorphp/rector-doctrine). Do you want to **be constantly on the latest PHP and Framework without effort**?
 
 Use Rector to handle **instant upgrades** for you.
 
@@ -162,4 +162,4 @@ We're using [ECS](https://github.com/symplify/easy-coding-standard) with [this s
 
 ### May cause unexpected output on File with mixed PHP+HTML content
 
-When you apply changes to File(s) thas has mixed PHP+HTML content, you may need to manually verify the changed file after apply the changes.
+When you apply changes to files with PHP + HTML content, you may need to manually verify the changed file after apply the changes.
