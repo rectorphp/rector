@@ -44,6 +44,7 @@ use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
+use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -202,6 +203,15 @@ final class PHPStanNodeScopeResolver
                 $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 if ($node->valueVar instanceof List_) {
                     $this->processArray($node->valueVar, $mutatingScope);
+                }
+                return;
+            }
+            if ($node instanceof For_) {
+                foreach (\array_merge($node->init, $node->cond, $node->loop) as $expr) {
+                    $expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    if ($expr instanceof BinaryOp) {
+                        $this->processBinaryOp($expr, $mutatingScope);
+                    }
                 }
                 return;
             }
