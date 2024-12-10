@@ -97,6 +97,10 @@ final class WorkerCommandLineFactory
             $config = (string) $input->getOption(Option::CONFIG);
             $workerCommandArray[] = \escapeshellarg($this->filePathHelper->relativePath($config));
         }
+        if ($input->getOption(Option::ONLY) !== null) {
+            $workerCommandArray[] = self::OPTION_DASHES . Option::ONLY;
+            $workerCommandArray[] = \escapeshellarg($input->getOption(Option::ONLY));
+        }
         return \implode(' ', $workerCommandArray);
     }
     private function shouldSkipOption(InputInterface $input, string $optionName) : bool

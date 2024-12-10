@@ -46,6 +46,8 @@ use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\UsesClassNameImp
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Config\RectorConfig;
 use Rector\Configuration\ConfigInitializer;
+use Rector\Configuration\ConfigurationRuleFilter;
+use Rector\Configuration\OnlyRuleResolver;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Console\Command\CustomRuleCommand;
 use Rector\Console\Command\ListRulesCommand;
@@ -255,12 +257,14 @@ final class LazyContainerFactory
             $inflectorFactory = new InflectorFactory();
             return $inflectorFactory->build();
         });
+        $rectorConfig->singleton(ConfigurationRuleFilter::class);
         $rectorConfig->singleton(ProcessCommand::class);
         $rectorConfig->singleton(WorkerCommand::class);
         $rectorConfig->singleton(SetupCICommand::class);
         $rectorConfig->singleton(ListRulesCommand::class);
         $rectorConfig->singleton(CustomRuleCommand::class);
         $rectorConfig->when(ListRulesCommand::class)->needs('$rectors')->giveTagged(RectorInterface::class);
+        $rectorConfig->when(OnlyRuleResolver::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
         // phpdoc-parser

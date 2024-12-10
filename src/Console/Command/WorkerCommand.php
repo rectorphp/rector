@@ -10,6 +10,7 @@ use RectorPrefix202412\React\Socket\ConnectionInterface;
 use RectorPrefix202412\React\Socket\TcpConnector;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Configuration\ConfigurationFactory;
+use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Console\ProcessConfigureDecorator;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
@@ -50,15 +51,20 @@ final class WorkerCommand extends Command
      */
     private ConfigurationFactory $configurationFactory;
     /**
+     * @readonly
+     */
+    private ConfigurationRuleFilter $configurationRuleFilter;
+    /**
      * @var string
      */
     private const RESULT = 'result';
-    public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, ApplicationFileProcessor $applicationFileProcessor, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory)
+    public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, ApplicationFileProcessor $applicationFileProcessor, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, ConfigurationRuleFilter $configurationRuleFilter)
     {
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->memoryLimiter = $memoryLimiter;
         $this->configurationFactory = $configurationFactory;
+        $this->configurationRuleFilter = $configurationRuleFilter;
         parent::__construct();
     }
     protected function configure() : void
@@ -72,6 +78,7 @@ final class WorkerCommand extends Command
     {
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);
+        $this->configurationRuleFilter->setConfiguration($configuration);
         $streamSelectLoop = new StreamSelectLoop();
         $parallelIdentifier = $configuration->getParallelIdentifier();
         $tcpConnector = new TcpConnector($streamSelectLoop);
