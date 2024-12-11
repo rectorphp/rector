@@ -205,7 +205,7 @@ CODE_SAMPLE
                     // special case for newline
                     $docValue = (string) $docNode->value;
                     if (\strpos($docValue, '\\') !== \false) {
-                        $docValue = Strings::replace($docValue, "#\\\\\n#", '');
+                        $docValue = Strings::replace($docValue, "#\\\\\r?\n#", '');
                     }
                 }
                 $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $docValue);
