@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use Error;
+use PHPStan\Node\Printer\Printer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
@@ -318,7 +320,17 @@ final class PHPStanNodeScopeResolver
                 return;
             }
         };
-        $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
+        try {
+            $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
+        } catch (Error $error) {
+            if (\strncmp($error->getMessage(), 'Call to undefined method ' . Printer::class . '::pPHPStan_', \strlen('Call to undefined method ' . Printer::class . '::pPHPStan_')) !== 0) {
+                throw $error;
+            }
+            // nothing we can do more precise here as error printing from deep internal PHPStan Printer service with service injection we cannot reset
+            // in the middle of process
+            // fallback to fill by found scope
+            \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $scope);
+        }
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new WrappedNodeRestoringNodeVisitor());
         if ($hasUnreachableStatementNode) {
