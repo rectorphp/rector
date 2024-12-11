@@ -37,7 +37,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
         if ($node instanceof BracketsAwareUnionTypeNode) {
             return null;
         }
-        $startAndEnd = $this->resolveStardAndEnd($node);
+        $startAndEnd = $this->resolveStartAndEnd($node);
         if (!$startAndEnd instanceof StartAndEnd) {
             $firstKey = \array_key_first($node->types);
             $lastKey = \array_key_last($node->types);
@@ -58,7 +58,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
         // there is no + 1, as end is right at the next token
         return $betterTokenProvider->isTokenTypeOnPosition(Lexer::TOKEN_CLOSE_PARENTHESES, $startAndEnd->getEnd());
     }
-    private function resolveStardAndEnd(UnionTypeNode $unionTypeNode) : ?StartAndEnd
+    private function resolveStartAndEnd(UnionTypeNode $unionTypeNode) : ?StartAndEnd
     {
         $starAndEnd = $unionTypeNode->getAttribute(PhpDocAttributeKey::START_AND_END);
         if ($starAndEnd instanceof StartAndEnd) {
