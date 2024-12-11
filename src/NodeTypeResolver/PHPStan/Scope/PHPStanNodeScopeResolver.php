@@ -86,8 +86,11 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
+use PHPStan\Node\FunctionCallableNode;
+use PHPStan\Node\InstantiationCallableNode;
 use PHPStan\Node\MethodCallableNode;
 use PHPStan\Node\Printer\Printer;
+use PHPStan\Node\StaticMethodCallableNode;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Parser\ParserErrorsException;
@@ -328,10 +331,10 @@ final class PHPStanNodeScopeResolver
                 $node->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
             }
-            if ($node instanceof MethodCallableNode) {
+            if ($node instanceof MethodCallableNode || $node instanceof FunctionCallableNode || $node instanceof StaticMethodCallableNode || $node instanceof InstantiationCallableNode) {
                 $node->getOriginalNode()->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->getOriginalNode()->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->getOriginalNode()->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $this->processCallike($node->getOriginalNode(), $mutatingScope);
+                return;
             }
         };
         try {
