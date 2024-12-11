@@ -99,7 +99,7 @@ final class WorkerCommandLineFactory
         }
         if ($input->getOption(Option::ONLY) !== null) {
             $workerCommandArray[] = self::OPTION_DASHES . Option::ONLY;
-            $workerCommandArray[] = \escapeshellarg($input->getOption(Option::ONLY));
+            $workerCommandArray[] = \escapeshellarg((string) $input->getOption(Option::ONLY));
         }
         return \implode(' ', $workerCommandArray);
     }

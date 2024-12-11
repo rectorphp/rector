@@ -47,12 +47,13 @@ final class OnlyRuleResolver
         $matching = \array_unique($matching);
         if (\count($matching) == 1) {
             return $matching[0];
-        } elseif (\count($matching) > 1) {
+        }
+        if (\count($matching) > 1) {
             \sort($matching);
             $message = \sprintf('Short rule name "%s" is ambiguous. Specify the full rule name:' . \PHP_EOL . '- ' . \implode(\PHP_EOL . '- ', $matching), $rule);
             throw new RectorRuleNameAmbigiousException($message);
         }
-        if (\strpos($rule, '\\') === \false) {
+        if (\in_array(\strpos($rule, '\\') !== \false, [0, \false], \true)) {
             $message = \sprintf('Rule "%s" was not found.%sThe rule has no namespace. Make sure to escape the backslashes, and add quotes around the rule name: --only="My\\Rector\\Rule"', $rule, \PHP_EOL);
         } else {
             $message = \sprintf('Rule "%s" was not found.%sMake sure it is registered in your config or in one of the sets', $rule, \PHP_EOL);

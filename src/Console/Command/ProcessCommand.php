@@ -73,6 +73,9 @@ final class ProcessCommand extends Command
      * @readonly
      */
     private MissConfigurationReporter $missConfigurationReporter;
+    /**
+     * @readonly
+     */
     private ConfigurationRuleFilter $configurationRuleFilter;
     public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, ConfigurationRuleFilter $configurationRuleFilter)
     {

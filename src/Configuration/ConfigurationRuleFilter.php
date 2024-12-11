@@ -16,30 +16,29 @@ final class ConfigurationRuleFilter
         $this->configuration = $configuration;
     }
     /**
-     * @param array<RectorInterface> $rectors
-     * @return array<RectorInterface>
+     * @param list<RectorInterface> $rectors
+     * @return list<RectorInterface>
      */
     public function filter(array $rectors) : array
     {
-        if ($this->configuration === null) {
+        if (!$this->configuration instanceof Configuration) {
             return $rectors;
         }
         $onlyRule = $this->configuration->getOnlyRule();
         if ($onlyRule !== null) {
-            $rectors = $this->filterOnlyRule($rectors, $onlyRule);
-            return $rectors;
+            return $this->filterOnlyRule($rectors, $onlyRule);
         }
         return $rectors;
     }
     /**
-     * @param array<RectorInterface> $rectors
-     * @return array<RectorInterface>
+     * @param list<RectorInterface> $rectors
+     * @return list<RectorInterface>
      */
     public function filterOnlyRule(array $rectors, string $onlyRule) : array
     {
         $activeRectors = [];
         foreach ($rectors as $rector) {
-            if (\is_a($rector, $onlyRule)) {
+            if ($rector instanceof $onlyRule) {
                 $activeRectors[] = $rector;
             }
         }

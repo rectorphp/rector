@@ -29,6 +29,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
@@ -175,7 +176,7 @@ final class PHPStanNodeScopeResolver
                 return;
             }
             $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
-            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast) && $node->expr instanceof Expr) {
+            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast || $node instanceof YieldFrom) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
             }
@@ -273,6 +274,7 @@ final class PHPStanNodeScopeResolver
             }
             if ($node instanceof Yield_) {
                 $this->processYield($node, $mutatingScope);
+                return;
             }
         };
         $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
