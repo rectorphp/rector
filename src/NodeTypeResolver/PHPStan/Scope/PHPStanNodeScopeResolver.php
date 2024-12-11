@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use Error;
-use PHPStan\Node\Printer\Printer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
@@ -87,6 +86,8 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
+use PHPStan\Node\MethodCallableNode;
+use PHPStan\Node\Printer\Printer;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Parser\ParserErrorsException;
@@ -326,6 +327,11 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof If_ || $node instanceof ElseIf_ || $node instanceof Do_ || $node instanceof While_) {
                 $node->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
+            }
+            if ($node instanceof MethodCallableNode) {
+                $node->getOriginalNode()->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->getOriginalNode()->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->getOriginalNode()->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         };
         try {
