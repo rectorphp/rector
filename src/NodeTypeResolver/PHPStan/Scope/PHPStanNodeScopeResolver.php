@@ -63,7 +63,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Expression;
@@ -71,6 +73,7 @@ use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
@@ -78,6 +81,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\Unset_;
+use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
@@ -319,6 +323,10 @@ final class PHPStanNodeScopeResolver
                 $this->processEcho($node, $mutatingScope);
                 return;
             }
+            if ($node instanceof If_ || $node instanceof ElseIf_ || $node instanceof Do_ || $node instanceof While_) {
+                $node->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                return;
+            }
         };
         try {
             $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
@@ -452,6 +460,7 @@ final class PHPStanNodeScopeResolver
     }
     private function processSwitch(Switch_ $switch, MutatingScope $mutatingScope) : void
     {
+        $switch->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         // decorate value as well
         foreach ($switch->cases as $case) {
             $case->setAttribute(AttributeKey::SCOPE, $mutatingScope);
