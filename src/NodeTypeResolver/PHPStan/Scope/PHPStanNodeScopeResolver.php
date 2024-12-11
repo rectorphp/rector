@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\BooleanNot;
@@ -207,7 +208,7 @@ final class PHPStanNodeScopeResolver
                 }
                 return;
             }
-            if ($node instanceof Assign || $node instanceof AssignOp) {
+            if ($node instanceof Assign || $node instanceof AssignOp || $node instanceof AssignRef) {
                 $this->processAssign($node, $mutatingScope);
                 if ($node->var instanceof Variable && $node->var->name instanceof Expr) {
                     $this->nodeScopeResolverProcessNodes([new Expression($node->var), new Expression($node->expr)], $mutatingScope, $nodeCallback);
@@ -366,7 +367,7 @@ final class PHPStanNodeScopeResolver
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\AssignRef $assign
      */
     private function processAssign($assign, MutatingScope $mutatingScope) : void
     {
