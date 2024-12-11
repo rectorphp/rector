@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
+use RectorPrefix202412\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -199,7 +200,15 @@ CODE_SAMPLE
                 if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
                     continue;
                 }
-                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $annotationToAttribute->getUseValueAsAttributeArgument() ? (string) $docNode->value : null);
+                $docValue = null;
+                if ($annotationToAttribute->getUseValueAsAttributeArgument()) {
+                    // special case for newline
+                    $docValue = (string) $docNode->value;
+                    if (\strpos($docValue, '\\') !== \false) {
+                        $docValue = Strings::replace($docValue, "#\\\\\n#", '');
+                    }
+                }
+                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $docValue);
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
