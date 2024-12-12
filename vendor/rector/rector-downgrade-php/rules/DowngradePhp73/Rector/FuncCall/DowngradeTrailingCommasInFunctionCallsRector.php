@@ -80,11 +80,15 @@ CODE_SAMPLE
         $tokens = $this->file->getOldTokens();
         $iteration = 1;
         while (isset($tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration])) {
-            if (\trim($tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration]->text) === ',') {
-                $tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration]->text = '';
+            if (\trim($tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration]->text) === '') {
+                ++$iteration;
+                continue;
+            }
+            if (\trim($tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration]->text) !== ',') {
                 break;
             }
-            ++$iteration;
+            $tokens[$args[$lastArgKey]->getEndTokenPos() + $iteration]->text = '';
+            break;
         }
         return $node;
     }
