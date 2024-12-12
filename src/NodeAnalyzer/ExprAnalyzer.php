@@ -36,10 +36,10 @@ final class ExprAnalyzer
             return \true;
         }
         $nativeType = $scope->getNativeType($expr);
-        if ($nativeType instanceof MixedType && !$nativeType->isExplicitMixed()) {
+        $type = $scope->getType($expr);
+        if ($nativeType instanceof MixedType && !$nativeType->isExplicitMixed() || $nativeType instanceof MixedType && !$type instanceof MixedType) {
             return \true;
         }
-        $type = $scope->getType($expr);
         if ($nativeType instanceof ObjectWithoutClassType && !$type instanceof ObjectWithoutClassType) {
             return \true;
         }

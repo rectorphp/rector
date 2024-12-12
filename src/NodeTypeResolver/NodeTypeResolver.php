@@ -8,11 +8,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -22,6 +24,7 @@ use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -471,6 +474,19 @@ final class NodeTypeResolver
             if ($callerType instanceof ObjectType && $callerType->getClassReflection() instanceof ClassReflection && $callerType->getClassReflection()->isBuiltin()) {
                 return $scope->getType($expr);
             }
+        }
+        if ($expr instanceof FuncCall) {
+            if (!$expr->name instanceof Name) {
+                return $scope->getNativeType($expr);
+            }
+            if (!$this->reflectionProvider->hasFunction($expr->name, $scope)) {
+                return $scope->getNativeType($expr);
+            }
+            $functionReflection = $this->reflectionProvider->getFunction($expr->name, $scope);
+            if (!$functionReflection instanceof NativeFunctionReflection) {
+                return $scope->getNativeType($expr);
+            }
+            return $scope->getType($expr);
         }
         return $scope->getNativeType($expr);
     }
