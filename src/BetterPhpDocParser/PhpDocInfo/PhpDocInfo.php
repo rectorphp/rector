@@ -433,7 +433,7 @@ final class PhpDocInfo
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : ?string
     {
         foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
-            /** @var class-string<PhpDocTagNode> $tagValueNodeType */
+            /** @var class-string<PhpDocTagValueNode> $tagValueNodeType */
             if ($phpDocTagValueNode instanceof $tagValueNodeType) {
                 return $name;
             }

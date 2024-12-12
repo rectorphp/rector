@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInfererTypeInferer;
-use Rector\TypeDeclaration\TypeNormalizer;
 /**
  * @internal
  */
