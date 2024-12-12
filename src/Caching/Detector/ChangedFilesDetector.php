@@ -82,7 +82,6 @@ final class ChangedFilesDetector
     }
     private function resolvePath(string $filePath) : string
     {
-        /** @var string|false $realPath */
         $realPath = \realpath($filePath);
         if ($realPath === \false) {
             return $filePath;

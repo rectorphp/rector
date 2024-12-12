@@ -39,9 +39,9 @@ final class BootstrapFilesIncluder
             return;
         }
         $dir = new RecursiveDirectoryIterator($stubsRectorDirectory, RecursiveDirectoryIterator::SKIP_DOTS);
-        /** @var SplFileInfo[] $stubs */
         $stubs = new RecursiveIteratorIterator($dir);
         foreach ($stubs as $stub) {
+            /** @var SplFileInfo $stub */
             require_once $stub->getRealPath();
         }
     }

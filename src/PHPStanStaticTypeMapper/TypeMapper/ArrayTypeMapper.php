@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node\Identifier;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -150,7 +149,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
         foreach ($genericTypes as $genericType) {
-            /** @var Node $genericType */
+            /** @var TypeNode $genericType */
             $genericType->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         }
         $identifierTypeNode->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);

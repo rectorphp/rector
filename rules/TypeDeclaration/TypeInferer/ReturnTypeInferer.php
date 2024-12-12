@@ -32,6 +32,5 @@ final class ReturnTypeInferer
             return new MixedType();
         }
         return $originalType;
-        // return $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
     }
 }

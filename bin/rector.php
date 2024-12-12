@@ -87,7 +87,7 @@ final class AutoloadIncluder
         if (\in_array($filePath, $this->alreadyLoadedAutoloadFiles, \true)) {
             return;
         }
-        /** @var string $realPath always string after file_exists() check */
+        /** @var non-empty-string $realPath always string after file_exists() check */
         $realPath = \realpath($filePath);
         $this->alreadyLoadedAutoloadFiles[] = $realPath;
         require_once $filePath;
