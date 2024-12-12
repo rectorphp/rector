@@ -14,7 +14,7 @@ final class NamedArgsFactory
 {
     /**
      * @param array<string|int, mixed|Expr> $values
-     * @return Arg[]
+     * @return list<Arg>
      */
     public function createFromValues(array $values) : array
     {

@@ -47,6 +47,7 @@ final class UseImportNameMatcher
     }
     /**
      * @param array<Use_|GroupUse> $uses
+     * @return non-empty-string|null
      */
     public function matchNameWithUses(string $tag, array $uses) : ?string
     {
@@ -61,6 +62,9 @@ final class UseImportNameMatcher
         }
         return null;
     }
+    /**
+     * @return non-empty-string
+     */
     private function resolveName(string $prefix, string $tag, UseItem $useItem) : string
     {
         // useuse can be renamed on the fly, so just in case, use the original one

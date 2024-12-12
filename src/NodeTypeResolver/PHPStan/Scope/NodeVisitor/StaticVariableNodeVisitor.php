@@ -41,10 +41,11 @@ final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements Sco
                 continue;
             }
             foreach ($stmt->vars as $staticVar) {
-                if (!$staticVar->var->name instanceof Expr) {
-                    $staticVar->var->setAttribute(AttributeKey::IS_STATIC_VAR, \true);
-                    $staticVariableNames[] = $staticVar->var->name;
+                if (!\is_string($staticVar->var->name)) {
+                    continue;
                 }
+                $staticVar->var->setAttribute(AttributeKey::IS_STATIC_VAR, \true);
+                $staticVariableNames[] = $staticVar->var->name;
             }
         }
         return null;

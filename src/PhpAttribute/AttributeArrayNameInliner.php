@@ -14,8 +14,8 @@ use RectorPrefix202412\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**
-     * @param Array_|Arg[] $array
-     * @return Arg[]
+     * @param Array_|list<Arg> $array
+     * @return list<Arg>
      */
     public function inlineArrayToArgs($array) : array
     {
@@ -25,7 +25,7 @@ final class AttributeArrayNameInliner
         return $this->inlineArrayNode($array);
     }
     /**
-     * @return Arg[]
+     * @return list<Arg>
      */
     private function inlineArrayNode(Array_ $array) : array
     {
@@ -45,8 +45,8 @@ final class AttributeArrayNameInliner
         return $args;
     }
     /**
-     * @param Arg[] $args
-     * @return Arg[]
+     * @param list<Arg> $args
+     * @return list<Arg>
      */
     private function inlineArray(array $args) : array
     {

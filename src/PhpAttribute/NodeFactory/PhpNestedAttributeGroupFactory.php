@@ -104,7 +104,7 @@ final class PhpNestedAttributeGroupFactory
         return $attributeGroups;
     }
     /**
-     * @return Arg[]
+     * @return list<Arg>
      */
     private function createAttributeArgs(DoctrineAnnotationTagValueNode $nestedDoctrineAnnotationTagValueNode) : array
     {
@@ -113,7 +113,7 @@ final class PhpNestedAttributeGroupFactory
     }
     /**
      * @param ArrayItemNode[] $arrayItemNodes
-     * @return Arg[]
+     * @return list<Arg>
      */
     private function createArgsFromItems(array $arrayItemNodes) : array
     {

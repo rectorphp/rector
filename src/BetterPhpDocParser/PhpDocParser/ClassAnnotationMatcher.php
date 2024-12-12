@@ -30,7 +30,7 @@ final class ClassAnnotationMatcher
      */
     private ReflectionProvider $reflectionProvider;
     /**
-     * @var array<string, string>
+     * @var array<non-empty-string, string>
      */
     private array $fullyQualifiedNameByHash = [];
     public function __construct(UseImportNameMatcher $useImportNameMatcher, UseImportsResolver $useImportsResolver, ReflectionProvider $reflectionProvider)
@@ -39,6 +39,9 @@ final class ClassAnnotationMatcher
         $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
+    /**
+     * @return non-empty-string
+     */
     public function resolveTagFullyQualifiedName(string $tag, Node $node) : string
     {
         $uniqueId = $tag . \spl_object_id($node);
@@ -56,6 +59,7 @@ final class ClassAnnotationMatcher
     }
     /**
      * @param array<Use_|GroupUse> $uses
+     * @return non-empty-string|null
      */
     private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag) : ?string
     {
@@ -80,6 +84,7 @@ final class ClassAnnotationMatcher
     }
     /**
      * @param array<Use_|GroupUse> $uses
+     * @return non-empty-string|null
      */
     private function resolveAsAliased(array $uses, string $tag) : ?string
     {

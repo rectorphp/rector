@@ -118,7 +118,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $editorUrl = SimpleParameterProvider::provideStringParameter(Option::EDITOR_URL, '');
         if ($editorUrl !== '') {
-            $editorUrl = \str_replace(['%file%', '%relFile%', '%line%'], [$absoluteFilePath, $relativeFilePath, $lineNumber], $editorUrl);
+            $editorUrl = \str_replace(['%file%', '%relFile%', '%line%'], [(string) $absoluteFilePath, (string) $relativeFilePath, (string) $lineNumber], $editorUrl);
             $filePath = '<href=' . OutputFormatter::escape($editorUrl) . '>' . $filePath . '</>';
         }
         return $filePath;

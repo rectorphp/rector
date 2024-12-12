@@ -105,9 +105,10 @@ final class PhpAttributeGroupFactory
      * @api tests
      *
      * @param ArrayItemNode[]|mixed[] $items
+     * @param string $attributeClass @deprecated
      * @param string[] $classReferencedFields
      *
-     * @return Arg[]
+     * @return list<Arg>
      */
     public function createArgsFromItems(array $items, string $attributeClass = '', array $classReferencedFields = []) : array
     {
