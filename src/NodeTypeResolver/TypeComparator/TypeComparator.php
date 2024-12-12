@@ -20,17 +20,12 @@ use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\TypeDeclaration\TypeNormalizer;
 final class TypeComparator
 {
     /**
      * @readonly
      */
     private TypeHasher $typeHasher;
-    /**
-     * @readonly
-     */
-    private TypeNormalizer $typeNormalizer;
     /**
      * @readonly
      */
@@ -47,10 +42,9 @@ final class TypeComparator
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, ReflectionResolver $reflectionResolver)
+    public function __construct(TypeHasher $typeHasher, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, ReflectionResolver $reflectionResolver)
     {
         $this->typeHasher = $typeHasher;
-        $this->typeNormalizer = $typeNormalizer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->arrayTypeComparator = $arrayTypeComparator;
         $this->scalarTypeComparator = $scalarTypeComparator;
@@ -72,8 +66,6 @@ final class TypeComparator
         if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
             return \true;
         }
-        $firstType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($firstType);
-        $secondType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($secondType);
         if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
             return \true;
         }

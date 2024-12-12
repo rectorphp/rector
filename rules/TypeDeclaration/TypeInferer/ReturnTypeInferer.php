@@ -18,14 +18,9 @@ final class ReturnTypeInferer
     /**
      * @readonly
      */
-    private TypeNormalizer $typeNormalizer;
-    /**
-     * @readonly
-     */
     private ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer;
-    public function __construct(TypeNormalizer $typeNormalizer, ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer)
+    public function __construct(ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer)
     {
-        $this->typeNormalizer = $typeNormalizer;
         $this->returnedNodesReturnTypeInfererTypeInferer = $returnedNodesReturnTypeInfererTypeInferer;
     }
     /**
@@ -37,6 +32,7 @@ final class ReturnTypeInferer
         if ($originalType instanceof MixedType) {
             return new MixedType();
         }
-        return $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
+        return $originalType;
+        // return $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
     }
 }

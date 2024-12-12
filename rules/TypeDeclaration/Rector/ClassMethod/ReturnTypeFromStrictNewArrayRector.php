@@ -153,7 +153,7 @@ CODE_SAMPLE
      */
     private function processAddArrayReturnType($node, Type $returnType)
     {
-        if (!$returnType instanceof ArrayType && !$returnType instanceof ConstantArrayType) {
+        if (!$returnType->isArray()->yes()) {
             return null;
         }
         // always returns array
@@ -176,9 +176,8 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $arrayType
      */
-    private function changeReturnType($node, $arrayType) : void
+    private function changeReturnType($node, Type $arrayType) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // skip already filled type, on purpose
@@ -251,10 +250,7 @@ CODE_SAMPLE
         }
         return $variables;
     }
-    /**
-     * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $arrayType
-     */
-    private function shouldAddReturnArrayDocType($arrayType) : bool
+    private function shouldAddReturnArrayDocType(Type $arrayType) : bool
     {
         if ($arrayType instanceof ConstantArrayType) {
             if ($arrayType->getIterableValueType() instanceof NeverType) {
