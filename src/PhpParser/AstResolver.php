@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -340,10 +341,11 @@ final class AstResolver
         if ($funcCall->name instanceof Expr) {
             return null;
         }
-        if (!$this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
+        $functionName = new Name((string) $this->nodeNameResolver->getName($funcCall));
+        if (!$this->reflectionProvider->hasFunction($functionName, $scope)) {
             return null;
         }
-        $functionReflection = $this->reflectionProvider->getFunction($funcCall->name, $scope);
+        $functionReflection = $this->reflectionProvider->getFunction($functionName, $scope);
         return $this->resolveFunctionFromFunctionReflection($functionReflection);
     }
 }

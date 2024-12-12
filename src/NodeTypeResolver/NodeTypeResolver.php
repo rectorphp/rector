@@ -43,6 +43,7 @@ use PHPStan\Type\UnionType;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -79,6 +80,10 @@ final class NodeTypeResolver
      */
     private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    /**
      * @var string
      */
     private const ERROR_MESSAGE = '%s itself does not have any type. Check the %s node instead';
@@ -89,7 +94,7 @@ final class NodeTypeResolver
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, iterable $nodeTypeResolvers)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, iterable $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
@@ -97,6 +102,7 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        $this->nodeNameResolver = $nodeNameResolver;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
             if ($nodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
                 $nodeTypeResolver->autowire($this);
@@ -479,10 +485,11 @@ final class NodeTypeResolver
             if (!$expr->name instanceof Name) {
                 return $scope->getNativeType($expr);
             }
-            if (!$this->reflectionProvider->hasFunction($expr->name, $scope)) {
+            $functionName = new Name((string) $this->nodeNameResolver->getName($expr));
+            if (!$this->reflectionProvider->hasFunction($functionName, $scope)) {
                 return $scope->getNativeType($expr);
             }
-            $functionReflection = $this->reflectionProvider->getFunction($expr->name, $scope);
+            $functionReflection = $this->reflectionProvider->getFunction($functionName, $scope);
             if (!$functionReflection instanceof NativeFunctionReflection) {
                 return $scope->getNativeType($expr);
             }
