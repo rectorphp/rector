@@ -20,8 +20,9 @@ final class RectorNodeScopeResolver
     public static function processNodes(array $stmts, MutatingScope $mutatingScope) : void
     {
         $simpleCallableNodeTraverser = new SimpleCallableNodeTraverser();
-        $simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($mutatingScope) : void {
+        $simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($mutatingScope) {
             $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            return null;
         });
     }
 }

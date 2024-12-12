@@ -162,6 +162,9 @@ final class ValueResolver
      */
     private function resolveExprValueForConst($expr)
     {
+        if ($expr instanceof InterpolatedStringPart) {
+            return $expr->value;
+        }
         try {
             $constExprEvaluator = $this->getConstExprEvaluator();
             return $constExprEvaluator->evaluateDirectly($expr);
@@ -172,9 +175,6 @@ final class ValueResolver
             if ($type instanceof ConstantStringType) {
                 return $type->getValue();
             }
-        }
-        if ($expr instanceof InterpolatedStringPart) {
-            return $expr->value;
         }
         return null;
     }

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\NodeFactory;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\MatchArm;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,6 +22,7 @@ final class MatchArmsFactory
             if ($expr instanceof Assign) {
                 $expr = $expr->expr;
             }
+            /** @var list<Expr> $condExprs */
             $condExprs = $condAndExpr->getCondExprs();
             $matchArms[] = new MatchArm($condExprs, $expr, [AttributeKey::COMMENTS => $condAndExprs[$key]->getComments()]);
         }

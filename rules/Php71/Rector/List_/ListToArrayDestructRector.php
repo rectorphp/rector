@@ -77,6 +77,12 @@ CODE_SAMPLE
             return null;
         }
         $list = $node->valueVar;
+        // all list items must be set
+        foreach ($list->items as $listItem) {
+            if ($listItem === null) {
+                return null;
+            }
+        }
         $node->valueVar = new Array_($list->items);
         return $node;
     }
