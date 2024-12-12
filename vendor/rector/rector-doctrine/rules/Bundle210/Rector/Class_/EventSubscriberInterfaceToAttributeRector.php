@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Bundle210\Rector\Class_;
 
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;

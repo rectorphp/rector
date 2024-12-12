@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Collection22\Rector;
 
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Dbal211\Rector\MethodCall;
 
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;

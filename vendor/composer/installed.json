@@ -1691,12 +1691,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "a4cd22df620e449304f7cf8d341b02aa1e76be18"
+                "reference": "00ef1cd14df456b44f3e990a068ae1e188104eee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/a4cd22df620e449304f7cf8d341b02aa1e76be18",
-                "reference": "a4cd22df620e449304f7cf8d341b02aa1e76be18",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/00ef1cd14df456b44f3e990a068ae1e188104eee",
+                "reference": "00ef1cd14df456b44f3e990a068ae1e188104eee",
                 "shasum": ""
             },
             "require": {
@@ -1704,20 +1704,22 @@
                 "symfony\/yaml": "^7.1"
             },
             "require-dev": {
-                "doctrine\/doctrine-bundle": "^2.12",
-                "doctrine\/orm": "^2.19",
+                "doctrine\/doctrine-bundle": "^2.13",
+                "doctrine\/orm": "^2.20",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.0",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^11.4",
+                "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^12.3",
+                "rector\/type-perfect": "^2.0",
+                "symplify\/easy-coding-standard": "^12.5",
+                "symplify\/phpstan-rules": "^14.0",
                 "symplify\/vendor-patches": "^11.3",
-                "tomasvotruba\/class-leak": "^1.1",
+                "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-12-03T17:34:54+00:00",
+            "time": "2024-12-12T16:28:27+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
