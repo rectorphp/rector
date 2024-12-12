@@ -121,7 +121,7 @@ CODE_SAMPLE;
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
             if (!\in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
                 // notify this rule changing code
-                $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
+                $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
                 $this->file->addRectorClassWithLine($rectorWithLineChange);
                 return $refactoredNode;
             }
