@@ -142,17 +142,7 @@ final class TypeFactory
         if (\count($types) === 1) {
             return $types[0];
         }
-        $unionType = new UnionType($types);
-        if ($unionType->isFloat()->yes()) {
-            return new IntegerType();
-        }
-        if ($unionType->isString()->yes()) {
-            return new StringType();
-        }
-        if ($unionType->isInteger()->yes()) {
-            return new IntegerType();
-        }
-        return $unionType;
+        return new UnionType($types);
     }
     private function removeValueFromConstantType(Type $type) : Type
     {
