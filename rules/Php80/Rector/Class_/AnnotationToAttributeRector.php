@@ -28,6 +28,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
 use Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator;
@@ -164,9 +165,25 @@ CODE_SAMPLE
         }
         // 3. Reprint docblock
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        // 4. Left over comment removal
+        $this->cleanLeftOverComment($node);
         $this->attributeGroupNamedArgumentManipulator->decorate($attributeGroups);
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         return $node;
+    }
+    private function cleanLeftOverComment(Node $node) : void
+    {
+        $comments = $node->getComments();
+        if ($comments === []) {
+            return;
+        }
+        foreach ($comments as $key => $comment) {
+            if ($comment->getText() === '') {
+                unset($comments[$key]);
+                continue;
+            }
+        }
+        $node->setAttribute(AttributeKey::COMMENTS, \array_values($comments));
     }
     /**
      * @param mixed[] $configuration
