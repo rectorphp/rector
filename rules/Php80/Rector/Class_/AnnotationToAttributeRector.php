@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
-use RectorPrefix202412\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -17,7 +16,9 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -31,6 +32,7 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
 use Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php80\ValueObject\AttributeValueAndDocComment;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
@@ -84,10 +86,14 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      */
     private ReflectionProvider $reflectionProvider;
     /**
+     * @readonly
+     */
+    private \Rector\Php80\Rector\Class_\AttributeValueResolver $attributeValueResolver;
+    /**
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, \Rector\Php80\Rector\Class_\AttributeValueResolver $attributeValueResolver)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
@@ -98,6 +104,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->attributeValueResolver = $attributeValueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -180,7 +187,7 @@ CODE_SAMPLE
     {
         $attributeGroups = [];
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use(&$attributeGroups) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use(&$attributeGroups) {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
@@ -201,15 +208,12 @@ CODE_SAMPLE
                 if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
                     continue;
                 }
-                $docValue = null;
-                if ($annotationToAttribute->getUseValueAsAttributeArgument()) {
-                    // special case for newline
-                    $docValue = (string) $docNode->value;
-                    if (\strpos($docValue, '\\') !== \false) {
-                        $docValue = Strings::replace($docValue, "#\\\\\r?\n#", '');
-                    }
+                $attributeValueAndDocComment = $this->attributeValueResolver->resolve($annotationToAttribute, $docNode);
+                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $attributeValueAndDocComment instanceof AttributeValueAndDocComment ? $attributeValueAndDocComment->attributeValue : null);
+                // keep partial original comment, if useful
+                if ($attributeValueAndDocComment instanceof AttributeValueAndDocComment && $attributeValueAndDocComment->docComment) {
+                    return new PhpDocTextNode($attributeValueAndDocComment->docComment);
                 }
-                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute, $docValue);
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;

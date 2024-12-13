@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit43a144ea3a889e7564ca86040a3795ff
+class ComposerStaticInit4280c40f0ee92945093567ebf9648fda
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2185,6 +2185,7 @@ class ComposerStaticInit43a144ea3a889e7564ca86040a3795ff
         'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',
         'Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/AnnotationToAttributeRector.php',
+        'Rector\\Php80\\Rector\\Class_\\AttributeValueResolver' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/AttributeValueResolver.php',
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
         'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
@@ -2198,6 +2199,7 @@ class ComposerStaticInit43a144ea3a889e7564ca86040a3795ff
         'Rector\\Php80\\ValueObjectFactory\\StrStartsWithFactory' => __DIR__ . '/../..' . '/rules/Php80/ValueObjectFactory/StrStartsWithFactory.php',
         'Rector\\Php80\\ValueObject\\AnnotationPropertyToAttributeClass' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationPropertyToAttributeClass.php',
         'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
+        'Rector\\Php80\\ValueObject\\AttributeValueAndDocComment' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AttributeValueAndDocComment.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
         'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\MatchResult' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/MatchResult.php',
@@ -2838,9 +2840,9 @@ class ComposerStaticInit43a144ea3a889e7564ca86040a3795ff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit43a144ea3a889e7564ca86040a3795ff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit43a144ea3a889e7564ca86040a3795ff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit43a144ea3a889e7564ca86040a3795ff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4280c40f0ee92945093567ebf9648fda::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4280c40f0ee92945093567ebf9648fda::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4280c40f0ee92945093567ebf9648fda::$classMap;
 
         }, null, ClassLoader::class);
     }
