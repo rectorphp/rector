@@ -43,6 +43,7 @@ use RectorPrefix202412\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
  * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Php81NestedAttributesRectorTest
+ * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\MultipleCallAnnotationToAttributeRectorTest
  */
 final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
@@ -193,7 +194,7 @@ CODE_SAMPLE
             }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
                 $desiredTag = $annotationToAttribute->getTag();
-                if ($desiredTag !== $tag) {
+                if (\strtolower($desiredTag) !== \strtolower($tag)) {
                     continue;
                 }
                 // make sure the attribute class really exists to avoid error on early upgrade
