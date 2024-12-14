@@ -95,7 +95,7 @@ CODE_SAMPLE
     private function refactorGetKeyMethodCall(MethodCall $methodCall) : ?PropertyFetch
     {
         if (!$methodCall->var instanceof StaticCall) {
-            return null;
+            return $this->nodeFactory->createPropertyFetch($methodCall->var, 'name');
         }
         $staticCall = $methodCall->var;
         $className = $this->getName($staticCall->class);
@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function refactorGetValueMethodCall(MethodCall $methodCall) : ?PropertyFetch
     {
         if (!$methodCall->var instanceof StaticCall) {
-            return null;
+            return $this->nodeFactory->createPropertyFetch($methodCall->var, 'value');
         }
         $staticCall = $methodCall->var;
         $className = $this->getName($staticCall->class);
