@@ -2528,6 +2528,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => $baseDir . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
+    'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayMapRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayMapRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromArgRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromArgRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromIterableMethodCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromIterableMethodCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromObjectRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromObjectRector.php',

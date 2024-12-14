@@ -2747,6 +2747,7 @@ class ComposerStaticInit4280c40f0ee92945093567ebf9648fda
         'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayMapRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayMapRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromArgRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromArgRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromIterableMethodCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromIterableMethodCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromObjectRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromObjectRector.php',
