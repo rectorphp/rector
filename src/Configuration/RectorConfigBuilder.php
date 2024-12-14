@@ -132,6 +132,10 @@ final class RectorConfigBuilder
             $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
             SimpleParameterProvider::addParameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->groupLoadedSets);
         }
+        // not to miss it by accident
+        if ($this->isWithPhpSetsUsed === \true) {
+            $this->sets[] = SetList::PHP_POLYFILLS;
+        }
         // merge sets together
         $this->sets = \array_merge($this->sets, $this->groupLoadedSets);
         $uniqueSets = \array_unique($this->sets);
@@ -351,6 +355,7 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
+     * @deprecated Already included in withPhpSets(), no need to repeat
      * make use of polyfill packages in composer.json
      */
     public function withPhpPolyfill() : self
@@ -365,7 +370,6 @@ final class RectorConfigBuilder
     public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false, bool $php84 = \false) : self
     {
         $this->isWithPhpSetsUsed = \true;
-        $this->withPhpPolyfill();
         $pickedArguments = \array_filter(\func_get_args());
         if ($pickedArguments !== []) {
             Notifier::notifyWithPhpSetsNotSuitableForPHP80();
