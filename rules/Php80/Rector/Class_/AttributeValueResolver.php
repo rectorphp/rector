@@ -39,7 +39,7 @@ final class AttributeValueResolver
                 }
                 if (Strings::match($docValueLine, self::END_SLASH_REGEX) === null) {
                     if ($hasPreviousEndSlash === \false && $key > 0) {
-                        if ($key === 1) {
+                        if ($docComment === '') {
                             $docComment .= $docValueLine;
                         } else {
                             $docComment .= "\n * " . $docValueLine;
