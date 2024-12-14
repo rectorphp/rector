@@ -2355,7 +2355,6 @@ class ComposerStaticInit4280c40f0ee92945093567ebf9648fda
         'Rector\\Reporting\\DeprecatedRulesReporter' => __DIR__ . '/../..' . '/src/Reporting/DeprecatedRulesReporter.php',
         'Rector\\Reporting\\MissConfigurationReporter' => __DIR__ . '/../..' . '/src/Reporting/MissConfigurationReporter.php',
         'Rector\\Set\\Contract\\SetInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetInterface.php',
-        'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetListInterface.php',
         'Rector\\Set\\Contract\\SetProviderInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetProviderInterface.php',
         'Rector\\Set\\Enum\\SetGroup' => __DIR__ . '/../..' . '/src/Set/Enum/SetGroup.php',
         'Rector\\Set\\SetManager' => __DIR__ . '/../..' . '/src/Set/SetManager.php',

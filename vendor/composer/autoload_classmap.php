@@ -2136,7 +2136,6 @@ return array(
     'Rector\\Reporting\\DeprecatedRulesReporter' => $baseDir . '/src/Reporting/DeprecatedRulesReporter.php',
     'Rector\\Reporting\\MissConfigurationReporter' => $baseDir . '/src/Reporting/MissConfigurationReporter.php',
     'Rector\\Set\\Contract\\SetInterface' => $baseDir . '/src/Set/Contract/SetInterface.php',
-    'Rector\\Set\\Contract\\SetListInterface' => $baseDir . '/src/Set/Contract/SetListInterface.php',
     'Rector\\Set\\Contract\\SetProviderInterface' => $baseDir . '/src/Set/Contract/SetProviderInterface.php',
     'Rector\\Set\\Enum\\SetGroup' => $baseDir . '/src/Set/Enum/SetGroup.php',
     'Rector\\Set\\SetManager' => $baseDir . '/src/Set/SetManager.php',
