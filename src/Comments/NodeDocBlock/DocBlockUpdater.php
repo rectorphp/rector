@@ -33,11 +33,19 @@ final class DocBlockUpdater
         }
         $printedPhpDoc = $this->printPhpDocInfoToString($phpDocInfo);
         $node->setDocComment(new Doc($printedPhpDoc));
+        if ($printedPhpDoc === '') {
+            $this->clearEmptyDoc($node);
+        }
     }
     private function setCommentsAttribute(Node $node) : void
     {
         $comments = \array_filter($node->getComments(), static fn(Comment $comment): bool => !$comment instanceof Doc);
-        $node->setAttribute(AttributeKey::COMMENTS, $comments);
+        $node->setAttribute(AttributeKey::COMMENTS, \array_values($comments));
+    }
+    private function clearEmptyDoc(Node $node) : void
+    {
+        $comments = \array_filter($node->getComments(), static fn(Comment $comment): bool => !$comment instanceof Doc || $comment->getText() !== '');
+        $node->setAttribute(AttributeKey::COMMENTS, \array_values($comments));
     }
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo) : string
     {
