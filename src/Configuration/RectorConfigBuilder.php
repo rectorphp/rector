@@ -265,8 +265,8 @@ final class RectorConfigBuilder
         return $this->withSkip([$skipPath]);
     }
     /**
-     * Include PHP files from the root directory,
-     * typically ecs.php, rector.php etc.
+     * Include PHP files from the root directory (including hidden ones),
+     * typically ecs.php, rector.php, .php-cs-fixer.dist.php etc.
      */
     public function withRootFiles() : self
     {
@@ -298,7 +298,7 @@ final class RectorConfigBuilder
                 return \realpath($string);
             }, $gitIgnoreContents);
         }
-        $rootPhpFilesFinder = (new Finder())->files()->in(\getcwd())->depth(0)->name('*.php');
+        $rootPhpFilesFinder = (new Finder())->files()->in(\getcwd())->depth(0)->ignoreDotFiles(\false)->name('*.php')->name('.*.php');
         foreach ($rootPhpFilesFinder as $rootPhpFileFinder) {
             $path = $rootPhpFileFinder->getRealPath();
             if (\in_array($path, $gitIgnoreContents, \true)) {
