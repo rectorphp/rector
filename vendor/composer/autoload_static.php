@@ -1659,6 +1659,7 @@ class ComposerStaticInit4280c40f0ee92945093567ebf9648fda
         'Rector\\DowngradePhp73\\Rector\\Unset_\\DowngradeTrailingCommasInUnsetRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/Unset_/DowngradeTrailingCommasInUnsetRector.php',
         'Rector\\DowngradePhp73\\Tokenizer\\FollowedByCommaAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/FollowedByCommaAnalyzer.php',
         'Rector\\DowngradePhp73\\Tokenizer\\FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer.php',
+        'Rector\\DowngradePhp73\\Tokenizer\\TrailingCommaRemover' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/TrailingCommaRemover.php',
         'Rector\\DowngradePhp74\\Rector\\Array_\\DowngradeArraySpreadRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
         'Rector\\DowngradePhp74\\Rector\\ArrowFunction\\ArrowFunctionToAnonymousFunctionRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php',
         'Rector\\DowngradePhp74\\Rector\\ClassMethod\\DowngradeContravariantArgumentTypeRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ClassMethod/DowngradeContravariantArgumentTypeRector.php',

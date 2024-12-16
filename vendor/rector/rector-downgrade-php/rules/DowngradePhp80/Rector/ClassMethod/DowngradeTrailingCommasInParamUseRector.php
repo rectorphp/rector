@@ -10,7 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\DowngradePhp73\Tokenizer\TrailingCommaRemover;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,9 +23,14 @@ final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
      * @readonly
      */
     private FollowedByCommaAnalyzer $followedByCommaAnalyzer;
-    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
+    /**
+     * @readonly
+     */
+    private TrailingCommaRemover $trailingCommaRemover;
+    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer, TrailingCommaRemover $trailingCommaRemover)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
+        $this->trailingCommaRemover = $trailingCommaRemover;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -110,7 +115,7 @@ CODE_SAMPLE
         if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
             return null;
         }
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->trailingCommaRemover->remove($this->file, $last);
         return $node;
     }
 }
