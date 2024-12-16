@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\List_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
@@ -29,6 +31,13 @@ final class AssignedToNodeVisitor extends NodeVisitorAbstract implements ScopeRe
             return null;
         }
         $node->var->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
+        if ($node->var instanceof List_) {
+            foreach ($node->var->items as $item) {
+                if ($item instanceof ArrayItem) {
+                    $item->value->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
+                }
+            }
+        }
         $node->expr->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
         if ($node->expr instanceof Assign) {
             $node->var->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
