@@ -298,7 +298,7 @@ final class RectorConfigBuilder
                 return \realpath($string);
             }, $gitIgnoreContents);
         }
-        $rootPhpFilesFinder = (new Finder())->files()->in(\getcwd())->depth(0)->ignoreDotFiles(\false)->name('*.php')->name('.*.php');
+        $rootPhpFilesFinder = (new Finder())->files()->in(\getcwd())->depth(0)->ignoreDotFiles(\false)->name('*.php')->name('.*.php')->notName('.phpstorm.meta.php');
         foreach ($rootPhpFilesFinder as $rootPhpFileFinder) {
             $path = $rootPhpFileFinder->getRealPath();
             if (\in_array($path, $gitIgnoreContents, \true)) {
