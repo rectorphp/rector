@@ -77,7 +77,7 @@ CODE_SAMPLE
         }
         $originalArgs = $node->args;
         unset($originalArgs[0]);
-        $methodCall->args = $originalArgs;
+        $methodCall->args = \array_values($originalArgs);
         return $methodCall;
     }
 }
