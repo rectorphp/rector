@@ -1215,6 +1215,7 @@ class ComposerStaticInite1459f150f08d0eee2804dfc37f818db
         'Rector\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
         'Rector\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
+        'Rector\\Application\\NodeAttributeReIndexer' => __DIR__ . '/../..' . '/src/Application/NodeAttributeReIndexer.php',
         'Rector\\Application\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Application/Provider/CurrentFileProvider.php',
         'Rector\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',

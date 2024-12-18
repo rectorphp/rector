@@ -19,6 +19,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ChangedNodeScopeRefresher;
+use Rector\Application\NodeAttributeReIndexer;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
@@ -107,6 +108,7 @@ CODE_SAMPLE;
         }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
+        NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $refactoredNode = $this->refactor($node);
         // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
         if ($refactoredNode === NodeVisitor::REMOVE_NODE) {

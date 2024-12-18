@@ -996,6 +996,7 @@ return array(
     'Rector\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Application\\ChangedNodeScopeRefresher' => $baseDir . '/src/Application/ChangedNodeScopeRefresher.php',
     'Rector\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',
+    'Rector\\Application\\NodeAttributeReIndexer' => $baseDir . '/src/Application/NodeAttributeReIndexer.php',
     'Rector\\Application\\Provider\\CurrentFileProvider' => $baseDir . '/src/Application/Provider/CurrentFileProvider.php',
     'Rector\\Application\\VersionResolver' => $baseDir . '/src/Application/VersionResolver.php',
     'Rector\\Arguments\\ArgumentDefaultValueReplacer' => $baseDir . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
