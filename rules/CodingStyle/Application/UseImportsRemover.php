@@ -23,6 +23,7 @@ final class UseImportsRemover
      */
     public function removeImportsFromStmts(array $stmts, array $removedUses) : array
     {
+        $hasRemoved = \false;
         foreach ($stmts as $key => $stmt) {
             if (!$stmt instanceof Use_) {
                 continue;
@@ -31,9 +32,10 @@ final class UseImportsRemover
             // remove empty uses
             if ($stmt->uses === []) {
                 unset($stmts[$key]);
+                $hasRemoved = \true;
             }
         }
-        return $stmts;
+        return $hasRemoved ? \array_values($stmts) : $stmts;
     }
     /**
      * @param string[] $removedUses

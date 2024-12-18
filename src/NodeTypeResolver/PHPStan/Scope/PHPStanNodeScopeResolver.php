@@ -104,6 +104,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PHPStan\NodeVisitor\ReIndexNodeAttributeVisitor;
 use Rector\PHPStan\NodeVisitor\UnreachableStatementNodeVisitor;
 use Rector\PHPStan\NodeVisitor\WrappedNodeRestoringNodeVisitor;
 use Rector\Util\Reflection\PrivatesAccessor;
@@ -173,6 +174,13 @@ final class PHPStanNodeScopeResolver
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
          */
         Assert::allIsInstanceOf($stmts, Stmt::class);
+        // on refresh, early reindex node attributes
+        // due to PHPStan doing printing internally on process nodes
+        // using reindex via NodeVisitor on purpose to ensure reindex happen even on deep node changed
+        if ($formerMutatingScope instanceof MutatingScope) {
+            $nodeTraverser = new NodeTraverser(new ReIndexNodeAttributeVisitor());
+            $stmts = $nodeTraverser->traverse($stmts);
+        }
         $this->nodeTraverser->traverse($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         $hasUnreachableStatementNode = \false;
