@@ -20,7 +20,6 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         if ($node->stmts === null) {
             return null;
         }
-        $node->stmts = \array_values($node->stmts);
         // re-index stmt key under current node
         foreach ($node->stmts as $key => $childStmt) {
             $childStmt->setAttribute(AttributeKey::STMT_KEY, $key);
