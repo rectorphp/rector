@@ -115,7 +115,7 @@ CODE_SAMPLE
             if ($this->isVariableUsedInForeach($stmt->valueVar, $stmt)) {
                 continue;
             }
-            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key + 1, (string) $this->getName($stmt->valueVar))) {
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, (string) $this->getName($stmt->valueVar))) {
                 continue;
             }
             $hasChanged = \true;
