@@ -38,7 +38,7 @@ final class ReIndexNodeAttributeVisitor extends NodeVisitorAbstract
         }
         if ($node instanceof If_) {
             $node->elseifs = \array_values($node->elseifs);
-            return null;
+            return $node;
         }
         if ($node instanceof TryCatch) {
             $node->catches = \array_values($node->catches);
