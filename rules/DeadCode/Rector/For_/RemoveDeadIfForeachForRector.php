@@ -48,7 +48,7 @@ final class RemoveDeadIfForeachForRector extends AbstractRector
         return new RuleDefinition('Remove if, foreach and for that does not do anything', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run($value)
+    public function run($value, $differrentValue)
     {
         if ($value) {
         }
@@ -56,16 +56,16 @@ class SomeClass
         foreach ($values as $value) {
         }
 
-        return $value;
+        return $differentValue;
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run($value)
+    public function run($value, $differrentValue)
     {
-        return $value;
+        return $differentValue;
     }
 }
 CODE_SAMPLE
@@ -129,11 +129,10 @@ CODE_SAMPLE
      */
     private function processForForeach($for, int $key, StmtsAwareInterface $stmtsAware) : void
     {
-        $stmts = (array) $stmtsAware->stmts;
         if ($for instanceof For_) {
             $variables = $this->betterNodeFinder->findInstanceOf(\array_merge($for->init, $for->cond, $for->loop), Variable::class);
             foreach ($variables as $variable) {
-                if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key + 1, (string) $this->getName($variable))) {
+                if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmtsAware, $key + 1, (string) $this->getName($variable))) {
                     return;
                 }
             }
@@ -144,7 +143,7 @@ CODE_SAMPLE
         $exprs = [$for->expr, $for->valueVar, $for->valueVar];
         $variables = $this->betterNodeFinder->findInstanceOf($exprs, Variable::class);
         foreach ($variables as $variable) {
-            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmts, $key + 1, (string) $this->getName($variable))) {
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmtsAware, $key + 1, (string) $this->getName($variable))) {
                 return;
             }
         }

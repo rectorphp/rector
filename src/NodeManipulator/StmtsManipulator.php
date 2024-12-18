@@ -76,15 +76,20 @@ final class StmtsManipulator
         });
         return $stmts;
     }
-    /**
-     * @param StmtsAwareInterface|Stmt[] $stmtsAware
-     */
-    public function isVariableUsedInNextStmt($stmtsAware, int $jumpToKey, string $variableName) : bool
+    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName) : bool
     {
-        if ($stmtsAware instanceof StmtsAwareInterface && $stmtsAware->stmts === null) {
+        if ($stmtsAware->stmts === null) {
             return \false;
         }
-        $stmts = \array_slice($stmtsAware instanceof StmtsAwareInterface ? $stmtsAware->stmts : $stmtsAware, $jumpToKey, null, \true);
+        $lastKey = \array_key_last($stmtsAware->stmts);
+        $stmts = [];
+        for ($key = $jumpToKey; $key <= $lastKey; ++$key) {
+            if (!isset($stmtsAware->stmts[$key])) {
+                // can be just removed
+                continue;
+            }
+            $stmts[] = $stmtsAware->stmts[$key];
+        }
         if ($stmtsAware instanceof TryCatch) {
             $stmts = \array_merge($stmts, $stmtsAware->catches);
             if ($stmtsAware->finally instanceof Finally_) {
