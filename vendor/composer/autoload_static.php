@@ -2214,6 +2214,7 @@ class ComposerStaticInite1459f150f08d0eee2804dfc37f818db
         'Rector\\Php81\\NodeAnalyzer\\CoalesePropertyAssignMatcher' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/CoalesePropertyAssignMatcher.php',
         'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
+        'Rector\\Php81\\NodeManipulator\\AttributeGroupNewLiner' => __DIR__ . '/../..' . '/rules/Php81/NodeManipulator/AttributeGroupNewLiner.php',
         'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
         'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',

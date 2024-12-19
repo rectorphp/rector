@@ -1995,6 +1995,7 @@ return array(
     'Rector\\Php81\\NodeAnalyzer\\CoalesePropertyAssignMatcher' => $baseDir . '/rules/Php81/NodeAnalyzer/CoalesePropertyAssignMatcher.php',
     'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => $baseDir . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
+    'Rector\\Php81\\NodeManipulator\\AttributeGroupNewLiner' => $baseDir . '/rules/Php81/NodeManipulator/AttributeGroupNewLiner.php',
     'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => $baseDir . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
     'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => $baseDir . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
     'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',

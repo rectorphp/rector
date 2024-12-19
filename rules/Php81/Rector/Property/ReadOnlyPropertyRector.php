@@ -22,7 +22,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\NodeManipulator\PropertyManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php81\NodeManipulator\AttributeGroupNewLiner;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -66,7 +66,11 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private AttributeGroupNewLiner $attributeGroupNewLiner;
+    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, AttributeGroupNewLiner $attributeGroupNewLiner)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
@@ -75,6 +79,7 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
         $this->betterNodeFinder = $betterNodeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -177,7 +182,7 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeReadonly($property);
         $attributeGroups = $property->attrGroups;
         if ($attributeGroups !== []) {
-            $property->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->attributeGroupNewLiner->newLine($this->file, $property);
         }
         $this->removeReadOnlyDoc($property);
         return $property;
@@ -226,7 +231,7 @@ CODE_SAMPLE
             return null;
         }
         if ($param->attrGroups !== []) {
-            $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->attributeGroupNewLiner->newLine($this->file, $param);
         }
         $this->visibilityManipulator->makeReadonly($param);
         $this->removeReadOnlyDoc($param);

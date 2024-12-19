@@ -14,9 +14,9 @@ use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php81\Enum\AttributeName;
+use Rector\Php81\NodeManipulator\AttributeGroupNewLiner;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
@@ -47,12 +47,17 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     */
+    private AttributeGroupNewLiner $attributeGroupNewLiner;
+    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider, AttributeGroupNewLiner $attributeGroupNewLiner)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
+        $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -98,21 +103,18 @@ CODE_SAMPLE
             foreach ($constructClassMethod->getParams() as $param) {
                 $this->visibilityManipulator->removeReadonly($param);
                 if ($param->attrGroups !== []) {
-                    // invoke reprint with correct newline
-                    $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                    $this->attributeGroupNewLiner->newLine($this->file, $param);
                 }
             }
         }
         foreach ($node->getProperties() as $property) {
             $this->visibilityManipulator->removeReadonly($property);
             if ($property->attrGroups !== []) {
-                // invoke reprint with correct newline
-                $property->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                $this->attributeGroupNewLiner->newLine($this->file, $property);
             }
         }
         if ($node->attrGroups !== []) {
-            // invoke reprint with correct readonly newline
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->attributeGroupNewLiner->newLine($this->file, $node);
         }
         return $node;
     }
