@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeManipulator\ClassInsertManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\ValueObject\MethodName;
 final class ConstructorManipulator
@@ -34,7 +33,6 @@ final class ConstructorManipulator
             $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
             $constructClassMethod->stmts[] = $newExpression;
             $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
-            $class->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
     }
 }
