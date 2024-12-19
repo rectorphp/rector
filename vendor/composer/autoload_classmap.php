@@ -2053,7 +2053,6 @@ return array(
     'Rector\\PhpParser\\NodeFinder\\PropertyFetchFinder' => $baseDir . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
     'Rector\\PhpParser\\NodeTransformer' => $baseDir . '/src/PhpParser/NodeTransformer.php',
     'Rector\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
-    'Rector\\PhpParser\\NodeTraverser\\ReIndexNodeAttributesTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/ReIndexNodeAttributesTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
     'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => $baseDir . '/src/PhpParser/Node/AssignAndBinaryMap.php',
     'Rector\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',

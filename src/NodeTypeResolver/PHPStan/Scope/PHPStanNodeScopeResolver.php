@@ -104,7 +104,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\PhpParser\NodeTraverser\ReIndexNodeAttributesTraverser;
+use Rector\PHPStan\NodeVisitor\ReIndexNodeAttributeVisitor;
 use Rector\PHPStan\NodeVisitor\UnreachableStatementNodeVisitor;
 use Rector\PHPStan\NodeVisitor\WrappedNodeRestoringNodeVisitor;
 use Rector\Util\Reflection\PrivatesAccessor;
@@ -140,10 +140,6 @@ final class PHPStanNodeScopeResolver
      */
     private ClassAnalyzer $classAnalyzer;
     /**
-     * @readonly
-     */
-    private ReIndexNodeAttributesTraverser $reIndexNodeAttributesTraverser;
-    /**
      * @var string
      */
     private const CONTEXT = 'context';
@@ -154,7 +150,7 @@ final class PHPStanNodeScopeResolver
     /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
-    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, ReIndexNodeAttributesTraverser $reIndexNodeAttributesTraverser)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -162,7 +158,6 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
-        $this->reIndexNodeAttributesTraverser = $reIndexNodeAttributesTraverser;
         $this->nodeTraverser = new NodeTraverser();
         foreach ($nodeVisitors as $nodeVisitor) {
             $this->nodeTraverser->addVisitor($nodeVisitor);
@@ -183,7 +178,8 @@ final class PHPStanNodeScopeResolver
         // due to PHPStan doing printing internally on process nodes
         // using reindex via NodeVisitor on purpose to ensure reindex happen even on deep node changed
         if ($formerMutatingScope instanceof MutatingScope) {
-            $stmts = $this->reIndexNodeAttributesTraverser->traverse($stmts);
+            $nodeTraverser = new NodeTraverser(new ReIndexNodeAttributeVisitor());
+            $stmts = $nodeTraverser->traverse($stmts);
         }
         $this->nodeTraverser->traverse($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
