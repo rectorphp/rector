@@ -52,6 +52,7 @@ final class ChangedNodeScopeRefresher
             $errorMessage = \sprintf('Node "%s" with is missing scope required for scope refresh', \get_class($node));
             throw new ShouldNotHappenException($errorMessage);
         }
+        \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }

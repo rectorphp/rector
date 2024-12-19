@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
@@ -65,10 +64,6 @@ final class NodeAttributeReIndexer
         }
         if ($node instanceof Switch_) {
             $node->cases = \array_values($node->cases);
-            return $node;
-        }
-        if ($node instanceof MatchArm && \is_array($node->conds)) {
-            $node->conds = \array_values($node->conds);
             return $node;
         }
         return null;
