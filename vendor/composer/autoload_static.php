@@ -2272,6 +2272,7 @@ class ComposerStaticInite1459f150f08d0eee2804dfc37f818db
         'Rector\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
         'Rector\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
+        'Rector\\PhpParser\\NodeTraverser\\ReIndexNodeAttributesTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/ReIndexNodeAttributesTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
         'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',

@@ -19,7 +19,6 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ChangedNodeScopeRefresher;
-use Rector\Application\NodeAttributeReIndexer;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
@@ -33,6 +32,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
+use Rector\PhpParser\NodeTraverser\ReIndexNodeAttributesTraverser;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Application\File;
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
@@ -65,8 +65,9 @@ CODE_SAMPLE;
      */
     private array $nodesToReturn = [];
     private CreatedByRuleDecorator $createdByRuleDecorator;
+    private ReIndexNodeAttributesTraverser $reIndexNodeAttributesTraverser;
     private ?int $toBeRemovedNodeId = null;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher) : void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, ReIndexNodeAttributesTraverser $reIndexNodeAttributesTraverser) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -77,6 +78,7 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
+        $this->reIndexNodeAttributesTraverser = $reIndexNodeAttributesTraverser;
     }
     /**
      * @return Node[]|null
@@ -108,7 +110,7 @@ CODE_SAMPLE;
         }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
-        NodeAttributeReIndexer::reIndexNodeAttributes($node);
+        $this->reIndexNodeAttributesTraverser->traverse([$node]);
         $refactoredNode = $this->refactor($node);
         // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
         if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
