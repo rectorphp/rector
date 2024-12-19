@@ -24,29 +24,37 @@ use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeAttributeReIndexer
 {
+    public static function reIndexStmtKeyNodeAttributes(Node $node) : ?Node
+    {
+        if (!$node instanceof StmtsAwareInterface && !$node instanceof ClassLike && !$node instanceof Declare_) {
+            return null;
+        }
+        if ($node->stmts === null) {
+            return null;
+        }
+        $node->stmts = \array_values($node->stmts);
+        // re-index stmt key under current node
+        foreach ($node->stmts as $key => $childStmt) {
+            $childStmt->setAttribute(AttributeKey::STMT_KEY, $key);
+        }
+        return $node;
+    }
     public static function reIndexNodeAttributes(Node $node) : ?Node
     {
-        if (($node instanceof StmtsAwareInterface || $node instanceof ClassLike || $node instanceof Declare_) && $node->stmts !== null) {
-            $node->stmts = \array_values($node->stmts);
-            // re-index stmt key under current node
-            foreach ($node->stmts as $key => $childStmt) {
-                $childStmt->setAttribute(AttributeKey::STMT_KEY, $key);
-            }
-            if ($node instanceof If_) {
-                $node->elseifs = \array_values($node->elseifs);
-                return $node;
-            }
-            if ($node instanceof TryCatch) {
-                $node->catches = \array_values($node->catches);
-                return $node;
-            }
-            if ($node instanceof FunctionLike) {
-                /** @var ClassMethod|Function_|Closure $node */
-                $node->params = \array_values($node->params);
-                if ($node instanceof Closure) {
-                    $node->uses = \array_values($node->uses);
-                }
-                return $node;
+        self::reIndexStmtKeyNodeAttributes($node);
+        if ($node instanceof If_) {
+            $node->elseifs = \array_values($node->elseifs);
+            return $node;
+        }
+        if ($node instanceof TryCatch) {
+            $node->catches = \array_values($node->catches);
+            return $node;
+        }
+        if ($node instanceof FunctionLike) {
+            /** @var ClassMethod|Function_|Closure $node */
+            $node->params = \array_values($node->params);
+            if ($node instanceof Closure) {
+                $node->uses = \array_values($node->uses);
             }
             return $node;
         }
