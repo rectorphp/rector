@@ -109,7 +109,7 @@ final class CodeQualityLevel
         # https://www.php.net/manual/en/aliases.php
         'chop' => 'rtrim',
         'doubleval' => 'floatval',
-        'gzputs' => 'gzwrites',
+        'gzputs' => 'gzwrite',
         'fputs' => 'fwrite',
         'ini_alter' => 'ini_set',
         'is_double' => 'is_float',
