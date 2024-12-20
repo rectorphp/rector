@@ -15,6 +15,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Doctrine\CodeQuality\Enum\DoctrineClass;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
+use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver;
 use Rector\NodeManipulator\AssignManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -47,7 +48,11 @@ final class SetterCollectionResolver
      * @readonly
      */
     private CollectionTypeFactory $collectionTypeFactory;
-    public function __construct(AssignManipulator $assignManipulator, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, StaticTypeMapper $staticTypeMapper, CollectionTypeFactory $collectionTypeFactory)
+    /**
+     * @readonly
+     */
+    private CollectionTypeResolver $collectionTypeResolver;
+    public function __construct(AssignManipulator $assignManipulator, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, StaticTypeMapper $staticTypeMapper, CollectionTypeFactory $collectionTypeFactory, CollectionTypeResolver $collectionTypeResolver)
     {
         $this->assignManipulator = $assignManipulator;
         $this->reflectionResolver = $reflectionResolver;
@@ -55,6 +60,7 @@ final class SetterCollectionResolver
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->collectionTypeFactory = $collectionTypeFactory;
+        $this->collectionTypeResolver = $collectionTypeResolver;
     }
     public function resolveAssignedGenericCollectionType(Class_ $class, ClassMethod $classMethod) : ?GenericObjectType
     {
@@ -88,7 +94,7 @@ final class SetterCollectionResolver
             if (\count($nonCollectionTypes) === 1) {
                 $soleType = $nonCollectionTypes[0];
                 if ($soleType instanceof ArrayType && $soleType->getItemType() instanceof ObjectType) {
-                    return $this->collectionTypeFactory->createType($soleType->getItemType());
+                    return $this->collectionTypeFactory->createType($soleType->getItemType(), $this->collectionTypeResolver->hasIndexBy($property));
                 }
             }
         }

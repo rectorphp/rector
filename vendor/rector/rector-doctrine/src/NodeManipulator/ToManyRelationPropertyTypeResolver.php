@@ -18,6 +18,7 @@ use Rector\Doctrine\CodeQuality\Enum\OdmMappingKey;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
+use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ToManyRelationPropertyTypeResolver
@@ -42,13 +43,18 @@ final class ToManyRelationPropertyTypeResolver
      * @readonly
      */
     private CollectionTypeFactory $collectionTypeFactory;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory)
+    /**
+     * @readonly
+     */
+    private CollectionTypeResolver $collectionTypeResolver;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander, AttributeFinder $attributeFinder, ValueResolver $valueResolver, CollectionTypeFactory $collectionTypeFactory, CollectionTypeResolver $collectionTypeResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->shortClassExpander = $shortClassExpander;
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
         $this->collectionTypeFactory = $collectionTypeFactory;
+        $this->collectionTypeResolver = $collectionTypeResolver;
     }
     public function resolve(Property $property) : ?Type
     {
@@ -92,6 +98,6 @@ final class ToManyRelationPropertyTypeResolver
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($entityFullyQualifiedClass);
-        return $this->collectionTypeFactory->createType($fullyQualifiedObjectType);
+        return $this->collectionTypeFactory->createType($fullyQualifiedObjectType, $this->collectionTypeResolver->hasIndexBy($property));
     }
 }

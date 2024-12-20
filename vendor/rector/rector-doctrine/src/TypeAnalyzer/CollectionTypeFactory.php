@@ -8,9 +8,9 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 final class CollectionTypeFactory
 {
-    public function createType(ObjectType $objectType) : GenericObjectType
+    public function createType(ObjectType $objectType, bool $withIndexBy) : GenericObjectType
     {
-        $genericTypes = [new IntegerType(), $objectType];
+        $genericTypes = $withIndexBy ? [$objectType] : [new IntegerType(), $objectType];
         return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
     }
 }

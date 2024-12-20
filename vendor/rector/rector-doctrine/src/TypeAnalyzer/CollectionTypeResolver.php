@@ -9,7 +9,9 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -17,12 +19,15 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\Enum\OdmMappingKey;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class CollectionTypeResolver
@@ -44,15 +49,25 @@ final class CollectionTypeResolver
      */
     private TargetEntityResolver $targetEntityResolver;
     /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
+    /**
      * @var string
      */
     private const TARGET_DOCUMENT = 'targetDocument';
-    public function __construct(NameScopeFactory $nameScopeFactory, ShortClassExpander $shortClassExpander, AttrinationFinder $attrinationFinder, TargetEntityResolver $targetEntityResolver)
+    public function __construct(NameScopeFactory $nameScopeFactory, ShortClassExpander $shortClassExpander, AttrinationFinder $attrinationFinder, TargetEntityResolver $targetEntityResolver, PhpDocInfoFactory $phpDocInfoFactory, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->shortClassExpander = $shortClassExpander;
         $this->attrinationFinder = $attrinationFinder;
         $this->targetEntityResolver = $targetEntityResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     public function resolveFromTypeNode(TypeNode $typeNode, Node $node) : ?FullyQualifiedObjectType
     {
@@ -70,6 +85,26 @@ final class CollectionTypeResolver
             return new FullyQualifiedObjectType($fullyQualifiedName);
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     */
+    public function hasIndexBy($property) : bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        if ($phpDocInfo instanceof PhpDocInfo && \strpos((string) $phpDocInfo->getPhpDocNode(), 'indexBy') !== \false) {
+            return \true;
+        }
+        $attrGroups = $property->attrGroups;
+        $hasIndexBy = \false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attrGroups, function (Node $node) use(&$hasIndexBy) : ?int {
+            if ($node instanceof Arg && $node->name instanceof Identifier && $node->name->toString() === 'indexBy') {
+                $hasIndexBy = \true;
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+            return null;
+        });
+        return $hasIndexBy;
     }
     public function resolveFromToManyProperty(Property $property) : ?FullyQualifiedObjectType
     {
