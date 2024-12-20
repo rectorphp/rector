@@ -5,23 +5,14 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
 {
-    /**
-     * @readonly
-     */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
-    {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-    }
     public function enterNode(Node $node) : ?Node
     {
         if (!$node instanceof FunctionLike) {
@@ -34,16 +25,25 @@ final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeR
         if ($stmts === null) {
             return null;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $node) {
-            if ($node instanceof Class_ || $node instanceof FunctionLike) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if (!$node instanceof Return_) {
-                return null;
-            }
-            $node->setAttribute(AttributeKey::IS_BYREF_RETURN, \true);
-            return $node;
-        });
+        $this->setByRefAttribute($stmts);
         return null;
+    }
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function setByRefAttribute(array $stmts) : void
+    {
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof FunctionLike) {
+                continue;
+            }
+            if ($stmt instanceof StmtsAwareInterface && $stmt->stmts !== null) {
+                $this->setByRefAttribute($stmt->stmts);
+                continue;
+            }
+            if ($stmt instanceof Return_) {
+                $stmt->setAttribute(AttributeKey::IS_BYREF_RETURN, \true);
+            }
+        }
     }
 }
