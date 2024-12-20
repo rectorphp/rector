@@ -52,7 +52,9 @@ final class ChangedNodeScopeRefresher
             $errorMessage = \sprintf('Node "%s" with is missing scope required for scope refresh', \get_class($node));
             throw new ShouldNotHappenException($errorMessage);
         }
-        \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($node);
+        // reindex stmt_key already covered on StmtKeyNodeVisitor on next processNodes()
+        // so set flag $reIndexStmtKey to false to avoid double loop
+        \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($node, \false);
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }

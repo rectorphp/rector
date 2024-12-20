@@ -38,9 +38,11 @@ final class NodeAttributeReIndexer
         }
         return $node;
     }
-    public static function reIndexNodeAttributes(Node $node) : ?Node
+    public static function reIndexNodeAttributes(Node $node, bool $reIndexStmtKey = \true) : ?Node
     {
-        self::reIndexStmtKeyNodeAttributes($node);
+        if ($reIndexStmtKey) {
+            self::reIndexStmtKeyNodeAttributes($node);
+        }
         if ($node instanceof If_) {
             $node->elseifs = \array_values($node->elseifs);
             return $node;
