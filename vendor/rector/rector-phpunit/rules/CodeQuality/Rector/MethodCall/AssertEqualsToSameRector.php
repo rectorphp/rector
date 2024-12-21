@@ -9,7 +9,9 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\InterpolatedString;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
@@ -122,7 +124,10 @@ final class AssertEqualsToSameRector extends AbstractRector
                 return \true;
             }
         }
-        return \false;
+        if ($valueNodeType instanceof ConstantBooleanType) {
+            return \false;
+        }
+        return $valueNodeType instanceof BooleanType;
     }
     private function isScalarOrEnumValue(Expr $expr) : bool
     {
