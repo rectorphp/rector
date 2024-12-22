@@ -42,7 +42,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new CodeSample('$this->assertNotEquals(get_class($value), SomeInstance::class);', '$this->assertNotInstanceOf(SomeInstance::class, $value);')]);
+        return new RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new CodeSample('$this->assertNotEquals(SomeInstance::class, get_class($value));', '$this->assertNotInstanceOf(SomeInstance::class, $value);')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -68,13 +68,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         }
         $firstArgument = $node->getArgs()[0];
         $secondArgument = $node->getArgs()[1];
-        $firstArgumentValue = $firstArgument->value;
         $secondArgumentValue = $secondArgument->value;
         if ($secondArgumentValue instanceof FuncCall) {
             return $this->processFuncCallArgumentValue($node, $secondArgumentValue, $firstArgument);
-        }
-        if ($firstArgumentValue instanceof FuncCall) {
-            return $this->processFuncCallArgumentValue($node, $firstArgumentValue, $secondArgument);
         }
         return null;
     }
