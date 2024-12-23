@@ -9,15 +9,17 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\MethodCall\AssertCompareToSpecificMethodRector\AssertCompareToSpecificMethodRectorTest
+ * @deprecated This rule is deprecated, as its logic is handled better
+ * by other smaller rules in phpunit-code-quality set
  */
-final class AssertCompareToSpecificMethodRector extends AbstractRector
+final class AssertCompareToSpecificMethodRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @readonly
