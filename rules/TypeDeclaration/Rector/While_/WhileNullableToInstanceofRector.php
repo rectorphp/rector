@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Rector\While_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
@@ -73,6 +74,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->cond instanceof Assign) {
+            return null;
+        }
         if ($node->cond instanceof NotIdentical) {
             return $this->refactorNotIdentical($node, $node->cond);
         }
