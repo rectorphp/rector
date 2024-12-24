@@ -94,7 +94,7 @@ final class SetterCollectionResolver
             if (\count($nonCollectionTypes) === 1) {
                 $soleType = $nonCollectionTypes[0];
                 if ($soleType instanceof ArrayType && $soleType->getItemType() instanceof ObjectType) {
-                    return $this->collectionTypeFactory->createType($soleType->getItemType(), $this->collectionTypeResolver->hasIndexBy($property));
+                    return $this->collectionTypeFactory->createType($soleType->getItemType(), $this->collectionTypeResolver->hasIndexBy($property), $property);
                 }
             }
         }
