@@ -15,6 +15,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -95,10 +96,10 @@ final class AssertEqualsToSameRector extends AbstractRector
             $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
             $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
             // loose comparison
-            if ($firstArgType instanceof IntegerType && $secondArgType instanceof FloatType) {
+            if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof StringType)) {
                 return null;
             }
-            if ($firstArgType instanceof FloatType && $secondArgType instanceof IntegerType) {
+            if ($firstArgType instanceof FloatType && ($secondArgType instanceof IntegerType || $secondArgType instanceof StringType)) {
                 return null;
             }
             if ($firstArgType instanceof StringType && $secondArgType instanceof ObjectType && $this->isObjectType($args[1]->value, new ObjectType('Stringable'))) {
@@ -106,6 +107,10 @@ final class AssertEqualsToSameRector extends AbstractRector
             }
             // compare to mixed type is can be anything
             if ($secondArgType instanceof MixedType) {
+                return null;
+            }
+            // can happen with magic process
+            if ($secondArgType instanceof NeverType) {
                 return null;
             }
         }
