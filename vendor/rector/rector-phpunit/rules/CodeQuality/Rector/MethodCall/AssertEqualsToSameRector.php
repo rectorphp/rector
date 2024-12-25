@@ -14,6 +14,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
@@ -78,7 +79,7 @@ final class AssertEqualsToSameRector extends AbstractRector
             return null;
         }
         $args = $node->getArgs();
-        if (!isset($args[0])) {
+        if (!isset($args[0], $args[1])) {
             return null;
         }
         $firstArgValue = $args[0]->value;
@@ -88,12 +89,23 @@ final class AssertEqualsToSameRector extends AbstractRector
         if ($this->shouldSkipConstantArrayType($firstArgValue)) {
             return null;
         }
+        if ($this->isName($node->name, 'assertEquals')) {
+            $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
+            $secondArgType = $this->nodeTypeResolver->getNativeType($args[1]->value);
+            // loose comparison
+            if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof MixedType)) {
+                return null;
+            }
+            if ($firstArgType instanceof FloatType && ($secondArgType instanceof IntegerType || $secondArgType instanceof MixedType)) {
+                return null;
+            }
+        }
         $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
         return $hasChanged ? $node : null;
     }
     private function shouldSkipConstantArrayType(Expr $expr) : bool
     {
-        $type = $this->getType($expr);
+        $type = $this->nodeTypeResolver->getNativeType($expr);
         if (!$type instanceof ConstantArrayType) {
             return \false;
         }
@@ -137,7 +149,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         if ($expr instanceof InterpolatedString) {
             return \true;
         }
-        $valueNodeType = $this->nodeTypeResolver->getType($expr);
+        $valueNodeType = $this->nodeTypeResolver->getNativeType($expr);
         return $this->isScalarType($valueNodeType);
     }
 }
