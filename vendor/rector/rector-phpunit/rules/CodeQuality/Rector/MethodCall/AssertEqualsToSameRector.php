@@ -17,6 +17,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -91,7 +92,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
         if ($this->isName($node->name, 'assertEquals')) {
             $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
-            $secondArgType = $this->nodeTypeResolver->getNativeType($args[1]->value);
+            $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
             // loose comparison
             if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof MixedType)) {
                 return null;
