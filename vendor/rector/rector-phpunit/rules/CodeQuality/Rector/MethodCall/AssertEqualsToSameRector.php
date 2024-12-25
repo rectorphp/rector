@@ -15,6 +15,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -98,6 +99,9 @@ final class AssertEqualsToSameRector extends AbstractRector
                 return null;
             }
             if ($firstArgType instanceof FloatType && ($secondArgType instanceof IntegerType || $secondArgType instanceof MixedType)) {
+                return null;
+            }
+            if ($firstArgType instanceof StringType && $secondArgType instanceof ObjectType && $this->isObjectType($args[1]->value, new ObjectType('Stringable'))) {
                 return null;
             }
         }
