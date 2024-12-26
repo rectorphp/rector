@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -92,30 +93,35 @@ final class AssertEqualsToSameRector extends AbstractRector
         if ($this->shouldSkipConstantArrayType($firstArgValue)) {
             return null;
         }
-        if ($this->isName($node->name, 'assertEquals')) {
-            $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
-            $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
-            // loose comparison
-            if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof StringType)) {
-                return null;
-            }
-            if ($firstArgType instanceof FloatType && ($secondArgType instanceof IntegerType || $secondArgType instanceof StringType)) {
-                return null;
-            }
-            if ($firstArgType instanceof StringType && $secondArgType instanceof ObjectType && $this->isObjectType($args[1]->value, new ObjectType('Stringable'))) {
-                return null;
-            }
-            // compare to mixed type is can be anything
-            if ($secondArgType instanceof MixedType) {
-                return null;
-            }
-            // can happen with magic process
-            if ($secondArgType instanceof NeverType) {
-                return null;
-            }
+        if ($this->shouldSkipLooseComparison($args)) {
+            return null;
         }
         $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
         return $hasChanged ? $node : null;
+    }
+    /**
+     * @param Arg[] $args
+     */
+    private function shouldSkipLooseComparison(array $args) : bool
+    {
+        $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
+        $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
+        // loose comparison
+        if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof StringType)) {
+            return \true;
+        }
+        if ($firstArgType instanceof FloatType && ($secondArgType instanceof IntegerType || $secondArgType instanceof StringType)) {
+            return \true;
+        }
+        if ($firstArgType instanceof StringType && $secondArgType instanceof ObjectType && $this->isObjectType($args[1]->value, new ObjectType('Stringable'))) {
+            return \true;
+        }
+        // compare to mixed type is can be anything
+        if ($secondArgType instanceof MixedType) {
+            return \true;
+        }
+        // can happen with magic process
+        return $secondArgType instanceof NeverType;
     }
     private function shouldSkipConstantArrayType(Expr $expr) : bool
     {
