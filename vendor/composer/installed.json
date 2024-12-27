@@ -2119,12 +2119,12 @@
             "time": "2024-09-25T14:20:29+00:00",
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https:\/\/github.com\/symfony\/contracts",
+                    "name": "symfony\/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony\/contracts",
-                    "url": "https:\/\/github.com\/symfony\/contracts"
                 }
             },
             "installation-source": "dist",
@@ -2477,12 +2477,12 @@
             "time": "2024-09-25T14:20:29+00:00",
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https:\/\/github.com\/symfony\/contracts",
+                    "name": "symfony\/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony\/contracts",
-                    "url": "https:\/\/github.com\/symfony\/contracts"
                 }
             },
             "installation-source": "dist",
