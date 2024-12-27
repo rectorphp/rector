@@ -120,9 +120,6 @@ final class RectorConfigBuilder
      */
     private array $groupLoadedSets = [];
     private ?string $editorUrl = null;
-    /**
-     * @api soon to be used
-     */
     private ?bool $isWithPhpSetsUsed = null;
     private ?bool $isWithPhpLevelUsed = null;
     public function __invoke(RectorConfig $rectorConfig) : void
@@ -369,6 +366,9 @@ final class RectorConfigBuilder
      */
     public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false, bool $php84 = \false) : self
     {
+        if ($this->isWithPhpSetsUsed === \true) {
+            throw new InvalidConfigurationException(\sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
+        }
         $this->isWithPhpSetsUsed = \true;
         $pickedArguments = \array_filter(\func_get_args());
         if ($pickedArguments !== []) {
