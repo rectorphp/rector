@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\IntersectionType;
@@ -33,7 +34,10 @@ final class DeadVarTagValueNodeAnalyzer
         $this->staticTypeMapper = $staticTypeMapper;
         $this->templateTypeRemovalGuard = $templateTypeRemovalGuard;
     }
-    public function isDead(VarTagValueNode $varTagValueNode, Property $property) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
+     */
+    public function isDead(VarTagValueNode $varTagValueNode, $property) : bool
     {
         if (!$property->type instanceof Node) {
             return \false;

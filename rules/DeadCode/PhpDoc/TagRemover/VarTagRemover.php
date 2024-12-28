@@ -5,6 +5,7 @@ namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -52,7 +53,10 @@ final class VarTagRemover
         $this->docBlockUpdater = $docBlockUpdater;
         $this->typeComparator = $typeComparator;
     }
-    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
+     */
+    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $property) : bool
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         if (!$varTagValueNode instanceof VarTagValueNode) {
