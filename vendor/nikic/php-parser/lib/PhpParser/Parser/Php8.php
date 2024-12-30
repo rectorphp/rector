@@ -623,9 +623,11 @@ class Php8 extends \PhpParser\ParserAbstract
         }, 290 => static function ($self, $stackPos) {
             $self->semValue = new Node\Param($self->semStack[$stackPos - (7 - 6)], null, $self->semStack[$stackPos - (7 - 3)], $self->semStack[$stackPos - (7 - 4)], $self->semStack[$stackPos - (7 - 5)], $self->getAttributes($self->tokenStartStack[$stackPos - (7 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (7 - 2)], $self->semStack[$stackPos - (7 - 1)], $self->semStack[$stackPos - (7 - 7)]);
             $self->checkParam($self->semValue);
+            $self->addPropertyNameToHooks($self->semValue);
         }, 291 => static function ($self, $stackPos) {
             $self->semValue = new Node\Param($self->semStack[$stackPos - (9 - 6)], $self->semStack[$stackPos - (9 - 8)], $self->semStack[$stackPos - (9 - 3)], $self->semStack[$stackPos - (9 - 4)], $self->semStack[$stackPos - (9 - 5)], $self->getAttributes($self->tokenStartStack[$stackPos - (9 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (9 - 2)], $self->semStack[$stackPos - (9 - 1)], $self->semStack[$stackPos - (9 - 9)]);
             $self->checkParam($self->semValue);
+            $self->addPropertyNameToHooks($self->semValue);
         }, 292 => static function ($self, $stackPos) {
             $self->semValue = new Node\Param(new Expr\Error($self->getAttributes($self->tokenStartStack[$stackPos - (6 - 1)], $self->tokenEndStack[$stackPos])), null, $self->semStack[$stackPos - (6 - 3)], $self->semStack[$stackPos - (6 - 4)], $self->semStack[$stackPos - (6 - 5)], $self->getAttributes($self->tokenStartStack[$stackPos - (6 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (6 - 2)], $self->semStack[$stackPos - (6 - 1)]);
         }, 293 => null, 294 => static function ($self, $stackPos) {
@@ -734,7 +736,9 @@ class Php8 extends \PhpParser\ParserAbstract
             $self->semValue = new Stmt\Property($self->semStack[$stackPos - (5 - 2)], $self->semStack[$stackPos - (5 - 4)], $self->getAttributes($self->tokenStartStack[$stackPos - (5 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (5 - 3)], $self->semStack[$stackPos - (5 - 1)]);
         }, 348 => static function ($self, $stackPos) {
             $self->semValue = new Stmt\Property($self->semStack[$stackPos - (7 - 2)], $self->semStack[$stackPos - (7 - 4)], $self->getAttributes($self->tokenStartStack[$stackPos - (7 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (7 - 3)], $self->semStack[$stackPos - (7 - 1)], $self->semStack[$stackPos - (7 - 6)]);
-            $self->checkPropertyHookList($self->semStack[$stackPos - (7 - 6)], $stackPos - (7 - 5));
+            $self->checkPropertyHooksForMultiProperty($self->semValue, $stackPos - (7 - 5));
+            $self->checkEmptyPropertyHookList($self->semStack[$stackPos - (7 - 6)], $stackPos - (7 - 5));
+            $self->addPropertyNameToHooks($self->semValue);
         }, 349 => static function ($self, $stackPos) {
             $self->semValue = new Stmt\ClassConst($self->semStack[$stackPos - (5 - 4)], $self->semStack[$stackPos - (5 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (5 - 1)], $self->tokenEndStack[$stackPos]), $self->semStack[$stackPos - (5 - 1)]);
             $self->checkClassConst($self->semValue, $stackPos - (5 - 2));
@@ -823,7 +827,7 @@ class Php8 extends \PhpParser\ParserAbstract
             $self->semValue = [];
         }, 394 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (3 - 2)];
-            $self->checkPropertyHookList($self->semStack[$stackPos - (3 - 2)], $stackPos - (3 - 1));
+            $self->checkEmptyPropertyHookList($self->semStack[$stackPos - (3 - 2)], $stackPos - (3 - 1));
         }, 395 => static function ($self, $stackPos) {
             $self->semValue = new Node\PropertyHook($self->semStack[$stackPos - (5 - 4)], $self->semStack[$stackPos - (5 - 5)], ['flags' => $self->semStack[$stackPos - (5 - 2)], 'byRef' => $self->semStack[$stackPos - (5 - 3)], 'params' => [], 'attrGroups' => $self->semStack[$stackPos - (5 - 1)]], $self->getAttributes($self->tokenStartStack[$stackPos - (5 - 1)], $self->tokenEndStack[$stackPos]));
             $self->checkPropertyHook($self->semValue, null);

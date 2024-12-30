@@ -1,6 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202412;
+namespace PhpParser\Node\Scalar;
 
 require __DIR__ . '/InterpolatedString.php';
+if (\false) {
+    // For classmap-authoritative support.
+    class Encapsed extends \PhpParser\Node\Scalar\InterpolatedString
+    {
+    }
+}

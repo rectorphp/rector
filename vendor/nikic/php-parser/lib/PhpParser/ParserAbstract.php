@@ -32,6 +32,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\UseItem;
+use PhpParser\Node\VarLikeIdentifier;
 use PhpParser\NodeVisitor\CommentAnnotatingVisitor;
 abstract class ParserAbstract implements \PhpParser\Parser
 {
@@ -349,7 +350,6 @@ abstract class ParserAbstract implements \PhpParser\Parser
                 $rule = $state - $this->numNonLeafStates;
             }
         }
-        throw new \RuntimeException('Reached end of parser loop');
     }
     protected function emitError(\PhpParser\Error $error) : void
     {
@@ -956,8 +956,14 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use %s as %s because \'%2$s\' is a special class name', $node->name, $node->alias), $this->getAttributesAt($namePos)));
         }
     }
+    protected function checkPropertyHooksForMultiProperty(Property $property, int $hookPos) : void
+    {
+        if (\count($property->props) > 1) {
+            $this->emitError(new \PhpParser\Error('Cannot use hooks when declaring multiple properties', $this->getAttributesAt($hookPos)));
+        }
+    }
     /** @param PropertyHook[] $hooks */
-    protected function checkPropertyHookList(array $hooks, int $hookPos) : void
+    protected function checkEmptyPropertyHookList(array $hooks, int $hookPos) : void
     {
         if (empty($hooks)) {
             $this->emitError(new \PhpParser\Error('Property hook list cannot be empty', $this->getAttributesAt($hookPos)));
@@ -983,6 +989,20 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         if ($b != \PhpParser\Modifiers::FINAL) {
             $this->emitError(new \PhpParser\Error('Cannot use the ' . \PhpParser\Modifiers::toString($b) . ' modifier on a property hook', $this->getAttributesAt($modifierPos)));
+        }
+    }
+    /**
+     * @param Property|Param $node
+     */
+    protected function addPropertyNameToHooks(\PhpParser\Node $node) : void
+    {
+        if ($node instanceof Property) {
+            $name = $node->props[0]->name->toString();
+        } else {
+            $name = $node->var->name;
+        }
+        foreach ($node->hooks as $hook) {
+            $hook->setAttribute('propertyName', $name);
         }
     }
     /** @param array<Node\Arg|Node\VariadicPlaceholder> $args */

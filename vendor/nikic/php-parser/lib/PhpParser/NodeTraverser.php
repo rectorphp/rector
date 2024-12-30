@@ -91,56 +91,59 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 if ($this->stopTraversal) {
                     break;
                 }
-            } elseif ($subNode instanceof \PhpParser\Node) {
-                $traverseChildren = \true;
-                $visitorIndex = -1;
-                $visitors = $this->getVisitorsForNode($subNode);
-                foreach ($visitors as $visitorIndex => $visitor) {
-                    $return = $visitor->enterNode($subNode);
-                    if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
-                            $this->ensureReplacementReasonable($subNode, $return);
-                            $subNode = $node->{$name} = $return;
-                        } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
-                            $traverseChildren = \false;
-                        } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
-                            $traverseChildren = \false;
-                            break;
-                        } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
-                            $this->stopTraversal = \true;
-                            break 2;
-                        } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                            $node->{$name} = null;
-                            continue 2;
-                        } else {
-                            throw new \LogicException('enterNode() returned invalid value of type ' . \gettype($return));
-                        }
-                    }
-                }
-                if ($traverseChildren) {
-                    $this->traverseNode($subNode);
-                    if ($this->stopTraversal) {
+                continue;
+            }
+            if (!$subNode instanceof \PhpParser\Node) {
+                continue;
+            }
+            $traverseChildren = \true;
+            $visitorIndex = -1;
+            $visitors = $this->getVisitorsForNode($subNode);
+            foreach ($visitors as $visitorIndex => $visitor) {
+                $return = $visitor->enterNode($subNode);
+                if (null !== $return) {
+                    if ($return instanceof \PhpParser\Node) {
+                        $this->ensureReplacementReasonable($subNode, $return);
+                        $subNode = $node->{$name} = $return;
+                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
+                        $traverseChildren = \false;
+                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
+                        $traverseChildren = \false;
                         break;
+                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                        $this->stopTraversal = \true;
+                        break 2;
+                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                        $node->{$name} = null;
+                        continue 2;
+                    } else {
+                        throw new \LogicException('enterNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
-                for (; $visitorIndex >= 0; --$visitorIndex) {
-                    $visitor = $visitors[$visitorIndex];
-                    $return = $visitor->leaveNode($subNode);
-                    if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
-                            $this->ensureReplacementReasonable($subNode, $return);
-                            $subNode = $node->{$name} = $return;
-                        } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
-                            $this->stopTraversal = \true;
-                            break 2;
-                        } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                            $node->{$name} = null;
-                            break;
-                        } elseif (\is_array($return)) {
-                            throw new \LogicException('leaveNode() may only return an array ' . 'if the parent structure is an array');
-                        } else {
-                            throw new \LogicException('leaveNode() returned invalid value of type ' . \gettype($return));
-                        }
+            }
+            if ($traverseChildren) {
+                $this->traverseNode($subNode);
+                if ($this->stopTraversal) {
+                    break;
+                }
+            }
+            for (; $visitorIndex >= 0; --$visitorIndex) {
+                $visitor = $visitors[$visitorIndex];
+                $return = $visitor->leaveNode($subNode);
+                if (null !== $return) {
+                    if ($return instanceof \PhpParser\Node) {
+                        $this->ensureReplacementReasonable($subNode, $return);
+                        $subNode = $node->{$name} = $return;
+                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                        $this->stopTraversal = \true;
+                        break 2;
+                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                        $node->{$name} = null;
+                        break;
+                    } elseif (\is_array($return)) {
+                        throw new \LogicException('leaveNode() may only return an array ' . 'if the parent structure is an array');
+                    } else {
+                        throw new \LogicException('leaveNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
             }
@@ -157,68 +160,70 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
     {
         $doNodes = [];
         foreach ($nodes as $i => $node) {
-            if ($node instanceof \PhpParser\Node) {
-                $traverseChildren = \true;
-                $visitorIndex = -1;
-                $visitors = $this->getVisitorsForNode($node);
-                foreach ($visitors as $visitorIndex => $visitor) {
-                    $return = $visitor->enterNode($node);
-                    if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
-                            $this->ensureReplacementReasonable($node, $return);
-                            $nodes[$i] = $node = $return;
-                        } elseif (\is_array($return)) {
-                            $doNodes[] = [$i, $return];
-                            continue 2;
-                        } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
-                            $doNodes[] = [$i, []];
-                            continue 2;
-                        } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
-                            $traverseChildren = \false;
-                        } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
-                            $traverseChildren = \false;
-                            break;
-                        } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
-                            $this->stopTraversal = \true;
-                            break 2;
-                        } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                            throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
-                        } else {
-                            throw new \LogicException('enterNode() returned invalid value of type ' . \gettype($return));
-                        }
-                    }
+            if (!$node instanceof \PhpParser\Node) {
+                if (\is_array($node)) {
+                    throw new \LogicException('Invalid node structure: Contains nested arrays');
                 }
-                if ($traverseChildren) {
-                    $this->traverseNode($node);
-                    if ($this->stopTraversal) {
+                continue;
+            }
+            $traverseChildren = \true;
+            $visitorIndex = -1;
+            $visitors = $this->getVisitorsForNode($node);
+            foreach ($visitors as $visitorIndex => $visitor) {
+                $return = $visitor->enterNode($node);
+                if (null !== $return) {
+                    if ($return instanceof \PhpParser\Node) {
+                        $this->ensureReplacementReasonable($node, $return);
+                        $nodes[$i] = $node = $return;
+                    } elseif (\is_array($return)) {
+                        $doNodes[] = [$i, $return];
+                        continue 2;
+                    } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
+                        $doNodes[] = [$i, []];
+                        continue 2;
+                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
+                        $traverseChildren = \false;
+                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
+                        $traverseChildren = \false;
                         break;
+                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                        $this->stopTraversal = \true;
+                        break 2;
+                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                        throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
+                    } else {
+                        throw new \LogicException('enterNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
-                for (; $visitorIndex >= 0; --$visitorIndex) {
-                    $visitor = $visitors[$visitorIndex];
-                    $return = $visitor->leaveNode($node);
-                    if (null !== $return) {
-                        if ($return instanceof \PhpParser\Node) {
-                            $this->ensureReplacementReasonable($node, $return);
-                            $nodes[$i] = $node = $return;
-                        } elseif (\is_array($return)) {
-                            $doNodes[] = [$i, $return];
-                            break;
-                        } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
-                            $doNodes[] = [$i, []];
-                            break;
-                        } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
-                            $this->stopTraversal = \true;
-                            break 2;
-                        } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                            throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
-                        } else {
-                            throw new \LogicException('leaveNode() returned invalid value of type ' . \gettype($return));
-                        }
+            }
+            if ($traverseChildren) {
+                $this->traverseNode($node);
+                if ($this->stopTraversal) {
+                    break;
+                }
+            }
+            for (; $visitorIndex >= 0; --$visitorIndex) {
+                $visitor = $visitors[$visitorIndex];
+                $return = $visitor->leaveNode($node);
+                if (null !== $return) {
+                    if ($return instanceof \PhpParser\Node) {
+                        $this->ensureReplacementReasonable($node, $return);
+                        $nodes[$i] = $node = $return;
+                    } elseif (\is_array($return)) {
+                        $doNodes[] = [$i, $return];
+                        break;
+                    } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
+                        $doNodes[] = [$i, []];
+                        break;
+                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                        $this->stopTraversal = \true;
+                        break 2;
+                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                        throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
+                    } else {
+                        throw new \LogicException('leaveNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
-            } elseif (\is_array($node)) {
-                throw new \LogicException('Invalid node structure: Contains nested arrays');
             }
         }
         if (!empty($doNodes)) {
