@@ -757,7 +757,7 @@
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-case-php.patch",
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch",
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-namespace-php.patch",
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/fix-patch-php-parser-54\/patches\/nikic-php-parser-lib-phpparser-nodetraverser-php.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-nodetraverser-php.patch"
                 ]
             },
             "installation-source": "dist",

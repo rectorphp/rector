@@ -62,6 +62,6 @@ Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/
 
 
 15
-Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/fix-patch-php-parser-54/patches/nikic-php-parser-lib-phpparser-nodetraverser-php.patch
+Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-nodetraverser-php.patch
 
 
