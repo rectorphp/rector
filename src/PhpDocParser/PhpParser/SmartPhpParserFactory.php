@@ -10,6 +10,7 @@ use PHPStan\Parser\CachedParser;
 use PHPStan\Parser\SimpleParser;
 use PHPStan\Parser\VariadicFunctionsVisitor;
 use PHPStan\Parser\VariadicMethodsVisitor;
+use PHPStan\Parser\PropertyHookNameVisitor;
 /**
  * Based on PHPStan-based PHP-Parser best practices:
  *
@@ -37,7 +38,8 @@ final class SmartPhpParserFactory
         $nameResolver = new NameResolver();
         $variadicMethodsVisitor = new VariadicMethodsVisitor();
         $variadicFunctionsVisitor = new VariadicFunctionsVisitor();
-        $simpleParser = new SimpleParser($parser, $nameResolver, $variadicMethodsVisitor, $variadicFunctionsVisitor);
+        $propertyHookNameVisitor = new PropertyHookNameVisitor();
+        $simpleParser = new SimpleParser($parser, $nameResolver, $variadicMethodsVisitor, $variadicFunctionsVisitor, $propertyHookNameVisitor);
         return new CachedParser($simpleParser, 1024);
     }
 }
