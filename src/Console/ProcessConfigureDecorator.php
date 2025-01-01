@@ -5,9 +5,9 @@ namespace Rector\Console;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
-use RectorPrefix202412\Symfony\Component\Console\Command\Command;
-use RectorPrefix202412\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202412\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202501\Symfony\Component\Console\Command\Command;
+use RectorPrefix202501\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202501\Symfony\Component\Console\Input\InputOption;
 final class ProcessConfigureDecorator
 {
     public static function decorate(Command $command) : void

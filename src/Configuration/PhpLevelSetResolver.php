@@ -6,7 +6,7 @@ namespace Rector\Configuration;
 use Rector\Set\ValueObject\SetList;
 use Rector\Tests\Configuration\PhpLevelSetResolverTest;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202412\Webmozart\Assert\Assert;
+use RectorPrefix202501\Webmozart\Assert\Assert;
 /**
  * @see PhpLevelSetResolverTest
  */

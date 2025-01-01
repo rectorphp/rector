@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202412\Illuminate\Contracts\Mail;
+namespace RectorPrefix202501\Illuminate\Contracts\Mail;
 
 interface MailQueue
 {

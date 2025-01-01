@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202412\Nette\Utils;
+namespace RectorPrefix202501\Nette\Utils;
 
-use RectorPrefix202412\Nette;
+use RectorPrefix202501\Nette;
 /**
  * Provides the base class for a generic list (items can be accessed by index).
  * @template T

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202412\Illuminate\Contracts\Validation;
+namespace RectorPrefix202501\Illuminate\Contracts\Validation;
 
 interface Factory
 {

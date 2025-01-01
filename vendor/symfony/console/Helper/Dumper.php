@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202412\Symfony\Component\Console\Helper;
+namespace RectorPrefix202501\Symfony\Component\Console\Helper;
 
-use RectorPrefix202412\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202412\Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use RectorPrefix202412\Symfony\Component\VarDumper\Cloner\VarCloner;
-use RectorPrefix202412\Symfony\Component\VarDumper\Dumper\CliDumper;
+use RectorPrefix202501\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202501\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use RectorPrefix202501\Symfony\Component\VarDumper\Cloner\VarCloner;
+use RectorPrefix202501\Symfony\Component\VarDumper\Dumper\CliDumper;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */

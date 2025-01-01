@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202412;
+namespace RectorPrefix202501;
 
 use Rector\Config\Level\DeadCodeLevel;
 use Rector\Config\RectorConfig;

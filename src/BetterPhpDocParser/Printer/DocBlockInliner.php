@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix202412\Nette\Utils\Strings;
+use RectorPrefix202501\Nette\Utils\Strings;
 final class DocBlockInliner
 {
     /**

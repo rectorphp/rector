@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202412\React\Stream;
+namespace RectorPrefix202501\React\Stream;
 
-use RectorPrefix202412\Evenement\EventEmitter;
-use RectorPrefix202412\React\EventLoop\Loop;
-use RectorPrefix202412\React\EventLoop\LoopInterface;
+use RectorPrefix202501\Evenement\EventEmitter;
+use RectorPrefix202501\React\EventLoop\Loop;
+use RectorPrefix202501\React\EventLoop\LoopInterface;
 final class WritableResourceStream extends EventEmitter implements WritableStreamInterface
 {
     private $stream;

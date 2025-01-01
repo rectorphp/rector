@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202412\Illuminate\Contracts\View;
+namespace RectorPrefix202501\Illuminate\Contracts\View;
 
-use RectorPrefix202412\Illuminate\Contracts\Support\Renderable;
+use RectorPrefix202501\Illuminate\Contracts\Support\Renderable;
 interface View extends Renderable
 {
     /**

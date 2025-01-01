@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202412\Doctrine\Inflector\Inflector;
-use RectorPrefix202412\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202412\Illuminate\Container\Container;
+use RectorPrefix202501\Doctrine\Inflector\Inflector;
+use RectorPrefix202501\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202501\Illuminate\Container\Container;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -178,10 +178,10 @@ use Rector\StaticTypeMapper\PhpParser\NameNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
-use RectorPrefix202412\Symfony\Component\Console\Application;
-use RectorPrefix202412\Symfony\Component\Console\Command\Command;
-use RectorPrefix202412\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202412\Webmozart\Assert\Assert;
+use RectorPrefix202501\Symfony\Component\Console\Application;
+use RectorPrefix202501\Symfony\Component\Console\Command\Command;
+use RectorPrefix202501\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202501\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**
