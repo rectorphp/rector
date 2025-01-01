@@ -1522,6 +1522,7 @@ class ComposerStaticInit4fb50f2d4af661ecee2245f9ff725125
         'Rector\\DeadCode\\Rector\\Array_\\RemoveDuplicatedArrayKeyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Array_/RemoveDuplicatedArrayKeyRector.php',
         'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Assign/RemoveDoubleAssignRector.php',
         'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedVariableAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php',
+        'Rector\\DeadCode\\Rector\\Block\\ReplaceBlockToItsStmtsRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Block/ReplaceBlockToItsStmtsRector.php',
         'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
         'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
         'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',

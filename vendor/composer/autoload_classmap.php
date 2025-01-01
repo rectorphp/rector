@@ -1303,6 +1303,7 @@ return array(
     'Rector\\DeadCode\\Rector\\Array_\\RemoveDuplicatedArrayKeyRector' => $baseDir . '/rules/DeadCode/Rector/Array_/RemoveDuplicatedArrayKeyRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveDoubleAssignRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedVariableAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php',
+    'Rector\\DeadCode\\Rector\\Block\\ReplaceBlockToItsStmtsRector' => $baseDir . '/rules/DeadCode/Rector/Block/ReplaceBlockToItsStmtsRector.php',
     'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => $baseDir . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
     'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => $baseDir . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
     'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => $baseDir . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
