@@ -45,7 +45,7 @@ final class CommandDataCollector extends DataCollector
                 case OutputInterface::VERBOSITY_DEBUG:
                     return 'debug';
             }
-        })(), 'interactive' => $command->isInteractive, 'validate_input' => !$command->ignoreValidation, 'enabled' => $command->isEnabled(), 'visible' => !$command->isHidden(), 'input' => $this->cloneVar($command->input), 'output' => $this->cloneVar($command->output), 'interactive_inputs' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), $command->interactiveInputs), 'signalable' => $command->getSubscribedSignals(), 'handled_signals' => $command->handledSignals, 'helper_set' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), \iterator_to_array(\is_array($command->getHelperSet()) ? new \ArrayIterator($command->getHelperSet()) : $command->getHelperSet()))];
+        })(), 'interactive' => $command->isInteractive, 'validate_input' => !$command->ignoreValidation, 'enabled' => $command->isEnabled(), 'visible' => !$command->isHidden(), 'input' => $this->cloneVar($command->input), 'output' => $this->cloneVar($command->output), 'interactive_inputs' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), $command->interactiveInputs), 'signalable' => $command->getSubscribedSignals(), 'handled_signals' => $command->handledSignals, 'helper_set' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), \iterator_to_array($command->getHelperSet()))];
         $baseDefinition = $application->getDefinition();
         foreach ($command->arguments as $argName => $argValue) {
             if ($baseDefinition->hasArgument($argName)) {
