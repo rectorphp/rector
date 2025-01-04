@@ -1535,6 +1535,7 @@ class ComposerStaticInit4fb50f2d4af661ecee2245f9ff725125
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPublicMethodParameterRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPublicMethodParameterRector.php',
+        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessAssignFromPropertyPromotionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessAssignFromPropertyPromotionRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',

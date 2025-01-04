@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.6 (2025-01-01)
+
+This is a compatibility release that contains backported features from the `0.7.x` branch.
+Once v0.7 is released, it will be the way forward for this project.
+
+*   Feature: Improve PHP 8.4+ support by avoiding implicitly nullable types.
+    (#114 by @clue)
+
+*   Improve test suite to run tests on latest PHP versions and report failed assertions.
+    (#113 by @clue)
+
 ## 0.6.5 (2022-09-16)
 
 *   Feature: Full support for PHP 8.1 and PHP 8.2 release.
