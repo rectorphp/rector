@@ -69,10 +69,14 @@ final class Configuration
      */
     private ?string $onlyRule = null;
     /**
+     * @readonly
+     */
+    private ?string $onlySuffix = null;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -88,6 +92,7 @@ final class Configuration
         $this->isDebug = $isDebug;
         $this->reportingWithRealPath = $reportingWithRealPath;
         $this->onlyRule = $onlyRule;
+        $this->onlySuffix = $onlySuffix;
     }
     public function isDryRun() : bool
     {
@@ -151,5 +156,9 @@ final class Configuration
     public function isReportingWithRealPath() : bool
     {
         return $this->reportingWithRealPath;
+    }
+    public function getOnlySuffix() : ?string
+    {
+        return $this->onlySuffix;
     }
 }

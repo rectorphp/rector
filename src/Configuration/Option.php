@@ -232,4 +232,8 @@ final class Option
      * @var string
      */
     public const COMPOSER_BASED_SETS = 'composer_based_sets';
+    /**
+     * @internal To filter files by specific suffix
+     */
+    public const ONLY_SUFFIX = 'only-suffix';
 }

@@ -33,7 +33,7 @@ final class ConfigurationFactory
     public function createForTests(array $paths) : Configuration
     {
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
-        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false, null);
+        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false, null, null);
     }
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -47,10 +47,12 @@ final class ConfigurationFactory
         $showDiffs = $this->shouldShowDiffs($input);
         $paths = $this->resolvePaths($input);
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
+        // filter rule and path
         $onlyRule = $input->getOption(\Rector\Configuration\Option::ONLY);
         if ($onlyRule !== null) {
             $onlyRule = $this->onlyRuleResolver->resolve($onlyRule);
         }
+        $onlySuffix = $input->getOption(\Rector\Configuration\Option::ONLY_SUFFIX);
         $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::PARALLEL);
         $parallelPort = (string) $input->getOption(\Rector\Configuration\Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(\Rector\Configuration\Option::PARALLEL_IDENTIFIER);
@@ -61,7 +63,7 @@ final class ConfigurationFactory
         }
         $memoryLimit = $this->resolveMemoryLimit($input);
         $isReportingWithRealPath = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::ABSOLUTE_FILE_PATH);
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat) : bool
     {

@@ -54,7 +54,7 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return string[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true) : array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
@@ -77,7 +77,7 @@ final class FilesFinder
         });
         // filtering files in directories collection
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
-        $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $sortByName);
+        $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $sortByName, $onlySuffix);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
@@ -90,8 +90,7 @@ final class FilesFinder
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
-        $supportedFileExtensions = $configuration->getFileExtensions();
-        return $this->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
+        return $this->findInDirectoriesAndFiles($paths, $configuration->getFileExtensions(), \true, $configuration->getOnlySuffix());
     }
     /**
      * Exclude short "<?=" tags as lead to invalid changes
@@ -105,7 +104,7 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return string[]
      */
-    private function findInDirectories(array $directories, array $suffixes, bool $sortByName = \true) : array
+    private function findInDirectories(array $directories, array $suffixes, bool $sortByName = \true, ?string $onlySuffix = null) : array
     {
         if ($directories === []) {
             return [];
@@ -114,7 +113,13 @@ final class FilesFinder
         if ($sortByName) {
             $finder->sortByName();
         }
-        if ($suffixes !== []) {
+        // filter files by specific suffix
+        if ($onlySuffix !== null && $onlySuffix !== '') {
+            if (\substr_compare($onlySuffix, '.php', -\strlen('.php')) !== 0) {
+                $onlySuffix .= '.php';
+            }
+            $finder->name('*' . $onlySuffix);
+        } elseif ($suffixes !== []) {
             $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
             $finder->name($suffixesPattern);
         }
