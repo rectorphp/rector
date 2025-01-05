@@ -88,7 +88,7 @@ CODE_SAMPLE
         $construct = $node->getMethod(MethodName::CONSTRUCT);
         if ($construct instanceof ClassMethod) {
             foreach ($construct->params as $param) {
-                if ($param->flags === 0) {
+                if (!$param->isPromoted()) {
                     continue;
                 }
                 if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PROTECTED)) {

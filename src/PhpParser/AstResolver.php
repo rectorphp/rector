@@ -324,7 +324,7 @@ final class AstResolver
                 return \false;
             }
             foreach ($constructClassMethod->getParams() as $param) {
-                if ($param->flags === 0) {
+                if (!$param->isPromoted()) {
                     continue;
                 }
                 if ($this->nodeNameResolver->isName($param, $desiredPropertyName)) {

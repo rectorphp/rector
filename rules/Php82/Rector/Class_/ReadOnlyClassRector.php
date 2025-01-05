@@ -262,7 +262,7 @@ CODE_SAMPLE
     {
         foreach ($params as $param) {
             // has non-readonly property promotion
-            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY) && $param->flags !== 0) {
+            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY) && $param->isPromoted()) {
                 return \true;
             }
             // type is missing, invalid syntax

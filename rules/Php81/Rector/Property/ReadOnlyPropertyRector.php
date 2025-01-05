@@ -215,7 +215,7 @@ CODE_SAMPLE
             return null;
         }
         // early check not property promotion and already readonly
-        if ($param->flags === 0 || $this->visibilityManipulator->isReadonly($param)) {
+        if (!$param->isPromoted() || $this->visibilityManipulator->isReadonly($param)) {
             return null;
         }
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
@@ -243,7 +243,7 @@ CODE_SAMPLE
         if (!$constructClassMethod instanceof ClassMethod) {
             return \false;
         }
-        if ($param->flags === 0) {
+        if (!$param->isPromoted()) {
             return \false;
         }
         $propertyFetch = new PropertyFetch(new Variable('this'), $this->getName($param));

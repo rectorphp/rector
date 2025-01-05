@@ -20,7 +20,7 @@ final class PromotedPropertyResolver
         }
         $promotedPropertyParams = [];
         foreach ($constructClassMethod->getParams() as $param) {
-            if ($param->flags === 0) {
+            if (!$param->isPromoted()) {
                 continue;
             }
             $promotedPropertyParams[] = $param;

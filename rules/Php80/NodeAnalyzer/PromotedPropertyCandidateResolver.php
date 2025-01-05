@@ -150,7 +150,7 @@ final class PromotedPropertyCandidateResolver
     private function shouldSkipParam(Param $matchedParam, Variable $assignedVariable, array $firstParamAsVariable) : bool
     {
         // already promoted
-        if ($matchedParam->flags !== 0) {
+        if ($matchedParam->isPromoted()) {
             return \true;
         }
         return $this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable);

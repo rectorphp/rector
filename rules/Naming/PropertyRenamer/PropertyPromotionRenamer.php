@@ -89,7 +89,7 @@ final class PropertyPromotionRenamer
         // resolve possible and existing param names
         $blockingParamNames = $this->resolveBlockingParamNames($constructClassMethod);
         foreach ($constructClassMethod->params as $param) {
-            if ($param->flags === 0) {
+            if (!$param->isPromoted()) {
                 continue;
             }
             // promoted property

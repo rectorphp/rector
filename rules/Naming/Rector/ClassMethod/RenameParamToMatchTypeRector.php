@@ -129,6 +129,6 @@ CODE_SAMPLE
         if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
             return \false;
         }
-        return $param->flags !== 0;
+        return $param->isPromoted();
     }
 }

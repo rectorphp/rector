@@ -26,7 +26,7 @@ final class UnusedParameterResolver
         foreach ($classMethod->params as $i => $param) {
             // skip property promotion
             /** @var Param $param */
-            if ($param->flags !== 0) {
+            if ($param->isPromoted()) {
                 continue;
             }
             if ($this->paramAnalyzer->isParamUsedInClassMethod($classMethod, $param)) {
