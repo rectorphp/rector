@@ -7,7 +7,6 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\Parser\CachedParser;
-use PHPStan\Parser\PropertyHookNameVisitor;
 use PHPStan\Parser\SimpleParser;
 use PHPStan\Parser\VariadicFunctionsVisitor;
 use PHPStan\Parser\VariadicMethodsVisitor;
@@ -38,8 +37,7 @@ final class SmartPhpParserFactory
         $nameResolver = new NameResolver();
         $variadicMethodsVisitor = new VariadicMethodsVisitor();
         $variadicFunctionsVisitor = new VariadicFunctionsVisitor();
-        $propertyHookNameVisitor = new PropertyHookNameVisitor();
-        $simpleParser = new SimpleParser($parser, $nameResolver, $variadicMethodsVisitor, $variadicFunctionsVisitor, $propertyHookNameVisitor);
+        $simpleParser = new SimpleParser($parser, $nameResolver, $variadicMethodsVisitor, $variadicFunctionsVisitor);
         return new CachedParser($simpleParser, 1024);
     }
 }
