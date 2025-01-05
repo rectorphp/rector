@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "29a1abf5d8e8d6150dabe6e79e001a34236e9499"
+                "reference": "f7e0a140e1f6d30252f950b05da1fc89776468eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/29a1abf5d8e8d6150dabe6e79e001a34236e9499",
-                "reference": "29a1abf5d8e8d6150dabe6e79e001a34236e9499",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f7e0a140e1f6d30252f950b05da1fc89776468eb",
+                "reference": "f7e0a140e1f6d30252f950b05da1fc89776468eb",
                 "shasum": ""
             },
             "require": {
@@ -1896,7 +1896,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2024-12-08T17:51:24+00:00",
+            "time": "2025-01-05T17:17:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
