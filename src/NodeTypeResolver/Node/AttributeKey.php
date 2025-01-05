@@ -64,10 +64,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_UNREACHABLE = 'isUnreachable';
-    /**
-     * @var string
-     */
     public const PHP_DOC_INFO = 'php_doc_info';
     /**
      * @var string

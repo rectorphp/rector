@@ -1976,7 +1976,6 @@ class ComposerStaticInit4349f48e2d711e343a1bf0101d0ae855
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
-        'Rector\\PHPStan\\NodeVisitor\\UnreachableStatementNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/UnreachableStatementNodeVisitor.php',
         'Rector\\PHPStan\\ScopeFetcher' => __DIR__ . '/../..' . '/src/PHPStan/ScopeFetcher.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DependsAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php',
