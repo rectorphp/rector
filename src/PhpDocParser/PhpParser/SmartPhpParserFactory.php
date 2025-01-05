@@ -7,10 +7,10 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\Parser\CachedParser;
+use PHPStan\Parser\PropertyHookNameVisitor;
 use PHPStan\Parser\SimpleParser;
 use PHPStan\Parser\VariadicFunctionsVisitor;
 use PHPStan\Parser\VariadicMethodsVisitor;
-use PHPStan\Parser\PropertyHookNameVisitor;
 /**
  * Based on PHPStan-based PHP-Parser best practices:
  *
