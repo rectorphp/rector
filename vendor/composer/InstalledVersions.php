@@ -53,7 +53,7 @@ class InstalledVersions
         if (1 === \count($packages)) {
             return $packages[0];
         }
-        return \array_keys(\array_flip(\call_user_func_array('\\array_merge', $packages)));
+        return \array_keys(\array_flip(\call_user_func_array('RectorPrefix202501\\array_merge', $packages)));
     }
     /**
      * Returns a list of all package names with a specific type e.g. 'library'
@@ -277,7 +277,7 @@ class InstalledVersions
     private static function getInstalled()
     {
         if (null === self::$canGetVendors) {
-            self::$canGetVendors = \method_exists('\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
+            self::$canGetVendors = \method_exists('RectorPrefix202501\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
         }
         $installed = array();
         $copiedLocalDir = \false;

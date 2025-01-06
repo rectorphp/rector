@@ -93,7 +93,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias('\\AutoloadIncluder', 'AutoloadIncluder', \false);
+\class_alias('RectorPrefix202501\\AutoloadIncluder', 'AutoloadIncluder', \false);
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }

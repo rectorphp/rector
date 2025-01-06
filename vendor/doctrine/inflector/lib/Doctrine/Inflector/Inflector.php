@@ -168,7 +168,7 @@ class Inflector
         } else {
             $lowered = strtolower($unaccented);
         }
-        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'RectorPrefix202501\\1_\\2', '/([a-z\\d])([A-Z])/' => 'RectorPrefix202501\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
+        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => '\\1_\\2', '/([a-z\\d])([A-Z])/' => '\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
         $urlized = $lowered;
         foreach ($replacements as $pattern => $replacement) {
             $replaced = preg_replace($pattern, $replacement, $urlized);
