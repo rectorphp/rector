@@ -52,6 +52,10 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope, bool $withPreslash = \false)
     {
+        $className = \ltrim($objectType->getClassName(), '\\');
+        if (\strncmp($objectType->getClassName(), '\\', \strlen('\\')) === 0) {
+            return new FullyQualifiedObjectType($className);
+        }
         $uses = $this->useImportsResolver->resolve();
         $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
         if ($aliasedObjectType instanceof AliasedObjectType) {
@@ -60,10 +64,6 @@ final class ObjectTypeSpecifier
         $shortenedObjectType = $this->matchShortenedObjectType($objectType, $uses);
         if ($shortenedObjectType !== null) {
             return $shortenedObjectType;
-        }
-        $className = \ltrim($objectType->getClassName(), '\\');
-        if (\strncmp($objectType->getClassName(), '\\', \strlen('\\')) === 0) {
-            return new FullyQualifiedObjectType($className);
         }
         if ($this->reflectionProvider->hasClass($className)) {
             return new FullyQualifiedObjectType($className);
