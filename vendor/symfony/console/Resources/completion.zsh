@@ -61,14 +61,14 @@ _sf_{{ COMMAND_NAME }}() {
     # Use eval to handle any environment variables and such
     out=$(eval ${requestComp} 2>/dev/null)
 
-    while IFS='n' read -r comp; do
+    while IFS='\n' read -r comp; do
         if [ -n "$comp" ]; then
             # If requested, completions are returned with a description.
             # The description is preceded by a TAB character.
             # For zsh's _describe, we need to use a : instead of a TAB.
             # We first need to escape any : as part of the completion itself.
             comp=${comp//:/\\:}
-            local tab=$(printf 't')
+            local tab=$(printf '\t')
             comp=${comp//$tab/:}
             completions+=${comp}
         fi

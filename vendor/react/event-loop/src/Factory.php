@@ -48,7 +48,7 @@ final class Factory
             // only use ext-uv on PHP 7
             return new ExtUvLoop();
         }
-        if (\class_exists('libev\\EventLoop', \false)) {
+        if (\class_exists('RectorPrefix202501\\libev\\EventLoop', \false)) {
             return new ExtLibevLoop();
         }
         if (\class_exists('EvLoop', \false)) {

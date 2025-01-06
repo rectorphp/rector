@@ -21,11 +21,11 @@ class Inflectible
     /** @return Transformation[] */
     public static function getPlural() : iterable
     {
-        (yield new Transformation(new Pattern('/ú([sn])$/i'), 'u\\1es'));
-        (yield new Transformation(new Pattern('/ó([sn])$/i'), 'o\\1es'));
-        (yield new Transformation(new Pattern('/í([sn])$/i'), 'i\\1es'));
-        (yield new Transformation(new Pattern('/é([sn])$/i'), 'e\\1es'));
-        (yield new Transformation(new Pattern('/á([sn])$/i'), 'a\\1es'));
+        (yield new Transformation(new Pattern('/ú([sn])$/i'), 'RectorPrefix202501\\u\\1es'));
+        (yield new Transformation(new Pattern('/ó([sn])$/i'), 'RectorPrefix202501\\o\\1es'));
+        (yield new Transformation(new Pattern('/í([sn])$/i'), 'RectorPrefix202501\\i\\1es'));
+        (yield new Transformation(new Pattern('/é([sn])$/i'), 'RectorPrefix202501\\e\\1es'));
+        (yield new Transformation(new Pattern('/á([sn])$/i'), 'RectorPrefix202501\\a\\1es'));
         (yield new Transformation(new Pattern('/z$/i'), 'ces'));
         (yield new Transformation(new Pattern('/([aeiou]s)$/i'), '\\1'));
         (yield new Transformation(new Pattern('/([^aeéiou])$/i'), '\\1es'));

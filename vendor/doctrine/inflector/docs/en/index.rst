@@ -92,8 +92,8 @@ If you want to setup custom singular and plural rules, you can configure these i
         ->withSingularRules(
             new Ruleset(
                 new Transformations(
-                    new Transformation(new Pattern('/^(bil)er$/i'), '1'),
-                    new Transformation(new Pattern('/^(inflec|contribu)tors$/i'), '1ta')
+                    new Transformation(new Pattern('/^(bil)er$/i'), '\1'),
+                    new Transformation(new Pattern('/^(inflec|contribu)tors$/i'), '\1ta')
                 ),
                 new Patterns(new Pattern('singulars')),
                 new Substitutions(new Substitution(new Word('spins'), new Word('spinor')))
@@ -102,8 +102,8 @@ If you want to setup custom singular and plural rules, you can configure these i
         ->withPluralRules(
             new Ruleset(
                 new Transformations(
-                    new Transformation(new Pattern('^(bil)er$'), '1'),
-                    new Transformation(new Pattern('^(inflec|contribu)tors$'), '1ta')
+                    new Transformation(new Pattern('^(bil)er$'), '\1'),
+                    new Transformation(new Pattern('^(inflec|contribu)tors$'), '\1ta')
                 ),
                 new Patterns(new Pattern('noflect'), new Pattern('abtuse')),
                 new Substitutions(

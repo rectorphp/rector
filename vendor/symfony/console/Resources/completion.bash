@@ -17,7 +17,7 @@ _sf_{{ COMMAND_NAME }}() {
     done
 
     # Use newline as only separator to allow space in completion values
-    local IFS=$'n'
+    local IFS=$'\n'
     local sf_cmd="${COMP_WORDS[0]}"
 
     # for an alias, get the real script behind it
@@ -79,7 +79,7 @@ _sf_{{ COMMAND_NAME }}() {
             # no quotes: double escaping
             suggestions=$(for s in $sfcomplete; do printf $'%q\n' $(printf '%q' "$s"); done)
         fi
-        COMPREPLY=($(IFS=$'n' compgen -W "$suggestions" -- $(printf -- "%q" "$cur")))
+        COMPREPLY=($(IFS=$'\n' compgen -W "$suggestions" -- $(printf -- "%q" "$cur")))
         __ltrim_colon_completions "$cur"
     else
         if [[ "$sfcomplete" != *"Command \"_complete\" is not defined."* ]]; then
