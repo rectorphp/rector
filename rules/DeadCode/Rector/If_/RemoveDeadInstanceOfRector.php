@@ -21,6 +21,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\IfManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -102,6 +103,7 @@ CODE_SAMPLE
             return null;
         }
         if ($instanceof->expr instanceof Assign) {
+            $instanceof->expr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \false);
             $assignExpression = new Expression($instanceof->expr);
             return \array_merge([$assignExpression], $if->stmts);
         }
