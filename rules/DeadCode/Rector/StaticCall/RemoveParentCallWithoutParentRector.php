@@ -117,6 +117,9 @@ CODE_SAMPLE
         if (!$expr instanceof StaticCall) {
             return \false;
         }
+        if ($expr->name instanceof Expr) {
+            return \false;
+        }
         return $this->isName($expr->class, ObjectReference::PARENT);
     }
     private function shouldSkipClass(Class_ $class) : bool
