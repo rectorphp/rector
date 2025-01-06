@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "f7e0a140e1f6d30252f950b05da1fc89776468eb"
+                "reference": "f14ec1ab84460a4ecc961bb69dc3c8c6c4122e60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f7e0a140e1f6d30252f950b05da1fc89776468eb",
-                "reference": "f7e0a140e1f6d30252f950b05da1fc89776468eb",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f14ec1ab84460a4ecc961bb69dc3c8c6c4122e60",
+                "reference": "f14ec1ab84460a4ecc961bb69dc3c8c6c4122e60",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
                 "phpstan\/phpstan": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
-                "rector\/rector-src": "dev-main",
+                "rector\/rector-src": "dev-tv-readonly-add-ctor",
                 "symfony\/config": "^6.4",
                 "symfony\/dependency-injection": "^6.4",
                 "symfony\/http-kernel": "~6.3",
@@ -1896,7 +1896,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-01-05T17:17:55+00:00",
+            "time": "2025-01-06T10:15:02+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

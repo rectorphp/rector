@@ -37,7 +37,7 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
     /**
      * @var array<string, string>
      */
-    private const SYMFONY_NAME_TO_TYPE_MAP = ['validator' => SymfonyClass::VALIDATOR_INTERFACE, 'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE, 'logger' => SymfonyClass::LOGGER_INTERFACE, 'jms_serializer' => SymfonyClass::SERIALIZER_INTERFACE];
+    private const SYMFONY_NAME_TO_TYPE_MAP = ['validator' => SymfonyClass::VALIDATOR_INTERFACE, 'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE, 'logger' => SymfonyClass::LOGGER_INTERFACE, 'jms_serializer' => SymfonyClass::SERIALIZER_INTERFACE, 'translator' => SymfonyClass::TRANSLATOR_INTERFACE, 'session' => SymfonyClass::SESSION, 'security.token_storage' => SymfonyClass::TOKEN_STORAGE_INTERFACE];
     public function __construct(ClassDependencyManipulator $classDependencyManipulator, ThisGetTypeMatcher $thisGetTypeMatcher, PropertyNaming $propertyNaming)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;

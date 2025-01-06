@@ -49,4 +49,16 @@ final class SymfonyClass
      * @var string
      */
     public const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface';
+    /**
+     * @var string
+     */
+    public const TRANSLATOR_INTERFACE = 'Symfony\\Contracts\\Translation\\TranslatorInterface';
+    /**
+     * @var string
+     */
+    public const SESSION = 'Symfony\\Component\\HttpFoundation\\Session\\Session';
+    /**
+     * @var string
+     */
+    public const TOKEN_STORAGE_INTERFACE = 'Symfony\\Component\\Security\\Core\\Authentication\\Token\\Storage\\TokenStorageInterface';
 }
