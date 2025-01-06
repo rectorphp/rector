@@ -50,7 +50,7 @@ final class Query
     {
         $class = $this->class !== Message::CLASS_IN ? 'CLASS' . $this->class . ' ' : '';
         $type = 'TYPE' . $this->type;
-        $ref = new \ReflectionClass('RectorPrefix202501\\React\\Dns\\Model\\Message');
+        $ref = new \ReflectionClass('\\React\\Dns\\Model\\Message');
         foreach ($ref->getConstants() as $name => $value) {
             if ($value === $this->type && \strpos($name, 'TYPE_') === 0) {
                 $type = \substr($name, 5);
