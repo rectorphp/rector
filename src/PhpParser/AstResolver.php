@@ -30,8 +30,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Parser\RectorParser;
 use Rector\Reflection\MethodReflectionResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\ValueObject\MethodName;
@@ -45,7 +45,7 @@ final class AstResolver
     /**
      * @readonly
      */
-    private SmartPhpParser $smartPhpParser;
+    private RectorParser $rectorParser;
     /**
      * @readonly
      */
@@ -77,9 +77,9 @@ final class AstResolver
      * @var array<string, Stmt[]|null>
      */
     private array $parsedFileNodes = [];
-    public function __construct(SmartPhpParser $smartPhpParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
-        $this->smartPhpParser = $smartPhpParser;
+        $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -276,7 +276,7 @@ final class AstResolver
             return $this->parsedFileNodes[$fileName];
         }
         try {
-            $stmts = $this->smartPhpParser->parseFile($fileName);
+            $stmts = $this->rectorParser->parseFile($fileName);
         } catch (Throwable $throwable) {
             /**
              * phpstan.phar contains jetbrains/phpstorm-stubs which the code is not downgraded

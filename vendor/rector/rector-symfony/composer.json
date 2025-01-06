@@ -12,7 +12,7 @@
         "phpstan\/phpstan": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.4",
-        "rector\/rector-src": "dev-tv-readonly-add-ctor",
+        "rector\/rector-src": "dev-main",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
         "symfony\/http-kernel": "~6.3",

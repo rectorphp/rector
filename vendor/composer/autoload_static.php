@@ -2273,8 +2273,6 @@ class ComposerStaticInit4349f48e2d711e343a1bf0101d0ae855
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
-        'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpParser/SmartPhpParser.php',
-        'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
         'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/src/PhpDocParser/ValueObject/AttributeKey.php',
         'Rector\\PhpParser\\AstResolver' => __DIR__ . '/../..' . '/src/PhpParser/AstResolver.php',
         'Rector\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',

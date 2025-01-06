@@ -2054,8 +2054,6 @@ return array(
     'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => $baseDir . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
     'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => $baseDir . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
     'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => $baseDir . '/src/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
-    'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => $baseDir . '/src/PhpDocParser/PhpParser/SmartPhpParser.php',
-    'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => $baseDir . '/src/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
     'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => $baseDir . '/src/PhpDocParser/ValueObject/AttributeKey.php',
     'Rector\\PhpParser\\AstResolver' => $baseDir . '/src/PhpParser/AstResolver.php',
     'Rector\\PhpParser\\Comparing\\NodeComparator' => $baseDir . '/src/PhpParser/Comparing/NodeComparator.php',
