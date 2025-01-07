@@ -98,11 +98,11 @@ CODE_SAMPLE
             if (!$innerIfInnerNode instanceof Expr) {
                 continue;
             }
-            $if->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $newReturn = $this->resolveReturn($innerIfInnerNode, $if, $return);
             if (!$newReturn instanceof Return_) {
                 continue;
             }
+            $if->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $this->commentsMerger->keepComments($newReturn, [$if, $return, $ifInnerNode]);
             // remove previous IF
             unset($node->stmts[$key - 1]);
