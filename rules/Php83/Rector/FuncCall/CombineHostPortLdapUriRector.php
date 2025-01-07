@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php83\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Scalar\Int_;
@@ -66,7 +67,12 @@ CODE_SAMPLE
         if ($firstArg instanceof String_ && $secondArg instanceof Int_) {
             $args[0]->value = new String_($firstArg->value . ':' . $secondArg->value);
         } elseif ($this->exprAnalyzer->isDynamicExpr($firstArg) && $this->exprAnalyzer->isDynamicExpr($secondArg)) {
-            $args[0]->value = new InterpolatedString([$firstArg, new InterpolatedStringPart(':'), $secondArg]);
+            if ($firstArg instanceof Concat && !$secondArg instanceof Concat) {
+                $args[0]->value = new Concat($firstArg, new String_(':'));
+                $args[0]->value = new Concat($args[0]->value, $secondArg);
+            } else {
+                $args[0]->value = new InterpolatedString([$firstArg, new InterpolatedStringPart(':'), $secondArg]);
+            }
         } else {
             return null;
         }
