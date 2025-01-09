@@ -47,7 +47,7 @@ final class PropertyTypeChangeGuard
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
+        if ($this->propertyManipulator->hasTraitWithSamePropertyOrWritten($classReflection, $propertyName)) {
             return \false;
         }
         if ($this->propertyAnalyzer->hasForbiddenType($property)) {
