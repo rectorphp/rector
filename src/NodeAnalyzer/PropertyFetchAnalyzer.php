@@ -20,8 +20,10 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
+use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -50,16 +52,26 @@ final class PropertyFetchAnalyzer
      */
     private ReflectionResolver $reflectionResolver;
     /**
+     * @readonly
+     */
+    private ContextAnalyzer $contextAnalyzer;
+    /**
+     * @readonly
+     */
+    private PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer;
+    /**
      * @var string
      */
     private const THIS = 'this';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver, ContextAnalyzer $contextAnalyzer, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->contextAnalyzer = $contextAnalyzer;
+        $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
     }
     public function isLocalPropertyFetch(Node $node) : bool
     {
@@ -102,10 +114,16 @@ final class PropertyFetchAnalyzer
             return \true;
         }
         return (bool) $this->betterNodeFinder->findFirst($trait, function (Node $node) use($propertyName) : bool {
-            if (!$node instanceof Assign) {
+            if (!$this->isLocalPropertyFetchName($node, $propertyName)) {
                 return \false;
             }
-            return $this->isLocalPropertyFetchName($node->var, $propertyName);
+            /**
+             * @var PropertyFetch|StaticPropertyFetch|NullsafePropertyFetch $node
+             */
+            if ($this->contextAnalyzer->isChangeableContext($node)) {
+                return \true;
+            }
+            return $this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo([$node]);
         });
     }
     /**

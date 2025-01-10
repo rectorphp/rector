@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
@@ -79,10 +80,14 @@ final class PropertyManipulator
      */
     private PropertyFetchAnalyzer $propertyFetchAnalyzer;
     /**
+     * @readonly
+     */
+    private ContextAnalyzer $contextAnalyzer;
+    /**
      * @var string[]|class-string<Table>[]
      */
     private const ALLOWED_NOT_READONLY_CLASS_ANNOTATIONS = ['ApiPlatform\\Core\\Annotation\\ApiResource', 'ApiPlatform\\Metadata\\ApiResource', 'Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Table', 'Doctrine\\ORM\\Mapping\\MappedSuperclass', 'Doctrine\\ORM\\Mapping\\Embeddable'];
-    public function __construct(\Rector\NodeManipulator\AssignManipulator $assignManipulator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, PropertyFetchFinder $propertyFetchFinder, NodeNameResolver $nodeNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, NodeTypeResolver $nodeTypeResolver, PromotedPropertyResolver $promotedPropertyResolver, ConstructorAssignDetector $constructorAssignDetector, AstResolver $astResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(\Rector\NodeManipulator\AssignManipulator $assignManipulator, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, PropertyFetchFinder $propertyFetchFinder, NodeNameResolver $nodeNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, NodeTypeResolver $nodeTypeResolver, PromotedPropertyResolver $promotedPropertyResolver, ConstructorAssignDetector $constructorAssignDetector, AstResolver $astResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, ContextAnalyzer $contextAnalyzer)
     {
         $this->assignManipulator = $assignManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -95,6 +100,7 @@ final class PropertyManipulator
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->astResolver = $astResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
@@ -108,7 +114,7 @@ final class PropertyManipulator
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $propertyOrParam, $scope);
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         foreach ($propertyFetches as $propertyFetch) {
-            if ($this->isChangeableContext($propertyFetch)) {
+            if ($this->contextAnalyzer->isChangeableContext($propertyFetch)) {
                 return \true;
             }
             // skip for constructor? it is allowed to set value in constructor method
@@ -191,22 +197,6 @@ final class PropertyManipulator
             return \false;
         }
         return $this->constructorAssignDetector->isPropertyAssigned($class, $propertyName);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
-     */
-    private function isChangeableContext($propertyFetch) : bool
-    {
-        if ($propertyFetch->getAttribute(AttributeKey::IS_UNSET_VAR, \false)) {
-            return \true;
-        }
-        if ($propertyFetch->getAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \false)) {
-            return \true;
-        }
-        if ($propertyFetch->getAttribute(AttributeKey::IS_USED_AS_ARG_BY_REF_VALUE, \false) === \true) {
-            return \true;
-        }
-        return $propertyFetch->getAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \false) === \true;
     }
     private function hasAllowedNotReadonlyAnnotationOrAttribute(PhpDocInfo $phpDocInfo, Class_ $class) : bool
     {
