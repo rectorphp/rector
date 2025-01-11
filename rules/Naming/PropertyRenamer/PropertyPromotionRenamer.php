@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -19,8 +20,10 @@ use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\Naming\VariableRenamer;
+use Rector\NodeManipulator\PropertyManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php\PhpVersionProvider;
+use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 final class PropertyPromotionRenamer
@@ -61,7 +64,15 @@ final class PropertyPromotionRenamer
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(PhpVersionProvider $phpVersionProvider, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, PhpDocInfoFactory $phpDocInfoFactory, ParamRenamer $paramRenamer, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer, NodeNameResolver $nodeNameResolver, VariableRenamer $variableRenamer, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
+     * @readonly
+     */
+    private PropertyManipulator $propertyManipulator;
+    public function __construct(PhpVersionProvider $phpVersionProvider, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, PhpDocInfoFactory $phpDocInfoFactory, ParamRenamer $paramRenamer, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer, NodeNameResolver $nodeNameResolver, VariableRenamer $variableRenamer, DocBlockUpdater $docBlockUpdater, ReflectionResolver $reflectionResolver, PropertyManipulator $propertyManipulator)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
@@ -72,6 +83,8 @@ final class PropertyPromotionRenamer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->propertyManipulator = $propertyManipulator;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
@@ -84,6 +97,10 @@ final class PropertyPromotionRenamer
         }
         $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
+            return \false;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classLike);
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         // resolve possible and existing param names
@@ -102,6 +119,9 @@ final class PropertyPromotionRenamer
             }
             $currentParamName = $this->nodeNameResolver->getName($param);
             if ($this->isNameSuffixed($currentParamName, $desiredPropertyName)) {
+                continue;
+            }
+            if ($this->propertyManipulator->isUsedByTrait($classReflection, $currentParamName)) {
                 continue;
             }
             $this->renameParamVarNameAndVariableUsage($classLike, $constructClassMethod, $desiredPropertyName, $param);
