@@ -22,6 +22,7 @@ use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
@@ -122,10 +123,15 @@ final class RectorConfigBuilder
     private ?string $editorUrl = null;
     private ?bool $isWithPhpSetsUsed = null;
     private ?bool $isWithPhpLevelUsed = null;
+    /**
+     * @var array<class-string<SetProviderInterface>,bool>
+     */
+    private array $setProviders = [];
     public function __invoke(RectorConfig $rectorConfig) : void
     {
-        if ($this->setGroups !== []) {
-            $setManager = new SetManager(new SetProviderCollector(), new InstalledPackageResolver(\getcwd()));
+        if ($this->setGroups !== [] || $this->setProviders !== []) {
+            $setProviderCollector = new SetProviderCollector(\array_map(static fn(string $setProvider): SetProviderInterface => $rectorConfig->make($setProvider), \array_keys($this->setProviders)));
+            $setManager = new SetManager($setProviderCollector, new InstalledPackageResolver(\getcwd()));
             $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
             SimpleParameterProvider::addParameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->groupLoadedSets);
         }
@@ -756,6 +762,22 @@ final class RectorConfigBuilder
     public function withEditorUrl(string $editorUrl) : self
     {
         $this->editorUrl = $editorUrl;
+        return $this;
+    }
+    /**
+     * @param class-string<SetProviderInterface> ...$setProviders
+     */
+    public function withSetProviders(string ...$setProviders) : self
+    {
+        foreach ($setProviders as $setProvider) {
+            if (\array_key_exists($setProvider, $this->setProviders)) {
+                continue;
+            }
+            if (!\is_a($setProvider, SetProviderInterface::class, \true)) {
+                throw new InvalidConfigurationException(\sprintf('Set provider "%s" must implement "%s"', $setProvider, SetProviderInterface::class));
+            }
+            $this->setProviders[$setProvider] = \true;
+        }
         return $this;
     }
 }
