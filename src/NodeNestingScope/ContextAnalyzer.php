@@ -40,4 +40,14 @@ final class ContextAnalyzer
         }
         return $propertyFetch->getAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \false) === \true;
     }
+    public function isLeftPartOfAssign(Node $node) : bool
+    {
+        if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
+            return \true;
+        }
+        if ($node->getAttribute(AttributeKey::IS_ASSIGN_REF_EXPR) === \true) {
+            return \true;
+        }
+        return $node->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true;
+    }
 }

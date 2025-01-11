@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\FunctionLike;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\Php72\ValueObject\ListAndEach;
 use Rector\PhpParser\Node\BetterNodeFinder;
 final class AssignManipulator
@@ -30,11 +30,16 @@ final class AssignManipulator
      * @readonly
      */
     private PropertyFetchAnalyzer $propertyFetchAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @readonly
+     */
+    private ContextAnalyzer $contextAnalyzer;
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, ContextAnalyzer $contextAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
     /**
      * Matches:
@@ -64,16 +69,6 @@ final class AssignManipulator
         }
         return new ListAndEach($assign->var, $bareExpr);
     }
-    public function isLeftPartOfAssign(Node $node) : bool
-    {
-        if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
-            return \true;
-        }
-        if ($node->getAttribute(AttributeKey::IS_ASSIGN_REF_EXPR) === \true) {
-            return \true;
-        }
-        return $node->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true;
-    }
     /**
      * @api doctrine
      * @return array<PropertyFetch|StaticPropertyFetch>
@@ -84,7 +79,7 @@ final class AssignManipulator
             if (!$this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
                 return \false;
             }
-            return $this->isLeftPartOfAssign($node);
+            return $this->contextAnalyzer->isLeftPartOfAssign($node);
         });
     }
 }

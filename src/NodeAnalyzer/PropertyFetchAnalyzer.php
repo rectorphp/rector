@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
-use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ContextAnalyzer;
@@ -56,14 +55,10 @@ final class PropertyFetchAnalyzer
      */
     private ContextAnalyzer $contextAnalyzer;
     /**
-     * @readonly
-     */
-    private PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer;
-    /**
      * @var string
      */
     private const THIS = 'this';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver, ContextAnalyzer $contextAnalyzer, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver, ContextAnalyzer $contextAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -71,7 +66,6 @@ final class PropertyFetchAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->contextAnalyzer = $contextAnalyzer;
-        $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
     }
     public function isLocalPropertyFetch(Node $node) : bool
     {
@@ -123,7 +117,7 @@ final class PropertyFetchAnalyzer
             if ($this->contextAnalyzer->isChangeableContext($node)) {
                 return \true;
             }
-            return $this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo([$node]);
+            return $this->contextAnalyzer->isLeftPartOfAssign($node);
         });
     }
     /**

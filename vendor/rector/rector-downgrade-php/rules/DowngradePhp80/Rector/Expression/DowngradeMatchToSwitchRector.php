@@ -6,8 +6,10 @@ namespace Rector\DowngradePhp80\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
@@ -237,7 +239,11 @@ CODE_SAMPLE
         } elseif ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);
         } elseif ($node instanceof Return_) {
-            $stmts[] = new Return_($matchArm->body);
+            if ($node->expr instanceof BinaryOp) {
+                $stmts[] = $this->replicateBinaryOp($node->expr, $matchArm->body);
+            } else {
+                $stmts[] = new Return_($matchArm->body);
+            }
         } elseif ($node instanceof Echo_) {
             $stmts[] = new Echo_([$matchArm->body]);
             $stmts[] = new Break_();
@@ -255,5 +261,17 @@ CODE_SAMPLE
             $stmts[] = new Break_();
         }
         return $stmts;
+    }
+    private function replicateBinaryOp(BinaryOp $binaryOp, Expr $expr) : Return_
+    {
+        $newExpr = clone $binaryOp;
+        // remove the match statement from the binary operation
+        $this->traverseNodesWithCallable($newExpr, static function (Node $node) use($expr) : ?Expr {
+            if ($node instanceof Match_) {
+                return $expr;
+            }
+            return null;
+        });
+        return new Return_($newExpr);
     }
 }
