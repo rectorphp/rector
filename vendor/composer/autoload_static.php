@@ -2231,6 +2231,7 @@ class ComposerStaticInit4349f48e2d711e343a1bf0101d0ae855
         'Rector\\Php81\\Rector\\FuncCall\\NullToStrictStringFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
+        'Rector\\Php81\\Rector\\New_\\MyCLabsConstructorCallToEnumFromRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/New_/MyCLabsConstructorCallToEnumFromRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
         'Rector\\Php82\\Rector\\Encapsed\\VariableInStringInterpolationFixerRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Encapsed/VariableInStringInterpolationFixerRector.php',
