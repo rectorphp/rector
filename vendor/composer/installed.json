@@ -512,8 +512,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.37.0",
-            "version_normalized": "11.37.0.0",
+            "version": "v11.38.2",
+            "version_normalized": "11.38.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -569,17 +569,17 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.37.0",
-            "version_normalized": "11.37.0.0",
+            "version": "v11.38.2",
+            "version_normalized": "11.38.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
-                "reference": "184317f701ba20ca265e36808ed54b75b115972d"
+                "reference": "534b697fc1dd9fbdd9fbf2f33fc9dcbb943dea75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/184317f701ba20ca265e36808ed54b75b115972d",
-                "reference": "184317f701ba20ca265e36808ed54b75b115972d",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/534b697fc1dd9fbdd9fbf2f33fc9dcbb943dea75",
+                "reference": "534b697fc1dd9fbdd9fbf2f33fc9dcbb943dea75",
                 "shasum": ""
             },
             "require": {
@@ -587,7 +587,7 @@
                 "psr\/container": "^1.1.1|^2.0.1",
                 "psr\/simple-cache": "^1.0|^2.0|^3.0"
             },
-            "time": "2024-11-25T15:33:38+00:00",
+            "time": "2025-01-10T20:57:00+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
