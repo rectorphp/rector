@@ -185,6 +185,6 @@ final class UseImportsAdder
         if ($afterCurrentNamespace === null) {
             return \false;
         }
-        return \strpos($afterCurrentNamespace, '\\') === \false;
+        return $namespaceName . '\\' . $afterCurrentNamespace === $objectType->getClassName();
     }
 }
