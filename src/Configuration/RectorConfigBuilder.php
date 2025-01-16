@@ -481,9 +481,9 @@ final class RectorConfigBuilder
         }
         return $this;
     }
-    public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false) : self
+    public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false) : self
     {
-        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::PHPUNIT => $phpunit];
+        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::PHPUNIT => $phpunit, SetGroup::SYMFONY => $symfony];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->setGroups[] = $setPath;
