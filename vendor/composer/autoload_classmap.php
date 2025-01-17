@@ -1831,6 +1831,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',
+    'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\PropertyExistsWithoutAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/PropertyExistsWithoutAssertRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\ExpectsMethodCallDecorator' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/ExpectsMethodCallDecorator.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
