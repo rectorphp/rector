@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @url https://github.com/sebastianbergmann/phpunit/issues/4601
  *
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\MethodCall\PropertyExistsWithoutAssertRector\PropertyExistsWithoutAssertRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit100\Rector\MethodCall\PropertyExistsWithoutAssertRector\PropertyExistsWithoutAssertRectorTest
  */
 final class PropertyExistsWithoutAssertRector extends AbstractRector
 {
@@ -40,7 +40,7 @@ final class PropertyExistsWithoutAssertRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace delited PHPUnit methods: assertClassHasStaticAttribute, classHasStaticAttribute and assertClassNotHasStaticAttribute by property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace deleted PHPUnit methods: assertClassHasStaticAttribute, classHasStaticAttribute and assertClassNotHasStaticAttribute by property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
 $this->assertClassHasStaticAttribute("Class", "property");
 $this->classHasStaticAttribute("Class", "property");
 $this->assertClassNotHasStaticAttribute("Class", "property");
