@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Application;
 
-use RectorPrefix202501\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
@@ -11,7 +10,6 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
-use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -179,12 +177,15 @@ final class UseImportsAdder
         }
         return $namespace->name->toString();
     }
-    private function isCurrentNamespace(string $namespaceName, ObjectType $objectType) : bool
+    /**
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $objectType
+     */
+    private function isCurrentNamespace(string $namespaceName, $objectType) : bool
     {
-        $afterCurrentNamespace = Strings::after($objectType->getClassName(), $namespaceName . '\\');
-        if ($afterCurrentNamespace === null) {
+        $className = $objectType->getClassName();
+        if (\strncmp($className, $namespaceName . '\\', \strlen($namespaceName . '\\')) !== 0) {
             return \false;
         }
-        return $namespaceName . '\\' . $afterCurrentNamespace === $objectType->getClassName();
+        return $namespaceName . '\\' . $objectType->getShortName() === $className;
     }
 }
