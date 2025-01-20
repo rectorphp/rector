@@ -145,6 +145,9 @@ CODE_SAMPLE
         if (!$stmt instanceof Expression) {
             return null;
         }
+        if ($stmt->getComments() !== []) {
+            return null;
+        }
         $stmtExpr = $stmt->expr;
         if (!$stmtExpr instanceof Assign) {
             return null;
