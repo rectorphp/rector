@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,6 +23,11 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * @var string
+     * @see https://regex101.com/r/N8oLqv/1
+     */
+    private const WINDOWS_DRIVE_REGEX = '#^[a-zA-z]\\:[\\/\\\\]#';
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
@@ -81,10 +87,13 @@ CODE_SAMPLE
             return null;
         }
         // skip absolute paths
-        if (\strncmp($includeValue, '/', \strlen('/')) === 0) {
+        if (\strncmp($includeValue, '/', \strlen('/')) === 0 || \strncmp($includeValue, '\\', \strlen('\\')) === 0) {
             return null;
         }
         if (\strpos($includeValue, 'config/') !== \false) {
+            return null;
+        }
+        if (StringUtils::isMatch($includeValue, self::WINDOWS_DRIVE_REGEX)) {
             return null;
         }
         // add preslash to string
