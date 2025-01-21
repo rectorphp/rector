@@ -11,6 +11,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -315,6 +316,19 @@ final class BetterStandardPrinter extends Standard
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '') . ($param->hooks !== [] ? ' {' . $this->pStmts($param->hooks) . $this->nl . '}' : '');
+    }
+    protected function pInfixOp(string $class, Node $leftNode, string $operatorString, Node $rightNode, int $precedence, int $lhsPrecedence) : string
+    {
+        /**
+         * ensure left side is assign and right side is just created
+         *
+         * @see https://github.com/rectorphp/rector-src/pull/6668
+         * @see https://github.com/rectorphp/rector/issues/8980
+         */
+        if ($leftNode instanceof Assign && $leftNode->getStartTokenPos() > 0 && $rightNode->getStartTokenPos() < 0) {
+            $leftNode->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+        }
+        return parent::pInfixOp($class, $leftNode, $operatorString, $rightNode, $precedence, $lhsPrecedence);
     }
     private function cleanStartIndentationOnHeredocNowDoc(string $content) : string
     {

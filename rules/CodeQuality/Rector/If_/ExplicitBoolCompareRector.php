@@ -27,7 +27,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -124,9 +123,6 @@ CODE_SAMPLE
             $binaryOp->right->left = $node->cond->var;
             $node->cond = $binaryOp;
             return [$expression, $node];
-        }
-        if ($node->cond instanceof Assign) {
-            $binaryOp->left->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
         $node->cond = $binaryOp;
         return $node;
