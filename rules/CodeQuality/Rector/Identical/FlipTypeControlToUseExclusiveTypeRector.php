@@ -5,14 +5,12 @@ namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -87,9 +85,6 @@ CODE_SAMPLE
     private function processConvertToExclusiveType(ObjectType $objectType, Expr $expr, $binaryOp)
     {
         $fullyQualifiedType = $objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType ? $objectType->getFullyQualifiedName() : $objectType->getClassName();
-        if ($expr instanceof Assign) {
-            $expr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
-        }
         $instanceof = new Instanceof_($expr, new FullyQualified($fullyQualifiedType));
         if ($binaryOp instanceof NotIdentical) {
             return $instanceof;

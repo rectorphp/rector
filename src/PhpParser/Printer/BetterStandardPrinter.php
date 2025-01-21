@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
@@ -319,16 +320,26 @@ final class BetterStandardPrinter extends Standard
     }
     protected function pInfixOp(string $class, Node $leftNode, string $operatorString, Node $rightNode, int $precedence, int $lhsPrecedence) : string
     {
-        /**
-         * ensure left side is assign and right side is just created
-         *
-         * @see https://github.com/rectorphp/rector-src/pull/6668
-         * @see https://github.com/rectorphp/rector/issues/8980
-         */
+        $this->wrapAssign($leftNode, $rightNode);
+        return parent::pInfixOp($class, $leftNode, $operatorString, $rightNode, $precedence, $lhsPrecedence);
+    }
+    protected function pExpr_Instanceof(Instanceof_ $instanceof, int $precedence, int $lhsPrecedence) : string
+    {
+        $this->wrapAssign($instanceof->expr, $instanceof->class);
+        return parent::pExpr_Instanceof($instanceof, $precedence, $lhsPrecedence);
+    }
+    /**
+     * ensure left side is assign and right side is just created
+     *
+     * @see https://github.com/rectorphp/rector-src/pull/6668
+     * @see https://github.com/rectorphp/rector/issues/8980
+     * @see https://github.com/rectorphp/rector-src/pull/6653
+     */
+    private function wrapAssign(Node $leftNode, Node $rightNode) : void
+    {
         if ($leftNode instanceof Assign && $leftNode->getStartTokenPos() > 0 && $rightNode->getStartTokenPos() < 0) {
             $leftNode->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
-        return parent::pInfixOp($class, $leftNode, $operatorString, $rightNode, $precedence, $lhsPrecedence);
     }
     private function cleanStartIndentationOnHeredocNowDoc(string $content) : string
     {
