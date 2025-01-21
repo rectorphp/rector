@@ -28,7 +28,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     /**
      * @var array<string,array<array-key,string>>
      */
-    private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf']];
+    private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf'], 'str_contains' => ['str_contains', 'assertStringContainsString', 'assertStringNotContainsString']];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -149,7 +149,8 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             unset($funcCallOrEmptyNodeArgs[2]);
             return \array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
         }
-        if ($funcCallOrEmptyNodeName === 'is_a') {
+        if (\in_array($funcCallOrEmptyNodeName, ['is_a', 'str_contains'], \true)) {
+            // flip arguments
             $newArgs = [$funcCallOrEmptyNodeArgs[1], $funcCallOrEmptyNodeArgs[0]];
             return \array_merge($newArgs, $oldArguments);
         }

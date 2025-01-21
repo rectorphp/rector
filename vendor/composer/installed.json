@@ -512,8 +512,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.38.2",
-            "version_normalized": "11.38.2.0",
+            "version": "v11.39.0",
+            "version_normalized": "11.39.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -569,8 +569,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.38.2",
-            "version_normalized": "11.38.2.0",
+            "version": "v11.39.0",
+            "version_normalized": "11.39.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "4e82fcd9b2c742ff61d2d3540cc0158997df7cb2"
+                "reference": "289978fdd47b511c2d97d8abf1ae1990200304c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/4e82fcd9b2c742ff61d2d3540cc0158997df7cb2",
-                "reference": "4e82fcd9b2c742ff61d2d3540cc0158997df7cb2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/289978fdd47b511c2d97d8abf1ae1990200304c1",
+                "reference": "289978fdd47b511c2d97d8abf1ae1990200304c1",
                 "shasum": ""
             },
             "require": {
@@ -1819,18 +1819,18 @@
                 "rector\/rector": "<0.11"
             },
             "require-dev": {
+                "phpecs\/phpecs": "^2.0",
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.0",
+                "phpstan\/phpstan": "^2.1",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^11.4",
+                "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^1.0",
-                "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-01-19T18:40:48+00:00",
+            "time": "2025-01-21T19:46:08+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
