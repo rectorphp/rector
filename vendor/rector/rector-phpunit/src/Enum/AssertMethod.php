@@ -13,4 +13,12 @@ final class AssertMethod
      * @var string
      */
     public const ASSERT_TRUE = 'assertTrue';
+    /**
+     * @var string
+     */
+    public const ASSERT_EQUALS = 'assertEquals';
+    /**
+     * @var string
+     */
+    public const ASSERT_SAME = 'assertSame';
 }
