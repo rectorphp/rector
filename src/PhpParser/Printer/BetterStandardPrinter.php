@@ -270,7 +270,7 @@ final class BetterStandardPrinter extends Standard
     protected function pExpr_Ternary(Ternary $ternary, int $precedence, int $lhsPrecedence) : string
     {
         $kind = $ternary->getAttribute(AttributeKey::KIND);
-        if ($kind === 'wrapped_with_brackets') {
+        if ($kind === AttributeKey::WRAPPED_IN_PARENTHESES) {
             $pExprTernary = parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
             return '(' . $pExprTernary . ')';
         }
