@@ -155,10 +155,7 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
-        $this->nodeTraverser = new NodeTraverser();
-        foreach ($nodeVisitors as $nodeVisitor) {
-            $this->nodeTraverser->addVisitor($nodeVisitor);
-        }
+        $this->nodeTraverser = new NodeTraverser(...$nodeVisitors);
     }
     /**
      * @param Stmt[] $stmts

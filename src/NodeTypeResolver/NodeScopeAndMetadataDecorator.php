@@ -26,9 +26,8 @@ final class NodeScopeAndMetadataDecorator
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
-        $this->nodeTraverser = new NodeTraverser();
         // needed for format preserving printing
-        $this->nodeTraverser->addVisitor($cloningVisitor);
+        $this->nodeTraverser = new NodeTraverser($cloningVisitor);
     }
     /**
      * @param Stmt[] $stmts

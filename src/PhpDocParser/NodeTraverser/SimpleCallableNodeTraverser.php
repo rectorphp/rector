@@ -20,9 +20,8 @@ final class SimpleCallableNodeTraverser
         if ($node === null || $node === []) {
             return;
         }
-        $nodeTraverser = new NodeTraverser();
         $callableNodeVisitor = new CallableNodeVisitor($callable);
-        $nodeTraverser->addVisitor($callableNodeVisitor);
+        $nodeTraverser = new NodeTraverser($callableNodeVisitor);
         $nodes = $node instanceof Node ? [$node] : $node;
         $nodeTraverser->traverse($nodes);
     }

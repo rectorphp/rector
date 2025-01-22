@@ -25,8 +25,7 @@ final class SimplePhpParser
     {
         $parserFactory = new ParserFactory();
         $this->phpParser = $parserFactory->createForNewestSupportedVersion();
-        $this->nodeTraverser = new NodeTraverser();
-        $this->nodeTraverser->addVisitor(new AssignedToNodeVisitor());
+        $this->nodeTraverser = new NodeTraverser(new AssignedToNodeVisitor());
     }
     /**
      * @api tests
