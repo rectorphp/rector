@@ -89,9 +89,6 @@ CODE_SAMPLE
             if (!$this->isObjectType($type, $renameFunctionLikeParamWithinCallLikeArg->getObjectType())) {
                 continue;
             }
-            if (($node->name ?? null) === null) {
-                continue;
-            }
             if (!$node->name instanceof Identifier) {
                 continue;
             }
