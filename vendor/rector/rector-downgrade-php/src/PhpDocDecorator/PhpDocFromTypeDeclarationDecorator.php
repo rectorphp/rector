@@ -94,7 +94,7 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     public function decorateReturn($functionLike) : void
     {
-        if ($functionLike->returnType === null) {
+        if (!$functionLike->returnType instanceof Node) {
             return;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
@@ -163,7 +163,7 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     public function decorateReturnWithSpecificType($functionLike, Type $requireType) : bool
     {
-        if ($functionLike->returnType === null) {
+        if (!$functionLike->returnType instanceof Node) {
             return \false;
         }
         if (!$this->isTypeMatch($functionLike->returnType, $requireType)) {
