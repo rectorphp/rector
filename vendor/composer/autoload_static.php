@@ -1458,6 +1458,7 @@ class ComposerStaticInit3327108c61eea19d09115fa0e353e8ec
         'Rector\\Composer\\InstalledPackageResolver' => __DIR__ . '/../..' . '/src/Composer/InstalledPackageResolver.php',
         'Rector\\Composer\\ValueObject\\InstalledPackage' => __DIR__ . '/../..' . '/src/Composer/ValueObject/InstalledPackage.php',
         'Rector\\Config\\Level\\CodeQualityLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodeQualityLevel.php',
+        'Rector\\Config\\Level\\CodingStyleLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodingStyleLevel.php',
         'Rector\\Config\\Level\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Config/Level/DeadCodeLevel.php',
         'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',
