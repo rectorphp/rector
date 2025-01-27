@@ -113,7 +113,7 @@ final class NodeTransformer
      */
     private function splitBySpace(string $value) : array
     {
-        $value = \str_getcsv($value, ' ');
+        $value = \str_getcsv($value, ' ', escape: '\\');
         return \array_filter($value);
     }
     /**
