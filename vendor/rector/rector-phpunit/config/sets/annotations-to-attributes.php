@@ -8,6 +8,7 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\CoversAnnotationWithValueToAttributeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\RequiresAnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\TicketAnnotationToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector;
@@ -19,6 +20,7 @@ return static function (RectorConfig $rectorConfig) : void {
         TestWithAnnotationToAttributeRector::class,
         DataProviderAnnotationToAttributeRector::class,
         CoversAnnotationWithValueToAttributeRector::class,
+        RequiresAnnotationWithValueToAttributeRector::class,
         /**
          * Currently handle:
          *      - @depends Methodname

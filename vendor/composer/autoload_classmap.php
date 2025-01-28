@@ -1764,6 +1764,7 @@ return array(
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\AnnotationWithValueToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/AnnotationWithValueToAttributeRector.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
+    'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\RequiresAnnotationWithValueToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/RequiresAnnotationWithValueToAttributeRector.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\TicketAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\NestedClosureAssertFactory' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/NestedClosureAssertFactory.php',
