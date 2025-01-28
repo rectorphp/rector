@@ -36,8 +36,8 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainV
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\ChangesReporting\Output\GitlabOutputFormatter;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\ChangesReporting\Output\GitlabOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\AliasClassNameImportSkipVoter;
