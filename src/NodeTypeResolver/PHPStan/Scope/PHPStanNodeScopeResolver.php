@@ -387,13 +387,11 @@ final class PHPStanNodeScopeResolver
     {
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (ParserErrorsException|ParserException $exception) {
+        } catch (ParserErrorsException|ParserException|ShouldNotHappenException $exception) {
             // nothing we can do more precise here as error parsing from deep internal PHPStan service with service injection we cannot reset
             // in the middle of process
             // fallback to fill by found scope
             \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $mutatingScope);
-        } catch (ShouldNotHappenException $exception) {
-            // internal PHPStan error
         }
     }
     private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
