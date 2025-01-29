@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\Cast\Array_ as CastArray_;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -31,6 +32,7 @@ use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Node\Expr\AlwaysRememberedExpr;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Util\NewLineSplitter;
@@ -42,11 +44,20 @@ use Rector\Util\NewLineSplitter;
 final class BetterStandardPrinter extends Standard
 {
     /**
+     * @readonly
+     */
+    private ExprAnalyzer $exprAnalyzer;
+    /**
      * Remove extra spaces before new Nop_ nodes
      * @see https://regex101.com/r/iSvroO/1
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \\t]+$#m';
+    public function __construct(ExprAnalyzer $exprAnalyzer)
+    {
+        $this->exprAnalyzer = $exprAnalyzer;
+        parent::__construct([]);
+    }
     /**
      * @param Node[] $stmts
      * @param Node[] $origStmts
@@ -115,6 +126,9 @@ final class BetterStandardPrinter extends Standard
                     $originalNode->{$subNodeName} = $originalNode->{$subNodeName}->getExpr();
                 }
             }
+        }
+        if ($this->exprAnalyzer->isExprWithExprPropertyWrappable($node)) {
+            $node->expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;

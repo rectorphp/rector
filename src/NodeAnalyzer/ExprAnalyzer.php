@@ -3,14 +3,29 @@
 declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BitwiseNot;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\ErrorSuppress;
+use PhpParser\Node\Expr\Eval_;
+use PhpParser\Node\Expr\Exit_;
+use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Print_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
@@ -25,6 +40,23 @@ use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprAnalyzer
 {
+    /**
+     * Verify that Expr has ->expr property that can be wrapped by parentheses
+     */
+    public function isExprWithExprPropertyWrappable(Node $node) : bool
+    {
+        if (!$node instanceof Expr) {
+            return \false;
+        }
+        // ensure only verify on reprint, using token start verification is more reliable for its check
+        if ($node->getStartTokenPos() > 0) {
+            return \false;
+        }
+        if ($node instanceof Cast || $node instanceof YieldFrom || $node instanceof UnaryMinus || $node instanceof UnaryPlus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof BooleanNot || $node instanceof Clone_ || $node instanceof ErrorSuppress || $node instanceof BitwiseNot || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof Include_ || $node instanceof Instanceof_) {
+            return $node->expr instanceof BinaryOp;
+        }
+        return \false;
+    }
     public function isNonTypedFromParam(Expr $expr) : bool
     {
         if (!$expr instanceof Variable) {
