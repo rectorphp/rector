@@ -59,10 +59,10 @@ final class GitlabOutputFormatter implements OutputFormatterInterface
     private function appendSystemErrors(ProcessResult $processResult, Configuration $configuration) : array
     {
         $errorsJson = [];
-        foreach ($processResult->getSystemErrors() as $error) {
-            $filePath = $configuration->isReportingWithRealPath() ? $error->getAbsoluteFilePath() ?? '' : $error->getRelativeFilePath() ?? '';
-            $fingerprint = $this->filehasher->hash($filePath . ';' . $error->getLine() . ';' . $error->getMessage());
-            $errorsJson[] = ['fingerprint' => $fingerprint, 'type' => self::ERROR_TYPE_ISSUE, 'categories' => [self::ERROR_CATEGORY_BUG_RISK], 'severity' => self::ERROR_SEVERITY_BLOCKER, 'description' => $error->getMessage(), 'check_name' => $error->getRectorClass() ?? '', 'location' => ['path' => $filePath, 'lines' => ['begin' => $error->getLine() ?? 0]]];
+        foreach ($processResult->getSystemErrors() as $systemError) {
+            $filePath = $configuration->isReportingWithRealPath() ? $systemError->getAbsoluteFilePath() ?? '' : $systemError->getRelativeFilePath() ?? '';
+            $fingerprint = $this->filehasher->hash($filePath . ';' . $systemError->getLine() . ';' . $systemError->getMessage());
+            $errorsJson[] = ['fingerprint' => $fingerprint, 'type' => self::ERROR_TYPE_ISSUE, 'categories' => [self::ERROR_CATEGORY_BUG_RISK], 'severity' => self::ERROR_SEVERITY_BLOCKER, 'description' => $systemError->getMessage(), 'check_name' => $systemError->getRectorClass() ?? '', 'location' => ['path' => $filePath, 'lines' => ['begin' => $systemError->getLine() ?? 0]]];
         }
         return $errorsJson;
     }
