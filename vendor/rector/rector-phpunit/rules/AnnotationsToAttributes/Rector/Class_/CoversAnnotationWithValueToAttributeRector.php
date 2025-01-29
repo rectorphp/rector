@@ -58,6 +58,10 @@ final class CoversAnnotationWithValueToAttributeRector extends AbstractRector im
      * @var string
      */
     private const COVERTS_CLASS_ATTRIBUTE = 'PHPUnit\\Framework\\Attributes\\CoversClass';
+    /**
+     * @var string
+     */
+    private const COVERS_METHOD_ATTRIBUTE = 'PHPUnit\\Framework\\Attributes\\CoversMethod';
     public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpAttributeGroupFactory $phpAttributeGroupFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -143,12 +147,15 @@ CODE_SAMPLE
     {
         if (\strncmp($annotationValue, '::', \strlen('::')) === 0) {
             $attributeClass = self::COVERS_FUNCTION_ATTRIBUTE;
-            $attributeValue = \trim($annotationValue, ':()');
+            $attributeValue = [\trim($annotationValue, ':()')];
+        } elseif (\strpos($annotationValue, '::') !== \false) {
+            $attributeClass = self::COVERS_METHOD_ATTRIBUTE;
+            $attributeValue = [$this->getClass($annotationValue) . '::class', $this->getMethod($annotationValue)];
         } else {
             $attributeClass = self::COVERTS_CLASS_ATTRIBUTE;
-            $attributeValue = \trim($annotationValue) . '::class';
+            $attributeValue = [\trim($annotationValue) . '::class'];
         }
-        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, [$attributeValue]);
+        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, $attributeValue);
     }
     /**
      * @return array<string, AttributeGroup>
@@ -225,7 +232,6 @@ CODE_SAMPLE
             }
             $covers = $desiredTagValueNode->value->value;
             if (\strncmp($covers, '\\', \strlen('\\')) === 0) {
-                $covers = $this->getClass($covers);
                 $attributeGroups[$covers] = $this->createAttributeGroup($covers);
             } elseif (!$hasCoversDefault && \strncmp($covers, '::', \strlen('::')) === 0) {
                 $attributeGroups[$covers] = $this->createAttributeGroup($covers);
@@ -253,5 +259,9 @@ CODE_SAMPLE
     private function getClass(string $classWithMethod) : string
     {
         return Strings::replace($classWithMethod, '/::.*$/');
+    }
+    private function getMethod(string $classWithMethod) : string
+    {
+        return Strings::replace($classWithMethod, '/^.*::/');
     }
 }
