@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Cast\Array_ as CastArray_;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
