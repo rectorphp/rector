@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
@@ -114,11 +115,11 @@ CODE_SAMPLE
             }
             if (!$stmtExpr->var instanceof MethodCall && !$stmtExpr->var instanceof StaticCall) {
                 $nodeVar = $stmtExpr->var;
-                if ($nodeVar instanceof Node\Expr\PropertyFetch) {
+                if ($nodeVar instanceof PropertyFetch) {
                     do {
                         $previous = $nodeVar;
                         $nodeVar = $nodeVar->var;
-                    } while ($nodeVar instanceof Node\Expr\PropertyFetch);
+                    } while ($nodeVar instanceof PropertyFetch);
                     if ($this->getName($nodeVar) === 'this') {
                         $nodeVar = $previous;
                     }
