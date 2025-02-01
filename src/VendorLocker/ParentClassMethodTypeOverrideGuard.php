@@ -114,6 +114,12 @@ final class ParentClassMethodTypeOverrideGuard
             }
             return $interfaceReflection->getNativeMethod($methodName);
         }
+        foreach ($classReflection->getTraits() as $traitReflection) {
+            if (!$traitReflection->hasNativeMethod($methodName)) {
+                continue;
+            }
+            return $traitReflection->getNativeMethod($methodName);
+        }
         return null;
     }
     private function hasClassParent(ClassReflection $classReflection) : bool
