@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202501\OndraM\CiDetector\Ci;
+namespace RectorPrefix202502\OndraM\CiDetector\Ci;
 
-use RectorPrefix202501\OndraM\CiDetector\CiDetector;
-use RectorPrefix202501\OndraM\CiDetector\Env;
-use RectorPrefix202501\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202502\OndraM\CiDetector\CiDetector;
+use RectorPrefix202502\OndraM\CiDetector\Env;
+use RectorPrefix202502\OndraM\CiDetector\TrinaryLogic;
 class SourceHut extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

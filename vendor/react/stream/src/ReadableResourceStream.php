@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202501\React\Stream;
+namespace RectorPrefix202502\React\Stream;
 
-use RectorPrefix202501\Evenement\EventEmitter;
-use RectorPrefix202501\React\EventLoop\Loop;
-use RectorPrefix202501\React\EventLoop\LoopInterface;
+use RectorPrefix202502\Evenement\EventEmitter;
+use RectorPrefix202502\React\EventLoop\Loop;
+use RectorPrefix202502\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
 final class ReadableResourceStream extends EventEmitter implements ReadableStreamInterface
 {

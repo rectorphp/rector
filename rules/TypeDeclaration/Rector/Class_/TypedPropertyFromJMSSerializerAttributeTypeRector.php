@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
-use RectorPrefix202501\Nette\Utils\Strings;
+use RectorPrefix202502\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;

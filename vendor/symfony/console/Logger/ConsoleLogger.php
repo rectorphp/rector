@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202501\Symfony\Component\Console\Logger;
+namespace RectorPrefix202502\Symfony\Component\Console\Logger;
 
-use RectorPrefix202501\Psr\Log\AbstractLogger;
-use RectorPrefix202501\Psr\Log\InvalidArgumentException;
-use RectorPrefix202501\Psr\Log\LogLevel;
-use RectorPrefix202501\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202501\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202502\Psr\Log\AbstractLogger;
+use RectorPrefix202502\Psr\Log\InvalidArgumentException;
+use RectorPrefix202502\Psr\Log\LogLevel;
+use RectorPrefix202502\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202502\Symfony\Component\Console\Output\OutputInterface;
 /**
  * PSR-3 compliant console logger.
  *

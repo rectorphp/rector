@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202501\Illuminate\Contracts\Mail;
+namespace RectorPrefix202502\Illuminate\Contracts\Mail;
 
-use RectorPrefix202501\Illuminate\Contracts\Queue\Factory as Queue;
+use RectorPrefix202502\Illuminate\Contracts\Queue\Factory as Queue;
 interface Mailable
 {
     /**

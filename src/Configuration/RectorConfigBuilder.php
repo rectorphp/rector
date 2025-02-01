@@ -32,8 +32,8 @@ use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202501\Symfony\Component\Finder\Finder;
-use RectorPrefix202501\Webmozart\Assert\Assert;
+use RectorPrefix202502\Symfony\Component\Finder\Finder;
+use RectorPrefix202502\Webmozart\Assert\Assert;
 /**
  * @api
  */

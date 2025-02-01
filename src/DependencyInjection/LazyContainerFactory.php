@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202501\Doctrine\Inflector\Inflector;
-use RectorPrefix202501\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202501\Illuminate\Container\Container;
+use RectorPrefix202502\Doctrine\Inflector\Inflector;
+use RectorPrefix202502\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202502\Illuminate\Container\Container;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -97,7 +97,6 @@ use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefVariableNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ContextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\GlobalVariableNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\NameNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ReprintNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\StaticVariableNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\StmtKeyNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
@@ -179,10 +178,10 @@ use Rector\StaticTypeMapper\PhpParser\NameNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
-use RectorPrefix202501\Symfony\Component\Console\Application;
-use RectorPrefix202501\Symfony\Component\Console\Command\Command;
-use RectorPrefix202501\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202501\Webmozart\Assert\Assert;
+use RectorPrefix202502\Symfony\Component\Console\Application;
+use RectorPrefix202502\Symfony\Component\Console\Command\Command;
+use RectorPrefix202502\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202502\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**
@@ -200,7 +199,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<ScopeResolverNodeVisitorInterface>>
      */
-    private const SCOPE_RESOLVER_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, StmtKeyNodeVisitor::class, ReprintNodeVisitor::class];
+    private const SCOPE_RESOLVER_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, StmtKeyNodeVisitor::class];
     /**
      * @var array<class-string<PhpDocTypeMapperInterface>>
      */

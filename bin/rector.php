@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202501;
+namespace RectorPrefix202502;
 
-use RectorPrefix202501\Nette\Utils\Json;
+use RectorPrefix202502\Nette\Utils\Json;
 use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Configuration\Option;
@@ -11,9 +11,9 @@ use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\DependencyInjection\LazyContainerFactory;
 use Rector\DependencyInjection\RectorContainerFactory;
 use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202501\Symfony\Component\Console\Application;
-use RectorPrefix202501\Symfony\Component\Console\Command\Command;
-use RectorPrefix202501\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202502\Symfony\Component\Console\Application;
+use RectorPrefix202502\Symfony\Component\Console\Command\Command;
+use RectorPrefix202502\Symfony\Component\Console\Input\ArgvInput;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
@@ -93,7 +93,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias('RectorPrefix202501\\AutoloadIncluder', 'AutoloadIncluder', \false);
+\class_alias('RectorPrefix202502\\AutoloadIncluder', 'AutoloadIncluder', \false);
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }

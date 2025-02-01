@@ -1,5 +1,5 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix202501;
+namespace RectorPrefix202502;
 
 require_once __DIR__ . '/rector.php';

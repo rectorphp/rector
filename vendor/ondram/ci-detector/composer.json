@@ -52,12 +52,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202501\\OndraM\\CiDetector\\": "src\/"
+            "RectorPrefix202502\\OndraM\\CiDetector\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202501\\OndraM\\CiDetector\\Ci\\": "tests\/"
+            "RectorPrefix202502\\OndraM\\CiDetector\\Ci\\": "tests\/"
         }
     },
     "config": {

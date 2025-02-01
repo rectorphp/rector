@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202501\Illuminate\Contracts\Console;
+namespace RectorPrefix202502\Illuminate\Contracts\Console;
 
 interface PromptsForMissingInput
 {

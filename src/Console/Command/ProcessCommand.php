@@ -22,11 +22,11 @@ use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202501\Symfony\Component\Console\Application;
-use RectorPrefix202501\Symfony\Component\Console\Command\Command;
-use RectorPrefix202501\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202501\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202501\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202502\Symfony\Component\Console\Application;
+use RectorPrefix202502\Symfony\Component\Console\Command\Command;
+use RectorPrefix202502\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202502\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202502\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends Command
 {
     /**

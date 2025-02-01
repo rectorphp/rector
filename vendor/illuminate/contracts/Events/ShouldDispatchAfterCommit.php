@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202501\Illuminate\Contracts\Events;
+namespace RectorPrefix202502\Illuminate\Contracts\Events;
 
 interface ShouldDispatchAfterCommit
 {

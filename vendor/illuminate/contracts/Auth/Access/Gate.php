@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202501\Illuminate\Contracts\Auth\Access;
+namespace RectorPrefix202502\Illuminate\Contracts\Auth\Access;
 
 interface Gate
 {
