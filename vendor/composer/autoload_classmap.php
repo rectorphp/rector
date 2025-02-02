@@ -1852,6 +1852,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\SpecificAssertInternalTypeRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/SpecificAssertInternalTypeRector.php',
     'Rector\\PHPUnit\\PHPUnit90\\Rector\\Class_\\TestListenerToHooksRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit90/Rector/Class_/TestListenerToHooksRector.php',
     'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
+    'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\ReplaceAtMethodWithDesiredMatcherRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/ReplaceAtMethodWithDesiredMatcherRector.php',
     'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\SpecificAssertContainsWithoutIdentityRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php',
     'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
     'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',

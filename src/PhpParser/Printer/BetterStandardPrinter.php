@@ -131,24 +131,6 @@ final class BetterStandardPrinter extends Standard
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
     }
-    private function wrapBinaryOp(Node $node) : void
-    {
-        if ($this->exprAnalyzer->isExprWithExprPropertyWrappable($node)) {
-            $node->expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
-        if (!$node instanceof BinaryOp) {
-            return;
-        }
-        if ($node->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
-            return;
-        }
-        if ($node->left instanceof BinaryOp && $node->left->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
-            $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
-        if ($node->right instanceof BinaryOp && $node->right->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
-            $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
-    }
     protected function pAttributeGroup(AttributeGroup $attributeGroup) : string
     {
         $ret = parent::pAttributeGroup($attributeGroup);
@@ -357,6 +339,24 @@ final class BetterStandardPrinter extends Standard
     {
         $this->wrapAssign($instanceof->expr, $instanceof->class);
         return parent::pExpr_Instanceof($instanceof, $precedence, $lhsPrecedence);
+    }
+    private function wrapBinaryOp(Node $node) : void
+    {
+        if ($this->exprAnalyzer->isExprWithExprPropertyWrappable($node)) {
+            $node->expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+        if (!$node instanceof BinaryOp) {
+            return;
+        }
+        if ($node->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
+            return;
+        }
+        if ($node->left instanceof BinaryOp && $node->left->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
+            $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+        if ($node->right instanceof BinaryOp && $node->right->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
+            $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
     }
     /**
      * ensure left side is assign and right side is just created

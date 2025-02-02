@@ -2071,6 +2071,7 @@ class ComposerStaticInit3327108c61eea19d09115fa0e353e8ec
         'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\SpecificAssertInternalTypeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/SpecificAssertInternalTypeRector.php',
         'Rector\\PHPUnit\\PHPUnit90\\Rector\\Class_\\TestListenerToHooksRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit90/Rector/Class_/TestListenerToHooksRector.php',
         'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
+        'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\ReplaceAtMethodWithDesiredMatcherRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/ReplaceAtMethodWithDesiredMatcherRector.php',
         'Rector\\PHPUnit\\PHPUnit90\\Rector\\MethodCall\\SpecificAssertContainsWithoutIdentityRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit90/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php',
         'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
