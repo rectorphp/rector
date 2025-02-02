@@ -309,19 +309,19 @@ final class BetterStandardPrinter extends Standard
     }
     protected function pExpr_MethodCall(MethodCall $methodCall) : string
     {
+        if (!$methodCall->var instanceof CallLike) {
+            return parent::pExpr_MethodCall($methodCall);
+        }
         if (SimpleParameterProvider::provideBoolParameter(Option::NEW_LINE_ON_FLUENT_CALL) === \false) {
             return parent::pExpr_MethodCall($methodCall);
         }
-        if ($methodCall->var instanceof CallLike) {
-            foreach ($methodCall->args as $arg) {
-                if (!$arg instanceof Arg) {
-                    continue;
-                }
-                $arg->value->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        foreach ($methodCall->args as $arg) {
+            if (!$arg instanceof Arg) {
+                continue;
             }
-            return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . '->' . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
+            $arg->value->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
-        return parent::pExpr_MethodCall($methodCall);
+        return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . '->' . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
     }
     /**
      * Keep attributes on newlines
