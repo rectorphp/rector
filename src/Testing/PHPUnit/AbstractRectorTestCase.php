@@ -102,10 +102,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
     }
-    protected function isWindows() : bool
-    {
-        return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;
-    }
     protected function doTestFile(string $fixtureFilePath) : void
     {
         // prepare input file contents and expected file output contents
