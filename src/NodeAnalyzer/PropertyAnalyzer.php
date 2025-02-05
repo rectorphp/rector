@@ -39,7 +39,7 @@ final class PropertyAnalyzer
         }
         return \false;
     }
-    private function isForbiddenType(Type $type) : bool
+    public function isForbiddenType(Type $type) : bool
     {
         if ($type instanceof NonExistingObjectType) {
             return \true;

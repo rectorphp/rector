@@ -65,13 +65,14 @@ final class ClosureTypeMapper implements TypeMapperInterface
         if ($typeKind === TypeKind::PROPERTY && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return new FullyQualified('Closure');
         }
-        if ($typeKind !== TypeKind::RETURN) {
-            return null;
-        }
         // ref https://3v4l.org/nUreN#v7.0.0
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ANONYMOUS_FUNCTION_RETURN_TYPE)) {
-            return null;
+        if ($typeKind === TypeKind::RETURN && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ANONYMOUS_FUNCTION_RETURN_TYPE)) {
+            return new FullyQualified('Closure');
         }
-        return new FullyQualified('Closure');
+        // ref https://3v4l.org/ruh5g#v8.0.0
+        if ($typeKind === TypeKind::UNION && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            return new FullyQualified('Closure');
+        }
+        return null;
     }
 }
