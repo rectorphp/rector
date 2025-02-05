@@ -24,6 +24,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -126,6 +127,14 @@ CODE_SAMPLE
     }
     private function shouldSkip(Expr $expr) : bool
     {
+        $type = $this->getType($expr);
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if ($unionedType instanceof MixedType) {
+                    return \true;
+                }
+            }
+        }
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
             return $this->exprAnalyzer->isNonTypedFromParam($expr);
         }
