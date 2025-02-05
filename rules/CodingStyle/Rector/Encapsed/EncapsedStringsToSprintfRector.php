@@ -97,7 +97,18 @@ CODE_SAMPLE
     }
     private function shouldSkip(InterpolatedString $interpolatedString) : bool
     {
-        return $interpolatedString->hasAttribute(AttributeKey::DOC_LABEL);
+        if ($interpolatedString->hasAttribute(AttributeKey::DOC_LABEL)) {
+            return \true;
+        }
+        foreach ($interpolatedString->parts as $part) {
+            if (!$part instanceof InterpolatedStringPart) {
+                continue;
+            }
+            if ($this->containsASCIIChar($part->value)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function collectEncapsedStringPart(InterpolatedStringPart $interpolatedStringPart) : void
     {
@@ -185,5 +196,9 @@ CODE_SAMPLE
     {
         $kind = \strpos($value, "'") !== \false ? String_::KIND_DOUBLE_QUOTED : String_::KIND_SINGLE_QUOTED;
         return new String_($value, ['kind' => $kind]);
+    }
+    private function containsASCIIChar(string $content) : bool
+    {
+        return (bool) Strings::match($content, '#[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]#');
     }
 }
