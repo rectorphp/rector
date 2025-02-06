@@ -104,7 +104,7 @@ CODE_SAMPLE
             if (!$part instanceof InterpolatedStringPart) {
                 continue;
             }
-            if ($this->containsASCIIChar($part->value)) {
+            if ($this->containsControlASCIIChar($part->value)) {
                 return \true;
             }
         }
@@ -197,7 +197,7 @@ CODE_SAMPLE
         $kind = \strpos($value, "'") !== \false ? String_::KIND_DOUBLE_QUOTED : String_::KIND_SINGLE_QUOTED;
         return new String_($value, ['kind' => $kind]);
     }
-    private function containsASCIIChar(string $content) : bool
+    private function containsControlASCIIChar(string $content) : bool
     {
         return (bool) Strings::match($content, '#[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]#');
     }
