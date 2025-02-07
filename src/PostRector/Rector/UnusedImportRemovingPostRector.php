@@ -169,6 +169,9 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         }
         // match partial import
         foreach ($names as $name) {
+            if (\strncmp($name, '\\', \strlen('\\')) === 0) {
+                continue;
+            }
             if ($this->isSubNamespace($name, $comparedName, $namespacedPrefix)) {
                 return \true;
             }
