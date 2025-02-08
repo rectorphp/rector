@@ -11,6 +11,42 @@ if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionUnionType', false)) {
     }
 }
 
+if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionAttribute', false)) {
+	class ReflectionAttribute
+	{
+
+		public const IS_INSTANCEOF = 2;
+
+		public function getName(): string
+		{
+		}
+
+		public function getTarget(): int
+		{
+		}
+
+		public function isRepeated(): bool
+		{
+		}
+
+		public function getArguments(): array
+		{
+		}
+
+		public function newInstance(): object
+		{
+		}
+
+		private function __clone()
+		{
+		}
+
+		private function __construct()
+		{
+		}
+	}
+}
+
 if (PHP_VERSION_ID < 80000 && ! class_exists('Attribute', false)) {
     #[Attribute(Attribute::TARGET_CLASS)]
     class Attribute
@@ -77,4 +113,17 @@ if (PHP_VERSION_ID < 80100 && ! class_exists('ReturnTypeWillChange', false)) {
     final class ReturnTypeWillChange
     {
     }
+}
+
+if (PHP_VERSION_ID < 80100 && ! class_exists('ReflectionIntersectionType', false)) {
+	class ReflectionIntersectionType extends ReflectionType
+	{
+
+		/** @return ReflectionType[] */
+		public function getTypes()
+		{
+			return [];
+		}
+
+	}
 }
