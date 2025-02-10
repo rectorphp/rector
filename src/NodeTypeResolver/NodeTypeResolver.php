@@ -356,9 +356,9 @@ final class NodeTypeResolver
             }
         }
         if ($hasChanged) {
-            return $this->accessoryNonEmptyStringTypeCorrector->correct(new UnionType($types));
+            return new UnionType($types);
         }
-        return $this->accessoryNonEmptyStringTypeCorrector->correct($unionType);
+        return $unionType;
     }
     private function isMatchObjectWithoutClassType(ObjectWithoutClassType $objectWithoutClassType, ObjectType $requiredObjectType) : bool
     {
