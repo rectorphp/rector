@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Param;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Type\ClosureType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -146,6 +147,15 @@ CODE_SAMPLE
         }, []);
         if (\count($types) === 1) {
             return $types[0];
+        }
+        foreach ($types as $type) {
+            if ($type instanceof UnionType) {
+                foreach ($type->getTypes() as $unionedType) {
+                    if ($unionedType instanceof IntersectionType) {
+                        return null;
+                    }
+                }
+            }
         }
         return new UnionType(UnionTypeHelper::sortTypes($types));
     }
