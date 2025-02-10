@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PHPStan\Type\UnionType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -59,6 +60,9 @@ CODE_SAMPLE
             return null;
         }
         $type = $this->getType($node->getArgs()[0]->value);
+        if ($type instanceof UnionType) {
+            return null;
+        }
         $value = $type->getConstantScalarValues()[0] ?? null;
         if ($value === 0) {
             $args = $node->getArgs();
