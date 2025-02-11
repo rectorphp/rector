@@ -7,6 +7,15 @@ use RectorPrefix202502\Psr\Container\ContainerInterface;
 interface Container extends ContainerInterface
 {
     /**
+     * {@inheritdoc}
+     *
+     * @template TClass of object
+     *
+     * @param  string|class-string<TClass>  $id
+     * @return ($id is class-string<TClass> ? TClass : mixed)
+     */
+    public function get(string $id);
+    /**
      * Determine if the given abstract type has been bound.
      *
      * @param  string  $abstract
@@ -109,9 +118,11 @@ interface Container extends ContainerInterface
     /**
      * Register an existing instance as shared in the container.
      *
+     * @template TInstance of mixed
+     *
      * @param  string  $abstract
-     * @param  mixed  $instance
-     * @return mixed
+     * @param  TInstance  $instance
+     * @return TInstance
      */
     public function instance($abstract, $instance);
     /**
@@ -133,8 +144,10 @@ interface Container extends ContainerInterface
     /**
      * Get a closure to resolve the given type from the container.
      *
-     * @param  string  $abstract
-     * @return \Closure
+     * @template TClass of object
+     *
+     * @param  string|class-string<TClass>  $abstract
+     * @return ($abstract is class-string<TClass> ? \Closure(): TClass : \Closure(): mixed)
      */
     public function factory($abstract);
     /**
@@ -146,9 +159,11 @@ interface Container extends ContainerInterface
     /**
      * Resolve the given type from the container.
      *
-     * @param  string  $abstract
+     * @template TClass of object
+     *
+     * @param  string|class-string<TClass>  $abstract
      * @param  array  $parameters
-     * @return mixed
+     * @return ($abstract is class-string<TClass> ? TClass : mixed)
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
