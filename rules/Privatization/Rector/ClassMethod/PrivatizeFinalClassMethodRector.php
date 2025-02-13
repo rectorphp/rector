@@ -117,6 +117,9 @@ CODE_SAMPLE
         if (!$classMethod->isProtected()) {
             return \true;
         }
+        if ($classMethod->isMagic()) {
+            return \true;
+        }
         // if has parent call, its probably overriding parent one → skip it
         $hasParentCall = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
             if (!$node instanceof StaticCall) {

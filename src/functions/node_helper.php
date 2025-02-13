@@ -29,12 +29,12 @@ if (!\function_exists('dump_node')) {
      */
     function dump_node($node) : void
     {
-        $symfonyStyle = Container::getInstance()->make(SymfonyStyleFactory::class)->create();
+        $rectorStyle = Container::getInstance()->make(SymfonyStyleFactory::class)->create();
         // we turn up the verbosity so it's visible in tests overriding the
         // default which is to be quite during tests
-        $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-        $symfonyStyle->newLine();
-        $nodePrinter = new NodePrinter($symfonyStyle);
+        $rectorStyle->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+        $rectorStyle->newLine();
+        $nodePrinter = new NodePrinter($rectorStyle);
         $nodePrinter->printNodes($node);
     }
 }
