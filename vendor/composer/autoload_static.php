@@ -2818,6 +2818,7 @@ class ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23
         'Rector\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
         'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
         'Rector\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
+        'Rector\\ValueObject\\Configuration\\LevelOverflow' => __DIR__ . '/../..' . '/src/ValueObject/Configuration/LevelOverflow.php',
         'Rector\\ValueObject\\Error\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Error/SystemError.php',
         'Rector\\ValueObject\\FileProcessResult' => __DIR__ . '/../..' . '/src/ValueObject/FileProcessResult.php',
         'Rector\\ValueObject\\FuncCallAndExpr' => __DIR__ . '/../..' . '/src/ValueObject/FuncCallAndExpr.php',

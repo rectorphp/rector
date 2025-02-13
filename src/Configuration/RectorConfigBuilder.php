@@ -31,6 +31,7 @@ use Rector\Symfony\Set\FOSRestSetList;
 use Rector\Symfony\Set\JMSSetList;
 use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use RectorPrefix202502\Symfony\Component\Finder\Finder;
 use RectorPrefix202502\Webmozart\Assert\Assert;
@@ -39,6 +40,10 @@ use RectorPrefix202502\Webmozart\Assert\Assert;
  */
 final class RectorConfigBuilder
 {
+    /**
+     * @var int
+     */
+    private const MAX_LEVEL_GAP = 10;
     /**
      * @var string[]
      */
@@ -128,6 +133,10 @@ final class RectorConfigBuilder
      * @var array<class-string<SetProviderInterface>,bool>
      */
     private array $setProviders = [];
+    /**
+     * @var LevelOverflow[]
+     */
+    private array $levelOverflows = [];
     public function __invoke(RectorConfig $rectorConfig) : void
     {
         if ($this->setGroups !== [] || $this->setProviders !== []) {
@@ -246,6 +255,9 @@ final class RectorConfigBuilder
         }
         if ($this->editorUrl !== null) {
             $rectorConfig->editorUrl($this->editorUrl);
+        }
+        if ($this->levelOverflows !== []) {
+            $rectorConfig->setOverflowLevels($this->levelOverflows);
         }
     }
     /**
@@ -623,19 +635,7 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @experimental since 0.19.7 Raise your dead-code coverage from the safest rules
-     * to more affecting ones, one level at a time
-     */
-    public function withDeadCodeLevel(int $level) : self
-    {
-        Assert::natural($level);
-        $this->isDeadCodeLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, DeadCodeLevel::RULES, __METHOD__);
-        $this->rules = \array_merge($this->rules, $levelRules);
-        return $this;
-    }
-    /**
-     * @experimental since 0.19.7 Raise your type coverage from the safest type rules
+     * Raise your type coverage from the safest type rules
      * to more affecting ones, one level at a time
      */
     public function withTypeCoverageLevel(int $level) : self
@@ -643,11 +643,33 @@ final class RectorConfigBuilder
         Assert::natural($level);
         $this->isTypeCoverageLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, __METHOD__);
+        // too high
+        $levelRulesCount = \count($levelRules);
+        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
+            $this->levelOverflows[] = new LevelOverflow('withTypeCoverageLevel', $level, $levelRulesCount, 'typeCoverage', 'TYPE_DECLARATION');
+        }
         $this->rules = \array_merge($this->rules, $levelRules);
         return $this;
     }
     /**
-     * @experimental Since 1.2.5 Raise your PHP level from, one level at a time
+     * Raise your dead-code coverage from the safest rules
+     * to more affecting ones, one level at a time
+     */
+    public function withDeadCodeLevel(int $level) : self
+    {
+        Assert::natural($level);
+        $this->isDeadCodeLevelUsed = \true;
+        $levelRules = LevelRulesResolver::resolve($level, DeadCodeLevel::RULES, __METHOD__);
+        // too high
+        $levelRulesCount = \count($levelRules);
+        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
+            $this->levelOverflows[] = new LevelOverflow('withDeadCodeLevel', $level, $levelRulesCount, 'deadCode', 'DEAD_CODE');
+        }
+        $this->rules = \array_merge($this->rules, $levelRules);
+        return $this;
+    }
+    /**
+     * Raise your PHP level from, one level at a time
      */
     public function withPhpLevel(int $level) : self
     {
@@ -674,7 +696,7 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @experimental Raise your code quality from the safest rules
+     * Raise your code quality from the safest rules
      * to more affecting ones, one level at a time
      */
     public function withCodeQualityLevel(int $level) : self
@@ -682,6 +704,11 @@ final class RectorConfigBuilder
         Assert::natural($level);
         $this->isCodeQualityLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, CodeQualityLevel::RULES, __METHOD__);
+        // too high
+        $levelRulesCount = \count($levelRules);
+        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
+            $this->levelOverflows[] = new LevelOverflow('withCodeQualityLevel', $level, $levelRulesCount, 'codeQuality', 'CODE_QUALITY');
+        }
         $this->rules = \array_merge($this->rules, $levelRules);
         foreach (CodeQualityLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
             $this->rulesWithConfigurations[$rectorClass][] = $configuration;
@@ -689,7 +716,7 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @experimental Raise your coding style from the safest rules
+     * Raise your coding style from the safest rules
      * to more affecting ones, one level at a time
      */
     public function withCodingStyleLevel(int $level) : self
@@ -697,6 +724,11 @@ final class RectorConfigBuilder
         Assert::natural($level);
         $this->isCodingStyleLevelUsed = \true;
         $levelRules = LevelRulesResolver::resolve($level, CodingStyleLevel::RULES, __METHOD__);
+        // too high
+        $levelRulesCount = \count($levelRules);
+        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
+            $this->levelOverflows[] = new LevelOverflow('withCodingStyleLevel', $level, $levelRulesCount, 'codingStyle', 'CODING_STYLE');
+        }
         $this->rules = \array_merge($this->rules, $levelRules);
         foreach (CodingStyleLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
             $this->rulesWithConfigurations[$rectorClass][] = $configuration;

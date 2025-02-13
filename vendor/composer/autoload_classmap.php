@@ -2599,6 +2599,7 @@ return array(
     'Rector\\ValueObject\\Bootstrap\\BootstrapConfigs' => $baseDir . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
     'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => $vendorDir . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
     'Rector\\ValueObject\\Configuration' => $baseDir . '/src/ValueObject/Configuration.php',
+    'Rector\\ValueObject\\Configuration\\LevelOverflow' => $baseDir . '/src/ValueObject/Configuration/LevelOverflow.php',
     'Rector\\ValueObject\\Error\\SystemError' => $baseDir . '/src/ValueObject/Error/SystemError.php',
     'Rector\\ValueObject\\FileProcessResult' => $baseDir . '/src/ValueObject/FileProcessResult.php',
     'Rector\\ValueObject\\FuncCallAndExpr' => $baseDir . '/src/ValueObject/FuncCallAndExpr.php',

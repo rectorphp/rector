@@ -135,6 +135,11 @@ EOF
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
         $paths = $configuration->getPaths();
+        // 0. warn about too high levels
+        foreach ($configuration->getLevelOverflows() as $levelOverflow) {
+            $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? \sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : \sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
+            $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), \PHP_EOL, $suggestedSetMethod));
+        }
         // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
         if ($this->dynamicSourceLocatorDecorator->isPathsEmpty()) {

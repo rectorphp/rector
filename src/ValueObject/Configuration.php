@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\ValueObject;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\ValueObject\Configuration\LevelOverflow;
 use RectorPrefix202502\Webmozart\Assert\Assert;
 final class Configuration
 {
@@ -73,10 +74,16 @@ final class Configuration
      */
     private ?string $onlySuffix = null;
     /**
+     * @var LevelOverflow[]
+     * @readonly
+     */
+    private array $levelOverflows = [];
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
+     * @param LevelOverflow[] $levelOverflows
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [])
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -93,6 +100,7 @@ final class Configuration
         $this->reportingWithRealPath = $reportingWithRealPath;
         $this->onlyRule = $onlyRule;
         $this->onlySuffix = $onlySuffix;
+        $this->levelOverflows = $levelOverflows;
     }
     public function isDryRun() : bool
     {
@@ -160,5 +168,12 @@ final class Configuration
     public function getOnlySuffix() : ?string
     {
         return $this->onlySuffix;
+    }
+    /**
+     * @return LevelOverflow[]
+     */
+    public function getLevelOverflows() : array
+    {
+        return $this->levelOverflows;
     }
 }
