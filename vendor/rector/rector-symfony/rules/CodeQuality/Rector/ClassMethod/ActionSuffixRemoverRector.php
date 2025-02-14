@@ -62,13 +62,16 @@ CODE_SAMPLE
         if ($node->name->toString() === 'getAction') {
             return null;
         }
-        $this->removeSuffix($node, 'Action');
-        return $node;
+        return $this->removeSuffix($node, 'Action');
     }
-    private function removeSuffix(ClassMethod $classMethod, string $suffixToRemove) : void
+    private function removeSuffix(ClassMethod $classMethod, string $suffixToRemove) : ?ClassMethod
     {
         $name = $this->nodeNameResolver->getName($classMethod);
         $newName = Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
+        if ($newName === $name) {
+            return null;
+        }
         $classMethod->name = new Identifier($newName);
+        return $classMethod;
     }
 }

@@ -152,6 +152,16 @@ class TokenIterator
         $this->skipIrrelevantTokens();
         return \true;
     }
+    /** @phpstan-impure */
+    public function skipNewLineTokens() : void
+    {
+        if (!$this->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            return;
+        }
+        do {
+            $foundNewLine = $this->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+        } while ($foundNewLine === \true);
+    }
     private function detectNewline() : void
     {
         $value = $this->currentTokenValue();
