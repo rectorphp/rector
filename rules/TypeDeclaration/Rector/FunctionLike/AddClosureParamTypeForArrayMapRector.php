@@ -142,10 +142,7 @@ CODE_SAMPLE
     {
         // already set → no change
         if ($param->type instanceof Node) {
-            $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-            if ($this->typeComparator->areTypesEqual($currentParamType, $type)) {
-                return \false;
-            }
+            return \false;
         }
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         if (!$paramTypeNode instanceof Node) {
