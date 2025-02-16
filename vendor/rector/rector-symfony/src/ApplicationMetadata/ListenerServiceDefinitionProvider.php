@@ -47,13 +47,11 @@ final class ListenerServiceDefinitionProvider
                     continue;
                 }
                 $eventName = $tag->getEvent();
-                if ($tag->getMethod() === '') {
-                    // fill method based on the event
-                    if (\strncmp($tag->getEvent(), 'kernel.', \strlen('kernel.')) === 0) {
-                        [, $event] = \explode('.', $tag->getEvent());
-                        $methodName = 'onKernel' . \ucfirst($event);
-                        $tag->changeMethod($methodName);
-                    }
+                // fill method based on the event
+                if ($tag->getMethod() === '' && \strncmp($tag->getEvent(), 'kernel.', \strlen('kernel.')) === 0) {
+                    [, $event] = \explode('.', $tag->getEvent());
+                    $methodName = 'onKernel' . \ucfirst($event);
+                    $tag->changeMethod($methodName);
                 }
                 $this->listenerClassesToEvents[$eventListener->getClass()][$eventName][] = $eventListener;
             }
