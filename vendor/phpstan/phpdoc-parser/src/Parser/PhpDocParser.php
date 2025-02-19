@@ -79,7 +79,15 @@ class PhpDocParser
             }
             $tag = new Ast\PhpDoc\PhpDocTagNode($name, $this->enrichWithAttributes($tokens, new Ast\PhpDoc\InvalidTagValueNode($e->getMessage(), $e), $startLine, $startIndex));
             $tokens->forwardToTheEnd();
+            $comments = $tokens->flushComments();
+            if ($comments !== []) {
+                throw new LogicException('Comments should already be flushed');
+            }
             return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocNode([$this->enrichWithAttributes($tokens, $tag, $startLine, $startIndex)]), 1, 0);
+        }
+        $comments = $tokens->flushComments();
+        if ($comments !== []) {
+            throw new LogicException('Comments should already be flushed');
         }
         return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocNode($children), 1, 0);
     }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23
+class ComposerStaticInit30bd5d3b9b1d532a1d3e11eb20f91e28
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -228,6 +228,7 @@ class ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',
         'PHPStan\\PhpDocParser\\Ast\\Attribute' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Attribute.php',
+        'PHPStan\\PhpDocParser\\Ast\\Comment' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Comment.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -2864,9 +2865,9 @@ class ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita9ca9624b9ec3b7183135fb9d7d95d23::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit30bd5d3b9b1d532a1d3e11eb20f91e28::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit30bd5d3b9b1d532a1d3e11eb20f91e28::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit30bd5d3b9b1d532a1d3e11eb20f91e28::$classMap;
 
         }, null, ClassLoader::class);
     }

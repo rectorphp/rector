@@ -11,8 +11,6 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Application\ChangedNodeScopeRefresher;
@@ -267,9 +265,6 @@ final class LazyContainerFactory
         $rectorConfig->when(OnlyRuleResolver::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
-        // phpdoc-parser
-        $rectorConfig->when(TypeParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
-        $rectorConfig->when(ConstExprParser::class)->needs('$usedAttributes')->give(['lines' => \true, 'indexes' => \true]);
         $rectorConfig->when(RectorNodeTraverser::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ClassNameImportSkipper::class)->needs('$classNameImportSkipVoters')->giveTagged(ClassNameImportSkipVoterInterface::class);
@@ -357,7 +352,8 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::SCOPE_RESOLVER_NODE_VISITOR_CLASSES, ScopeResolverNodeVisitorInterface::class);
         $this->createPHPStanServices($rectorConfig);
         $rectorConfig->when(PhpDocNodeMapper::class)->needs('$phpDocNodeVisitors')->giveTagged(BasePhpDocNodeVisitorInterface::class);
-        $rectorConfig->singleton(ParserConfig::class, static fn(Container $container): ParserConfig => new ParserConfig(['lines' => \true, 'indexes' => \true]));
+        // phpdoc-parser
+        $rectorConfig->singleton(ParserConfig::class, static fn(Container $container): ParserConfig => new ParserConfig(['lines' => \true, 'indexes' => \true, 'comments' => \true]));
         return $rectorConfig;
     }
     /**

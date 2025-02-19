@@ -264,6 +264,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/compatibility_tok
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Node.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/NodeVisitor.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Lexer/Lexer.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Comment.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagValueNode.php';
