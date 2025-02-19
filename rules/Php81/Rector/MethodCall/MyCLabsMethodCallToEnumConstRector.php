@@ -89,6 +89,9 @@ CODE_SAMPLE
     }
     private function isEnumConstant(string $className, string $constant) : bool
     {
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
         $classReflection = $this->reflectionProvider->getClass($className);
         return $classReflection->hasConstant($constant);
     }
