@@ -57,6 +57,10 @@ CODE_SAMPLE
         $node->if = null;
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::ELVIS_OPERATOR;
+    }
     private function isParenthesized(Expr $ifExpr, Expr $elseExpr) : bool
     {
         $tokens = $this->file->getOldTokens();
@@ -75,9 +79,5 @@ CODE_SAMPLE
             }
         }
         return \false;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::ELVIS_OPERATOR;
     }
 }

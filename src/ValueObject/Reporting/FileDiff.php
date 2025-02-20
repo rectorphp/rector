@@ -30,9 +30,10 @@ final class FileDiff implements SerializableInterface
     private array $rectorsWithLineChanges = [];
     /**
      * @var string
-     * @se https://regex101.com/r/AUPIX4/1
+     * @see https://en.wikipedia.org/wiki/Diff#Unified_format
+     * @see https://regex101.com/r/AUPIX4/1
      */
-    private const FIRST_LINE_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\\d+)(.*?)@@#';
+    private const DIFF_HUNK_HEADER_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\\d+)(.*?)@@#';
     /**
      * @var string
      */
@@ -95,12 +96,12 @@ final class FileDiff implements SerializableInterface
     }
     public function getFirstLineNumber() : ?int
     {
-        $match = Strings::match($this->diff, self::FIRST_LINE_REGEX);
+        $match = Strings::match($this->diff, self::DIFF_HUNK_HEADER_REGEX);
         // probably some error in diff
         if (!isset($match[self::FIRST_LINE_KEY])) {
             return null;
         }
-        return (int) $match[self::FIRST_LINE_KEY] - 1;
+        return (int) $match[self::FIRST_LINE_KEY];
     }
     /**
      * @return array{relative_file_path: string, diff: string, diff_console_formatted: string, rectors_with_line_changes: RectorWithLineChange[]}
