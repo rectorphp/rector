@@ -55,7 +55,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     }
     protected function setUp() : void
     {
-        $this->includePreloadFilesAndScoperAutoload();
+        parent::setUp();
         $configFile = $this->provideConfigFilePath();
         // cleanup all registered rectors, so you can use only the new ones
         $rectorConfig = self::getContainer();
@@ -142,20 +142,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             }
             return $afterResolvingCallbacks;
         });
-    }
-    private function includePreloadFilesAndScoperAutoload() : void
-    {
-        if (\file_exists(__DIR__ . '/../../../preload.php')) {
-            if (\file_exists(__DIR__ . '/../../../vendor')) {
-                require_once __DIR__ . '/../../../preload.php';
-                // test case in rector split package
-            } elseif (\file_exists(__DIR__ . '/../../../../../../vendor')) {
-                require_once __DIR__ . '/../../../preload-split-package.php';
-            }
-        }
-        if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
-            require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
-        }
     }
     private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
     {
