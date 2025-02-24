@@ -1098,6 +1098,7 @@ return array(
     'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => $baseDir . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
     'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => $baseDir . '/src/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
     'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
+    'Rector\\ChangesReporting\\Output\\GitHubOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/GitHubOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\GitlabOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/GitlabOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/JsonOutputFormatter.php',
     'Rector\\ChangesReporting\\ValueObjectFactory\\ErrorFactory' => $baseDir . '/src/ChangesReporting/ValueObjectFactory/ErrorFactory.php',
