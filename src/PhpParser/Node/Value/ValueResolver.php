@@ -14,6 +14,8 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\MagicConst\Class_;
+use PhpParser\Node\Scalar\MagicConst\Dir;
+use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -21,6 +23,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Type;
+use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Enum\ObjectReference;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ConstFetchAnalyzer;
@@ -61,8 +64,12 @@ final class ValueResolver
      * @readonly
      */
     private ClassReflectionAnalyzer $classReflectionAnalyzer;
+    /**
+     * @readonly
+     */
+    private CurrentFileProvider $currentFileProvider;
     private ?ConstExprEvaluator $constExprEvaluator = null;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ClassReflectionAnalyzer $classReflectionAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ClassReflectionAnalyzer $classReflectionAnalyzer, CurrentFileProvider $currentFileProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -70,6 +77,7 @@ final class ValueResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
         $this->classReflectionAnalyzer = $classReflectionAnalyzer;
+        $this->currentFileProvider = $currentFileProvider;
     }
     /**
      * @param mixed $value
@@ -189,6 +197,14 @@ final class ValueResolver
             return $this->constExprEvaluator;
         }
         $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
+            if ($expr instanceof Dir) {
+                // __DIR__
+                return $this->resolveDirConstant();
+            }
+            if ($expr instanceof File) {
+                // __FILE__
+                return $this->resolveFileConstant($expr);
+            }
             // resolve "SomeClass::SOME_CONST"
             if ($expr instanceof ClassConstFetch && $expr->class instanceof Name) {
                 return $this->resolveClassConstFetch($expr);
@@ -196,6 +212,22 @@ final class ValueResolver
             throw new ConstExprEvaluationException(\sprintf('Expression of type "%s" cannot be evaluated', $expr->getType()));
         });
         return $this->constExprEvaluator;
+    }
+    private function resolveDirConstant() : string
+    {
+        $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof \Rector\ValueObject\Application\File) {
+            throw new ShouldNotHappenException();
+        }
+        return \dirname($file->getFilePath());
+    }
+    private function resolveFileConstant(File $file) : string
+    {
+        $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof \Rector\ValueObject\Application\File) {
+            throw new ShouldNotHappenException();
+        }
+        return $file->getFilePath();
     }
     /**
      * @return mixed[]|null
