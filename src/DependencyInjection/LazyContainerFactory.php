@@ -38,6 +38,7 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\ChangesReporting\Output\GitHubOutputFormatter;
 use Rector\ChangesReporting\Output\GitlabOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
+use Rector\ChangesReporting\Output\JUnitOutputFormatter;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\AliasClassNameImportSkipVoter;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\ClassLikeNameClassNameImportSkipVoter;
@@ -222,7 +223,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<OutputFormatterInterface>>
      */
-    private const OUTPUT_FORMATTER_CLASSES = [ConsoleOutputFormatter::class, JsonOutputFormatter::class, GitlabOutputFormatter::class, GitHubOutputFormatter::class];
+    private const OUTPUT_FORMATTER_CLASSES = [ConsoleOutputFormatter::class, JsonOutputFormatter::class, GitlabOutputFormatter::class, JUnitOutputFormatter::class, GitHubOutputFormatter::class];
     /**
      * @var array<class-string<NodeTypeResolverInterface>>
      */

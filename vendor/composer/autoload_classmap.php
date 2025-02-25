@@ -1100,6 +1100,7 @@ return array(
     'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\GitHubOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/GitHubOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\GitlabOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/GitlabOutputFormatter.php',
+    'Rector\\ChangesReporting\\Output\\JUnitOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/JUnitOutputFormatter.php',
     'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => $baseDir . '/src/ChangesReporting/Output/JsonOutputFormatter.php',
     'Rector\\ChangesReporting\\ValueObjectFactory\\ErrorFactory' => $baseDir . '/src/ChangesReporting/ValueObjectFactory/ErrorFactory.php',
     'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => $baseDir . '/src/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
