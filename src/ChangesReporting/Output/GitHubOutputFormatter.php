@@ -86,8 +86,8 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
         // This is a workaround for buggy endLine. See https://github.com/orgs/community/discussions/129899
         // TODO: Should be removed once github will have fixed it issue.
         unset($annotationProperties['endLine']);
-        $nonNullProperties = \array_filter($annotationProperties, static fn($value) => $value !== null);
-        $sanitizedProperties = \array_map(fn($key, $value) => \sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), \array_keys($nonNullProperties), $nonNullProperties);
+        $nonNullProperties = \array_filter($annotationProperties, static fn($value): bool => $value !== null);
+        $sanitizedProperties = \array_map(fn($key, $value): string => \sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), \array_keys($nonNullProperties), $nonNullProperties);
         return \implode(',', $sanitizedProperties);
     }
     /**
@@ -99,7 +99,6 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
             return '';
         }
         $value = (string) $value;
-        $value = \str_replace(['%', "\r", "\n", ':', ','], ['%25', '%0D', '%0A', '%3A', '%2C'], $value);
-        return $value;
+        return \str_replace(['%', "\r", "\n", ':', ','], ['%25', '%0D', '%0A', '%3A', '%2C'], $value);
     }
 }
