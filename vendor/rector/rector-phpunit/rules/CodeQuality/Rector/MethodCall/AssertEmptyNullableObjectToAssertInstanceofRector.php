@@ -95,8 +95,12 @@ CODE_SAMPLE
         $methodName = $this->isNames($node->name, ['assertEmpty', 'assertNull']) ? 'assertNotInstanceOf' : 'assertInstanceOf';
         $node->name = new Identifier($methodName);
         $fullyQualified = new FullyQualified($pureType->getClassName());
+        $customMessageArg = $node->getArgs()[1] ?? null;
         $node->args[0] = new Arg(new ClassConstFetch($fullyQualified, 'class'));
         $node->args[1] = $firstArg;
+        if ($customMessageArg instanceof Arg) {
+            $node->args[] = $customMessageArg;
+        }
         return $node;
     }
 }
