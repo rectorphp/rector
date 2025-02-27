@@ -1687,12 +1687,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "33f8d9bca8f9d2b5d3d28660f19bd4f3390223d4"
+                "reference": "f058b83421528abba7e0d18ca6da5f70a699ac99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/33f8d9bca8f9d2b5d3d28660f19bd4f3390223d4",
-                "reference": "33f8d9bca8f9d2b5d3d28660f19bd4f3390223d4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/f058b83421528abba7e0d18ca6da5f70a699ac99",
+                "reference": "f058b83421528abba7e0d18ca6da5f70a699ac99",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1715,7 @@
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-02-16T09:38:25+00:00",
+            "time": "2025-02-26T22:52:41+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2385,23 +2385,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.4.15",
-            "version_normalized": "6.4.15.0",
+            "version": "v6.4.19",
+            "version_normalized": "6.4.19.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "3cb242f059c14ae08591c5c4087d1fe443564392"
+                "reference": "7a1c12e87b08ec9c97abdd188c9b3f5a40e37fc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/3cb242f059c14ae08591c5c4087d1fe443564392",
-                "reference": "3cb242f059c14ae08591c5c4087d1fe443564392",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/7a1c12e87b08ec9c97abdd188c9b3f5a40e37fc3",
+                "reference": "7a1c12e87b08ec9c97abdd188c9b3f5a40e37fc3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2024-11-06T14:19:14+00:00",
+            "time": "2025-02-04T13:35:48+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2429,7 +2429,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.15"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.19"
             },
             "funding": [
                 {

@@ -127,19 +127,6 @@ final class AttributeFinder
     {
         return $this->findAttributeByClasses($node, $attributeClasses) instanceof Attribute;
     }
-    private function findArgByName(Attribute $attribute, string $argName) : ?\PhpParser\Node\Expr
-    {
-        foreach ($attribute->args as $arg) {
-            if (!$arg->name instanceof Identifier) {
-                continue;
-            }
-            if (!$this->nodeNameResolver->isName($arg->name, $argName)) {
-                continue;
-            }
-            return $arg->value;
-        }
-        return null;
-    }
     /**
      * @param string[] $names
      * @return Attribute[]
@@ -153,5 +140,18 @@ final class AttributeFinder
             $attributes = \array_merge($attributes, $justFoundAttributes);
         }
         return $attributes;
+    }
+    private function findArgByName(Attribute $attribute, string $argName) : ?\PhpParser\Node\Expr
+    {
+        foreach ($attribute->args as $arg) {
+            if (!$arg->name instanceof Identifier) {
+                continue;
+            }
+            if (!$this->nodeNameResolver->isName($arg->name, $argName)) {
+                continue;
+            }
+            return $arg->value;
+        }
+        return null;
     }
 }
