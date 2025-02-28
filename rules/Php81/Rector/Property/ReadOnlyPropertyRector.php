@@ -161,6 +161,9 @@ CODE_SAMPLE
         if ($property->isReadonly()) {
             return null;
         }
+        if ($property->hooks !== []) {
+            return null;
+        }
         if ($property->props[0]->default instanceof Expr) {
             return null;
         }
