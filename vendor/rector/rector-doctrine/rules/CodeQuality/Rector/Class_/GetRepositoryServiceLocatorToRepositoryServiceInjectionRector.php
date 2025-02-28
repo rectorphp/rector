@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
