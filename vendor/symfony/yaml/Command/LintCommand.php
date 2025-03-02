@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Yaml\Command;
+namespace RectorPrefix202503\Symfony\Component\Yaml\Command;
 
-use RectorPrefix202502\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202502\Symfony\Component\Console\CI\GithubActionReporter;
-use RectorPrefix202502\Symfony\Component\Console\Command\Command;
-use RectorPrefix202502\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202502\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202502\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202502\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202502\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202502\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202502\Symfony\Component\Yaml\Exception\ParseException;
-use RectorPrefix202502\Symfony\Component\Yaml\Parser;
-use RectorPrefix202502\Symfony\Component\Yaml\Yaml;
+use RectorPrefix202503\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202503\Symfony\Component\Console\CI\GithubActionReporter;
+use RectorPrefix202503\Symfony\Component\Console\Command\Command;
+use RectorPrefix202503\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202503\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202503\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202503\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202503\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202503\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202503\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix202503\Symfony\Component\Yaml\Parser;
+use RectorPrefix202503\Symfony\Component\Yaml\Yaml;
 /**
  * Validates YAML files syntax and outputs encountered errors.
  *

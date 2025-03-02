@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Routing;
+namespace RectorPrefix202503\Illuminate\Contracts\Routing;
 
 interface UrlRoutable
 {

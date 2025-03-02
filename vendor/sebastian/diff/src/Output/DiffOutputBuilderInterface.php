@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\SebastianBergmann\Diff\Output;
+namespace RectorPrefix202503\SebastianBergmann\Diff\Output;
 
 /**
  * Defines how an output builder should take a generated

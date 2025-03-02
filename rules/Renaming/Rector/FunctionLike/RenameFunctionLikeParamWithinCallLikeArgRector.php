@@ -23,7 +23,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameFunctionLikeParamWithinCallLikeArg;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202502\Webmozart\Assert\Assert;
+use RectorPrefix202503\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FunctionLike\RenameFunctionLikeParamWithinCallLikeArgRector\RenameFunctionLikeParamWithinCallLikeArgRectorTest
  */

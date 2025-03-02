@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix202503\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix202502\Symfony\Component\Console\Application;
-use RectorPrefix202502\Symfony\Component\Console\Command\Command;
-use RectorPrefix202502\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202502\Symfony\Component\Console\Helper\Helper;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202503\Symfony\Component\Console\Application;
+use RectorPrefix202503\Symfony\Component\Console\Command\Command;
+use RectorPrefix202503\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202503\Symfony\Component\Console\Helper\Helper;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputOption;
 /**
  * Text descriptor.
  *

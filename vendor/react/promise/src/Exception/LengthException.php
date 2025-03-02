@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\React\Promise\Exception;
+namespace RectorPrefix202503\React\Promise\Exception;
 
 class LengthException extends \LengthException
 {

@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Console\Command;
+namespace RectorPrefix202503\Symfony\Component\Console\Command;
 
-use RectorPrefix202502\Symfony\Component\Console\Application;
-use RectorPrefix202502\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202502\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202502\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202502\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix202502\Symfony\Component\Console\Exception\ExceptionInterface;
-use RectorPrefix202502\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202502\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix202502\Symfony\Component\Console\Helper\HelperInterface;
-use RectorPrefix202502\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202502\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202502\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202503\Symfony\Component\Console\Application;
+use RectorPrefix202503\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202503\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202503\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202503\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202503\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix202503\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202503\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202503\Symfony\Component\Console\Helper\HelperInterface;
+use RectorPrefix202503\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202503\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202503\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base class for all commands.
  *

@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202502\React\Dns\Model;
+namespace RectorPrefix202503\React\Dns\Model;
 
-use RectorPrefix202502\React\Dns\Query\Query;
+use RectorPrefix202503\React\Dns\Query\Query;
 /**
  * This class represents an outgoing query message or an incoming response message
  *

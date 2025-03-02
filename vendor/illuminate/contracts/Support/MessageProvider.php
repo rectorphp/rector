@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Support;
+namespace RectorPrefix202503\Illuminate\Contracts\Support;
 
 interface MessageProvider
 {

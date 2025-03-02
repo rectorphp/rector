@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202502\Symplify\EasyParallel\ValueObject;
+namespace RectorPrefix202503\Symplify\EasyParallel\ValueObject;
 
-use RectorPrefix202502\React\Socket\TcpServer;
-use RectorPrefix202502\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202503\React\Socket\TcpServer;
+use RectorPrefix202503\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 /**
  * Used from https://github.com/phpstan/phpstan-src/blob/master/src/Parallel/ProcessPool.php
  *

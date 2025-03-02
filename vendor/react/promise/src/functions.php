@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202502\React\Promise;
+namespace RectorPrefix202503\React\Promise;
 
-use RectorPrefix202502\React\Promise\Exception\CompositeException;
-use RectorPrefix202502\React\Promise\Internal\FulfilledPromise;
-use RectorPrefix202502\React\Promise\Internal\RejectedPromise;
+use RectorPrefix202503\React\Promise\Exception\CompositeException;
+use RectorPrefix202503\React\Promise\Internal\FulfilledPromise;
+use RectorPrefix202503\React\Promise\Internal\RejectedPromise;
 /**
  * Creates a promise for the supplied `$promiseOrValue`.
  *

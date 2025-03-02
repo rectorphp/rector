@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php;
 
-use RectorPrefix202502\Nette\Utils\FileSystem;
-use RectorPrefix202502\Nette\Utils\Json;
+use RectorPrefix202503\Nette\Utils\FileSystem;
+use RectorPrefix202503\Nette\Utils\Json;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\ValueObject\PolyfillPackage;

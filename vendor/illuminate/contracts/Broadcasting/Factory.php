@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Broadcasting;
+namespace RectorPrefix202503\Illuminate\Contracts\Broadcasting;
 
 interface Factory
 {

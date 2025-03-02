@@ -23,7 +23,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
-use RectorPrefix202502\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202503\Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

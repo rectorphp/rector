@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202502\\Illuminate\\Container\\": ""
+            "RectorPrefix202503\\Illuminate\\Container\\": ""
         }
     },
     "extra": {

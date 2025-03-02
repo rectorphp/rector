@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Process;
+namespace RectorPrefix202503\Symfony\Component\Process;
 
-use RectorPrefix202502\Symfony\Component\Process\Exception\InvalidArgumentException;
-use RectorPrefix202502\Symfony\Component\Process\Exception\LogicException;
-use RectorPrefix202502\Symfony\Component\Process\Exception\ProcessFailedException;
-use RectorPrefix202502\Symfony\Component\Process\Exception\ProcessSignaledException;
-use RectorPrefix202502\Symfony\Component\Process\Exception\ProcessTimedOutException;
-use RectorPrefix202502\Symfony\Component\Process\Exception\RuntimeException;
-use RectorPrefix202502\Symfony\Component\Process\Pipes\UnixPipes;
-use RectorPrefix202502\Symfony\Component\Process\Pipes\WindowsPipes;
+use RectorPrefix202503\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202503\Symfony\Component\Process\Exception\LogicException;
+use RectorPrefix202503\Symfony\Component\Process\Exception\ProcessFailedException;
+use RectorPrefix202503\Symfony\Component\Process\Exception\ProcessSignaledException;
+use RectorPrefix202503\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use RectorPrefix202503\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix202503\Symfony\Component\Process\Pipes\UnixPipes;
+use RectorPrefix202503\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.

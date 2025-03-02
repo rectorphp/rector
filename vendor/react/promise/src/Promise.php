@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202502\React\Promise;
+namespace RectorPrefix202503\React\Promise;
 
-use RectorPrefix202502\React\Promise\Internal\RejectedPromise;
+use RectorPrefix202503\React\Promise\Internal\RejectedPromise;
 /**
  * @template T
  * @template-implements PromiseInterface<T>

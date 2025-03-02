@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Contracts\Service;
+namespace RectorPrefix202503\Symfony\Contracts\Service;
 
-use RectorPrefix202502\Psr\Container\ContainerInterface;
-use RectorPrefix202502\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202502\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix202503\Psr\Container\ContainerInterface;
+use RectorPrefix202503\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202503\Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services
  * from methods that have the #[SubscribedService] attribute.

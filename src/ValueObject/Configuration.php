@@ -5,7 +5,7 @@ namespace Rector\ValueObject;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\ValueObject\Configuration\LevelOverflow;
-use RectorPrefix202502\Webmozart\Assert\Assert;
+use RectorPrefix202503\Webmozart\Assert\Assert;
 final class Configuration
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Auth;
+namespace RectorPrefix202503\Illuminate\Contracts\Auth;
 
 use Closure;
 interface PasswordBroker

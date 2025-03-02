@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Console\Messenger;
+namespace RectorPrefix202503\Symfony\Component\Console\Messenger;
 
-use RectorPrefix202502\Symfony\Component\Console\Application;
-use RectorPrefix202502\Symfony\Component\Console\Command\Command;
-use RectorPrefix202502\Symfony\Component\Console\Exception\RunCommandFailedException;
-use RectorPrefix202502\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix202502\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix202503\Symfony\Component\Console\Application;
+use RectorPrefix202503\Symfony\Component\Console\Command\Command;
+use RectorPrefix202503\Symfony\Component\Console\Exception\RunCommandFailedException;
+use RectorPrefix202503\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202503\Symfony\Component\Console\Output\BufferedOutput;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */

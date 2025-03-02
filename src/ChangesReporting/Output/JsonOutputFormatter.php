@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix202502\Nette\Utils\Json;
+use RectorPrefix202503\Nette\Utils\Json;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\ValueObject\Configuration;

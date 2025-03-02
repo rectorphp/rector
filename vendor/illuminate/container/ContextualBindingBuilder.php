@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Container;
+namespace RectorPrefix202503\Illuminate\Container;
 
-use RectorPrefix202502\Illuminate\Contracts\Container\Container;
-use RectorPrefix202502\Illuminate\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use RectorPrefix202503\Illuminate\Contracts\Container\Container;
+use RectorPrefix202503\Illuminate\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {
     /**

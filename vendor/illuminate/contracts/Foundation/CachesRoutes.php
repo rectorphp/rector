@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Foundation;
+namespace RectorPrefix202503\Illuminate\Contracts\Foundation;
 
 interface CachesRoutes
 {

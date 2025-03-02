@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202502\Symfony\Component\Console;
+namespace RectorPrefix202503\Symfony\Component\Console;
 
-use RectorPrefix202502\Symfony\Component\Console\Output\AnsiColorMode;
+use RectorPrefix202503\Symfony\Component\Console\Output\AnsiColorMode;
 class Terminal
 {
     public const DEFAULT_COLOR_MODE = AnsiColorMode::Ansi4;

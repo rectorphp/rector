@@ -5,7 +5,7 @@ namespace Rector\Php80\ValueObject;
 
 use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Rector\Validation\RectorAssert;
-use RectorPrefix202502\Webmozart\Assert\Assert;
+use RectorPrefix202503\Webmozart\Assert\Assert;
 final class AnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**

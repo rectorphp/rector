@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202502\React\Stream;
+namespace RectorPrefix202503\React\Stream;
 
-use RectorPrefix202502\Evenement\EventEmitterInterface;
+use RectorPrefix202503\Evenement\EventEmitterInterface;
 /**
  * The `WritableStreamInterface` is responsible for providing an interface for
  * write-only streams and the writable side of duplex streams.

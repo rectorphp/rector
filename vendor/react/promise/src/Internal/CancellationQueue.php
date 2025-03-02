@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\React\Promise\Internal;
+namespace RectorPrefix202503\React\Promise\Internal;
 
 /**
  * @internal

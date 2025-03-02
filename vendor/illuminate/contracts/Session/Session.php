@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Session;
+namespace RectorPrefix202503\Illuminate\Contracts\Session;
 
 interface Session
 {

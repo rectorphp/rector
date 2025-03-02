@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Translation;
+namespace RectorPrefix202503\Illuminate\Contracts\Translation;
 
 interface HasLocalePreference
 {

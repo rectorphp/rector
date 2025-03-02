@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202502\Illuminate\Contracts\Config;
+namespace RectorPrefix202503\Illuminate\Contracts\Config;
 
 interface Repository
 {
