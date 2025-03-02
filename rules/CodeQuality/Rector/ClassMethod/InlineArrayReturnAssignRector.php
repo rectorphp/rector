@@ -163,7 +163,7 @@ CODE_SAMPLE
             }
             $assign = $stmt->expr;
             // skip new X instance with args to keep complex assign readable
-            if ($assign->expr instanceof New_ && $assign->expr->getArgs() !== []) {
+            if ($assign->expr instanceof New_ && !$assign->expr->isFirstClassCallable() && $assign->expr->getArgs() !== []) {
                 return \false;
             }
             if (!$assign->var instanceof ArrayDimFetch) {
