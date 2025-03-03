@@ -21,6 +21,7 @@ use Rector\Reporting\MissConfigurationReporter;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
+use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\ProcessResult;
 use RectorPrefix202503\Symfony\Component\Console\Application;
 use RectorPrefix202503\Symfony\Component\Console\Command\Command;
@@ -137,8 +138,12 @@ EOF
         $paths = $configuration->getPaths();
         // 0. warn about too high levels
         foreach ($configuration->getLevelOverflows() as $levelOverflow) {
-            $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? \sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : \sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
-            $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), \PHP_EOL, $suggestedSetMethod));
+            $this->reportLevelOverflow($levelOverflow);
+        }
+        // 0. warn about rules registered in both withRules() and sets to avoid bloated rector.php configs
+        $setAndRulesDuplicatedRegistrations = $configuration->getBothSetAndRulesDuplicatedRegistrations();
+        if ($setAndRulesDuplicatedRegistrations !== []) {
+            $this->symfonyStyle->warning(\sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', \PHP_EOL . \PHP_EOL, \implode(' * ', $setAndRulesDuplicatedRegistrations) . \PHP_EOL));
         }
         // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
@@ -216,5 +221,10 @@ EOF
         }
         $this->symfonyStyle->writeln('[info] Sets loaded based on installed packages:');
         $this->symfonyStyle->listing($composerBasedSets);
+    }
+    private function reportLevelOverflow(LevelOverflow $levelOverflow) : void
+    {
+        $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? \sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : \sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
+        $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), \PHP_EOL, $suggestedSetMethod));
     }
 }

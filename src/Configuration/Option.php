@@ -240,4 +240,13 @@ final class Option
      * @internal To report overflow levels in ->with*Level() methods
      */
     public const LEVEL_OVERFLOWS = 'level_overflows';
+    /**
+     * @internal To avoid registering rules via ->withRules(), that are already loaded in sets,
+     * and keep rector.php clean
+     */
+    public const ROOT_STANDALONE_REGISTERED_RULES = 'root_standalone_registered_rules';
+    /**
+     * @internal The other half of ROOT_STANDALONE_REGISTERED_RULES to compare
+     */
+    public const SET_REGISTERED_RULES = 'set_registered_rules';
 }

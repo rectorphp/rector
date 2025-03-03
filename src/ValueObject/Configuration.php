@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\ValueObject;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use RectorPrefix202503\Webmozart\Assert\Assert;
 final class Configuration
@@ -175,5 +177,15 @@ final class Configuration
     public function getLevelOverflows() : array
     {
         return $this->levelOverflows;
+    }
+    /**
+     * @return string[]
+     */
+    public function getBothSetAndRulesDuplicatedRegistrations() : array
+    {
+        $rootStandaloneRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::ROOT_STANDALONE_REGISTERED_RULES);
+        $setRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::SET_REGISTERED_RULES);
+        $ruleDuplicatedRegistrations = \array_intersect($rootStandaloneRegisteredRules, $setRegisteredRules);
+        return \array_unique($ruleDuplicatedRegistrations);
     }
 }
