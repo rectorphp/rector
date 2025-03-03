@@ -96,8 +96,8 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily('Darwin')]
 #[\PHPUnit\Framework\Attributes\RequiresFunction('someFunction')]
 #[\PHPUnit\Framework\Attributes\RequiresMethod(\some\className::class, 'someMethod')]
-#[\PHPUnit\Framework\Attributes\RequiresExtension('mysqli')]
-#[\PHPUnit\Framework\Attributes\RequiresExtension('mysqli', '>= 8.3.0')]
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli')]
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli', '>= 8.3.0')]
 #[\PHPUnit\Framework\Attributes\RequiresSetting('date.timezone', 'Europe/Berlin')]
 final class SomeTest extends TestCase
 {
@@ -108,8 +108,8 @@ final class SomeTest extends TestCase
     #[\PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily('Darwin')]
     #[\PHPUnit\Framework\Attributes\RequiresFunction('someFunction')]
     #[\PHPUnit\Framework\Attributes\RequiresMethod(\some\className::class, 'someMethod')]
-    #[\PHPUnit\Framework\Attributes\RequiresExtension('mysqli')]
-    #[\PHPUnit\Framework\Attributes\RequiresExtension('mysqli', '>= 8.3.0')]
+    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli')]
+    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli', '>= 8.3.0')]
     #[\PHPUnit\Framework\Attributes\RequiresSetting('date.timezone', 'Europe/Berlin')]
     public function test()
     {
@@ -197,7 +197,7 @@ CODE_SAMPLE
                 }
                 break;
             case 'extension':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresExtension';
+                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresPhpExtension';
                 $attributeValue = \explode(' ', (string) $attributeValue, 2);
                 break;
             case 'setting':
