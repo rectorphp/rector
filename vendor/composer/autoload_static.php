@@ -1444,6 +1444,7 @@ class ComposerStaticInit57511360b381a600aff109823304b5c7
         'Rector\\CodingStyle\\Rector\\FuncCall\\FunctionFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
+        'Rector\\CodingStyle\\Rector\\FunctionLike\\FunctionLikeToFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FunctionLike/FunctionLikeToFirstClassCallableRector.php',
         'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
