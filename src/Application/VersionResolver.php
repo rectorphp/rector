@@ -19,7 +19,7 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const PACKAGE_VERSION = 'a732689e0488b7c199551d466ff1bb04fb00afa9';
+    public const PACKAGE_VERSION = '2.0.10';
     /**
      * @api
      * @var string
