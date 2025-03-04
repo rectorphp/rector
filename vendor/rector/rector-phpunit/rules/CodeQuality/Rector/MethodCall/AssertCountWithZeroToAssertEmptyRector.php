@@ -63,6 +63,10 @@ CODE_SAMPLE
         if ($type instanceof UnionType) {
             return null;
         }
+        $secondType = $this->getType($node->getArgs()[1]->value);
+        if ($secondType instanceof UnionType) {
+            return null;
+        }
         $value = $type->getConstantScalarValues()[0] ?? null;
         if ($value === 0) {
             $args = $node->getArgs();
