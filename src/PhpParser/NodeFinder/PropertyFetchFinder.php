@@ -95,7 +95,7 @@ final class PropertyFetchFinder
     public function findLocalPropertyFetchesByName(Class_ $class, string $paramName) : array
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[]|NullsafePropertyFetch[] $foundPropertyFetches */
-        $foundPropertyFetches = $this->betterNodeFinder->find($class->getMethods(), function (Node $subNode) use($paramName) : bool {
+        $foundPropertyFetches = $this->betterNodeFinder->find($this->resolveNodesToLocate($class), function (Node $subNode) use($paramName) : bool {
             if ($subNode instanceof PropertyFetch) {
                 return $this->propertyFetchAnalyzer->isLocalPropertyFetchName($subNode, $paramName);
             }
@@ -117,7 +117,7 @@ final class PropertyFetchFinder
         $propertyName = $this->nodeNameResolver->getName($property);
         /** @var ArrayDimFetch[] $propertyArrayDimFetches */
         $propertyArrayDimFetches = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->getMethods(), function (Node $subNode) use(&$propertyArrayDimFetches, $propertyName) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($this->resolveNodesToLocate($class), function (Node $subNode) use(&$propertyArrayDimFetches, $propertyName) {
             if (!$subNode instanceof Assign) {
                 return null;
             }
@@ -155,6 +155,14 @@ final class PropertyFetchFinder
             return $this->nodeNameResolver->isName($class, $type->getClassName());
         }
         return \false;
+    }
+    /**
+     * @return Stmt[]
+     */
+    private function resolveNodesToLocate(Class_ $class) : array
+    {
+        $propertyWithHooks = \array_filter($class->getProperties(), fn(Property $property): bool => $property->hooks !== []);
+        return \array_merge($propertyWithHooks, $class->getMethods());
     }
     /**
      * @param Stmt[] $stmts
