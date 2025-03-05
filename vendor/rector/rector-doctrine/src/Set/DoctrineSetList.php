@@ -50,8 +50,10 @@ final class DoctrineSetList
     public const DOCTRINE_ORM_28 = __DIR__ . '/../../config/sets/doctrine-orm-28.php';
     /**
      * @var string
+     *
+     * @deprecated please use DOCTRINE_ORM_219  @see https://github.com/rectorphp/rector-doctrine/issues/306
      */
-    public const DOCTRINE_ORM_29 = __DIR__ . '/../../config/sets/doctrine-orm-29.php';
+    public const DOCTRINE_ORM_29 = __DIR__ . '/../../config/sets/doctrine-orm-219.php';
     /**
      * @var string
      */
@@ -60,6 +62,10 @@ final class DoctrineSetList
      * @var string
      */
     public const DOCTRINE_ORM_214 = __DIR__ . '/../../config/sets/doctrine-orm-214.php';
+    /**
+     * @var string
+     */
+    public const DOCTRINE_ORM_219 = __DIR__ . '/../../config/sets/doctrine-orm-219.php';
     /**
      * @var string
      */
