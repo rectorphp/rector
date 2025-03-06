@@ -108,12 +108,15 @@ CODE_SAMPLE
             return null;
         }
         $classRoutePath = null;
+        $classRouteName = null;
         // 1. detect attribute
         $routeAttributeOrAnnotation = $this->attrinationFinder->getByMany($node, [SymfonyAttribute::ROUTE, SymfonyAnnotation::ROUTE]);
         if ($routeAttributeOrAnnotation instanceof DoctrineAnnotationTagValueNode) {
             $classRoutePath = $this->resolveRoutePath($routeAttributeOrAnnotation);
+            $classRouteName = $this->resolveRouteName($routeAttributeOrAnnotation);
         } elseif ($routeAttributeOrAnnotation instanceof Attribute) {
             $classRoutePath = $this->resolveRoutePathFromAttribute($routeAttributeOrAnnotation);
+            $classRouteName = $this->resolveRouteNameFromAttribute($routeAttributeOrAnnotation);
         }
         if ($classRoutePath === null) {
             return null;
@@ -138,6 +141,11 @@ CODE_SAMPLE
                     $methodPrefix = $routePathArrayItemNode->value;
                     $newMethodPath = $classRoutePath . $methodPrefix->value;
                     $routePathArrayItemNode->value = new StringNode($newMethodPath);
+                    foreach ($methodRouteAnnotationOrAttribute->values as $value) {
+                        if ($value->key === 'name' && $value->value instanceof StringNode && \is_string($classRouteName)) {
+                            $value->value->value = $classRouteName . $value->value->value;
+                        }
+                    }
                     $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
                     $hasChanged = \true;
                 } elseif ($methodRouteAnnotationOrAttribute instanceof Attribute) {
@@ -148,6 +156,15 @@ CODE_SAMPLE
                             }
                             $methodRouteString = $methodRouteArg->value;
                             $methodRouteArg->value = new String_(\sprintf('%s%s', $classRoutePath, $methodRouteString->value));
+                            $hasChanged = \true;
+                            continue;
+                        }
+                        if ($methodRouteArg->name->toString() === 'name') {
+                            if (!$methodRouteArg->value instanceof String_) {
+                                continue;
+                            }
+                            $methodRouteString = $methodRouteArg->value;
+                            $methodRouteArg->value = new String_(\sprintf('%s%s', $classRouteName, $methodRouteString->value));
                             $hasChanged = \true;
                         }
                     }
@@ -199,11 +216,37 @@ CODE_SAMPLE
         }
         return $classRoutePathNode->value->value;
     }
+    private function resolveRouteName(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?string
+    {
+        $classRouteNameNode = $doctrineAnnotationTagValueNode->getValue('name');
+        if (!$classRouteNameNode instanceof ArrayItemNode) {
+            return null;
+        }
+        if (!$classRouteNameNode->value instanceof StringNode) {
+            return null;
+        }
+        return $classRouteNameNode->value->value;
+    }
     private function resolveRoutePathFromAttribute(Attribute $attribute) : ?string
     {
         foreach ($attribute->args as $arg) {
             // silent or "path"
             if ($arg->name === null || $arg->name->toString() === self::PATH) {
+                $routeExpr = $arg->value;
+                if ($routeExpr instanceof String_) {
+                    return $routeExpr->value;
+                }
+            }
+        }
+        return null;
+    }
+    private function resolveRouteNameFromAttribute(Attribute $attribute) : ?string
+    {
+        foreach ($attribute->args as $arg) {
+            if ($arg->name === null) {
+                continue;
+            }
+            if ($arg->name->toString() === 'name') {
                 $routeExpr = $arg->value;
                 if ($routeExpr instanceof String_) {
                     return $routeExpr->value;
