@@ -22,7 +22,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -252,7 +251,7 @@ CODE_SAMPLE
         $paramOnPositionTypes = [];
         foreach ($array->items as $singleDataProvidedSet) {
             if (!$singleDataProvidedSet instanceof ArrayItem || !$singleDataProvidedSet->value instanceof Array_) {
-                throw new ShouldNotHappenException();
+                return [];
             }
             foreach ($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem) {
                 if ($position !== $parameterPosition) {
