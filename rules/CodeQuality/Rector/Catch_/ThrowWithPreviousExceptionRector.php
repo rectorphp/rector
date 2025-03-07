@@ -118,14 +118,17 @@ CODE_SAMPLE
         if (isset($new->getArgs()[$exceptionArgumentPosition])) {
             return null;
         }
-        if (!isset($new->getArgs()[0])) {
+        /** @var Arg|null $messageArgument */
+        $messageArgument = $new->args[0] ?? null;
+        $shouldUseNamedArguments = $messageArgument instanceof Arg && $messageArgument->name instanceof Identifier;
+        if (!isset($new->args[0])) {
             // get previous message
             $getMessageMethodCall = new MethodCall($catchedThrowableVariable, 'getMessage');
             $new->args[0] = new Arg($getMessageMethodCall);
+        } elseif ($new->args[0] instanceof Arg && $new->args[0]->name instanceof Identifier && $new->args[0]->name->toString() === 'previous' && $this->nodeComparator->areNodesEqual($new->args[0]->value, $catchedThrowableVariable)) {
+            $new->args[0]->name->name = 'message';
+            $new->args[0]->value = new MethodCall($catchedThrowableVariable, 'getMessage');
         }
-        /** @var Arg $messageArgument */
-        $messageArgument = $new->getArgs()[0];
-        $shouldUseNamedArguments = $messageArgument->name !== null;
         if (!isset($new->getArgs()[1])) {
             // get previous code
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'), \false, \false, [], $shouldUseNamedArguments ? new Identifier('code') : null);
