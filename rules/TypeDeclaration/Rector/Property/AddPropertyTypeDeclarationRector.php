@@ -101,6 +101,6 @@ CODE_SAMPLE
         if ($classReflection->hasTraitUse($type)) {
             return \true;
         }
-        return $classReflection->isSubclassOf($type);
+        return $classReflection->is($type);
     }
 }

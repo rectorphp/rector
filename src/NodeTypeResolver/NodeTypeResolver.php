@@ -298,7 +298,7 @@ final class NodeTypeResolver
         if ($classReflection->getName() === $objectType->getClassName()) {
             return \true;
         }
-        return $classReflection->isSubclassOf($objectType->getClassName());
+        return $classReflection->is($objectType->getClassName());
     }
     /**
      * Allow pull type from

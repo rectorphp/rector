@@ -138,7 +138,7 @@ CODE_SAMPLE
      */
     private function collectTestMethodsUsesPrivateDataProvider(ClassReflection $classReflection, Class_ $class, array $classMethods) : array
     {
-        if (!$classReflection->isSubClassOf('PHPUnit\\Framework\\TestCase')) {
+        if (!$classReflection->is('PHPUnit\\Framework\\TestCase')) {
             return [];
         }
         $privateMethods = [];

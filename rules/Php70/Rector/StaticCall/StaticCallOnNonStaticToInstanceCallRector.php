@@ -158,7 +158,7 @@ CODE_SAMPLE
             return \true;
         }
         $reflection = $scope->getClassReflection();
-        if ($reflection instanceof ClassReflection && $reflection->isSubclassOf($className)) {
+        if ($reflection instanceof ClassReflection && $reflection->is($className)) {
             return \true;
         }
         $className = $this->getName($staticCall->class);

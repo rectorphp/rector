@@ -138,6 +138,6 @@ CODE_SAMPLE
             return \false;
         }
         // is phpunit test case?
-        return $classReflection->isSubclassOf(ClassName::TEST_CASE_CLASS);
+        return $classReflection->is(ClassName::TEST_CASE_CLASS);
     }
 }

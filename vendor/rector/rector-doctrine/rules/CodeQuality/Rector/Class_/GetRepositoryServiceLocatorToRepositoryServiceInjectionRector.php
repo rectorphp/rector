@@ -148,7 +148,7 @@ CODE_SAMPLE
                 return null;
             }
             $repositoryClassReflection = $this->reflectionProvider->getClass($repositoryClass);
-            if (!$repositoryClassReflection->isSubclassOf(DoctrineClass::SERVICE_DOCUMENT_REPOSITORY) && !$repositoryClassReflection->isSubclassOf(DoctrineClass::SERVICE_ENTITY_REPOSITORY)) {
+            if (!$repositoryClassReflection->is(DoctrineClass::SERVICE_DOCUMENT_REPOSITORY) && !$repositoryClassReflection->is(DoctrineClass::SERVICE_ENTITY_REPOSITORY)) {
                 return null;
             }
             $repositoryPropertyMetadatas[] = new PropertyMetadata($repositoryVariableName, new FullyQualifiedObjectType($repositoryClass));
@@ -174,12 +174,12 @@ CODE_SAMPLE
             return \true;
         }
         // skip repositories themselves to avoid circular dependencies
-        if ($classReflection->isSubclassOf(DoctrineClass::OBJECT_REPOSITORY)) {
+        if ($classReflection->is(DoctrineClass::OBJECT_REPOSITORY)) {
             return \true;
         }
-        if ($classReflection->isSubclassOf(DoctrineClass::ENTITY_REPOSITORY)) {
+        if ($classReflection->is(DoctrineClass::ENTITY_REPOSITORY)) {
             return \true;
         }
-        return $classReflection->isSubclassOf(TestClass::BEHAT_CONTEXT);
+        return $classReflection->is(TestClass::BEHAT_CONTEXT);
     }
 }

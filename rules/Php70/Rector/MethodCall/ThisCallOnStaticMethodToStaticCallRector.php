@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         // skip PHPUnit calls, as they accept both self:: and $this-> formats
-        if ($classReflection->isSubclassOf('PHPUnit\\Framework\\TestCase')) {
+        if ($classReflection->is('PHPUnit\\Framework\\TestCase')) {
             return null;
         }
         $this->hasChanged = \false;
