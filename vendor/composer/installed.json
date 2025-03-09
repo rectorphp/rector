@@ -1748,12 +1748,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "6dba10960d71bdd442b5ebe54dbbf2c4a72b263d"
+                "reference": "b55c3bc2acedcf25ebc9b38ddb6ebdad451f42e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/6dba10960d71bdd442b5ebe54dbbf2c4a72b263d",
-                "reference": "6dba10960d71bdd442b5ebe54dbbf2c4a72b263d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b55c3bc2acedcf25ebc9b38ddb6ebdad451f42e7",
+                "reference": "b55c3bc2acedcf25ebc9b38ddb6ebdad451f42e7",
                 "shasum": ""
             },
             "require": {
@@ -1761,7 +1761,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.3",
-                "phpstan\/phpstan": "^2.0",
+                "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
                 "rector\/rector-src": "dev-main",
@@ -1771,7 +1771,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-01-27T16:10:20+00:00",
+            "time": "2025-03-09T20:52:35+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "19250313eb0dd965c34e96c9da0d16785f344c51"
+                "reference": "757cd1f46f71f33c665a85a26e2aed320cd88795"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/19250313eb0dd965c34e96c9da0d16785f344c51",
-                "reference": "19250313eb0dd965c34e96c9da0d16785f344c51",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/757cd1f46f71f33c665a85a26e2aed320cd88795",
+                "reference": "757cd1f46f71f33c665a85a26e2aed320cd88795",
                 "shasum": ""
             },
             "require": {
@@ -1821,7 +1821,7 @@
             "require-dev": {
                 "phpecs\/phpecs": "^2.0",
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.1",
+                "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
@@ -1830,7 +1830,7 @@
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-04T16:18:47+00:00",
+            "time": "2025-03-09T20:51:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "dcb8a8896bf6c5cd220c84dd9dac66293fc985e3"
+                "reference": "578d314f0cfdf7289f4e73b82cdf7809da73c250"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/dcb8a8896bf6c5cd220c84dd9dac66293fc985e3",
-                "reference": "dcb8a8896bf6c5cd220c84dd9dac66293fc985e3",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/578d314f0cfdf7289f4e73b82cdf7809da73c250",
+                "reference": "578d314f0cfdf7289f4e73b82cdf7809da73c250",
                 "shasum": ""
             },
             "require": {
@@ -1880,7 +1880,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.0",
+                "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
                 "rector\/rector-src": "dev-main",
@@ -1896,7 +1896,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-06T14:38:21+00:00",
+            "time": "2025-03-09T20:50:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

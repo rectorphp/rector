@@ -75,7 +75,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->isSubclassOf('Symfony\\Component\\Console\\Command\\Command')) {
+        if (!$classReflection->is('Symfony\\Component\\Console\\Command\\Command')) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node, 'execute')) {

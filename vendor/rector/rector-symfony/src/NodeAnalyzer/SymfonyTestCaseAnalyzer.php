@@ -22,7 +22,7 @@ final class SymfonyTestCaseAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase');
+        return $classReflection->is('Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase');
     }
     /**
      * @api
@@ -33,6 +33,6 @@ final class SymfonyTestCaseAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase');
+        return $classReflection->is('Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase');
     }
 }

@@ -62,10 +62,10 @@ final class ControllerAnalyzer
     }
     private function isControllerClassReflection(ClassReflection $classReflection) : bool
     {
-        if ($classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller')) {
+        if ($classReflection->is('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller')) {
             return \true;
         }
-        return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        return $classReflection->is('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
     }
     private function isControllerClass(Class_ $class) : bool
     {

@@ -121,9 +121,9 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        if ($classReflection->isSubclassOf(SymfonyClass::CONTAINER_AWARE_COMMAND)) {
+        if ($classReflection->is(SymfonyClass::CONTAINER_AWARE_COMMAND)) {
             return \false;
         }
-        return !$classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
+        return !$classReflection->is(SymfonyClass::CONTROLLER);
     }
 }

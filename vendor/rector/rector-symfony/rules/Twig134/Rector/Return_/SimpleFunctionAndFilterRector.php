@@ -132,7 +132,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        if (!$classReflection->isSubclassOf('Twig_Extension')) {
+        if (!$classReflection->is('Twig_Extension')) {
             return \true;
         }
         return !$this->nodeNameResolver->isNames($classMethod, ['getFunctions', 'getFilters']);

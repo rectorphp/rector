@@ -206,7 +206,7 @@ CODE_SAMPLE
             if (!$this->isNames($classMethod, $unsafeMethods)) {
                 continue;
             }
-            if ($classReflection->isSubclassOf($unsafeType)) {
+            if ($classReflection->is($unsafeType)) {
                 return \false;
             }
             // skip self too

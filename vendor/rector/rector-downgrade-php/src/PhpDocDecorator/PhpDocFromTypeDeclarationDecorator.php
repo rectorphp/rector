@@ -184,7 +184,7 @@ final class PhpDocFromTypeDeclarationDecorator
             if ($classMethodWillChangeReturnType->getMethodName() !== $methodName) {
                 continue;
             }
-            if (!$classReflection->isSubclassOf($classMethodWillChangeReturnType->getClassName())) {
+            if (!$classReflection->is($classMethodWillChangeReturnType->getClassName())) {
                 continue;
             }
             if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'ReturnTypeWillChange')) {

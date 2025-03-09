@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->isSubclassOf('Symfony\\Component\\Validator\\Constraint')) {
+        if (!$classReflection->is('Symfony\\Component\\Validator\\Constraint')) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->name, 'errorNames')) {

@@ -118,6 +118,6 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        return !$classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
+        return !$classReflection->is(SymfonyClass::CONTROLLER);
     }
 }
