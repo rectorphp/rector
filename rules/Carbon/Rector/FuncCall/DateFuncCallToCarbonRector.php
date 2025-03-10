@@ -59,7 +59,7 @@ CODE_SAMPLE
     {
         if ($node instanceof Minus) {
             $left = $node->left;
-            if ($left instanceof FuncCall && $this->isName($left->name, 'time')) {
+            if ($left instanceof FuncCall && !$left->isFirstClassCallable() && $this->isName($left->name, 'time')) {
                 $timeUnit = $this->detectTimeUnit($node->right);
                 if ($timeUnit !== null) {
                     return $this->createCarbonSubtract($timeUnit);

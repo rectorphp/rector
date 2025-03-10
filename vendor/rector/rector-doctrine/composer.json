@@ -11,7 +11,7 @@
         "doctrine\/doctrine-bundle": "^2.13",
         "doctrine\/orm": "^2.20",
         "phpstan\/extension-installer": "^1.4",
-        "phpstan\/phpstan": "^2.0",
+        "phpstan\/phpstan": "^2.1.8",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",

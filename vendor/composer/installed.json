@@ -1687,12 +1687,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "70e288130abf8b477a7abf1f86f0f940b8e58317"
+                "reference": "92f682e23190f3cbbf0e7b95912b5d4ab043be42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/70e288130abf8b477a7abf1f86f0f940b8e58317",
-                "reference": "70e288130abf8b477a7abf1f86f0f940b8e58317",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/92f682e23190f3cbbf0e7b95912b5d4ab043be42",
+                "reference": "92f682e23190f3cbbf0e7b95912b5d4ab043be42",
                 "shasum": ""
             },
             "require": {
@@ -1703,7 +1703,7 @@
                 "doctrine\/doctrine-bundle": "^2.13",
                 "doctrine\/orm": "^2.20",
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.0",
+                "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
@@ -1715,7 +1715,7 @@
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-09T19:48:45+00:00",
+            "time": "2025-03-09T20:53:31+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
