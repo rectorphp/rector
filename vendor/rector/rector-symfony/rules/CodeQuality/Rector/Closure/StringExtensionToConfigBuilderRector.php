@@ -64,7 +64,22 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const EXTENSION_KEY_TO_CLASS_MAP = ['security' => 'Symfony\\Config\\SecurityConfig', 'framework' => 'Symfony\\Config\\FrameworkConfig', 'monolog' => 'Symfony\\Config\\MonologConfig', 'twig' => 'Symfony\\Config\\TwigConfig', 'doctrine' => 'Symfony\\Config\\DoctrineConfig', 'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig', 'sentry' => 'Symfony\\Config\\SentryConfig', 'web_profiler' => 'Symfony\\Config\\WebProfilerConfig', 'debug' => 'Symfony\\Config\\DebugConfig', 'maker' => 'Symfony\\Config\\MakerConfig', 'nelmio_cors' => 'Symfony\\Config\\NelmioCorsConfig', 'api_platform' => 'Symfony\\Config\\ApiPlatformConfig'];
+    private const EXTENSION_KEY_TO_CLASS_MAP = [
+        'security' => 'Symfony\\Config\\SecurityConfig',
+        'framework' => 'Symfony\\Config\\FrameworkConfig',
+        'monolog' => 'Symfony\\Config\\MonologConfig',
+        'twig' => 'Symfony\\Config\\TwigConfig',
+        'doctrine' => 'Symfony\\Config\\DoctrineConfig',
+        'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig',
+        'sentry' => 'Symfony\\Config\\SentryConfig',
+        'web_profiler' => 'Symfony\\Config\\WebProfilerConfig',
+        'debug' => 'Symfony\\Config\\DebugConfig',
+        'maker' => 'Symfony\\Config\\MakerConfig',
+        'nelmio_cors' => 'Symfony\\Config\\NelmioCorsConfig',
+        'api_platform' => 'Symfony\\Config\\ApiPlatformConfig',
+        // @see https://github.com/thephpleague/flysystem-bundle/blob/3.x/src/DependencyInjection/Configuration.php
+        'flysystem' => 'Symfony\\Config\\FlysystemConfig',
+    ];
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher, PropertyNaming $propertyNaming, ValueResolver $valueResolver, NestedConfigCallsFactory $nestedConfigCallsFactory, SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler, SymfonyClosureFactory $symfonyClosureFactory)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
