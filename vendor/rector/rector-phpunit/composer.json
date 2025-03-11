@@ -12,11 +12,12 @@
         "phpstan\/phpstan": "^2.1.8",
         "phpecs\/phpecs": "^2.0",
         "phpstan\/extension-installer": "^1.4",
-        "symplify\/vendor-patches": "^11.3",
+        "symplify\/vendor-patches": "^11.4",
         "tracy\/tracy": "^2.10",
         "tomasvotruba\/class-leak": "^1.2",
         "rector\/swiss-knife": "^1.0",
-        "phpstan\/phpstan-webmozart-assert": "^2.0"
+        "phpstan\/phpstan-webmozart-assert": "^2.0",
+        "rector\/type-perfect": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -53,17 +54,15 @@
         "rector": "vendor\/bin\/rector process --ansi"
     },
     "extra": {
-        "enable-patching": true,
-        "branch-alias": {
-            "dev-main": "0.11-dev"
-        }
+        "enable-patching": true
     },
     "conflict": {
-        "rector\/rector": "<0.11"
+        "rector\/rector": "<2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "cweagans\/composer-patches": true,
             "rector\/extension-installer": true,

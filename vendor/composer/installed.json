@@ -1804,19 +1804,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "757cd1f46f71f33c665a85a26e2aed320cd88795"
+                "reference": "0d8fbf875ffa3caac6b24e12a4afd317622d1d40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/757cd1f46f71f33c665a85a26e2aed320cd88795",
-                "reference": "757cd1f46f71f33c665a85a26e2aed320cd88795",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0d8fbf875ffa3caac6b24e12a4afd317622d1d40",
+                "reference": "0d8fbf875ffa3caac6b24e12a4afd317622d1d40",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2"
             },
             "conflict": {
-                "rector\/rector": "<0.11"
+                "rector\/rector": "<2.0"
             },
             "require-dev": {
                 "phpecs\/phpecs": "^2.0",
@@ -1826,17 +1826,15 @@
                 "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^1.0",
-                "symplify\/vendor-patches": "^11.3",
+                "rector\/type-perfect": "^2.0",
+                "symplify\/vendor-patches": "^11.4",
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-09T20:51:17+00:00",
+            "time": "2025-03-11T11:46:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
                 "enable-patching": true
             },
             "installation-source": "dist",
