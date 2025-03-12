@@ -8,7 +8,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -73,15 +72,19 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        $argsCount = \count($funcCall->args);
+        $args = $funcCall->getArgs();
+        $argsCount = \count($args);
         if ($argsCount <= 2) {
             return \true;
         }
-        if ($funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Array_) {
+        if ($args[2]->value instanceof Array_) {
             return \true;
         }
         if ($argsCount === 3) {
-            return $funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Variable;
+            $type = $this->nodeTypeResolver->getNativeType($args[2]->value);
+            if (!$type->isInteger()->yes()) {
+                return \true;
+            }
         }
         return \false;
     }
