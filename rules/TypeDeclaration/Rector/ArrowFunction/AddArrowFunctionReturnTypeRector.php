@@ -5,6 +5,8 @@ namespace Rector\TypeDeclaration\Rector\ArrowFunction;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -53,6 +55,10 @@ CODE_SAMPLE
         $type = $this->nodeTypeResolver->getNativeType($node->expr);
         // not valid to add explicit type in PHP
         if ($type->isVoid()->yes()) {
+            return null;
+        }
+        $docblockType = $this->getType($node->expr);
+        if ($type instanceof MixedType && $docblockType instanceof NullType) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);
