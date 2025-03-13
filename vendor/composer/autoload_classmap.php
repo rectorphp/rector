@@ -1366,6 +1366,7 @@ return array(
     'Rector\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Differ\\DefaultDiffer' => $baseDir . '/src/Differ/DefaultDiffer.php',
     'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => $vendorDir . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',
+    'Rector\\Doctrine\\Bundle230\\Rector\\Class_\\AddAnnotationToRepositoryRector' => $vendorDir . '/rector/rector-doctrine/rules/Bundle230/Rector/Class_/AddAnnotationToRepositoryRector.php',
     'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\EmbeddableClassAttributeTransformer' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/EmbeddableClassAttributeTransformer.php',
     'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\EntityClassAttributeTransformer' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/EntityClassAttributeTransformer.php',
     'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\InheritanceClassAttributeTransformer' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/InheritanceClassAttributeTransformer.php',

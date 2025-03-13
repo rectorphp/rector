@@ -77,6 +77,10 @@ final class DoctrineSetList
     /**
      * @var string
      */
+    public const DOCTRINE_BUNDLE_230 = __DIR__ . '/../../config/sets/doctrine-bundle-230.php';
+    /**
+     * @var string
+     */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/attributes/doctrine.php';
     /**
      * @var string

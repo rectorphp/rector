@@ -1585,6 +1585,7 @@ class ComposerStaticInit82c6a73a31b80aa1be38da0fc895c7e2
         'Rector\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
         'Rector\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
         'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',
+        'Rector\\Doctrine\\Bundle230\\Rector\\Class_\\AddAnnotationToRepositoryRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Bundle230/Rector/Class_/AddAnnotationToRepositoryRector.php',
         'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\EmbeddableClassAttributeTransformer' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/EmbeddableClassAttributeTransformer.php',
         'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\EntityClassAttributeTransformer' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/EntityClassAttributeTransformer.php',
         'Rector\\Doctrine\\CodeQuality\\AttributeTransformer\\ClassAttributeTransformer\\InheritanceClassAttributeTransformer' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/AttributeTransformer/ClassAttributeTransformer/InheritanceClassAttributeTransformer.php',
