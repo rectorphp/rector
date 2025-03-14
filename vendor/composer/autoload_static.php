@@ -2263,6 +2263,7 @@ class ComposerStaticInit82c6a73a31b80aa1be38da0fc895c7e2
         'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
+        'Rector\\Php84\\Rector\\FuncCall\\AddEscapeArgumentRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/AddEscapeArgumentRector.php',
         'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',
         'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
