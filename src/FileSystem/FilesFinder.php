@@ -59,7 +59,6 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
         $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filteredFilePaths = \array_map(fn(string $filePath): string => \realpath($filePath), $filteredFilePaths);
         $filteredFilePaths = \array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
         // fallback append `.php` to be used for both $filteredFilePaths and $filteredFilePathsInDirectories
         $hasOnlySuffix = $onlySuffix !== null && $onlySuffix !== '';
