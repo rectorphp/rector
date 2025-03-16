@@ -1652,6 +1652,7 @@ class ComposerStaticInit82c6a73a31b80aa1be38da0fc895c7e2
         'Rector\\Doctrine\\NodeManipulator\\ToOneRelationPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ToOneRelationPropertyTypeResolver.php',
         'Rector\\Doctrine\\Orm214\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm214/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
         'Rector\\Doctrine\\Orm28\\Rector\\MethodCall\\IterateToToIterableRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php',
+        'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\CastDoctrineExprToStringRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/CastDoctrineExprToStringRector.php',
         'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
         'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
         'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',

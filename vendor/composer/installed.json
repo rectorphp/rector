@@ -1687,12 +1687,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "8a70e67aa9b6691bc586ecc5ea942ba45240cd21"
+                "reference": "1da0aa0cbb301491186a6f8e447d3d8d48387a02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/8a70e67aa9b6691bc586ecc5ea942ba45240cd21",
-                "reference": "8a70e67aa9b6691bc586ecc5ea942ba45240cd21",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/1da0aa0cbb301491186a6f8e447d3d8d48387a02",
+                "reference": "1da0aa0cbb301491186a6f8e447d3d8d48387a02",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1715,7 @@
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-13T09:08:24+00:00",
+            "time": "2025-03-16T14:47:31+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
