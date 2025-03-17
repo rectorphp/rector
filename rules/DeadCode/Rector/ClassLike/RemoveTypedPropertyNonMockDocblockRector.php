@@ -38,10 +38,6 @@ final class RemoveTypedPropertyNonMockDocblockRector extends AbstractRector impl
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @var string
-     */
-    private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
     public function __construct(VarTagRemover $varTagRemover, StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->varTagRemover = $varTagRemover;
@@ -97,7 +93,7 @@ CODE_SAMPLE
             if (!$property->type instanceof FullyQualified) {
                 continue;
             }
-            if ($this->isObjectType($property->type, new ObjectType(self::MOCK_OBJECT_CLASS))) {
+            if ($this->isObjectType($property->type, new ObjectType(ClassName::MOCK_OBJECT))) {
                 continue;
             }
             $propertyDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -132,7 +128,7 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($varTagType->getTypes() as $unionedType) {
-            if ($unionedType->isSuperTypeOf(new ObjectType(self::MOCK_OBJECT_CLASS))->yes()) {
+            if ($unionedType->isSuperTypeOf(new ObjectType(ClassName::MOCK_OBJECT))->yes()) {
                 return \true;
             }
         }

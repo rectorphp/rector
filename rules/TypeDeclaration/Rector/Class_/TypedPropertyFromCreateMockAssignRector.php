@@ -35,10 +35,6 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
      * @readonly
      */
     private ConstructorAssignDetector $constructorAssignDetector;
-    /**
-     * @var string
-     */
-    private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
     public function __construct(AssignToPropertyTypeInferer $assignToPropertyTypeInferer, StaticTypeMapper $staticTypeMapper, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
@@ -105,7 +101,7 @@ CODE_SAMPLE
             if (!$propertyType instanceof Node) {
                 continue;
             }
-            if (!$this->isObjectType($propertyType, new ObjectType(self::MOCK_OBJECT_CLASS))) {
+            if (!$this->isObjectType($propertyType, new ObjectType(ClassName::MOCK_OBJECT))) {
                 continue;
             }
             if (!$this->constructorAssignDetector->isPropertyAssigned($node, $propertyName)) {

@@ -39,10 +39,6 @@ final class ReturnTypeFromMockObjectRector extends AbstractRector implements Min
      * @readonly
      */
     private ReturnAnalyzer $returnAnalyzer;
-    /**
-     * @var string
-     */
-    private const MOCK_OBJECT_CLASS = 'PHPUnit\\Framework\\MockObject\\MockObject';
     public function __construct(BetterNodeFinder $betterNodeFinder, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnAnalyzer $returnAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -107,7 +103,7 @@ CODE_SAMPLE
         if (!$this->isMockObjectType($returnType)) {
             return null;
         }
-        $node->returnType = new FullyQualified(self::MOCK_OBJECT_CLASS);
+        $node->returnType = new FullyQualified(ClassName::MOCK_OBJECT);
         return $node;
     }
     public function provideMinPhpVersion() : int
@@ -122,11 +118,11 @@ CODE_SAMPLE
         if (\count($type->getTypes()) !== 2) {
             return \false;
         }
-        return \in_array(self::MOCK_OBJECT_CLASS, $type->getObjectClassNames());
+        return \in_array(ClassName::MOCK_OBJECT, $type->getObjectClassNames());
     }
     private function isMockObjectType(Type $returnType) : bool
     {
-        if ($returnType instanceof ObjectType && $returnType->isInstanceOf(self::MOCK_OBJECT_CLASS)->yes()) {
+        if ($returnType instanceof ObjectType && $returnType->isInstanceOf(ClassName::MOCK_OBJECT)->yes()) {
             return \true;
         }
         return $this->isIntersectionWithMockObjectType($returnType);
