@@ -154,11 +154,11 @@ CODE_SAMPLE
             return null;
         }
         $uses = $this->useImportsResolver->resolveBareUses();
-        // 1. bare tags without annotation class, e.g. "@require"
-        $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
-        // 2. Doctrine annotation classes
+        // 1. Doctrine annotation classes
         $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo, $uses);
-        $attributeGroups = \array_merge($genericAttributeGroups, $annotationAttributeGroups);
+        // 2. bare tags without annotation class, e.g. "@require"
+        $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
+        $attributeGroups = \array_merge($annotationAttributeGroups, $genericAttributeGroups);
         if ($attributeGroups === []) {
             return null;
         }
@@ -241,6 +241,10 @@ CODE_SAMPLE
             $doctrineTagValueNode = $phpDocChildNode->value;
             $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineTagValueNode);
             if (!$annotationToAttribute instanceof AnnotationToAttribute) {
+                continue;
+            }
+            if ($annotationToAttribute->getUseValueAsAttributeArgument()) {
+                /* Will be processed by processGenericTags instead */
                 continue;
             }
             // make sure the attribute class really exists to avoid error on early upgrade
