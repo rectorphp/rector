@@ -97,14 +97,7 @@ CODE_SAMPLE
                         return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
                     }
                     $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $staticCallToMethodCall->getClassObjectType());
-                    if ($staticCallToMethodCall->getMethodName() === '*') {
-                        $methodName = $this->getName($node->name);
-                    } else {
-                        $methodName = $staticCallToMethodCall->getMethodName();
-                    }
-                    if (!\is_string($methodName)) {
-                        throw new ShouldNotHappenException();
-                    }
+                    $methodName = $this->getMethodName($node, $staticCallToMethodCall);
                     $hasChanged = \true;
                     return new MethodCall($expr, $methodName, $node->args);
                 }
@@ -124,9 +117,22 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, StaticCallToMethodCall::class);
         $this->staticCallsToMethodCalls = $configuration;
     }
+    private function getMethodName(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall) : string
+    {
+        if ($staticCallToMethodCall->getMethodName() === '*') {
+            $methodName = $this->getName($staticCall->name);
+        } else {
+            $methodName = $staticCallToMethodCall->getMethodName();
+        }
+        if (!\is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
+        return $methodName;
+    }
     private function refactorToInstanceCall(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall) : MethodCall
     {
         $new = new New_(new FullyQualified($staticCallToMethodCall->getClassType()));
-        return new MethodCall($new, $staticCallToMethodCall->getMethodName(), $staticCall->args);
+        $methodName = $this->getMethodName($staticCall, $staticCallToMethodCall);
+        return new MethodCall($new, $methodName, $staticCall->args);
     }
 }
