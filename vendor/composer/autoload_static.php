@@ -1552,6 +1552,7 @@ class ComposerStaticInit82c6a73a31b80aa1be38da0fc895c7e2
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
         'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
+        'Rector\\DeadCode\\Rector\\FuncCall\\RemoveFilterVarOnExactTypeRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FuncCall/RemoveFilterVarOnExactTypeRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
         'Rector\\DeadCode\\Rector\\If_\\ReduceAlwaysFalseIfOrRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/ReduceAlwaysFalseIfOrRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveAlwaysTrueIfConditionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveAlwaysTrueIfConditionRector.php',
