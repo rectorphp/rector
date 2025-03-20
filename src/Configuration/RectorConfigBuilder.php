@@ -348,11 +348,11 @@ final class RectorConfigBuilder
     /**
      * @deprecated Already included in withPhpSets(), no need to repeat
      * make use of polyfill packages in composer.json
+     * @return never
      */
-    public function withPhpPolyfill() : self
+    public function withPhpPolyfill()
     {
-        $this->sets[] = SetList::PHP_POLYFILLS;
-        return $this;
+        throw new InvalidConfigurationException(\sprintf('Method "%s()" is deprecated and is now part of ->withPhpSets() to avoid duplications and too granular configuration.', __METHOD__));
     }
     /**
      * What PHP sets should be applied? By default the same version
@@ -366,7 +366,7 @@ final class RectorConfigBuilder
         $this->isWithPhpSetsUsed = \true;
         $pickedArguments = \array_filter(\func_get_args());
         if ($pickedArguments !== []) {
-            Notifier::notifyWithPhpSetsNotSuitableForPHP80();
+            Notifier::errorWithPhpSetsNotSuitableForPHP74AndLower();
         }
         if (\count($pickedArguments) > 1) {
             throw new InvalidConfigurationException(\sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
