@@ -71,8 +71,9 @@ CODE_SAMPLE
                 if ($node->stmts === null) {
                     continue;
                 }
-                $this->wrap($classMethod, $typeMethodWrap->isArrayWrap());
-                $hasChanged = \true;
+                if ($typeMethodWrap->isArrayWrap() && $this->wrap($classMethod)) {
+                    $hasChanged = \true;
+                }
             }
         }
         if ($hasChanged) {
@@ -88,19 +89,18 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, WrapReturn::class);
         $this->typeMethodWraps = $configuration;
     }
-    private function wrap(ClassMethod $classMethod, bool $isArrayWrap) : ?ClassMethod
+    private function wrap(ClassMethod $classMethod) : bool
     {
         if (!\is_iterable($classMethod->stmts)) {
-            return null;
+            return \false;
         }
-        foreach ($classMethod->stmts as $key => $stmt) {
-            if ($stmt instanceof Return_ && $stmt->expr instanceof Expr) {
-                if ($isArrayWrap && !$stmt->expr instanceof Array_) {
-                    $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
-                }
-                $classMethod->stmts[$key] = $stmt;
+        $hasChanged = \false;
+        foreach ($classMethod->stmts as $stmt) {
+            if ($stmt instanceof Return_ && $stmt->expr instanceof Expr && !$stmt->expr instanceof Array_) {
+                $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
+                $hasChanged = \true;
             }
         }
-        return $classMethod;
+        return $hasChanged;
     }
 }
