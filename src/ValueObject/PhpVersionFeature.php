@@ -556,6 +556,11 @@ final class PhpVersionFeature
      */
     public const DEPRECATE_IMPLICIT_NULLABLE_PARAM_TYPE = \Rector\ValueObject\PhpVersion::PHP_84;
     /**
+     * @see https://wiki.php.net/rfc/new_without_parentheses
+     * @var int
+     */
+    public const NEW_METHOD_CALL_WITHOUT_PARENTHESES = \Rector\ValueObject\PhpVersion::PHP_84;
+    /**
      * @see https://wiki.php.net/rfc/correctly_name_the_rounding_mode_and_make_it_an_enum
      * @var int
      */
