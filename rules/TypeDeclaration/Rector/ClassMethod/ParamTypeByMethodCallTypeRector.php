@@ -188,7 +188,6 @@ CODE_SAMPLE
                     break;
                 }
                 $paramTypes[] = $this->phpParserNodeMapper->mapToPHPStanType($paramType);
-                $hasChanged = \true;
             }
             if ($paramTypes === []) {
                 continue;
@@ -197,6 +196,7 @@ CODE_SAMPLE
             $paramNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
             if ($paramNodeType instanceof Node) {
                 $param->type = $paramNodeType;
+                $hasChanged = \true;
             }
         }
         return $hasChanged;
