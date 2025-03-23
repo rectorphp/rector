@@ -68,7 +68,7 @@ final class SomeServiceTest extends TestCase
     public function provideData(): array
     {
         return [
-            'name' => ['Tom'],
+            ['Tom'],
         ];
     }
 }
