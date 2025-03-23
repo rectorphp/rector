@@ -2012,6 +2012,7 @@ class ComposerStaticInit463a5eb4f43b9fdf649399cc7beca233
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\NarrowUnusedSetUpDefinedPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/NarrowUnusedSetUpDefinedPropertyRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitSelfCallRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\RemoveDataProviderParamKeysRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/RemoveDataProviderParamKeysRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SetUpBeforeClassToSetUpRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SetUpBeforeClassToSetUpRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SingleMockPropertyTypeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SingleMockPropertyTypeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\TestWithToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/TestWithToDataProviderRector.php',
