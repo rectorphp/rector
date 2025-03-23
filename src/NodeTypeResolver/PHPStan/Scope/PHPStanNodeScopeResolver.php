@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use PHPStan\Analyser\UndefinedVariableException;
 use Error;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -390,7 +391,7 @@ final class PHPStanNodeScopeResolver
     {
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (ParserErrorsException|ParserException|ShouldNotHappenException $exception) {
+        } catch (ParserErrorsException|ParserException|ShouldNotHappenException|UndefinedVariableException $exception) {
             // nothing we can do more precise here as error parsing from deep internal PHPStan service with service injection we cannot reset
             // in the middle of process
             // fallback to fill by found scope
