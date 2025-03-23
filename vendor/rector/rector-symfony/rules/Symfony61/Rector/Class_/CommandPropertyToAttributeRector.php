@@ -16,7 +16,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -91,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
         // does attribute already exist?
-        if (!$this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
+        if (!$this->reflectionProvider->hasClass(SymfonyAttribute::AS_COMMAND)) {
             return null;
         }
         $defaultNameExpr = $this->resolvePropertyExpr($node, 'defaultName');
@@ -99,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
         $defaultDescriptionExpr = $this->resolvePropertyExpr($node, 'defaultDescription');
-        $existingAsCommandAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAnnotation::AS_COMMAND);
+        $existingAsCommandAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAttribute::AS_COMMAND);
         $attributeArgs = $this->createAttributeArgs($defaultNameExpr, $defaultDescriptionExpr);
         // already has attribute, only add "name" and optionally "description"
         if ($existingAsCommandAttribute instanceof Attribute) {
@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function createAttributeGroupAsCommand(array $args) : AttributeGroup
     {
         Assert::allIsInstanceOf($args, Arg::class);
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
         $attributeGroup->attrs[0]->args = $args;
         return $attributeGroup;
     }

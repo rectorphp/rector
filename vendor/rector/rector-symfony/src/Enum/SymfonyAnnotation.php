@@ -21,8 +21,4 @@ final class SymfonyAnnotation
      * @var string
      */
     public const TEMPLATE = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
-    /**
-     * @var string
-     */
-    public const AS_COMMAND = 'Symfony\\Component\\Console\\Attribute\\AsCommand';
 }

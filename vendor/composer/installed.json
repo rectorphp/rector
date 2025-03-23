@@ -1864,12 +1864,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "d4e5a0f5ca731659f5d7761c3133e176fa78cdef"
+                "reference": "00c1f259413b81b5075df372d56446f3e41d7891"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d4e5a0f5ca731659f5d7761c3133e176fa78cdef",
-                "reference": "d4e5a0f5ca731659f5d7761c3133e176fa78cdef",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/00c1f259413b81b5075df372d56446f3e41d7891",
+                "reference": "00c1f259413b81b5075df372d56446f3e41d7891",
                 "shasum": ""
             },
             "require": {
@@ -1877,24 +1877,27 @@
                 "php": ">=8.2"
             },
             "require-dev": {
+                "phpecs\/phpecs": "^2.0.1",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
                 "rector\/rector-src": "dev-main",
+                "rector\/type-perfect": "^2.0",
                 "symfony\/config": "^6.4",
                 "symfony\/dependency-injection": "^6.4",
-                "symfony\/http-kernel": "~6.3",
+                "symfony\/http-kernel": "^6.4",
                 "symfony\/routing": "^6.4",
                 "symfony\/security-core": "^6.4",
                 "symfony\/security-http": "^6.4",
                 "symfony\/validator": "^6.4",
-                "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/vendor-patches": "^11.3",
-                "tomasvotruba\/class-leak": "^1.0",
+                "tomasvotruba\/class-leak": "^2.0",
+                "tomasvotruba\/type-coverage": "^2.0",
+                "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-03-11T10:18:32+00:00",
+            "time": "2025-03-21T10:27:25+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
