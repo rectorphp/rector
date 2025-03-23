@@ -32,7 +32,7 @@ final class SwitchExprsResolver
                 continue;
             }
             if (!$case->cond instanceof Expr) {
-                continue;
+                return [];
             }
             $collectionEmptyCasesCond[$key] = $case->cond;
         }
