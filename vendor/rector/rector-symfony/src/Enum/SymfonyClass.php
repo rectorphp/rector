@@ -61,4 +61,16 @@ final class SymfonyClass
      * @var string
      */
     public const TOKEN_STORAGE_INTERFACE = 'Symfony\\Component\\Security\\Core\\Authentication\\Token\\Storage\\TokenStorageInterface';
+    /**
+     * @var string
+     */
+    public const HTTP_KERNEL_INTERFACE = 'Symfony\\Component\\HttpKernel\\HttpKernelInterface';
+    /**
+     * @var string
+     */
+    public const HTTP_KERNEL = 'Symfony\\Component\\HttpKernel\\HttpKernel';
+    /**
+     * @var string
+     */
+    public const REQUEST = 'Symfony\\Component\\HttpFoundation\\Request';
 }
