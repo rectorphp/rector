@@ -176,6 +176,9 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
                 return \true;
             }
             if (\strncmp($name, $lastName . '\\', \strlen($lastName . '\\')) !== 0) {
+                if (\strncmp($name, $comparedName . '\\', \strlen($comparedName . '\\')) === 0) {
+                    return \true;
+                }
                 continue;
             }
             if ($namespaceName === null) {
