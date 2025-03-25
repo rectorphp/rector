@@ -653,7 +653,7 @@ final class RectorConfigBuilder
         // too high
         $levelRulesCount = \count($levelRules);
         if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow('withTypeCoverageLevel', $level, $levelRulesCount, 'typeCoverage', 'TYPE_DECLARATION');
+            $this->levelOverflows[] = new LevelOverflow('withTypeCoverageLevel', $level, $levelRulesCount, 'typeDeclarations', 'TYPE_DECLARATION');
         }
         $this->rules = \array_merge($this->rules, $levelRules);
         return $this;
