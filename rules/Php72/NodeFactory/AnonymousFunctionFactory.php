@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\InlineCodeParser;
@@ -50,17 +51,22 @@ final class AnonymousFunctionFactory
      */
     private InlineCodeParser $inlineCodeParser;
     /**
+     * @readonly
+     */
+    private ReservedKeywordAnalyzer $reservedKeywordAnalyzer;
+    /**
      * @var string
      * @see https://regex101.com/r/jkLLlM/2
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, InlineCodeParser $inlineCodeParser)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, InlineCodeParser $inlineCodeParser, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->simplePhpParser = $simplePhpParser;
         $this->inlineCodeParser = $inlineCodeParser;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
     /**
      * @api
@@ -148,6 +154,10 @@ final class AnonymousFunctionFactory
                 continue;
             }
             if (\in_array($variableName, $paramNames, \true)) {
+                continue;
+            }
+            // Superglobal variables cannot be in a use statement
+            if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
                 continue;
             }
             if ($variable->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true || $variable->getAttribute(AttributeKey::IS_PARAM_VAR) === \true || $variable->getAttribute(AttributeKey::IS_VARIABLE_LOOP) === \true) {
