@@ -83,7 +83,10 @@ CODE_SAMPLE
         if ($node->expr instanceof Assign && $node->expr->expr instanceof Variable) {
             $isFound = (bool) $this->betterNodeFinder->findFirst($anonymousFunctionFactory->uses, fn(Node $subNode): bool => $subNode instanceof Variable && $this->nodeComparator->areNodesEqual($subNode, $node->expr->expr));
             if (!$isFound) {
-                $anonymousFunctionFactory->uses[] = new ClosureUse($node->expr->expr);
+                $isAlsoParam = \in_array($node->expr->expr->name, \array_map(static fn($param) => $param->var instanceof Variable ? $param->var->name : null, $node->params));
+                if (!$isAlsoParam) {
+                    $anonymousFunctionFactory->uses[] = new ClosureUse($node->expr->expr);
+                }
             }
         }
         // downgrade "return throw"
