@@ -38,6 +38,9 @@ final class ServiceMapFactory
             }
             $def = $this->convertXmlToArray($def);
             $tags = $this->createTagFromXmlElement($def);
+            if (\in_array('container.excluded', \array_column($tags, 'name'), \true)) {
+                continue;
+            }
             $service = $this->createServiceFromXmlAndTagsData($attrs, $tags);
             if ($service->getAlias() !== null) {
                 $aliases[] = $service;

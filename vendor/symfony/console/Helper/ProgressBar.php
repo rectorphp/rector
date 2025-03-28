@@ -411,6 +411,11 @@ final class ProgressBar
                 if ($this->output instanceof ConsoleSectionOutput) {
                     $messageLines = \explode("\n", $this->previousMessage);
                     $lineCount = \count($messageLines);
+                    $lastLineWithoutDecoration = Helper::removeDecoration($this->output->getFormatter(), \end($messageLines) ?? '');
+                    // When the last previous line is empty (without formatting) it is already cleared by the section output, so we don't need to clear it again
+                    if ('' === $lastLineWithoutDecoration) {
+                        --$lineCount;
+                    }
                     foreach ($messageLines as $messageLine) {
                         $messageLineLength = Helper::width(Helper::removeDecoration($this->output->getFormatter(), $messageLine));
                         if ($messageLineLength > $this->terminal->getWidth()) {

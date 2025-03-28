@@ -55,7 +55,7 @@ class UnixPipes extends AbstractPipes
             return [['file', '/dev/tty', 'r'], ['file', '/dev/tty', 'w'], ['file', '/dev/tty', 'w']];
         }
         if ($this->ptyMode && Process::isPtySupported()) {
-            return [['pty'], ['pty'], ['pty']];
+            return [['pty'], ['pty'], ['pipe', 'w']];
         }
         return [
             ['pipe', 'r'],
