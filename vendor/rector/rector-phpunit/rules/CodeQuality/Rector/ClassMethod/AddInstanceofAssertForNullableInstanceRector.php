@@ -110,6 +110,7 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $variableNameToTypeCollection = $this->nullableObjectAssignCollector->collect($node);
+        $next = 0;
         foreach ($node->stmts as $key => $stmt) {
             // has callable on nullable variable of already collected name?
             $matchedNullableVariableNameToType = $this->matchedNullableVariableNameToType($stmt, $variableNameToTypeCollection);
@@ -118,11 +119,12 @@ CODE_SAMPLE
             }
             // adding type here + popping the variable name out
             $assertInstanceofExpression = $this->createAssertInstanceof($matchedNullableVariableNameToType);
-            \array_splice($node->stmts, $key, 0, [$assertInstanceofExpression]);
+            \array_splice($node->stmts, $key + $next, 0, [$assertInstanceofExpression]);
             // remove variable name from nullable ones
             $hasChanged = \true;
             // from now on, the variable is not nullable, remove to avoid double asserts
             $variableNameToTypeCollection->remove($matchedNullableVariableNameToType);
+            ++$next;
         }
         if (!$hasChanged) {
             return null;
