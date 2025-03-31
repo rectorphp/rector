@@ -20,7 +20,7 @@ class Strings
     /** @deprecated use Strings::TrimCharacters */
     public const TRIM_CHARACTERS = self::TrimCharacters;
     /**
-     * @deprecated use Nette\Utils\Validator::isUnicode()
+     * @deprecated use Nette\Utils\Validators::isUnicode()
      */
     public static function checkEncoding(string $s) : bool
     {

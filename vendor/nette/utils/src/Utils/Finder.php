@@ -434,6 +434,6 @@ class Finder implements \IteratorAggregate
             $anchor = '(?:^|/)';
         }
         $pattern = \strtr(\preg_quote($mask, '#'), ['\\*\\*/' => '(.+/)?', '\\*' => '[^/]*', '\\?' => '[^/]', '\\[\\!' => '[^', '\\[' => '[', '\\]' => ']', '\\-' => '-']);
-        return '#' . $anchor . $pattern . '$#D' . (\defined('PHP_WINDOWS_VERSION_BUILD') ? 'i' : '');
+        return '#' . $anchor . $pattern . '$#D' . (Helpers::IsWindows ? 'i' : '');
     }
 }

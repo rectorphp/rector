@@ -214,6 +214,8 @@ final class Iterables
                 return self::toIterator($iterable->getIterator());
             case \is_array($iterable):
                 return new \ArrayIterator($iterable);
+            default:
+                throw new Nette\ShouldNotHappenException();
         }
     }
 }

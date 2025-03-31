@@ -73,7 +73,7 @@ final class SomeTest extends TestCase
     public function test()
     {
         $someObject = $this->getSomeObject();
-        $this->assertInstanceof(SomeClass::class, $someObject);
+        $this->assertInstanceOf(SomeClass::class, $someObject);
 
         $value = $someObject->getSomeMethod();
     }
@@ -118,8 +118,8 @@ CODE_SAMPLE
                 continue;
             }
             // adding type here + popping the variable name out
-            $assertInstanceofExpression = $this->createAssertInstanceof($matchedNullableVariableNameToType);
-            \array_splice($node->stmts, $key + $next, 0, [$assertInstanceofExpression]);
+            $assertInstanceOfExpression = $this->createAssertInstanceOf($matchedNullableVariableNameToType);
+            \array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
             // remove variable name from nullable ones
             $hasChanged = \true;
             // from now on, the variable is not nullable, remove to avoid double asserts
@@ -141,10 +141,10 @@ CODE_SAMPLE
         }
         return \count($type->getTypes()) === 2;
     }
-    private function createAssertInstanceof(VariableNameToType $variableNameToType) : Expression
+    private function createAssertInstanceOf(VariableNameToType $variableNameToType) : Expression
     {
         $args = [new Arg(new ClassConstFetch(new FullyQualified($variableNameToType->getObjectType()), 'class')), new Arg(new Variable($variableNameToType->getVariableName()))];
-        $methodCall = new MethodCall(new Variable('this'), 'assertInstanceof', $args);
+        $methodCall = new MethodCall(new Variable('this'), 'assertInstanceOf', $args);
         return new Expression($methodCall);
     }
     private function matchedNullableVariableNameToType(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection) : ?VariableNameToType

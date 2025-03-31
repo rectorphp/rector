@@ -222,6 +222,20 @@ final class FileSystem
         return self::normalizePath(\implode('/', $paths));
     }
     /**
+     * Resolves a path against a base path. If the path is absolute, returns it directly, if it's relative, joins it with the base path.
+     */
+    public static function resolvePath(string $basePath, string $path) : string
+    {
+        switch (\true) {
+            case self::isAbsolute($path):
+                return self::platformSlashes($path);
+            case $path === '':
+                return self::platformSlashes($basePath);
+            default:
+                return self::joinPaths($basePath, $path);
+        }
+    }
+    /**
      * Converts backslashes to slashes.
      */
     public static function unixSlashes(string $path) : string

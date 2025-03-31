@@ -587,39 +587,36 @@ class Image
     {
         switch ($type) {
             case ImageType::JPEG:
-                $quality = $quality === null ? 85 : \max(0, \min(100, $quality));
-                $success = @\imagejpeg($this->image, $file, $quality);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [85, 0, 100];
                 break;
             case ImageType::PNG:
-                $quality = $quality === null ? 9 : \max(0, \min(9, $quality));
-                $success = @\imagepng($this->image, $file, $quality);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [9, 0, 9];
                 break;
             case ImageType::GIF:
-                $success = @\imagegif($this->image, $file);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [null, null, null];
                 break;
             case ImageType::WEBP:
-                $quality = $quality === null ? 80 : \max(0, \min(100, $quality));
-                $success = @\imagewebp($this->image, $file, $quality);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [80, 0, 100];
                 break;
             case ImageType::AVIF:
-                $quality = $quality === null ? 30 : \max(0, \min(100, $quality));
-                $success = @\imageavif($this->image, $file, $quality);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [30, 0, 100];
                 break;
             case ImageType::BMP:
-                $success = @\imagebmp($this->image, $file);
-                // @ is escalated to exception
+                [$defQuality, $min, $max] = [null, null, null];
                 break;
             default:
                 throw new Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
         }
-        if (!$success) {
-            throw new ImageException(Helpers::getLastError() ?: 'Unknown error');
+        $args = [$this->image, $file];
+        if ($defQuality !== null) {
+            $args[] = $quality === null ? $defQuality : \max($min, \min($max, $quality));
         }
+        Callback::invokeSafe('image' . self::Formats[$type], $args, function (string $message) use($file) : void {
+            if ($file !== null) {
+                @\unlink($file);
+            }
+            throw new ImageException($message);
+        });
     }
     /**
      * Call to undefined method.

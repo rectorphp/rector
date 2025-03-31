@@ -859,6 +859,7 @@ class ComposerStaticInit463a5eb4f43b9fdf649399cc7beca233
         'RectorPrefix202503\\Nette\\NotImplementedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix202503\\Nette\\NotSupportedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix202503\\Nette\\OutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
+        'RectorPrefix202503\\Nette\\ShouldNotHappenException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix202503\\Nette\\SmartObject' => __DIR__ . '/..' . '/nette/utils/src/SmartObject.php',
         'RectorPrefix202503\\Nette\\StaticClass' => __DIR__ . '/..' . '/nette/utils/src/StaticClass.php',
         'RectorPrefix202503\\Nette\\UnexpectedValueException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',

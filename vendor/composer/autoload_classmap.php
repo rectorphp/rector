@@ -640,6 +640,7 @@ return array(
     'RectorPrefix202503\\Nette\\NotImplementedException' => $vendorDir . '/nette/utils/src/exceptions.php',
     'RectorPrefix202503\\Nette\\NotSupportedException' => $vendorDir . '/nette/utils/src/exceptions.php',
     'RectorPrefix202503\\Nette\\OutOfRangeException' => $vendorDir . '/nette/utils/src/exceptions.php',
+    'RectorPrefix202503\\Nette\\ShouldNotHappenException' => $vendorDir . '/nette/utils/src/exceptions.php',
     'RectorPrefix202503\\Nette\\SmartObject' => $vendorDir . '/nette/utils/src/SmartObject.php',
     'RectorPrefix202503\\Nette\\StaticClass' => $vendorDir . '/nette/utils/src/StaticClass.php',
     'RectorPrefix202503\\Nette\\UnexpectedValueException' => $vendorDir . '/nette/utils/src/exceptions.php',

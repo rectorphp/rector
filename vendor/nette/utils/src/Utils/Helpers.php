@@ -10,6 +10,7 @@ namespace RectorPrefix202503\Nette\Utils;
 use RectorPrefix202503\Nette;
 class Helpers
 {
+    public const IsWindows = \PHP_OS_FAMILY === 'Windows';
     /**
      * Executes a callback and returns the captured output as a string.
      */
