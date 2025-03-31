@@ -68,22 +68,22 @@ final class PhpDocTypeChanger
         $this->newPhpDocFromPHPStanTypeGuard = $newPhpDocFromPHPStanTypeGuard;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function changeVarType(Stmt $stmt, PhpDocInfo $phpDocInfo, Type $newType) : void
+    public function changeVarType(Stmt $stmt, PhpDocInfo $phpDocInfo, Type $newType) : bool
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@var')) {
-            return;
+            return \false;
         }
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getVarType(), $newType)) {
-            return;
+            return \false;
         }
         // prevent existing type override by mixed
         if (!$phpDocInfo->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getIterableValueType() instanceof NeverType) {
-            return;
+            return \false;
         }
         if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {
-            return;
+            return \false;
         }
         // override existing type
         $newPHPStanPhpDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
@@ -97,6 +97,7 @@ final class PhpDocTypeChanger
             $phpDocInfo->addTagValueNode($varTagValueNode);
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
+        return \true;
     }
     public function changeReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType) : bool
     {
