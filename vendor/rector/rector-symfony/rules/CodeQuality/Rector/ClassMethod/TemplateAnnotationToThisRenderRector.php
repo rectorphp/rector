@@ -189,8 +189,10 @@ CODE_SAMPLE
             if (!$node instanceof StmtsAwareInterface) {
                 return null;
             }
-            $this->refactorStmtsAwareNode($node, $templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod);
-            $hasChanged = \true;
+            $hasChangedNode = $this->refactorStmtsAwareNode($node, $templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod);
+            if ($hasChangedNode) {
+                $hasChanged = \true;
+            }
             return null;
         });
         if (!$this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
@@ -215,15 +217,15 @@ CODE_SAMPLE
         $returnType = $this->getType($lastReturn->expr);
         return $responseObjectType->isSuperTypeOf($returnType)->yes();
     }
-    private function refactorReturn(Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : void
+    private function refactorReturn(Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : bool
     {
         // nothing we can do
         if (!$return->expr instanceof Expr) {
-            return;
+            return \false;
         }
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
         $thisRenderMethodCall = $this->thisRenderFactory->create($return, $templateDoctrineAnnotationTagValueNode, $classMethod);
-        $this->refactorReturnWithValue($return, $hasThisRenderOrReturnsResponse, $thisRenderMethodCall, $classMethod, $templateDoctrineAnnotationTagValueNode);
+        return $this->refactorReturnWithValue($return, $hasThisRenderOrReturnsResponse, $thisRenderMethodCall, $classMethod, $templateDoctrineAnnotationTagValueNode);
     }
     private function refactorNoReturn(ClassMethod $classMethod, MethodCall $thisRenderMethodCall, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
@@ -231,7 +233,7 @@ CODE_SAMPLE
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
     }
-    private function refactorReturnWithValue(Return_ $return, bool $hasThisRenderOrReturnsResponse, MethodCall $thisRenderMethodCall, ClassMethod $classMethod, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
+    private function refactorReturnWithValue(Return_ $return, bool $hasThisRenderOrReturnsResponse, MethodCall $thisRenderMethodCall, ClassMethod $classMethod, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
     {
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
@@ -244,16 +246,17 @@ CODE_SAMPLE
             $return->expr = $thisRenderMethodCall;
         } elseif ($returnStaticType instanceof MixedType) {
             // nothing we can do
-            return;
+            return \false;
         }
         $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType($returnStaticType, SymfonyClass::RESPONSE);
         // skip as the original class method has to change first
         if ($isArrayOrResponseType) {
-            return;
+            return \false;
         }
         // already response
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
+        return \true;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
@@ -264,20 +267,25 @@ CODE_SAMPLE
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
     }
-    private function refactorStmtsAwareNode(StmtsAwareInterface $stmtsAware, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : void
+    private function refactorStmtsAwareNode(StmtsAwareInterface $stmtsAware, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : bool
     {
         if ($stmtsAware->stmts === null) {
-            return;
+            return \false;
         }
+        $hasChanged = \false;
         foreach ($stmtsAware->stmts as $stmt) {
             if (!$stmt instanceof Return_) {
                 continue;
             }
             // just created node, skip it
             if ($stmt->getAttributes() === []) {
-                return;
+                return \false;
             }
-            $this->refactorReturn($stmt, $templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod);
+            $hasChangedReturn = $this->refactorReturn($stmt, $templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod);
+            if ($hasChangedReturn) {
+                $hasChanged = \true;
+            }
         }
+        return $hasChanged;
     }
 }

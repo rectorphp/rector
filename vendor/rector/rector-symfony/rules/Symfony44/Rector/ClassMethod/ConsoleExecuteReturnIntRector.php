@@ -86,6 +86,7 @@ CODE_SAMPLE
         if (!$executeClassMethod instanceof ClassMethod) {
             return null;
         }
+        $this->hasChanged = \false;
         $this->refactorReturnTypeDeclaration($executeClassMethod);
         $this->addReturn0ToExecuteClassMethod($executeClassMethod);
         if ($this->hasChanged) {

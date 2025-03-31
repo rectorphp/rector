@@ -96,7 +96,10 @@ CODE_SAMPLE
         if (!$activeValueType instanceof StringType) {
             return null;
         }
-        $this->processStringType($node, $argumentPosition, $activeArgValue);
+        $hasChanged = $this->processStringType($node, $argumentPosition, $activeArgValue);
+        if (!$hasChanged) {
+            return null;
+        }
         return $node;
     }
     private function shouldSkipProcessMethodCall(MethodCall $methodCall) : bool
@@ -107,23 +110,27 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $expr
      */
-    private function processStringType($expr, int $argumentPosition, Expr $firstArgumentExpr) : void
+    private function processStringType($expr, int $argumentPosition, Expr $firstArgumentExpr) : bool
     {
         if ($firstArgumentExpr instanceof Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
             $expr->args[$argumentPosition] = new Arg($arrayNode);
-            return;
+            return \true;
         }
         $args = $expr->getArgs();
+        $hasChanged = \false;
         if ($firstArgumentExpr instanceof FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
             if ($arrayNode instanceof Array_) {
                 $args[$argumentPosition]->value = $arrayNode;
+                $hasChanged = \true;
             }
         } elseif ($firstArgumentExpr instanceof String_) {
             $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
             $args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
+            $hasChanged = \true;
         }
+        return $hasChanged;
     }
     /**
      * @return string[]
