@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202503;
+namespace RectorPrefix202504;
 
 use Rector\Carbon\Rector\FuncCall\DateFuncCallToCarbonRector;
 use Rector\Carbon\Rector\FuncCall\TimeFuncCallToCarbonRector;

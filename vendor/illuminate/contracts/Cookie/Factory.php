@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Cookie;
+namespace RectorPrefix202504\Illuminate\Contracts\Cookie;
 
 interface Factory
 {

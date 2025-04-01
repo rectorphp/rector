@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\ValueObject\Error;
 
-use RectorPrefix202503\Nette\Utils\Strings;
+use RectorPrefix202504\Nette\Utils\Strings;
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202503\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202504\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     /**

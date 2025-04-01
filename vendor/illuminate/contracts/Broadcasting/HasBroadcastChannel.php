@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Broadcasting;
+namespace RectorPrefix202504\Illuminate\Contracts\Broadcasting;
 
 interface HasBroadcastChannel
 {

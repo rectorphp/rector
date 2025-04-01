@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202503\Fidry\CpuCoreCounter\Finder;
+namespace RectorPrefix202504\Fidry\CpuCoreCounter\Finder;
 
-use RectorPrefix202503\Fidry\CpuCoreCounter\Executor\ProcessExecutor;
+use RectorPrefix202504\Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use function sprintf;
 /**
  * The number of (logical) cores.

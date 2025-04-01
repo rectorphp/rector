@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Bus;
+namespace RectorPrefix202504\Illuminate\Contracts\Bus;
 
 interface QueueingDispatcher extends Dispatcher
 {

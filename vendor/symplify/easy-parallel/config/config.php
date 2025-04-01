@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202503;
+namespace RectorPrefix202504;
 
-use RectorPrefix202503\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202504\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();

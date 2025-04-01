@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202503\\Symplify\\EasyParallel\\": "src"
+            "RectorPrefix202504\\Symplify\\EasyParallel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202503\\Symplify\\EasyParallel\\Tests\\": "tests"
+            "RectorPrefix202504\\Symplify\\EasyParallel\\Tests\\": "tests"
         }
     },
     "scripts": {

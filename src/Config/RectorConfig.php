@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Config;
 
-use RectorPrefix202503\Illuminate\Container\Container;
+use RectorPrefix202504\Illuminate\Container\Container;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -19,11 +19,11 @@ use Rector\Validation\RectorConfigValidator;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
-use RectorPrefix202503\Symfony\Component\Console\Command\Command;
-use RectorPrefix202503\Symfony\Component\Console\Input\ArrayInput;
-use RectorPrefix202503\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202503\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202503\Webmozart\Assert\Assert;
+use RectorPrefix202504\Symfony\Component\Console\Command\Command;
+use RectorPrefix202504\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix202504\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202504\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202504\Webmozart\Assert\Assert;
 /**
  * @api
  */

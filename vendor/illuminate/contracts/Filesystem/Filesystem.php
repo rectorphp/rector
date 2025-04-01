@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Filesystem;
+namespace RectorPrefix202504\Illuminate\Contracts\Filesystem;
 
 interface Filesystem
 {

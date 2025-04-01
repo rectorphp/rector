@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202503\Nette\Utils;
+namespace RectorPrefix202504\Nette\Utils;
 
-use RectorPrefix202503\Nette;
+use RectorPrefix202504\Nette;
 use Random\Randomizer;
 /**
  * Secure random string generator.

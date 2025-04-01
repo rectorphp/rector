@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit100\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
@@ -95,11 +96,13 @@ CODE_SAMPLE
             /** @var Expression $stmt */
             foreach ($dataProvider->getStmts() ?? [] as $stmt) {
                 $expr = $stmt->expr;
+                $arrayChanged = \false;
                 if ($expr instanceof Yield_) {
-                    $this->handleStmt($expr->value);
-                    $hasChanged = \true;
+                    $arrayChanged = $this->handleArray($expr->value);
                 } elseif ($expr instanceof Array_) {
-                    $this->handleStmt($expr);
+                    $arrayChanged = $this->handleArray($expr);
+                }
+                if ($arrayChanged) {
                     $hasChanged = \true;
                 }
             }
@@ -109,15 +112,18 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function handleStmt(Array_ $array) : void
+    private function handleArray(Array_ $array) : bool
     {
+        $hasChanged = \false;
         foreach ($array->items as $item) {
             if (!$item instanceof ArrayItem) {
                 continue;
             }
-            if (!$item->key instanceof Int_) {
+            if (!$item->key instanceof Int_ && $item->key instanceof Expr) {
                 $item->key = null;
+                $hasChanged = \true;
             }
         }
+        return $hasChanged;
     }
 }

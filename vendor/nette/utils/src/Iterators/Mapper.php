@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202503\Nette\Iterators;
+namespace RectorPrefix202504\Nette\Iterators;
 
 /**
  * @deprecated use Nette\Utils\Iterables::map()

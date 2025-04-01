@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Auth\Middleware;
+namespace RectorPrefix202504\Illuminate\Contracts\Auth\Middleware;
 
 interface AuthenticatesRequests
 {

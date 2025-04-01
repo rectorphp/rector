@@ -15,7 +15,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use RectorPrefix202503\Webmozart\Assert\Assert;
+use RectorPrefix202504\Webmozart\Assert\Assert;
 final class AnnotationToAttributeIntegerValueCaster
 {
     /**

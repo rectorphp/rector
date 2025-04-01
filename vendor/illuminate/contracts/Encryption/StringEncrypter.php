@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202503\Illuminate\Contracts\Encryption;
+namespace RectorPrefix202504\Illuminate\Contracts\Encryption;
 
 interface StringEncrypter
 {
