@@ -93,3 +93,14 @@ This is no longer needed. Now The `getRuleDefinition()` method has been removed:
 
 If you need description yourself to understand rule after many months, use the common place for documentation - docblock above class.
 
+
+### 3. `SetListInterface` was removed
+
+The deprecated `SetListInterface` was removed, if you created your own list just remove the Interface from it:
+
+```diff
+-use Rector\Set\Contract\SetListInterface;
+
+-final class YourSetList implements SetListInterface
++final class YourSetList
+```
