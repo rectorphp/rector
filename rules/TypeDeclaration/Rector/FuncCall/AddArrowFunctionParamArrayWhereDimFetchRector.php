@@ -8,8 +8,11 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
+use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -62,7 +65,7 @@ CODE_SAMPLE
         if ($arrowFunctionParam->type instanceof Node) {
             return null;
         }
-        if ($this->hasTernary($arrowFunction)) {
+        if ($this->shouldSkip($arrowFunction)) {
             return null;
         }
         $paramName = $this->getName($arrowFunctionParam);
@@ -87,9 +90,16 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function hasTernary(ArrowFunction $arrowFunction) : bool
+    private function shouldSkip(ArrowFunction $arrowFunction) : bool
     {
-        $nodeFinder = new NodeFinder();
-        return (bool) $nodeFinder->findFirstInstanceOf($arrowFunction->expr, Ternary::class);
+        $shouldSkip = \false;
+        $this->traverseNodesWithCallable($arrowFunction->expr, function (Node $subNode) use(&$shouldSkip) : ?int {
+            if ($subNode instanceof Class_ || $subNode instanceof FunctionLike || $subNode instanceof Ternary) {
+                $shouldSkip = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
+            }
+            return null;
+        });
+        return $shouldSkip;
     }
 }
