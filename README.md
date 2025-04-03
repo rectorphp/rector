@@ -60,13 +60,13 @@ return RectorConfig::configure()
 Then dry run Rector:
 
 ```bash
-vendor/bin/rector process src --dry-run
+vendor/bin/rector src --dry-run
 ```
 
 Rector will show you diff of files that it *would* change. To *make* the changes, drop `--dry-run`:
 
 ```bash
-vendor/bin/rector process src
+vendor/bin/rector src
 ```
 
 ## Documentation
@@ -124,7 +124,7 @@ See [the contribution guide](/CONTRIBUTING.md) or go to development repository [
 You can use `--debug` option, that will print nested exceptions output:
 
 ```bash
-vendor/bin/rector process src/Controller --dry-run --debug
+vendor/bin/rector src/Controller --dry-run --debug
 ```
 
 Or with Xdebug:
@@ -133,7 +133,7 @@ Or with Xdebug:
 2. Add `--xdebug` option when running Rector
 
 ```bash
-vendor/bin/rector process src/Controller --dry-run --xdebug
+vendor/bin/rector src/Controller --dry-run --xdebug
 ```
 
 To assist with simple debugging Rector provides 2 helpers to pretty-print AST-nodes:
