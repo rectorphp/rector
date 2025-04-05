@@ -7,12 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeFinder;
-use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -65,11 +60,14 @@ CODE_SAMPLE
         if ($arrowFunctionParam->type instanceof Node) {
             return null;
         }
-        if ($this->shouldSkip($arrowFunction)) {
+        if (!$arrowFunction->expr instanceof ArrayDimFetch) {
             return null;
         }
-        $paramName = $this->getName($arrowFunctionParam);
-        if (!$this->isParamArrayDimFetched($arrowFunction, $paramName)) {
+        $var = $arrowFunction->expr;
+        while ($var instanceof ArrayDimFetch) {
+            $var = $var->var;
+        }
+        if (!$this->nodeComparator->areNodesEqual($var, $arrowFunctionParam->var)) {
             return null;
         }
         $arrowFunctionParam->type = new Identifier('array');
@@ -78,28 +76,5 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::SCALAR_TYPES;
-    }
-    private function isParamArrayDimFetched(ArrowFunction $arrowFunction, string $paramName) : bool
-    {
-        $nodeFinder = new NodeFinder();
-        $arrayDimFetches = $nodeFinder->findInstanceOf($arrowFunction->expr, ArrayDimFetch::class);
-        foreach ($arrayDimFetches as $arrayDimFetch) {
-            if ($this->isName($arrayDimFetch->var, $paramName)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function shouldSkip(ArrowFunction $arrowFunction) : bool
-    {
-        $shouldSkip = \false;
-        $this->traverseNodesWithCallable($arrowFunction->expr, function (Node $subNode) use(&$shouldSkip) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof FunctionLike || $subNode instanceof Ternary) {
-                $shouldSkip = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
-            }
-            return null;
-        });
-        return $shouldSkip;
     }
 }
