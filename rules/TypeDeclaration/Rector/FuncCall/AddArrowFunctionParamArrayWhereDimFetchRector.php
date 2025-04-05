@@ -33,7 +33,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $array = [['name' => 'John']];
 
-$result = array_map(fn ($item) => $item['name'], $array);
+$result = array_map(fn (array $item) => $item['name'], $array);
 CODE_SAMPLE
 )]);
     }
