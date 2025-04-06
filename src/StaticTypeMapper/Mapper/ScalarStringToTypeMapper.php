@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\StaticTypeMapper\Mapper;
 
 use RectorPrefix202504\Nette\Utils\Strings;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -22,6 +23,7 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VoidType;
 final class ScalarStringToTypeMapper
 {
@@ -49,6 +51,9 @@ final class ScalarStringToTypeMapper
                 continue;
             }
             return new $objectType();
+        }
+        if ($loweredScalarName === 'list') {
+            return TypeCombinator::intersect(new ArrayType(new MixedType(), new MixedType()), new AccessoryArrayListType());
         }
         if ($loweredScalarName === 'array') {
             return new ArrayType(new MixedType(), new MixedType());

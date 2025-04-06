@@ -14,12 +14,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -193,6 +195,9 @@ CODE_SAMPLE
             $narrowArrayType = $arrayType;
         } else {
             $narrowArrayType = new ArrayType(new MixedType(), $itemType);
+        }
+        if ($arrayType->isList()->yes()) {
+            $narrowArrayType = TypeCombinator::intersect($narrowArrayType, new AccessoryArrayListType());
         }
         $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $narrowArrayType);
     }
