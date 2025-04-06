@@ -153,6 +153,22 @@ final class ArrayParser
         if (\is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
             $value = new StringNode(\substr($rawValue, 1, \strlen($rawValue) - 2));
+        } elseif ($valueQuoteKind === null && \is_string($rawValue)) {
+            $lowerRawValue = \strtolower($rawValue);
+            switch ($lowerRawValue) {
+                case 'null':
+                    $value = null;
+                    break;
+                case 'true':
+                    $value = \true;
+                    break;
+                case 'false':
+                    $value = \false;
+                    break;
+                default:
+                    $value = $rawValue;
+                    break;
+            }
         } else {
             $value = $rawValue;
         }
