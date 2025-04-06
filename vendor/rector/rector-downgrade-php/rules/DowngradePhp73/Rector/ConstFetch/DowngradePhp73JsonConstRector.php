@@ -92,12 +92,13 @@ CODE_SAMPLE
     }
     /**
      * @param ConstFetch|BitwiseOr|If_|TryCatch|Expression $node
-     * @return null|Expr|If_|array<Expression|If_>
+     * @return null|Expr|array<Expression|If_>
      */
     public function refactor(Node $node)
     {
         if ($node instanceof If_) {
-            return $this->refactorIf($node);
+            $this->markConstantKnownInInnerStmts($node);
+            return null;
         }
         // skip as known
         if ((bool) $node->getAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN)) {
@@ -124,16 +125,15 @@ CODE_SAMPLE
         }
         return $this->jsonConstCleaner->clean($node, [JsonConstant::THROW_ON_ERROR]);
     }
-    private function refactorIf(If_ $if) : ?If_
+    private function markConstantKnownInInnerStmts(If_ $if) : void
     {
         if (!$this->defineFuncCallAnalyzer->isDefinedWithConstants($if->cond, [JsonConstant::THROW_ON_ERROR])) {
-            return null;
+            return;
         }
         $this->traverseNodesWithCallable($if, static function (Node $node) {
             $node->setAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN, \true);
             return null;
         });
-        return $if;
     }
     private function resolveFuncCall(Expression $Expression) : ?FuncCall
     {
