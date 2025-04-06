@@ -14,13 +14,14 @@ final class IdAttributeTransformer implements PropertyAttributeTransformerInterf
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $idMapping = $entityMapping->matchIdPropertyMapping($property);
         if (!\is_array($idMapping)) {
-            return;
+            return \false;
         }
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName());
+        return \true;
     }
     public function getClassName() : string
     {

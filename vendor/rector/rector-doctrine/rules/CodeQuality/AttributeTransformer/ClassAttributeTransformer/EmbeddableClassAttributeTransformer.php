@@ -10,14 +10,15 @@ use Rector\Doctrine\CodeQuality\ValueObject\EntityMapping;
 use Rector\Doctrine\Enum\MappingClass;
 final class EmbeddableClassAttributeTransformer implements ClassAttributeTransformerInterface
 {
-    public function transform(EntityMapping $entityMapping, Class_ $class) : void
+    public function transform(EntityMapping $entityMapping, Class_ $class) : bool
     {
         $classMapping = $entityMapping->getClassMapping();
         $type = $classMapping['type'] ?? null;
         if ($type !== 'embeddable') {
-            return;
+            return \false;
         }
         $class->attrGroups[] = AttributeFactory::createGroup($this->getClassName());
+        return \true;
     }
     public function getClassName() : string
     {

@@ -24,10 +24,11 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
-        $this->transformMapping($property, $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null);
-        $this->transformMapping($property, $entityMapping->matchManyToOnePropertyMapping($property));
+        $hasChangedManyToMany = $this->transformMapping($property, $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null);
+        $hasChangedManyToOne = $this->transformMapping($property, $entityMapping->matchManyToOnePropertyMapping($property));
+        return $hasChangedManyToMany || $hasChangedManyToOne;
     }
     public function getClassName() : string
     {
@@ -37,10 +38,10 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
      * @param array<string, array<string, mixed>>|null $mapping
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    private function transformMapping($property, ?array $mapping) : void
+    private function transformMapping($property, ?array $mapping) : bool
     {
         if (!\is_array($mapping)) {
-            return;
+            return \false;
         }
         $singleJoinColumn = $mapping['joinColumn'] ?? null;
         if (\is_array($singleJoinColumn)) {
@@ -50,11 +51,14 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
         }
         $joinColumns = $mapping['joinColumns'] ?? null;
         if (!\is_array($joinColumns)) {
-            return;
+            return \false;
         }
+        $hasChanged = \false;
         foreach ($joinColumns as $columnName => $joinColumn) {
+            $hasChanged = \true;
             $property->attrGroups[] = $this->createJoinColumnAttrGroup($columnName, $joinColumn);
         }
+        return $hasChanged;
     }
     /**
      * @param int|string $columnName

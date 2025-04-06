@@ -24,11 +24,11 @@ final class ColumnAttributeTransformer implements PropertyAttributeTransformerIn
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $propertyMapping = $entityMapping->matchFieldPropertyMapping($property);
         if ($propertyMapping === null) {
-            return;
+            return \false;
         }
         // handled in another mapper
         unset($propertyMapping['gedmo']);
@@ -41,6 +41,7 @@ final class ColumnAttributeTransformer implements PropertyAttributeTransformerIn
         }
         $args = \array_merge($args, $this->nodeFactory->createArgs($propertyMapping));
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
+        return \true;
     }
     public function getClassName() : string
     {

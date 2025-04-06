@@ -25,11 +25,11 @@ final class ManyToOneAttributeTransformer implements PropertyAttributeTransforme
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $manyToOneMapping = $entityMapping->matchManyToOnePropertyMapping($property);
         if (!\is_array($manyToOneMapping)) {
-            return;
+            return \false;
         }
         // handled by another mapper
         unset($manyToOneMapping['joinColumn'], $manyToOneMapping['joinColumns']);
@@ -38,6 +38,7 @@ final class ManyToOneAttributeTransformer implements PropertyAttributeTransforme
         $args = $this->nodeFactory->createArgs($manyToOneMapping);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, EntityMappingKey::TARGET_ENTITY);
+        return \true;
     }
     public function getClassName() : string
     {

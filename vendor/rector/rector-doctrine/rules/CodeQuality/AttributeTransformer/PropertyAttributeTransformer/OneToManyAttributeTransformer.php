@@ -25,17 +25,18 @@ final class OneToManyAttributeTransformer implements PropertyAttributeTransforme
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $oneToManyMapping = $entityMapping->matchOneToManyPropertyMapping($property);
         if (!\is_array($oneToManyMapping)) {
-            return;
+            return \false;
         }
         // handled by OrderBy mapping rule as standalone entity class
         unset($oneToManyMapping[EntityMappingKey::ORDER_BY]);
         $args = $this->nodeFactory->createArgs($oneToManyMapping);
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, EntityMappingKey::TARGET_ENTITY);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
+        return \true;
     }
     public function getClassName() : string
     {

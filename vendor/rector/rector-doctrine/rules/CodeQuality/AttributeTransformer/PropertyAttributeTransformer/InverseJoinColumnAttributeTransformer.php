@@ -24,19 +24,20 @@ final class InverseJoinColumnAttributeTransformer implements PropertyAttributeTr
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $joinTableMapping = $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null;
         if (!\is_array($joinTableMapping)) {
-            return;
+            return \false;
         }
         $joinColumns = $joinTableMapping['inverseJoinColumns'] ?? null;
         if (!\is_array($joinColumns)) {
-            return;
+            return \false;
         }
         foreach ($joinColumns as $columnName => $joinColumn) {
             $property->attrGroups[] = $this->createInverseJoinColumnAttrGroup($columnName, $joinColumn);
         }
+        return \true;
     }
     public function getClassName() : string
     {

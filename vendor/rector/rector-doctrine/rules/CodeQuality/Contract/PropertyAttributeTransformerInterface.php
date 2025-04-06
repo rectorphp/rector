@@ -15,5 +15,5 @@ interface PropertyAttributeTransformerInterface
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void;
+    public function transform(EntityMapping $entityMapping, $property) : bool;
 }

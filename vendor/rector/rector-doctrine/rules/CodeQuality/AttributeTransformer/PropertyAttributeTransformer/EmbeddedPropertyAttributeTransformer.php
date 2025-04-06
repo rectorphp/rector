@@ -24,17 +24,18 @@ final class EmbeddedPropertyAttributeTransformer implements PropertyAttributeTra
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $propertyMapping = $entityMapping->matchEmbeddedPropertyMapping($property);
         if ($propertyMapping === null) {
-            return;
+            return \false;
         }
         // handled in another attribute
         unset($propertyMapping['nullable']);
         $args = $this->nodeFactory->createArgs($propertyMapping);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, 'class');
+        return \true;
     }
     public function getClassName() : string
     {

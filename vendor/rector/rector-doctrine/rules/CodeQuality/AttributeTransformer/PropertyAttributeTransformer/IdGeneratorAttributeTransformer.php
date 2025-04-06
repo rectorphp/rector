@@ -30,20 +30,21 @@ final class IdGeneratorAttributeTransformer implements PropertyAttributeTransfor
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $idMapping = $entityMapping->matchIdPropertyMapping($property);
         if (!\is_array($idMapping)) {
-            return;
+            return \false;
         }
         $generator = $idMapping[EntityMappingKey::GENERATOR] ?? null;
         if (!\is_array($generator)) {
-            return;
+            return \false;
         }
         // make sure strategy is uppercase as constant value
         $generator = $this->normalizeStrategy($generator);
         $args = $this->nodeFactory->createArgs($generator);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
+        return \true;
     }
     public function getClassName() : string
     {

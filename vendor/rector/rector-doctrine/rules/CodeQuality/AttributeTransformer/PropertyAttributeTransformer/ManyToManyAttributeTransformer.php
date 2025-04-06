@@ -25,17 +25,18 @@ final class ManyToManyAttributeTransformer implements PropertyAttributeTransform
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : void
+    public function transform(EntityMapping $entityMapping, $property) : bool
     {
         $manyToManyMapping = $entityMapping->matchManyToManyPropertyMapping($property);
         if (!\is_array($manyToManyMapping)) {
-            return;
+            return \false;
         }
         // handled by another mapper
         unset($manyToManyMapping['joinTable']);
         $args = $this->nodeFactory->createArgs($manyToManyMapping);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, EntityMappingKey::TARGET_ENTITY);
+        return \true;
     }
     public function getClassName() : string
     {
