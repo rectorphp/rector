@@ -48,6 +48,9 @@ final class RepositoryClassResolver
         } else {
             $repositoryClass = $match['repositoryClass'];
         }
+        if ($repositoryClass === null) {
+            return null;
+        }
         if (!$this->reflectionProvider->hasClass($repositoryClass)) {
             throw new ShouldNotHappenException(\sprintf('Repository class "%s" for entity "%s" does not exist', $repositoryClass, $entityClassName));
         }
