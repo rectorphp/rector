@@ -85,10 +85,6 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
-            // already typed
-            if ($property->type instanceof Node) {
-                continue;
-            }
             if (\count($property->props) !== 1) {
                 continue;
             }
