@@ -24,9 +24,13 @@ final class SymfonyAttribute
     /**
      * @var string
      */
-    public const EVENT_LISTENER_ATTRIBUTE = 'Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener';
+    public const AS_EVENT_LISTENER = 'Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener';
     /**
      * @var string
      */
     public const ROUTE = 'Symfony\\Component\\Routing\\Attribute\\Route';
+    /**
+     * @var string
+     */
+    public const IS_GRANTED = 'Symfony\\Component\\Security\\Http\\Attribute\\IsGranted';
 }

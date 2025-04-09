@@ -21,4 +21,12 @@ final class SensioAttribute
      * @var string
      */
     public const TEMPLATE = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
+    /**
+     * @var string
+     */
+    public const IS_GRANTED = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted';
+    /**
+     * @var string
+     */
+    public const SECURITY = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Security';
 }
