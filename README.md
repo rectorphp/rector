@@ -102,7 +102,8 @@ Among there projects belong:
 * [driftingly/rector-laravel](https://github.com/driftingly/rector-laravel)
 * [contao/contao-rector](https://github.com/contao/contao-rector)
 * [php-static-analysis/rector-rule](https://github.com/php-static-analysis/rector-rule)
-
+* [ibexa/rector](https://github.com/ibexa/rector)
+  
 <br>
 
 ## Hire us to get Job Done :muscle:

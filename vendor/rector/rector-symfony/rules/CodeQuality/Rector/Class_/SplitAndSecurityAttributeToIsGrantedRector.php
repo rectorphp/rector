@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
-use PhpParser\Node\Name\FullyQualified;
 use RectorPrefix202504\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -65,10 +65,15 @@ CODE_SAMPLE
                     continue;
                 }
                 // we look for "and"s
-                if (\strpos($content, ' and') === \false) {
+                if (\strpos($content, ' and ') === \false && \strpos($content, ' && ') === \false) {
                     continue;
                 }
-                $andItems = \explode(' and ', $content);
+                // split by && and "and"
+                if (\strpos($content, ' && ') !== \false) {
+                    $andItems = \explode(' && ', $content);
+                } else {
+                    $andItems = \explode(' and ', $content);
+                }
                 $accessRights = [];
                 foreach ($andItems as $andItem) {
                     $matches = Strings::match($andItem, '#^(is_granted|has_role)\\(\'(?<access_right>[A-Za-z_]+)\'\\)$#');
