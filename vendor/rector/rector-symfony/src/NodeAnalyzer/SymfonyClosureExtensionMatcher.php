@@ -33,6 +33,9 @@ final class SymfonyClosureExtensionMatcher
             if (\count($extensionNames) > 2) {
                 return null;
             }
+            if ($extensionNames === []) {
+                return null;
+            }
             // warn use early about it, to avoid silent skip
             $errorMessage = \sprintf('Split extensions "%s" to multiple separated files first', \implode('", "', $extensionNames));
             throw new ShouldNotHappenException($errorMessage);
