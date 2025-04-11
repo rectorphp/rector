@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php71\Rector\FuncCall;
 
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -77,6 +78,10 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
             if ($classReflection->isInterface()) {
                 return null;
             }
+        }
+        // skip replaced native function
+        if ($functionLikeReflection instanceof PhpFunctionReflection && \strtolower((string) $this->getName($node)) !== \strtolower($functionLikeReflection->getName())) {
+            return null;
         }
         $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($functionLikeReflection);
         if ($node->isFirstClassCallable()) {
