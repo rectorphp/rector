@@ -486,10 +486,10 @@ final class NodeTypeResolver
                 return $scope->getNativeType($expr);
             }
             $functionName = new Name((string) $this->nodeNameResolver->getName($expr));
-            if (!$this->reflectionProvider->hasFunction($functionName, $scope)) {
+            if (!$this->reflectionProvider->hasFunction($functionName, null)) {
                 return $scope->getNativeType($expr);
             }
-            $functionReflection = $this->reflectionProvider->getFunction($functionName, $scope);
+            $functionReflection = $this->reflectionProvider->getFunction($functionName, null);
             if (!$functionReflection instanceof NativeFunctionReflection) {
                 return $scope->getNativeType($expr);
             }

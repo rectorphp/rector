@@ -201,15 +201,15 @@ final class ReflectionResolver
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->resolveMethodReflection($className, $methodName, $scope);
     }
-    public function resolveFunctionReflectionFromFunction(Function_ $function, Scope $scope) : ?FunctionReflection
+    public function resolveFunctionReflectionFromFunction(Function_ $function) : ?FunctionReflection
     {
         $name = $this->nodeNameResolver->getName($function);
         if ($name === null) {
             return null;
         }
         $functionName = new Name($name);
-        if ($this->reflectionProvider->hasFunction($functionName, $scope)) {
-            return $this->reflectionProvider->getFunction($functionName, $scope);
+        if ($this->reflectionProvider->hasFunction($functionName, null)) {
+            return $this->reflectionProvider->getFunction($functionName, null);
         }
         return null;
     }
@@ -259,13 +259,12 @@ final class ReflectionResolver
      */
     private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall)
     {
-        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
         if (!$funcCall->name instanceof Name) {
             return null;
         }
         $functionName = new Name((string) $this->nodeNameResolver->getName($funcCall));
-        if ($this->reflectionProvider->hasFunction($functionName, $scope)) {
-            return $this->reflectionProvider->getFunction($functionName, $scope);
+        if ($this->reflectionProvider->hasFunction($functionName, null)) {
+            return $this->reflectionProvider->getFunction($functionName, null);
         }
         return null;
     }

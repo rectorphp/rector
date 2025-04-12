@@ -112,7 +112,7 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod) {
             $reflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($node, $scope);
         } else {
-            $reflection = $this->reflectionResolver->resolveFunctionReflectionFromFunction($node, $scope);
+            $reflection = $this->reflectionResolver->resolveFunctionReflectionFromFunction($node);
         }
         if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return null;

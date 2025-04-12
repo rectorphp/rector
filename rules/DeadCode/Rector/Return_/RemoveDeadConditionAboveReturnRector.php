@@ -8,10 +8,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -74,10 +72,8 @@ CODE_SAMPLE
             if (!$this->isBareIf($previousNode)) {
                 continue;
             }
-            /** @var Scope $scope */
-            $scope = $stmt->getAttribute(AttributeKey::SCOPE);
             /** @var If_ $previousNode */
-            if ($this->sideEffectNodeDetector->detect($previousNode->cond, $scope)) {
+            if ($this->sideEffectNodeDetector->detect($previousNode->cond)) {
                 continue;
             }
             $countStmt = \count($previousNode->stmts);

@@ -104,13 +104,13 @@ final class CallerParamMatcher
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    public function matchCallParam($call, Param $param, Scope $scope) : ?Param
+    public function matchCallParam($call, Param $param) : ?Param
     {
         $callArgPosition = $this->matchCallArgPosition($call, $param);
         if ($callArgPosition === null) {
             return null;
         }
-        $classMethodOrFunction = $this->astResolver->resolveClassMethodOrFunctionFromCall($call, $scope);
+        $classMethodOrFunction = $this->astResolver->resolveClassMethodOrFunctionFromCall($call);
         if ($classMethodOrFunction === null) {
             return null;
         }

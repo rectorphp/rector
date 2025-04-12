@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -54,7 +53,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         $stmts = $node->stmts;
         if ($stmts === null) {
             return null;
@@ -87,11 +85,11 @@ CODE_SAMPLE
             }
             // detect call expression has side effect
             // no calls on right, could hide e.g. array_pop()|array_shift()
-            if ($this->sideEffectNodeDetector->detectCallExpr($stmt->expr->expr, $scope)) {
+            if ($this->sideEffectNodeDetector->detectCallExpr($stmt->expr->expr)) {
                 continue;
             }
             // next stmts can have side effect as well
-            if (($nextAssign->var instanceof PropertyFetch || $nextAssign->var instanceof StaticPropertyFetch) && $this->sideEffectNodeDetector->detectCallExpr($nextAssign->expr, $scope)) {
+            if (($nextAssign->var instanceof PropertyFetch || $nextAssign->var instanceof StaticPropertyFetch) && $this->sideEffectNodeDetector->detectCallExpr($nextAssign->expr)) {
                 continue;
             }
             if (!$stmt->expr->var instanceof Variable && !$stmt->expr->var instanceof PropertyFetch && !$stmt->expr->var instanceof StaticPropertyFetch) {

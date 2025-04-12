@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeVisitor;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -72,12 +71,11 @@ CODE_SAMPLE
         } else {
             $exprs = [$node->expr, $node->valueVar];
         }
-        $scope = ScopeFetcher::fetch($node);
         foreach ($exprs as $expr) {
             if ($expr instanceof Assign) {
                 $expr = $expr->expr;
             }
-            if ($this->sideEffectNodeDetector->detect($expr, $scope)) {
+            if ($this->sideEffectNodeDetector->detect($expr)) {
                 return null;
             }
         }

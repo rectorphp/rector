@@ -15,13 +15,11 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Analyser\Scope;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\Php\ReservedKeywordAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -110,8 +108,7 @@ CODE_SAMPLE
             $currentStmt = $stmts[$stmtPosition];
             /** @var Assign $assign */
             $assign = $currentStmt->expr;
-            $scope = ScopeFetcher::fetch($node);
-            if ($this->hasCallLikeInAssignExpr($assign, $scope)) {
+            if ($this->hasCallLikeInAssignExpr($assign)) {
                 // clean safely
                 $cleanAssignedExpr = $this->cleanCastedExpr($assign->expr);
                 $newExpression = new Expression($cleanAssignedExpr);
@@ -134,9 +131,9 @@ CODE_SAMPLE
         }
         return $this->cleanCastedExpr($expr->expr);
     }
-    private function hasCallLikeInAssignExpr(Expr $expr, Scope $scope) : bool
+    private function hasCallLikeInAssignExpr(Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->sideEffectNodeDetector->detectCallExpr($subNode, $scope));
+        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->sideEffectNodeDetector->detectCallExpr($subNode));
     }
     /**
      * @param Stmt[] $stmts
