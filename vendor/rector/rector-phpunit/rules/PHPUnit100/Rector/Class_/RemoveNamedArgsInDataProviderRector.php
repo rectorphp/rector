@@ -119,6 +119,9 @@ CODE_SAMPLE
             if (!$item instanceof ArrayItem) {
                 continue;
             }
+            if (!$item->key instanceof Expr) {
+                continue;
+            }
             if (!$item->key instanceof Int_ && $item->key instanceof Expr) {
                 $item->key = null;
                 $hasChanged = \true;

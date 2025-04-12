@@ -124,6 +124,15 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         FileSystem::write($inputFilePath, $inputFileContents, null);
         $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
     }
+    protected function doTestFileExpectingWarningAboutRuleApplied(string $fixtureFilePath, string $expectedRuleApplied) : void
+    {
+        \ob_start();
+        $this->doTestFile($fixtureFilePath);
+        $content = \ob_get_clean();
+        $fixtureName = \basename($fixtureFilePath);
+        $testClass = static::class;
+        $this->assertSame(\PHP_EOL . "WARNING: On fixture file \"" . $fixtureName . '" for test "' . $testClass . "\"" . \PHP_EOL . "File not changed but some Rector rules applied:" . \PHP_EOL . ' * ' . $expectedRuleApplied . \PHP_EOL, $content);
+    }
     private function forgetRectorsRules() : void
     {
         $rectorConfig = self::getContainer();
@@ -151,13 +160,16 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $changedContents = $rectorTestResult->getChangedContents();
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
+        $numAppliedRectorClasses = \count($rectorTestResult->getAppliedRectorClasses());
         // give more context about used rules in case of set testing
-        if (\count($rectorTestResult->getAppliedRectorClasses()) > 1) {
-            $failureMessage .= \PHP_EOL . \PHP_EOL;
-            $failureMessage .= 'Applied Rector rules:' . \PHP_EOL;
+        $appliedRulesList = '';
+        if ($numAppliedRectorClasses > 0) {
             foreach ($rectorTestResult->getAppliedRectorClasses() as $appliedRectorClass) {
-                $failureMessage .= ' * ' . $appliedRectorClass . \PHP_EOL;
+                $appliedRulesList .= ' * ' . $appliedRectorClass . \PHP_EOL;
             }
+        }
+        if ($numAppliedRectorClasses > 1) {
+            $failureMessage .= \PHP_EOL . \PHP_EOL . 'Applied Rector rules:' . \PHP_EOL . $appliedRulesList;
         }
         try {
             $this->assertSame($expectedFileContents, $changedContents, $failureMessage);
@@ -165,6 +177,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             FixtureFileUpdater::updateFixtureContent($inputFileContents, $changedContents, $fixtureFilePath);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($expectedFileContents, $changedContents, $failureMessage);
+        }
+        if ($inputFileContents === $expectedFileContents && $numAppliedRectorClasses > 0) {
+            $failureMessage = \PHP_EOL . \sprintf('WARNING: On fixture file "%s" for test "%s"', $fixtureFilename, static::class) . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . $appliedRulesList;
+            echo $failureMessage;
         }
     }
     private function processFilePath(string $filePath) : RectorTestResult

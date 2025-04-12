@@ -33,7 +33,7 @@ final class RectorTestResult
     public function getAppliedRectorClasses() : array
     {
         $rectorClasses = [];
-        foreach ($this->processResult->getFileDiffs() as $fileDiff) {
+        foreach ($this->processResult->getFileDiffs(\false) as $fileDiff) {
             $rectorClasses = \array_merge($rectorClasses, $fileDiff->getRectorClasses());
         }
         \sort($rectorClasses);

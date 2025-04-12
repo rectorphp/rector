@@ -38,8 +38,11 @@ final class ProcessResult
     /**
      * @return FileDiff[]
      */
-    public function getFileDiffs() : array
+    public function getFileDiffs(bool $onlyWithChanges = \true) : array
     {
+        if ($onlyWithChanges) {
+            return \array_filter($this->fileDiffs, fn(FileDiff $fileDiff): bool => $fileDiff->getDiff() !== '');
+        }
         return $this->fileDiffs;
     }
     /**
