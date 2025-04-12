@@ -131,7 +131,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $content = \ob_get_clean();
         $fixtureName = \basename($fixtureFilePath);
         $testClass = static::class;
-        $this->assertSame(\PHP_EOL . "WARNING: On fixture file \"" . $fixtureName . '" for test "' . $testClass . "\"" . \PHP_EOL . "File not changed but some Rector rules applied:" . \PHP_EOL . ' * ' . $expectedRuleApplied . \PHP_EOL, $content);
+        $this->assertSame(\PHP_EOL . 'WARNING: On fixture file "' . $fixtureName . '" for test "' . $testClass . '"' . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . ' * ' . $expectedRuleApplied . \PHP_EOL, $content);
     }
     private function forgetRectorsRules() : void
     {
