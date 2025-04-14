@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver;
 
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -281,6 +282,9 @@ final class NodeTypeResolver
     public function isMethodStaticCallOrClassMethodObjectType(Node $node, ObjectType $objectType) : bool
     {
         if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall) {
+            if ($this->isEnumTypeMatch($node, $objectType)) {
+                return \true;
+            }
             // method call is variable return
             return $this->isObjectType($node->var, $objectType);
         }
@@ -496,5 +500,28 @@ final class NodeTypeResolver
             return $scope->getType($expr);
         }
         return $scope->getNativeType($expr);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
+     */
+    private function isEnumTypeMatch($call, ObjectType $objectType) : bool
+    {
+        if (!$call->var instanceof ClassConstFetch) {
+            return \false;
+        }
+        // possibly enum
+        $classConstFetch = $call->var;
+        if (!$classConstFetch->class instanceof FullyQualified) {
+            return \false;
+        }
+        $className = $classConstFetch->class->toString();
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (!$classReflection->isEnum()) {
+            return \false;
+        }
+        return $classReflection->getName() === $objectType->getClassName();
     }
 }
