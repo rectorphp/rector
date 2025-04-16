@@ -176,6 +176,10 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $this->resolveWithChangedAttributesClass($configuration);
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
+    }
     /**
      * @param AnnotationToAttribute[] $configuration
      * @return AnnotationToAttribute[] $configuration
@@ -190,10 +194,6 @@ CODE_SAMPLE
             }
         }
         return $configuration;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @return AttributeGroup[]

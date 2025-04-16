@@ -56,14 +56,14 @@ final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector
      */
     private ValueResolver $valueResolver;
     /**
-     * @var string
-     */
-    private const OVERRIDE_CLASS = 'Override';
-    /**
      * @api
      * @var string
      */
     public const ALLOW_OVERRIDE_EMPTY_METHOD = 'allow_override_empty_method';
+    /**
+     * @var string
+     */
+    private const OVERRIDE_CLASS = 'Override';
     private bool $allowOverrideEmptyMethod = \false;
     private bool $hasChanged = \false;
     public function __construct(ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, AstResolver $astResolver, ValueResolver $valueResolver)
