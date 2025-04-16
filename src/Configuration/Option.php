@@ -254,4 +254,8 @@ final class Option
      * @internal The other half of ROOT_STANDALONE_REGISTERED_RULES to compare
      */
     public const SET_REGISTERED_RULES = 'set_registered_rules';
+    /**
+     * @internal to allow process file without extension if explicitly registered
+     */
+    public const FILES_WITHOUT_EXTENSION = 'files_without_extension';
 }

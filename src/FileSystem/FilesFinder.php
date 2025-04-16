@@ -78,6 +78,8 @@ final class FilesFinder
             $fileWithSuffixFilter = fn(): bool => \true;
         }
         $filteredFilePaths = \array_filter($filteredFilePaths, $fileWithSuffixFilter === null ? fn($value, $key): bool => !empty($value) : $fileWithSuffixFilter, $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
+        // add file without extension after file extension filter
+        $filteredFilePaths = \array_merge($filteredFilePaths, SimpleParameterProvider::provideArrayParameter(Option::FILES_WITHOUT_EXTENSION));
         $filteredFilePaths = \array_filter($filteredFilePaths, function (string $file) : bool {
             if ($this->isStartWithShortPHPTag(FileSystem::read($file))) {
                 SimpleParameterProvider::addParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES, $this->filePathHelper->relativePath($file));

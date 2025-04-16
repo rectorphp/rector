@@ -94,10 +94,28 @@ final class ConfigurationFactory
         $commandLinePaths = (array) $input->getArgument(\Rector\Configuration\Option::SOURCE);
         // give priority to command line
         if ($commandLinePaths !== []) {
+            $this->setFilesWithoutExtensionParameter($commandLinePaths);
             return $commandLinePaths;
         }
         // fallback to parameter
-        return SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::PATHS);
+        $configPaths = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::PATHS);
+        $this->setFilesWithoutExtensionParameter($configPaths);
+        return $configPaths;
+    }
+    /**
+     * @param string[] $paths
+     */
+    private function setFilesWithoutExtensionParameter(array $paths) : void
+    {
+        foreach ($paths as $path) {
+            if (\is_file($path) && \pathinfo($path, \PATHINFO_EXTENSION) === '') {
+                $path = \realpath($path);
+                if ($path === \false) {
+                    continue;
+                }
+                SimpleParameterProvider::addParameter(\Rector\Configuration\Option::FILES_WITHOUT_EXTENSION, $path);
+            }
+        }
     }
     private function resolveMemoryLimit(InputInterface $input) : ?string
     {
