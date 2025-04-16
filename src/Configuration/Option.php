@@ -205,6 +205,11 @@ final class Option
      */
     public const REGISTERED_RECTOR_SETS = 'registered_rector_sets';
     /**
+     * @internal For verify RectorConfigBuilder instance recreated
+     * @var string
+     */
+    public const IS_RECTORCONFIG_BUILDER_RECREATED = 'is_rectorconfig_builder_recreated';
+    /**
      * @internal For verify skipped rules exists in registered rules
      * @var string
      */
