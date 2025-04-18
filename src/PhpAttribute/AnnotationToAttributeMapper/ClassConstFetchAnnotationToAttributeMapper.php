@@ -5,6 +5,7 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
@@ -27,10 +28,14 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
     }
     /**
      * @param string $value
+     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\ClassConstFetch
      */
-    public function map($value) : ClassConstFetch
+    public function map($value)
     {
         [$class, $constant] = \explode('::', $value);
+        if ($class === '') {
+            return new String_($value);
+        }
         return new ClassConstFetch(new Name($class), $constant);
     }
 }
