@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -28,9 +29,9 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
     }
     /**
      * @param string $value
-     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\ClassConstFetch
+     * @return String_|ClassConstFetch
      */
-    public function map($value)
+    public function map($value) : Node
     {
         [$class, $constant] = \explode('::', $value);
         if ($class === '') {
