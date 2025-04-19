@@ -33,7 +33,11 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
      */
     public function map($value) : Node
     {
-        [$class, $constant] = \explode('::', $value);
+        $values = \explode('::', $value);
+        if (\count($values) !== 2) {
+            return new String_($value);
+        }
+        [$class, $constant] = $values;
         if ($class === '') {
             return new String_($value);
         }
