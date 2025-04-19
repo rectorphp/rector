@@ -146,7 +146,7 @@ final class PropertyNaming
     }
     private function prolongIfTooShort(string $shortClassName, string $className) : string
     {
-        if (\in_array($shortClassName, ['Factory', 'Repository'], \true)) {
+        if (\in_array($shortClassName, ['Factory', 'Repository'], \true) && \substr_compare($className, 'Repository', -\strlen('Repository')) !== 0 && \substr_compare($className, 'Factory', -\strlen('Factory')) !== 0) {
             $namespaceAbove = (string) Strings::after($className, '\\', -2);
             $namespaceAbove = (string) Strings::before($namespaceAbove, '\\');
             return \lcfirst($namespaceAbove) . $shortClassName;
