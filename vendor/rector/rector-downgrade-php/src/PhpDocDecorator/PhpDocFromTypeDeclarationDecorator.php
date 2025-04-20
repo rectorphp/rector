@@ -9,7 +9,9 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -26,6 +28,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php\PhpVersionProvider;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\PhpParser\AstResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -70,10 +73,14 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private PhpVersionProvider $phpVersionProvider;
     /**
+     * @readonly
+     */
+    private AstResolver $astResolver;
+    /**
      * @var ClassMethodWillChangeReturnType[]
      */
     private array $classMethodWillChangeReturnTypes = [];
-    public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionResolver $reflectionResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpVersionProvider $phpVersionProvider)
+    public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionResolver $reflectionResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpVersionProvider $phpVersionProvider, AstResolver $astResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -83,6 +90,7 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->reflectionResolver = $reflectionResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->astResolver = $astResolver;
         $this->classMethodWillChangeReturnTypes = [
             // @todo how to make list complete? is the method list needed or can we use just class names?
             new ClassMethodWillChangeReturnType('ArrayAccess', 'offsetGet'),
@@ -113,6 +121,22 @@ final class PhpDocFromTypeDeclarationDecorator
         $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
         if (!$classReflection instanceof ClassReflection || !$classReflection->isInterface() && !$classReflection->isClass()) {
             return;
+        }
+        $ancestors = \array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $classReflection->getName() !== $ancestor->getName());
+        foreach ($ancestors as $ancestor) {
+            $classLike = $this->astResolver->resolveClassFromClassReflection($ancestor);
+            if (!$classLike instanceof ClassLike) {
+                continue;
+            }
+            $classMethod = $classLike->getMethod($functionLike->name->toString());
+            if (!$classMethod instanceof ClassMethod) {
+                continue;
+            }
+            $returnType = $classMethod->returnType;
+            if ($returnType instanceof Node && $returnType instanceof FullyQualified) {
+                $functionLike->returnType = new FullyQualified($returnType->toString());
+                break;
+            }
         }
         if (!$this->isRequireReturnTypeWillChange($classReflection, $functionLike)) {
             return;
