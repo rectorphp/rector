@@ -191,9 +191,10 @@ final class ClassDependencyManipulator
                 // which parent::__construct() will cause error
                 break;
             }
+            $constructorMethod = clone $parentConstructorMethod;
             // reprint parent method node to avoid invalid tokens
-            $this->nodeFactory->createReprintedNode($parentConstructorMethod);
-            return $parentConstructorMethod;
+            $this->nodeFactory->createReprintedNode($constructorMethod);
+            return $constructorMethod;
         }
         return null;
     }
