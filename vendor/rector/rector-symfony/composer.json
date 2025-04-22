@@ -13,7 +13,7 @@
         "phpstan\/phpstan": "^2.1.8",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.4",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-follow-empty-param",
         "rector\/type-perfect": "^2.0",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
