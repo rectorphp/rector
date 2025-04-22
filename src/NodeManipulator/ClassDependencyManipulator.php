@@ -186,6 +186,11 @@ final class ClassDependencyManipulator
             if (!$parentConstructorMethod instanceof ClassMethod) {
                 continue;
             }
+            if ($parentConstructorMethod->isPrivate()) {
+                // stop, nearest __construct() uses private visibility
+                // which parent::__construct() will cause error
+                break;
+            }
             // reprint parent method node to avoid invalid tokens
             $this->nodeFactory->createReprintedNode($parentConstructorMethod);
             return $parentConstructorMethod;
