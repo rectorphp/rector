@@ -1864,12 +1864,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "9b807485a017c4becf5b7d6f93e05a1597700b0a"
+                "reference": "fc00253be624ef24a4f3ad7df177dfa4af28a476"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/9b807485a017c4becf5b7d6f93e05a1597700b0a",
-                "reference": "9b807485a017c4becf5b7d6f93e05a1597700b0a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/fc00253be624ef24a4f3ad7df177dfa4af28a476",
+                "reference": "fc00253be624ef24a4f3ad7df177dfa4af28a476",
                 "shasum": ""
             },
             "require": {
@@ -1882,7 +1882,7 @@
                 "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
-                "rector\/rector-src": "dev-follow-empty-param",
+                "rector\/rector-src": "dev-main",
                 "rector\/type-perfect": "^2.0",
                 "symfony\/config": "^6.4",
                 "symfony\/dependency-injection": "^6.4",
@@ -1897,7 +1897,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-04-22T10:14:14+00:00",
+            "time": "2025-04-22T10:16:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

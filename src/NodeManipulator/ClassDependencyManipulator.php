@@ -85,38 +85,6 @@ final class ClassDependencyManipulator
         $this->reflectionResolver = $reflectionResolver;
         $this->astResolver = $astResolver;
     }
-    private function resolveConstruct(Class_ $class) : ?ClassMethod
-    {
-        /** @var ClassMethod|null $constructorMethod */
-        $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
-        // exists in current class
-        if ($constructorMethod instanceof ClassMethod) {
-            return $constructorMethod;
-        }
-        // lookup parent, found first found (nearest parent constructor to follow)
-        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
-        }
-        $ancestors = \array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
-        foreach ($ancestors as $ancestor) {
-            if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
-                continue;
-            }
-            $parentClass = $this->astResolver->resolveClassFromClassReflection($ancestor);
-            if (!$parentClass instanceof ClassLike) {
-                continue;
-            }
-            $parentConstructorMethod = $parentClass->getMethod(MethodName::CONSTRUCT);
-            if (!$parentConstructorMethod instanceof ClassMethod) {
-                continue;
-            }
-            // reprint parent method node to avoid invalid tokens
-            $this->nodeFactory->createReprintedNode($parentConstructorMethod);
-            return $parentConstructorMethod;
-        }
-        return null;
-    }
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata) : void
     {
         // already has property as dependency? skip it
@@ -191,6 +159,38 @@ final class ClassDependencyManipulator
             return;
         }
         $classMethod->stmts = \array_merge($stmts, (array) $classMethod->stmts);
+    }
+    private function resolveConstruct(Class_ $class) : ?ClassMethod
+    {
+        /** @var ClassMethod|null $constructorMethod */
+        $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
+        // exists in current class
+        if ($constructorMethod instanceof ClassMethod) {
+            return $constructorMethod;
+        }
+        // lookup parent, found first found (nearest parent constructor to follow)
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $ancestors = \array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
+        foreach ($ancestors as $ancestor) {
+            if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
+                continue;
+            }
+            $parentClass = $this->astResolver->resolveClassFromClassReflection($ancestor);
+            if (!$parentClass instanceof ClassLike) {
+                continue;
+            }
+            $parentConstructorMethod = $parentClass->getMethod(MethodName::CONSTRUCT);
+            if (!$parentConstructorMethod instanceof ClassMethod) {
+                continue;
+            }
+            // reprint parent method node to avoid invalid tokens
+            $this->nodeFactory->createReprintedNode($parentConstructorMethod);
+            return $parentConstructorMethod;
+        }
+        return null;
     }
     private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata, ?ClassMethod $constructClassMethod) : void
     {
