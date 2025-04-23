@@ -106,6 +106,10 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike) : void
     {
         foreach ($classLike->getProperties() as $property) {
+            // skip public properties, as they can be used in external code
+            if ($property->isPublic()) {
+                continue;
+            }
             $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property, $classLike);
             if ($expectedPropertyName === null) {
                 continue;

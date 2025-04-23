@@ -109,6 +109,10 @@ final class PropertyPromotionRenamer
             if (!$param->isPromoted()) {
                 continue;
             }
+            // skip public properties, as they can be used in external code
+            if ($param->isPublic()) {
+                continue;
+            }
             // promoted property
             $desiredPropertyName = $this->matchParamTypeExpectedNameResolver->resolve($param);
             if ($desiredPropertyName === null) {
