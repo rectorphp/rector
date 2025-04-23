@@ -83,6 +83,10 @@ CODE_SAMPLE
                 $dateExpr = $timestamp->args[0]->value;
                 return $this->createCarbonParseFormat($dateExpr, $format);
             }
+            // @phpstan-ignore if.alwaysTrue
+            if ($this->getType($timestamp)->isInteger()) {
+                return $this->createCarbonFromTimestamp($timestamp, $format);
+            }
         }
         if ($this->isName($node->name, 'date') && isset($node->args[0])) {
             $format = $this->getArgValue($node, 0);
@@ -92,8 +96,16 @@ CODE_SAMPLE
         }
         if ($this->isName($node->name, 'strtotime') && isset($node->args[0])) {
             $dateExpr = $this->getArgValue($node, 0);
-            if ($dateExpr instanceof Expr) {
+            $baseTimestamp = $this->getArgValue($node, 1);
+            if ($dateExpr instanceof Expr && $baseTimestamp === null) {
                 return $this->createCarbonParseTimestamp($dateExpr);
+            }
+            if ($dateExpr instanceof Expr && $baseTimestamp instanceof String_) {
+                $isRelative = \strncmp($baseTimestamp->value, '+', \strlen('+')) === 0 || \strncmp($baseTimestamp->value, '-', \strlen('-')) === 0;
+                if ($isRelative) {
+                    return null;
+                    // @todo implement relative changes based on second arg
+                }
             }
         }
         return null;
@@ -107,8 +119,11 @@ CODE_SAMPLE
     }
     private function createCarbonNowFormat(String_ $string) : MethodCall
     {
-        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'now');
-        return new MethodCall($staticCall, 'format', [new Arg($string)]);
+        return new MethodCall($this->createCarbonNow(), 'format', [new Arg($string)]);
+    }
+    private function createCarbonNow() : StaticCall
+    {
+        return new StaticCall(new FullyQualified('Carbon\\Carbon'), 'now');
     }
     private function createCarbonParseTimestamp(Expr $dateExpr) : MethodCall
     {
@@ -118,6 +133,11 @@ CODE_SAMPLE
     private function createCarbonParseFormat(Expr $dateExpr, Expr $format) : MethodCall
     {
         $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'parse', [new Arg($dateExpr)]);
+        return new MethodCall($staticCall, 'format', [new Arg($format)]);
+    }
+    private function createCarbonFromTimestamp(Expr $timestampExpr, Expr $format) : MethodCall
+    {
+        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'createFromTimestamp', [new Arg($timestampExpr)]);
         return new MethodCall($staticCall, 'format', [new Arg($format)]);
     }
     /**
