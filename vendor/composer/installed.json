@@ -1687,12 +1687,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "c9233892e967e8574144f6f6d0e62b3d62da2269"
+                "reference": "c2dac7bdb10f6e0a40738924362cb2095a01f690"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c9233892e967e8574144f6f6d0e62b3d62da2269",
-                "reference": "c9233892e967e8574144f6f6d0e62b3d62da2269",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c2dac7bdb10f6e0a40738924362cb2095a01f690",
+                "reference": "c2dac7bdb10f6e0a40738924362cb2095a01f690",
                 "shasum": ""
             },
             "require": {
@@ -1702,6 +1702,7 @@
             "require-dev": {
                 "doctrine\/doctrine-bundle": "^2.13",
                 "doctrine\/orm": "^2.20",
+                "phpecs\/phpecs": "^2.1",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
@@ -1709,13 +1710,12 @@
                 "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/type-perfect": "^2.0",
-                "symplify\/easy-coding-standard": "^12.5",
                 "symplify\/phpstan-rules": "^14.0",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-04-06T01:47:44+00:00",
+            "time": "2025-04-24T09:25:21+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

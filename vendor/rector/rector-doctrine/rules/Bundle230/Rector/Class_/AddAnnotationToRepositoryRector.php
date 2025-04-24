@@ -3,25 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Bundle230\Rector\Class_;
 
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Arg;
-use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Doctrine\CodeQuality\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/DoctrineBundle/commit/2f12b5302bafac39c70b024e1686119be28b79ab
+ *
+ * @see \Rector\Doctrine\Tests\Bundle230\Rector\Class_\AddAnnotationToRepositoryRector\AddAnnotationToRepositoryRectorTest
  */
 final class AddAnnotationToRepositoryRector extends AbstractRector
 {
@@ -41,6 +43,8 @@ final class AddAnnotationToRepositoryRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add @extends ServiceEntityRepository<T> annotation to repository classes', [new CodeSample(<<<'CODE_SAMPLE'
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 final class SomeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -50,7 +54,11 @@ final class SomeRepository extends ServiceEntityRepository
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-/** @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\SomeEntity> */
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
+/**
+ * @extends ServiceEntityRepository<\SomeEntity>
+ */
 final class SomeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -85,18 +93,18 @@ CODE_SAMPLE
     }
     private function isRepositoryClass(Class_ $class) : bool
     {
-        if ($class->extends instanceof Name) {
-            return $this->getName($class->extends) === 'Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository';
+        if (!$class->extends instanceof Name) {
+            return \false;
         }
-        return \false;
+        return $this->isName($class->extends, DoctrineClass::SERVICE_ENTITY_REPOSITORY);
     }
     private function getEntityClassFromConstructor(Class_ $class) : ?string
     {
-        $method = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$method instanceof ClassMethod || $method->stmts === null) {
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod || $classMethod->stmts === null) {
             return null;
         }
-        foreach ($method->stmts as $stmt) {
+        foreach ($classMethod->stmts as $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
             }
@@ -119,8 +127,8 @@ CODE_SAMPLE
     private function addAnnotationToNode(Class_ $class, string $entityClass) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $annotation = \sprintf('\\Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository<\\%s>', $entityClass);
-        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@extends', new GenericTagValueNode($annotation)));
+        $genericsAnnotation = \sprintf('\\%s<\\%s>', DoctrineClass::SERVICE_ENTITY_REPOSITORY, $entityClass);
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@extends', new GenericTagValueNode($genericsAnnotation)));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
     }
     private function hasExtendsAnnotation(Class_ $class) : bool
@@ -129,6 +137,6 @@ CODE_SAMPLE
     }
     private function isParentConstructorCall(StaticCall $staticCall) : bool
     {
-        return $staticCall->class instanceof Name && $staticCall->class->toString() === 'parent' && $staticCall->name instanceof Identifier && $staticCall->name->toString() === '__construct' && isset($staticCall->args[1]) && $staticCall->args[1] instanceof Arg && $staticCall->args[1]->value instanceof ClassConstFetch;
+        return $this->isName($staticCall->class, 'parent') && $this->isName($staticCall->name, '__construct') && isset($staticCall->args[1]) && $staticCall->args[1] instanceof Arg && $staticCall->args[1]->value instanceof ClassConstFetch;
     }
 }
