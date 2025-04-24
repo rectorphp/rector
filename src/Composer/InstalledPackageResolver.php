@@ -69,7 +69,10 @@ final class InstalledPackageResolver
             $projectComposerContents = FileSystem::read($projectComposerJsonFilePath);
             $projectComposerJson = Json::decode($projectComposerContents, \true);
             if (isset($projectComposerJson['config']['vendor-dir']) && \is_string($projectComposerJson['config']['vendor-dir'])) {
-                return PathNormalizer::normalize(\realpath($projectComposerJson['config']['vendor-dir'])) === PathNormalizer::normalize($projectComposerJson['config']['vendor-dir']) ? $projectComposerJson['config']['vendor-dir'] : $this->projectDirectory . '/' . $projectComposerJson['config']['vendor-dir'];
+                $realPathVendorDir = \realpath($projectComposerJson['config']['vendor-dir']) ?: '';
+                $normalizedRealPathVendorDir = PathNormalizer::normalize($realPathVendorDir);
+                $normalizedVendorDir = PathNormalizer::normalize($projectComposerJson['config']['vendor-dir']);
+                return $normalizedRealPathVendorDir === $normalizedVendorDir ? $projectComposerJson['config']['vendor-dir'] : $this->projectDirectory . '/' . $projectComposerJson['config']['vendor-dir'];
             }
         }
         return $this->projectDirectory . '/vendor';
