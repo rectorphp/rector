@@ -97,7 +97,7 @@ CODE_SAMPLE
         if ($this->isName($node->name, 'strtotime') && isset($node->args[0])) {
             $dateExpr = $this->getArgValue($node, 0);
             $baseTimestamp = $this->getArgValue($node, 1);
-            if ($dateExpr instanceof Expr && $baseTimestamp === null) {
+            if ($dateExpr instanceof Expr && !$baseTimestamp instanceof Expr) {
                 return $this->createCarbonParseTimestamp($dateExpr);
             }
             if ($dateExpr instanceof Expr && $baseTimestamp instanceof String_) {
