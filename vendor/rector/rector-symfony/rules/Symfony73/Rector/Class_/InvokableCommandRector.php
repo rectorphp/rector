@@ -12,6 +12,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
@@ -42,6 +43,7 @@ final class InvokableCommandRector extends AbstractRector
      * @readonly
      */
     private CommandInvokeParamsFactory $commandInvokeParamsFactory;
+    private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
     public function __construct(AttributeFinder $attributeFinder, CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory)
     {
         $this->attributeFinder = $attributeFinder;
@@ -171,7 +173,26 @@ CODE_SAMPLE
             if (!$this->isName($stmt->name, CommandMethodName::CONFIGURE)) {
                 continue;
             }
-            unset($class->stmts[$key]);
+            foreach ((array) $stmt->stmts as $innerKey => $innerStmt) {
+                if (!$innerStmt instanceof Expression) {
+                    continue;
+                }
+                $expr = $innerStmt->expr;
+                if (!$expr instanceof MethodCall) {
+                    continue;
+                }
+                if ($this->isFluentArgumentOptionChain($expr)) {
+                    unset($stmt->stmts[$innerKey]);
+                    continue;
+                }
+                if ($this->isName($expr->var, 'this') && $this->isNames($expr->name, self::MIGRATED_CONFIGURE_CALLS)) {
+                    unset($stmt->stmts[$innerKey]);
+                }
+            }
+            // 2. if configure() has become empty → remove the method itself
+            if ($stmt->stmts === [] || $stmt->stmts === null) {
+                unset($class->stmts[$key]);
+            }
             return;
         }
     }
@@ -194,5 +215,19 @@ CODE_SAMPLE
             }
             return new Variable($firstArgValue->value);
         });
+    }
+    private function isFluentArgumentOptionChain(MethodCall $call) : bool
+    {
+        $current = $call;
+        while ($current instanceof MethodCall) {
+            // every link must be addArgument() or addOption()
+            if (!$this->isNames($current->name, self::MIGRATED_CONFIGURE_CALLS)) {
+                return \false;
+            }
+            $current = $current->var;
+            // go one step left
+        }
+        // the left-most var must be $this
+        return $current instanceof Variable && $this->isName($current, 'this');
     }
 }

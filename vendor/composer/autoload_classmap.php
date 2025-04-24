@@ -2407,6 +2407,7 @@ return array(
     'Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php',
     'Rector\\Symfony\\Symfony73\\NodeAnalyzer\\CommandArgumentsAndOptionsResolver' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/NodeAnalyzer/CommandArgumentsAndOptionsResolver.php',
     'Rector\\Symfony\\Symfony73\\NodeFactory\\CommandInvokeParamsFactory' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/NodeFactory/CommandInvokeParamsFactory.php',
+    'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandRector.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',

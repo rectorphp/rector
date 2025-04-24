@@ -2626,6 +2626,7 @@ class ComposerStaticInitf80ed6cfbb29252baeb5933d3cb8debd
         'Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php',
         'Rector\\Symfony\\Symfony73\\NodeAnalyzer\\CommandArgumentsAndOptionsResolver' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/NodeAnalyzer/CommandArgumentsAndOptionsResolver.php',
         'Rector\\Symfony\\Symfony73\\NodeFactory\\CommandInvokeParamsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/NodeFactory/CommandInvokeParamsFactory.php',
+        'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandRector.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
