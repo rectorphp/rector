@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitor;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssertMethodAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,12 +25,13 @@ final class PreferPHPUnitThisCallRector extends AbstractRector
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
-     * @var string[]
+     * @readonly
      */
-    private const NON_ASSERT_STATIC_METHODS = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never', 'expectException', 'expectExceptionMessage', 'expectExceptionCode', 'expectExceptionMessageMatches'];
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    private AssertMethodAnalyzer $assertMethodAnalyzer;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertMethodAnalyzer $assertMethodAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->assertMethodAnalyzer = $assertMethodAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -84,16 +86,10 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
+            if (!$this->assertMethodAnalyzer->detectTestCaseCall($node)) {
+                return null;
+            }
             $methodName = $this->getName($node->name);
-            if (!\is_string($methodName)) {
-                return null;
-            }
-            if (!$this->isNames($node->class, ['static', 'self'])) {
-                return null;
-            }
-            if (\strncmp($methodName, 'assert', \strlen('assert')) !== 0 && !\in_array($methodName, self::NON_ASSERT_STATIC_METHODS)) {
-                return null;
-            }
             $hasChanged = \true;
             return $this->nodeFactory->createMethodCall('this', $methodName, $node->getArgs());
         });

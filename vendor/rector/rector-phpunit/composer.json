@@ -7,7 +7,7 @@
         "php": ">=8.2"
     },
     "require-dev": {
-        "phpecs\/phpecs": "^2.0",
+        "phpecs\/phpecs": "^2.1.1",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.8",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
