@@ -172,7 +172,7 @@ CODE_SAMPLE
         $testWithItems = \explode("\n", \trim($genericTagValueNode->value));
         $jsonArray = [];
         foreach ($testWithItems as $testWithItem) {
-            $jsonArray[] = Json::decode(\trim($testWithItem), Json::FORCE_ARRAY);
+            $jsonArray[] = Json::decode(\trim($testWithItem), \true);
         }
         return $jsonArray;
     }

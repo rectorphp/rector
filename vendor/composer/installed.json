@@ -512,8 +512,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.44.5",
-            "version_normalized": "11.44.5.0",
+            "version": "v11.44.6",
+            "version_normalized": "11.44.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -569,8 +569,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.44.5",
-            "version_normalized": "11.44.5.0",
+            "version": "v11.44.6",
+            "version_normalized": "11.44.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "6f6793527af12ec72ec0f5c8771e28ae89fc1b56"
+                "reference": "c61efd3161a1f347d1b2b2d5c0e07392f8d2a104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/6f6793527af12ec72ec0f5c8771e28ae89fc1b56",
-                "reference": "6f6793527af12ec72ec0f5c8771e28ae89fc1b56",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/c61efd3161a1f347d1b2b2d5c0e07392f8d2a104",
+                "reference": "c61efd3161a1f347d1b2b2d5c0e07392f8d2a104",
                 "shasum": ""
             },
             "require": {
@@ -1822,16 +1822,18 @@
                 "phpecs\/phpecs": "^2.0",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.1.8",
+                "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^1.0",
                 "rector\/type-perfect": "^2.0",
+                "symplify\/phpstan-extensions": "^12.0",
                 "symplify\/vendor-patches": "^11.4",
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-04-12T15:37:56+00:00",
+            "time": "2025-04-25T11:32:58+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,7 +26,7 @@ final class PreferPHPUnitThisCallRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const NON_ASSERT_STATIC_METHODS = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never'];
+    private const NON_ASSERT_STATIC_METHODS = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never', 'expectException', 'expectExceptionMessage', 'expectExceptionCode', 'expectExceptionMessageMatches'];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -76,7 +76,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
             $isInsideStaticFunctionLike = $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
             if ($isInsideStaticFunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof StaticCall) {
                 return null;

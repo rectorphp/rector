@@ -7,17 +7,19 @@
         "php": ">=8.2"
     },
     "require-dev": {
-        "rector\/rector-src": "dev-main",
-        "phpunit\/phpunit": "^11.5",
-        "phpstan\/phpstan": "^2.1.8",
         "phpecs\/phpecs": "^2.0",
         "phpstan\/extension-installer": "^1.4",
-        "symplify\/vendor-patches": "^11.4",
-        "tracy\/tracy": "^2.10",
-        "tomasvotruba\/class-leak": "^1.2",
-        "rector\/swiss-knife": "^1.0",
+        "phpstan\/phpstan": "^2.1.8",
+        "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
-        "rector\/type-perfect": "^2.0"
+        "phpunit\/phpunit": "^11.5",
+        "rector\/rector-src": "dev-main",
+        "rector\/swiss-knife": "^1.0",
+        "rector\/type-perfect": "^2.0",
+        "symplify\/phpstan-extensions": "^12.0",
+        "symplify\/vendor-patches": "^11.4",
+        "tomasvotruba\/class-leak": "^1.2",
+        "tracy\/tracy": "^2.10"
     },
     "autoload": {
         "psr-4": {
