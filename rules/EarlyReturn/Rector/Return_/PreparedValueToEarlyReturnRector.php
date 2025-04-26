@@ -104,8 +104,8 @@ CODE_SAMPLE
             if ($stmt instanceof Expression && $stmt->expr instanceof AssignOp) {
                 return null;
             }
-            if ($stmt instanceof For_ || $stmt instanceof Foreach_ || $stmt instanceof While_ || $stmt instanceof Do_) {
-                $isReassignInLoop = (bool) $this->betterNodeFinder->findFirst($stmt, fn(Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, ($nullsafeVariable1 = $initialAssign) ? $nullsafeVariable1->var : null));
+            if (($stmt instanceof For_ || $stmt instanceof Foreach_ || $stmt instanceof While_ || $stmt instanceof Do_) && $initialAssign instanceof Assign) {
+                $isReassignInLoop = (bool) $this->betterNodeFinder->findFirst($stmt, fn(Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $initialAssign->var));
                 if ($isReassignInLoop) {
                     return null;
                 }
