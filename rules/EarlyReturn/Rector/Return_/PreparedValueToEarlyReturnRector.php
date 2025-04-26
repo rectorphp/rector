@@ -9,9 +9,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\While_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\EarlyReturn\ValueObject\BareSingleAssignIf;
 use Rector\NodeManipulator\IfManipulator;
@@ -99,6 +103,12 @@ CODE_SAMPLE
         foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression && $stmt->expr instanceof AssignOp) {
                 return null;
+            }
+            if ($stmt instanceof For_ || $stmt instanceof Foreach_ || $stmt instanceof While_ || $stmt instanceof Do_) {
+                $isReassignInLoop = (bool) $this->betterNodeFinder->findFirst($stmt, fn(Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, ($nullsafeVariable1 = $initialAssign) ? $nullsafeVariable1->var : null));
+                if ($isReassignInLoop) {
+                    return null;
+                }
             }
             if ($stmt instanceof If_) {
                 $ifs[$key] = $stmt;
