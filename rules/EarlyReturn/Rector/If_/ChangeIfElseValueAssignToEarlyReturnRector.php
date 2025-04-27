@@ -112,7 +112,7 @@ CODE_SAMPLE
             $stmt->expr = $assign->expr;
             $lastStmt = \array_pop($node->stmts);
             $elseStmtsExceptLast = \array_slice($elseStmts, 0, -1);
-            $node->stmts = [...$node->stmts, ...$elseStmtsExceptLast, $lastStmt];
+            $node->stmts = \array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
             return $node;
         }
         return null;
