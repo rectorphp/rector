@@ -9,7 +9,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -86,20 +85,17 @@ final class PropertyPromotionRenamer
         $this->reflectionResolver = $reflectionResolver;
         $this->propertyManipulator = $propertyManipulator;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
-     */
-    public function renamePropertyPromotion($classLike) : bool
+    public function renamePropertyPromotion(Class_ $class) : bool
     {
         $hasChanged = \false;
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             return \false;
         }
-        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
             return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classLike);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
@@ -111,6 +107,9 @@ final class PropertyPromotionRenamer
             }
             // skip public properties, as they can be used in external code
             if ($param->isPublic()) {
+                continue;
+            }
+            if (!$class->isFinal() && $param->isProtected()) {
                 continue;
             }
             // promoted property
@@ -128,7 +127,7 @@ final class PropertyPromotionRenamer
             if ($this->propertyManipulator->isUsedByTrait($classReflection, $currentParamName)) {
                 continue;
             }
-            $this->renameParamVarNameAndVariableUsage($classLike, $constructClassMethod, $desiredPropertyName, $param);
+            $this->renameParamVarNameAndVariableUsage($class, $constructClassMethod, $desiredPropertyName, $param);
             $hasChanged = \true;
         }
         return $hasChanged;

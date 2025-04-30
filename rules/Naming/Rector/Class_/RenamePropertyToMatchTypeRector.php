@@ -6,8 +6,6 @@ namespace Rector\Naming\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Enum\ClassName;
@@ -85,10 +83,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, Interface_::class];
+        return [Class_::class];
     }
     /**
-     * @param Class_|Interface_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -103,18 +101,21 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorClassProperties(ClassLike $classLike) : void
+    private function refactorClassProperties(Class_ $class) : void
     {
-        foreach ($classLike->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             // skip public properties, as they can be used in external code
             if ($property->isPublic()) {
                 continue;
             }
-            $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property, $classLike);
+            if (!$class->isFinal() && $property->isProtected()) {
+                continue;
+            }
+            $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property, $class);
             if ($expectedPropertyName === null) {
                 continue;
             }
-            $propertyRename = $this->propertyRenameFactory->createFromExpectedName($classLike, $property, $expectedPropertyName);
+            $propertyRename = $this->propertyRenameFactory->createFromExpectedName($class, $property, $expectedPropertyName);
             if (!$propertyRename instanceof PropertyRename) {
                 continue;
             }
