@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202504\Nette\Utils;
+namespace RectorPrefix202505\Nette\Utils;
 
-use RectorPrefix202504\JetBrains\PhpStorm\Language;
-use RectorPrefix202504\Nette;
+use RectorPrefix202505\JetBrains\PhpStorm\Language;
+use RectorPrefix202505\Nette;
 use function is_array, is_int, is_object, count;
 /**
  * Array tools library.

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202504\Symfony\Component\Console\Helper;
+namespace RectorPrefix202505\Symfony\Component\Console\Helper;
 
-use RectorPrefix202504\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202504\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202505\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202505\Symfony\Component\Console\Exception\LogicException;
 /**
  * Defines the styles for a Table.
  *

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\FileSystem;
 
-use RectorPrefix202504\Nette\Utils\Strings;
+use RectorPrefix202505\Nette\Utils\Strings;
 use Rector\Skipper\FileSystem\PathNormalizer;
-use RectorPrefix202504\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202504\Webmozart\Assert\Assert;
+use RectorPrefix202505\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202505\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\FileSystem\FilePathHelperTest
  */

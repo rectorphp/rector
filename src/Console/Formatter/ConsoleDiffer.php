@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Console\Formatter;
 
-use RectorPrefix202504\SebastianBergmann\Diff\Differ;
-use RectorPrefix202504\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix202505\SebastianBergmann\Diff\Differ;
+use RectorPrefix202505\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class ConsoleDiffer
 {
     /**

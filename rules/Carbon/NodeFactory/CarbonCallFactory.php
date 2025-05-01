@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Carbon\NodeFactory;
 
-use RectorPrefix202504\Nette\Utils\Strings;
+use RectorPrefix202505\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;

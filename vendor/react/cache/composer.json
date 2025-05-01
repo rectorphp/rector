@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202504\\React\\Cache\\": "src\/"
+            "RectorPrefix202505\\React\\Cache\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202504\\React\\Tests\\Cache\\": "tests\/"
+            "RectorPrefix202505\\React\\Tests\\Cache\\": "tests\/"
         }
     }
 }

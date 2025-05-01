@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202504\Illuminate\Contracts\Queue;
+namespace RectorPrefix202505\Illuminate\Contracts\Queue;
 
 interface ClearableQueue
 {

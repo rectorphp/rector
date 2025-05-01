@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202504\Illuminate\Container;
+namespace RectorPrefix202505\Illuminate\Container;
 
 use Countable;
 use IteratorAggregate;
