@@ -53,7 +53,7 @@ class MatchNoneConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function __toString() : string
     {
         return '[]';
     }

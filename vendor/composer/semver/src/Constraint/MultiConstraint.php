@@ -138,7 +138,7 @@ class MultiConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function __toString() : string
     {
         if ($this->string !== null) {
             return $this->string;
