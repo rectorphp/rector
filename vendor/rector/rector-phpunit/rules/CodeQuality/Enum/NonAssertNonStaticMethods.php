@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Enum;
 
-final class NonAssertStaticableMethods
+final class NonAssertNonStaticMethods
 {
     /**
      * @var string[]

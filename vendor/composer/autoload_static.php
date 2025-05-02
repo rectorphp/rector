@@ -1995,7 +1995,7 @@ class ComposerStaticInitf80ed6cfbb29252baeb5933d3cb8debd
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\RequiresAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/RequiresAnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\TicketAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php',
-        'Rector\\PHPUnit\\CodeQuality\\Enum\\NonAssertStaticableMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Enum/NonAssertStaticableMethods.php',
+        'Rector\\PHPUnit\\CodeQuality\\Enum\\NonAssertNonStaticMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Enum/NonAssertNonStaticMethods.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\AssertMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/AssertMethodAnalyzer.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\NullableObjectAssignCollector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/NullableObjectAssignCollector.php',

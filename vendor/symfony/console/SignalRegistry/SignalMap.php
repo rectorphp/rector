@@ -24,7 +24,7 @@ class SignalMap
         if (!isset(self::$map)) {
             $r = new \ReflectionExtension('pcntl');
             $c = $r->getConstants();
-            $map = \array_filter($c, fn($k) => \strncmp($k, 'SIG', \strlen('SIG')) === 0 && \strncmp($k, 'SIG_', \strlen('SIG_')) !== 0, \ARRAY_FILTER_USE_KEY);
+            $map = \array_filter($c, fn($k) => \strncmp($k, 'SIG', \strlen('SIG')) === 0 && \strncmp($k, 'SIG_', \strlen('SIG_')) !== 0 && 'SIGBABY' !== $k, \ARRAY_FILTER_USE_KEY);
             self::$map = \array_flip($map);
         }
         return self::$map[$signal] ?? null;

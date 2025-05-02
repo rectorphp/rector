@@ -79,7 +79,7 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            if (!$this->assertMethodAnalyzer->detectTestCaseCall($node)) {
+            if (!$this->assertMethodAnalyzer->detectTestCaseCallForStatic($node)) {
                 return null;
             }
             $methodName = $this->getName($node->name);
