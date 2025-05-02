@@ -59,7 +59,7 @@ CODE_SAMPLE
         if ($this->skipper->shouldSkipElementAndFilePath(self::class, $filePath)) {
             return null;
         }
-        if ($this->startWithShebang($this->file)) {
+        if ($this->startsWithShebang($this->file)) {
             return null;
         }
         if ($nodes === []) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
         // workaround, as Rector now only hooks to specific nodes, not arrays
         return null;
     }
-    private function startWithShebang(File $file) : bool
+    private function startsWithShebang(File $file) : bool
     {
         return \strncmp($file->getFileContent(), '#!', \strlen('#!')) === 0;
     }

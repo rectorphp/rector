@@ -144,7 +144,7 @@ CODE_SAMPLE;
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
      * @return mixed[]|int|\PhpParser\Node|null
      */
-    public function leaveNode(Node $node)
+    public final function leaveNode(Node $node)
     {
         if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
             return null;

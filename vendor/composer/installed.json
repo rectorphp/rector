@@ -1748,12 +1748,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "b3dd2a37ba4b91677ded818daa65dd60b4d9060c"
+                "reference": "2b141c8042ec2e81b939338da02c847f64616559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b3dd2a37ba4b91677ded818daa65dd60b4d9060c",
-                "reference": "b3dd2a37ba4b91677ded818daa65dd60b4d9060c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/2b141c8042ec2e81b939338da02c847f64616559",
+                "reference": "2b141c8042ec2e81b939338da02c847f64616559",
                 "shasum": ""
             },
             "require": {
@@ -1764,14 +1764,14 @@
                 "phpstan\/phpstan": "^2.1.8",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
-                "rector\/rector-src": "dev-fix-to-string",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/rule-doc-generator": "^12.2",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-02T18:49:28+00:00",
+            "time": "2025-05-02T18:57:43+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

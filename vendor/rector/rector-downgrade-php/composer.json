@@ -11,7 +11,7 @@
         "phpstan\/phpstan": "^2.1.8",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.4",
-        "rector\/rector-src": "dev-fix-to-string",
+        "rector\/rector-src": "dev-main",
         "symplify\/easy-coding-standard": "^12.3",
         "symplify\/rule-doc-generator": "^12.2",
         "symplify\/vendor-patches": "^11.3",

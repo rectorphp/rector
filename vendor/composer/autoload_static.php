@@ -1768,6 +1768,7 @@ class ComposerStaticInit85a5c971754a67e64efb2b2dadc9a1fe
         'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
         'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => __DIR__ . '/../..' . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
         'Rector\\Enum\\ClassName' => __DIR__ . '/../..' . '/src/Enum/ClassName.php',
+        'Rector\\Enum\\Config\\Defaults' => __DIR__ . '/../..' . '/src/Enum/Config/Defaults.php',
         'Rector\\Enum\\JsonConstant' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
         'Rector\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',

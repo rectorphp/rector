@@ -13,6 +13,7 @@ use Rector\Contract\DependencyInjection\ResetableInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\Laravel\ContainerMemento;
+use Rector\Enum\Config\Defaults;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Validation\RectorConfigValidator;
@@ -77,7 +78,7 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::PARALLEL, \false);
     }
-    public function parallel(int $processTimeout = 120, int $maxNumberOfProcess = 16, int $jobSize = 16) : void
+    public function parallel(int $processTimeout = 120, int $maxNumberOfProcess = Defaults::PARALLEL_MAX_NUMBER_OF_PROCESS, int $jobSize = 16) : void
     {
         SimpleParameterProvider::setParameter(Option::PARALLEL, \true);
         SimpleParameterProvider::setParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS, $processTimeout);

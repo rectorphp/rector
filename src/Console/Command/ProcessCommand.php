@@ -147,7 +147,7 @@ EOF
         }
         // 2. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
-        if ($this->dynamicSourceLocatorDecorator->isPathsEmpty()) {
+        if ($this->dynamicSourceLocatorDecorator->arePathsEmpty()) {
             // read from rector.php, no paths definition needs withPaths() config
             if ($paths === []) {
                 $this->symfonyStyle->error('No paths definition in rector configuration, define paths: https://getrector.com/documentation/define-paths');

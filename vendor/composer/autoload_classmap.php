@@ -1549,6 +1549,7 @@ return array(
     'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => $baseDir . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
     'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => $baseDir . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
     'Rector\\Enum\\ClassName' => $baseDir . '/src/Enum/ClassName.php',
+    'Rector\\Enum\\Config\\Defaults' => $baseDir . '/src/Enum/Config/Defaults.php',
     'Rector\\Enum\\JsonConstant' => $vendorDir . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
     'Rector\\Enum\\ObjectReference' => $baseDir . '/src/Enum/ObjectReference.php',
     'Rector\\Exception\\Cache\\CachingException' => $baseDir . '/src/Exception/Cache/CachingException.php',

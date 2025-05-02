@@ -44,8 +44,8 @@ final class DynamicSourceLocatorDecorator
         $directories = $this->fileAndDirectoryFilter->filterDirectories($paths);
         $this->dynamicSourceLocatorProvider->addDirectories($directories);
     }
-    public function isPathsEmpty() : bool
+    public function arePathsEmpty() : bool
     {
-        return $this->dynamicSourceLocatorProvider->isPathsEmpty();
+        return $this->dynamicSourceLocatorProvider->arePathsEmpty();
     }
 }
