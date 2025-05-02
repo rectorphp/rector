@@ -186,7 +186,7 @@ CODE_SAMPLE
             return \false;
         }
         $funcCall = $substrOffset->expr;
-        if (!$this->nodeNameResolver->isName($funcCall, 'strlen')) {
+        if (!$this->isName($funcCall, 'strlen')) {
             return \false;
         }
         if (!isset($funcCall->getArgs()[0])) {

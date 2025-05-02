@@ -127,7 +127,7 @@ CODE_SAMPLE
         if ($classMethods === []) {
             return;
         }
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $methodName = $this->getName($classMethod);
         $keysArg = \array_keys($unusedParameters);
         foreach ($classMethods as $classMethod) {
             /** @var MethodCall[] $callers */
@@ -172,10 +172,10 @@ CODE_SAMPLE
             if (!$subNode->var instanceof Variable) {
                 return \false;
             }
-            if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
+            if (!$this->isName($subNode->var, 'this')) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($subNode->name, $methodName);
+            return $this->isName($subNode->name, $methodName);
         });
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool

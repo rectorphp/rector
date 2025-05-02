@@ -85,7 +85,7 @@ CODE_SAMPLE
         if (!isset($ternary->cond->getArgs()[0])) {
             return \true;
         }
-        if (!$this->nodeNameResolver->isName($ternary->cond, 'is_object')) {
+        if (!$this->isName($ternary->cond, 'is_object')) {
             return \true;
         }
         if (!$ternary->if instanceof FuncCall) {
@@ -94,7 +94,7 @@ CODE_SAMPLE
             }
             return $this->shouldSkipClassConstFetch($ternary->if);
         }
-        if (!$this->nodeNameResolver->isName($ternary->if, 'get_class')) {
+        if (!$this->isName($ternary->if, 'get_class')) {
             return \true;
         }
         if (!$ternary->else instanceof FuncCall) {
@@ -103,7 +103,7 @@ CODE_SAMPLE
         if ($ternary->else->isFirstClassCallable()) {
             return \true;
         }
-        return !$this->nodeNameResolver->isName($ternary->else, 'gettype');
+        return !$this->isName($ternary->else, 'gettype');
     }
     private function shouldSkipClassConstFetch(ClassConstFetch $classConstFetch) : bool
     {

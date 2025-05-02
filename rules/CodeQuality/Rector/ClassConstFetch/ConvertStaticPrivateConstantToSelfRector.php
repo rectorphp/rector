@@ -92,7 +92,7 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($class->getConstants() as $classConst) {
-            if (!$this->nodeNameResolver->isName($classConst, $constantName)) {
+            if (!$this->isName($classConst, $constantName)) {
                 continue;
             }
             return $classConst->isPrivate();

@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
         /** @var MethodCall $returnExpr */
         $returnExpr = $node->stmts[0]->expr;
-        if (!$this->nodeNameResolver->isName($returnExpr->name, 'deserialize')) {
+        if (!$this->isName($returnExpr->name, 'deserialize')) {
             return null;
         }
         if ($returnExpr->isFirstClassCallable()) {

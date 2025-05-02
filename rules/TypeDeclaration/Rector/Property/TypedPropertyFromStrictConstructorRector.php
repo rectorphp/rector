@@ -154,7 +154,7 @@ CODE_SAMPLE
                 continue;
             }
             $propertyProperty = $property->props[0];
-            $propertyName = $this->nodeNameResolver->getName($property);
+            $propertyName = $this->getName($property);
             if ($this->constructorAssignDetector->isPropertyAssigned($node, $propertyName)) {
                 $propertyProperty->default = null;
                 $hasChanged = \true;

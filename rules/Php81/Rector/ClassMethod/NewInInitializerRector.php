@@ -147,7 +147,7 @@ CODE_SAMPLE
     private function isOverrideAbstractMethod(ClassMethod $classMethod) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $methodName = $this->getName($classMethod);
         return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
     private function processPropertyPromotion(Class_ $class, Param $param, string $paramName) : void

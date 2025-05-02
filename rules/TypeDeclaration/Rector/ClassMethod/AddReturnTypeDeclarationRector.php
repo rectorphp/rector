@@ -110,7 +110,7 @@ CODE_SAMPLE
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Class_ $class, Type $newType, ObjectType $objectType) : void
     {
         if ($newType instanceof MixedType) {
-            $className = (string) $this->nodeNameResolver->getName($class);
+            $className = (string) $this->getName($class);
             $currentObjectType = new ObjectType($className);
             if (!$objectType->equals($currentObjectType) && $classMethod->returnType instanceof Node) {
                 return;

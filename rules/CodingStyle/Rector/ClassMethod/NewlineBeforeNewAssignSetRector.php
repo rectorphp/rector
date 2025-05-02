@@ -149,7 +149,7 @@ CODE_SAMPLE
             return \false;
         }
         // local method call
-        return $this->nodeNameResolver->isName($node->var, 'this');
+        return $this->isName($node->var, 'this');
     }
     private function isNewVariableThanBefore(?string $currentStmtVariableName) : bool
     {

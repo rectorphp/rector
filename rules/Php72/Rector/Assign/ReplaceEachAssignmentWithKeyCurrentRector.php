@@ -87,7 +87,7 @@ CODE_SAMPLE
         if (!$assign->expr instanceof FuncCall) {
             return \true;
         }
-        if (!$this->nodeNameResolver->isName($assign->expr, 'each')) {
+        if (!$this->isName($assign->expr, 'each')) {
             return \true;
         }
         return $assign->var instanceof List_;

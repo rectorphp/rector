@@ -138,7 +138,7 @@ CODE_SAMPLE
     private function processClassMethodReturnType(Class_ $class, ClassMethod $classMethod, Type $parentType) : ?ClassMethod
     {
         if ($parentType instanceof MixedType) {
-            $className = (string) $this->nodeNameResolver->getName($class);
+            $className = (string) $this->getName($class);
             $currentObjectType = new ObjectType($className);
             if (!$parentType->equals($currentObjectType) && $classMethod->returnType instanceof Node) {
                 return null;

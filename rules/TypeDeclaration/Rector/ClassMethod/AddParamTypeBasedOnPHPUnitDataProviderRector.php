@@ -283,7 +283,7 @@ CODE_SAMPLE
         $dataProviders = [];
         foreach ($attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if (!$this->nodeNameResolver->isName($attribute->name, $attributeName)) {
+                if (!$this->isName($attribute->name, $attributeName)) {
                     continue;
                 }
                 $dataProviders[] = $attribute;

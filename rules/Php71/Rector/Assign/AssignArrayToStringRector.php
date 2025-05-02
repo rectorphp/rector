@@ -136,7 +136,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return [];
         }
-        $variableName = $this->nodeNameResolver->getName($variable);
+        $variableName = $this->getName($variable);
         if ($variableName === null) {
             return [];
         }

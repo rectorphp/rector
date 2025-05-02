@@ -79,7 +79,7 @@ CODE_SAMPLE
             if (!$node->var instanceof Variable) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node->var, 'this')) {
+            if (!$this->isName($node->var, 'this')) {
                 return null;
             }
             $methodName = $this->getName($node->name);

@@ -210,7 +210,7 @@ CODE_SAMPLE
                 if (!$subNode->var instanceof Variable) {
                     return \false;
                 }
-                if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
+                if (!$this->isName($subNode->var, 'this')) {
                     return \false;
                 }
                 return $subNode->name instanceof Variable;

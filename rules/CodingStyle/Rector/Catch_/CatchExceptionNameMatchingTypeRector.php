@@ -142,7 +142,7 @@ CODE_SAMPLE
             if (!$node instanceof Variable) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node, $oldVariableName)) {
+            if (!$this->isName($node, $oldVariableName)) {
                 return null;
             }
             $node->name = $newVariableName;
@@ -166,7 +166,7 @@ CODE_SAMPLE
             if (!$node instanceof Variable) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node, $oldVariableName)) {
+            if (!$this->isName($node, $oldVariableName)) {
                 return null;
             }
             $nonAssignedVariables[] = $node;

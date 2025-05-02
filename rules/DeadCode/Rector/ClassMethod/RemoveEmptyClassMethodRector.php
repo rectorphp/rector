@@ -150,11 +150,11 @@ CODE_SAMPLE
         if ($this->controllerClassMethodManipulator->isControllerClassMethod($class, $classMethod)) {
             return \true;
         }
-        if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+        if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
             // has parent class?
             return $class->extends instanceof FullyQualified;
         }
-        return $this->nodeNameResolver->isName($classMethod, MethodName::INVOKE);
+        return $this->isName($classMethod, MethodName::INVOKE);
     }
     private function hasDeprecatedAnnotation(ClassMethod $classMethod) : bool
     {

@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeNameResolver->isName($node, 'get_class')) {
+        if (!$this->isName($node, 'get_class')) {
             return null;
         }
         if ($node->isFirstClassCallable()) {

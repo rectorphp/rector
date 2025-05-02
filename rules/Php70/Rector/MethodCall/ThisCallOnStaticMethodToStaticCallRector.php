@@ -115,7 +115,7 @@ CODE_SAMPLE
             if (!$subNode->var instanceof Variable) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
+            if (!$this->isName($subNode->var, 'this')) {
                 return null;
             }
             if (!$subNode->name instanceof Identifier) {

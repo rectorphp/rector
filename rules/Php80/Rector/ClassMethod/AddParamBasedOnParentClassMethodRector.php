@@ -107,7 +107,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
+        if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
         $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($node);
@@ -174,7 +174,7 @@ CODE_SAMPLE
         $originalParams = $node->params;
         foreach ($parentClassMethodParams as $key => $parentClassMethodParam) {
             if (isset($currentClassMethodParams[$key])) {
-                $currentParamName = $this->nodeNameResolver->getName($currentClassMethodParams[$key]);
+                $currentParamName = $this->getName($currentClassMethodParams[$key]);
                 $collectParamNamesNextKey = $this->collectParamNamesNextKey($parentClassMethod, $key);
                 if (\in_array($currentParamName, $collectParamNamesNextKey, \true)) {
                     $node->params = $originalParams;
@@ -196,7 +196,7 @@ CODE_SAMPLE
             if ($paramDefault instanceof Expr) {
                 $paramDefault = $this->nodeFactory->createReprintedNode($paramDefault);
             }
-            $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
+            $paramName = $this->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
             $node->params[$key] = new Param(new Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags);
             if ($parentClassMethodParam->attrGroups !== []) {
@@ -224,7 +224,7 @@ CODE_SAMPLE
         $paramNames = [];
         foreach ($classMethod->params as $paramKey => $param) {
             if ($paramKey > $key) {
-                $paramNames[] = $this->nodeNameResolver->getName($param);
+                $paramNames[] = $this->getName($param);
             }
         }
         return $paramNames;
