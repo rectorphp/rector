@@ -5,10 +5,11 @@ namespace Rector\Symfony\Symfony62\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Helper\MessengerHelper;
-use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\ValueObject\PhpVersionFeature;
@@ -31,17 +32,17 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
     /**
      * @readonly
      */
-    private ClassAnalyzer $classAnalyzer;
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
      * @readonly
      */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->messengerHelper = $messengerHelper;
         $this->classManipulator = $classManipulator;
-        $this->classAnalyzer = $classAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
     {
@@ -86,10 +87,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if (!$this->reflectionProvider->hasClass(MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
+            return null;
+        }
         if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
             return null;
         }
-        if (!$this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
+        $classType = $this->getType($node);
+        $messageHandlerObjectType = new ObjectType(MessengerHelper::MESSAGE_HANDLER_INTERFACE);
+        if (!$messageHandlerObjectType->isSuperTypeOf($classType)->yes()) {
             $handlers = $this->messengerHelper->getHandlersFromServices();
             if ($handlers === []) {
                 return null;
@@ -97,6 +103,10 @@ CODE_SAMPLE
             return $this->checkForServices($node, $handlers);
         }
         $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_HANDLER_INTERFACE]);
+        // no need to add the attribute
+        if ($node->isAbstract()) {
+            return $node;
+        }
         return $this->messengerHelper->addAttribute($node);
     }
     /**
