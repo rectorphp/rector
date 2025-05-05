@@ -27,9 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony-docs/issues/20553
  * @see https://github.com/symfony/symfony/pull/59340
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandRector\InvokableCommandRectorTest
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandRectorTest
  */
-final class InvokableCommandRector extends AbstractRector
+final class InvokableCommandInputAttributeRector extends AbstractRector
 {
     /**
      * @readonly

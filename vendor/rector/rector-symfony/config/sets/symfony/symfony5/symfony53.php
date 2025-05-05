@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix202505;
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 # https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.3.md
 return static function (RectorConfig $rectorConfig) : void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
