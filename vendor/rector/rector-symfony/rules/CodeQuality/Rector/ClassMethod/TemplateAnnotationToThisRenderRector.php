@@ -160,7 +160,7 @@ CODE_SAMPLE
             return;
         }
         // this will make $this->render() method available
-        $class->extends = new FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        $class->extends = new FullyQualified(SymfonyClass::ABSTRACT_CONTROLLER);
     }
     private function replaceTemplateAnnotation(ClassMethod $classMethod, ?DoctrineAnnotationTagValueNode $classDoctrineAnnotationTagValueNode) : bool
     {

@@ -69,11 +69,7 @@ CODE_SAMPLE
                     continue;
                 }
                 // split by && and "and"
-                if (\strpos($content, ' && ') !== \false) {
-                    $andItems = \explode(' && ', $content);
-                } else {
-                    $andItems = \explode(' and ', $content);
-                }
+                $andItems = \strpos($content, ' && ') !== \false ? \explode(' && ', $content) : \explode(' and ', $content);
                 $accessRights = [];
                 foreach ($andItems as $andItem) {
                     $matches = Strings::match($andItem, '#^(is_granted|has_role)\\(\'(?<access_right>[A-Za-z_]+)\'\\)$#');

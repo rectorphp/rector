@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -38,11 +39,43 @@ final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`, also updates AbstractController usages', [new CodeSample(<<<'CODE_SAMPLE'
-if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+final class SomeController
+{
+    public function __construct(
+        private AuthorizationCheckerInterface $authorizationChecker
+    ) {
+    }
+
+    public function hasAccess(): bool
+    {
+        if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
+            return true;
+        }
+
+        return false;
+    }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+final class SomeController
+{
+    public function __construct(
+        private AuthorizationCheckerInterface $authorizationChecker
+    ) {
+    }
+
+    public function hasAccess(): bool
+    {
+        if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return false;
+    }
 }
 CODE_SAMPLE
 )]);
@@ -67,7 +100,7 @@ CODE_SAMPLE
         if (!$objectType instanceof ObjectType) {
             return null;
         }
-        $authorizationChecker = new ObjectType('Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface');
+        $authorizationChecker = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
         if (!$authorizationChecker->isSuperTypeOf($objectType)->yes()) {
             return null;
         }

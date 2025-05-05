@@ -35,7 +35,7 @@ final class ContainerGetNameToTypeInTestsRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change $container->get("some_name") to bare type, useful since Symfony 3.4', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change $container->get("some_name") in tests to bare type, useful since Symfony 3.4', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase

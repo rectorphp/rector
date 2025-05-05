@@ -216,9 +216,9 @@ CODE_SAMPLE
             return new Variable($firstArgValue->value);
         });
     }
-    private function isFluentArgumentOptionChain(MethodCall $call) : bool
+    private function isFluentArgumentOptionChain(MethodCall $methodCall) : bool
     {
-        $current = $call;
+        $current = $methodCall;
         while ($current instanceof MethodCall) {
             // every link must be addArgument() or addOption()
             if (!$this->isNames($current->name, self::MIGRATED_CONFIGURE_CALLS)) {

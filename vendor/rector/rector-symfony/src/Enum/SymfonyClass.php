@@ -73,4 +73,16 @@ final class SymfonyClass
      * @var string
      */
     public const REQUEST = 'Symfony\\Component\\HttpFoundation\\Request';
+    /**
+     * @var string
+     */
+    public const ABSTRACT_CONTROLLER = 'Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController';
+    /**
+     * @var string
+     */
+    public const CONTROLLER_TRAIT = 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerTrait';
+    /**
+     * @var string
+     */
+    public const AUTHORIZATION_CHECKER = 'Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface';
 }

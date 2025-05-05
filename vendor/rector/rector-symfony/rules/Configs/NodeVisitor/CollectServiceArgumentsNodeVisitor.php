@@ -5,7 +5,6 @@ namespace Rector\Symfony\Configs\NodeVisitor;
 
 use RectorPrefix202505\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;

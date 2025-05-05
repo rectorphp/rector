@@ -12,11 +12,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/pull/21035
  * @changelog https://github.com/symfony/symfony/blob/4.4/src/Symfony/Bundle/FrameworkBundle/Templating/TemplateNameParser.php
+ *
  * @changelog https://symfony.com/doc/4.4/templates.html#bundle-templates
  *
  * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector\ConvertRenderTemplateShortNotationToBundleSyntaxRectorTest
@@ -73,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
         $objectType = $this->nodeTypeResolver->getType($node->var);
-        $controllerType = new ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller');
+        $controllerType = new ObjectType(SymfonyClass::CONTROLLER);
         if (!$controllerType->isSuperTypeOf($objectType)->yes()) {
             return null;
         }

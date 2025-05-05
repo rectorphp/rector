@@ -38,12 +38,16 @@ final class OptionNameRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Turns old option names to new ones in FormTypes in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
-$builder = new FormBuilder;
-$builder->add("...", ["precision" => "...", "virtual" => "..."];
+use Symfony\Component\Form\FormBuilder;
+
+$formBuilder = new FormBuilder;
+$formBuilder->add("...", ["precision" => "...", "virtual" => "..."];
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$builder = new FormBuilder;
-$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
+use Symfony\Component\Form\FormBuilder;
+
+$formBuilder = new FormBuilder;
+$formBuilder->add("...", ["scale" => "...", "inherit_data" => "..."];
 CODE_SAMPLE
 )]);
     }
