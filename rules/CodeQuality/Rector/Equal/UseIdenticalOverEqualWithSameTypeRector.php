@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Equal;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
@@ -53,6 +54,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->left instanceof ArrayDimFetch || $node->right instanceof ArrayDimFetch) {
+            return null;
+        }
         $leftStaticType = $this->nodeTypeResolver->getNativeType($node->left);
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
         // objects can be different by content
