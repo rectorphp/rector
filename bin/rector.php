@@ -17,7 +17,6 @@ use RectorPrefix202505\Symfony\Component\Console\Input\ArgvInput;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
-\error_reporting(\E_ALL);
 \ini_set('display_errors', 'stderr');
 \gc_disable();
 \define('__RECTOR_RUNNING__', \true);
