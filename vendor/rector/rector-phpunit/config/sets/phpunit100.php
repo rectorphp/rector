@@ -5,6 +5,7 @@ namespace RectorPrefix202505;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\PHPUnit100\Rector\Class_\AddProphecyTraitRector;
+use Rector\PHPUnit\PHPUnit100\Rector\Class_\ParentTestClassConstructorRector;
 use Rector\PHPUnit\PHPUnit100\Rector\Class_\PublicDataProviderClassMethodRector;
 use Rector\PHPUnit\PHPUnit100\Rector\Class_\StaticDataProviderClassMethodRector;
 use Rector\PHPUnit\PHPUnit100\Rector\MethodCall\PropertyExistsWithoutAssertRector;
@@ -15,7 +16,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->sets([PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES]);
-    $rectorConfig->rules([StaticDataProviderClassMethodRector::class, PublicDataProviderClassMethodRector::class, AddProphecyTraitRector::class, WithConsecutiveRector::class, RemoveSetMethodsMethodCallRector::class, PropertyExistsWithoutAssertRector::class]);
+    $rectorConfig->rules([StaticDataProviderClassMethodRector::class, PublicDataProviderClassMethodRector::class, AddProphecyTraitRector::class, WithConsecutiveRector::class, RemoveSetMethodsMethodCallRector::class, PropertyExistsWithoutAssertRector::class, ParentTestClassConstructorRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // https://github.com/sebastianbergmann/phpunit/issues/4087
         new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),

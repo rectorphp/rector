@@ -1858,6 +1858,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnIfNodeDecorator' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnIfNodeDecorator.php',
     'Rector\\PHPUnit\\PHPUnit100\\NodeFactory\\WillReturnCallbackFactory' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/NodeFactory/WillReturnCallbackFactory.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
+    'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\ParentTestClassConstructorRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/ParentTestClassConstructorRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\RemoveNamedArgsInDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/RemoveNamedArgsInDataProviderRector.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',

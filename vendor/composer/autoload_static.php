@@ -2077,6 +2077,7 @@ class ComposerStaticInit85a5c971754a67e64efb2b2dadc9a1fe
         'Rector\\PHPUnit\\PHPUnit100\\NodeDecorator\\WillReturnIfNodeDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/NodeDecorator/WillReturnIfNodeDecorator.php',
         'Rector\\PHPUnit\\PHPUnit100\\NodeFactory\\WillReturnCallbackFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/NodeFactory/WillReturnCallbackFactory.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\AddProphecyTraitRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php',
+        'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\ParentTestClassConstructorRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/ParentTestClassConstructorRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\PublicDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/PublicDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\RemoveNamedArgsInDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/RemoveNamedArgsInDataProviderRector.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php',
