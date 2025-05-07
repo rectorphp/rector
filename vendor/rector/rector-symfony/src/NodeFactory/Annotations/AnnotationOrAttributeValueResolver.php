@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory\Annotations;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
@@ -28,7 +27,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -88,8 +87,8 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
     /**
      * @readonly
      */
-    private AttributeFinder $attributeFinder;
-    public function __construct(ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, ThisRenderFactory $thisRenderFactory, PhpDocTagRemover $phpDocTagRemover, EmptyReturnNodeFinder $emptyReturnNodeFinder, AnnotationAnalyzer $annotationAnalyzer, DocBlockUpdater $docBlockUpdater, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, AttributeFinder $attributeFinder)
+    private AttrinationFinder $attrinationFinder;
+    public function __construct(ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, ThisRenderFactory $thisRenderFactory, PhpDocTagRemover $phpDocTagRemover, EmptyReturnNodeFinder $emptyReturnNodeFinder, AnnotationAnalyzer $annotationAnalyzer, DocBlockUpdater $docBlockUpdater, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, AttrinationFinder $attrinationFinder)
     {
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
@@ -100,7 +99,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->attributeFinder = $attributeFinder;
+        $this->attrinationFinder = $attrinationFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -145,12 +144,10 @@ CODE_SAMPLE
         if (!$this->annotationAnalyzer->hasClassMethodWithTemplateAnnotation($node)) {
             return null;
         }
-        $this->decorateAbstractControllerParentClass($node);
         $hasChanged = \false;
-        $classDoctrineAnnotationTagValueNode = $this->annotationAnalyzer->getDoctrineAnnotationTagValueNode($node, SymfonyAnnotation::TEMPLATE);
-        $classTemplateAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAnnotation::TEMPLATE);
+        $classTemplateTagValueNodeOrAttribute = $this->attrinationFinder->getByOne($node, SymfonyAnnotation::TEMPLATE);
         foreach ($node->getMethods() as $classMethod) {
-            $hasClassMethodChanged = $this->replaceTemplateAnnotation($classMethod, $classDoctrineAnnotationTagValueNode ?: $classTemplateAttribute);
+            $hasClassMethodChanged = $this->replaceTemplateAnnotation($classMethod, $classTemplateTagValueNodeOrAttribute);
             if ($hasClassMethodChanged) {
                 $hasChanged = \true;
             }
@@ -158,9 +155,10 @@ CODE_SAMPLE
         if (!$hasChanged) {
             return null;
         }
+        $this->decorateAbstractControllerParentClass($node);
         // cleanup Class_ @Template annotation
-        if ($classDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            $this->removeDoctrineAnnotationTagValueNode($node, $classDoctrineAnnotationTagValueNode);
+        if ($classTemplateTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
+            $this->removeDoctrineAnnotationTagValueNode($node, $classTemplateTagValueNodeOrAttribute);
         }
         return $node;
     }
@@ -180,12 +178,11 @@ CODE_SAMPLE
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        $doctrineAnnotationTagValueNode = $this->annotationAnalyzer->getDoctrineAnnotationTagValueNode($classMethod, SymfonyAnnotation::TEMPLATE);
-        $templateAttribute = $this->attributeFinder->findAttributeByClass($classMethod, SymfonyAnnotation::TEMPLATE);
-        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode || $templateAttribute instanceof Attribute) {
-            return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode ?: $templateAttribute);
+        $methodTemplateTagValueNodeOrAttribute = $this->attrinationFinder->getByOne($classMethod, SymfonyAnnotation::TEMPLATE);
+        if ($methodTemplateTagValueNodeOrAttribute !== null) {
+            return $this->refactorClassMethod($classMethod, $methodTemplateTagValueNodeOrAttribute);
         }
-        // global @Template/#[Template] access
+        // fallback to global @Template/#[Template] access
         if ($classTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode || $classTagValueNodeOrAttribute instanceof Attribute) {
             return $this->refactorClassMethod($classMethod, $classTagValueNodeOrAttribute);
         }
@@ -263,27 +260,24 @@ CODE_SAMPLE
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
         $returnStaticType = $this->getType($lastReturnExpr);
-        // is new response? keep it
-        $isResponseType = \false;
-        if ($return->expr instanceof New_) {
-            $new = $return->expr;
-            if ($this->isObjectType($new->class, new ObjectType(Response::class))) {
-                $isResponseType = \true;
-            }
-        } elseif (!$return->expr instanceof MethodCall) {
-            if (!$hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
+        $responseObjectType = new ObjectType(Response::class);
+        // change contents only if the value is not Response yet
+        if (!$responseObjectType->isSuperTypeOf($returnStaticType)->yes()) {
+            if (!$return->expr instanceof MethodCall) {
+                if (!$hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
+                    $return->expr = $thisRenderMethodCall;
+                }
+            } elseif ($returnStaticType instanceof ArrayType) {
                 $return->expr = $thisRenderMethodCall;
+            } elseif ($returnStaticType instanceof MixedType) {
+                // nothing we can do
+                return \false;
             }
-        } elseif ($returnStaticType instanceof ArrayType) {
-            $return->expr = $thisRenderMethodCall;
-        } elseif ($returnStaticType instanceof MixedType) {
-            // nothing we can do
-            return \false;
-        }
-        $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType($returnStaticType, SymfonyClass::RESPONSE);
-        // skip as the original class method has to change first
-        if ($isArrayOrResponseType && $isResponseType === \false) {
-            return \false;
+            $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType($returnStaticType, SymfonyClass::RESPONSE);
+            // skip as the original class method has to change first
+            if ($isArrayOrResponseType) {
+                return \false;
+            }
         }
         // already response
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineTagValueNodeOrAttribute);
@@ -327,7 +321,7 @@ CODE_SAMPLE
             if (!$stmt instanceof Return_) {
                 continue;
             }
-            // just created node, skip it
+            // just created class, skip it
             if ($stmt->getAttributes() === []) {
                 return \false;
             }
