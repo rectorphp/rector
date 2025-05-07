@@ -2548,6 +2548,7 @@ class ComposerStaticInit85a5c971754a67e64efb2b2dadc9a1fe
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyClosureExtensionMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyClosureExtensionMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
+        'Rector\\Symfony\\NodeFactory\\Annotations\\AnnotationOrAttributeValueResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/AnnotationOrAttributeValueResolver.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationFromNewFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationFromNewFactory.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationKeyToValuesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationKeyToValuesResolver.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\StringValueQuoteWrapper' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/StringValueQuoteWrapper.php',

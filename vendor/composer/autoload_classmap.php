@@ -2329,6 +2329,7 @@ return array(
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyClosureExtensionMatcher' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyClosureExtensionMatcher.php',
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
+    'Rector\\Symfony\\NodeFactory\\Annotations\\AnnotationOrAttributeValueResolver' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/Annotations/AnnotationOrAttributeValueResolver.php',
     'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationFromNewFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationFromNewFactory.php',
     'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationKeyToValuesResolver' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationKeyToValuesResolver.php',
     'Rector\\Symfony\\NodeFactory\\Annotations\\StringValueQuoteWrapper' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/Annotations/StringValueQuoteWrapper.php',

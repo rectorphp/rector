@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "48203503078e4224c91eba3ba038a575c9c25586"
+                "reference": "96b3565483d88525d338c57eddae43a930aa6db2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/48203503078e4224c91eba3ba038a575c9c25586",
-                "reference": "48203503078e4224c91eba3ba038a575c9c25586",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/96b3565483d88525d338c57eddae43a930aa6db2",
+                "reference": "96b3565483d88525d338c57eddae43a930aa6db2",
                 "shasum": ""
             },
             "require": {
@@ -1833,7 +1833,7 @@
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-05T17:05:33+00:00",
+            "time": "2025-05-07T08:27:03+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "b719ac773f34f01f08f2d571c64d047c3517b75f"
+                "reference": "fdcb6e2d5c4ebd8c4b82b6cfbc3aa22d5fc9ad85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b719ac773f34f01f08f2d571c64d047c3517b75f",
-                "reference": "b719ac773f34f01f08f2d571c64d047c3517b75f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/fdcb6e2d5c4ebd8c4b82b6cfbc3aa22d5fc9ad85",
+                "reference": "fdcb6e2d5c4ebd8c4b82b6cfbc3aa22d5fc9ad85",
                 "shasum": ""
             },
             "require": {
@@ -1900,7 +1900,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-07T04:07:34+00:00",
+            "time": "2025-05-07T10:50:35+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
