@@ -15,11 +15,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -180,7 +183,7 @@ CODE_SAMPLE
         if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode || $templateAttribute instanceof Attribute) {
             return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode ?: $templateAttribute);
         }
-        // global @Template access
+        // global @Template/#[Template] access
         if ($classTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode || $classTagValueNodeOrAttribute instanceof Attribute) {
             return $this->refactorClassMethod($classMethod, $classTagValueNodeOrAttribute);
         }
@@ -207,6 +210,8 @@ CODE_SAMPLE
             }
             return null;
         });
+        // remove return array shape details
+        $this->removeReturnArrayShapeDocblock($classMethod);
         if (!$this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
             return $hasChanged;
         }
@@ -323,5 +328,22 @@ CODE_SAMPLE
             }
         }
         return $hasChanged;
+    }
+    private function removeReturnArrayShapeDocblock(ClassMethod $classMethod) : void
+    {
+        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+        $returnTagValueNode = $classMethodPhpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return;
+        }
+        if (!$returnTagValueNode->type instanceof ArrayShapeNode) {
+            return;
+        }
+        if ($classMethodPhpDocInfo->removeByName('@return')) {
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
+        }
     }
 }

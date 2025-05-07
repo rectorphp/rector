@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace RectorPrefix202505;
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
         // @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
