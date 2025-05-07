@@ -122,19 +122,19 @@ final class SymfonySetList
     /**
      * @var string
      */
-    public const SYMFONY_70 = __DIR__ . '/../../config/sets/symfony/symfony70.php';
+    public const SYMFONY_70 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony70.php';
     /**
      * @var string
      */
-    public const SYMFONY_71 = __DIR__ . '/../../config/sets/symfony/symfony71.php';
+    public const SYMFONY_71 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony71.php';
     /**
      * @var string
      */
-    public const SYMFONY_72 = __DIR__ . '/../../config/sets/symfony/symfony72.php';
+    public const SYMFONY_72 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony72.php';
     /**
      * @var string
      */
-    public const SYMFONY_73 = __DIR__ . '/../../config/sets/symfony/symfony73.php';
+    public const SYMFONY_73 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony73.php';
     /**
      * @var string
      */
