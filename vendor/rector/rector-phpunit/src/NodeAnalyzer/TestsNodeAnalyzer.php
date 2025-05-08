@@ -64,6 +64,13 @@ final class TestsNodeAnalyzer
         if (\strncmp($classMethod->name->toString(), 'test', \strlen('test')) === 0) {
             return \true;
         }
+        foreach ($classMethod->getAttrGroups() as $attributeGroup) {
+            foreach ($attributeGroup->attrs as $attribute) {
+                if ($attribute->name->toString() === 'PHPUnit\\Framework\\Attributes\\Test') {
+                    return \true;
+                }
+            }
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByName('test');
     }
