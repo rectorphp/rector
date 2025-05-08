@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?StmtsAwareInterface
     {
-        return $this->processArrayKeyFirstLast($node, \false);
+        return $this->processArrayKeyFirstLast($node);
     }
     public function provideMinPhpVersion() : int
     {
@@ -91,7 +91,7 @@ CODE_SAMPLE
     {
         return PolyfillPackage::PHP_73;
     }
-    private function processArrayKeyFirstLast(StmtsAwareInterface $stmtsAware, bool $hasChanged, int $jumpToKey = 0) : ?StmtsAwareInterface
+    private function processArrayKeyFirstLast(StmtsAwareInterface $stmtsAware, int $jumpToKey = 0) : ?StmtsAwareInterface
     {
         if ($stmtsAware->stmts === null) {
             return null;
@@ -124,10 +124,6 @@ CODE_SAMPLE
             $keyFuncCall->name = new Name($newName);
             $this->changeNextKeyCall($stmtsAware, $key + 2, $resetOrEndFuncCall, $keyFuncCall->name);
             unset($stmtsAware->stmts[$key]);
-            $hasChanged = \true;
-            return $this->processArrayKeyFirstLast($stmtsAware, $hasChanged, $key + 2);
-        }
-        if ($hasChanged) {
             return $stmtsAware;
         }
         return null;
@@ -140,7 +136,7 @@ CODE_SAMPLE
                 break;
             }
             if ($stmtsAware->stmts[$nextKey] instanceof Expression && !$this->shouldSkip($stmtsAware->stmts[$nextKey])) {
-                $this->processArrayKeyFirstLast($stmtsAware, \true, $nextKey);
+                $this->processArrayKeyFirstLast($stmtsAware, $nextKey);
                 break;
             }
             $keyFuncCall = $this->resolveKeyFuncCall($stmtsAware->stmts[$nextKey], $resetOrEndFuncCall);
