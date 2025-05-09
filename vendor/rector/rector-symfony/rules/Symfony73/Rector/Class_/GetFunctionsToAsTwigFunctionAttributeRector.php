@@ -73,10 +73,11 @@ CODE_SAMPLE
         if ($node->isAbstract() || $node->isAnonymous()) {
             return null;
         }
-        if (!$this->isObjectType($node, new ObjectType(TwigClass::TWIG_EXTENSION))) {
+        $twigExtensionObjectType = new ObjectType(TwigClass::TWIG_EXTENSION);
+        if (!$this->isObjectType($node, $twigExtensionObjectType)) {
             return null;
         }
-        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker($node, 'getFunctions', TwigClass::AS_TWIG_FUNCTION_ATTRIBUTE);
+        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker($node, 'getFunctions', TwigClass::AS_TWIG_FUNCTION_ATTRIBUTE, $twigExtensionObjectType);
         if (!$hasChanged) {
             return null;
         }

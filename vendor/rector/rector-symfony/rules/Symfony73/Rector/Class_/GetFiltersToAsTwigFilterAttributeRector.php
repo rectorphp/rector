@@ -77,7 +77,7 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, $twigExtensionObjectType)) {
             return null;
         }
-        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker($node, 'getFilters', TwigClass::AS_TWIG_FILTER_ATTRIBUTE);
+        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker($node, 'getFilters', TwigClass::AS_TWIG_FILTER_ATTRIBUTE, $twigExtensionObjectType);
         if ($hasChanged) {
             return $node;
         }
