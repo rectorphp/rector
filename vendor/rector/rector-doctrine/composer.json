@@ -8,7 +8,7 @@
         "symfony\/yaml": "^7.2"
     },
     "require-dev": {
-        "doctrine\/doctrine-bundle": "^2.13",
+        "doctrine\/doctrine-bundle": "^2.14",
         "doctrine\/orm": "^2.20",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.14",

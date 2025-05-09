@@ -13,5 +13,8 @@ final class TwigClass
      * @var string
      */
     public const AS_TWIG_FILTER_ATTRIBUTE = 'Twig\\Attribute\\AsTwigFilter';
-    public const TWIG_FILTER = 'Twig\\TwigFilter';
+    /**
+     * @var string
+     */
+    public const AS_TWIG_FUNCTION_ATTRIBUTE = 'Twig\\Attribute\\AsTwigFunction';
 }

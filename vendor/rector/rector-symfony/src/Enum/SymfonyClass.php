@@ -85,4 +85,5 @@ final class SymfonyClass
      * @var string
      */
     public const AUTHORIZATION_CHECKER = 'Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface';
+    public const REQUEST_STACK = 'Symfony\\Component\\HttpFoundation\\RequestStack';
 }

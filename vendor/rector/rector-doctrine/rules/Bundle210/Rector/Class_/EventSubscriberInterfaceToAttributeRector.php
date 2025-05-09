@@ -15,6 +15,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -22,20 +24,27 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/doctrine/DoctrineBundle/pull/1664
+ * @see https://github.com/doctrine/DoctrineBundle/pull/1592
  *
  * @see \Rector\Doctrine\Tests\Bundle210\Rector\Class_\EventSubscriberInterfaceToAttributeRector\EventSubscriberInterfaceToAttributeRectorTest
  */
 final class EventSubscriberInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    private Class_ $subscriberClass;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace EventSubscriberInterface with AsDoctrineListener attribute(s)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace EventSubscriberInterface with #[AsDoctrineListener] attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\Common\EventSubscriberInterface;
@@ -97,10 +106,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->hasImplements($node, 'Doctrine\\Common\\EventSubscriber') && !$this->hasImplements($node, 'Doctrine\\Bundle\\DoctrineBundle\\EventSubscriber\\EventSubscriberInterface')) {
+        if (!$this->reflectionProvider->hasClass(DoctrineClass::AS_DOCTRINE_LISTENER_ATTRIBUTE)) {
             return null;
         }
-        $this->subscriberClass = $node;
+        if (!$this->hasImplements($node, DoctrineClass::EVENT_SUBSCRIBER) && !$this->hasImplements($node, DoctrineClass::EVENT_SUBSCRIBER_INTERFACE)) {
+            return null;
+        }
+        //        $this->subscriberClass = $class;
         $getSubscribedEventsClassMethod = $node->getMethod('getSubscribedEvents');
         if (!$getSubscribedEventsClassMethod instanceof ClassMethod) {
             return null;
@@ -110,23 +122,23 @@ CODE_SAMPLE
             return null;
         }
         if ($stmts[0] instanceof Return_ && $stmts[0]->expr instanceof Array_) {
-            $this->handleArray($stmts);
+            $this->handleArray($node, $stmts);
         }
-        $this->removeImplements($node, ['Doctrine\\Common\\EventSubscriber', 'Doctrine\\Bundle\\DoctrineBundle\\EventSubscriber\\EventSubscriberInterface']);
+        $this->removeImplements($node, [DoctrineClass::EVENT_SUBSCRIBER, DoctrineClass::EVENT_SUBSCRIBER_INTERFACE]);
         unset($node->stmts[$getSubscribedEventsClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
         return $node;
     }
     /**
      * @param array<int, Node\Stmt> $expressions
      */
-    private function handleArray(array $expressions) : void
+    private function handleArray(Class_ $class, array $expressions) : void
     {
         foreach ($expressions as $expression) {
             if (!$expression instanceof Return_ || !$expression->expr instanceof Array_) {
                 continue;
             }
             $arguments = $this->parseArguments($expression->expr);
-            $this->addAttribute($arguments);
+            $this->addAttribute($class, $arguments);
         }
     }
     /**
@@ -145,10 +157,10 @@ CODE_SAMPLE
     /**
      * @param array<Expr> $arguments
      */
-    private function addAttribute(array $arguments) : void
+    private function addAttribute(Class_ $class, array $arguments) : void
     {
         foreach ($arguments as $argument) {
-            $this->subscriberClass->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('Doctrine\\Bundle\\DoctrineBundle\\Attribute\\AsDoctrineListener'), [new Arg($argument, \false, \false, [], new Identifier('event'))])]);
+            $class->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(DoctrineClass::AS_DOCTRINE_LISTENER_ATTRIBUTE), [new Arg($argument, \false, \false, [], new Identifier('event'))])]);
         }
     }
     private function hasImplements(Class_ $class, string $interfaceFQN) : bool

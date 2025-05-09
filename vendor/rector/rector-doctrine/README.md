@@ -24,6 +24,18 @@ return RectorConfig::configure()
     ->withComposerBased(doctrine: true);
 ```
 
+If you're on PHP 7.x, you can use withSets() instead, for `doctrineCodeQuality` set, so you can define:
+
+```php
+use Rector\Config\RectorConfig;
+use Rector\Doctrine\Set\DoctrineSetList;
+
+return RectorConfig::configure()
+    ->withSets([
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+    ]);
+```
+
 See [documentation](https://getrector.com/documentation) for more.
 
 <br>
