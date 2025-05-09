@@ -37,7 +37,6 @@ use Rector\Symfony\NodeFactory\ThisRenderFactory;
 use Rector\Symfony\NodeFinder\EmptyReturnNodeFinder;
 use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater;
-use RectorPrefix202505\Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
