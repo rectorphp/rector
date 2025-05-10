@@ -61,7 +61,7 @@ final class TypedPropertyFromToManyRelationTypeRector extends AbstractRector imp
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Complete @var annotations or types based on @ORM\\*toMany annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete Collection @var annotations and property type declarations, based on @ORM\\*toMany and @ODM\\*toMany annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn
@@ -74,14 +74,15 @@ class SimpleColumn
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 class SimpleColumn
 {
     /**
      * @ORM\OneToMany(targetEntity="App\Product")
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Product>
+     * @var Collection<int, \App\Product>
      */
-    private \Doctrine\Common\Collections\Collection $products;
+    private Collection $products;
 }
 CODE_SAMPLE
 )]);

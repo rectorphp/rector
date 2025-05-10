@@ -1506,6 +1506,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeMixedTypeDeclarationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
+    'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradeInstanceofStringableRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Instanceof_/DowngradeInstanceofStringableRector.php',
     'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradePhp80ResourceReturnToObjectRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php',
     'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeNamedArgumentRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php',
     'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionClassGetConstantsFilterRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionClassGetConstantsFilterRector.php',
