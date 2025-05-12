@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Doctrine\CodeQuality\Enum\DoctrineClass;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\Enum\TestClass;
 use Rector\Doctrine\NodeAnalyzer\RepositoryClassResolver;
 use Rector\Naming\Naming\PropertyNaming;

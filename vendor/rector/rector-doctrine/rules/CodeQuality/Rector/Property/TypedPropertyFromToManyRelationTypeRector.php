@@ -10,6 +10,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -99,7 +100,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Property
     {
-        if ($node->type !== null) {
+        if ($node->type !== null && $this->isName($node->type, DoctrineClass::COLLECTION)) {
             return null;
         }
         $propertyType = $this->toManyRelationPropertyTypeResolver->resolve($node);

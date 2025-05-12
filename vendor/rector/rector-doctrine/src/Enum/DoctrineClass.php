@@ -18,4 +18,28 @@ final class DoctrineClass
      */
     public const EVENT_SUBSCRIBER = 'Doctrine\\Common\\EventSubscriber';
     public const EVENT_SUBSCRIBER_INTERFACE = 'Doctrine\\Bundle\\DoctrineBundle\\EventSubscriber\\EventSubscriberInterface';
+    /**
+     * @var string
+     */
+    public const COLLECTION = 'Doctrine\\Common\\Collections\\Collection';
+    /**
+     * @var string
+     */
+    public const ARRAY_COLLECTION = 'Doctrine\\Common\\Collections\\ArrayCollection';
+    /**
+     * @var string
+     */
+    public const SERVICE_DOCUMENT_REPOSITORY = 'Doctrine\\Bundle\\MongoDBBundle\\Repository\\ServiceDocumentRepository';
+    /**
+     * @var string
+     */
+    public const SERVICE_ENTITY_REPOSITORY = 'Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository';
+    /**
+     * @var string
+     */
+    public const ENTITY_REPOSITORY = 'Doctrine\\ORM\\EntityRepository';
+    /**
+     * @var string
+     */
+    public const OBJECT_REPOSITORY = 'Doctrine\\Persistence\\ObjectRepository';
 }
