@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
@@ -41,6 +42,10 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private PhpAttributeAnalyzer $phpAttributeAnalyzer;
     /**
+     * @readonly
+     */
+    private ClassNaming $classNaming;
+    /**
      * @var string
      * @changelog https://regex101.com/r/qiHZ4T/1
      */
@@ -49,12 +54,13 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      * @var EventNameToClassAndConstant[]
      */
     private array $eventNamesToClassConstants = [];
-    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, ClassNaming $classNaming)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->classAnalyzer = $classAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->classNaming = $classNaming;
         $this->eventNamesToClassConstants = [
             // kernel events
             new EventNameToClassAndConstant('kernel.request', SymfonyClass::KERNEL_EVENTS_CLASS, 'REQUEST'),
@@ -140,7 +146,7 @@ CODE_SAMPLE
     private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods) : void
     {
         $class->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
-        $classShortName = $this->nodeNameResolver->getShortName($class);
+        $classShortName = $this->classNaming->getShortName($class);
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
         $class->name = new Identifier($classShortName . 'EventSubscriber');

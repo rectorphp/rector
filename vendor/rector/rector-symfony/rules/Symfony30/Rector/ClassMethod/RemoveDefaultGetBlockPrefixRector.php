@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,9 +26,14 @@ final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private ClassNaming $classNaming;
+    public function __construct(ValueResolver $valueResolver, ClassNaming $classNaming)
     {
         $this->valueResolver = $valueResolver;
+        $this->classNaming = $classNaming;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -86,7 +92,7 @@ CODE_SAMPLE
             if (!\is_string($className)) {
                 continue;
             }
-            $shortClassName = $this->nodeNameResolver->getShortName($className);
+            $shortClassName = $this->classNaming->getShortName($className);
             if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
                 $shortClassName = (string) Strings::before($shortClassName, 'Type');
             }
