@@ -147,7 +147,7 @@ CODE_SAMPLE
             if (!$arg->name instanceof Identifier) {
                 continue;
             }
-            if (!$this->nodeNameResolver->isNames($arg->name, $argNames)) {
+            if (!$this->isNames($arg->name, $argNames)) {
                 continue;
             }
             $positions[] = $position;
@@ -270,7 +270,7 @@ CODE_SAMPLE
     private function shouldSkip(FuncCall $funcCall) : bool
     {
         $functionNames = \array_keys(NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES);
-        if (!$this->nodeNameResolver->isNames($funcCall, $functionNames)) {
+        if (!$this->isNames($funcCall, $functionNames)) {
             return \true;
         }
         return $funcCall->isFirstClassCallable();

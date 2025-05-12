@@ -6,6 +6,7 @@ namespace Rector\Doctrine\NodeManipulator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -73,7 +74,8 @@ final class ToManyRelationPropertyTypeResolver
     {
         $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue(EntityMappingKey::TARGET_ENTITY) ?: $doctrineAnnotationTagValueNode->getValue(OdmMappingKey::TARGET_DOCUMENT);
         if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
-            return null;
+            // most likely mapped superclass
+            return new ObjectType(DoctrineClass::COLLECTION);
         }
         $targetEntityClass = $targetEntityArrayItemNode->value;
         if ($targetEntityClass instanceof StringNode) {
