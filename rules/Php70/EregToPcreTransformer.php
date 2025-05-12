@@ -59,7 +59,7 @@ final class EregToPcreTransformer
      */
     private array $cache = [];
     /**
-     * Change this via services configuratoin in rector.php if you need it
+     * Change this via services configuration in rector.php if you need it
      * Single type is chosen to prevent every regular with different delimiter.
      */
     public function __construct(string $pcreDelimiter = '#')

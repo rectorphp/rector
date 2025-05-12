@@ -115,7 +115,7 @@ final class DeadReturnTagValueNodeAnalyzer
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void') {
             return \true;
         }
-        if (!$this->hasUsefullPhpdocType($returnTagValueNode, $node)) {
+        if (!$this->hasUsefulPhpdocType($returnTagValueNode, $node)) {
             return \true;
         }
         $nodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
@@ -140,7 +140,7 @@ final class DeadReturnTagValueNodeAnalyzer
      * exact different between @return and node return type
      * @param mixed $returnType
      */
-    private function hasUsefullPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType) : bool
+    private function hasUsefulPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType) : bool
     {
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && $returnTagValueNode->type->name === 'mixed') {
             return \false;

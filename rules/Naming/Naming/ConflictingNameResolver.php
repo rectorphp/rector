@@ -60,7 +60,7 @@ final class ConflictingNameResolver
             }
             $expectedNames[] = $expectedName;
         }
-        return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
+        return $this->arrayFilter->filterWithAtLeastTwoOccurrences($expectedNames);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
@@ -85,7 +85,7 @@ final class ConflictingNameResolver
         $newAssignNames = $this->resolveForNewAssigns($functionLike);
         $nonNewAssignNames = $this->resolveForNonNewAssigns($functionLike);
         $protectedNames = \array_merge($paramNames, $newAssignNames, $nonNewAssignNames);
-        $protectedNames = $this->arrayFilter->filterWithAtLeastTwoOccurences($protectedNames);
+        $protectedNames = $this->arrayFilter->filterWithAtLeastTwoOccurrences($protectedNames);
         $this->conflictingVariableNamesByClassMethod[$classMethodId] = $protectedNames;
         return $protectedNames;
     }

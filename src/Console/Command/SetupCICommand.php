@@ -37,7 +37,7 @@ final class SetupCICommand extends Command
         if ($ci === CiDetector::CI_GITHUB_ACTIONS) {
             return $this->handleGithubActions();
         }
-        $noteMessage = sprintf('Only Github and GitLab are currently supported.%s Contribute your CI template to Rector to make this work: %s', \PHP_EOL, 'https://github.com/rectorphp/rector-src/');
+        $noteMessage = sprintf('Only GitHub and GitLab are currently supported.%s Contribute your CI template to Rector to make this work: %s', \PHP_EOL, 'https://github.com/rectorphp/rector-src/');
         $this->symfonyStyle->note($noteMessage);
         return self::SUCCESS;
     }

@@ -37,8 +37,8 @@ final class CallCollectionAnalyzer
         foreach ($calls as $call) {
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
             $callerType = $this->nodeTypeResolver->getType($callerRoot);
-            $callerTypeClasName = ClassNameFromObjectTypeResolver::resolve($callerType);
-            if ($callerTypeClasName === null) {
+            $callerTypeClassName = ClassNameFromObjectTypeResolver::resolve($callerType);
+            if ($callerTypeClassName === null) {
                 // handle fluent by $this->bar()->baz()->qux()
                 // that methods don't have return type
                 if ($callerType instanceof MixedType && !$callerType->isExplicitMixed()) {
@@ -65,7 +65,7 @@ final class CallCollectionAnalyzer
             if ($this->isSelfStatic($call) && $this->shouldSkip($call, $classMethodName)) {
                 return \true;
             }
-            if ($callerTypeClasName !== $className) {
+            if ($callerTypeClassName !== $className) {
                 continue;
             }
             if ($this->shouldSkip($call, $classMethodName)) {

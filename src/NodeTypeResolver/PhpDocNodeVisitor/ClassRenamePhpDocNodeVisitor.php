@@ -97,10 +97,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     {
         return $this->hasChanged;
     }
-    private function ensureFQCNObject(ObjectType $objectType, string $identiferName) : ObjectType
+    private function ensureFQCNObject(ObjectType $objectType, string $identifierName) : ObjectType
     {
-        if ($objectType instanceof ShortenedObjectType && \strncmp($identiferName, '\\', \strlen('\\')) === 0) {
-            return new ObjectType(\ltrim($identiferName, '\\'));
+        if ($objectType instanceof ShortenedObjectType && \strncmp($identifierName, '\\', \strlen('\\')) === 0) {
+            return new ObjectType(\ltrim($identifierName, '\\'));
         }
         if ($objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType) {
             return new ObjectType($objectType->getFullyQualifiedName());

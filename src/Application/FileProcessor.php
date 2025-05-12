@@ -108,7 +108,7 @@ final class FileProcessor
         } while (\true);
         // 5. add as cacheable if not changed at all
         if (!$fileHasChanged) {
-            $this->changedFilesDetector->addCachableFile($filePath);
+            $this->changedFilesDetector->addCacheableFile($filePath);
         } else {
             // when changed, set final status changed to true
             // to ensure it make sense to verify in next process when needed

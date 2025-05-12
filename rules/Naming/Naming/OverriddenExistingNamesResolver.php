@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
-final class OverridenExistingNamesResolver
+final class OverriddenExistingNamesResolver
 {
     /**
      * @readonly
@@ -29,7 +29,7 @@ final class OverridenExistingNamesResolver
     /**
      * @var array<int, array<int, string>>
      */
-    private array $overridenExistingVariableNamesByClassMethod = [];
+    private array $overriddenExistingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->arrayFilter = $arrayFilter;
@@ -41,8 +41,8 @@ final class OverridenExistingNamesResolver
      */
     public function hasNameInClassMethodForNew(string $variableName, $functionLike) : bool
     {
-        $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLike);
-        return \in_array($variableName, $overridenVariableNames, \true);
+        $overriddenVariableNames = $this->resolveOverriddenNamesForNew($functionLike);
+        return \in_array($variableName, $overriddenVariableNames, \true);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
@@ -68,11 +68,11 @@ final class OverridenExistingNamesResolver
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function resolveOveriddenNamesForNew($functionLike) : array
+    private function resolveOverriddenNamesForNew($functionLike) : array
     {
         $classMethodId = \spl_object_id($functionLike);
-        if (isset($this->overridenExistingVariableNamesByClassMethod[$classMethodId])) {
-            return $this->overridenExistingVariableNamesByClassMethod[$classMethodId];
+        if (isset($this->overriddenExistingVariableNamesByClassMethod[$classMethodId])) {
+            return $this->overriddenExistingVariableNamesByClassMethod[$classMethodId];
         }
         $currentlyUsedNames = [];
         /** @var Assign[] $assigns */
@@ -86,8 +86,8 @@ final class OverridenExistingNamesResolver
             }
             $currentlyUsedNames[] = $currentVariableName;
         }
-        $currentlyUsedNames = $this->arrayFilter->filterWithAtLeastTwoOccurences($currentlyUsedNames);
-        $this->overridenExistingVariableNamesByClassMethod[$classMethodId] = $currentlyUsedNames;
+        $currentlyUsedNames = $this->arrayFilter->filterWithAtLeastTwoOccurrences($currentlyUsedNames);
+        $this->overriddenExistingVariableNamesByClassMethod[$classMethodId] = $currentlyUsedNames;
         return $currentlyUsedNames;
     }
 }

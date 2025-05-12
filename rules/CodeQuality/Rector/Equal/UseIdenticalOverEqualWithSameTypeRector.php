@@ -26,7 +26,7 @@ class SomeClass
     public function run(int $firstValue, int $secondValue)
     {
          $isSame = $firstValue == $secondValue;
-         $isDiffernt = $firstValue != $secondValue;
+         $isDifferent = $firstValue != $secondValue;
     }
 }
 CODE_SAMPLE
@@ -36,7 +36,7 @@ class SomeClass
     public function run(int $firstValue, int $secondValue)
     {
          $isSame = $firstValue === $secondValue;
-         $isDiffernt = $firstValue !== $secondValue;
+         $isDifferent = $firstValue !== $secondValue;
     }
 }
 CODE_SAMPLE

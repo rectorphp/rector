@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class CoalesePropertyAssignMatcher
+final class CoalescePropertyAssignMatcher
 {
     /**
      * @readonly

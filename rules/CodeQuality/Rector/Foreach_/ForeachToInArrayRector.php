@@ -166,14 +166,14 @@ CODE_SAMPLE
     }
     private function isIfBodyABoolReturnNode(If_ $if) : bool
     {
-        $ifStatment = $if->stmts[0];
-        if (!$ifStatment instanceof Return_) {
+        $ifStatement = $if->stmts[0];
+        if (!$ifStatement instanceof Return_) {
             return \false;
         }
-        if (!$ifStatment->expr instanceof Expr) {
+        if (!$ifStatement->expr instanceof Expr) {
             return \false;
         }
-        return $this->valueResolver->isTrueOrFalse($ifStatment->expr);
+        return $this->valueResolver->isTrueOrFalse($ifStatement->expr);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $binaryOp

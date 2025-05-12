@@ -9,7 +9,7 @@ final class ArrayFilter
      * @param mixed[] $values
      * @return string[]
      */
-    public function filterWithAtLeastTwoOccurences(array $values) : array
+    public function filterWithAtLeastTwoOccurrences(array $values) : array
     {
         /** @var array<string, int> $valueToCount */
         $valueToCount = \array_count_values($values);

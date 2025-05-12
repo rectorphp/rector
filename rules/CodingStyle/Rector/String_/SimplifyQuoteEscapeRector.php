@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector\SymplifyQuoteEscapeRectorTest
  */
-final class SymplifyQuoteEscapeRector extends AbstractRector
+final class SimplifyQuoteEscapeRector extends AbstractRector
 {
     /**
      * @var string
