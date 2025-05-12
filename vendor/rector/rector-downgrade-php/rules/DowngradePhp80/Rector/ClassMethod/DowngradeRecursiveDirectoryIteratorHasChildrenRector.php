@@ -63,7 +63,7 @@ CODE_SAMPLE
             if ($classMethod->params[0]->type === null) {
                 continue;
             }
-            if (!$this->nodeNameResolver->isName($classMethod, 'hasChildren')) {
+            if (!$this->isName($classMethod, 'hasChildren')) {
                 continue;
             }
             $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);

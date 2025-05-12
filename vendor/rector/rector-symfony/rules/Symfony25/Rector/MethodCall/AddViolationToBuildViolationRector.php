@@ -56,7 +56,7 @@ CODE_SAMPLE
         if (!$executionContext->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($node->name, 'addViolationAt')) {
+        if (!$this->isName($node->name, 'addViolationAt')) {
             return null;
         }
         $args = $node->getArgs();

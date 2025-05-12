@@ -70,7 +70,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(FuncCall $funcCall) : bool
     {
-        if (!$this->nodeNameResolver->isName($funcCall, 'number_format')) {
+        if (!$this->isName($funcCall, 'number_format')) {
             return \true;
         }
         $args = $funcCall->getArgs();

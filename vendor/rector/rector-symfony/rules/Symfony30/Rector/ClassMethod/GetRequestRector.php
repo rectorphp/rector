@@ -127,7 +127,7 @@ CODE_SAMPLE
             if (!$node->var instanceof Variable) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node->name, 'get');
+            return $this->isName($node->name, 'get');
         });
         foreach ($getMethodCalls as $getMethodCall) {
             if ($this->isGetMethodCallWithRequestParameters($getMethodCall)) {
@@ -142,7 +142,7 @@ CODE_SAMPLE
         if (!$methodCall->var instanceof Variable) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($methodCall->var, 'this')) {
+        if (!$this->isName($methodCall->var, 'this')) {
             return \false;
         }
         if (!$this->isName($methodCall->name, 'getRequest') && !$this->isGetMethodCallWithRequestParameters($methodCall)) {
@@ -162,7 +162,7 @@ CODE_SAMPLE
             if (!$this->isName($node->var, 'this')) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node->name, 'getRequest');
+            return $this->isName($node->name, 'getRequest');
         });
     }
     private function isGetMethodCallWithRequestParameters(MethodCall $methodCall) : bool

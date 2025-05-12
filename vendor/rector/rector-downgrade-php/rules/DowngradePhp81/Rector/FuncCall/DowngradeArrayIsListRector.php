@@ -121,7 +121,7 @@ CODE_SAMPLE
         if (!$callLike instanceof FuncCall) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($callLike, 'array_is_list')) {
+        if (!$this->isName($callLike, 'array_is_list')) {
             return \true;
         }
         $scope = $callLike->getAttribute(AttributeKey::SCOPE);

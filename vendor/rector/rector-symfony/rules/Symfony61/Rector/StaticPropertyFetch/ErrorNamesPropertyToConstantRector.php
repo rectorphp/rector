@@ -67,7 +67,7 @@ CODE_SAMPLE
         if (!$classReflection->is('Symfony\\Component\\Validator\\Constraint')) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($node->name, 'errorNames')) {
+        if (!$this->isName($node->name, 'errorNames')) {
             return null;
         }
         $parentClass = $classReflection->getParentClass();

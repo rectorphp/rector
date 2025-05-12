@@ -82,7 +82,7 @@ CODE_SAMPLE
                 return null;
             }
             $returnedValue = $this->valueResolver->getValue($returnedExpr);
-            $className = $this->nodeNameResolver->getName($node);
+            $className = $this->getName($node);
             if (!\is_string($className)) {
                 continue;
             }

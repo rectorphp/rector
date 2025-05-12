@@ -78,7 +78,7 @@ CODE_SAMPLE
         if (!$classReflection->is('Symfony\\Component\\Console\\Command\\Command')) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($node, 'execute')) {
+        if (!$this->isName($node, 'execute')) {
             return null;
         }
         $hasChanged = \false;

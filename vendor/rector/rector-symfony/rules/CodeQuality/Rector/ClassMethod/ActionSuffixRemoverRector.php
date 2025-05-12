@@ -66,7 +66,7 @@ CODE_SAMPLE
     }
     private function removeSuffix(ClassMethod $classMethod, string $suffixToRemove) : ?ClassMethod
     {
-        $name = $this->nodeNameResolver->getName($classMethod);
+        $name = $this->getName($classMethod);
         $newName = Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
         if ($newName === $name) {
             return null;

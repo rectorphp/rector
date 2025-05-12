@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (!$this->symfonyTestCaseAnalyzer->isInKernelTestCase($node)) {
             return null;
         }
-        if ($this->nodeNameResolver->getName($node->name) !== 'container') {
+        if ($this->getName($node->name) !== 'container') {
             return null;
         }
         if (!$node->class instanceof Name || (string) $node->class !== 'self') {

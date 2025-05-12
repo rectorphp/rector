@@ -89,7 +89,7 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        return !$this->nodeNameResolver->isName($funcCall, 'hash');
+        return !$this->isName($funcCall, 'hash');
     }
     /**
      * @param Arg[] $args

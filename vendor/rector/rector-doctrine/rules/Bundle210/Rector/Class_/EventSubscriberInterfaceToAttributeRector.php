@@ -166,7 +166,7 @@ CODE_SAMPLE
     private function hasImplements(Class_ $class, string $interfaceFQN) : bool
     {
         foreach ($class->implements as $implement) {
-            if ($this->nodeNameResolver->isName($implement, $interfaceFQN)) {
+            if ($this->isName($implement, $interfaceFQN)) {
                 return \true;
             }
         }
@@ -178,7 +178,7 @@ CODE_SAMPLE
     private function removeImplements(Class_ $class, array $interfaceFQNS) : void
     {
         foreach ($class->implements as $key => $implement) {
-            if (!$this->nodeNameResolver->isNames($implement, $interfaceFQNS)) {
+            if (!$this->isNames($implement, $interfaceFQNS)) {
                 continue;
             }
             unset($class->implements[$key]);

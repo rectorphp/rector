@@ -59,7 +59,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
-                if (!$this->nodeNameResolver->isName($attribute, 'Doctrine\\ORM\\Mapping\\Table')) {
+                if (!$this->isName($attribute, 'Doctrine\\ORM\\Mapping\\Table')) {
                     continue;
                 }
                 if ($attribute->args !== []) {

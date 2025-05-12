@@ -137,8 +137,8 @@ CODE_SAMPLE
     }
     private function resolveControllerReference(Class_ $class, ClassMethod $classMethod) : ?string
     {
-        $className = $this->nodeNameResolver->getName($class);
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $className = $this->getName($class);
+        $methodName = $this->getName($classMethod);
         if ($methodName === '__invoke') {
             return $className;
         }

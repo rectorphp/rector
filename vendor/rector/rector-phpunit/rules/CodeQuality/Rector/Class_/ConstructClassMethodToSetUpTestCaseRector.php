@@ -189,13 +189,13 @@ CODE_SAMPLE
         if ($node->class instanceof Expr) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($node->class, 'parent')) {
+        if (!$this->isName($node->class, 'parent')) {
             return \false;
         }
         if ($node->name instanceof Expr) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($node->name, $desiredMethodName);
+        return $this->isName($node->name, $desiredMethodName);
     }
     private function shouldSkipClass(Class_ $class) : bool
     {

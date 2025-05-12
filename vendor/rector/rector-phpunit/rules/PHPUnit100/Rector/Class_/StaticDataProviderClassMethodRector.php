@@ -120,6 +120,6 @@ CODE_SAMPLE
         if ($classMethod->stmts === null) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, fn(Node $node): bool => $node instanceof Variable && $this->nodeNameResolver->isName($node, 'this'));
+        return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, fn(Node $node): bool => $node instanceof Variable && $this->isName($node, 'this'));
     }
 }

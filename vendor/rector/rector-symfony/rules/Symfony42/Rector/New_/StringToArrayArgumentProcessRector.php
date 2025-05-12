@@ -104,7 +104,7 @@ CODE_SAMPLE
     }
     private function shouldSkipProcessMethodCall(MethodCall $methodCall) : bool
     {
-        $methodName = (string) $this->nodeNameResolver->getName($methodCall->name);
+        $methodName = (string) $this->getName($methodCall->name);
         return \in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, \true);
     }
     /**

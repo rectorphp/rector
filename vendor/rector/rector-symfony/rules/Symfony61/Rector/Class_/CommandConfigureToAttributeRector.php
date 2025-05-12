@@ -108,7 +108,7 @@ CODE_SAMPLE
         $attributeArgs = [];
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if (!$this->nodeNameResolver->isName($attribute->name, SymfonyAttribute::AS_COMMAND)) {
+                if (!$this->isName($attribute->name, SymfonyAttribute::AS_COMMAND)) {
                     continue;
                 }
                 $asCommandAttribute = $attribute;

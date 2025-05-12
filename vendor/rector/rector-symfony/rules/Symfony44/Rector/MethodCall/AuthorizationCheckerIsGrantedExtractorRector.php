@@ -104,7 +104,7 @@ CODE_SAMPLE
         if (!$authorizationChecker->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($node->name, 'isGranted')) {
+        if (!$this->isName($node->name, 'isGranted')) {
             return null;
         }
         return $this->handleIsGranted($node);
@@ -149,7 +149,7 @@ CODE_SAMPLE
      */
     private function processControllerMethods(MethodCall $methodCall)
     {
-        if ($this->nodeNameResolver->isName($methodCall->name, 'isGranted')) {
+        if ($this->isName($methodCall->name, 'isGranted')) {
             return $this->handleIsGranted($methodCall);
         }
         return null;

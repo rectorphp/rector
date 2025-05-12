@@ -50,7 +50,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeNameResolver->isName($node->name, 'getDefaultValue')) {
+        if (!$this->isName($node->name, 'getDefaultValue')) {
             return null;
         }
         $objectType = $this->nodeTypeResolver->getType($node->var);
