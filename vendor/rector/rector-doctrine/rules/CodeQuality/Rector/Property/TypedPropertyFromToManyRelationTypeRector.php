@@ -113,12 +113,16 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // always decorate with collection generic type
         $this->phpDocTypeChanger->changeVarType($node, $phpDocInfo, $propertyType);
+        // remove default null value if any
+        if ($node->props[0]->default !== null) {
+            $node->props[0]->default = null;
+        }
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
             if ($propertyType instanceof UnionType) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);
-                return $node;
+            } else {
+                $node->type = $typeNode;
             }
-            $node->type = $typeNode;
             return $node;
         }
         return $node;
