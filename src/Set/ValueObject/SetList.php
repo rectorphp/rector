@@ -106,6 +106,10 @@ final class SetList
     /**
      * @var string
      */
+    public const PHP_85 = __DIR__ . '/../../../config/set/php85.php';
+    /**
+     * @var string
+     */
     public const PRIVATIZATION = __DIR__ . '/../../../config/set/privatization.php';
     /**
      * @var string

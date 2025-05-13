@@ -71,5 +71,9 @@ final class PhpVersion
     /**
      * @var int
      */
+    public const PHP_85 = 80500;
+    /**
+     * @var int
+     */
     public const PHP_10 = 100000;
 }

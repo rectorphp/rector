@@ -2061,6 +2061,7 @@ return array(
     'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => $baseDir . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',
     'Rector\\Php84\\Rector\\MethodCall\\NewMethodCallWithoutParenthesesRector' => $baseDir . '/rules/Php84/Rector/MethodCall/NewMethodCallWithoutParenthesesRector.php',
     'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => $baseDir . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
+    'Rector\\Php85\\Rector\\ArrayDimFetch\\ArrayFirstLastRector' => $baseDir . '/rules/Php85/Rector/ArrayDimFetch/ArrayFirstLastRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

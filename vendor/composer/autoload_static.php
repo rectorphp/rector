@@ -2280,6 +2280,7 @@ class ComposerStaticInit505aae23228c95129299728105788b45
         'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',
         'Rector\\Php84\\Rector\\MethodCall\\NewMethodCallWithoutParenthesesRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/MethodCall/NewMethodCallWithoutParenthesesRector.php',
         'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
+        'Rector\\Php85\\Rector\\ArrayDimFetch\\ArrayFirstLastRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ArrayDimFetch/ArrayFirstLastRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

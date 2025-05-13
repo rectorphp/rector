@@ -242,6 +242,11 @@ final class PhpVersionFeature
     public const ARRAY_KEY_FIRST_LAST = \Rector\ValueObject\PhpVersion::PHP_73;
     /**
      * @var int
+     * @see https://php.watch/versions/8.5/array_first-array_last
+     */
+    public const ARRAY_FIRST_LAST = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @var int
      */
     public const JSON_EXCEPTION = \Rector\ValueObject\PhpVersion::PHP_73;
     /**
