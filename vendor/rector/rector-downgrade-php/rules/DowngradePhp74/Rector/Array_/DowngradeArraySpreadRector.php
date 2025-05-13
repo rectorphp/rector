@@ -159,14 +159,10 @@ CODE_SAMPLE
             if (!$type instanceof FullyQualifiedObjectType) {
                 continue;
             }
-            /**
-             * @var ArrayItem $item
-             * @var ClassConstFetch $value
-             * @var Identifier $name
-             */
             $value = $item->value;
-            /** @var Identifier $name */
+            /** @var ClassConstFetch $value */
             $name = $value->name;
+            /** @var Identifier $name */
             $classLike = $this->astResolver->resolveClassFromName($type->getClassName());
             if (!$classLike instanceof ClassLike) {
                 continue;

@@ -12,6 +12,10 @@ final class DowngradeLevelSetList
     /**
      * @var string
      */
+    public const DOWN_TO_PHP_84 = __DIR__ . '/../../../config/set/level/down-to-php84.php';
+    /**
+     * @var string
+     */
     public const DOWN_TO_PHP_83 = __DIR__ . '/../../../config/set/level/down-to-php83.php';
     /**
      * @var string

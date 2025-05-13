@@ -1761,6 +1761,7 @@ class ComposerStaticInit505aae23228c95129299728105788b45
         'Rector\\DowngradePhp83\\Rector\\ClassConst\\DowngradeTypedClassConstRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php',
         'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeRoundingModeEnumRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeRoundingModeEnumRector.php',
         'Rector\\DowngradePhp84\\Rector\\MethodCall\\DowngradeNewMethodCallWithoutParenthesesRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/MethodCall/DowngradeNewMethodCallWithoutParenthesesRector.php',
+        'Rector\\DowngradePhp85\\Rector\\FuncCall\\DowngradeArrayFirstLastRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/FuncCall/DowngradeArrayFirstLastRector.php',
         'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
         'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
         'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',
