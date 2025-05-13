@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony-docs/issues/20553
  * @see https://github.com/symfony/symfony/pull/59340
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandRectorTest
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandInputAttributeRectorTest
  */
 final class InvokableCommandInputAttributeRector extends AbstractRector
 {
@@ -88,7 +88,7 @@ use Symfony\Component\Console\Command\Option;
 final class SomeCommand
 {
     public function __invoke(
-        #[Argument]
+        #[Argument(name: 'argument', mode: Argument::REQUIRED, description: 'Argument description')]
         string $argument,
         #[Option]
         bool $option = false,
@@ -150,6 +150,16 @@ CODE_SAMPLE
         $executeClassMethod->params = $invokeParams;
         // 6. remove parent class
         $node->extends = null;
+        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attr) {
+                if ($this->isName($attr->name, 'Override')) {
+                    unset($attrGroup->attrs[$attributeKey]);
+                }
+            }
+            if ($attrGroup->attrs === []) {
+                unset($executeClassMethod->attrGroups[$attrGroupKey]);
+            }
+        }
         // 7. replace input->getArgument() and input->getOption() calls with direct variable access
         $this->replaceInputArgumentOptionFetchWithVariables($executeClassMethod);
         return $node;

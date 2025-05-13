@@ -10,10 +10,19 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Symfony73\ValueObject\CommandArgument;
 use Rector\Symfony\Symfony73\ValueObject\CommandOption;
 final class CommandArgumentsAndOptionsResolver
 {
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     /**
      * @return CommandArgument[]
      */
@@ -24,13 +33,22 @@ final class CommandArgumentsAndOptionsResolver
         foreach ($addArgumentMethodCalls as $addArgumentMethodCall) {
             // @todo extract name, type and requirements
             $addArgumentArgs = $addArgumentMethodCall->getArgs();
-            $nameArgValue = $addArgumentArgs[0]->value;
-            if (!$nameArgValue instanceof String_) {
+            $optionName = $this->valueResolver->getValue($addArgumentArgs[0]->value);
+            if ($optionName === null) {
                 // we need string value, otherwise param will not have a name
                 throw new ShouldNotHappenException('Argument name is required');
             }
-            $optionName = $nameArgValue->value;
-            $commandArguments[] = new CommandArgument($optionName);
+            $mode = isset($addArgumentArgs[1]) ? $this->valueResolver->getValue($addArgumentArgs[1]->value) : null;
+            if ($mode !== null && !\is_numeric($mode)) {
+                // we need numeric value or null, otherwise param will not have a name
+                throw new ShouldNotHappenException('Argument mode is required to be null or numeric');
+            }
+            $description = isset($addArgumentArgs[2]) ? $this->valueResolver->getValue($addArgumentArgs[2]->value) : null;
+            if (!\is_string($description)) {
+                // we need string value, otherwise param will not have a name
+                throw new ShouldNotHappenException('Argument description is required');
+            }
+            $commandArguments[] = new CommandArgument($addArgumentArgs[0]->value, $addArgumentArgs[1]->value, $addArgumentArgs[2]->value);
         }
         return $commandArguments;
     }

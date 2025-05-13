@@ -20,7 +20,7 @@ final class SymfonyAttribute
     /**
      * @var string
      */
-    public const COMMAND_ARGUMENT = 'Symfony\\Component\\Console\\Attribute\\Command\\Argument';
+    public const COMMAND_ARGUMENT = 'Symfony\\Component\\Console\\Attribute\\Argument';
     /**
      * @var string
      */
