@@ -9,6 +9,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -45,6 +46,10 @@ final class CommandInvokeParamsFactory
         foreach ($commandArguments as $commandArgument) {
             $argumentParam = new Param(new Variable((string) $this->valueResolver->getValue($commandArgument->getName())));
             $argumentParam->type = new Identifier('string');
+            $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
+            if ($modeValue === null || $modeValue === 2) {
+                $argumentParam->type = new NullableType($argumentParam->type);
+            }
             // @todo fill type or default value
             // @todo default string, multiple values array
             $argumentParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), [new Arg($commandArgument->getName(), \false, \false, [], new Identifier('name')), new Arg($commandArgument->getMode(), \false, \false, [], new Identifier('mode')), new Arg($commandArgument->getDescription(), \false, \false, [], new Identifier('description'))])]);
