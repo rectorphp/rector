@@ -47,7 +47,7 @@ final class ContinueToBreakInSwitchRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Use break instead of continue in switch statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use `break` instead of `continue` in switch statements', [new CodeSample(<<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {

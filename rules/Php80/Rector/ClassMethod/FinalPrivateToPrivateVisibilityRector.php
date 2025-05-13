@@ -31,7 +31,7 @@ final class FinalPrivateToPrivateVisibilityRector extends AbstractRector impleme
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes method visibility from final private to only private', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change method visibility from final private to only private', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     final private function getter() {

@@ -18,7 +18,7 @@ final class FlipNegatedTernaryInstanceofRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Flip negated ternary of instanceof to direct use of object', [new CodeSample('echo ! $object instanceof Product ? null : $object->getPrice();', 'echo $object instanceof Product ? $object->getPrice() : null;')]);
+        return new RuleDefinition('Flip negated ternary of `instanceof` to direct use of object', [new CodeSample('echo ! $object instanceof Product ? null : $object->getPrice();', 'echo $object instanceof Product ? $object->getPrice() : null;')]);
     }
     /**
      * @return array<class-string<Node>>

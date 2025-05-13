@@ -18,7 +18,7 @@ final class NewStaticToNewSelfRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change unsafe new static() to new self()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change unsafe `new static()` to `new self()`', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function build()

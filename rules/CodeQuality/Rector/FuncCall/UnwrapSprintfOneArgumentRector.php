@@ -15,7 +15,7 @@ final class UnwrapSprintfOneArgumentRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('unwrap sprintf() with one argument', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Unwrap `sprintf()` with one argument', [new CodeSample(<<<'CODE_SAMPLE'
 echo sprintf('value');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

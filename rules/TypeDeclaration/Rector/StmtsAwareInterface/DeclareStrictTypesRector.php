@@ -34,7 +34,7 @@ final class DeclareStrictTypesRector extends AbstractRector implements HTMLAvers
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add declare(strict_types=1) if missing', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add `declare(strict_types=1)` if missing', [new CodeSample(<<<'CODE_SAMPLE'
 function someFunction()
 {
 }

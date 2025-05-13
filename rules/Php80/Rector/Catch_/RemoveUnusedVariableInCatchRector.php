@@ -40,7 +40,7 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector implements 
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Remove unused variable in catch()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused variable in `catch()`', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()

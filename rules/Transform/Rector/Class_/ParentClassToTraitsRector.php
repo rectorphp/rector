@@ -38,7 +38,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replaces parent class to specific traits', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace parent class to specific traits', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
 {
 }

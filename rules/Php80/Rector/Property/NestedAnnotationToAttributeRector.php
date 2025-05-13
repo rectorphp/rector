@@ -75,7 +75,7 @@ final class NestedAnnotationToAttributeRector extends AbstractRector implements 
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changed nested annotations to attributes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change nested annotations to attributes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SomeEntity

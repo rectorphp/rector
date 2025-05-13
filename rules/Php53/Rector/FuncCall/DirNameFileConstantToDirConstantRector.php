@@ -19,7 +19,7 @@ final class DirNameFileConstantToDirConstantRector extends AbstractRector implem
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert dirname(__FILE__) to __DIR__', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `dirname(__FILE__)` to `__DIR__`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

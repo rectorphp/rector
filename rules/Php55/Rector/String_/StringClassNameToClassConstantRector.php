@@ -47,7 +47,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace string class names by <class>::class constant', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace string class names by `<class>::class` constant', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class AnotherClass
 {
 }

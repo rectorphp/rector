@@ -31,7 +31,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Streamline the operator arguments of version_compare function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Streamline the operator arguments of `version_compare` function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'gte');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

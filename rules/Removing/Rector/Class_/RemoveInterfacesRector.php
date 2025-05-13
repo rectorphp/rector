@@ -22,7 +22,7 @@ final class RemoveInterfacesRector extends AbstractRector implements Configurabl
     private array $interfacesToRemove = [];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Removes interfaces usage from class.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove interfaces from class', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface
 {
 }

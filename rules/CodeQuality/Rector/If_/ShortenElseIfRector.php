@@ -19,7 +19,7 @@ final class ShortenElseIfRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Shortens else/if to elseif', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Shorten `else`/`if` to `elseif`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

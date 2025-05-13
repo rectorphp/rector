@@ -47,7 +47,7 @@ final class InlineVarDocTagToAssertRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert inline @var tags to calls to assert()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert inline `@var` tags to calls to `assert()`', [new CodeSample(<<<'CODE_SAMPLE'
 /** @var Foo $foo */
 $foo = createFoo();
 CODE_SAMPLE

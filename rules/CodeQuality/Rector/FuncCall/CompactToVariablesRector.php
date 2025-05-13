@@ -31,7 +31,7 @@ final class CompactToVariablesRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change compact() call to own array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `compact()` call to own array', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

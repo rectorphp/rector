@@ -24,7 +24,7 @@ final class RemoveReferenceFromCallRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Remove & from function and method calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove `&` from function and method calls', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one)

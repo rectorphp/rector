@@ -60,7 +60,7 @@ final class RecastingRemovalRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Removes recasting of the same type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove recasting of the same type', [new CodeSample(<<<'CODE_SAMPLE'
 $string = '';
 $string = (string) $string;
 

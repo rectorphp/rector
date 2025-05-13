@@ -29,7 +29,7 @@ final class DateTimeInstanceToCarbonRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert new DateTime() to Carbon::*()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `new DateTime()` to `Carbon::*()`', [new CodeSample(<<<'CODE_SAMPLE'
 $date = new \DateTime('today');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

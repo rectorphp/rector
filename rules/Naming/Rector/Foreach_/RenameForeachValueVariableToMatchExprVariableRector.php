@@ -44,7 +44,7 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Renames value variable name in foreach loop to match expression variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename value variable name in foreach loop to match expression variable', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

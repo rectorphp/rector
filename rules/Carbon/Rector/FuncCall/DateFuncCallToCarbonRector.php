@@ -25,7 +25,7 @@ final class DateFuncCallToCarbonRector extends AbstractRector
     private const TIME_UNITS = [['weeks', 604800], ['days', 86400], ['hours', 3600], ['minutes', 60], ['seconds', 1]];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert date() function call to Carbon::now()->format(*)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `date()` function call to `Carbon::now()->format(*)`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

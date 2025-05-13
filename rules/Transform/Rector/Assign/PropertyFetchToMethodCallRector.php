@@ -25,7 +25,7 @@ final class PropertyFetchToMethodCallRector extends AbstractRector implements Co
     private array $propertiesToMethodCalls = [];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replaces properties assign calls be defined methods.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace properties assign calls be defined methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $result = $object->property;
 $object->property = $value;
 

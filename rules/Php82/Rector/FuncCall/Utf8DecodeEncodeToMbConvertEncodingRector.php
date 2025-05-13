@@ -21,7 +21,7 @@ final class Utf8DecodeEncodeToMbConvertEncodingRector extends AbstractRector imp
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change deprecated utf8_decode and utf8_encode to mb_convert_encoding', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change deprecated `utf8_decode()` and `utf8_encode()` to `mb_convert_encoding()`', [new CodeSample(<<<'CODE_SAMPLE'
 utf8_decode($value);
 utf8_encode($value);
 CODE_SAMPLE

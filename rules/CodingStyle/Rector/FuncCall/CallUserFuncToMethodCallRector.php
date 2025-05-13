@@ -26,7 +26,7 @@ final class CallUserFuncToMethodCallRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Refactor call_user_func() on known class method to a method call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor `call_user_func()` on known class method to a method call', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()

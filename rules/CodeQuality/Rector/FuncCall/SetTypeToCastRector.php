@@ -45,7 +45,7 @@ final class SetTypeToCastRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes settype() to (type) where possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `settype()` to `(type)` where possible', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($foo)

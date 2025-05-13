@@ -52,7 +52,7 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change isset on property object to property_exists() and not null check', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change isset on property object to `property_exists()` and not null check', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;

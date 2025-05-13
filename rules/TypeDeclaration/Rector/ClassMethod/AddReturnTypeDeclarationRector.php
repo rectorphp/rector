@@ -51,7 +51,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes defined return typehint of method and class.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change defined return typehint of method and class', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getData()

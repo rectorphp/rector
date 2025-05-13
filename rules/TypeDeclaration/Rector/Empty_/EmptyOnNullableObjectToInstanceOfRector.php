@@ -33,7 +33,7 @@ final class EmptyOnNullableObjectToInstanceOfRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change empty() on nullable object to instanceof check', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `empty()` on nullable object to instanceof check', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(?AnotherObject $anotherObject)

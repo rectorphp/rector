@@ -27,7 +27,7 @@ final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes if || to early return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `if a || b` to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $newCar)

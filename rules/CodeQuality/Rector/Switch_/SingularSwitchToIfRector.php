@@ -29,7 +29,7 @@ final class SingularSwitchToIfRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change switch with only 1 check to if', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `switch` with only 1 check to `if`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)

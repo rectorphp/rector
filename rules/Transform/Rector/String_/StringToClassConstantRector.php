@@ -31,7 +31,7 @@ final class StringToClassConstantRector extends AbstractRector implements Config
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes strings to specific constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change strings to specific constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeSubscriber
 {
     public static function getSubscribedEvents()

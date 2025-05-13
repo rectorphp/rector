@@ -19,7 +19,7 @@ final class GetCalledClassToStaticClassRector extends AbstractRector implements 
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change get_called_class() to static::class on non-final class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `get_called_class()` to `static::class` on non-final class', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
    public function callOnMe()

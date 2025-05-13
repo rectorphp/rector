@@ -26,7 +26,7 @@ final class TernaryToBooleanOrFalseToBooleanAndRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change ternary of bool : false to && bool', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change ternary of `bool : false` to `&& bool`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()

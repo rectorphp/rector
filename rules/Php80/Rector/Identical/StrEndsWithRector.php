@@ -50,7 +50,7 @@ final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInt
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change helper functions to str_ends_with()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change helper functions to `str_ends_with()`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

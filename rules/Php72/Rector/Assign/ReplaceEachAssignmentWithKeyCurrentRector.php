@@ -33,7 +33,7 @@ final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector imp
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace each() assign outside loop', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace `each()` assign outside loop', [new CodeSample(<<<'CODE_SAMPLE'
 $array = ['b' => 1, 'a' => 2];
 
 $eachedArray = each($array);

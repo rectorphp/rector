@@ -24,7 +24,7 @@ final class IfIssetToCoalescingRector extends AbstractRector implements MinPhpVe
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change if with isset and return to coalesce', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `if` with `isset` and `return` to coalesce', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $items = [];

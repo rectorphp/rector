@@ -28,7 +28,7 @@ final class StringifyStrNeedlesRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Makes needles explicit strings', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make needles explicit strings', [new CodeSample(<<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', $needle);
 CODE_SAMPLE

@@ -36,7 +36,7 @@ final class CombineIfRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Merges nested if statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Merge nested if statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

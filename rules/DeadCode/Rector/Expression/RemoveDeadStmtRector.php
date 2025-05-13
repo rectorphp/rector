@@ -48,7 +48,7 @@ final class RemoveDeadStmtRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Removes dead code statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead code statements', [new CodeSample(<<<'CODE_SAMPLE'
 $value = 5;
 $value;
 CODE_SAMPLE

@@ -50,7 +50,7 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change switch() to match()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `switch()` to `match()`', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($input) {
     case Lexer::T_SELECT:
         $statement = 'select';

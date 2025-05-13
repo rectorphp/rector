@@ -35,7 +35,7 @@ final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes Single return of || to early returns', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change single return of `||` to early returns', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function accept()

@@ -32,7 +32,7 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns defined function calls to local method calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turn defined function calls to local method calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
