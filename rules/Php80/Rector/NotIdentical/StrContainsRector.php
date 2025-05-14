@@ -34,7 +34,7 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     /**
      * @var string[]
      */
-    private const OLD_STR_NAMES = ['strpos', 'strstr'];
+    private const OLD_STR_NAMES = ['mb_strpos', 'mb_strstr', 'strpos', 'strstr'];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
@@ -45,7 +45,7 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace strpos|mb_strpos() !== false and strstr()|mb_strstr() with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
