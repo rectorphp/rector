@@ -88,7 +88,7 @@ use Symfony\Component\Console\Command\Option;
 final class SomeCommand
 {
     public function __invoke(
-        #[Argument(name: 'argument', mode: Argument::REQUIRED, description: 'Argument description')]
+        #[Argument(name: 'argument', description: 'Argument description')]
         string $argument,
         #[Option]
         bool $option = false,

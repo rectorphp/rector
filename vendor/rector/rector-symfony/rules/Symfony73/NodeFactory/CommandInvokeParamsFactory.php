@@ -52,7 +52,7 @@ final class CommandInvokeParamsFactory
             }
             // @todo fill type or default value
             // @todo default string, multiple values array
-            $argumentParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), [new Arg($commandArgument->getName(), \false, \false, [], new Identifier('name')), new Arg($commandArgument->getMode(), \false, \false, [], new Identifier('mode')), new Arg($commandArgument->getDescription(), \false, \false, [], new Identifier('description'))])]);
+            $argumentParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), [new Arg($commandArgument->getName(), \false, \false, [], new Identifier('name')), new Arg($commandArgument->getDescription(), \false, \false, [], new Identifier('description'))])]);
             $argumentParams[] = $argumentParam;
         }
         return $argumentParams;
