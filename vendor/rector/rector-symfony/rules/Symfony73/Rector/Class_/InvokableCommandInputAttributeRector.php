@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -50,13 +51,18 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * @readonly
+     */
+    private VisibilityManipulator $visibilityManipulator;
     private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
-    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ValueResolver $valueResolver)
+    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ValueResolver $valueResolver, VisibilityManipulator $visibilityManipulator)
     {
         $this->attributeFinder = $attributeFinder;
         $this->commandArgumentsAndOptionsResolver = $commandArgumentsAndOptionsResolver;
         $this->commandInvokeParamsFactory = $commandInvokeParamsFactory;
         $this->valueResolver = $valueResolver;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -147,6 +153,7 @@ CODE_SAMPLE
             return null;
         }
         $executeClassMethod->name = new Identifier('__invoke');
+        $this->visibilityManipulator->makePublic($executeClassMethod);
         // 3. create arguments and options parameters
         // @todo
         $commandArguments = $this->commandArgumentsAndOptionsResolver->collectCommandArguments($configureClassMethod);
