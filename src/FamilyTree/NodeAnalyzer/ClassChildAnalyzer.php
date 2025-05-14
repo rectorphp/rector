@@ -3,26 +3,13 @@
 declare (strict_types=1);
 namespace Rector\FamilyTree\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\PhpParser\AstResolver;
 final class ClassChildAnalyzer
 {
-    /**
-     * @readonly
-     */
-    private AstResolver $astResolver;
-    public function __construct(AstResolver $astResolver)
-    {
-        $this->astResolver = $astResolver;
-    }
     /**
      * Look both parent class and interface, yes, all PHP interface methods are abstract
      */
@@ -49,36 +36,13 @@ final class ClassChildAnalyzer
             return new MixedType();
         }
         foreach ($parentClassMethods as $parentClassMethod) {
-            // for downgrade purpose on __toString
-            // @see https://3v4l.org/kdcEh#v7.4.33
-            // @see https://github.com/phpstan/phpstan-src/commit/3854cbc5748a7cb51ee0b86ceffe29bd0564bc98
-            if ($parentClassMethod->getDeclaringClass()->isBuiltIn() || $methodName !== '__toString') {
-                $nativeReturnType = $this->resolveNativeType($parentClassMethod);
-            } else {
-                $nativeReturnType = $this->resolveToStringNativeTypeFromAstResolver($parentClassMethod);
-            }
+            $parametersAcceptor = ParametersAcceptorSelector::combineAcceptors($parentClassMethod->getVariants());
+            $nativeReturnType = $parametersAcceptor->getNativeReturnType();
             if (!$nativeReturnType instanceof MixedType) {
                 return $nativeReturnType;
             }
         }
         return new MixedType();
-    }
-    private function resolveNativeType(PhpMethodReflection $phpMethodReflection) : Type
-    {
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($phpMethodReflection->getVariants());
-        return $extendedParametersAcceptor->getNativeReturnType();
-    }
-    private function resolveToStringNativeTypeFromAstResolver(PhpMethodReflection $phpMethodReflection) : Type
-    {
-        $classReflection = $phpMethodReflection->getDeclaringClass();
-        $class = $this->astResolver->resolveClassFromClassReflection($classReflection);
-        if ($class instanceof ClassLike) {
-            $classMethod = $class->getMethod($phpMethodReflection->getName());
-            if ($classMethod instanceof ClassMethod && !$classMethod->returnType instanceof Node) {
-                return new MixedType();
-            }
-        }
-        return new StringType();
     }
     /**
      * @return PhpMethodReflection[]
