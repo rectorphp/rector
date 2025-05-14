@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -45,12 +46,17 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
      * @readonly
      */
     private CommandInvokeParamsFactory $commandInvokeParamsFactory;
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
     private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
-    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory)
+    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ValueResolver $valueResolver)
     {
         $this->attributeFinder = $attributeFinder;
         $this->commandArgumentsAndOptionsResolver = $commandArgumentsAndOptionsResolver;
         $this->commandInvokeParamsFactory = $commandInvokeParamsFactory;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -210,7 +216,7 @@ CODE_SAMPLE
     }
     private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod) : void
     {
-        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node) : ?Variable {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -222,7 +228,7 @@ CODE_SAMPLE
             }
             $firstArgValue = $node->getArgs()[0]->value;
             if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
-                return $firstArgValue;
+                return new Variable($this->valueResolver->getValue($firstArgValue));
             }
             if (!$firstArgValue instanceof String_) {
                 // unable to resolve argument/option name
