@@ -5,6 +5,8 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -208,7 +210,7 @@ CODE_SAMPLE
     }
     private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod) : void
     {
-        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node) : ?Variable {
+        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node) {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -219,6 +221,9 @@ CODE_SAMPLE
                 return null;
             }
             $firstArgValue = $node->getArgs()[0]->value;
+            if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
+                return $firstArgValue;
+            }
             if (!$firstArgValue instanceof String_) {
                 // unable to resolve argument/option name
                 throw new ShouldNotHappenException();
