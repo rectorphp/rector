@@ -52,7 +52,7 @@ final class RectorConfigValidator
         foreach ($nonExistingRules as $nonExistingRule) {
             $nonExistingRulesString .= ' * ' . $nonExistingRule . \PHP_EOL;
         }
-        throw new ShouldNotHappenException('These rules from "$rectorConfig->skip()" does not exist - remove them or fix their names:' . \PHP_EOL . $nonExistingRulesString);
+        throw new ShouldNotHappenException('These rules from "$rectorConfig->skip()" do not exist - remove them or fix their names:' . \PHP_EOL . $nonExistingRulesString);
     }
     /**
      * @param mixed $value
