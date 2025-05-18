@@ -29,7 +29,7 @@ final class ChangedFilesDetector
     /**
      * @var array<string, true>
      */
-    private array $cachableFiles = [];
+    private array $cacheableFiles = [];
     public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher)
     {
         $this->fileHashComputer = $fileHashComputer;
@@ -39,16 +39,16 @@ final class ChangedFilesDetector
     public function cacheFile(string $filePath) : void
     {
         $filePathCacheKey = $this->getFilePathCacheKey($filePath);
-        if (!isset($this->cachableFiles[$filePathCacheKey])) {
+        if (!isset($this->cacheableFiles[$filePathCacheKey])) {
             return;
         }
         $hash = $this->hashFile($filePath);
         $this->cache->save($filePathCacheKey, CacheKey::FILE_HASH_KEY, $hash);
     }
-    public function addCachableFile(string $filePath) : void
+    public function addCacheableFile(string $filePath) : void
     {
         $filePathCacheKey = $this->getFilePathCacheKey($filePath);
-        $this->cachableFiles[$filePathCacheKey] = \true;
+        $this->cacheableFiles[$filePathCacheKey] = \true;
     }
     public function hasFileChanged(string $filePath) : bool
     {
@@ -65,7 +65,7 @@ final class ChangedFilesDetector
     {
         $fileInfoCacheKey = $this->getFilePathCacheKey($filePath);
         $this->cache->clean($fileInfoCacheKey);
-        unset($this->cachableFiles[$fileInfoCacheKey]);
+        unset($this->cacheableFiles[$fileInfoCacheKey]);
     }
     public function clear() : void
     {

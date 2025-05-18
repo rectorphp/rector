@@ -18,7 +18,7 @@ final class RemoveConcatAutocastRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove (string) casting when it comes to concat, that does this by default', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeConcatingClass
+class SomeConcatenatingClass
 {
     public function run($value)
     {
@@ -27,7 +27,7 @@ class SomeConcatingClass
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeConcatingClass
+class SomeConcatenatingClass
 {
     public function run($value)
     {

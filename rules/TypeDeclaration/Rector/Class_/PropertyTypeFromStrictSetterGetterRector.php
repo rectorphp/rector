@@ -189,7 +189,7 @@ CODE_SAMPLE
     {
         if (!TypeCombinator::containsNull($getterSetterPropertyType)) {
             if ($hasPropertyDefaultNull) {
-                // reset to nothign
+                // reset to nothing
                 $property->props[0]->default = null;
             }
             return;

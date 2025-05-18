@@ -245,7 +245,7 @@ include/require to absolute path. This Rector might introduce backwards incompat
 
 ### AndAssignsToSeparateLinesRector
 
-Split 2 assigns ands to separate line
+Split 2 assign ands to separate line
 
 - class: [`Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector`](../rules/CodeQuality/Rector/LogicalAnd/AndAssignsToSeparateLinesRector.php)
 
@@ -1598,9 +1598,9 @@ Use ===/!== over ==/!=, it values have the same type
      public function run(int $firstValue, int $secondValue)
      {
 -         $isSame = $firstValue == $secondValue;
--         $isDiffernt = $firstValue != $secondValue;
+-         $isDifferent = $firstValue != $secondValue;
 +         $isSame = $firstValue === $secondValue;
-+         $isDiffernt = $firstValue !== $secondValue;
++         $isDifferent = $firstValue !== $secondValue;
      }
  }
 ```
@@ -2279,7 +2279,7 @@ Remove (string) casting when it comes to concat, that does this by default
 - class: [`Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector`](../rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php)
 
 ```diff
- class SomeConcatingClass
+ class SomeConcatenatingClass
  {
      public function run($value)
      {

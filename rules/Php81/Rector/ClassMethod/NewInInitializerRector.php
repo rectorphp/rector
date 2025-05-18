@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
-use Rector\Php81\NodeAnalyzer\CoalesePropertyAssignMatcher;
+use Rector\Php81\NodeAnalyzer\CoalescePropertyAssignMatcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
@@ -38,16 +38,16 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
     /**
      * @readonly
      */
-    private CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher;
+    private CoalescePropertyAssignMatcher $coalescePropertyAssignMatcher;
     /**
      * @readonly
      */
     private StmtsManipulator $stmtsManipulator;
-    public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, CoalesePropertyAssignMatcher $coalesePropertyAssignMatcher, StmtsManipulator $stmtsManipulator)
+    public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, CoalescePropertyAssignMatcher $coalescePropertyAssignMatcher, StmtsManipulator $stmtsManipulator)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
-        $this->coalesePropertyAssignMatcher = $coalesePropertyAssignMatcher;
+        $this->coalescePropertyAssignMatcher = $coalescePropertyAssignMatcher;
         $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -105,7 +105,7 @@ CODE_SAMPLE
         foreach ((array) $constructClassMethod->stmts as $key => $stmt) {
             foreach ($params as $param) {
                 $paramName = $this->getName($param);
-                $coalesce = $this->coalesePropertyAssignMatcher->matchCoalesceAssignsToLocalPropertyNamed($stmt, $paramName);
+                $coalesce = $this->coalescePropertyAssignMatcher->matchCoalesceAssignsToLocalPropertyNamed($stmt, $paramName);
                 if (!$coalesce instanceof Coalesce) {
                     continue;
                 }

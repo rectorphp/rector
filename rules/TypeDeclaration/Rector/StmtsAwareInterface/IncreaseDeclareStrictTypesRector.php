@@ -70,7 +70,7 @@ CODE_SAMPLE
         if ($this->declareStrictTypeFinder->hasDeclareStrictTypes($stmt)) {
             return null;
         }
-        // keep change withing a limit
+        // keep change within a limit
         if ($this->changedItemCount >= $this->limit) {
             return null;
         }

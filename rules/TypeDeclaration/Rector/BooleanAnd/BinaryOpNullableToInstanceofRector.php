@@ -71,13 +71,13 @@ CODE_SAMPLE
         if ($node instanceof BooleanOr) {
             return $this->processNegationBooleanOr($node);
         }
-        return $this->processsNullableInstance($node);
+        return $this->processNullableInstance($node);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr $node
      * @return null|\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
-    private function processsNullableInstance($node)
+    private function processNullableInstance($node)
     {
         $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($node->left);
         $hasChanged = \false;
@@ -116,7 +116,7 @@ CODE_SAMPLE
             return $booleanOr;
         }
         /** @var BooleanOr|null $result */
-        $result = $this->processsNullableInstance($booleanOr);
+        $result = $this->processNullableInstance($booleanOr);
         return $result;
     }
     private function createExprInstanceof(Expr $expr, ObjectType $objectType) : Instanceof_

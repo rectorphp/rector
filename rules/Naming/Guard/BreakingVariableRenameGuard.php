@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\ConflictingNameResolver;
-use Rector\Naming\Naming\OverridenExistingNamesResolver;
+use Rector\Naming\Naming\OverriddenExistingNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -43,7 +43,7 @@ final class BreakingVariableRenameGuard
     /**
      * @readonly
      */
-    private OverridenExistingNamesResolver $overridenExistingNamesResolver;
+    private OverriddenExistingNamesResolver $overriddenExistingNamesResolver;
     /**
      * @readonly
      */
@@ -57,12 +57,12 @@ final class BreakingVariableRenameGuard
      * @see https://regex101.com/r/1pKLgf/1
      */
     public const AT_NAMING_REGEX = '#[\\w+]At$#';
-    public function __construct(BetterNodeFinder $betterNodeFinder, ConflictingNameResolver $conflictingNameResolver, NodeTypeResolver $nodeTypeResolver, OverridenExistingNamesResolver $overridenExistingNamesResolver, TypeUnwrapper $typeUnwrapper, NodeNameResolver $nodeNameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ConflictingNameResolver $conflictingNameResolver, NodeTypeResolver $nodeTypeResolver, OverriddenExistingNamesResolver $overriddenExistingNamesResolver, TypeUnwrapper $typeUnwrapper, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
+        $this->overriddenExistingNamesResolver = $overriddenExistingNamesResolver;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -79,7 +79,7 @@ final class BreakingVariableRenameGuard
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
             return \true;
         }
-        if (!$functionLike instanceof ArrowFunction && $this->overridenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
+        if (!$functionLike instanceof ArrowFunction && $this->overriddenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
@@ -107,7 +107,7 @@ final class BreakingVariableRenameGuard
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
             return \true;
         }
-        if ($this->overridenExistingNamesResolver->hasNameInFunctionLikeForParam($expectedName, $classMethod)) {
+        if ($this->overriddenExistingNamesResolver->hasNameInFunctionLikeForParam($expectedName, $classMethod)) {
             return \true;
         }
         if ($param->var instanceof Error) {

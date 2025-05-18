@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-final class UnitializedPropertyAnalyzer
+final class UninitializedPropertyAnalyzer
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class UnitializedPropertyAnalyzer
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isUnitialized(Expr $expr) : bool
+    public function isUninitialized(Expr $expr) : bool
     {
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;

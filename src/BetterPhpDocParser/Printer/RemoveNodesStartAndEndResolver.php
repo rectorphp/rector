@@ -33,7 +33,7 @@ final class RemoveNodesStartAndEndResolver
                 if ($tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
                     break;
                 }
-                // do not colide
+                // do not collide
                 if ($lastEndPosition < $seekPosition) {
                     break;
                 }
