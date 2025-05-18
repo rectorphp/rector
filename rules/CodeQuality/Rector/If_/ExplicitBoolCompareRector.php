@@ -211,7 +211,7 @@ CODE_SAMPLE
         /**
          * // compare === ''
          *
-         * @var Identical|NotIdentical $identical
+         * @var Identical|NotIdentical
          */
         $identical = $isNegated ? new Identical($expr, $string) : new NotIdentical($expr, $string);
         return $identical;
