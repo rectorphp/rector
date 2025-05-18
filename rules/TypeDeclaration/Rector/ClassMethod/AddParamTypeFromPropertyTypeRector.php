@@ -54,7 +54,7 @@ final class AddParamTypeFromPropertyTypeRector extends AbstractRector implements
     /**
      * @var string
      */
-    private const ERROR_MESSAGE = 'Adds param type declaration based on property type the value is assigned to PHPUnit provider return type declaration';
+    private const ERROR_MESSAGE = 'Add param type declaration based on property type';
     public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard, StaticTypeMapper $staticTypeMapper)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
