@@ -125,7 +125,7 @@ CODE_SAMPLE
     private function shouldSkipClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         // is method called somewhere else in the class?
-        $scope = ScopeFetcher::fetch($classMethod);
+        $scope = ScopeFetcher::fetch($class);
         if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($class, $classMethod, $scope)) {
             return \true;
         }
