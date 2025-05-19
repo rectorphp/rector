@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -14,8 +15,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator;
 use Rector\NodeAnalyzer\ParamAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeManipulator\ClassMethodManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -45,13 +48,18 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(ClassMethodManipulator $classMethodManipulator, ControllerClassMethodManipulator $controllerClassMethodManipulator, ParamAnalyzer $paramAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private ArrayCallableMethodMatcher $arrayCallableMethodMatcher;
+    public function __construct(ClassMethodManipulator $classMethodManipulator, ControllerClassMethodManipulator $controllerClassMethodManipulator, ParamAnalyzer $paramAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->controllerClassMethodManipulator = $controllerClassMethodManipulator;
         $this->paramAnalyzer = $paramAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -126,12 +134,13 @@ CODE_SAMPLE
     private function shouldSkipClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         $desiredClassMethodName = $this->getName($classMethod);
+        $className = (string) $this->getName($class);
         // is method called somewhere else in the class?
         foreach ($class->getMethods() as $anotherClassMethod) {
             if ($anotherClassMethod === $classMethod) {
                 continue;
             }
-            if ($this->containsMethodCall($anotherClassMethod, $desiredClassMethodName)) {
+            if ($this->containsMethodCallOrArrayCallable($anotherClassMethod, $desiredClassMethodName, $className)) {
                 return \true;
             }
         }
@@ -164,9 +173,13 @@ CODE_SAMPLE
         }
         return $phpDocInfo->hasByType(DeprecatedTagValueNode::class);
     }
-    private function containsMethodCall(ClassMethod $anotherClassMethod, string $desiredClassMethodName) : bool
+    private function containsMethodCallOrArrayCallable(ClassMethod $anotherClassMethod, string $desiredClassMethodName, string $className) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($anotherClassMethod, function (Node $node) use($desiredClassMethodName) : bool {
+        $scope = ScopeFetcher::fetch($anotherClassMethod);
+        return (bool) $this->betterNodeFinder->findFirst($anotherClassMethod, function (Node $node) use($desiredClassMethodName, $className, $scope) : bool {
+            if ($node instanceof Array_) {
+                return (bool) $this->arrayCallableMethodMatcher->match($node, $scope, $className);
+            }
             if (!$node instanceof MethodCall) {
                 return \false;
             }
