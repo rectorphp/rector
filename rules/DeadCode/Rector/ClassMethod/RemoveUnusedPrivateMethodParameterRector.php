@@ -3,9 +3,10 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
+use PHPStan\Type\ObjectType;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -129,9 +130,10 @@ CODE_SAMPLE
         }
         $methodName = $this->getName($classMethod);
         $keysArg = \array_keys($unusedParameters);
+        $classObjectType = new ObjectType((string) $this->getName($class));
         foreach ($classMethods as $classMethod) {
-            /** @var MethodCall[] $callers */
-            $callers = $this->resolveCallers($classMethod, $methodName);
+            /** @var MethodCall[]|StaticCall[] $callers */
+            $callers = $this->resolveCallers($classMethod, $methodName, $classObjectType);
             if ($callers === []) {
                 continue;
             }
@@ -142,37 +144,36 @@ CODE_SAMPLE
     }
     /**
      * @param int[] $keysArg
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function cleanupArgs(MethodCall $methodCall, array $keysArg) : void
+    private function cleanupArgs($call, array $keysArg) : void
     {
-        if ($methodCall->isFirstClassCallable()) {
+        if ($call->isFirstClassCallable()) {
             return;
         }
-        $args = $methodCall->getArgs();
+        $args = $call->getArgs();
         foreach (\array_keys($args) as $key) {
             if (\in_array($key, $keysArg, \true)) {
                 unset($args[$key]);
             }
         }
         // reset arg keys
-        $methodCall->args = \array_values($args);
+        $call->args = \array_values($args);
     }
     /**
-     * @return MethodCall[]
+     * @return MethodCall[]|StaticCall[]
      */
-    private function resolveCallers(ClassMethod $classMethod, string $methodName) : array
+    private function resolveCallers(ClassMethod $classMethod, string $methodName, ObjectType $classObjectType) : array
     {
-        return $this->betterNodeFinder->find($classMethod, function (Node $subNode) use($methodName) : bool {
-            if (!$subNode instanceof MethodCall) {
+        return $this->betterNodeFinder->find($classMethod, function (Node $subNode) use($methodName, $classObjectType) : bool {
+            if (!$subNode instanceof MethodCall && !$subNode instanceof StaticCall) {
                 return \false;
             }
             if ($subNode->isFirstClassCallable()) {
                 return \false;
             }
-            if (!$subNode->var instanceof Variable) {
-                return \false;
-            }
-            if (!$this->isName($subNode->var, 'this')) {
+            $nodeToCheck = $subNode instanceof MethodCall ? $subNode->var : $subNode->class;
+            if (!$this->isObjectType($nodeToCheck, $classObjectType)) {
                 return \false;
             }
             return $this->isName($subNode->name, $methodName);
