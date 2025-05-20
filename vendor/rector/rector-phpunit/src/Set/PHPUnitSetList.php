@@ -43,6 +43,10 @@ final class PHPUnitSetList
     /**
      * @var string
      */
+    public const PHPUNIT_120 = __DIR__ . '/../../config/sets/phpunit120.php';
+    /**
+     * @var string
+     */
     public const PHPUNIT_CODE_QUALITY = __DIR__ . '/../../config/sets/phpunit-code-quality.php';
     /**
      * @var string

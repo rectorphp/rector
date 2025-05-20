@@ -101,6 +101,9 @@ CODE_SAMPLE
         if (\substr_compare((string) $className, 'Test', -\strlen('Test')) === 0) {
             return \true;
         }
-        return \substr_compare((string) $className, 'TestCase', -\strlen('TestCase')) === 0;
+        if (\substr_compare((string) $className, 'TestCase', -\strlen('TestCase')) === 0) {
+            return \true;
+        }
+        return (bool) $class->getAttribute('hasRemovedFinalConstruct');
     }
 }

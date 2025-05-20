@@ -2088,6 +2088,7 @@ class ComposerStaticInit8b189e2896ef7855c36c6041871e26fe
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\ExpectsMethodCallDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/ExpectsMethodCallDecorator.php',
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
         'Rector\\PHPUnit\\PHPUnit110\\Rector\\Class_\\NamedArgumentForDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
         'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
