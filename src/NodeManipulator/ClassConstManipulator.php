@@ -67,20 +67,19 @@ final class ClassConstManipulator
     }
     private function isNameMatch(ClassConstFetch $classConstFetch, ClassConst $classConst, string $className, ObjectType $objectType) : bool
     {
-        // dynamic
-        if (!$classConstFetch->name instanceof Identifier) {
-            return \true;
-        }
         $classConstName = (string) $this->nodeNameResolver->getName($classConst);
         $selfConstantName = 'self::' . $classConstName;
         $staticConstantName = 'static::' . $classConstName;
         $classNameConstantName = $className . '::' . $classConstName;
-        if (!$this->nodeNameResolver->isName($classConstFetch->name, $classConstName)) {
-            return \false;
-        }
         if ($this->nodeNameResolver->isNames($classConstFetch, [$selfConstantName, $staticConstantName, $classNameConstantName])) {
             return \true;
         }
-        return $this->nodeTypeResolver->isObjectType($classConstFetch->class, $objectType);
+        if ($this->nodeTypeResolver->isObjectType($classConstFetch->class, $objectType)) {
+            if (!$classConstFetch->name instanceof Identifier) {
+                return \true;
+            }
+            return $this->nodeNameResolver->isName($classConstFetch->name, $classConstName);
+        }
+        return \false;
     }
 }
