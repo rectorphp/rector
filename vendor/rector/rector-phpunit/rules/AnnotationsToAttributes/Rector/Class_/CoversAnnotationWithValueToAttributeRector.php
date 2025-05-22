@@ -147,13 +147,16 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    private function createAttributeGroup(string $annotationValue) : AttributeGroup
+    private function createAttributeGroup(string $annotationValue) : ?AttributeGroup
     {
         if (\strncmp($annotationValue, '::', \strlen('::')) === 0) {
             $attributeClass = self::COVERS_FUNCTION_ATTRIBUTE;
             $attributeValue = [\trim($annotationValue, ':()')];
         } elseif (\strpos($annotationValue, '::') !== \false) {
             $attributeClass = self::COVERS_METHOD_ATTRIBUTE;
+            if (!$this->reflectionProvider->hasClass($attributeClass)) {
+                return null;
+            }
             $attributeValue = [$this->getClass($annotationValue) . '::class', $this->getMethod($annotationValue)];
         } else {
             $attributeClass = self::COVERTS_CLASS_ATTRIBUTE;
@@ -161,6 +164,9 @@ CODE_SAMPLE
                 $classReflection = $this->reflectionProvider->getClass($annotationValue);
                 if ($classReflection->isTrait()) {
                     $attributeClass = self::COVERTS_TRAIT_ATTRIBUTE;
+                    if (!$this->reflectionProvider->hasClass($attributeClass)) {
+                        return null;
+                    }
                 }
             }
             $attributeValue = [\trim($annotationValue) . '::class'];
@@ -199,7 +205,12 @@ CODE_SAMPLE
             if (!$desiredTagValueNode->value instanceof GenericTagValueNode) {
                 continue;
             }
-            $attributeGroups[] = $this->createAttributeGroup($desiredTagValueNode->value->value);
+            $attributeGroup = $this->createAttributeGroup($desiredTagValueNode->value->value);
+            // phpunit 10 may not fully support attribute
+            if (!$attributeGroup instanceof AttributeGroup) {
+                continue;
+            }
+            $attributeGroups[] = $attributeGroup;
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
         return $attributeGroups;
@@ -216,10 +227,13 @@ CODE_SAMPLE
                 continue;
             }
             $covers = $desiredTagValueNode->value->value;
-            if (\strncmp($covers, '\\', \strlen('\\')) === 0) {
-                $attributeGroups[$covers] = $this->createAttributeGroup($covers);
-            } elseif (!$hasCoversDefault && \strncmp($covers, '::', \strlen('::')) === 0) {
-                $attributeGroups[$covers] = $this->createAttributeGroup($covers);
+            if (\strncmp($covers, '\\', \strlen('\\')) === 0 || !$hasCoversDefault && \strncmp($covers, '::', \strlen('::')) === 0) {
+                $attributeGroup = $this->createAttributeGroup($covers);
+                // phpunit 10 may not fully support attribute
+                if (!$attributeGroup instanceof AttributeGroup) {
+                    continue;
+                }
+                $attributeGroups[$covers] = $attributeGroup;
             }
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
@@ -241,10 +255,13 @@ CODE_SAMPLE
                 continue;
             }
             $covers = $desiredTagValueNode->value->value;
-            if (\strncmp($covers, '\\', \strlen('\\')) === 0) {
-                $attributeGroups[$covers] = $this->createAttributeGroup($covers);
-            } elseif (!$hasCoversDefault && \strncmp($covers, '::', \strlen('::')) === 0) {
-                $attributeGroups[$covers] = $this->createAttributeGroup($covers);
+            if (\strncmp($covers, '\\', \strlen('\\')) === 0 || !$hasCoversDefault && \strncmp($covers, '::', \strlen('::')) === 0) {
+                $attributeGroup = $this->createAttributeGroup($covers);
+                // phpunit 10 may not fully support attribute
+                if (!$attributeGroup instanceof AttributeGroup) {
+                    continue;
+                }
+                $attributeGroups[$covers] = $attributeGroup;
             }
         }
         return $attributeGroups;
