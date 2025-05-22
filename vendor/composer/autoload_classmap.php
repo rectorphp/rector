@@ -1540,6 +1540,7 @@ return array(
     'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
     'Rector\\DowngradePhp82\\Rector\\FuncCall\\DowngradeIteratorCountToArrayRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FuncCall/DowngradeIteratorCountToArrayRector.php',
     'Rector\\DowngradePhp82\\Rector\\FunctionLike\\DowngradeStandaloneNullTrueFalseReturnTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FunctionLike/DowngradeStandaloneNullTrueFalseReturnTypeRector.php',
+    'Rector\\DowngradePhp83\\Rector\\ClassConstFetch\\DowngradeDynamicClassConstFetchRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConstFetch/DowngradeDynamicClassConstFetchRector.php',
     'Rector\\DowngradePhp83\\Rector\\ClassConst\\DowngradeTypedClassConstRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php',
     'Rector\\DowngradePhp83\\Rector\\Class_\\DowngradeReadonlyAnonymousClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/Class_/DowngradeReadonlyAnonymousClassRector.php',
     'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeRoundingModeEnumRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeRoundingModeEnumRector.php',
