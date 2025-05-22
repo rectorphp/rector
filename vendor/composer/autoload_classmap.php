@@ -2063,6 +2063,7 @@ return array(
     'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => $baseDir . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
     'Rector\\Php83\\Rector\\Class_\\ReadOnlyAnonymousClassRector' => $baseDir . '/rules/Php83/Rector/Class_/ReadOnlyAnonymousClassRector.php',
     'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => $baseDir . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
+    'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => $baseDir . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
     'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => $baseDir . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
     'Rector\\Php84\\Rector\\FuncCall\\AddEscapeArgumentRector' => $baseDir . '/rules/Php84/Rector/FuncCall/AddEscapeArgumentRector.php',
     'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => $baseDir . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',

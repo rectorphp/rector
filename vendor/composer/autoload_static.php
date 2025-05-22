@@ -2282,6 +2282,7 @@ class ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70
         'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
         'Rector\\Php83\\Rector\\Class_\\ReadOnlyAnonymousClassRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/Class_/ReadOnlyAnonymousClassRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
+        'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
         'Rector\\Php84\\Rector\\FuncCall\\AddEscapeArgumentRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/AddEscapeArgumentRector.php',
         'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',

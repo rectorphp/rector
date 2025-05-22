@@ -561,6 +561,11 @@ final class PhpVersionFeature
      */
     public const TYPED_CLASS_CONSTANTS = \Rector\ValueObject\PhpVersion::PHP_83;
     /**
+     * @see https://wiki.php.net/rfc/dynamic_class_constant_fetch
+     * @var int
+     */
+    public const DYNAMIC_CLASS_CONST_FETCH = \Rector\ValueObject\PhpVersion::PHP_83;
+    /**
      * @see https://wiki.php.net/rfc/deprecate-implicitly-nullable-types
      * @var int
      */
