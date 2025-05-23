@@ -50,7 +50,7 @@ final class NamedToUnnamedArgs
                 if (!$this->nodeNameResolver->isName($currentArg->name, $parameterReflectionName)) {
                     continue;
                 }
-                $unnamedArgs[$paramPosition] = new Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, $currentArg->getAttributes(), null);
+                $unnamedArgs[$paramPosition] = new Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, [], null);
             }
         }
         return $unnamedArgs;
