@@ -1,40 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\CodeQuality\Rector\Property;
+namespace Rector\Doctrine\TypedCollections\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\NodeManipulator\ToManyRelationPropertyTypeResolver;
-use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
-use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Property\TypedPropertyFromToManyRelationTypeRector\TypedPropertyFromToManyRelationTypeRectorTest
+ * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Property\TypedPropertyFromToManyRelationTypeRector\TypedPropertyFromToManyRelationTypeRectorTest
  */
 final class TypedPropertyFromToManyRelationTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @readonly
-     */
-    private PropertyTypeDecorator $propertyTypeDecorator;
-    /**
-     * @readonly
-     */
-    private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
      */
@@ -42,28 +29,17 @@ final class TypedPropertyFromToManyRelationTypeRector extends AbstractRector imp
     /**
      * @readonly
      */
-    private PhpVersionProvider $phpVersionProvider;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @readonly
-     */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver, PhpVersionProvider $phpVersionProvider, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
+    public function __construct(ToManyRelationPropertyTypeResolver $toManyRelationPropertyTypeResolver, StaticTypeMapper $staticTypeMapper)
     {
-        $this->propertyTypeDecorator = $propertyTypeDecorator;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->toManyRelationPropertyTypeResolver = $toManyRelationPropertyTypeResolver;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Complete Collection @var annotations and property type declarations, based on @ORM\\*toMany and @ODM\\*toMany annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "Doctrine\\Common\\Collections\\Collection" type declaration, based on @ORM\\*toMany and @ODM\\*toMany annotations/attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 class SimpleColumn
 {
@@ -71,19 +47,25 @@ class SimpleColumn
      * @ORM\OneToMany(targetEntity="App\Product")
      */
     private $products;
+
+    #[ManyToMany(targetEntity: 'App\Car')]
+    private $cars;
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\Common\Collections\Collection;
 
 class SimpleColumn
 {
     /**
      * @ORM\OneToMany(targetEntity="App\Product")
-     * @var Collection<int, \App\Product>
      */
     private Collection $products;
+
+    #[ManyToMany(targetEntity: 'App\Car')]
+    private Collection $cars;
 }
 CODE_SAMPLE
 )]);
@@ -98,7 +80,7 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Property
+    public function refactor(Node $node) : ?Property
     {
         if ($node->type !== null && $this->isName($node->type, DoctrineClass::COLLECTION)) {
             return null;
@@ -111,20 +93,12 @@ CODE_SAMPLE
         if (!$typeNode instanceof Node) {
             return null;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        // always decorate with collection generic type
-        $this->phpDocTypeChanger->changeVarType($node, $phpDocInfo, $propertyType);
         // remove default null value if any
         if ($node->props[0]->default !== null) {
             $node->props[0]->default = null;
         }
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
-            if ($propertyType instanceof UnionType) {
-                $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);
-            } else {
-                $node->type = $typeNode;
-            }
-            return $node;
+        if (!$propertyType instanceof UnionType) {
+            $node->type = $typeNode;
         }
         return $node;
     }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\CodeQuality\Rector\Class_;
+namespace Rector\Doctrine\TypedCollections\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Doctrine\NodeAnalyzer\MethodUniqueReturnedPropertyResolver;
-use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
+use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -19,7 +19,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- *  @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRectorTest
+ *  @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRectorTest
  */
 final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector extends AbstractRector
 {
@@ -34,7 +34,7 @@ final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector 
     /**
      * @readonly
      */
-    private DoctrineDocBlockResolver $doctrineDocBlockResolver;
+    private EntityLikeClassDetector $entityLikeClassDetector;
     /**
      * @readonly
      */
@@ -51,11 +51,11 @@ final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector 
      * @readonly
      */
     private MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver;
-    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpDocInfoFactory $phpDocInfoFactory, DoctrineDocBlockResolver $doctrineDocBlockResolver, PhpDocTypeChanger $phpDocTypeChanger, CollectionTypeResolver $collectionTypeResolver, CollectionTypeFactory $collectionTypeFactory, MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver)
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpDocInfoFactory $phpDocInfoFactory, EntityLikeClassDetector $entityLikeClassDetector, PhpDocTypeChanger $phpDocTypeChanger, CollectionTypeResolver $collectionTypeResolver, CollectionTypeFactory $collectionTypeFactory, MethodUniqueReturnedPropertyResolver $methodUniqueReturnedPropertyResolver)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->entityLikeClassDetector = $entityLikeClassDetector;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->collectionTypeResolver = $collectionTypeResolver;
         $this->collectionTypeFactory = $collectionTypeFactory;
@@ -119,7 +119,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
+        if (!$this->entityLikeClassDetector->detect($node)) {
             return null;
         }
         $hasChanged = \false;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\CodeQuality\Rector\Property;
+namespace Rector\Doctrine\TypedCollections\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
@@ -18,16 +18,16 @@ use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Doctrine\CodeQuality\SetterCollectionResolver;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
-use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver;
+use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\ImproveDoctrineCollectionDocTypeInEntityRectorTest
+ * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\ImproveDoctrineCollectionDocTypeInEntityRectorTest
  */
 final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRector
 {
@@ -50,7 +50,7 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
     /**
      * @readonly
      */
-    private DoctrineDocBlockResolver $doctrineDocBlockResolver;
+    private EntityLikeClassDetector $entityLikeClassDetector;
     /**
      * @readonly
      */
@@ -67,13 +67,13 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
      * @readonly
      */
     private SetterCollectionResolver $setterCollectionResolver;
-    public function __construct(CollectionTypeFactory $collectionTypeFactory, CollectionTypeResolver $collectionTypeResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, PhpDocTypeChanger $phpDocTypeChanger, DoctrineDocBlockResolver $doctrineDocBlockResolver, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver, PhpDocInfoFactory $phpDocInfoFactory, SetterCollectionResolver $setterCollectionResolver)
+    public function __construct(CollectionTypeFactory $collectionTypeFactory, CollectionTypeResolver $collectionTypeResolver, CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, PhpDocTypeChanger $phpDocTypeChanger, EntityLikeClassDetector $entityLikeClassDetector, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver, PhpDocInfoFactory $phpDocInfoFactory, SetterCollectionResolver $setterCollectionResolver)
     {
         $this->collectionTypeFactory = $collectionTypeFactory;
         $this->collectionTypeResolver = $collectionTypeResolver;
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->entityLikeClassDetector = $entityLikeClassDetector;
         $this->attributeFinder = $attributeFinder;
         $this->targetEntityResolver = $targetEntityResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -159,7 +159,7 @@ CODE_SAMPLE
     }
     private function refactorClassMethod(Class_ $class) : ?Class_
     {
-        if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+        if (!$this->entityLikeClassDetector->detect($class)) {
             return null;
         }
         $hasChanged = \false;

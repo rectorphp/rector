@@ -1,35 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\CodeQuality\Rector\Class_;
+namespace Rector\Doctrine\TypedCollections\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Doctrine\Enum\DoctrineClass;
-use Rector\Doctrine\Enum\MappingClass;
-use Rector\Doctrine\Enum\OdmMappingClass;
-use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
+use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\ExplicitRelationCollectionRector\ExplicitRelationCollectionRectorTest
+ * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\InitializeCollectionInConstructorRector\InitializeCollectionInConstructorRectorTest
  *
  * @changelog https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
  */
-final class ExplicitRelationCollectionRector extends AbstractRector implements MinPhpVersionInterface
+final class InitializeCollectionInConstructorRector extends AbstractRector
 {
     /**
      * @readonly
      */
-    private AttrinationFinder $attrinationFinder;
+    private EntityLikeClassDetector $entityLikeClassDetector;
     /**
      * @readonly
      */
@@ -42,16 +35,16 @@ final class ExplicitRelationCollectionRector extends AbstractRector implements M
      * @readonly
      */
     private ClassDependencyManipulator $classDependencyManipulator;
-    public function __construct(AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, ClassDependencyManipulator $classDependencyManipulator)
+    public function __construct(EntityLikeClassDetector $entityLikeClassDetector, ConstructorAssignDetector $constructorAssignDetector, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, ClassDependencyManipulator $classDependencyManipulator)
     {
-        $this->attrinationFinder = $attrinationFinder;
+        $this->entityLikeClassDetector = $entityLikeClassDetector;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->arrayCollectionAssignFactory = $arrayCollectionAssignFactory;
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Use Collection object type for one-to-many relations of Doctrine entity/ODM document', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Initialize Collection property in entity/ODM __construct()', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Entity;
 
@@ -59,7 +52,7 @@ use Doctrine\ORM\Mapping\Entity;
 class SomeClass
 {
     #[OneToMany(targetEntity: 'SomeClass')]
-    private $items = [];
+    private $items;
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -72,7 +65,7 @@ use Doctrine\Common\Collections\Collection;
 class SomeClass
 {
     #[OneToMany(targetEntity: 'SomeClass')]
-    private Collection $items;
+    private $items;
 
     public function __construct()
     {
@@ -94,38 +87,29 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->attrinationFinder->hasByMany($node, [MappingClass::ENTITY, MappingClass::EMBEDDABLE, OdmMappingClass::DOCUMENT])) {
+        if (!$this->entityLikeClassDetector->detect($node)) {
             return null;
         }
         $arrayCollectionAssigns = [];
         foreach ($node->getProperties() as $property) {
-            if (!$this->attrinationFinder->hasByMany($property, [MappingClass::ONE_TO_MANY, MappingClass::MANY_TO_MANY, OdmMappingClass::REFERENCE_MANY])) {
+            if (!$this->entityLikeClassDetector->isToMany($property)) {
                 continue;
             }
-            // make sure has collection
-            if (!$property->type instanceof Node) {
-                $property->type = new FullyQualified(DoctrineClass::COLLECTION);
-            }
-            // make sure is null
-            if ($property->props[0]->default instanceof Expr) {
-                $property->props[0]->default = null;
-            }
+            //            // make sure is null
+            //            if ($property->props[0]->default instanceof Expr) {
+            //                $property->props[0]->default = null;
+            //            }
             /** @var string $propertyName */
             $propertyName = $this->getName($property);
             if ($this->constructorAssignDetector->isPropertyAssigned($node, $propertyName)) {
                 continue;
             }
             $arrayCollectionAssigns[] = $this->arrayCollectionAssignFactory->createFromPropertyName($propertyName);
-            // make sure it is initialized in constructor
         }
         if ($arrayCollectionAssigns === []) {
             return null;
         }
         $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $arrayCollectionAssigns);
         return $node;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }
