@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70
+class ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1672,7 +1672,9 @@ class ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70
         'Rector\\Doctrine\\TypedCollections\\Rector\\ClassMethod\\RemoveNewArrayCollectionOutsideConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/ClassMethod/RemoveNewArrayCollectionOutsideConstructorRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\ClassMethod\\ReturnArrayToNewArrayCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/ClassMethod/ReturnArrayToNewArrayCollectionRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\ClassMethod\\ReturnCollectionDocblockRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/ClassMethod/ReturnCollectionDocblockRector.php',
-        'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector.php',
+        'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\CompleteParamDocblockFromSetterToCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/CompleteParamDocblockFromSetterToCollectionRector.php',
+        'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\CompletePropertyDocblockFromToManyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/CompletePropertyDocblockFromToManyRector.php',
+        'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\CompleteReturnDocblockFromToManyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/CompleteReturnDocblockFromToManyRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\DefaultNewArrayCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/DefaultNewArrayCollectionRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Class_\\InitializeCollectionInConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Class_/InitializeCollectionInConstructorRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Empty_\\EmptyOnCollectionToIsEmptyCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Empty_/EmptyOnCollectionToIsEmptyCallRector.php',
@@ -1683,7 +1685,6 @@ class ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70
         'Rector\\Doctrine\\TypedCollections\\Rector\\If_\\RemoveIfInstanceofCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/If_/RemoveIfInstanceofCollectionRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\MethodCall\\SetArrayToNewCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/MethodCall/SetArrayToNewCollectionRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\New_\\RemoveNewArrayCollectionWrapRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/New_/RemoveNewArrayCollectionWrapRector.php',
-        'Rector\\Doctrine\\TypedCollections\\Rector\\Property\\ImproveDoctrineCollectionDocTypeInEntityRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Property\\NarrowPropertyUnionToCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Property/NarrowPropertyUnionToCollectionRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Property\\TypedPropertyFromToManyRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php',
         'Rector\\Doctrine\\TypedCollections\\TypeAnalyzer\\CollectionTypeDetector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/TypeAnalyzer/CollectionTypeDetector.php',
@@ -2948,9 +2949,9 @@ class ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit04fe53a8b23bb6f4c7feb3f1d0449d70::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44::$classMap;
 
         }, null, ClassLoader::class);
     }

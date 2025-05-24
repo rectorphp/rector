@@ -19,9 +19,9 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- *  @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector\AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRectorTest
+ *  @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToManyRector\CompleteReturnDocblockFromToManyRectorTest
  */
-final class AddReturnDocBlockToCollectionPropertyGetterByToManyAnnotationRector extends AbstractRector
+final class CompleteReturnDocblockFromToManyRector extends AbstractRector
 {
     /**
      * @readonly
