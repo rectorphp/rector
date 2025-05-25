@@ -134,7 +134,6 @@ EOF
             $this->symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
         $this->additionalAutoloader->autoloadInput($input);
-        $this->additionalAutoloader->autoloadPaths();
         $paths = $configuration->getPaths();
         // 0. warn about too high levels
         foreach ($configuration->getLevelOverflows() as $levelOverflow) {
@@ -157,6 +156,12 @@ EOF
             $isSingular = \count($paths) === 1;
             $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', \PHP_EOL . \PHP_EOL . ' - ', \implode(\PHP_EOL . ' - ', $paths)));
             return ExitCode::FAILURE;
+        }
+        // autoload paths is register to DynamicSourceLocatorProvider,
+        // so check after arePathsEmpty() above
+        // check in no parallel since parallel will require register on its own process
+        if (!$configuration->isParallel()) {
+            $this->additionalAutoloader->autoloadPaths();
         }
         // show debug info
         if ($configuration->isDebug()) {

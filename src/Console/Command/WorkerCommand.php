@@ -9,6 +9,7 @@ use RectorPrefix202505\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202505\React\Socket\ConnectionInterface;
 use RectorPrefix202505\React\Socket\TcpConnector;
 use Rector\Application\ApplicationFileProcessor;
+use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Console\ProcessConfigureDecorator;
@@ -37,6 +38,10 @@ final class WorkerCommand extends Command
     /**
      * @readonly
      */
+    private AdditionalAutoloader $additionalAutoloader;
+    /**
+     * @readonly
+     */
     private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator;
     /**
      * @readonly
@@ -58,8 +63,9 @@ final class WorkerCommand extends Command
      * @var string
      */
     private const RESULT = 'result';
-    public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, ApplicationFileProcessor $applicationFileProcessor, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, ConfigurationRuleFilter $configurationRuleFilter)
+    public function __construct(AdditionalAutoloader $additionalAutoloader, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, ApplicationFileProcessor $applicationFileProcessor, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, ConfigurationRuleFilter $configurationRuleFilter)
     {
+        $this->additionalAutoloader = $additionalAutoloader;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->memoryLimiter = $memoryLimiter;
@@ -94,6 +100,7 @@ final class WorkerCommand extends Command
     }
     private function runWorker(Encoder $encoder, Decoder $decoder, Configuration $configuration, OutputInterface $output) : void
     {
+        $this->additionalAutoloader->autoloadPaths();
         $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
         if ($configuration->isDebug()) {
             $preFileCallback = static function (string $filePath) use($output) : void {
