@@ -36,10 +36,6 @@ final class PropertyRenameGuard
         if ($this->nodeTypeResolver->isObjectType($propertyRename->getProperty(), new ObjectType('Ramsey\\Uuid\\UuidInterface'))) {
             return \true;
         }
-        // skip date times, as often custom named and using "dateTime" does not bring any value to code
-        if ($propertyRename->getExpectedName() === 'dateTime') {
-            return \true;
-        }
         if ($this->dateTimeAtNamingConventionGuard->isConflicting($propertyRename)) {
             return \true;
         }

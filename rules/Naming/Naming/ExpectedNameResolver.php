@@ -115,9 +115,6 @@ final class ExpectedNameResolver
         if (!$returnedType instanceof ObjectType) {
             return null;
         }
-        if ($this->isDateTimeType($returnedType)) {
-            return null;
-        }
         $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
         if ($expectedName instanceof ExpectedName) {
             return $expectedName->getName();
@@ -189,15 +186,5 @@ final class ExpectedNameResolver
             return null;
         }
         return $arrayType->getIterableValueType();
-    }
-    /**
-     * Skip date time, as custom naming
-     */
-    private function isDateTimeType(ObjectType $objectType) : bool
-    {
-        if ($objectType->isInstanceOf('DateTimeInterface')->yes()) {
-            return \true;
-        }
-        return $objectType->isInstanceOf('DateTime')->yes();
     }
 }
