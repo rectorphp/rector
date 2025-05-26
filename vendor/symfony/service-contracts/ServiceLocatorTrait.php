@@ -23,6 +23,9 @@ use RectorPrefix202505\Psr\Container\NotFoundExceptionInterface;
  */
 trait ServiceLocatorTrait
 {
+    /**
+     * @var array<string, callable>
+     */
     private array $factories;
     private array $loading = [];
     private array $providedTypes;

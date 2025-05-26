@@ -1748,12 +1748,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "9650da2fd99ff1a0cbc56a02068ff42ad946a2ce"
+                "reference": "22ce946d59e9c6c362d81835e6111ff0db8367f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/9650da2fd99ff1a0cbc56a02068ff42ad946a2ce",
-                "reference": "9650da2fd99ff1a0cbc56a02068ff42ad946a2ce",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/22ce946d59e9c6c362d81835e6111ff0db8367f0",
+                "reference": "22ce946d59e9c6c362d81835e6111ff0db8367f0",
                 "shasum": ""
             },
             "require": {
@@ -1771,7 +1771,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-23T08:33:48+00:00",
+            "time": "2025-05-26T01:26:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2454,17 +2454,17 @@
         },
         {
             "name": "symfony\/service-contracts",
-            "version": "v3.5.1",
-            "version_normalized": "3.5.1.0",
+            "version": "v3.6.0",
+            "version_normalized": "3.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/service-contracts.git",
-                "reference": "e53260aabf78fb3d63f8d79d69ece59f80d5eda0"
+                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/service-contracts\/zipball\/e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
-                "reference": "e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/service-contracts\/zipball\/f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
+                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
                 "shasum": ""
             },
             "require": {
@@ -2475,7 +2475,7 @@
             "conflict": {
                 "ext-psr": "<1.1|>=2"
             },
-            "time": "2024-09-25T14:20:29+00:00",
+            "time": "2025-04-25T09:37:31+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2483,7 +2483,7 @@
                     "name": "symfony\/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "installation-source": "dist",
@@ -2520,7 +2520,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/service-contracts\/tree\/v3.5.1"
+                "source": "https:\/\/github.com\/symfony\/service-contracts\/tree\/v3.6.0"
             },
             "funding": [
                 {
