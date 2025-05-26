@@ -81,13 +81,6 @@ final class ClassNameImportSkipper
     }
     private function shouldSkipShortName(FullyQualified $fullyQualified) : bool
     {
-        // is scalar name?
-        if (\in_array($fullyQualified->toLowerString(), ['true', 'false', 'bool'], \true)) {
-            return \true;
-        }
-        if ($fullyQualified->isSpecialClassName()) {
-            return \true;
-        }
         if ($this->isFunctionOrConstantImport($fullyQualified)) {
             return \true;
         }

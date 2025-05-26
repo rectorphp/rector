@@ -1194,6 +1194,7 @@ return array(
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\FullyQualifiedNameClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/FullyQualifiedNameClassNameImportSkipVoter.php',
+    'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ReservedClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ReservedClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\UsesClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/UsesClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipper' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipper.php',
     'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',

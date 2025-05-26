@@ -1413,6 +1413,7 @@ class ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\FullyQualifiedNameClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/FullyQualifiedNameClassNameImportSkipVoter.php',
+        'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ReservedClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ReservedClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\UsesClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/UsesClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipper' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipper.php',
         'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',
