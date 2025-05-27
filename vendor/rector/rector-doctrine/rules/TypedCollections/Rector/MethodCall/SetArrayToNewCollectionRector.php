@@ -8,16 +8,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\Php\PhpParameterReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeCombinator;
 use Rector\Doctrine\Enum\DoctrineClass;
-use Rector\PHPStan\ScopeFetcher;
+use Rector\Doctrine\TypedCollections\NodeAnalyzer\CollectionParamCallDetector;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -28,10 +24,10 @@ final class SetArrayToNewCollectionRector extends AbstractRector
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    private CollectionParamCallDetector $collectionParamCallDetector;
+    public function __construct(CollectionParamCallDetector $collectionParamCallDetector)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->collectionParamCallDetector = $collectionParamCallDetector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -72,11 +68,11 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, New_::class];
+        return [MethodCall::class, New_::class, StaticCall::class];
     }
     /**
-     * @param MethodCall|New_ $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|null
+     * @param MethodCall|New_|StaticCall $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {
@@ -89,7 +85,7 @@ CODE_SAMPLE
             if ($soleArgType instanceof ObjectType) {
                 continue;
             }
-            if (!$this->isCallWithCollectionParam($node, $position)) {
+            if (!$this->collectionParamCallDetector->detect($node, $position)) {
                 continue;
             }
             $oldArgValue = $arg->value;
@@ -102,47 +98,5 @@ CODE_SAMPLE
             return null;
         }
         return $node;
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $methodCallOrNew
-     */
-    private function isCallWithCollectionParam($methodCallOrNew, int $position) : bool
-    {
-        if ($methodCallOrNew instanceof MethodCall) {
-            // does setter method require a collection?
-            $callerType = $this->getType($methodCallOrNew->var);
-            $methodName = $this->getName($methodCallOrNew->name);
-        } else {
-            $callerType = $this->getType($methodCallOrNew->class);
-            $methodName = MethodName::CONSTRUCT;
-        }
-        $callerType = TypeCombinator::removeNull($callerType);
-        if (!$callerType instanceof ObjectType) {
-            return \false;
-        }
-        if (!$this->reflectionProvider->hasClass($callerType->getClassName())) {
-            return \false;
-        }
-        $classReflection = $this->reflectionProvider->getClass($callerType->getClassName());
-        if ($methodName === null) {
-            return \false;
-        }
-        $scope = ScopeFetcher::fetch($methodCallOrNew);
-        if (!$classReflection->hasMethod($methodName)) {
-            return \false;
-        }
-        $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
-        $activeParameterReflection = $extendedParametersAcceptor->getParameters()[$position] ?? null;
-        if (!$activeParameterReflection instanceof PhpParameterReflection) {
-            return \false;
-        }
-        $parameterType = $activeParameterReflection->getType();
-        // to include nullables
-        $parameterType = TypeCombinator::removeNull($parameterType);
-        if (!$parameterType instanceof ObjectType) {
-            return \false;
-        }
-        return $parameterType->isInstanceOf(DoctrineClass::COLLECTION)->yes();
     }
 }

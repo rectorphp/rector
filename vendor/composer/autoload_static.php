@@ -1663,6 +1663,7 @@ class ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
         'Rector\\Doctrine\\TypedCollections\\DocBlockProcessor\\UnionCollectionTagValueNodeNarrower' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/DocBlockProcessor/UnionCollectionTagValueNodeNarrower.php',
+        'Rector\\Doctrine\\TypedCollections\\NodeAnalyzer\\CollectionParamCallDetector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/NodeAnalyzer/CollectionParamCallDetector.php',
         'Rector\\Doctrine\\TypedCollections\\NodeAnalyzer\\EntityLikeClassDetector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/NodeAnalyzer/EntityLikeClassDetector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\Assign\\ArrayDimFetchAssignToAddCollectionCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/Assign/ArrayDimFetchAssignToAddCollectionCallRector.php',
         'Rector\\Doctrine\\TypedCollections\\Rector\\ClassMethod\\CollectionGetterNativeTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/TypedCollections/Rector/ClassMethod/CollectionGetterNativeTypeRector.php',

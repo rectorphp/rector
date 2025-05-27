@@ -1444,6 +1444,7 @@ return array(
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
     'Rector\\Doctrine\\TypedCollections\\DocBlockProcessor\\UnionCollectionTagValueNodeNarrower' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/DocBlockProcessor/UnionCollectionTagValueNodeNarrower.php',
+    'Rector\\Doctrine\\TypedCollections\\NodeAnalyzer\\CollectionParamCallDetector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/NodeAnalyzer/CollectionParamCallDetector.php',
     'Rector\\Doctrine\\TypedCollections\\NodeAnalyzer\\EntityLikeClassDetector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/NodeAnalyzer/EntityLikeClassDetector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\Assign\\ArrayDimFetchAssignToAddCollectionCallRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/Assign/ArrayDimFetchAssignToAddCollectionCallRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\ClassMethod\\CollectionGetterNativeTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/ClassMethod/CollectionGetterNativeTypeRector.php',
