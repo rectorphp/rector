@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\Enum\DoctrineClass;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,6 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveNewArrayCollectionOutsideConstructorRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove new ArrayCollection() assigns outside constructor', [new CodeSample(<<<'CODE_SAMPLE'
@@ -61,6 +70,9 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?ClassMethod
     {
         if ($node->isAbstract()) {
+            return null;
+        }
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $hasChanged = \false;
