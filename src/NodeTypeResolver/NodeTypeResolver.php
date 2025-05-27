@@ -302,7 +302,10 @@ final class NodeTypeResolver
         if ($classReflection->getName() === $objectType->getClassName()) {
             return \true;
         }
-        return $classReflection->is($objectType->getClassName());
+        if ($classReflection->is($objectType->getClassName())) {
+            return \true;
+        }
+        return $classReflection->hasTraitUse($objectType->getClassName());
     }
     /**
      * Allow pull type from
