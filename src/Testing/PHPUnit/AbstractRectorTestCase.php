@@ -102,7 +102,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
     }
-    protected function doTestFile(string $fixtureFilePath) : void
+    protected function doTestFile(string $fixtureFilePath, bool $includeFixtureDirectoryAsSource = \false) : void
     {
         // prepare input file contents and expected file output contents
         $fixtureFileContents = FileSystem::read($fixtureFilePath);
@@ -122,7 +122,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         }
         // write temp file
         FileSystem::write($inputFilePath, $inputFileContents, null);
-        $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
+        $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath, $includeFixtureDirectoryAsSource);
     }
     protected function doTestFileExpectingWarningAboutRuleApplied(string $fixtureFilePath, string $expectedRuleApplied) : void
     {
@@ -152,11 +152,11 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             return $afterResolvingCallbacks;
         });
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
+    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath, bool $includeFixtureDirectoryAsSource) : void
     {
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
         // the file is now changed (if any rule matches)
-        $rectorTestResult = $this->processFilePath($originalFilePath);
+        $rectorTestResult = $this->processFilePath($originalFilePath, $includeFixtureDirectoryAsSource);
         $changedContents = $rectorTestResult->getChangedContents();
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
@@ -183,9 +183,14 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             echo $failureMessage;
         }
     }
-    private function processFilePath(string $filePath) : RectorTestResult
+    private function processFilePath(string $filePath, bool $includeFixtureDirectoryAsSource) : RectorTestResult
     {
-        $this->dynamicSourceLocatorProvider->setFilePath($filePath);
+        if ($includeFixtureDirectoryAsSource) {
+            $fixtureDirectory = \dirname($filePath);
+            $this->dynamicSourceLocatorProvider->addDirectories([$fixtureDirectory]);
+        } else {
+            $this->dynamicSourceLocatorProvider->setFilePath($filePath);
+        }
         /** @var ConfigurationFactory $configurationFactory */
         $configurationFactory = $this->make(ConfigurationFactory::class);
         $configuration = $configurationFactory->createForTests([$filePath]);

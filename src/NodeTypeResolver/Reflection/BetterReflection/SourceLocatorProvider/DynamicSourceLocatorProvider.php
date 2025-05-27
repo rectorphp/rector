@@ -46,14 +46,14 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
      */
     public function addFiles(array $files) : void
     {
-        $this->filePaths = \array_merge($this->filePaths, $files);
+        $this->filePaths = \array_unique(\array_merge($this->filePaths, $files));
     }
     /**
      * @param string[] $directories
      */
     public function addDirectories(array $directories) : void
     {
-        $this->directories = \array_merge($this->directories, $directories);
+        $this->directories = \array_unique(\array_merge($this->directories, $directories));
     }
     public function provide() : SourceLocator
     {
