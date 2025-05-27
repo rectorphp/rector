@@ -24,6 +24,6 @@ final class EntityLikeClassDetector
     }
     public function isToMany(Property $property) : bool
     {
-        return $this->attrinationFinder->hasByMany($property, [MappingClass::ONE_TO_MANY, MappingClass::MANY_TO_MANY, OdmMappingClass::REFERENCE_MANY]);
+        return $this->attrinationFinder->hasByMany($property, [MappingClass::ONE_TO_MANY, MappingClass::MANY_TO_MANY, OdmMappingClass::REFERENCE_MANY, OdmMappingClass::EMBED_MANY]);
     }
 }
