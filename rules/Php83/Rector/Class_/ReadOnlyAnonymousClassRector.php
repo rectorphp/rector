@@ -65,6 +65,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::READONLY_CLASS;
+        return PhpVersionFeature::READONLY_ANONYMOUS_CLASS;
     }
 }
