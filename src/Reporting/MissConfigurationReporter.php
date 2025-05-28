@@ -28,13 +28,15 @@ final class MissConfigurationReporter
         $registeredRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
         $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
         $neverRegisteredSkippedRules = \array_unique(\array_diff($skippedRules, $registeredRules));
-        foreach ($neverRegisteredSkippedRules as $neverRegisteredSkippedRule) {
-            // post rules are registered in a different way
-            if (\is_a($neverRegisteredSkippedRule, PostRectorInterface::class, \true)) {
-                continue;
-            }
-            $this->symfonyStyle->warning(\sprintf('Skipped rule "%s" is never registered. You can remove it from "->withSkip()"', $neverRegisteredSkippedRule));
+        // remove special PostRectorInterface rules, they are registered in a different way
+        $neverRegisteredSkippedRules = \array_filter($neverRegisteredSkippedRules, function ($skippedRule) {
+            return !\is_a($skippedRule, PostRectorInterface::class, \true);
+        });
+        if ($neverRegisteredSkippedRules === []) {
+            return;
         }
+        $this->symfonyStyle->warning(\sprintf('%s never registered. You can remove %s from "->withSkip()"', \count($neverRegisteredSkippedRules) > 1 ? 'These skipped rules are' : 'This skipped rule is', \count($neverRegisteredSkippedRules) > 1 ? 'them' : 'it'));
+        $this->symfonyStyle->listing($neverRegisteredSkippedRules);
     }
     /**
      * @param string[] $filePaths
