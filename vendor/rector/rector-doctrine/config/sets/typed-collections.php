@@ -11,6 +11,7 @@ use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToM
 use Rector\Doctrine\TypedCollections\Rector\Class_\InitializeCollectionInConstructorRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionGetterNativeTypeRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionParamTypeSetterToCollectionPropertyRector;
+use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionSetterParamNativeTypeRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\DefaultCollectionKeyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowArrayCollectionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowParamUnionToCollectionRector;
@@ -46,6 +47,7 @@ return static function (RectorConfig $rectorConfig) : void {
         InArrayOnCollectionToContainsCallRector::class,
         // native type declarations
         CollectionGetterNativeTypeRector::class,
+        CollectionSetterParamNativeTypeRector::class,
         CollectionParamTypeSetterToCollectionPropertyRector::class,
         TypedPropertyFromToManyRelationTypeRector::class,
         RemoveNullFromNullableCollectionTypeRector::class,

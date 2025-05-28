@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Doctrine\TypedCollections\DocBlockAnalyzer\CollectionTagValueNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,10 +28,15 @@ final class DefaultCollectionKeyRector extends AbstractRector
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private CollectionTagValueNodeAnalyzer $collectionTagValueNodeAnalyzer;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, CollectionTagValueNodeAnalyzer $collectionTagValueNodeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->collectionTagValueNodeAnalyzer = $collectionTagValueNodeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -96,14 +102,12 @@ CODE_SAMPLE
      */
     private function processTagValueNode($tagValueNode) : bool
     {
-        if (!$tagValueNode->type instanceof GenericTypeNode) {
+        if (!$this->collectionTagValueNodeAnalyzer->detect($tagValueNode)) {
             return \false;
         }
+        /** @var GenericTypeNode $genericTypeNode */
         $genericTypeNode = $tagValueNode->type;
         if (\count($genericTypeNode->genericTypes) !== 1) {
-            return \false;
-        }
-        if ($genericTypeNode->type->name !== 'Collection') {
             return \false;
         }
         $valueGenericType = $genericTypeNode->genericTypes[0];
