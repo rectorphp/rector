@@ -2314,6 +2314,7 @@ class ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44
         'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
+        'Rector\\Php84\\Rector\\Class_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Class_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
         'Rector\\Php84\\Rector\\FuncCall\\AddEscapeArgumentRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/AddEscapeArgumentRector.php',
         'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',
         'Rector\\Php84\\Rector\\MethodCall\\NewMethodCallWithoutParenthesesRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/MethodCall/NewMethodCallWithoutParenthesesRector.php',
