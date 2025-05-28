@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -101,6 +102,10 @@ CODE_SAMPLE
             }
             $hasChanged = \true;
             $param->type = new FullyQualified(DoctrineClass::COLLECTION);
+            if ($param->default instanceof Expr) {
+                // remove default param, as no longer needed; empty collection should be passed instead
+                $param->default = null;
+            }
         }
         if ($hasChanged) {
             return $node;
