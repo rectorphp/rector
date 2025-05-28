@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\Enum\DoctrineClass;
@@ -93,6 +94,10 @@ CODE_SAMPLE
             }
             /** @var Assign $assign */
             $assign = $stmt->expr;
+            // we only care about initialization
+            if (!$assign->var instanceof PropertyFetch) {
+                continue;
+            }
             if (!$assign->expr instanceof New_) {
                 continue;
             }
