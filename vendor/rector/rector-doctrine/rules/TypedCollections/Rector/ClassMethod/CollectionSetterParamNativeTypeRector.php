@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?ClassMethod
     {
-        if ($node->isAbstract() || $node->stmts === null) {
+        if ($node->isAbstract()) {
             return null;
         }
         $hasChanged = \false;
