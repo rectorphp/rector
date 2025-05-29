@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -31,6 +32,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
@@ -136,6 +138,20 @@ final class NodeTypeResolver
             throw new ShouldNotHappenException(\sprintf(self::ERROR_MESSAGE, \get_class($node), ClassLike::class));
         }
         $resolvedType = $this->getType($node);
+        // cover call $this on trait
+        if ($resolvedType instanceof ErrorType && ($node instanceof Variable && $this->nodeNameResolver->isName($node, 'this'))) {
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            if (!$scope instanceof Scope) {
+                return \false;
+            }
+            $classReflection = $scope->getClassReflection();
+            if (!$classReflection instanceof ClassReflection) {
+                return \false;
+            }
+            if ($classReflection->isTrait()) {
+                $resolvedType = new ObjectType($classReflection->getName());
+            }
+        }
         if ($resolvedType instanceof MixedType) {
             return \false;
         }
