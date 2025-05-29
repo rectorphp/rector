@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "6f9034aabeaa52c83c034f2168c881c1ce851be7"
+                "reference": "3bc079d2b3488716eaac7f63052d793734d5d1f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/6f9034aabeaa52c83c034f2168c881c1ce851be7",
-                "reference": "6f9034aabeaa52c83c034f2168c881c1ce851be7",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/3bc079d2b3488716eaac7f63052d793734d5d1f3",
+                "reference": "3bc079d2b3488716eaac7f63052d793734d5d1f3",
                 "shasum": ""
             },
             "require": {
@@ -1833,7 +1833,7 @@
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-29T04:12:23+00:00",
+            "time": "2025-05-29T16:41:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

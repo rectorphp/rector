@@ -8,5 +8,5 @@ final class NonAssertNonStaticMethods
     /**
      * @var string[]
      */
-    public const ALL = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never', 'expectException', 'expectExceptionMessage', 'expectExceptionCode', 'expectExceptionMessageMatches'];
+    public const ALL = ['createMock', 'atLeast', 'atLeastOnce', 'once', 'never', 'any', 'exactly', 'atMost', 'throwException', 'expectException', 'expectExceptionMessage', 'expectExceptionCode', 'expectExceptionMessageMatches'];
 }
