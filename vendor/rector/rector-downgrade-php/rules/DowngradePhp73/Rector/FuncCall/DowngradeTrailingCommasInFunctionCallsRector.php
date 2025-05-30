@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\DowngradePhp73\Tokenizer\TrailingCommaRemover;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -77,6 +78,15 @@ CODE_SAMPLE
         $args = $node->getArgs();
         if ($args === []) {
             return null;
+        }
+        // reprint is needed as position changed that can't rely on token position
+        // @see https://github.com/rectorphp/rector-downgrade-php/pull/281
+        // @see https://github.com/rectorphp/rector-downgrade-php/pull/285
+        foreach ($args as $arg) {
+            if ($arg->getEndTokenPos() < 0) {
+                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                return $node;
+            }
         }
         $lastArgKey = \count($args) - 1;
         $lastArg = $args[$lastArgKey];
