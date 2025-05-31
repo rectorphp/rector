@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp73\Tokenizer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\CallLike;
 use Rector\ValueObject\Application\File;
 final class TrailingCommaRemover
 {
@@ -22,5 +23,24 @@ final class TrailingCommaRemover
             $tokens[$node->getEndTokenPos() + $iteration]->text = '';
             break;
         }
+    }
+    public function removeFromCallLike(File $file, CallLike $callLike) : bool
+    {
+        $tokens = $file->getOldTokens();
+        $iteration = 1;
+        $hasChanged = \false;
+        while (isset($tokens[$callLike->getEndTokenPos() - $iteration])) {
+            $text = \trim($tokens[$callLike->getEndTokenPos() - $iteration]->text);
+            if (\in_array($text, [')', ''], \true)) {
+                ++$iteration;
+                continue;
+            }
+            if ($text === ',') {
+                $tokens[$callLike->getEndTokenPos() - $iteration]->text = '';
+                $hasChanged = \true;
+            }
+            break;
+        }
+        return $hasChanged;
     }
 }
