@@ -9,7 +9,6 @@ class MatchArm extends NodeAbstract
 {
     /** @var null|list<Node\Expr> */
     public ?array $conds;
-    /** @var Node\Expr */
     public \PhpParser\Node\Expr $body;
     /**
      * @param null|list<Node\Expr> $conds

@@ -42,4 +42,8 @@ final class DoctrineClass
      * @var string
      */
     public const OBJECT_REPOSITORY = 'Doctrine\\Persistence\\ObjectRepository';
+    /**
+     * @var string
+     */
+    public const ARRAY_RESULT = 'Doctrine\\DBAL\\Cache\\ArrayResult';
 }

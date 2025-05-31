@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Enum_;
@@ -989,6 +990,12 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         if ($b != \PhpParser\Modifiers::FINAL) {
             $this->emitError(new \PhpParser\Error('Cannot use the ' . \PhpParser\Modifiers::toString($b) . ' modifier on a property hook', $this->getAttributesAt($modifierPos)));
+        }
+    }
+    protected function checkConstantAttributes(Const_ $node) : void
+    {
+        if ($node->attrGroups !== [] && \count($node->consts) > 1) {
+            $this->emitError(new \PhpParser\Error('Cannot use attributes on multiple constants at once', $node->getAttributes()));
         }
     }
     /**

@@ -709,17 +709,17 @@
         },
         {
             "name": "nikic\/php-parser",
-            "version": "v5.4.0",
-            "version_normalized": "5.4.0.0",
+            "version": "v5.5.0",
+            "version_normalized": "5.5.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nikic\/PHP-Parser.git",
-                "reference": "447a020a1f875a434d62f2a401f53b82a396e494"
+                "reference": "ae59794362fe85e051a58ad36b289443f57be7a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/447a020a1f875a434d62f2a401f53b82a396e494",
-                "reference": "447a020a1f875a434d62f2a401f53b82a396e494",
+                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/ae59794362fe85e051a58ad36b289443f57be7a9",
+                "reference": "ae59794362fe85e051a58ad36b289443f57be7a9",
                 "shasum": ""
             },
             "require": {
@@ -732,7 +732,7 @@
                 "ircmaxell\/php-yacc": "^0.0.7",
                 "phpunit\/phpunit": "^9.0"
             },
-            "time": "2024-12-30T11:07:19+00:00",
+            "time": "2025-05-31T08:24:38+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -782,7 +782,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nikic\/PHP-Parser\/issues",
-                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v5.4.0"
+                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v5.5.0"
             },
             "install-path": "..\/nikic\/php-parser"
         },
@@ -1687,12 +1687,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "f3e5d75fc7ba1aa8421e4709ec150c3b3fbbdb11"
+                "reference": "9686a88ce54080d062ff39aeda57e36dcc85cf7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/f3e5d75fc7ba1aa8421e4709ec150c3b3fbbdb11",
-                "reference": "f3e5d75fc7ba1aa8421e4709ec150c3b3fbbdb11",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/9686a88ce54080d062ff39aeda57e36dcc85cf7f",
+                "reference": "9686a88ce54080d062ff39aeda57e36dcc85cf7f",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1715,7 @@
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-05-28T23:02:46+00:00",
+            "time": "2025-05-31T20:29:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

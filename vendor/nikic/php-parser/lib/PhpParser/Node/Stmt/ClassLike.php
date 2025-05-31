@@ -16,7 +16,7 @@ abstract class ClassLike extends Node\Stmt
     /** @var Node\Name|null Namespaced name (if using NameResolver) */
     public ?Node\Name $namespacedName;
     /**
-     * @return TraitUse[]
+     * @return list<TraitUse>
      */
     public function getTraitUses() : array
     {
@@ -29,7 +29,7 @@ abstract class ClassLike extends Node\Stmt
         return $traitUses;
     }
     /**
-     * @return ClassConst[]
+     * @return list<ClassConst>
      */
     public function getConstants() : array
     {
@@ -42,7 +42,7 @@ abstract class ClassLike extends Node\Stmt
         return $constants;
     }
     /**
-     * @return Property[]
+     * @return list<Property>
      */
     public function getProperties() : array
     {
@@ -77,7 +77,7 @@ abstract class ClassLike extends Node\Stmt
     /**
      * Gets all methods defined directly in this class/interface/trait
      *
-     * @return ClassMethod[]
+     * @return list<ClassMethod>
      */
     public function getMethods() : array
     {

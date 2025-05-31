@@ -162,7 +162,7 @@ final class PropertyFetchFinder
     private function resolveNodesToLocate(Class_ $class) : array
     {
         $propertyWithHooks = \array_filter($class->getProperties(), fn(Property $property): bool => $property->hooks !== []);
-        return \array_merge($propertyWithHooks, $class->getMethods());
+        return [...$propertyWithHooks, ...$class->getMethods()];
     }
     /**
      * @param Stmt[] $stmts

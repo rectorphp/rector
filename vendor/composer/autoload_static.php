@@ -1631,6 +1631,8 @@ class ComposerStaticInit912e02b74e97bb7d91c242d9973e0c44
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',
         'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
+        'Rector\\Doctrine\\Dbal40\\Rector\\StmtsAwareInterface\\ExecuteQueryParamsToBindValueRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal40/Rector/StmtsAwareInterface/ExecuteQueryParamsToBindValueRector.php',
+        'Rector\\Doctrine\\Dbal42\\Rector\\New_\\AddArrayResultColumnNamesRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal42/Rector/New_/AddArrayResultColumnNamesRector.php',
         'Rector\\Doctrine\\DoctrineFixture\\Rector\\MethodCall\\AddGetReferenceTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/DoctrineFixture/Rector/MethodCall/AddGetReferenceTypeRector.php',
         'Rector\\Doctrine\\DoctrineFixture\\Reflection\\ParameterTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/DoctrineFixture/Reflection/ParameterTypeResolver.php',
         'Rector\\Doctrine\\Enum\\DoctrineClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/DoctrineClass.php',
