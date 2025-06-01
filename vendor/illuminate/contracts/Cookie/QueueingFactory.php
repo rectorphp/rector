@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202505\Illuminate\Contracts\Cookie;
+namespace RectorPrefix202506\Illuminate\Contracts\Cookie;
 
 interface QueueingFactory extends Factory
 {

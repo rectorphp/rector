@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202505\Symfony\Component\Console\Debug;
+namespace RectorPrefix202506\Symfony\Component\Console\Debug;
 
-use RectorPrefix202505\Symfony\Component\Console\Command\TraceableCommand;
-use RectorPrefix202505\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix202505\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix202506\Symfony\Component\Console\Command\TraceableCommand;
+use RectorPrefix202506\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix202506\Symfony\Component\HttpFoundation\Response;
 /**
  * @internal
  */

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202505\Symfony\Component\Console\CommandLoader;
+namespace RectorPrefix202506\Symfony\Component\Console\CommandLoader;
 
-use RectorPrefix202505\Psr\Container\ContainerInterface;
-use RectorPrefix202505\Symfony\Component\Console\Command\Command;
-use RectorPrefix202505\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix202506\Psr\Container\ContainerInterface;
+use RectorPrefix202506\Symfony\Component\Console\Command\Command;
+use RectorPrefix202506\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Loads commands from a PSR-11 container.
  *

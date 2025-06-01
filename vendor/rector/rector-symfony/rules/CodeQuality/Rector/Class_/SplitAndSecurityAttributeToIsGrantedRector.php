@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
-use RectorPrefix202505\Nette\Utils\Strings;
+use RectorPrefix202506\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -13,8 +13,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202505\Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use RectorPrefix202505\Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use RectorPrefix202506\Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use RectorPrefix202506\Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SplitAndSecurityAttributeToIsGrantedRector extends AbstractRector

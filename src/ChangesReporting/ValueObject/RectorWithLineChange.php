@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\ChangesReporting\ValueObject;
 
 use Rector\Contract\Rector\RectorInterface;
-use RectorPrefix202505\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix202505\Webmozart\Assert\Assert;
+use RectorPrefix202506\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202506\Webmozart\Assert\Assert;
 final class RectorWithLineChange implements SerializableInterface
 {
     /**

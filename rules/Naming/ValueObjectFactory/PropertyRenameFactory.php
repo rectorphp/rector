@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202505\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202506\Webmozart\Assert\InvalidArgumentException;
 final class PropertyRenameFactory
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202505\React\EventLoop;
+namespace RectorPrefix202506\React\EventLoop;
 
 /**
  * [Deprecated] The `Factory` class exists as a convenient way to pick the best available event loop implementation.
@@ -48,7 +48,7 @@ final class Factory
             // only use ext-uv on PHP 7
             return new ExtUvLoop();
         }
-        if (\class_exists('RectorPrefix202505\\libev\\EventLoop', \false)) {
+        if (\class_exists('RectorPrefix202506\\libev\\EventLoop', \false)) {
             return new ExtLibevLoop();
         }
         if (\class_exists('EvLoop', \false)) {

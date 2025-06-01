@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202505\Illuminate\Contracts\Queue;
+namespace RectorPrefix202506\Illuminate\Contracts\Queue;
 
 use InvalidArgumentException;
 class EntityNotFoundException extends InvalidArgumentException

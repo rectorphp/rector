@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202505;
+namespace RectorPrefix202506;
 
 use Rector\Config\RectorConfig;
 // @see https://github.com/symfony/symfony/blob/6.3/UPGRADE-6.3.md

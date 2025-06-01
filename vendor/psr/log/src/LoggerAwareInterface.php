@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202505\Psr\Log;
+namespace RectorPrefix202506\Psr\Log;
 
 /**
  * Describes a logger-aware instance.

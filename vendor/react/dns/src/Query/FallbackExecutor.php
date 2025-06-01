@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202505\React\Dns\Query;
+namespace RectorPrefix202506\React\Dns\Query;
 
-use RectorPrefix202505\React\Promise\Promise;
+use RectorPrefix202506\React\Promise\Promise;
 final class FallbackExecutor implements ExecutorInterface
 {
     private $executor;

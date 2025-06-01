@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202505\Symfony\Component\Console\Style;
+namespace RectorPrefix202506\Symfony\Component\Console\Style;
 
-use RectorPrefix202505\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202505\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202505\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202505\Symfony\Component\Console\Helper\Helper;
-use RectorPrefix202505\Symfony\Component\Console\Helper\OutputWrapper;
-use RectorPrefix202505\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix202505\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use RectorPrefix202505\Symfony\Component\Console\Helper\Table;
-use RectorPrefix202505\Symfony\Component\Console\Helper\TableCell;
-use RectorPrefix202505\Symfony\Component\Console\Helper\TableSeparator;
-use RectorPrefix202505\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202505\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202505\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use RectorPrefix202505\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202505\Symfony\Component\Console\Output\TrimmedBufferOutput;
-use RectorPrefix202505\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix202505\Symfony\Component\Console\Question\ConfirmationQuestion;
-use RectorPrefix202505\Symfony\Component\Console\Question\Question;
-use RectorPrefix202505\Symfony\Component\Console\Terminal;
+use RectorPrefix202506\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202506\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202506\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202506\Symfony\Component\Console\Helper\Helper;
+use RectorPrefix202506\Symfony\Component\Console\Helper\OutputWrapper;
+use RectorPrefix202506\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix202506\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use RectorPrefix202506\Symfony\Component\Console\Helper\Table;
+use RectorPrefix202506\Symfony\Component\Console\Helper\TableCell;
+use RectorPrefix202506\Symfony\Component\Console\Helper\TableSeparator;
+use RectorPrefix202506\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202506\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202506\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use RectorPrefix202506\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202506\Symfony\Component\Console\Output\TrimmedBufferOutput;
+use RectorPrefix202506\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix202506\Symfony\Component\Console\Question\ConfirmationQuestion;
+use RectorPrefix202506\Symfony\Component\Console\Question\Question;
+use RectorPrefix202506\Symfony\Component\Console\Terminal;
 /**
  * Output decorator helpers for the Symfony Style Guide.
  *

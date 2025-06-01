@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202505;
+namespace RectorPrefix202506;
 
 use Rector\Config\RectorConfig;
 // @see https://github.com/symfony/symfony/blame/7.2/UPGRADE-7.2.md

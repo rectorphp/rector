@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\TypedCollections\Rector\Property;
 
-use RectorPrefix202505\Doctrine\Common\Collections\Collection;
+use RectorPrefix202506\Doctrine\Common\Collections\Collection;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;

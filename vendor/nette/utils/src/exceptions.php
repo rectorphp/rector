@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202505\Nette;
+namespace RectorPrefix202506\Nette;
 
 /**
  * The value is outside the allowed range.

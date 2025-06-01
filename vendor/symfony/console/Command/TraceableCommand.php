@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202505\Symfony\Component\Console\Command;
+namespace RectorPrefix202506\Symfony\Component\Console\Command;
 
-use RectorPrefix202505\Symfony\Component\Console\Application;
-use RectorPrefix202505\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202505\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202505\Symfony\Component\Console\Helper\HelperInterface;
-use RectorPrefix202505\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix202505\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202505\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202505\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202505\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202505\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix202506\Symfony\Component\Console\Application;
+use RectorPrefix202506\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202506\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202506\Symfony\Component\Console\Helper\HelperInterface;
+use RectorPrefix202506\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202506\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202506\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202506\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202506\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202506\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @internal
  *

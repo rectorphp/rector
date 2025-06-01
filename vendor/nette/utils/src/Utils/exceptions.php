@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202505\Nette\Utils;
+namespace RectorPrefix202506\Nette\Utils;
 
 /**
  * An error occurred while working with the image.

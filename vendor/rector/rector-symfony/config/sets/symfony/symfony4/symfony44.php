@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202505;
+namespace RectorPrefix202506;
 
 use Rector\Config\RectorConfig;
 // https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md

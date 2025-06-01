@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202505\\Clue\\React\\NDJson\\": "src\/"
+            "RectorPrefix202506\\Clue\\React\\NDJson\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202505\\Clue\\Tests\\React\\NDJson\\": "tests\/"
+            "RectorPrefix202506\\Clue\\Tests\\React\\NDJson\\": "tests\/"
         }
     }
 }

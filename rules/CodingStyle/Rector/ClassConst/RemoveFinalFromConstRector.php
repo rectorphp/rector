@@ -56,11 +56,11 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        foreach ($node->getConstants() as $classConst) {
-            if (!$classConst->isFinal()) {
+        foreach ($node->getConstants() as $constant) {
+            if (!$constant->isFinal()) {
                 continue;
             }
-            $this->visibilityManipulator->removeFinal($classConst);
+            $this->visibilityManipulator->removeFinal($constant);
             $hasChanged = \true;
         }
         if ($hasChanged) {

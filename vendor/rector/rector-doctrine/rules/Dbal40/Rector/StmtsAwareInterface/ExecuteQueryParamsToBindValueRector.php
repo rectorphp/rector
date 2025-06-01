@@ -3,16 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Dbal40\Rector\StmtsAwareInterface;
 
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BinaryOp\Plus;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeFinder;
+use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -63,12 +64,16 @@ CODE_SAMPLE
     {
         $nodeFinder = new NodeFinder();
         $hasChanged = \false;
+        $objectType = new ObjectType('Doctrine\\DBAL\\Statement');
         foreach ((array) $node->stmts as $key => $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
             }
-            $executeQueryMethodCall = $nodeFinder->findFirst($stmt, function (Node $node) : bool {
+            $executeQueryMethodCall = $nodeFinder->findFirst($stmt, function (Node $node) use($objectType) : bool {
                 if (!$node instanceof MethodCall) {
+                    return \false;
+                }
+                if (!$this->isObjectType($node->var, $objectType)) {
                     return \false;
                 }
                 if (!$this->isName($node->name, 'executeQuery')) {

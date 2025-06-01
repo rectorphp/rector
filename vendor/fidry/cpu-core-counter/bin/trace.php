@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202505;
+namespace RectorPrefix202506;
 
-use RectorPrefix202505\Fidry\CpuCoreCounter\CpuCoreCounter;
-use RectorPrefix202505\Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use RectorPrefix202506\Fidry\CpuCoreCounter\CpuCoreCounter;
+use RectorPrefix202506\Fidry\CpuCoreCounter\Finder\FinderRegistry;
 require_once __DIR__ . '/../vendor/autoload.php';
 $separator = \str_repeat('–', 80);
 echo 'With all finders...' . \PHP_EOL . \PHP_EOL;

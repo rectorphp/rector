@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202505\Symfony\Contracts\Service\Attribute;
+namespace RectorPrefix202506\Symfony\Contracts\Service\Attribute;
 
-use RectorPrefix202505\Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use RectorPrefix202505\Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RectorPrefix202506\Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
+use RectorPrefix202506\Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * For use as the return value for {@see ServiceSubscriberInterface}.
  *

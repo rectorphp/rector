@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202505\Illuminate\Container\Attributes;
+namespace RectorPrefix202506\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202505\Illuminate\Contracts\Container\Container;
-use RectorPrefix202505\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202506\Illuminate\Contracts\Container\Container;
+use RectorPrefix202506\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Cache implements ContextualAttribute
 {
