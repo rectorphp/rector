@@ -17,6 +17,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 final class SideEffectNodeDetector
 {
@@ -29,13 +31,23 @@ final class SideEffectNodeDetector
      */
     private BetterNodeFinder $betterNodeFinder;
     /**
+     * @readonly
+     */
+    private NodeTypeResolver $nodeTypeResolver;
+    /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    /**
      * @var array<class-string<Expr>>
      */
     private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [MethodCall::class, New_::class, NullsafeMethodCall::class, StaticCall::class];
-    public function __construct(\Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->pureFunctionDetector = $pureFunctionDetector;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function detect(Expr $expr) : bool
     {
@@ -55,6 +67,9 @@ final class SideEffectNodeDetector
         if ($node instanceof New_ && $this->isPhpParser($node)) {
             return \false;
         }
+        if (($node instanceof MethodCall || $node instanceof StaticCall) && $this->isTestMock($node)) {
+            return \false;
+        }
         $exprClass = \get_class($node);
         if (\in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, \true)) {
             return \true;
@@ -68,6 +83,18 @@ final class SideEffectNodeDetector
             return !$variable instanceof Variable;
         }
         return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     */
+    private function isTestMock($node) : bool
+    {
+        $objectType = new ObjectType('PHPUnit\\Framework\\TestCase');
+        $nodeCaller = $node instanceof MethodCall ? $node->var : $node->class;
+        if (!$this->nodeTypeResolver->isObjectType($nodeCaller, $objectType)) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($node->name, 'createMock');
     }
     private function isPhpParser(New_ $new) : bool
     {
