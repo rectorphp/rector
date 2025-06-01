@@ -13,6 +13,7 @@ use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
 use Rector\DeadCode\Rector\ClassLike\RemoveTypedPropertyNonMockDocblockRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveArgumentFromDefaultParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
@@ -127,5 +128,6 @@ final class DeadCodeLevel
         RemoveUnusedConstructorParamRector::class,
         RemoveEmptyClassMethodRector::class,
         RemoveDeadReturnRector::class,
+        RemoveArgumentFromDefaultParentCallRector::class,
     ];
 }

@@ -1317,6 +1317,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => $baseDir . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
     'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
     'Rector\\DeadCode\\Rector\\ClassLike\\RemoveTypedPropertyNonMockDocblockRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveTypedPropertyNonMockDocblockRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
