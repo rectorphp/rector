@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
@@ -95,6 +96,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
+        if (!$node->extends instanceof FullyQualified) {
+            return null;
+        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
