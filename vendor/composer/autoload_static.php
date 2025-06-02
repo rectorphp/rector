@@ -1576,6 +1576,7 @@ class ComposerStaticInit78fb90a05527c4e1e3e0271783524c1e
         'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
         'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
         'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
+        'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadCatchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/TryCatch/RemoveDeadCatchRector.php',
         'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
         'Rector\\DeadCode\\SideEffect\\PureFunctionDetector' => __DIR__ . '/../..' . '/rules/DeadCode/SideEffect/PureFunctionDetector.php',
         'Rector\\DeadCode\\SideEffect\\SideEffectNodeDetector' => __DIR__ . '/../..' . '/rules/DeadCode/SideEffect/SideEffectNodeDetector.php',

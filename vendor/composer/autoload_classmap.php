@@ -1357,6 +1357,7 @@ return array(
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
     'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => $baseDir . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
     'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => $baseDir . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
+    'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadCatchRector' => $baseDir . '/rules/DeadCode/Rector/TryCatch/RemoveDeadCatchRector.php',
     'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => $baseDir . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
     'Rector\\DeadCode\\SideEffect\\PureFunctionDetector' => $baseDir . '/rules/DeadCode/SideEffect/PureFunctionDetector.php',
     'Rector\\DeadCode\\SideEffect\\SideEffectNodeDetector' => $baseDir . '/rules/DeadCode/SideEffect/SideEffectNodeDetector.php',
