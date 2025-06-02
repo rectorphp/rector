@@ -3,9 +3,12 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\TryCatch;
 
+use PHPStan\Type\ObjectType;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TryCatch;
@@ -60,22 +63,21 @@ CODE_SAMPLE
      * @param TryCatch $node
      * @return TryCatch|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?Node
     {
         $catches = $node->catches;
         if (\count($catches) === 1) {
             return null;
         }
         $hasChanged = \false;
+        $maxIndexCatches = \count($catches) - 1;
         foreach ($catches as $key => $catchItem) {
-            if ($this->isEmpty($catchItem->stmts)) {
+            if (!$this->isJustThrowedSameVariable($catchItem)) {
                 continue;
             }
-            $catchItemStmt = $catchItem->stmts[0];
-            if (!($catchItemStmt instanceof Expression && $catchItemStmt->expr instanceof Throw_)) {
-                continue;
-            }
-            if (!$this->nodeComparator->areNodesEqual($catchItem->var, $catchItemStmt->expr->expr)) {
+            /** @var FullyQualified */
+            $type = $catchItem->types[0];
+            if ($this->shouldSkipNextCatchClassParentWithSpecialTreatment($catches, $type, $key, $maxIndexCatches)) {
                 continue;
             }
             unset($catches[$key]);
@@ -86,6 +88,52 @@ CODE_SAMPLE
         }
         $node->catches = $catches;
         return $node;
+    }
+    private function isJustThrowedSameVariable(Catch_ $catch) : bool
+    {
+        if ($this->isEmpty($catch->stmts)) {
+            return \false;
+        }
+        $catchItemStmt = $catch->stmts[0];
+        if (!($catchItemStmt instanceof Expression && $catchItemStmt->expr instanceof Throw_)) {
+            return \false;
+        }
+        if (!$this->nodeComparator->areNodesEqual($catch->var, $catchItemStmt->expr->expr)) {
+            return \false;
+        }
+        // too complex to check
+        if (\count($catch->types) !== 1) {
+            return \false;
+        }
+        $type = $catch->types[0];
+        return $type instanceof FullyQualified;
+    }
+    /**
+     * @param Catch_[] $catches
+     */
+    private function shouldSkipNextCatchClassParentWithSpecialTreatment(array $catches, FullyQualified $fullyQualified, int $key, int $maxIndexCatches) : bool
+    {
+        for ($index = $key + 1; $index <= $maxIndexCatches; ++$index) {
+            if (!isset($catches[$index])) {
+                continue;
+            }
+            $nextCatch = $catches[$index];
+            // too complex to check
+            if (\count($nextCatch->types) !== 1) {
+                return \true;
+            }
+            $nextCatchType = $nextCatch->types[0];
+            if (!$nextCatchType instanceof FullyQualified) {
+                return \true;
+            }
+            if (!$this->isObjectType($fullyQualified, new ObjectType($nextCatchType->toString()))) {
+                continue;
+            }
+            if (!$this->isJustThrowedSameVariable($nextCatch)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param Stmt[] $stmts
