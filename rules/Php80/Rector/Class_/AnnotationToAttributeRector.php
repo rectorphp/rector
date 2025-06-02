@@ -262,8 +262,7 @@ CODE_SAMPLE
                 /* Will be processed by processGenericTags instead */
                 continue;
             }
-            // make sure the attribute class really exists to avoid error on early upgrade
-            if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
+            if (!$this->isExistingAttributeClass($annotationToAttribute)) {
                 continue;
             }
             $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
@@ -287,5 +286,15 @@ CODE_SAMPLE
             return $annotationToAttribute;
         }
         return null;
+    }
+    private function isExistingAttributeClass(AnnotationToAttribute $annotationToAttribute) : bool
+    {
+        // make sure the attribute class really exists to avoid error on early upgrade
+        if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
+            return \false;
+        }
+        // make sure the class is marked as attribute
+        $classReflection = $this->reflectionProvider->getClass($annotationToAttribute->getAttributeClass());
+        return $classReflection->isAttributeClass();
     }
 }
