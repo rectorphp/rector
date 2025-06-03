@@ -7,11 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Php\PhpVersionProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -46,23 +43,13 @@ final class ReturnTypeDeclarationUpdater
      */
     public function updateClassMethod(ClassMethod $classMethod, string $className) : void
     {
-        $this->updatePhpDoc($classMethod, $className);
+        $this->removeReturnDocBlocks($classMethod);
         $this->updatePhp($classMethod, $className);
     }
-    /**
-     * @param class-string $className
-     */
-    private function updatePhpDoc(ClassMethod $classMethod, string $className) : void
+    private function removeReturnDocBlocks(ClassMethod $classMethod) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
-            return;
-        }
-        $returnStaticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $classMethod);
-        if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
-            $returnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($className);
-        }
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     /**
