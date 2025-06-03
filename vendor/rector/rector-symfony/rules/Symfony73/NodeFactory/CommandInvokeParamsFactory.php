@@ -44,7 +44,9 @@ final class CommandInvokeParamsFactory
     {
         $argumentParams = [];
         foreach ($commandArguments as $commandArgument) {
-            $argumentParam = new Param(new Variable((string) $this->valueResolver->getValue($commandArgument->getName())));
+            $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
+            $variableName = \str_replace('-', '_', $argumentName);
+            $argumentParam = new Param(new Variable($variableName));
             $argumentParam->type = new Identifier('string');
             $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
             if ($modeValue === null || $modeValue === 2) {
@@ -65,7 +67,9 @@ final class CommandInvokeParamsFactory
     {
         $optionParams = [];
         foreach ($commandOptions as $commandOption) {
-            $optionParam = new Param(new Variable($commandOption->getName()));
+            $optionName = $commandOption->getName();
+            $variableName = \str_replace('-', '_', $optionName);
+            $optionParam = new Param(new Variable($variableName));
             // @todo fill type or default value
             $optionParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION))]);
             $optionParams[] = $optionParam;

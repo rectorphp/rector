@@ -235,13 +235,15 @@ CODE_SAMPLE
             }
             $firstArgValue = $node->getArgs()[0]->value;
             if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
-                return new Variable($this->valueResolver->getValue($firstArgValue));
+                $variableName = $this->valueResolver->getValue($firstArgValue);
+                return new Variable(\str_replace('-', '_', $variableName));
             }
             if (!$firstArgValue instanceof String_) {
                 // unable to resolve argument/option name
                 throw new ShouldNotHappenException();
             }
-            return new Variable($firstArgValue->value);
+            $variableName = $firstArgValue->value;
+            return new Variable(\str_replace('-', '_', $variableName));
         });
     }
     private function isFluentArgumentOptionChain(MethodCall $methodCall) : bool
