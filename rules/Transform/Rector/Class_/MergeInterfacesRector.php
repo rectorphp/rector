@@ -5,6 +5,7 @@ namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -61,7 +62,7 @@ CODE_SAMPLE
                 continue;
             }
             $interface = $this->getName($implement);
-            $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
+            $node->implements[$key] = new FullyQualified($this->oldToNewInterfaces[$interface]);
             $hasChanged = \true;
         }
         if (!$hasChanged) {
