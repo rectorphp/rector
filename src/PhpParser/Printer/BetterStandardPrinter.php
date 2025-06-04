@@ -130,8 +130,8 @@ final class BetterStandardPrinter extends Standard
         }
         $this->wrapBinaryOp($node);
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
-        if ($node instanceof New_ && $node->class instanceof AnonymousClassNode) {
-            $content = 'new ' . \ltrim($content, 'new ');
+        if ($node instanceof New_ && $node->class instanceof AnonymousClassNode && \strncmp($content, 'new', \strlen('new')) !== 0) {
+            $content = 'new ' . $content;
         }
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
     }
