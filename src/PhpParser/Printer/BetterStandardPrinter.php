@@ -37,6 +37,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Util\NewLineSplitter;
+use Rector\Util\StringUtils;
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  *
@@ -54,6 +55,11 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \\t]+$#m';
+    /**
+     * @see https://regex101.com/r/UluSYL/1
+     * @var string
+     */
+    private const SPACED_NEW_START_REGEX = '#^new\\s+#';
     public function __construct(ExprAnalyzer $exprAnalyzer)
     {
         $this->exprAnalyzer = $exprAnalyzer;
@@ -130,7 +136,7 @@ final class BetterStandardPrinter extends Standard
         }
         $this->wrapBinaryOp($node);
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
-        if ($node instanceof New_ && $node->class instanceof AnonymousClassNode && \strncmp($content, 'new', \strlen('new')) !== 0) {
+        if ($node instanceof New_ && $node->class instanceof AnonymousClassNode && !StringUtils::isMatch($content, self::SPACED_NEW_START_REGEX)) {
             $content = 'new ' . $content;
         }
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
