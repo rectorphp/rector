@@ -96,8 +96,8 @@ final class SomeCommand extends Command
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Argument;
-use Symfony\Component\Console\Command\Option;
+use Symfony\Component\Console\Argument;
+use Symfony\Component\Console\Option;
 
 final class SomeCommand
 {

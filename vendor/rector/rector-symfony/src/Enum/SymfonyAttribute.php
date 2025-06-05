@@ -16,7 +16,7 @@ final class SymfonyAttribute
     /**
      * @var string
      */
-    public const COMMAND_OPTION = 'Symfony\\Component\\Console\\Attribute\\Command\\Option';
+    public const COMMAND_OPTION = 'Symfony\\Component\\Console\\Attribute\\Option';
     /**
      * @var string
      */
