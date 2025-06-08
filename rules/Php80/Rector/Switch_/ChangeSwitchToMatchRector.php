@@ -201,7 +201,7 @@ CODE_SAMPLE
             }
             foreach ($arm->conds as $cond) {
                 $type = $this->nodeTypeResolver->getNativeType($cond);
-                if (!$this->exprAnalyzer->isDynamicExpr($cond) || !$type->isBoolean()->yes()) {
+                if (!$this->exprAnalyzer->isDynamicExpr($cond) || !$type->isBoolean()->yes() || \is_bool($this->valueResolver->getValue($cond))) {
                     // return early here, as condition is mixed
                     // we need another real use case for mixed conditions of dynamic + non-dynamic case expr
                     return;
