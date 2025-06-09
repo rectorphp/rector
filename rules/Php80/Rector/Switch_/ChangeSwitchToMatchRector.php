@@ -6,17 +6,16 @@ namespace Rector\Php80\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
-use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
@@ -49,12 +48,17 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(SwitchExprsResolver $switchExprsResolver, MatchSwitchAnalyzer $matchSwitchAnalyzer, MatchFactory $matchFactory, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private ExprAnalyzer $exprAnalyzer;
+    public function __construct(SwitchExprsResolver $switchExprsResolver, MatchSwitchAnalyzer $matchSwitchAnalyzer, MatchFactory $matchFactory, ValueResolver $valueResolver, ExprAnalyzer $exprAnalyzer)
     {
         $this->switchExprsResolver = $switchExprsResolver;
         $this->matchSwitchAnalyzer = $matchSwitchAnalyzer;
         $this->matchFactory = $matchFactory;
         $this->valueResolver = $valueResolver;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -187,7 +191,9 @@ CODE_SAMPLE
     }
     private function mirrorDynamicBoolExpr(Match_ $match) : void
     {
-        if ($this->valueResolver->isTrue($match->cond)) {
+        // switch(true) already just use
+        // switch(false) is dead code that can be on purpose
+        if ($this->valueResolver->isTrueOrFalse($match->cond)) {
             return;
         }
         $isChanged = \false;
@@ -196,14 +202,11 @@ CODE_SAMPLE
                 continue;
             }
             foreach ($arm->conds as $cond) {
-                if ($cond instanceof Instanceof_ || $cond instanceof CallLike) {
-                    $type = $this->nodeTypeResolver->getNativeType($cond);
-                    if ($type->isBoolean()->yes()) {
-                        // dont' stop lookup for dynamic conditions
-                        // continue verify other condition, in case of mixed condition
-                        $isChanged = \true;
-                        continue;
-                    }
+                if ($this->exprAnalyzer->isBoolExpr($cond) || $this->exprAnalyzer->isCallLikeReturnNativeBool($cond)) {
+                    // dont' stop lookup for dynamic conditions
+                    // continue verify other condition, in case of mixed condition
+                    $isChanged = \true;
+                    continue;
                 }
                 // return early here, as condition is mixed
                 // we need another real use case for mixed conditions of dynamic + non-dynamic case expr
