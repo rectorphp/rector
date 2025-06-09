@@ -21,6 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\Renaming\Collector\RenamedNameCollector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Util\FileHasher;
 final class ClassRenamer
@@ -73,6 +74,9 @@ final class ClassRenamer
      */
     public function renameNode(Node $node, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
+        if ($node instanceof FullyQualified && $node->getAttribute(RenameClassRector::SKIPPED_AS_CLASS_CONST_FETCH_CLASS) === \true) {
+            return null;
+        }
         $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
         if ($node instanceof FullyQualified) {
             return $this->refactorName($node, $oldToNewClasses);
