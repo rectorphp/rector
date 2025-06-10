@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
@@ -143,7 +143,7 @@ CODE_SAMPLE
         if (!$hasReturn) {
             $emptyStringReturn = new Return_(new String_(''));
             $lastStmt = $toStringClassMethod->stmts[\count($toStringClassMethod->stmts) - 1] ?? null;
-            if ($lastStmt instanceof Expression && $this->terminatedNodeAnalyzer->isAlwaysTerminated($toStringClassMethod, $lastStmt, $emptyStringReturn)) {
+            if ($lastStmt instanceof Stmt && $this->terminatedNodeAnalyzer->isAlwaysTerminated($toStringClassMethod, $lastStmt, $emptyStringReturn)) {
                 return;
             }
             $toStringClassMethod->stmts[] = $emptyStringReturn;

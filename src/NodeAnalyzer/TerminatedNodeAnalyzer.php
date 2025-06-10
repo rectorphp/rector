@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
@@ -41,10 +40,7 @@ final class TerminatedNodeAnalyzer
      * @var array<class-string<Node>>
      */
     private const ALLOWED_CONTINUE_CURRENT_STMTS = [InlineHTML::class, Nop::class];
-    /**
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\ClassMethod $stmtsAware
-     */
-    public function isAlwaysTerminated($stmtsAware, Stmt $node, Stmt $currentStmt) : bool
+    public function isAlwaysTerminated(StmtsAwareInterface $stmtsAware, Stmt $node, Stmt $currentStmt) : bool
     {
         if (\in_array(\get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
             return \false;
