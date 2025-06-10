@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\TypedCollections\DocBlockAnalyzer\CollectionTagValueNodeAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -112,6 +113,8 @@ CODE_SAMPLE
             }
             $hasChanged = \true;
             $param->type = new FullyQualified(DoctrineClass::COLLECTION);
+            // fix reprint position of type
+            $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             // make nullable only 1st param, as others might require a null
             if ($param->default instanceof Expr) {
                 if ($isInTests === \false) {
