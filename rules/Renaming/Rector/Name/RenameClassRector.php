@@ -3,17 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Renaming\Rector\Name;
 
-use PHPStan\Reflection\ReflectionProvider;
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitor;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,10 +40,6 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    /**
-     * @var string
-     */
-    public const SKIPPED_AS_CLASS_CONST_FETCH_CLASS = 'skipped_as_class_const_fetch_class';
     public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, ReflectionProvider $reflectionProvider)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
@@ -82,42 +79,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class, FullyQualified::class, Property::class, FunctionLike::class, Expression::class, ClassLike::class, If_::class];
+        return [
+            ClassConstFetch::class,
+            // place FullyQualified before Name on purpose executed early before the Name as parent
+            FullyQualified::class,
+            // Name as parent of FullyQualified executed later for fallback annotation to attribute rename to Name
+            Name::class,
+            Property::class,
+            FunctionLike::class,
+            Expression::class,
+            ClassLike::class,
+            If_::class,
+        ];
     }
     /**
-     * @param ClassConstFetch|FunctionLike|FullyQualified|ClassLike|Expression|Property|If_ $node
+     * @param ClassConstFetch|FunctionLike|FullyQualified|Name|ClassLike|Expression|Property|If_ $node
      * @return int|null|\PhpParser\Node
      */
     public function refactor(Node $node)
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        if ($node instanceof ClassConstFetch) {
-            if ($node->class instanceof FullyQualified && $node->name instanceof Identifier && $this->reflectionProvider->hasClass($node->class->toString())) {
-                foreach ($oldToNewClasses as $oldClass => $newClass) {
-                    if ($this->isName($node->class, $oldClass) && $this->reflectionProvider->hasClass($newClass)) {
-                        $classReflection = $this->reflectionProvider->getClass($newClass);
-                        if (!$classReflection->isInterface()) {
-                            continue;
-                        }
-                        $oldClassReflection = $this->reflectionProvider->getClass($oldClass);
-                        if ($oldClassReflection->hasConstant($node->name->toString()) && !$classReflection->hasConstant($node->name->toString())) {
-                            // used by ClassRenamer::renameNode()
-                            // that called on ClassRenamingPostRector PostRector
-                            $node->class->setAttribute(self::SKIPPED_AS_CLASS_CONST_FETCH_CLASS, \true);
-                            // no constant found on new interface? skip node below ClassConstFetch on this rule
-                            return NodeVisitor::DONT_TRAVERSE_CHILDREN;
-                        }
-                    }
-                }
-            }
-            // continue to next FullyQualified usage
+        if ($oldToNewClasses === []) {
             return null;
         }
-        if ($oldToNewClasses !== []) {
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-            return $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
+        if ($node instanceof ClassConstFetch) {
+            return $this->processClassConstFetch($node, $oldToNewClasses);
         }
-        return null;
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        return $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
     }
     /**
      * @param mixed[] $configuration
@@ -127,5 +116,33 @@ CODE_SAMPLE
         Assert::allString($configuration);
         Assert::allString(\array_keys($configuration));
         $this->renamedClassesDataCollector->addOldToNewClasses($configuration);
+    }
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
+    private function processClassConstFetch(ClassConstFetch $classConstFetch, array $oldToNewClasses) : ?int
+    {
+        if (!$classConstFetch->class instanceof FullyQualified || !$classConstFetch->name instanceof Identifier || !$this->reflectionProvider->hasClass($classConstFetch->class->toString())) {
+            return null;
+        }
+        foreach ($oldToNewClasses as $oldClass => $newClass) {
+            if (!$this->isName($classConstFetch->class, $oldClass)) {
+                continue;
+            }
+            if (!$this->reflectionProvider->hasClass($newClass)) {
+                continue;
+            }
+            $classReflection = $this->reflectionProvider->getClass($newClass);
+            if (!$classReflection->isInterface()) {
+                continue;
+            }
+            $oldClassReflection = $this->reflectionProvider->getClass($oldClass);
+            if ($oldClassReflection->hasConstant($classConstFetch->name->toString()) && !$classReflection->hasConstant($classConstFetch->name->toString())) {
+                // no constant found on new interface? skip node below ClassConstFetch on this rule
+                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            }
+        }
+        // continue to next Name usage
+        return null;
     }
 }
