@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -89,7 +90,7 @@ CODE_SAMPLE
         if ($classMethodPhpDocInfo->getParamTagValueNodes() === []) {
             return null;
         }
-        foreach ($node->params as $param) {
+        foreach ($node->params as $position => $param) {
             if ($param->type instanceof Node) {
                 continue;
             }
@@ -102,9 +103,16 @@ CODE_SAMPLE
             }
             $hasChanged = \true;
             $param->type = new FullyQualified(DoctrineClass::COLLECTION);
+            // make nullable only 1st param, as others might require a null
             if ($param->default instanceof Expr) {
-                // remove default param, as no longer needed; empty collection should be passed instead
-                $param->default = null;
+                if ($position === 0) {
+                    // remove default param, as no longer needed; empty collection should be passed instead
+                    $param->default = null;
+                } else {
+                    // make type explicitly nullable
+                    $collectionFullyQualified = new FullyQualified(DoctrineClass::COLLECTION);
+                    $param->type = new NullableType($collectionFullyQualified);
+                }
             }
         }
         if ($hasChanged) {
