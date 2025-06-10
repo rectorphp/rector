@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -107,6 +108,9 @@ CODE_SAMPLE
     private function isAssignToPropertyFetchCollection(Assign $assign) : bool
     {
         if (!$assign->var instanceof PropertyFetch) {
+            return \false;
+        }
+        if ($assign->expr instanceof New_) {
             return \false;
         }
         $propertyFetchType = $this->getType($assign->var);
