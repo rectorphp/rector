@@ -144,11 +144,14 @@ CODE_SAMPLE
             if ($caller->isFirstClassCallable()) {
                 return \false;
             }
-            foreach ($caller->getArgs() as $arg) {
+            foreach ($caller->getArgs() as $key => $arg) {
                 if ($arg->unpack) {
                     return \false;
                 }
                 if ($arg->name instanceof Identifier) {
+                    if (isset($unusedParameters[$key]) && $this->isName($unusedParameters[$key], (string) $this->getName($arg->name))) {
+                        continue;
+                    }
                     return \false;
                 }
             }
