@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -101,6 +102,10 @@ CODE_SAMPLE
             if ($unusedParameters === []) {
                 continue;
             }
+            // early remove callers
+            if (!$this->removeCallerArgs($node, $classMethod, $unusedParameters)) {
+                continue;
+            }
             $unusedParameterPositions = \array_keys($unusedParameters);
             foreach (\array_keys($classMethod->params) as $key) {
                 if (!\in_array($key, $unusedParameterPositions, \true)) {
@@ -111,7 +116,6 @@ CODE_SAMPLE
             // reset param keys
             $classMethod->params = \array_values($classMethod->params);
             $this->clearPhpDocInfo($classMethod, $unusedParameters);
-            $this->removeCallerArgs($node, $classMethod, $unusedParameters);
             $hasChanged = \true;
         }
         if ($hasChanged) {
@@ -122,25 +126,37 @@ CODE_SAMPLE
     /**
      * @param Param[] $unusedParameters
      */
-    private function removeCallerArgs(Class_ $class, ClassMethod $classMethod, array $unusedParameters) : void
+    private function removeCallerArgs(Class_ $class, ClassMethod $classMethod, array $unusedParameters) : bool
     {
         $classMethods = $class->getMethods();
         if ($classMethods === []) {
-            return;
+            return \false;
         }
         $methodName = $this->getName($classMethod);
         $keysArg = \array_keys($unusedParameters);
         $classObjectType = new ObjectType((string) $this->getName($class));
+        $callers = [];
         foreach ($classMethods as $classMethod) {
             /** @var MethodCall[]|StaticCall[] $callers */
-            $callers = $this->resolveCallers($classMethod, $methodName, $classObjectType);
-            if ($callers === []) {
-                continue;
+            $callers = \array_merge($callers, $this->resolveCallers($classMethod, $methodName, $classObjectType));
+        }
+        foreach ($callers as $caller) {
+            if ($caller->isFirstClassCallable()) {
+                return \false;
             }
-            foreach ($callers as $caller) {
-                $this->cleanupArgs($caller, $keysArg);
+            foreach ($caller->getArgs() as $arg) {
+                if ($arg->unpack) {
+                    return \false;
+                }
+                if ($arg->name instanceof Identifier) {
+                    return \false;
+                }
             }
         }
+        foreach ($callers as $caller) {
+            $this->cleanupArgs($caller, $keysArg);
+        }
+        return \true;
     }
     /**
      * @param int[] $keysArg
@@ -148,9 +164,6 @@ CODE_SAMPLE
      */
     private function cleanupArgs($call, array $keysArg) : void
     {
-        if ($call->isFirstClassCallable()) {
-            return;
-        }
         $args = $call->getArgs();
         foreach (\array_keys($args) as $key) {
             if (\in_array($key, $keysArg, \true)) {
