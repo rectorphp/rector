@@ -159,10 +159,7 @@ CODE_SAMPLE
         } else {
             $condition = $ternary->cond;
         }
-        if (!$condition instanceof FuncCall) {
-            return null;
-        }
-        if ($this->isName($condition, 'is_object')) {
+        if ($this->isIsObjectFuncCallOnCollection($condition)) {
             return $ternary->if;
         }
         return null;
@@ -173,5 +170,19 @@ CODE_SAMPLE
             return \false;
         }
         return $this->collectionTypeDetector->isCollectionType($expr->expr);
+    }
+    private function isIsObjectFuncCallOnCollection(Expr $expr) : bool
+    {
+        if (!$expr instanceof FuncCall) {
+            return \false;
+        }
+        if ($expr->isFirstClassCallable()) {
+            return \false;
+        }
+        if (!$this->isName($expr->name, 'is_object')) {
+            return \false;
+        }
+        $firstArg = $expr->getArgs()[0];
+        return $this->collectionTypeDetector->isCollectionType($firstArg->value);
     }
 }

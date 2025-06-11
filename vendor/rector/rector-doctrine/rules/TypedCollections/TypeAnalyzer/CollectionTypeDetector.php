@@ -21,6 +21,11 @@ final class CollectionTypeDetector
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
+    public function isCollectionNonNullableType(Expr $expr) : bool
+    {
+        $exprType = $this->nodeTypeResolver->getType($expr);
+        return $this->isCollectionObjectType($exprType);
+    }
     public function isCollectionType(Expr $expr) : bool
     {
         $exprType = $this->nodeTypeResolver->getType($expr);

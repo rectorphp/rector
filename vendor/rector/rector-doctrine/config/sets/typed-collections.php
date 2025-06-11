@@ -21,14 +21,18 @@ use Rector\Doctrine\TypedCollections\Rector\ClassMethod\RemoveNullFromNullableCo
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\ReturnArrayToNewArrayCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\ReturnCollectionDocblockRector;
 use Rector\Doctrine\TypedCollections\Rector\Empty_\EmptyOnCollectionToIsEmptyCallRector;
+use Rector\Doctrine\TypedCollections\Rector\Expression\RemoveAssertNotNullOnCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Expression\RemoveCoalesceAssignOnCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\ArrayMapOnCollectionToArrayRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\ArrayMergeOnCollectionToArrayRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\InArrayOnCollectionToContainsCallRector;
 use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIfInstanceofCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIsArrayOnCollectionRector;
+use Rector\Doctrine\TypedCollections\Rector\MethodCall\AssertNullOnCollectionToAssertEmptyRector;
+use Rector\Doctrine\TypedCollections\Rector\MethodCall\AssertSameCountOnCollectionToAssertCountRector;
 use Rector\Doctrine\TypedCollections\Rector\MethodCall\SetArrayToNewCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\New_\RemoveNewArrayCollectionWrapRector;
+use Rector\Doctrine\TypedCollections\Rector\NullsafeMethodCall\RemoveNullsafeOnCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Property\NarrowPropertyUnionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Property\TypedPropertyFromToManyRelationTypeRector;
 return static function (RectorConfig $rectorConfig) : void {
@@ -68,5 +72,11 @@ return static function (RectorConfig $rectorConfig) : void {
         ReturnArrayToNewArrayCollectionRector::class,
         SetArrayToNewCollectionRector::class,
         RemoveNewArrayCollectionWrapRector::class,
+        // cleanup
+        RemoveNullsafeOnCollectionRector::class,
+        // test assertions
+        RemoveAssertNotNullOnCollectionRector::class,
+        AssertNullOnCollectionToAssertEmptyRector::class,
+        AssertSameCountOnCollectionToAssertCountRector::class,
     ]);
 };
