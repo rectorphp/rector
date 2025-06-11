@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Doctrine\TypedCollections\TypeAnalyzer\CollectionTypeDetector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -62,12 +63,13 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node)
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -75,7 +77,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'assertSame')) {
             return null;
         }
-        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+        if ($node instanceof MethodCall && !$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $comparedArg = $node->getArgs()[1]->value;

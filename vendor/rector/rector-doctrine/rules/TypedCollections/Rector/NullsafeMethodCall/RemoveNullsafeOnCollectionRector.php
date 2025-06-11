@@ -65,6 +65,6 @@ CODE_SAMPLE
         if (!$this->collectionTypeDetector->isCollectionNonNullableType($node->var)) {
             return null;
         }
-        return new MethodCall($node->var, $node->name);
+        return new MethodCall($node->var, $node->name, $node->args);
     }
 }
