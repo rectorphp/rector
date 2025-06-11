@@ -157,6 +157,10 @@ CODE_SAMPLE
                         if ($this->exprAnalyzer->isDynamicExpr($args[$index]->value)) {
                             break;
                         }
+                        // on decrement loop, when next arg is not removed, then current can't be removed
+                        if (isset($args[$index + 1])) {
+                            break;
+                        }
                         $defaultValue = $parameters[$index]->getDefaultValue();
                         if ($defaultValue === $this->valueResolver->getValue($args[$index]->value)) {
                             unset($args[$index]);
