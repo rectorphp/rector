@@ -1474,6 +1474,7 @@ return array(
     'Rector\\Doctrine\\TypedCollections\\Rector\\FuncCall\\ArrayMapOnCollectionToArrayRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/FuncCall/ArrayMapOnCollectionToArrayRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\FuncCall\\ArrayMergeOnCollectionToArrayRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/FuncCall/ArrayMergeOnCollectionToArrayRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\FuncCall\\InArrayOnCollectionToContainsCallRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/FuncCall/InArrayOnCollectionToContainsCallRector.php',
+    'Rector\\Doctrine\\TypedCollections\\Rector\\If_\\RemoveIfCollectionIdenticalToNullRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/If_/RemoveIfCollectionIdenticalToNullRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\If_\\RemoveIfInstanceofCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/If_/RemoveIfInstanceofCollectionRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\If_\\RemoveIsArrayOnCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/If_/RemoveIsArrayOnCollectionRector.php',
     'Rector\\Doctrine\\TypedCollections\\Rector\\MethodCall\\AssertNullOnCollectionToAssertEmptyRector' => $vendorDir . '/rector/rector-doctrine/rules/TypedCollections/Rector/MethodCall/AssertNullOnCollectionToAssertEmptyRector.php',
