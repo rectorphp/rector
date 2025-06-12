@@ -44,6 +44,13 @@ final class CollectionTypeDetector
     }
     private function isCollectionObjectType(Type $exprType) : bool
     {
+        if ($exprType instanceof IntersectionType) {
+            foreach ($exprType->getTypes() as $intersectionedType) {
+                if ($this->isCollectionObjectType($intersectionedType)) {
+                    return \true;
+                }
+            }
+        }
         if (!$exprType instanceof ObjectType) {
             return \false;
         }
