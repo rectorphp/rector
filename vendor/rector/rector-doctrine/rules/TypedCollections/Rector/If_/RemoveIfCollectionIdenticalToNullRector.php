@@ -4,11 +4,14 @@ declare (strict_types=1);
 namespace Rector\Doctrine\TypedCollections\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Stmt\If_;
 use Rector\Doctrine\TypedCollections\TypeAnalyzer\CollectionTypeDetector;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,9 +24,14 @@ final class RemoveIfCollectionIdenticalToNullRector extends AbstractRector
      * @readonly
      */
     private CollectionTypeDetector $collectionTypeDetector;
-    public function __construct(CollectionTypeDetector $collectionTypeDetector)
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(CollectionTypeDetector $collectionTypeDetector, ValueResolver $valueResolver)
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
+        $this->valueResolver = $valueResolver;
     }
     public function getNodeTypes() : array
     {
@@ -34,22 +42,21 @@ final class RemoveIfCollectionIdenticalToNullRector extends AbstractRector
      */
     public function refactor(Node $node) : ?If_
     {
-        if (!$node->cond instanceof BooleanOr) {
-            return null;
+        if ($node->cond instanceof BooleanOr) {
+            $changedCond = $this->refactorBooleanOr($node->cond);
+            if ($changedCond instanceof Expr) {
+                $node->cond = $changedCond;
+                return $node;
+            }
         }
-        $leftCondition = $node->cond->left;
-        if (!$leftCondition instanceof Identical) {
-            return null;
+        if ($node->cond instanceof BooleanAnd) {
+            $changedCond = $this->refactorBooleanAnd($node->cond);
+            if ($changedCond instanceof Expr) {
+                $node->cond = $changedCond;
+                return $node;
+            }
         }
-        if (!$leftCondition->right instanceof ConstFetch || !$this->isName($leftCondition->right->name, 'null')) {
-            return null;
-        }
-        if (!$this->collectionTypeDetector->isCollectionType($leftCondition->left)) {
-            return null;
-        }
-        $rightCondition = $node->cond->right;
-        $node->cond = $rightCondition;
-        return $node;
+        return null;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -88,5 +95,33 @@ final class SomeClass
 }
 CODE_SAMPLE
 )]);
+    }
+    private function refactorBooleanOr(BooleanOr $booleanOr) : ?Expr
+    {
+        $leftCondition = $booleanOr->left;
+        if (!$leftCondition instanceof Identical) {
+            return null;
+        }
+        if (!$this->valueResolver->isNull($leftCondition->right)) {
+            return null;
+        }
+        if (!$this->collectionTypeDetector->isCollectionType($leftCondition->left)) {
+            return null;
+        }
+        return $booleanOr->right;
+    }
+    private function refactorBooleanAnd(BooleanAnd $booleanAnd) : ?Expr
+    {
+        $leftCondition = $booleanAnd->left;
+        if (!$leftCondition instanceof NotIdentical) {
+            return null;
+        }
+        if (!$this->valueResolver->isNull($leftCondition->right)) {
+            return null;
+        }
+        if (!$this->collectionTypeDetector->isCollectionType($leftCondition->left)) {
+            return null;
+        }
+        return $booleanAnd->right;
     }
 }
