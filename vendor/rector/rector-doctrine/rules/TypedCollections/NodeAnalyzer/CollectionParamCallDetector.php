@@ -10,6 +10,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpParameterReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeCombinator;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -53,6 +54,10 @@ final class CollectionParamCallDetector
             $methodName = MethodName::CONSTRUCT;
         }
         $callerType = TypeCombinator::removeNull($callerType);
+        // to support same-class calls as well
+        if ($callerType instanceof ThisType) {
+            $callerType = $callerType->getStaticObjectType();
+        }
         if (!$callerType instanceof ObjectType) {
             return \false;
         }
