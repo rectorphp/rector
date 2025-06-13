@@ -78,10 +78,6 @@ final class AssignToPropertyTypeInferer
      * @readonly
      */
     private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    /**
-     * @var string
-     */
-    public const JMS_TYPE = 'JMS\\Serializer\\Annotation\\Type';
     public function __construct(ConstructorAssignDetector $constructorAssignDetector, PropertyAssignMatcher $propertyAssignMatcher, PropertyDefaultAssignDetector $propertyDefaultAssignDetector, NullTypeAssignDetector $nullTypeAssignDetector, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, NodeTypeResolver $nodeTypeResolver, ExprAnalyzer $exprAnalyzer, ValueResolver $valueResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
