@@ -26,10 +26,12 @@ use Rector\Doctrine\TypedCollections\Rector\Expression\RemoveAssertNotNullOnColl
 use Rector\Doctrine\TypedCollections\Rector\Expression\RemoveCoalesceAssignOnCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\ArrayMapOnCollectionToArrayRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\ArrayMergeOnCollectionToArrayRector;
+use Rector\Doctrine\TypedCollections\Rector\FuncCall\CurrentOnCollectionToArrayRector;
 use Rector\Doctrine\TypedCollections\Rector\FuncCall\InArrayOnCollectionToContainsCallRector;
 use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIfCollectionIdenticalToNullRector;
 use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIfInstanceofCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIsArrayOnCollectionRector;
+use Rector\Doctrine\TypedCollections\Rector\If_\RemoveUselessIsEmptyAssignRector;
 use Rector\Doctrine\TypedCollections\Rector\MethodCall\AssertNullOnCollectionToAssertEmptyRector;
 use Rector\Doctrine\TypedCollections\Rector\MethodCall\AssertSameCountOnCollectionToAssertCountRector;
 use Rector\Doctrine\TypedCollections\Rector\MethodCall\SetArrayToNewCollectionRector;
@@ -51,6 +53,7 @@ return static function (RectorConfig $rectorConfig) : void {
         ArrayOffsetSetToSetCollectionCallRector::class,
         ArrayMapOnCollectionToArrayRector::class,
         ArrayMergeOnCollectionToArrayRector::class,
+        CurrentOnCollectionToArrayRector::class,
         EmptyOnCollectionToIsEmptyCallRector::class,
         InArrayOnCollectionToContainsCallRector::class,
         // native type declarations
@@ -78,6 +81,7 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveNewArrayCollectionWrapRector::class,
         // cleanup
         RemoveNullsafeOnCollectionRector::class,
+        RemoveUselessIsEmptyAssignRector::class,
         // test assertions
         RemoveAssertNotNullOnCollectionRector::class,
         AssertNullOnCollectionToAssertEmptyRector::class,

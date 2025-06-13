@@ -11,9 +11,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Doctrine\Tests\TypedCollections\Rector\FuncCall\ArrayMapOnCollectionToArrayRector\ArrayMapOnCollectionToArrayRectorTest
+ * @see \Rector\Doctrine\Tests\TypedCollections\Rector\FuncCall\CurrentOnCollectionToArrayRector\CurrentOnCollectionToArrayRectorTest
  */
-final class ArrayMapOnCollectionToArrayRector extends AbstractRector
+final class CurrentOnCollectionToArrayRector extends AbstractRector
 {
     /**
      * @readonly
@@ -25,10 +25,10 @@ final class ArrayMapOnCollectionToArrayRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change array_map() and array_filter() on Collection typed property to ->toArray() call, to always provide an array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change current() on Collection typed property to ->toArray() call, to always provide an array', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
 
-final class ArrayMapOnAssignedVariable
+final class SimpleClass
 {
     /**
      * @var Collection<int, string>
@@ -37,16 +37,14 @@ final class ArrayMapOnAssignedVariable
 
     public function merge()
     {
-        $items = $this->items;
-
-        return array_map(fn ($item) => $item, $items);
+        return current($this->items);
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
 
-final class ArrayMapOnAssignedVariable
+final class SimpleClass
 {
     /**
      * @var Collection<int, string>
@@ -55,9 +53,7 @@ final class ArrayMapOnAssignedVariable
 
     public function merge()
     {
-        $items = $this->items;
-
-        return array_map(fn ($item) => $item, $items->toArray());
+        return current($this->items->toArray());
     }
 }
 CODE_SAMPLE
@@ -75,30 +71,14 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if ($this->isName($node->name, 'array_map')) {
-            return $this->refactorArrayMap($node);
+        if (!$this->isName($node->name, 'current')) {
+            return null;
         }
-        if ($this->isName($node->name, 'array_filter')) {
-            $this->refactorArrayFilter($node);
-        }
-        return null;
-    }
-    private function refactorArrayMap(FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
-    {
-        $secondArg = $funcCall->getArgs()[1];
+        $secondArg = $node->getArgs()[0];
         if (!$this->collectionTypeDetector->isCollectionType($secondArg->value)) {
             return null;
         }
         $secondArg->value = new MethodCall($secondArg->value, 'toArray');
-        return $funcCall;
-    }
-    private function refactorArrayFilter(FuncCall $funcCall) : ?FuncCall
-    {
-        $firstArg = $funcCall->getArgs()[0];
-        if (!$this->collectionTypeDetector->isCollectionType($firstArg->value)) {
-            return null;
-        }
-        $firstArg->value = new MethodCall($firstArg->value, 'toArray');
-        return $funcCall;
+        return $node;
     }
 }

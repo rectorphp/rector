@@ -4,8 +4,11 @@ declare (strict_types=1);
 namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Doctrine\Enum\DoctrineClass;
@@ -78,21 +81,75 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?ClassMethod
     {
-        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnTagValueNode = $classMethodPhpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+        $hasChanged = \false;
+        if ($this->refactorReturnDocblockTag($node)) {
+            $hasChanged = \true;
+        }
+        if ($this->refactorNativeReturn($node)) {
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
             return null;
         }
-        if ($node->returnType !== null && $this->isName($node->returnType, DoctrineClass::COLLECTION)) {
-            $hasNativeCollectionType = \true;
-        } else {
-            $hasNativeCollectionType = \false;
+        return $node;
+    }
+    private function refactorReturnDocblockTag(ClassMethod $classMethod) : bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return \false;
         }
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return \false;
+        }
+        $hasNativeCollectionType = $this->hasNativeCollectionType($classMethod);
         $hasChanged = $this->unionCollectionTagValueNodeNarrower->narrow($returnTagValueNode, $hasNativeCollectionType);
         if ($hasChanged === \false) {
-            return null;
+            return \false;
         }
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return $node;
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
+        return \true;
+    }
+    private function hasNativeCollectionType(ClassMethod $classMethod) : bool
+    {
+        if (!$classMethod->returnType instanceof Node) {
+            return \false;
+        }
+        return $this->isName($classMethod->returnType, DoctrineClass::COLLECTION);
+    }
+    private function refactorNativeReturn(ClassMethod $classMethod) : bool
+    {
+        if (!$classMethod->returnType instanceof Node) {
+            return \false;
+        }
+        if ($classMethod->returnType instanceof NullableType && $this->isName($classMethod->returnType->type, DoctrineClass::COLLECTION)) {
+            // unwrap nullable type
+            $classMethod->returnType = $classMethod->returnType->type;
+            return \true;
+        }
+        if (!$classMethod->returnType instanceof UnionType) {
+            return \false;
+        }
+        $unionType = $classMethod->returnType;
+        if (!$this->hasNativeReturnCollectionType($unionType)) {
+            return \false;
+        }
+        // remove null from union type
+        foreach ($unionType->types as $key => $unionedType) {
+            if ($this->isName($unionedType, 'null')) {
+                unset($unionType->types[$key]);
+            }
+        }
+        return \true;
+    }
+    private function hasNativeReturnCollectionType(UnionType $unionType) : bool
+    {
+        foreach ($unionType->types as $unionedType) {
+            if ($this->isName($unionedType, DoctrineClass::COLLECTION)) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
