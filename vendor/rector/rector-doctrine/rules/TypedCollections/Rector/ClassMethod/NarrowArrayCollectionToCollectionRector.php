@@ -105,14 +105,17 @@ CODE_SAMPLE
         if ($tagValueNode->type instanceof UnionTypeNode) {
             $unionTypeNode = $tagValueNode->type;
             foreach ($unionTypeNode->types as $key => $unionedType) {
-                if (!$unionedType instanceof IdentifierTypeNode) {
-                    continue;
+                if ($unionedType instanceof IdentifierTypeNode) {
+                    if (!\in_array($unionedType->name, ['ArrayCollection', DoctrineClass::ARRAY_COLLECTION], \true)) {
+                        continue;
+                    }
+                    $unionTypeNode->types[$key] = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
+                    return \true;
                 }
-                if (!\in_array($unionedType->name, ['ArrayCollection', DoctrineClass::ARRAY_COLLECTION], \true)) {
-                    continue;
+                if ($unionedType instanceof GenericTypeNode && $unionedType->type->name === 'ArrayCollection') {
+                    $unionedType->type = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
+                    return \true;
                 }
-                $unionTypeNode->types[$key] = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
-                return \true;
             }
         }
         // 3. handle single type
