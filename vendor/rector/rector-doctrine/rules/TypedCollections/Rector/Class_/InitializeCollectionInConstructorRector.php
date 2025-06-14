@@ -4,10 +4,11 @@ declare (strict_types=1);
 namespace Rector\Doctrine\TypedCollections\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory;
+use Rector\Doctrine\TypedCollections\NodeAnalyzer\CollectionPropertyDetector;
 use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
+use Rector\Doctrine\TypedCollections\NodeModifier\PropertyDefaultNullRemover;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -41,13 +42,23 @@ final class InitializeCollectionInConstructorRector extends AbstractRector
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
-    public function __construct(EntityLikeClassDetector $entityLikeClassDetector, ConstructorAssignDetector $constructorAssignDetector, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, ClassDependencyManipulator $classDependencyManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private PropertyDefaultNullRemover $propertyDefaultNullRemover;
+    /**
+     * @readonly
+     */
+    private CollectionPropertyDetector $collectionPropertyDetector;
+    public function __construct(EntityLikeClassDetector $entityLikeClassDetector, ConstructorAssignDetector $constructorAssignDetector, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, ClassDependencyManipulator $classDependencyManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, PropertyDefaultNullRemover $propertyDefaultNullRemover, CollectionPropertyDetector $collectionPropertyDetector)
     {
         $this->entityLikeClassDetector = $entityLikeClassDetector;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->arrayCollectionAssignFactory = $arrayCollectionAssignFactory;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
+        $this->collectionPropertyDetector = $collectionPropertyDetector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -94,24 +105,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->entityLikeClassDetector->detect($node)) {
-            return null;
-        }
-        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-        if ($node->isAbstract()) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
         $arrayCollectionAssigns = [];
         foreach ($node->getProperties() as $property) {
-            if (!$this->entityLikeClassDetector->isToMany($property)) {
+            if (!$this->isDefaultArrayCollectionPropertyCandidate($property)) {
                 continue;
             }
             // make sure is null
-            if ($property->props[0]->default instanceof Expr) {
-                $property->props[0]->default = null;
-            }
+            $this->propertyDefaultNullRemover->remove($property);
             /** @var string $propertyName */
             $propertyName = $this->getName($property);
             if ($this->constructorAssignDetector->isPropertyAssigned($node, $propertyName)) {
@@ -124,5 +127,25 @@ CODE_SAMPLE
         }
         $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $arrayCollectionAssigns);
         return $node;
+    }
+    private function shouldSkipClass(Class_ $class) : bool
+    {
+        if (!$this->entityLikeClassDetector->detect($class)) {
+            return \true;
+        }
+        if ($this->testsNodeAnalyzer->isInTestClass($class)) {
+            return \true;
+        }
+        return $class->isAbstract();
+    }
+    /**
+     * @param mixed $property
+     */
+    private function isDefaultArrayCollectionPropertyCandidate($property) : bool
+    {
+        if ($this->entityLikeClassDetector->isToMany($property)) {
+            return \true;
+        }
+        return $this->collectionPropertyDetector->detect($property);
     }
 }

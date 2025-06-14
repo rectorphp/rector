@@ -16,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Doctrine\Enum\DoctrineClass;
+use Rector\Doctrine\TypedCollections\NodeModifier\PropertyDefaultNullRemover;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -42,12 +43,17 @@ final class RemoveNullFromNullableCollectionTypeRector extends AbstractRector
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private PropertyDefaultNullRemover $propertyDefaultNullRemover;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper, PropertyDefaultNullRemover $propertyDefaultNullRemover)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -125,6 +131,7 @@ CODE_SAMPLE
         if ($property->type instanceof NullableType && $this->hasNativeCollectionType($property->type)) {
             // unwrap nullable type
             $property->type = $property->type->type;
+            $this->propertyDefaultNullRemover->remove($property);
             return $property;
         }
         if (!$this->hasNativeCollectionType($property)) {

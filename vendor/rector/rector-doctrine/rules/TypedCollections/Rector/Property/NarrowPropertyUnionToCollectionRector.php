@@ -5,7 +5,6 @@ namespace Rector\Doctrine\TypedCollections\Rector\Property;
 
 use RectorPrefix202506\Doctrine\Common\Collections\Collection;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -17,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\TypedCollections\DocBlockProcessor\UnionCollectionTagValueNodeNarrower;
+use Rector\Doctrine\TypedCollections\NodeModifier\PropertyDefaultNullRemover;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,11 +37,16 @@ final class NarrowPropertyUnionToCollectionRector extends AbstractRector
      * @readonly
      */
     private UnionCollectionTagValueNodeNarrower $unionCollectionTagValueNodeNarrower;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, UnionCollectionTagValueNodeNarrower $unionCollectionTagValueNodeNarrower)
+    /**
+     * @readonly
+     */
+    private PropertyDefaultNullRemover $propertyDefaultNullRemover;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, UnionCollectionTagValueNodeNarrower $unionCollectionTagValueNodeNarrower, PropertyDefaultNullRemover $propertyDefaultNullRemover)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->unionCollectionTagValueNodeNarrower = $unionCollectionTagValueNodeNarrower;
+        $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -86,7 +91,7 @@ CODE_SAMPLE
             if ($this->refactorPropertyDocBlock($property)) {
                 $hasChanged = \true;
             }
-            if ($this->refactorNativePropertyType($property)) {
+            if ($this->refactorNativeUnionPropertyType($property)) {
                 $hasChanged = \true;
             }
         }
@@ -109,7 +114,7 @@ CODE_SAMPLE
         }
         return $this->isName($node, DoctrineClass::COLLECTION);
     }
-    private function refactorNativePropertyType(Property $property) : bool
+    private function refactorNativeUnionPropertyType(Property $property) : bool
     {
         if (!$property->type instanceof UnionType) {
             return \false;
@@ -121,9 +126,7 @@ CODE_SAMPLE
             // narrow to pure collection
             $property->type = new FullyQualified(DoctrineClass::COLLECTION);
             // remove default, as will be defined in constructor by another rule
-            if ($property->props[0]->default instanceof Expr) {
-                $property->props[0]->default = null;
-            }
+            $this->propertyDefaultNullRemover->remove($property);
             return \true;
         }
         return \false;

@@ -19,6 +19,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer;
 use Rector\Doctrine\NodeFactory\ValueAssignFactory;
 use Rector\Doctrine\NodeManipulator\ConstructorManipulator;
+use Rector\Doctrine\TypedCollections\NodeModifier\PropertyDefaultNullRemover;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
@@ -55,8 +56,12 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * @readonly
+     */
+    private PropertyDefaultNullRemover $propertyDefaultNullRemover;
     private bool $hasChanged = \false;
-    public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver)
+    public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ValueResolver $valueResolver, PropertyDefaultNullRemover $propertyDefaultNullRemover)
     {
         $this->constructorManipulator = $constructorManipulator;
         $this->valueAssignFactory = $valueAssignFactory;
@@ -64,6 +69,7 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->valueResolver = $valueResolver;
+        $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -179,8 +185,7 @@ CODE_SAMPLE
             return;
         }
         // 3. remove default from property
-        $onlyProperty = $property->props[0];
-        $onlyProperty->default = null;
+        $this->propertyDefaultNullRemover->remove($property);
         $this->hasChanged = \true;
     }
     private function refactorClass(Class_ $class, Property $property) : void
