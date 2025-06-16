@@ -248,6 +248,10 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::NEW_LINE_ON_FLUENT_CALL, $enabled);
     }
+    public function treatClassesAsFinal(bool $treatClassesAsFinal = \true) : void
+    {
+        SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, $treatClassesAsFinal);
+    }
     /**
      * @param string[] $extensions
      */

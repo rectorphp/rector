@@ -116,6 +116,7 @@ final class RectorConfigBuilder
     private ?bool $isCodeQualityLevelUsed = null;
     private ?bool $isCodingStyleLevelUsed = null;
     private ?bool $isFluentNewLine = null;
+    private ?bool $isTreatClassesAsFinal = null;
     /**
      * @var RegisteredService[]
      */
@@ -255,6 +256,9 @@ final class RectorConfigBuilder
         }
         if ($this->isFluentNewLine !== null) {
             $rectorConfig->newLineOnFluentCall($this->isFluentNewLine);
+        }
+        if ($this->isTreatClassesAsFinal !== null) {
+            $rectorConfig->treatClassesAsFinal($this->isTreatClassesAsFinal);
         }
         if ($this->reportingRealPath !== null) {
             $rectorConfig->reportingRealPath($this->reportingRealPath);
@@ -763,6 +767,11 @@ final class RectorConfigBuilder
     public function withFluentCallNewLine(bool $isFluentNewLine = \true) : self
     {
         $this->isFluentNewLine = $isFluentNewLine;
+        return $this;
+    }
+    public function withTreatClassesAsFinal(bool $isTreatClassesAsFinal = \true) : self
+    {
+        $this->isTreatClassesAsFinal = $isTreatClassesAsFinal;
         return $this;
     }
     public function registerService(string $className, ?string $alias = null, ?string $tag = null) : self

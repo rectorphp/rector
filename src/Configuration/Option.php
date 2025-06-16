@@ -232,6 +232,11 @@ final class Option
      */
     public const EDITOR_URL = 'editor_url';
     /**
+     * @internal Use @see \Rector\Config\RectorConfig::treatClassesAsFinal() method
+     * @var string
+     */
+    public const TREAT_CLASSES_AS_FINAL = 'treat_classes_as_final';
+    /**
      * @internal To report composer based loaded sets
      * @see \Rector\Configuration\RectorConfigBuilder::withComposerBased()
      * @var string

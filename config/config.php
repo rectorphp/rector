@@ -35,4 +35,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->newLineOnFluentCall(\false);
     // allow real paths in output formatters
     $rectorConfig->reportingRealPath(\false);
+    $rectorConfig->treatClassesAsFinal(\false);
 };
