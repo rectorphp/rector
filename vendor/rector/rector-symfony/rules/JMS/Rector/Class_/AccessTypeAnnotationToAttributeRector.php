@@ -4,9 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\JMS\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -75,9 +73,7 @@ CODE_SAMPLE
         $attribute = $attributeGroup->attrs[0];
         if (\count($attribute->args) === 1) {
             $soleArg = $attribute->args[0];
-            // wrap to array
-            $soleArg->name = new Identifier('values');
-            $soleArg->value = new Array_([new ArrayItem($soleArg->value)]);
+            $soleArg->name = new Identifier('type');
         }
         // 2. Reprint docblock
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
