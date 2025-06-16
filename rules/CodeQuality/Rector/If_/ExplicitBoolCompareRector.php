@@ -16,8 +16,10 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
@@ -114,10 +116,10 @@ CODE_SAMPLE
             return null;
         }
         $binaryOp = $this->resolveNewConditionNode($conditionNode, $isNegated);
-        if (!$binaryOp instanceof BinaryOp) {
+        if (!$binaryOp instanceof Expr) {
             return null;
         }
-        if ($node instanceof If_ && $node->cond instanceof Assign && $binaryOp->left instanceof NotIdentical && $binaryOp->right instanceof NotIdentical) {
+        if ($node instanceof If_ && $node->cond instanceof Assign && $binaryOp instanceof BinaryOp && $binaryOp->left instanceof NotIdentical && $binaryOp->right instanceof NotIdentical) {
             $expression = new Expression($node->cond);
             $binaryOp->left->left = $node->cond->var;
             $binaryOp->right->left = $node->cond->var;
@@ -127,7 +129,10 @@ CODE_SAMPLE
         $node->cond = $binaryOp;
         return $node;
     }
-    private function resolveNewConditionNode(Expr $expr, bool $isNegated) : ?BinaryOp
+    /**
+     * @return \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr\Instanceof_|\PhpParser\Node\Expr\BooleanNot|null
+     */
+    private function resolveNewConditionNode(Expr $expr, bool $isNegated)
     {
         if ($expr instanceof FuncCall && $this->isName($expr, 'count')) {
             return $this->resolveCount($isNegated, $expr);
@@ -145,8 +150,9 @@ CODE_SAMPLE
         if ($exprType->isFloat()->yes()) {
             return $this->resolveFloat($isNegated, $expr);
         }
-        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, ObjectType::class)) {
-            return $this->resolveNullable($isNegated, $expr);
+        $objectType = $this->nodeTypeResolver->matchNullableTypeOfSpecificType($expr, ObjectType::class);
+        if ($objectType instanceof ObjectType) {
+            return $this->resolveNullable($isNegated, $expr, $objectType);
         }
         return null;
     }
@@ -194,7 +200,7 @@ CODE_SAMPLE
         $value = $this->valueResolver->getValue($expr);
         // unknown value. may be from parameter
         if ($value === null) {
-            return $this->resolveZeroIdenticalstring($identical, $isNegated, $expr);
+            return $this->resolveZeroIdenticalString($identical, $isNegated, $expr);
         }
         $length = \strlen((string) $value);
         if ($length === 1) {
@@ -220,7 +226,7 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $identical
      * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
-    private function resolveZeroIdenticalstring($identical, bool $isNegated, Expr $expr)
+    private function resolveZeroIdenticalString($identical, bool $isNegated, Expr $expr)
     {
         $string = new String_('0');
         $zeroIdentical = $isNegated ? new Identical($expr, $string) : new NotIdentical($expr, $string);
@@ -249,14 +255,12 @@ CODE_SAMPLE
         return new NotIdentical($expr, $float);
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
+     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_
      */
-    private function resolveNullable(bool $isNegated, Expr $expr)
+    private function resolveNullable(bool $isNegated, Expr $expr, ObjectType $objectType)
     {
-        $constFetch = $this->nodeFactory->createNull();
-        if ($isNegated) {
-            return new Identical($expr, $constFetch);
-        }
-        return new NotIdentical($expr, $constFetch);
+        $fullyQualified = new FullyQualified($objectType->getClassName());
+        $instanceof = new Instanceof_($expr, $fullyQualified);
+        return $isNegated ? new BooleanNot($instanceof) : $instanceof;
     }
 }
