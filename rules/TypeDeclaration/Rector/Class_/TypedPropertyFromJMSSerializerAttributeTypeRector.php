@@ -153,24 +153,27 @@ CODE_SAMPLE
             if (!\is_string($typeValue)) {
                 continue;
             }
-            $typeValue = Strings::match($typeValue, '#\\w+#');
-            if (isset($typeValue[0]) && \is_string($typeValue[0])) {
-                $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue[0]);
-                if ($type instanceof MixedType) {
-                    $type = new ObjectType($typeValue[0]);
-                }
-                $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
-                if (!$propertyType instanceof Identifier && !$propertyType instanceof FullyQualified) {
-                    return null;
-                }
-                $isInConstructorAssigned = $this->constructorAssignDetector->isPropertyAssigned($node, $this->getName($property));
-                $type = $isInConstructorAssigned ? $propertyType : new NullableType($propertyType);
-                $property->type = $type;
-                if (!$isInConstructorAssigned) {
-                    $property->props[0]->default = new ConstFetch(new Name('null'));
-                }
-                $hasChanged = \true;
+            if (Strings::match($typeValue, '#DateTime\\<(.*?)\\>#')) {
+                // special case for DateTime, which is not a scalar type
+                $typeValue = 'DateTime';
             }
+            $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
+            if ($type instanceof MixedType) {
+                // fallback to object type
+                $type = new ObjectType($typeValue);
+            }
+            $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+            if (!$propertyType instanceof Identifier && !$propertyType instanceof FullyQualified) {
+                return null;
+            }
+            $isInConstructorAssigned = $this->constructorAssignDetector->isPropertyAssigned($node, $this->getName($property));
+            $type = $isInConstructorAssigned ? $propertyType : new NullableType($propertyType);
+            $property->type = $type;
+            if (!$isInConstructorAssigned) {
+                $property->props[0]->default = new ConstFetch(new Name('null'));
+            }
+            $hasChanged = \true;
+            //            }
         }
         if ($hasChanged) {
             return $node;
