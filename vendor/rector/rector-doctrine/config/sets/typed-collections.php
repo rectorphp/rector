@@ -10,6 +10,7 @@ use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteParamDocblockFromSett
 use Rector\Doctrine\TypedCollections\Rector\Class_\CompletePropertyDocblockFromToManyRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToManyRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\InitializeCollectionInConstructorRector;
+use Rector\Doctrine\TypedCollections\Rector\Class_\RemoveNullFromInstantiatedArrayCollectionPropertyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionGetterNativeTypeRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionParamTypeSetterToCollectionPropertyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionSetterParamNativeTypeRector;
@@ -43,7 +44,9 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
         // init
         InitializeCollectionInConstructorRector::class,
+        RemoveNullFromInstantiatedArrayCollectionPropertyRector::class,
         RemoveNewArrayCollectionOutsideConstructorRector::class,
+        // cleanups
         RemoveCoalesceAssignOnCollectionRector::class,
         RemoveIfInstanceofCollectionRector::class,
         RemoveIsArrayOnCollectionRector::class,
