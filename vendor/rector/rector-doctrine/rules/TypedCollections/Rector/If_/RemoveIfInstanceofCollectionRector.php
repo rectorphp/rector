@@ -16,8 +16,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Doctrine\Enum\TestClass;
 use Rector\Doctrine\TypedCollections\TypeAnalyzer\CollectionTypeDetector;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStan\ScopeFetcher;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,10 +38,15 @@ final class RemoveIfInstanceofCollectionRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(CollectionTypeDetector $collectionTypeDetector, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
+    public function __construct(CollectionTypeDetector $collectionTypeDetector, ValueResolver $valueResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
         $this->valueResolver = $valueResolver;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
     public function getNodeTypes() : array
     {
@@ -49,6 +58,9 @@ final class RemoveIfInstanceofCollectionRector extends AbstractRector
      */
     public function refactor(Node $node)
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
         if ($node instanceof BooleanNot) {
             if ($this->collectionTypeDetector->isCollectionType($node->expr)) {
                 return new MethodCall($node->expr, 'isEmpty');
@@ -184,5 +196,22 @@ CODE_SAMPLE
         }
         $firstArg = $expr->getArgs()[0];
         return $this->collectionTypeDetector->isCollectionType($firstArg->value);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node|\PhpParser\Node\Expr\BinaryOp\Coalesce|\PhpParser\Node\Expr\Ternary|\PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\BooleanAnd $node
+     */
+    private function shouldSkip($node) : bool
+    {
+        // most likely on purpose in tests
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
+            return \true;
+        }
+        $classScope = ScopeFetcher::fetch($node);
+        $classReflection = $classScope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        // usually assert on purpose
+        return $classReflection->is(TestClass::BEHAT_CONTEXT);
     }
 }
