@@ -74,6 +74,9 @@ CODE_SAMPLE
         if (!$this->isNames($node->else, ['implode', 'join'])) {
             return null;
         }
+        if ($node->else->isFirstClassCallable()) {
+            return null;
+        }
         $function = $node->else;
         $secondArg = $function->getArgs()[1] ?? null;
         if (!$secondArg instanceof Arg) {
