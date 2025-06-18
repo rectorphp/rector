@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Expr\PropertyFetch;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -79,6 +81,12 @@ CODE_SAMPLE
                 continue;
             }
             if (!$arrayItem->key instanceof Expr) {
+                continue;
+            }
+            if ($arrayItem->key instanceof CallLike) {
+                continue;
+            }
+            if ($arrayItem->key instanceof PropertyFetch) {
                 continue;
             }
             $keyValue = $this->betterStandardPrinter->print($arrayItem->key);
