@@ -241,15 +241,7 @@ final class ReflectionResolver
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if (!$classReflection->hasProperty($propertyName)) {
-            return null;
-        }
-        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
-            $propertyReflection = $classReflection->getProperty($propertyName, $scope);
-            if ($propertyReflection instanceof PhpPropertyReflection) {
-                return $propertyReflection;
-            }
+        if (!$classReflection->hasNativeProperty($propertyName)) {
             return null;
         }
         return $classReflection->getNativeProperty($propertyName);
