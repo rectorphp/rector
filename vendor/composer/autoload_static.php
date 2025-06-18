@@ -1403,6 +1403,7 @@ class ComposerStaticInit78fb90a05527c4e1e3e0271783524c1e
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\TernaryEmptyArrayArrayDimFetchToCoalesceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/TernaryEmptyArrayArrayDimFetchToCoalesceRector.php',
+        'Rector\\CodeQuality\\Rector\\Ternary\\TernaryImplodeToImplodeRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/TernaryImplodeToImplodeRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\UnnecessaryTernaryExpressionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php',
         'Rector\\CodeQuality\\TypeResolver\\ArrayDimFetchTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/ArrayDimFetchTypeResolver.php',
         'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',

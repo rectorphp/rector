@@ -1184,6 +1184,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\TernaryEmptyArrayArrayDimFetchToCoalesceRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/TernaryEmptyArrayArrayDimFetchToCoalesceRector.php',
+    'Rector\\CodeQuality\\Rector\\Ternary\\TernaryImplodeToImplodeRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/TernaryImplodeToImplodeRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\UnnecessaryTernaryExpressionRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php',
     'Rector\\CodeQuality\\TypeResolver\\ArrayDimFetchTypeResolver' => $baseDir . '/rules/CodeQuality/TypeResolver/ArrayDimFetchTypeResolver.php',
     'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => $baseDir . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
