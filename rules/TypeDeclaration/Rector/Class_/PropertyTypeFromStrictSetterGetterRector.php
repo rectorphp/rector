@@ -7,9 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -183,14 +189,40 @@ CODE_SAMPLE
             return \true;
         }
         $defaultExprType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($defaultExpr);
+        // avoid constant vs variable type conflicts
+        if ($defaultExprType instanceof FloatType && $getterSetterPropertyType instanceof FloatType) {
+            return \true;
+        }
+        if ($defaultExprType instanceof IntegerType && $getterSetterPropertyType instanceof IntegerType) {
+            return \true;
+        }
+        if ($defaultExprType instanceof StringType && $getterSetterPropertyType instanceof StringType) {
+            return \true;
+        }
         return $defaultExprType->equals($getterSetterPropertyType);
     }
     private function decorateDefaultExpr(Type $getterSetterPropertyType, Property $property, bool $hasPropertyDefaultNull) : void
     {
         if (!TypeCombinator::containsNull($getterSetterPropertyType)) {
+            if ($getterSetterPropertyType instanceof FloatType) {
+                if (!$property->props[0]->default instanceof Expr) {
+                    // string is used, we need default value
+                    $property->props[0]->default = new DNumber(0.0);
+                }
+            } elseif ($getterSetterPropertyType instanceof IntegerType) {
+                if (!$property->props[0]->default instanceof Expr) {
+                    // string is used, we need default value
+                    $property->props[0]->default = new LNumber(0);
+                }
+            }
             if ($hasPropertyDefaultNull) {
-                // reset to nothing
-                $property->props[0]->default = null;
+                if ($getterSetterPropertyType instanceof StringType) {
+                    // string is used, we need default value
+                    $property->props[0]->default = new String_('');
+                } else {
+                    // reset to nothing
+                    $property->props[0]->default = null;
+                }
             }
             return;
         }
