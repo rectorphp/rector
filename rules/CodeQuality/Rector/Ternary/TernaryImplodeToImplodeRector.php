@@ -34,7 +34,7 @@ class SomeClass
 {
     public function run(array $values)
     {
-        return $values === [] ? '' : implode(',', $values);
+        return implode(',', $values);
     }
 }
 CODE_SAMPLE
