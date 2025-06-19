@@ -20,8 +20,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -185,8 +184,7 @@ CODE_SAMPLE
     }
     private function canBeInherited(ClassConst $classConst, Class_ $class) : bool
     {
-        // as classes marked as final just by pass final/private check
-        if (SimpleParameterProvider::provideBoolParameter(Option::TREAT_CLASSES_AS_FINAL)) {
+        if (FeatureFlags::treatClassesAsFinal()) {
             return \false;
         }
         return !$class->isFinal() && !$classConst->isPrivate() && !$classConst->isFinal();

@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator;
 use Rector\NodeAnalyzer\ParamAnalyzer;
@@ -92,7 +93,7 @@ CODE_SAMPLE
             if ($stmt->isAbstract()) {
                 continue;
             }
-            if ($stmt->isFinal() && !$node->isFinal()) {
+            if ($stmt->isFinal() && !$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
                 continue;
             }
             if ($this->shouldSkipNonFinalNonPrivateClassMethod($node, $stmt)) {
@@ -111,7 +112,7 @@ CODE_SAMPLE
     }
     private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
-        if ($class->isFinal()) {
+        if ($class->isFinal() || FeatureFlags::treatClassesAsFinal()) {
             return \false;
         }
         if ($classMethod->isMagic()) {

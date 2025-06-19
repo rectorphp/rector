@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\Enum\ObjectReference;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -62,7 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
-        if (!$node->isFinal()) {
+        if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
             return null;
         }
         $hasChanged = \false;

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\DeadCode\NodeManipulator\ClassMethodParamRemover;
 use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
@@ -77,7 +78,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         // may have child, or override parent that needs to follow the signature
-        if (!$node->isFinal() || $node->extends instanceof FullyQualified || $node->implements !== []) {
+        if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
+            return null;
+        }
+        if ($node->extends instanceof FullyQualified || $node->implements !== []) {
             return null;
         }
         $hasChanged = \false;
