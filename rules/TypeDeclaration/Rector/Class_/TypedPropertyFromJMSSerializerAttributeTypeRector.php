@@ -158,7 +158,7 @@ CODE_SAMPLE
                 $typeValue = 'DateTime';
             }
             // skip generic iterable types
-            if (\strncmp($typeValue, 'iterable<', \strlen('iterable<')) === 0) {
+            if (\strpos($typeValue, '<') !== \false) {
                 continue;
             }
             $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
