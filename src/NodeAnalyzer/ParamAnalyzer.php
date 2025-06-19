@@ -62,6 +62,9 @@ final class ParamAnalyzer
             if ($isParamUsed) {
                 return NodeVisitor::STOP_TRAVERSAL;
             }
+            if ($this->isFuncGetArgsCall($node)) {
+                $isParamUsed = \true;
+            }
             if ($this->isUsedAsArg($node, $param)) {
                 $isParamUsed = \true;
             }
@@ -150,5 +153,15 @@ final class ParamAnalyzer
         }
         $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$node]);
         return $this->nodeNameResolver->isNames($param, $arguments);
+    }
+    private function isFuncGetArgsCall(Node $node) : bool
+    {
+        if (!$node instanceof Node\Expr\FuncCall) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($node, 'func_get_args')) {
+            return \false;
+        }
+        return \true;
     }
 }
