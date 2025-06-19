@@ -14,8 +14,4 @@ final class FeatureFlags
     {
         return \Rector\Configuration\Parameter\SimpleParameterProvider::provideBoolParameter(Option::TREAT_CLASSES_AS_FINAL);
     }
-    public static function reset() : void
-    {
-        \Rector\Configuration\Parameter\SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, \false);
-    }
 }

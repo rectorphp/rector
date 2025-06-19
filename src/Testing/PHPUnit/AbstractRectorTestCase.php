@@ -52,6 +52,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         SimpleParameterProvider::setParameter(Option::INDENT_SIZE, 4);
         SimpleParameterProvider::setParameter(Option::POLYFILL_PACKAGES, []);
         SimpleParameterProvider::setParameter(Option::NEW_LINE_ON_FLUENT_CALL, \false);
+        SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, \false);
     }
     protected function setUp() : void
     {

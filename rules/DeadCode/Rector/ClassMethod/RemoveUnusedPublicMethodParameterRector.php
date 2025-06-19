@@ -77,6 +77,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isAbstract()) {
+            return null;
+        }
         // may have child, or override parent that needs to follow the signature
         if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
             return null;
