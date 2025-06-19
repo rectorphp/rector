@@ -63,6 +63,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
+        if ($node->isAbstract()) {
+            return null;
+        }
         if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
             return null;
         }

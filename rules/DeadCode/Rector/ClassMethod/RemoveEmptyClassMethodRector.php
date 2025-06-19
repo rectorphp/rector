@@ -113,7 +113,7 @@ CODE_SAMPLE
     private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         if ($class->isFinal() || FeatureFlags::treatClassesAsFinal()) {
-            return \false;
+            return $class->isAbstract();
         }
         if ($classMethod->isMagic()) {
             return \false;
