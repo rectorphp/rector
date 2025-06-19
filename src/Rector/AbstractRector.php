@@ -23,6 +23,7 @@ use Rector\Application\NodeAttributeReIndexer;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Configuration\KaizenStepper;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
@@ -66,7 +67,8 @@ CODE_SAMPLE;
     private array $nodesToReturn = [];
     private CreatedByRuleDecorator $createdByRuleDecorator;
     private ?int $toBeRemovedNodeId = null;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher) : void
+    private KaizenStepper $kaizenStepper;
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, KaizenStepper $kaizenStepper) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -77,6 +79,7 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
+        $this->kaizenStepper = $kaizenStepper;
     }
     /**
      * @return Node[]|null
@@ -102,6 +105,10 @@ CODE_SAMPLE;
         if (\is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
             return null;
         }
+        // should keep improving?
+        if ($this->kaizenStepper->enabled() && !$this->kaizenStepper->shouldKeepImproving(static::class)) {
+            return null;
+        }
         $filePath = $this->file->getFilePath();
         if ($this->skipper->shouldSkipCurrentNode($this, $filePath, static::class, $node)) {
             return null;
@@ -110,8 +117,13 @@ CODE_SAMPLE;
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $refactoredNode = $this->refactor($node);
+        // take it step by step
+        if ($refactoredNode !== null && $this->kaizenStepper->enabled()) {
+            $this->kaizenStepper->recordAppliedRule(static::class);
+        }
         // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
         if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
+            // log here, so we can remove the node in leaveNode() method
             $this->toBeRemovedNodeId = \spl_object_id($originalNode);
             // notify this rule changing code
             $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());

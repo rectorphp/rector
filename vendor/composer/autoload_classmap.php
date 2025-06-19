@@ -1257,6 +1257,7 @@ return array(
     'Rector\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
     'Rector\\Configuration\\ConfigurationRuleFilter' => $baseDir . '/src/Configuration/ConfigurationRuleFilter.php',
     'Rector\\Configuration\\Deprecation\\Contract\\DeprecatedInterface' => $baseDir . '/src/Configuration/Deprecation/Contract/DeprecatedInterface.php',
+    'Rector\\Configuration\\KaizenStepper' => $baseDir . '/src/Configuration/KaizenStepper.php',
     'Rector\\Configuration\\Levels\\LevelRulesResolver' => $baseDir . '/src/Configuration/Levels/LevelRulesResolver.php',
     'Rector\\Configuration\\OnlyRuleResolver' => $baseDir . '/src/Configuration/OnlyRuleResolver.php',
     'Rector\\Configuration\\Option' => $baseDir . '/src/Configuration/Option.php',

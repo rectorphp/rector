@@ -97,7 +97,7 @@ final class ProcessCommand extends Command
     protected function configure() : void
     {
         $this->setName('process');
-        $this->setDescription('Upgrades or refactors source code with provided rectors');
+        $this->setDescription('Upgrades or refactors source code with provided Rector rules');
         $this->setHelp(<<<'EOF'
 The <info>%command.name%</info> command will run Rector main feature:
 
@@ -127,6 +127,10 @@ EOF
             return self::SUCCESS;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
+        if ($configuration->isKaizenEnabled()) {
+            $this->symfonyStyle->writeln(\sprintf('<fg=yellow>[EXPERIMENTAL] Running Kaizen mode. Only first %d rule%s will be applied</>', $configuration->getKaizenStepCount(), $configuration->getKaizenStepCount() > 1 ? 's' : ''));
+            $this->symfonyStyle->newLine(1);
+        }
         $this->memoryLimiter->adjust($configuration);
         $this->configurationRuleFilter->setConfiguration($configuration);
         // disable console output in case of json output formatter
@@ -149,7 +153,7 @@ EOF
         if ($this->dynamicSourceLocatorDecorator->arePathsEmpty()) {
             // read from rector.php, no paths definition needs withPaths() config
             if ($paths === []) {
-                $this->symfonyStyle->error('No paths definition in rector configuration, define paths: https://getrector.com/documentation/define-paths');
+                $this->symfonyStyle->error('Provide paths in Rector config. See ways: https://getrector.com/documentation/define-paths');
                 return ExitCode::FAILURE;
             }
             // read from cli paths arguments, eg: vendor/bin/rector process A B C which A, B, and C not exists

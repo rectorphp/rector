@@ -1476,6 +1476,7 @@ class ComposerStaticInit78fb90a05527c4e1e3e0271783524c1e
         'Rector\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Configuration\\ConfigurationRuleFilter' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationRuleFilter.php',
         'Rector\\Configuration\\Deprecation\\Contract\\DeprecatedInterface' => __DIR__ . '/../..' . '/src/Configuration/Deprecation/Contract/DeprecatedInterface.php',
+        'Rector\\Configuration\\KaizenStepper' => __DIR__ . '/../..' . '/src/Configuration/KaizenStepper.php',
         'Rector\\Configuration\\Levels\\LevelRulesResolver' => __DIR__ . '/../..' . '/src/Configuration/Levels/LevelRulesResolver.php',
         'Rector\\Configuration\\OnlyRuleResolver' => __DIR__ . '/../..' . '/src/Configuration/OnlyRuleResolver.php',
         'Rector\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
