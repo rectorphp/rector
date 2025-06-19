@@ -157,6 +157,10 @@ CODE_SAMPLE
                 // special case for DateTime, which is not a scalar type
                 $typeValue = 'DateTime';
             }
+            // skip generic iterable types
+            if (\strncmp($typeValue, 'iterable<', \strlen('iterable<')) === 0) {
+                continue;
+            }
             $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
             if ($type instanceof MixedType) {
                 // fallback to object type
