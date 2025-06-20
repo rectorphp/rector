@@ -1,6 +1,7 @@
 {
     "name": "rector/rector",
     "description": "Instant Upgrade and Automated Refactoring of any PHP code",
+    "homepage": "https://getrector.com/",
     "license": "MIT",
     "keywords": ["dev", "refactoring", "automation", "migration"],
     "bin": [
