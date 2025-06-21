@@ -616,4 +616,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const ARRAY_ALL = \Rector\ValueObject\PhpVersion::PHP_84;
+    /**
+     * @see https://php.watch/versions/8.4/array_find-array_find_key-array_any-array_all
+     * @var int
+     */
+    public const ARRAY_ANY = \Rector\ValueObject\PhpVersion::PHP_84;
 }
