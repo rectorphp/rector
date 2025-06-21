@@ -2115,6 +2115,7 @@ return array(
     'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => $baseDir . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
     'Rector\\Php84\\Rector\\Class_\\DeprecatedAnnotationToDeprecatedAttributeRector' => $baseDir . '/rules/Php84/Rector/Class_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
     'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayFindKeyRector' => $baseDir . '/rules/Php84/Rector/Foreach_/ForeachToArrayFindKeyRector.php',
+    'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayFindRector' => $baseDir . '/rules/Php84/Rector/Foreach_/ForeachToArrayFindRector.php',
     'Rector\\Php84\\Rector\\FuncCall\\AddEscapeArgumentRector' => $baseDir . '/rules/Php84/Rector/FuncCall/AddEscapeArgumentRector.php',
     'Rector\\Php84\\Rector\\FuncCall\\RoundingModeEnumRector' => $baseDir . '/rules/Php84/Rector/FuncCall/RoundingModeEnumRector.php',
     'Rector\\Php84\\Rector\\MethodCall\\NewMethodCallWithoutParenthesesRector' => $baseDir . '/rules/Php84/Rector/MethodCall/NewMethodCallWithoutParenthesesRector.php',

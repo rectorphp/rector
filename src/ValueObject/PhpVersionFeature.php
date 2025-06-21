@@ -605,5 +605,10 @@ final class PhpVersionFeature
      * @see https://php.watch/versions/8.4/array_find-array_find_key-array_any-array_all
      * @var int
      */
+    public const ARRAY_FIND = \Rector\ValueObject\PhpVersion::PHP_84;
+    /**
+     * @see https://php.watch/versions/8.4/array_find-array_find_key-array_any-array_all
+     * @var int
+     */
     public const ARRAY_FIND_KEY = \Rector\ValueObject\PhpVersion::PHP_84;
 }
