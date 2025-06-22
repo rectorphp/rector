@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\DeadCode\NodeManipulator\ClassMethodParamRemover;
-use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
@@ -22,18 +21,13 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
     /**
      * @readonly
      */
-    private ParamAnalyzer $paramAnalyzer;
-    /**
-     * @readonly
-     */
     private ReflectionResolver $reflectionResolver;
     /**
      * @readonly
      */
     private ClassMethodParamRemover $classMethodParamRemover;
-    public function __construct(ParamAnalyzer $paramAnalyzer, ReflectionResolver $reflectionResolver, ClassMethodParamRemover $classMethodParamRemover)
+    public function __construct(ReflectionResolver $reflectionResolver, ClassMethodParamRemover $classMethodParamRemover)
     {
-        $this->paramAnalyzer = $paramAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->classMethodParamRemover = $classMethodParamRemover;
     }
@@ -80,9 +74,6 @@ CODE_SAMPLE
             return null;
         }
         if ($constructorClassMethod->params === []) {
-            return null;
-        }
-        if ($this->paramAnalyzer->hasPropertyPromotion($constructorClassMethod->params)) {
             return null;
         }
         if ($constructorClassMethod->isAbstract()) {
