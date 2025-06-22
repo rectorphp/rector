@@ -16,7 +16,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\NodeCollector\UnusedParameterResolver;
-use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,10 +25,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedPrivateMethodParameterRector extends AbstractRector
 {
-    /**
-     * @readonly
-     */
-    private VariadicFunctionLikeDetector $variadicFunctionLikeDetector;
     /**
      * @readonly
      */
@@ -50,9 +45,8 @@ final class RemoveUnusedPrivateMethodParameterRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(VariadicFunctionLikeDetector $variadicFunctionLikeDetector, UnusedParameterResolver $unusedParameterResolver, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
+    public function __construct(UnusedParameterResolver $unusedParameterResolver, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
     {
-        $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
         $this->unusedParameterResolver = $unusedParameterResolver;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->docBlockUpdater = $docBlockUpdater;
@@ -95,7 +89,7 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
-            if ($this->shouldSkipClassMethod($classMethod)) {
+            if (!$classMethod->isPrivate()) {
                 continue;
             }
             $unusedParameters = $this->unusedParameterResolver->resolve($classMethod);
@@ -194,16 +188,6 @@ CODE_SAMPLE
             }
             return $this->isName($subNode->name, $methodName);
         });
-    }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
-    {
-        if (!$classMethod->isPrivate()) {
-            return \true;
-        }
-        if ($classMethod->params === []) {
-            return \true;
-        }
-        return $this->variadicFunctionLikeDetector->isVariadic($classMethod);
     }
     /**
      * @param Param[] $unusedParameters

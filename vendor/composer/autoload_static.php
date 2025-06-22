@@ -1521,7 +1521,6 @@ class ComposerStaticInit78fb90a05527c4e1e3e0271783524c1e
         'Rector\\DeadCode\\NodeManipulator\\ControllerClassMethodManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/ControllerClassMethodManipulator.php',
         'Rector\\DeadCode\\NodeManipulator\\CountManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/CountManipulator.php',
         'Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/LivingCodeManipulator.php',
-        'Rector\\DeadCode\\NodeManipulator\\VariadicFunctionLikeDetector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/VariadicFunctionLikeDetector.php',
         'Rector\\DeadCode\\PhpDoc\\DeadParamTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadParamTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\DeadReturnTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadReturnTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\DeadVarTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadVarTagValueNodeAnalyzer.php',

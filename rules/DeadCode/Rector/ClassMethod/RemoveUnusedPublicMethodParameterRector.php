@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\DeadCode\NodeManipulator\ClassMethodParamRemover;
-use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -23,10 +22,6 @@ final class RemoveUnusedPublicMethodParameterRector extends AbstractRector
     /**
      * @readonly
      */
-    private VariadicFunctionLikeDetector $variadicFunctionLikeDetector;
-    /**
-     * @readonly
-     */
     private ClassMethodParamRemover $classMethodParamRemover;
     /**
      * @readonly
@@ -36,9 +31,8 @@ final class RemoveUnusedPublicMethodParameterRector extends AbstractRector
      * @readonly
      */
     private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    public function __construct(VariadicFunctionLikeDetector $variadicFunctionLikeDetector, ClassMethodParamRemover $classMethodParamRemover, MagicClassMethodAnalyzer $magicClassMethodAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(ClassMethodParamRemover $classMethodParamRemover, MagicClassMethodAnalyzer $magicClassMethodAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
-        $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
         $this->classMethodParamRemover = $classMethodParamRemover;
         $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
@@ -116,9 +110,6 @@ CODE_SAMPLE
         if ($this->isName($classMethod->name, '__invoke') && $this->phpAttributeAnalyzer->hasPhpAttribute($class, 'Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler')) {
             return \true;
         }
-        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
-            return \true;
-        }
-        return $this->variadicFunctionLikeDetector->isVariadic($classMethod);
+        return $this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod);
     }
 }

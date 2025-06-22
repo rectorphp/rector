@@ -44,6 +44,10 @@ final class ParamAnalyzer
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
+    /**
+     * @var string[]
+     */
+    private const VARIADIC_FUNCTION_NAMES = ['func_get_arg', 'func_get_args', 'func_num_args'];
     public function __construct(NodeComparator $nodeComparator, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
@@ -54,19 +58,21 @@ final class ParamAnalyzer
     }
     public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param) : bool
     {
+        if ($param->isPromoted()) {
+            return \true;
+        }
         $isParamUsed = \false;
         if ($param->var instanceof Error) {
             return \false;
         }
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use(&$isParamUsed, $param) : ?int {
-            if ($isParamUsed) {
-                return NodeVisitor::STOP_TRAVERSAL;
-            }
-            if ($this->isFuncGetArgsCall($node)) {
+            if ($this->isVariadicFuncCall($node)) {
                 $isParamUsed = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if ($this->isUsedAsArg($node, $param)) {
                 $isParamUsed = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             // skip nested anonymous class
             if ($node instanceof Class_ || $node instanceof Function_) {
@@ -74,12 +80,15 @@ final class ParamAnalyzer
             }
             if ($node instanceof Variable && $this->nodeComparator->areNodesEqual($node, $param->var)) {
                 $isParamUsed = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if ($node instanceof Closure && $this->isVariableInClosureUses($node, $param->var)) {
                 $isParamUsed = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             if ($this->isParamUsed($node, $param)) {
                 $isParamUsed = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             return null;
         });
@@ -154,11 +163,11 @@ final class ParamAnalyzer
         $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$node]);
         return $this->nodeNameResolver->isNames($param, $arguments);
     }
-    private function isFuncGetArgsCall(Node $node) : bool
+    private function isVariadicFuncCall(Node $node) : bool
     {
         if (!$node instanceof FuncCall) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($node, 'func_get_args');
+        return $this->nodeNameResolver->isNames($node, self::VARIADIC_FUNCTION_NAMES);
     }
 }

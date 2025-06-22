@@ -1302,7 +1302,6 @@ return array(
     'Rector\\DeadCode\\NodeManipulator\\ControllerClassMethodManipulator' => $baseDir . '/rules/DeadCode/NodeManipulator/ControllerClassMethodManipulator.php',
     'Rector\\DeadCode\\NodeManipulator\\CountManipulator' => $baseDir . '/rules/DeadCode/NodeManipulator/CountManipulator.php',
     'Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator' => $baseDir . '/rules/DeadCode/NodeManipulator/LivingCodeManipulator.php',
-    'Rector\\DeadCode\\NodeManipulator\\VariadicFunctionLikeDetector' => $baseDir . '/rules/DeadCode/NodeManipulator/VariadicFunctionLikeDetector.php',
     'Rector\\DeadCode\\PhpDoc\\DeadParamTagValueNodeAnalyzer' => $baseDir . '/rules/DeadCode/PhpDoc/DeadParamTagValueNodeAnalyzer.php',
     'Rector\\DeadCode\\PhpDoc\\DeadReturnTagValueNodeAnalyzer' => $baseDir . '/rules/DeadCode/PhpDoc/DeadReturnTagValueNodeAnalyzer.php',
     'Rector\\DeadCode\\PhpDoc\\DeadVarTagValueNodeAnalyzer' => $baseDir . '/rules/DeadCode/PhpDoc/DeadVarTagValueNodeAnalyzer.php',
