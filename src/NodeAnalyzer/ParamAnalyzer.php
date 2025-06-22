@@ -156,12 +156,9 @@ final class ParamAnalyzer
     }
     private function isFuncGetArgsCall(Node $node) : bool
     {
-        if (!$node instanceof Node\Expr\FuncCall) {
+        if (!$node instanceof FuncCall) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($node, 'func_get_args')) {
-            return \false;
-        }
-        return \true;
+        return $this->nodeNameResolver->isName($node, 'func_get_args');
     }
 }
