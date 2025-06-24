@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\MixedType;
 use Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -83,7 +84,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $args = $node->getArgs();
-        if ($this->shouldSkip($args)) {
+        if (!$this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
         return $this->removeNamedArguments($node, $args);
@@ -100,16 +101,21 @@ CODE_SAMPLE
             $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         }
         if (!$functionLikeReflection instanceof MethodReflection && !$functionLikeReflection instanceof FunctionReflection) {
+            // remove leftovers in case of unknown type, to avoid crashing on unknown syntax
+            if ($node instanceof MethodCall) {
+                $callerType = $this->getType($node->var);
+                if ($callerType instanceof MixedType) {
+                    foreach ($node->getArgs() as $arg) {
+                        if ($arg->name instanceof Node) {
+                            $arg->name = null;
+                        }
+                    }
+                    return $node;
+                }
+            }
             return null;
         }
         $node->args = $this->unnamedArgumentResolver->resolveFromReflection($functionLikeReflection, $args);
         return $node;
-    }
-    /**
-     * @param mixed[]|Arg[] $args
-     */
-    private function shouldSkip(array $args) : bool
-    {
-        return !$this->argsAnalyzer->hasNamedArg($args);
     }
 }
