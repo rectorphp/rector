@@ -96,18 +96,23 @@ final class SilentVoidResolver
      */
     private function hasStmtsAlwaysReturnOrExit(array $stmts) : bool
     {
-        // early label check
+        // early label check position key stmt
         // as label can be defined later after goto
+        $hasAlwaysReturnOrExitAfterLabelPosition = null;
         foreach ($stmts as $key => $stmt) {
-            if ($stmt instanceof Label && isset($stmts[$key + 1])) {
-                return $this->hasStmtsAlwaysReturnOrExit(\array_slice($stmts, $key + 1));
+            if ($stmt instanceof Label && isset($stmts[$key + 1]) && $this->hasStmtsAlwaysReturnOrExit(\array_slice($stmts, $key + 1))) {
+                $hasAlwaysReturnOrExitAfterLabelPosition = $key;
+                break;
             }
         }
-        foreach ($stmts as $stmt) {
+        foreach ($stmts as $key => $stmt) {
             if ($this->neverFuncCallAnalyzer->isWithNeverTypeExpr($stmt)) {
                 return \true;
             }
             if ($this->isStopped($stmt)) {
+                return \true;
+            }
+            if ($stmt instanceof Goto_ && $hasAlwaysReturnOrExitAfterLabelPosition < $key) {
                 return \true;
             }
             // has switch with always return
@@ -183,7 +188,7 @@ final class SilentVoidResolver
         if ($stmt instanceof Expression) {
             $stmt = $stmt->expr;
         }
-        return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_ && $stmt->expr instanceof Expr || $stmt instanceof Yield_ || $stmt instanceof YieldFrom || $stmt instanceof Goto_;
+        return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_ && $stmt->expr instanceof Expr || $stmt instanceof Yield_ || $stmt instanceof YieldFrom;
     }
     private function isSwitchWithAlwaysReturnOrExit(Switch_ $switch) : bool
     {
