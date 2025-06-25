@@ -25,7 +25,6 @@ use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Label;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
@@ -96,23 +95,11 @@ final class SilentVoidResolver
      */
     private function hasStmtsAlwaysReturnOrExit(array $stmts) : bool
     {
-        // early label check position key stmt
-        // as label can be defined later after goto
-        $hasAlwaysReturnOrExitAfterLabelPosition = null;
-        foreach ($stmts as $key => $stmt) {
-            if ($stmt instanceof Label && isset($stmts[$key + 1]) && $this->hasStmtsAlwaysReturnOrExit(\array_slice($stmts, $key + 1))) {
-                $hasAlwaysReturnOrExitAfterLabelPosition = $key;
-                break;
-            }
-        }
-        foreach ($stmts as $key => $stmt) {
+        foreach ($stmts as $stmt) {
             if ($this->neverFuncCallAnalyzer->isWithNeverTypeExpr($stmt)) {
                 return \true;
             }
             if ($this->isStopped($stmt)) {
-                return \true;
-            }
-            if ($stmt instanceof Goto_ && $hasAlwaysReturnOrExitAfterLabelPosition < $key) {
                 return \true;
             }
             // has switch with always return
