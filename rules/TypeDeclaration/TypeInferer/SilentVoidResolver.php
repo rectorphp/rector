@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Label;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
@@ -95,6 +96,13 @@ final class SilentVoidResolver
      */
     private function hasStmtsAlwaysReturnOrExit(array $stmts) : bool
     {
+        // early label check
+        // as label can be defined later after goto
+        foreach ($stmts as $key => $stmt) {
+            if ($stmt instanceof Label && isset($stmts[$key + 1])) {
+                return $this->hasStmtsAlwaysReturnOrExit(\array_slice($stmts, $key + 1));
+            }
+        }
         foreach ($stmts as $stmt) {
             if ($this->neverFuncCallAnalyzer->isWithNeverTypeExpr($stmt)) {
                 return \true;
