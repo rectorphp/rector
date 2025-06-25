@@ -175,7 +175,7 @@ final class SilentVoidResolver
         if ($stmt instanceof Expression) {
             $stmt = $stmt->expr;
         }
-        return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_ && $stmt->expr instanceof Expr || $stmt instanceof Yield_ || $stmt instanceof YieldFrom;
+        return $stmt instanceof Throw_ || $stmt instanceof Exit_ || $stmt instanceof Return_ && $stmt->expr instanceof Expr || $stmt instanceof Yield_ || $stmt instanceof YieldFrom || $stmt instanceof Goto_;
     }
     private function isSwitchWithAlwaysReturnOrExit(Switch_ $switch) : bool
     {
