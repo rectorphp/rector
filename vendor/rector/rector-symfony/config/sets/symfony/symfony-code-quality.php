@@ -17,6 +17,7 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
+use Rector\Symfony\CodeQuality\Rector\MethodCall\StringCastDebugResponseRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
@@ -34,6 +35,7 @@ return static function (RectorConfig $rectorConfig) : void {
         RequestIsMainRector::class,
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
+        StringCastDebugResponseRector::class,
         // routing
         InlineClassRoutePrefixRector::class,
         // narrow attributes

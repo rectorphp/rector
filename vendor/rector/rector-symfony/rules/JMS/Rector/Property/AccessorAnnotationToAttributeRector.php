@@ -83,9 +83,9 @@ CODE_SAMPLE
                 continue;
             }
             $value = $this->valueResolver->getValue($attributeArg->value);
-            if (\strncmp($value, 'get', \strlen('get')) === 0) {
+            if (\strncmp((string) $value, 'get', \strlen('get')) === 0) {
                 $attributeArg->name = new Identifier('getter');
-            } elseif (\strncmp($value, 'set', \strlen('set')) === 0) {
+            } elseif (\strncmp((string) $value, 'set', \strlen('set')) === 0) {
                 $attributeArg->name = new Identifier('setter');
             } else {
                 // skip, not getter/setter

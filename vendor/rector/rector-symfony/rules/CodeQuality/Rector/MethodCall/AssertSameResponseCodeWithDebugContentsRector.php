@@ -6,6 +6,7 @@ namespace Rector\Symfony\CodeQuality\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ObjectType;
@@ -93,7 +94,8 @@ CODE_SAMPLE
             return null;
         }
         $getContentMethodCall = new MethodCall($responseExpr, 'getContent');
-        $node->args[2] = new Arg($getContentMethodCall);
+        $castString = new String_($getContentMethodCall);
+        $node->args[2] = new Arg($castString);
         return $node;
     }
     /**

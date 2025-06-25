@@ -85,5 +85,24 @@ final class SymfonyClass
      * @var string
      */
     public const AUTHORIZATION_CHECKER = 'Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface';
+    /**
+     * @var string
+     */
     public const REQUEST_STACK = 'Symfony\\Component\\HttpFoundation\\RequestStack';
+    /**
+     * @var string
+     */
+    public const ABSTRACT_BROWSER = 'Symfony\\Component\\BrowserKit\\AbstractBrowser';
+    /**
+     * @var string
+     */
+    public const HTTP_CLIENT = 'Symfony\\Component\\HttpKernel\\Client';
+    /**
+     * @var string
+     */
+    public const KERNEL_BROWSER = 'Symfony\\Bundle\\FrameworkBundle\\KernelBrowser';
+    /**
+     * @var string
+     */
+    public const FORM_BUILDER = 'Symfony\\Component\\Form\\FormBuilderInterface';
 }
