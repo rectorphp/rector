@@ -52,8 +52,11 @@ final class ConsoleApplication extends Application
             $output->write(\PHP_EOL);
         }
         $commandName = $input->getFirstArgument();
-        // if paths exist
-        if (\is_string($commandName) && \file_exists($commandName)) {
+        // if paths exist or if the command name is not the first argument but with --option, eg:
+        // bin/rector src
+        // bin/rector --only "RemovePhpVersionIdCheckRector"
+        // file_exists() can check directory and file
+        if (\is_string($commandName) && (\file_exists($commandName) || isset($_SERVER['argv'][1]) && $commandName !== $_SERVER['argv'][1] && $input->hasParameterOption($_SERVER['argv'][1]))) {
             // prepend command name if implicit
             $privatesAccessor = new PrivatesAccessor();
             $tokens = $privatesAccessor->getPrivateProperty($input, 'tokens');
