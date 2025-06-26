@@ -132,6 +132,10 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($assignment->var, $assignedVariable)) {
             return \false;
         }
-        return $this->nodeComparator->areNodesEqual($assignment->expr, $foreach->keyVar);
+        if (!$this->nodeComparator->areNodesEqual($assignment->expr, $foreach->keyVar)) {
+            return \false;
+        }
+        $type = $this->nodeTypeResolver->getNativeType($foreach->expr);
+        return $type->isArray()->yes();
     }
 }
