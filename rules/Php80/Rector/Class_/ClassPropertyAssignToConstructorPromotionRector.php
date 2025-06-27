@@ -211,6 +211,7 @@ CODE_SAMPLE
             $paramName = $this->getName($property);
             $param->var = new Variable($paramName);
             $param->flags = $property->flags;
+            $param->hooks = $property->hooks;
             // copy attributes of the old property
             $param->attrGroups = \array_merge($param->attrGroups, $property->attrGroups);
             $this->processUnionType($property, $param);
