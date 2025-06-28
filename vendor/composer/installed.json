@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "158a72ea131045f5be7c4ec81beab1938c737277"
+                "reference": "39316ccfdc238c9ffb0f3f16ccb96a1e5ff4dd35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/158a72ea131045f5be7c4ec81beab1938c737277",
-                "reference": "158a72ea131045f5be7c4ec81beab1938c737277",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/39316ccfdc238c9ffb0f3f16ccb96a1e5ff4dd35",
+                "reference": "39316ccfdc238c9ffb0f3f16ccb96a1e5ff4dd35",
                 "shasum": ""
             },
             "require": {
@@ -1900,7 +1900,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-06-25T14:53:55+00:00",
+            "time": "2025-06-28T21:01:46+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1998,17 +1998,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.22",
-            "version_normalized": "6.4.22.0",
+            "version": "v6.4.23",
+            "version_normalized": "6.4.23.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "7d29659bc3c9d8e9a34e2c3414ef9e9e003e6cf3"
+                "reference": "9056771b8eca08d026cd3280deeec3cfd99c4d93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7d29659bc3c9d8e9a34e2c3414ef9e9e003e6cf3",
-                "reference": "7d29659bc3c9d8e9a34e2c3414ef9e9e003e6cf3",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/9056771b8eca08d026cd3280deeec3cfd99c4d93",
+                "reference": "9056771b8eca08d026cd3280deeec3cfd99c4d93",
                 "shasum": ""
             },
             "require": {
@@ -2041,7 +2041,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2025-05-07T07:05:04+00:00",
+            "time": "2025-06-27T19:37:22+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2080,7 +2080,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.22"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.23"
             },
             "funding": [
                 {
@@ -2540,17 +2540,17 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.3.0",
-            "version_normalized": "7.3.0.0",
+            "version": "v7.3.1",
+            "version_normalized": "7.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "cea40a48279d58dc3efee8112634cb90141156c2"
+                "reference": "0c3555045a46ab3cd4cc5a69d161225195230edb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/cea40a48279d58dc3efee8112634cb90141156c2",
-                "reference": "cea40a48279d58dc3efee8112634cb90141156c2",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/0c3555045a46ab3cd4cc5a69d161225195230edb",
+                "reference": "0c3555045a46ab3cd4cc5a69d161225195230edb",
                 "shasum": ""
             },
             "require": {
@@ -2564,7 +2564,7 @@
             "require-dev": {
                 "symfony\/console": "^6.4|^7.0"
             },
-            "time": "2025-04-04T10:10:33+00:00",
+            "time": "2025-06-03T06:57:57+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -2595,7 +2595,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.3.0"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.3.1"
             },
             "funding": [
                 {

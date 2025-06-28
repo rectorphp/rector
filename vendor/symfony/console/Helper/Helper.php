@@ -43,7 +43,8 @@ abstract class Helper implements HelperInterface
         $string ??= '';
         return \mb_strlen($string);
         if (\preg_match('//u', $string)) {
-            return (new UnicodeString($string))->width(\false);
+            $string = \preg_replace('/[\\p{Cc}\\x7F]++/u', '', $string, -1, $count);
+            return (new UnicodeString($string))->width(\false) + $count;
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
