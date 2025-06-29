@@ -654,7 +654,7 @@ class Inline
                             if (\false !== ($scalar = $time->getTimestamp())) {
                                 return $scalar;
                             }
-                        } catch (\RectorPrefix202506\DateRangeError|\ValueError $exception) {
+                        } catch (\DateRangeError|\ValueError $exception) {
                             // no-op
                         }
                         return $time->format('U');
