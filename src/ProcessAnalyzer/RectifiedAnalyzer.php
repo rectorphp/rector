@@ -6,6 +6,7 @@ namespace Rector\ProcessAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * This service verify if the Node:
@@ -17,6 +18,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RectifiedAnalyzer
 {
+    /**
+     * @readonly
+     */
+    private ScopeAnalyzer $scopeAnalyzer;
+    public function __construct(ScopeAnalyzer $scopeAnalyzer)
+    {
+        $this->scopeAnalyzer = $scopeAnalyzer;
+    }
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
@@ -66,9 +75,9 @@ final class RectifiedAnalyzer
         if ($startTokenPos >= 0) {
             return \true;
         }
-        if ($node instanceof Stmt) {
-            return !\in_array(AttributeKey::SCOPE, \array_keys($node->getAttributes()), \true);
+        if (!$this->scopeAnalyzer->isRefreshable($node)) {
+            return \false;
         }
-        return $node->getAttributes() === [];
+        return !\in_array(AttributeKey::SCOPE, \array_keys($node->getAttributes()), \true);
     }
 }
