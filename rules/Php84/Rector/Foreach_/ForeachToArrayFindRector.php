@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\NodeManipulator\StmtsManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -28,9 +29,14 @@ final class ForeachToArrayFindRector extends AbstractRector implements MinPhpVer
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private StmtsManipulator $stmtsManipulator;
+    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator)
     {
         $this->valueResolver = $valueResolver;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -84,6 +90,9 @@ CODE_SAMPLE
             }
             $assignedVariable = $prevAssign->var;
             if (!$this->isValidForeachStructure($foreach, $assignedVariable)) {
+                continue;
+            }
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, (string) $this->getName($foreach->valueVar))) {
                 continue;
             }
             /** @var If_ $firstNodeInsideForeach */
