@@ -62,11 +62,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         // type is already known
         if ($node->type !== null) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;

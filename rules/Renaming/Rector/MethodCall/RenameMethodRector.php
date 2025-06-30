@@ -79,8 +79,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         if ($node instanceof Class_ || $node instanceof Trait_ || $node instanceof Interface_) {
+            $scope = ScopeFetcher::fetch($node);
             return $this->refactorClass($node, $scope);
         }
         return $this->refactorMethodCallAndStaticCall($node);

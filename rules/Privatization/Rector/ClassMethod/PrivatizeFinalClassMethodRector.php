@@ -76,13 +76,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         if (!$node->isFinal()) {
             return null;
         }
         if (!$this->overrideByParentClassGuard->isLegal($node)) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;

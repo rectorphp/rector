@@ -86,7 +86,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         // already added → skip
         if ($node->returnType instanceof Node) {
             return null;
@@ -103,6 +102,7 @@ CODE_SAMPLE
         if (!$this->isAlwaysStringStrictType($returns)) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkipClassMethodForOverride($node, $scope)) {
             return null;
         }

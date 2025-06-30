@@ -125,12 +125,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node)) {
             return null;
         }
         $hasChanged = \false;
         $classMethod = $node->getMethod(MethodName::CONSTRUCT);
+        $scope = ScopeFetcher::fetch($node);
         if ($classMethod instanceof ClassMethod) {
             foreach ($classMethod->params as $param) {
                 $justChanged = $this->refactorParam($node, $classMethod, $param, $scope);
