@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -141,7 +142,7 @@ CODE_SAMPLE
         $matches = Strings::match($annotationValue, self::VERSION_MATCH_REGEX);
         if ($matches === null) {
             $annotationValue = Strings::replace($annotationValue, self::START_STAR_SPACED_REGEX, '');
-            return new AttributeGroup([new Attribute(new FullyQualified('Deprecated'), [new Arg(new String_($annotationValue, [AttributeKey::KIND => String_::KIND_NOWDOC, AttributeKey::DOC_LABEL => 'TXT']))])]);
+            return new AttributeGroup([new Attribute(new FullyQualified('Deprecated'), [new Arg(new String_($annotationValue, [AttributeKey::KIND => String_::KIND_NOWDOC, AttributeKey::DOC_LABEL => 'TXT']), \false, \false, [], new Identifier('message'))])]);
         }
         $since = $matches[1] ?? null;
         $message = $matches[2] ?? null;
