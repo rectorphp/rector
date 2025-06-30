@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 /**
@@ -36,11 +37,16 @@ final class GetMethodToAsTwigAttributeTransformer
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    public function __construct(LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher, ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     */
+    private VisibilityManipulator $visibilityManipulator;
+    public function __construct(LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher, ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover, ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator)
     {
         $this->localArrayMethodCallableMatcher = $localArrayMethodCallableMatcher;
         $this->returnEmptyArrayMethodRemover = $returnEmptyArrayMethodRemover;
         $this->reflectionProvider = $reflectionProvider;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     public function transformClassGetMethodToAttributeMarker(Class_ $class, string $methodName, string $attributeClass, ObjectType $objectType) : bool
     {
@@ -88,6 +94,7 @@ final class GetMethodToAsTwigAttributeTransformer
                         continue;
                     }
                     $this->decorateMethodWithAttribute($localMethod, $attributeClass, $nameArg);
+                    $this->visibilityManipulator->makePublic($localMethod);
                     // remove old new fuction instance
                     unset($returnArray->items[$key]);
                     $hasChanged = \true;
