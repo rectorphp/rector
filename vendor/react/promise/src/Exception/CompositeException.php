@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202506\React\Promise\Exception;
+namespace RectorPrefix202507\React\Promise\Exception;
 
 /**
  * Represents an exception that is a composite of one or more other exceptions.

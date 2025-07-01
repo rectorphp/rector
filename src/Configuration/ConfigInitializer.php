@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use RectorPrefix202506\Nette\Utils\FileSystem;
+use RectorPrefix202507\Nette\Utils\FileSystem;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\InitFilePathsResolver;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202506\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202507\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConfigInitializer
 {
     /**

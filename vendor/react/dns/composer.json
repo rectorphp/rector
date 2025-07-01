@@ -43,12 +43,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202506\\React\\Dns\\": "src\/"
+            "RectorPrefix202507\\React\\Dns\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202506\\React\\Tests\\Dns\\": "tests\/"
+            "RectorPrefix202507\\React\\Tests\\Dns\\": "tests\/"
         }
     }
 }

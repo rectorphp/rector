@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202506\Doctrine\Inflector\Rules;
+namespace RectorPrefix202507\Doctrine\Inflector\Rules;
 
-use RectorPrefix202506\Doctrine\Inflector\WordInflector;
+use RectorPrefix202507\Doctrine\Inflector\WordInflector;
 use function strtolower;
 use function strtoupper;
 use function substr;

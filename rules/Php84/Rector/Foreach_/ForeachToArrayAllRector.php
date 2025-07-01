@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\StmtsManipulator;
+use Rector\Php84\NodeAnalyzer\ForeachKeyUsedInConditionalAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -34,10 +35,15 @@ final class ForeachToArrayAllRector extends AbstractRector implements MinPhpVers
      * @readonly
      */
     private StmtsManipulator $stmtsManipulator;
-    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator)
+    /**
+     * @readonly
+     */
+    private ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer;
+    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator, ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer)
     {
         $this->valueResolver = $valueResolver;
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->foreachKeyUsedInConditionalAnalyzer = $foreachKeyUsedInConditionalAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -103,9 +109,12 @@ CODE_SAMPLE
             if (!$valueParam instanceof Variable) {
                 continue;
             }
-            $param = new Param($valueParam);
+            $params = [new Param($valueParam)];
+            if ($foreach->keyVar instanceof Variable && $this->foreachKeyUsedInConditionalAnalyzer->isUsed($foreach->keyVar, $condition)) {
+                $params[] = new Param(new Variable((string) $this->getName($foreach->keyVar)));
+            }
             $negatedCondition = $condition instanceof BooleanNot ? $condition->expr : new BooleanNot($condition);
-            $arrowFunction = new ArrowFunction(['params' => [$param], 'expr' => $negatedCondition]);
+            $arrowFunction = new ArrowFunction(['params' => $params, 'expr' => $negatedCondition]);
             $funcCall = $this->nodeFactory->createFuncCall('array_all', [$foreach->expr, $arrowFunction]);
             $newAssign = new Assign($assignedVariable, $funcCall);
             $newExpression = new Expression($newAssign);

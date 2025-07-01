@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\StmtsManipulator;
+use Rector\Php84\NodeAnalyzer\ForeachKeyUsedInConditionalAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -34,10 +35,15 @@ final class ForeachToArrayFindKeyRector extends AbstractRector implements MinPhp
      * @readonly
      */
     private StmtsManipulator $stmtsManipulator;
-    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator)
+    /**
+     * @readonly
+     */
+    private ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer;
+    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator, ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer)
     {
         $this->valueResolver = $valueResolver;
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->foreachKeyUsedInConditionalAnalyzer = $foreachKeyUsedInConditionalAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -107,8 +113,11 @@ CODE_SAMPLE
             if (!$valueParam instanceof Variable) {
                 continue;
             }
-            $param = new Param($valueParam);
-            $arrowFunction = new ArrowFunction(['params' => [$param], 'expr' => $condition]);
+            $params = [new Param($valueParam)];
+            if ($foreach->keyVar instanceof Variable && $this->foreachKeyUsedInConditionalAnalyzer->isUsed($foreach->keyVar, $condition)) {
+                $params[] = new Param(new Variable((string) $this->getName($foreach->keyVar)));
+            }
+            $arrowFunction = new ArrowFunction(['params' => $params, 'expr' => $condition]);
             $funcCall = $this->nodeFactory->createFuncCall('array_find_key', [$foreach->expr, $arrowFunction]);
             $newAssign = new Assign($assignedVariable, $funcCall);
             $newExpression = new Expression($newAssign);

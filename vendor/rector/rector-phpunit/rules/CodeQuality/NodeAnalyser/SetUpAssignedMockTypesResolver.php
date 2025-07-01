@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ValueObject\MethodName;
-use RectorPrefix202506\Webmozart\Assert\Assert;
+use RectorPrefix202507\Webmozart\Assert\Assert;
 final class SetUpAssignedMockTypesResolver
 {
     /**
