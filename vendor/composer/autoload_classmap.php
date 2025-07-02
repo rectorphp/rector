@@ -2502,6 +2502,7 @@ return array(
     'Rector\\Symfony\\Symfony73\\NodeRemover\\ReturnEmptyArrayMethodRemover' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/NodeRemover/ReturnEmptyArrayMethodRemover.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AddVoteArgumentToVoteOnAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AddVoteArgumentToVoteOnAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
+    'Rector\\Symfony\\Symfony73\\Rector\\Class_\\ConstraintOptionsToNamedArgumentsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/ConstraintOptionsToNamedArgumentsRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFiltersToAsTwigFilterAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFiltersToAsTwigFilterAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFunctionsToAsTwigFunctionAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFunctionsToAsTwigFunctionAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandInputAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandInputAttributeRector.php',

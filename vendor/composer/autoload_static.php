@@ -2721,6 +2721,7 @@ class ComposerStaticInitdb65f1617bfddbb41dc0dee4425e5c9b
         'Rector\\Symfony\\Symfony73\\NodeRemover\\ReturnEmptyArrayMethodRemover' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/NodeRemover/ReturnEmptyArrayMethodRemover.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AddVoteArgumentToVoteOnAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AddVoteArgumentToVoteOnAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
+        'Rector\\Symfony\\Symfony73\\Rector\\Class_\\ConstraintOptionsToNamedArgumentsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/ConstraintOptionsToNamedArgumentsRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFiltersToAsTwigFilterAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFiltersToAsTwigFilterAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFunctionsToAsTwigFunctionAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFunctionsToAsTwigFunctionAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandInputAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandInputAttributeRector.php',
