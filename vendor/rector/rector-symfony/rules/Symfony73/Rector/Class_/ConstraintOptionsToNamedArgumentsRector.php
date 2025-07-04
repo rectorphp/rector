@@ -61,6 +61,10 @@ CODE_SAMPLE
         if (0 === \count($node->args) || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
             return null;
         }
+        $argName = $node->args[0]->name;
+        if (null !== $argName && 'options' !== $argName->name) {
+            return null;
+        }
         $array = $node->args[0]->value;
         $namedArgs = [];
         foreach ($array->items as $item) {
