@@ -12,6 +12,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Enum\ClassName;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
@@ -35,18 +38,31 @@ final class PromotedPropertyCandidateResolver
      * @readonly
      */
     private PropertyFetchAnalyzer $propertyFetchAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer;
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     /**
      * @return PropertyPromotionCandidate[]
      */
-    public function resolveFromClass(Class_ $class, ClassMethod $constructClassMethod) : array
+    public function resolveFromClass(Class_ $class, ClassMethod $constructClassMethod, bool $allowModelBasedClasses) : array
     {
+        if (!$allowModelBasedClasses && $this->hasModelTypeCheck($class, ClassName::DOCTRINE_ENTITY)) {
+            return [];
+        }
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
             $propertyCount = \count($property->props);
@@ -57,9 +73,23 @@ final class PromotedPropertyCandidateResolver
             if (!$propertyPromotionCandidate instanceof PropertyPromotionCandidate) {
                 continue;
             }
+            if (!$allowModelBasedClasses && $this->hasModelTypeCheck($property, ClassName::JMS_TYPE)) {
+                continue;
+            }
             $propertyPromotionCandidates[] = $propertyPromotionCandidate;
         }
         return $propertyPromotionCandidates;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property $node
+     */
+    private function hasModelTypeCheck($node, string $modelType) : bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByAnnotationClass($modelType)) {
+            return \true;
+        }
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($node, $modelType);
     }
     private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod) : ?PropertyPromotionCandidate
     {

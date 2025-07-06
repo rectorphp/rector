@@ -209,9 +209,6 @@ final class PhpDocInfo
         $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $class);
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
-    /**
-     * @api used in tests, doctrine
-     */
     public function hasByAnnotationClass(string $class) : bool
     {
         return $this->findByAnnotationClass($class) !== [];
