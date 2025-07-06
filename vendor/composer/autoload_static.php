@@ -2164,6 +2164,7 @@ class ComposerStaticInitdb65f1617bfddbb41dc0dee4425e5c9b
         'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
         'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
         'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
+        'Rector\\PHPUnit\\ValueObject\\TestClassSuffixesConfig' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/TestClassSuffixesConfig.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/src/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/src/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/Bridge.php',

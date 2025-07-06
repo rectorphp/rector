@@ -7,12 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\ValueObject\TestClassSuffixesConfig;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix202507\Webmozart\Assert\Assert;
 use function array_filter;
 use function array_merge;
 use function count;
@@ -22,7 +25,7 @@ use function in_array;
 use function preg_replace;
 use function strtolower;
 use function trim;
-final class AddCoversClassAttributeRector extends AbstractRector
+final class AddCoversClassAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @readonly
@@ -40,6 +43,10 @@ final class AddCoversClassAttributeRector extends AbstractRector
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
+    /**
+     * @var string[]
+     */
+    private array $testClassSuffixes = ['Test', 'TestCase'];
     public function __construct(ReflectionProvider $reflectionProvider, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
@@ -49,14 +56,14 @@ final class AddCoversClassAttributeRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Adds `#[CoversClass(...)]` attribute to test files guessing source class name.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds `#[CoversClass(...)]` attribute to test files guessing source class name.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeService
 {
 }
 
 use PHPUnit\Framework\TestCase;
 
-class SomeServiceTest extends TestCase
+class SomeServiceFunctionalTest extends TestCase
 {
 }
 CODE_SAMPLE
@@ -69,11 +76,11 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SomeService::class)]
-class SomeServiceTest extends TestCase
+class SomeServiceFunctionalTest extends TestCase
 {
 }
 CODE_SAMPLE
-)]);
+, [new TestClassSuffixesConfig(['Test', 'TestCase', 'FunctionalTest', 'IntegrationTest'])])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -107,13 +114,31 @@ CODE_SAMPLE
         return $node;
     }
     /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration) : void
+    {
+        Assert::countBetween($configuration, 0, 1);
+        if (isset($configuration[0])) {
+            Assert::isInstanceOf($configuration[0], TestClassSuffixesConfig::class);
+            $this->testClassSuffixes = $configuration[0]->getSuffixes();
+        }
+    }
+    /**
      * @return string[]
      */
     private function resolveSourceClassNames(string $className) : array
     {
         $classNameParts = explode('\\', $className);
         $partCount = count($classNameParts);
-        $classNameParts[$partCount - 1] = preg_replace(['#TestCase$#', '#Test$#'], '', $classNameParts[$partCount - 1]);
+        // Sort suffixes by length (longest first) to ensure more specific patterns match first
+        $sortedSuffixes = $this->testClassSuffixes;
+        \usort($sortedSuffixes, static fn(string $a, string $b): int => \strlen($b) <=> \strlen($a));
+        $patterns = [];
+        foreach ($sortedSuffixes as $sortedSuffix) {
+            $patterns[] = '#' . \preg_quote($sortedSuffix, '#') . '$#';
+        }
+        $classNameParts[$partCount - 1] = preg_replace($patterns, '', $classNameParts[$partCount - 1]);
         $possibleTestClassNames = [implode('\\', $classNameParts)];
         $partsWithoutTests = array_filter($classNameParts, static fn(?string $part): bool => $part === null ? \false : !in_array(strtolower($part), ['test', 'tests'], \true));
         $possibleTestClassNames[] = implode('\\', $partsWithoutTests);

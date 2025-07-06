@@ -1945,6 +1945,7 @@ return array(
     'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
     'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
     'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
+    'Rector\\PHPUnit\\ValueObject\\TestClassSuffixesConfig' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/TestClassSuffixesConfig.php',
     'Rector\\Parallel\\Application\\ParallelFileProcessor' => $baseDir . '/src/Parallel/Application/ParallelFileProcessor.php',
     'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => $baseDir . '/src/Parallel/Command/WorkerCommandLineFactory.php',
     'Rector\\Parallel\\ValueObject\\Bridge' => $baseDir . '/src/Parallel/ValueObject/Bridge.php',
