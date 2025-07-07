@@ -91,9 +91,9 @@ final class FilesFinder
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
-        $changedFiles = $this->unchangedFilesFilter->filterFilePaths($filePaths);
-        // no files changed, early return empty
-        if ($changedFiles === []) {
+        $toBeChangedFiles = $this->unchangedFilesFilter->filterFilePaths($filePaths);
+        // no files to be changed, early return empty
+        if ($toBeChangedFiles === []) {
             return [];
         }
         if ($isKaizenEnabled) {
@@ -102,7 +102,7 @@ final class FilesFinder
             $this->changedFilesDetector->clear();
             return \array_unique($filePaths);
         }
-        return $changedFiles;
+        return $toBeChangedFiles;
     }
     /**
      * @param string[] $paths
