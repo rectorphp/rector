@@ -96,7 +96,13 @@ final class FilesFinder
         if ($changedFiles === []) {
             return [];
         }
-        return $isKaizenEnabled ? \array_unique($filePaths) : $changedFiles;
+        if ($isKaizenEnabled) {
+            // enforce clear cache, because there is probably another files that
+            // incrementally need to apply change on kaizen run
+            $this->changedFilesDetector->clear();
+            return \array_unique($filePaths);
+        }
+        return $changedFiles;
     }
     /**
      * @param string[] $paths
