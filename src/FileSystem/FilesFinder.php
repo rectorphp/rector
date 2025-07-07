@@ -54,7 +54,7 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return string[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null) : array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null, bool $isKaizenEnabled = \false) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
@@ -91,6 +91,9 @@ final class FilesFinder
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
+        if ($isKaizenEnabled) {
+            return \array_unique($filePaths);
+        }
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
     /**
@@ -102,7 +105,7 @@ final class FilesFinder
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
-        return $this->findInDirectoriesAndFiles($paths, $configuration->getFileExtensions(), \true, $configuration->getOnlySuffix());
+        return $this->findInDirectoriesAndFiles($paths, $configuration->getFileExtensions(), \true, $configuration->getOnlySuffix(), $configuration->isKaizenEnabled());
     }
     /**
      * Exclude short "<?=" tags as lead to invalid changes
