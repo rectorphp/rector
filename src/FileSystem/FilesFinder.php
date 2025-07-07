@@ -91,10 +91,12 @@ final class FilesFinder
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
         $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
-        if ($isKaizenEnabled) {
-            return \array_unique($filePaths);
+        $changedFiles = $this->unchangedFilesFilter->filterFilePaths($filePaths);
+        // no files changed, early return empty
+        if ($changedFiles === []) {
+            return [];
         }
-        return $this->unchangedFilesFilter->filterFilePaths($filePaths);
+        return $isKaizenEnabled ? \array_unique($filePaths) : $changedFiles;
     }
     /**
      * @param string[] $paths
