@@ -128,6 +128,10 @@ final class ApplicationFileProcessor
         } else {
             $preFileCallback = null;
         }
+        // on repetitive runs, the counter of kaizen must start from 0 again
+        if ($configuration->isKaizenEnabled()) {
+            $this->kaizenStepper->start();
+        }
         if ($configuration->isParallel()) {
             $processResult = $this->runParallel($filePaths, $input, $postFileCallback);
         } else {

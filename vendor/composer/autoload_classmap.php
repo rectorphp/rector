@@ -1086,6 +1086,7 @@ return array(
     'Rector\\Caching\\Config\\FileHashComputer' => $baseDir . '/src/Caching/Config/FileHashComputer.php',
     'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => $baseDir . '/src/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
     'Rector\\Caching\\Detector\\ChangedFilesDetector' => $baseDir . '/src/Caching/Detector/ChangedFilesDetector.php',
+    'Rector\\Caching\\Detector\\KaizenRulesDetector' => $baseDir . '/src/Caching/Detector/KaizenRulesDetector.php',
     'Rector\\Caching\\Enum\\CacheKey' => $baseDir . '/src/Caching/Enum/CacheKey.php',
     'Rector\\Caching\\UnchangedFilesFilter' => $baseDir . '/src/Caching/UnchangedFilesFilter.php',
     'Rector\\Caching\\ValueObject\\CacheFilePaths' => $baseDir . '/src/Caching/ValueObject/CacheFilePaths.php',

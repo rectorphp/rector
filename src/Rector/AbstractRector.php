@@ -117,30 +117,6 @@ CODE_SAMPLE;
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $refactoredNode = $this->refactor($node);
-        // take it step by step
-        if ($refactoredNode !== null && $this->kaizenStepper->enabled()) {
-            $this->kaizenStepper->recordAppliedRule(static::class);
-        }
-        // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
-        if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
-            // log here, so we can remove the node in leaveNode() method
-            $this->toBeRemovedNodeId = \spl_object_id($originalNode);
-            // notify this rule changing code
-            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
-            $this->file->addRectorClassWithLine($rectorWithLineChange);
-            return $originalNode;
-        }
-        if (\is_int($refactoredNode)) {
-            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
-            if (!\in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
-                // notify this rule changing code
-                $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
-                $this->file->addRectorClassWithLine($rectorWithLineChange);
-                return $refactoredNode;
-            }
-            $this->decorateCurrentAndChildren($node);
-            return null;
-        }
         // nothing to change → continue
         if ($refactoredNode === null) {
             return null;
@@ -148,6 +124,33 @@ CODE_SAMPLE;
         if ($refactoredNode === []) {
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
+        }
+        $isIntRefactoredNode = \is_int($refactoredNode);
+        /**
+         * If below node and/or its children not traversed on current rule
+         * early return null with decorate current and children node with skipped by "only" current rule
+         */
+        if ($isIntRefactoredNode) {
+            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
+            if (\in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
+                $this->decorateCurrentAndChildren($node);
+                return null;
+            }
+        }
+        // take it step by step
+        if ($this->kaizenStepper->enabled()) {
+            $this->kaizenStepper->recordAppliedRule(static::class);
+        }
+        if ($isIntRefactoredNode) {
+            // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
+            if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
+                // log here, so we can remove the node in leaveNode() method
+                $this->toBeRemovedNodeId = \spl_object_id($originalNode);
+            }
+            // notify this rule changing code
+            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
+            $this->file->addRectorClassWithLine($rectorWithLineChange);
+            return $refactoredNode === NodeVisitor::REMOVE_NODE ? $originalNode : $refactoredNode;
         }
         return $this->postRefactorProcess($originalNode, $node, $refactoredNode, $filePath);
     }

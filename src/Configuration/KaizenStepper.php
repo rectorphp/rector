@@ -3,17 +3,26 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use Rector\Caching\Detector\KaizenRulesDetector;
 use Rector\Contract\Rector\RectorInterface;
 final class KaizenStepper
 {
     /**
+     * @readonly
+     */
+    private KaizenRulesDetector $kaizenRulesDetector;
+    /**
      * @var positive-int|null
      */
     private ?int $stepCount = null;
-    /**
-     * @var array<class-string<RectorInterface>>
-     */
-    private array $appliedRectorClasses = [];
+    public function __construct(KaizenRulesDetector $kaizenRulesDetector)
+    {
+        $this->kaizenRulesDetector = $kaizenRulesDetector;
+    }
+    public function start() : void
+    {
+        $this->kaizenRulesDetector->clean();
+    }
     /**
      * @param positive-int $stepCount
      */
@@ -30,16 +39,16 @@ final class KaizenStepper
      */
     public function recordAppliedRule(string $rectorClass) : void
     {
-        $this->appliedRectorClasses[] = $rectorClass;
+        $this->kaizenRulesDetector->addRule($rectorClass);
     }
     public function shouldKeepImproving(string $rectorClass) : bool
     {
+        $appliedRectorClasses = $this->kaizenRulesDetector->loadRules();
         // is rule already in applied rules? keep going
-        $uniqueAppliedRectorClasses = \array_unique($this->appliedRectorClasses);
-        if (\in_array($rectorClass, $uniqueAppliedRectorClasses)) {
+        if (\in_array($rectorClass, $appliedRectorClasses)) {
             return \true;
         }
         // make sure we made enough changes
-        return \count($uniqueAppliedRectorClasses) < $this->stepCount;
+        return \count($appliedRectorClasses) < $this->stepCount;
     }
 }

@@ -1305,6 +1305,7 @@ class ComposerStaticInitdb65f1617bfddbb41dc0dee4425e5c9b
         'Rector\\Caching\\Config\\FileHashComputer' => __DIR__ . '/../..' . '/src/Caching/Config/FileHashComputer.php',
         'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/src/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\Detector\\ChangedFilesDetector' => __DIR__ . '/../..' . '/src/Caching/Detector/ChangedFilesDetector.php',
+        'Rector\\Caching\\Detector\\KaizenRulesDetector' => __DIR__ . '/../..' . '/src/Caching/Detector/KaizenRulesDetector.php',
         'Rector\\Caching\\Enum\\CacheKey' => __DIR__ . '/../..' . '/src/Caching/Enum/CacheKey.php',
         'Rector\\Caching\\UnchangedFilesFilter' => __DIR__ . '/../..' . '/src/Caching/UnchangedFilesFilter.php',
         'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/src/Caching/ValueObject/CacheFilePaths.php',
