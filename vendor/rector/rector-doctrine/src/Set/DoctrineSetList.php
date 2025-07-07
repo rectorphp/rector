@@ -44,6 +44,11 @@ final class DoctrineSetList
      * @deprecated Use withComposerBased() instead, see https://getrector.com/blog/introducing-composer-version-based-sets
      * @var string
      */
+    public const DOCTRINE_DBAL_38 = __DIR__ . '/../../config/sets/doctrine-dbal-38.php';
+    /**
+     * @deprecated Use withComposerBased() instead, see https://getrector.com/blog/introducing-composer-version-based-sets
+     * @var string
+     */
     public const DOCTRINE_DBAL_40 = __DIR__ . '/../../config/sets/doctrine-dbal-40.php';
     /**
      * @deprecated Use withComposerBased() instead, see https://getrector.com/blog/introducing-composer-version-based-sets
