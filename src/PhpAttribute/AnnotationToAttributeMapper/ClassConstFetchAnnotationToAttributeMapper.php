@@ -45,7 +45,7 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
         }
         try {
             RectorAssert::className(\ltrim($class, '\\'));
-            RectorAssert::propertyName($constant);
+            RectorAssert::constantName($constant);
         } catch (InvalidArgumentException $exception) {
             return new String_($value);
         }
