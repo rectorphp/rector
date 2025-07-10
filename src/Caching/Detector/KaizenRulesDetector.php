@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use Rector\Contract\Rector\RectorInterface;
 use Rector\Caching\Cache;
 use Rector\Caching\Enum\CacheKey;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Util\FileHasher;
 final class KaizenRulesDetector
@@ -22,10 +22,6 @@ final class KaizenRulesDetector
     {
         $this->cache = $cache;
         $this->fileHasher = $fileHasher;
-    }
-    private function getCacheKey() : string
-    {
-        return CacheKey::KAIZEN_RULES . '_' . $this->fileHasher->hash(\getcwd());
     }
     public function addRule(string $rectorClass) : void
     {
@@ -44,5 +40,9 @@ final class KaizenRulesDetector
             throw new ShouldNotHappenException();
         }
         return \array_unique($rules);
+    }
+    private function getCacheKey() : string
+    {
+        return CacheKey::KAIZEN_RULES . '_' . $this->fileHasher->hash(\getcwd());
     }
 }
