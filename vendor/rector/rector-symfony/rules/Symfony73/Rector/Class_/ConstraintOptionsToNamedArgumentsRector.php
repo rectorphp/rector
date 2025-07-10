@@ -58,17 +58,17 @@ CODE_SAMPLE
         if (\strncmp($className, 'Symfony\\Component\\Validator\\Constraints\\', \strlen('Symfony\\Component\\Validator\\Constraints\\')) !== 0) {
             return null;
         }
-        if (0 === \count($node->args) || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
+        if (\count($node->args) === 0 || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
             return null;
         }
         $argName = $node->args[0]->name;
-        if (null !== $argName && 'options' !== $argName->name) {
+        if ($argName !== null && $argName->name !== 'options') {
             return null;
         }
         $array = $node->args[0]->value;
         $namedArgs = [];
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem || null === $item->key) {
+            if (!$item instanceof ArrayItem || $item->key === null) {
                 continue;
             }
             $keyValue = $this->valueResolver->getValue($item->key);

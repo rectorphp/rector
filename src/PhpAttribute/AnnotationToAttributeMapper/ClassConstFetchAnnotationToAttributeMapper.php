@@ -8,6 +8,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use Rector\Validation\RectorAssert;
+use RectorPrefix202507\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
  */
@@ -39,6 +41,12 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
         }
         [$class, $constant] = $values;
         if ($class === '') {
+            return new String_($value);
+        }
+        try {
+            RectorAssert::className(\ltrim($class, '\\'));
+            RectorAssert::propertyName($constant);
+        } catch (InvalidArgumentException $exception) {
             return new String_($value);
         }
         return new ClassConstFetch(new Name($class), $constant);
