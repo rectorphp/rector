@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php82\Rector\Encapsed;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\InterpolatedString;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -44,7 +45,7 @@ CODE_SAMPLE
         $oldTokens = $this->file->getOldTokens();
         $hasChanged = \false;
         foreach ($node->parts as $part) {
-            if (!$part instanceof Variable) {
+            if (!$part instanceof Variable && !$part instanceof ArrayDimFetch) {
                 continue;
             }
             $startTokenPos = $part->getStartTokenPos();
@@ -54,7 +55,11 @@ CODE_SAMPLE
             if ((string) $oldTokens[$startTokenPos] !== '${') {
                 continue;
             }
-            $part->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            if ($part instanceof ArrayDimFetch && $part->var instanceof Variable) {
+                $oldTokens[$startTokenPos]->text = '{$';
+            } else {
+                $part->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
             $hasChanged = \true;
         }
         if (!$hasChanged) {
