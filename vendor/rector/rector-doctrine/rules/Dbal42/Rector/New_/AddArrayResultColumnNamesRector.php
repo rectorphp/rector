@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         $itemsExpr = $node->getArgs()[0]->value;
         // pass column names as 1st argument
-        $arrayDimFetch = new ArrayDimFetch($itemsExpr, new LNumber(0));
+        $arrayDimFetch = new ArrayDimFetch($itemsExpr, new Int_(0));
         $arrayCoalesce = new Coalesce($arrayDimFetch, new Array_());
         $arrayKeysFuncCall = new FuncCall(new Name('array_keys'), [new Arg($arrayCoalesce)]);
         $node->args[0] = new Arg($arrayKeysFuncCall);

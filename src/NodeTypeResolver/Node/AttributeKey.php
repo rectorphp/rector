@@ -10,7 +10,7 @@ use PHPStan\Analyser\Scope;
 final class AttributeKey
 {
     /**
-     * Internal php-parser key for String_, LNumber and DNumber nodes to hold original value (with "_" separators etc.)
+     * Internal php-parser key for String_, Int_ and Float_ nodes to hold original value (with "_" separators etc.)
      * @var string
      */
     public const RAW_VALUE = 'rawValue';

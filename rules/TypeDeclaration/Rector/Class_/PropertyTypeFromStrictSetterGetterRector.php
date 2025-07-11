@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -207,12 +207,12 @@ CODE_SAMPLE
             if ($getterSetterPropertyType instanceof FloatType) {
                 if (!$property->props[0]->default instanceof Expr) {
                     // string is used, we need default value
-                    $property->props[0]->default = new DNumber(0.0);
+                    $property->props[0]->default = new Float_(0.0);
                 }
             } elseif ($getterSetterPropertyType instanceof IntegerType) {
                 if (!$property->props[0]->default instanceof Expr) {
                     // string is used, we need default value
-                    $property->props[0]->default = new LNumber(0);
+                    $property->props[0]->default = new Int_(0);
                 }
             }
             if ($hasPropertyDefaultNull) {

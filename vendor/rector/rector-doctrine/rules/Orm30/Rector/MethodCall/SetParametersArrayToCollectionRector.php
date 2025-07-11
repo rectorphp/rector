@@ -8,14 +8,14 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
@@ -170,7 +170,7 @@ CODE_SAMPLE
             $arrayValueType = $this->nodeTypeResolver->getType($value->value);
             if (!$arrayValueType instanceof ObjectType || !$arrayValueType->isInstanceOf('Doctrine\\ORM\\Query\\Parameter')->yes()) {
                 $newParameter = new New_(new FullyQualified('Doctrine\\ORM\\Query\\Parameter'));
-                $newParameter->args = [new Arg($value->key ?? new LNumber($index)), new Arg($value->value)];
+                $newParameter->args = [new Arg($value->key ?? new Int_($index)), new Arg($value->value)];
                 $value->value = $newParameter;
                 $changedParameterType = \true;
             }
