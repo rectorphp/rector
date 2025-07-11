@@ -6,7 +6,8 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -67,8 +68,15 @@ CODE_SAMPLE
         }
         $array = $node->args[0]->value;
         $namedArgs = [];
-        foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem || $item->key === null) {
+        foreach ($array->items as $key => $item) {
+            if (!$item instanceof ArrayItem) {
+                continue;
+            }
+            if (!$item->key instanceof Expr) {
+                // handle nested array
+                if ($item->value instanceof New_) {
+                    return null;
+                }
                 continue;
             }
             $keyValue = $this->valueResolver->getValue($item->key);
