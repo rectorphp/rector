@@ -20,9 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://php.watch/versions/8.4/array_find-array_find_key-array_any-array_all
  *
- * @see \Rector\Tests\DowngradePhp84\Rector\Expression\DowngradeArrayAnyRector\DowngradeArrayAnyRectorTest
+ * @see \Rector\Tests\DowngradePhp84\Rector\Expression\DowngradeArrayFindRector\DowngradeArrayFindRectorTest
  */
-final class DowngradeArrayAnyRector extends AbstractRector
+final class DowngradeArrayFindRector extends AbstractRector
 {
     public function getNodeTypes() : array
     {
@@ -30,14 +30,14 @@ final class DowngradeArrayAnyRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Downgrade array_any() to foreach loop', [new CodeSample(<<<'CODE_SAMPLE'
-$found = array_any($animals, fn($animal) => str_starts_with($animal, 'c'));
+        return new RuleDefinition('Downgrade array_find() to foreach loop', [new CodeSample(<<<'CODE_SAMPLE'
+$found = array_find($animals, fn($animal) => str_starts_with($animal, 'c'));
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$found = false;
+$found = null;
 foreach ($animals as $animal) {
     if (str_starts_with($animal, 'c')) {
-        $found = true;
+        $found = $animal;
         break;
     }
 }
@@ -56,7 +56,7 @@ CODE_SAMPLE
         if (!$node->expr->expr instanceof FuncCall) {
             return null;
         }
-        if (!$this->isName($node->expr->expr, 'array_any')) {
+        if (!$this->isName($node->expr->expr, 'array_find')) {
             return null;
         }
         if ($node->expr->expr->isFirstClassCallable()) {
@@ -70,10 +70,10 @@ CODE_SAMPLE
             return null;
         }
         $valueCond = $args[1]->value->expr;
-        $if = new If_($valueCond, ['stmts' => [new Expression(new Assign($node->expr->var, new ConstFetch(new Name('true')))), new Break_()]]);
+        $if = new If_($valueCond, ['stmts' => [new Expression(new Assign($node->expr->var, $args[1]->value->params[0]->var)), new Break_()]]);
         return [
             // init
-            new Expression(new Assign($node->expr->var, new ConstFetch(new Name('false')))),
+            new Expression(new Assign($node->expr->var, new ConstFetch(new Name('null')))),
             // foreach loop
             new Foreach_($args[0]->value, $args[1]->value->params[0]->var, isset($args[1]->value->params[1]->var) ? ['keyVar' => $args[1]->value->params[1]->var, 'stmts' => [$if]] : ['stmts' => [$if]]),
         ];

@@ -1817,6 +1817,7 @@ class ComposerStaticInitdb65f1617bfddbb41dc0dee4425e5c9b
         'Rector\\DowngradePhp83\\Rector\\Class_\\DowngradeReadonlyAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/Class_/DowngradeReadonlyAnonymousClassRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAllRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAllRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAnyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAnyRector.php',
+        'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindRector.php',
         'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeRoundingModeEnumRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeRoundingModeEnumRector.php',
         'Rector\\DowngradePhp84\\Rector\\MethodCall\\DowngradeNewMethodCallWithoutParenthesesRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/MethodCall/DowngradeNewMethodCallWithoutParenthesesRector.php',
         'Rector\\DowngradePhp85\\Rector\\FuncCall\\DowngradeArrayFirstLastRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/FuncCall/DowngradeArrayFirstLastRector.php',
