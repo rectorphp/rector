@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeVisitor;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
@@ -69,6 +70,9 @@ CODE_SAMPLE
         }
         if (!$this->isIfWithConstantReturns($node)) {
             return null;
+        }
+        if ($node->stmts === []) {
+            return NodeVisitor::REMOVE_NODE;
         }
         return $node->stmts;
     }
