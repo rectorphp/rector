@@ -148,6 +148,13 @@ class PhpDocNode implements Node
         return array_filter(array_column($this->getTagsByName($tagName), 'value'), static fn(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value): bool => $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\RequireImplementsTagValueNode);
     }
     /**
+     * @return SealedTagValueNode[]
+     */
+    public function getSealedTagValues(string $tagName = '@phpstan-sealed') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static fn(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value): bool => $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\SealedTagValueNode);
+    }
+    /**
      * @return DeprecatedTagValueNode[]
      */
     public function getDeprecatedTagValues() : array
