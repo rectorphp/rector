@@ -61,9 +61,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null
+     * @return Stmt[]|null|int
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node)
     {
         if (!$node->else instanceof Else_) {
             return null;
