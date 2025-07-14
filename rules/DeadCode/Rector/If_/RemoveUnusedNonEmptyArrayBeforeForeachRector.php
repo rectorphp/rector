@@ -98,7 +98,7 @@ CODE_SAMPLE
      * @param If_|StmtsAwareInterface $node
      * @return Foreach_|StmtsAwareInterface|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof If_) {
             $scope = ScopeFetcher::fetch($node);

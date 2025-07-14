@@ -107,13 +107,14 @@ final class PhpDocFromTypeDeclarationDecorator
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        $returnType = $returnTagValueNode instanceof ReturnTagValueNode ? $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTagValueNode, $functionLike->returnType) : $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+        $returnDocType = $returnTagValueNode instanceof ReturnTagValueNode ? $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTagValueNode, $functionLike->returnType) : $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         // if nullable is supported, downgrade to that one
         if ($this->isNullableSupportedAndPossible($returnType)) {
             $functionLike->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
             return;
         }
-        $this->phpDocTypeChanger->changeReturnType($functionLike, $phpDocInfo, $returnType);
+        $this->phpDocTypeChanger->changeReturnType($functionLike, $phpDocInfo, $returnDocType);
         $functionLike->returnType = null;
         if (!$functionLike instanceof ClassMethod) {
             return;

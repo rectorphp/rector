@@ -27,7 +27,7 @@ final class LiteralCallLikeConstFetchReplacer
      * @param array<string|int, string> $constantMap
      * @return TCallLike
      */
-    public function replaceArgOnPosition(CallLike $callLike, int $argPosition, string $className, array $constantMap)
+    public function replaceArgOnPosition(CallLike $callLike, int $argPosition, string $className, array $constantMap) : ?\PhpParser\Node\Expr\CallLike
     {
         $args = $callLike->getArgs();
         if (!isset($args[$argPosition])) {
