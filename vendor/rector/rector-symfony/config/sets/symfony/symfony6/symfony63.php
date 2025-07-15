@@ -11,4 +11,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/symfony63/symfony63-http-client.php');
     $rectorConfig->import(__DIR__ . '/symfony63/symfony63-messenger.php');
     $rectorConfig->import(__DIR__ . '/symfony63/symfony63-console.php');
+    $rectorConfig->import(__DIR__ . '/symfony63/symfony63-web-link.php');
 };

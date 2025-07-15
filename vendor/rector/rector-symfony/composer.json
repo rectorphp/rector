@@ -22,6 +22,7 @@
         "symfony\/security-core": "^6.4",
         "symfony\/security-http": "^6.4",
         "symfony\/validator": "^6.4",
+        "symfony\/web-link": "^6.4",
         "symplify\/phpstan-rules": "^14.6",
         "symplify\/vendor-patches": "^11.3",
         "tomasvotruba\/class-leak": "^2.0",

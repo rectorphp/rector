@@ -1866,12 +1866,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "aaabd63bd1eaf4ee8e6d777cf64d591a4bdceb6f"
+                "reference": "967dc6e832bdcc72c50e347fba7d819a6b9044b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/aaabd63bd1eaf4ee8e6d777cf64d591a4bdceb6f",
-                "reference": "aaabd63bd1eaf4ee8e6d777cf64d591a4bdceb6f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/967dc6e832bdcc72c50e347fba7d819a6b9044b7",
+                "reference": "967dc6e832bdcc72c50e347fba7d819a6b9044b7",
                 "shasum": ""
             },
             "require": {
@@ -1893,6 +1893,7 @@
                 "symfony\/security-core": "^6.4",
                 "symfony\/security-http": "^6.4",
                 "symfony\/validator": "^6.4",
+                "symfony\/web-link": "^6.4",
                 "symplify\/phpstan-rules": "^14.6",
                 "symplify\/vendor-patches": "^11.3",
                 "tomasvotruba\/class-leak": "^2.0",
@@ -1900,7 +1901,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-07-11T03:23:28+00:00",
+            "time": "2025-07-15T15:04:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

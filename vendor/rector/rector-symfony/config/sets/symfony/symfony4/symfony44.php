@@ -11,4 +11,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/symfony44/symfony44-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony44/symfony44-templating.php');
     $rectorConfig->import(__DIR__ . '/symfony44/symfony44-security-core.php');
+    $rectorConfig->import(__DIR__ . '/symfony44/symfony44-web-link.php');
 };
