@@ -2565,7 +2565,6 @@ return array(
     'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => $baseDir . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
     'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => $baseDir . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
     'Rector\\Transform\\Rector\\ConstFetch\\ConstFetchToClassConstFetchRector' => $baseDir . '/rules/Transform/Rector/ConstFetch/ConstFetchToClassConstFetchRector.php',
-    'Rector\\Transform\\Rector\\FileWithoutNamespace\\RectorConfigBuilderRector' => $baseDir . '/rules/Transform/Rector/FileWithoutNamespace/RectorConfigBuilderRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => $baseDir . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => $baseDir . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\FuncCallToNewRector' => $baseDir . '/rules/Transform/Rector/FuncCall/FuncCallToNewRector.php',

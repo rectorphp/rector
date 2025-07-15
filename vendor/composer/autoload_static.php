@@ -2784,7 +2784,6 @@ class ComposerStaticInitdb65f1617bfddbb41dc0dee4425e5c9b
         'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
         'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
         'Rector\\Transform\\Rector\\ConstFetch\\ConstFetchToClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/ConstFetch/ConstFetchToClassConstFetchRector.php',
-        'Rector\\Transform\\Rector\\FileWithoutNamespace\\RectorConfigBuilderRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FileWithoutNamespace/RectorConfigBuilderRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToNewRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToNewRector.php',
