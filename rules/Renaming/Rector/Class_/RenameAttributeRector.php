@@ -6,6 +6,7 @@ namespace Rector\Renaming\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -47,10 +48,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, ClassMethod::class, Property::class];
+        return [Class_::class, ClassMethod::class, Property::class, Param::class];
     }
     /**
-     * @param Class_|ClassMethod|Property $node
+     * @param Class_|ClassMethod|Property|Param $node
      */
     public function refactor(Node $node) : ?Node
     {
