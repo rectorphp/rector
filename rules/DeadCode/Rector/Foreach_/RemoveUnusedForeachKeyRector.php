@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,12 +38,17 @@ final class RemoveUnusedForeachKeyRector extends AbstractRector
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(NodeFinder $nodeFinder, StmtsManipulator $stmtsManipulator, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer;
+    public function __construct(NodeFinder $nodeFinder, StmtsManipulator $stmtsManipulator, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->nodeFinder = $nodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -84,7 +90,7 @@ CODE_SAMPLE
                 continue;
             }
             $keyVar = $stmt->keyVar;
-            $isNodeUsed = (bool) $this->nodeFinder->findFirst($stmt->stmts, fn(Node $node): bool => $this->nodeComparator->areNodesEqual($node, $keyVar));
+            $isNodeUsed = (bool) $this->nodeFinder->findFirst($stmt->stmts, fn(Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $keyVar));
             if ($isNodeUsed) {
                 continue;
             }
