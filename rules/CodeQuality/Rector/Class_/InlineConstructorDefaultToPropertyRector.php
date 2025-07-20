@@ -7,13 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeAnalyzer\ExprAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -96,7 +96,7 @@ CODE_SAMPLE
             if ($this->exprAnalyzer->isDynamicExpr($defaultExpr)) {
                 continue;
             }
-            $hasPropertyChanged = $this->refactorProperty($node, $propertyName, $defaultExpr, $constructClassMethod, $key, $stmt);
+            $hasPropertyChanged = $this->refactorProperty($node, $propertyName, $defaultExpr, $constructClassMethod, $key);
             if ($hasPropertyChanged) {
                 $hasChanged = \true;
             }
@@ -121,7 +121,7 @@ CODE_SAMPLE
         }
         return $propertyName;
     }
-    private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key, Stmt $stmt) : bool
+    private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key) : bool
     {
         if ($class->isReadonly()) {
             return \false;
@@ -139,9 +139,9 @@ CODE_SAMPLE
                     continue;
                 }
                 $propertyProperty->default = $defaultExpr;
+                $classStmt->setAttribute(AttributeKey::COMMENTS, \array_merge($classStmt->getComments(), isset($constructClassMethod->stmts[$key]) ? $constructClassMethod->stmts[$key]->getComments() : []));
                 // remove assign
                 unset($constructClassMethod->stmts[$key]);
-                $this->mirrorComments($classStmt, $stmt, \true);
                 return \true;
             }
         }
