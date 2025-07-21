@@ -46,7 +46,7 @@ CODE_SAMPLE
         $hasVariableBeenWrapped = \false;
         $oldTokens = $this->file->getOldTokens();
         foreach ($node->parts as $index => $nodePart) {
-            if ($nodePart instanceof Variable && $nodePart->getStartTokenPos() > 0) {
+            if ($nodePart instanceof Variable && $nodePart->getStartTokenPos() >= 0) {
                 $start = $oldTokens[$nodePart->getStartTokenPos() - 1] ?? null;
                 $end = $oldTokens[$nodePart->getEndTokenPos() + 1] ?? null;
                 if ($start instanceof Token && $end instanceof Token && $start->text === '{' && $end->text === '}') {
