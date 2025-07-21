@@ -11,6 +11,7 @@ use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -86,6 +87,7 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        $scope = ScopeFetcher::fetch($node);
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
                 continue;
@@ -120,6 +122,9 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, $valueVarName)) {
+                continue;
+            }
+            if ($scope->hasVariableType($singularValueVarName)->yes()) {
                 continue;
             }
             $this->processRename($stmt, $valueVarName, $singularValueVarName);
