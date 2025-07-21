@@ -137,7 +137,9 @@ CODE_SAMPLE
             }
             return null;
         });
-        if (!$this->silentVoidResolver->hasSilentVoid($node)) {
+        // allow non native @return never type use
+        // to avoid noise for addition returns
+        if (!$this->silentVoidResolver->hasSilentVoid($node, \false)) {
             if ($hasChanged) {
                 $this->transformDocUnionVoidToUnionNull($node);
                 return $node;

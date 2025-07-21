@@ -32,7 +32,7 @@ final class NeverFuncCallAnalyzer
         }
         return \false;
     }
-    public function isWithNeverTypeExpr(Stmt $stmt) : bool
+    public function isWithNeverTypeExpr(Stmt $stmt, bool $withNativeNeverType = \true) : bool
     {
         if ($stmt instanceof Expression) {
             $stmt = $stmt->expr;
@@ -40,7 +40,7 @@ final class NeverFuncCallAnalyzer
         if ($stmt instanceof Stmt) {
             return \false;
         }
-        $stmtType = $this->nodeTypeResolver->getNativeType($stmt);
+        $stmtType = $withNativeNeverType ? $this->nodeTypeResolver->getNativeType($stmt) : $this->nodeTypeResolver->getType($stmt);
         return $stmtType instanceof NeverType;
     }
 }
