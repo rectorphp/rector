@@ -1448,6 +1448,7 @@ class ComposerStaticInit6f11260598dccd26f4238ff29b0c17be
         'Rector\\CodingStyle\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncArrayToVariadicRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',
+        'Rector\\CodingStyle\\Rector\\FuncCall\\ClosureFromCallableToFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/ClosureFromCallableToFirstClassCallableRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentImplodeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/ConsistentImplodeRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\CountArrayToEmptyArrayComparisonRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\FunctionFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php',

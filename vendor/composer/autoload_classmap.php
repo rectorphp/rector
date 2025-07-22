@@ -1229,6 +1229,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncArrayToVariadicRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncToMethodCallRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php',
+    'Rector\\CodingStyle\\Rector\\FuncCall\\ClosureFromCallableToFirstClassCallableRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ClosureFromCallableToFirstClassCallableRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentImplodeRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ConsistentImplodeRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CountArrayToEmptyArrayComparisonRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\FunctionFirstClassCallableRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/FunctionFirstClassCallableRector.php',
