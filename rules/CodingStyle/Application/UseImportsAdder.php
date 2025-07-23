@@ -170,6 +170,9 @@ final class UseImportsAdder
                 if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $importType)) {
                     continue;
                 }
+                if ($namespaceName === null && $importType instanceof FullyQualifiedObjectType && \substr_count(\ltrim($importType->getClassName(), '\\'), '\\') === 0) {
+                    continue;
+                }
                 // already imported in previous cycle
                 $newUses[] = $importType->getUseNode($type);
             }
