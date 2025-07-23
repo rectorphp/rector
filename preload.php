@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+if (defined('__PHPSTAN_RUNNING__')) {
+    return;
+}
+
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node.php';
 require_once __DIR__ . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeAbstract.php';
