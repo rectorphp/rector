@@ -52,6 +52,7 @@ final class ObjectHelpers
         if (\method_exists($class, $method)) {
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
+            $rm->setAccessible(\true);
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
             throw new MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {
@@ -75,6 +76,7 @@ final class ObjectHelpers
         if (\method_exists($class, $method)) {
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
+            $rm->setAccessible(\true);
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
             throw new MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {

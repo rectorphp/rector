@@ -226,8 +226,10 @@ function _checkTypehint(callable $callback, \Throwable $reason) : bool
 {
     if (\is_array($callback)) {
         $callbackReflection = new \ReflectionMethod($callback[0], $callback[1]);
+        $callbackReflection->setAccessible(\true);
     } elseif (\is_object($callback) && !$callback instanceof \Closure) {
         $callbackReflection = new \ReflectionMethod($callback, '__invoke');
+        $callbackReflection->setAccessible(\true);
     } else {
         \assert($callback instanceof \Closure || \is_string($callback));
         $callbackReflection = new \ReflectionFunction($callback);

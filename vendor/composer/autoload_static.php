@@ -2329,6 +2329,7 @@ class ComposerStaticInit6f11260598dccd26f4238ff29b0c17be
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\NullToStrictStringFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
+        'Rector\\Php81\\Rector\\MethodCall\\RemoveReflectionSetAccessibleCallsRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/RemoveReflectionSetAccessibleCallsRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\New_\\MyCLabsConstructorCallToEnumFromRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/New_/MyCLabsConstructorCallToEnumFromRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',

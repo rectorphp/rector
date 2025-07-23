@@ -211,8 +211,10 @@ final class Promise implements PromiseInterface
         // if the callback creates an Exception (creating garbage cycles).
         if (\is_array($callback)) {
             $ref = new \ReflectionMethod($callback[0], $callback[1]);
+            $ref->setAccessible(\true);
         } elseif (\is_object($callback) && !$callback instanceof \Closure) {
             $ref = new \ReflectionMethod($callback, '__invoke');
+            $ref->setAccessible(\true);
         } else {
             \assert($callback instanceof \Closure || \is_string($callback));
             $ref = new \ReflectionFunction($callback);

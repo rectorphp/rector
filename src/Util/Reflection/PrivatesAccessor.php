@@ -43,7 +43,6 @@ final class PrivatesAccessor
     public function getPrivateProperty(object $object, string $propertyName)
     {
         $reflectionProperty = $this->resolvePropertyReflection($object, $propertyName);
-        $reflectionProperty->setAccessible(\true);
         return $reflectionProperty->getValue($object);
     }
     /**
@@ -52,23 +51,26 @@ final class PrivatesAccessor
     public function setPrivateProperty(object $object, string $propertyName, $value) : void
     {
         $reflectionProperty = $this->resolvePropertyReflection($object, $propertyName);
-        $reflectionProperty->setAccessible(\true);
         $reflectionProperty->setValue($object, $value);
     }
     private function createAccessibleMethodReflection(object $object, string $methodName) : ReflectionMethod
     {
-        $reflectionMethod = new ReflectionMethod($object, $methodName);
-        $reflectionMethod->setAccessible(\true);
-        return $reflectionMethod;
+        $reflection = new ReflectionMethod($object, $methodName);
+        $reflection->setAccessible(\true);
+        return $reflection;
     }
     private function resolvePropertyReflection(object $object, string $propertyName) : ReflectionProperty
     {
         if (\property_exists($object, $propertyName)) {
-            return new ReflectionProperty($object, $propertyName);
+            $reflection = new ReflectionProperty($object, $propertyName);
+            $reflection->setAccessible(\true);
+            return $reflection;
         }
         $parentClass = \get_parent_class($object);
         if ($parentClass !== \false) {
-            return new ReflectionProperty($parentClass, $propertyName);
+            $reflection = new ReflectionProperty($parentClass, $propertyName);
+            $reflection->setAccessible(\true);
+            return $reflection;
         }
         $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));
         throw new MissingPrivatePropertyException($errorMessage);

@@ -2110,6 +2110,7 @@ return array(
     'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
     'Rector\\Php81\\Rector\\FuncCall\\NullToStrictStringFuncCallArgRector' => $baseDir . '/rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
+    'Rector\\Php81\\Rector\\MethodCall\\RemoveReflectionSetAccessibleCallsRector' => $baseDir . '/rules/Php81/Rector/MethodCall/RemoveReflectionSetAccessibleCallsRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\New_\\MyCLabsConstructorCallToEnumFromRector' => $baseDir . '/rules/Php81/Rector/New_/MyCLabsConstructorCallToEnumFromRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',

@@ -8,9 +8,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,6 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeSetAccessibleReflectionPropertyRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private VariableNaming $variableNaming;
+    public function __construct(VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add setAccessible() on ReflectionProperty to allow reading private properties in PHP 8.0-', [new CodeSample(<<<'CODE_SAMPLE'
@@ -65,26 +77,42 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof Expression && !$stmt instanceof Return_) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if ($stmt instanceof Expression) {
+                if (!$stmt->expr instanceof Assign) {
+                    continue;
+                }
+                $assign = $stmt->expr;
+                if (!$assign->expr instanceof New_) {
+                    continue;
+                }
+                $new = $assign->expr;
+                $variable = $assign->var;
+            } else {
+                if (!$stmt->expr instanceof New_) {
+                    continue;
+                }
+                $new = $stmt->expr;
+                $scope = ScopeFetcher::fetch($stmt);
+                $variable = new Variable($this->variableNaming->createCountedValueName('reflection', $scope));
+            }
+            if (!$this->isNames($new->class, ['ReflectionProperty', 'ReflectionMethod'])) {
                 continue;
             }
-            $assign = $stmt->expr;
-            if (!$assign->expr instanceof New_) {
-                continue;
+            if ($stmt instanceof Expression) {
+                // next stmts should be setAccessible() call
+                $nextStmt = $node->stmts[$key + 1] ?? null;
+                if ($this->isSetAccessibleMethodCall($nextStmt)) {
+                    continue;
+                }
+                \array_splice($node->stmts, $key + 1, 0, [$this->createSetAccessibleExpression($variable)]);
+            } else {
+                $previousStmts = [new Expression(new Assign($variable, $new)), $this->createSetAccessibleExpression($variable)];
+                $stmt->expr = $variable;
+                \array_splice($node->stmts, $key - 2, 0, $previousStmts);
             }
-            $new = $assign->expr;
-            if (!$this->isName($new->class, 'ReflectionProperty')) {
-                continue;
-            }
-            // next stmts should be setAccessible() call
-            $nextStmt = $node->stmts[$key + 1] ?? null;
-            if ($this->isSetAccessibleMethodCall($nextStmt)) {
-                continue;
-            }
-            \array_splice($node->stmts, $key + 1, 0, [$this->createSetAccessibleExpression($assign->var)]);
             $hasChanged = \true;
         }
         if ($hasChanged) {
