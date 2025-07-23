@@ -95,10 +95,12 @@ final class SomeCommand extends Command
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Argument;
 use Symfony\Component\Console\Option;
 
+#[AsCommand(name: 'some_name')]
 final class SomeCommand
 {
     public function __invoke(
