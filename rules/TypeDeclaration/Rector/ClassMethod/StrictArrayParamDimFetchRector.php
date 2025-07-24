@@ -26,6 +26,10 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Rector\AbstractRector;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -39,9 +43,19 @@ final class StrictArrayParamDimFetchRector extends AbstractRector
      * @readonly
      */
     private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
-    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    /**
+     * @readonly
+     */
+    private TypeComparator $typeComparator;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, TypeComparator $typeComparator, TypeFactory $typeFactory)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->typeComparator = $typeComparator;
+        $this->typeFactory = $typeFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -144,6 +158,15 @@ CODE_SAMPLE
             $dimType = $this->getType($node->dim);
             if ($dimType->isInteger()->yes() && $variableType->isString()->maybe()) {
                 return null;
+            }
+            $variableType = $this->typeFactory->createMixedPassedOrUnionType([$variableType]);
+            if ($variableType instanceof UnionType) {
+                $isParamAccessedArrayDimFetch = \false;
+                return NodeVisitor::STOP_TRAVERSAL;
+            }
+            if ($variableType instanceof ObjectType && $this->typeComparator->isSubtype($variableType, new ObjectType('ArrayAccess'))) {
+                $isParamAccessedArrayDimFetch = \false;
+                return NodeVisitor::STOP_TRAVERSAL;
             }
             $isParamAccessedArrayDimFetch = \true;
             return null;
