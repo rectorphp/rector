@@ -702,7 +702,7 @@ final class RectorConfigBuilder
         foreach ($rectorRulesWithConfiguration as $position => $rectorRuleWithConfiguration) {
             // add rules until level is reached
             if ($position > $level) {
-                continue;
+                break;
             }
             if (\is_string($rectorRuleWithConfiguration)) {
                 $this->rules[] = $rectorRuleWithConfiguration;
