@@ -7,9 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
@@ -164,29 +164,12 @@ CODE_SAMPLE
             return null;
         }
         $argValue = $args[$position]->value;
-        if ($argValue instanceof ConstFetch && $this->valueResolver->isNull($argValue)) {
+        if ($this->valueResolver->isNull($argValue)) {
             $args[$position]->value = new String_('');
             $funcCall->args = $args;
             return $funcCall;
         }
-        $type = $this->nodeTypeResolver->getType($argValue);
-        if ($type->isString()->yes()) {
-            return null;
-        }
-        $nativeType = $this->nodeTypeResolver->getNativeType($argValue);
-        if ($nativeType->isString()->yes()) {
-            return null;
-        }
-        if ($this->shouldSkipType($type)) {
-            return null;
-        }
-        if ($argValue instanceof InterpolatedString) {
-            return null;
-        }
-        if ($this->isAnErrorType($argValue, $nativeType, $scope)) {
-            return null;
-        }
-        if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
+        if ($this->shouldSkipValue($argValue, $scope, $isTrait)) {
             return null;
         }
         $parameter = $parametersAcceptor->getParameters()[$position] ?? null;
@@ -196,9 +179,40 @@ CODE_SAMPLE
                 return null;
             }
         }
+        if ($argValue instanceof Ternary && !$this->shouldSkipValue($argValue->else, $scope, $isTrait)) {
+            if ($this->valueResolver->isNull($argValue->else)) {
+                $argValue->else = new String_('');
+            } else {
+                $argValue->else = new CastString_($argValue->else);
+            }
+            $args[$position]->value = $argValue;
+            $funcCall->args = $args;
+            return $funcCall;
+        }
         $args[$position]->value = new CastString_($argValue);
         $funcCall->args = $args;
         return $funcCall;
+    }
+    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait) : bool
+    {
+        $type = $this->nodeTypeResolver->getType($expr);
+        if ($type->isString()->yes()) {
+            return \true;
+        }
+        $nativeType = $this->nodeTypeResolver->getNativeType($expr);
+        if ($nativeType->isString()->yes()) {
+            return \true;
+        }
+        if ($this->shouldSkipType($type)) {
+            return \true;
+        }
+        if ($expr instanceof InterpolatedString) {
+            return \true;
+        }
+        if ($this->isAnErrorType($expr, $nativeType, $scope)) {
+            return \true;
+        }
+        return $this->shouldSkipTrait($expr, $type, $isTrait);
     }
     private function isValidUnionType(Type $type) : bool
     {
