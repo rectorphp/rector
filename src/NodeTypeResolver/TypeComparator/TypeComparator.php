@@ -9,13 +9,16 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\ConstantScalarType;
+use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\Generic\TemplateType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -89,6 +92,13 @@ final class TypeComparator
         }
         if ($this->areTypesSameWithLiteralTypeInPhpDoc($areDifferentScalarTypes, $phpStanDocType, $phpParserNodeType)) {
             return \false;
+        }
+        if ($phpStanDocType instanceof UnionType || $phpStanDocType instanceof IntersectionType) {
+            foreach ($phpStanDocType->getTypes() as $type) {
+                if ($type instanceof TemplateObjectType) {
+                    return \false;
+                }
+            }
         }
         return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $phpParserNode);
     }
