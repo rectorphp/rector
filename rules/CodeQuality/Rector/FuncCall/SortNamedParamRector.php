@@ -118,7 +118,9 @@ CODE_SAMPLE
             $argName1 = $arg1->name;
             /** @var Identifier $argName2 */
             $argName2 = $arg2->name;
-            return $order[$argName1->name] <=> $order[$argName2->name];
+            $order1 = $order[$argName1->name] ?? \PHP_INT_MAX;
+            $order2 = $order[$argName2->name] ?? \PHP_INT_MAX;
+            return $order1 <=> $order2;
         });
         return \array_merge($sortedArgs, $toSortArgs);
     }
