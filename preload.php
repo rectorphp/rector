@@ -71,10 +71,12 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulat
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ExplicitOctalEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/MatchTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NullsafeTokenEmulator.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/PipeOperatorEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/PropertyTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReadonlyFunctionTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReadonlyTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReverseEmulator.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/VoidCastEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Modifiers.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NameContext.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Arg.php';
@@ -122,6 +124,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryO
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/Mul.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/NotEqual.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/NotIdentical.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/Pipe.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/Plus.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/Pow.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/BinaryOp/ShiftLeft.php';
@@ -139,6 +142,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Cast/In
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Cast/Object_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Cast/String_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Cast/Unset_.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Cast/Void_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/ClassConstFetch.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Clone_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/Closure.php';
