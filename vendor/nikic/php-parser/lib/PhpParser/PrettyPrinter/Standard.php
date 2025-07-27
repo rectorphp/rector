@@ -398,6 +398,10 @@ class Standard extends PrettyPrinterAbstract
     {
         return $this->pInfixOp(BinaryOp\Coalesce::class, $node->left, ' ?? ', $node->right, $precedence, $lhsPrecedence);
     }
+    protected function pExpr_BinaryOp_Pipe(BinaryOp\Pipe $node, int $precedence, int $lhsPrecedence) : string
+    {
+        return $this->pInfixOp(BinaryOp\Pipe::class, $node->left, ' |> ', $node->right, $precedence, $lhsPrecedence);
+    }
     protected function pExpr_Instanceof(Expr\Instanceof_ $node, int $precedence, int $lhsPrecedence) : string
     {
         return $this->pPostfixOp(Expr\Instanceof_::class, $node->expr, ' instanceof ' . $this->pNewOperand($node->class), $precedence, $lhsPrecedence);
@@ -484,6 +488,10 @@ class Standard extends PrettyPrinterAbstract
     protected function pExpr_Cast_Unset(Cast\Unset_ $node, int $precedence, int $lhsPrecedence) : string
     {
         return $this->pPrefixOp(Cast\Unset_::class, '(unset) ', $node->expr, $precedence, $lhsPrecedence);
+    }
+    protected function pExpr_Cast_Void(Cast\Void_ $node, int $precedence, int $lhsPrecedence) : string
+    {
+        return $this->pPrefixOp(Cast\Void_::class, '(void) ', $node->expr, $precedence, $lhsPrecedence);
     }
     // Function calls and similar constructs
     protected function pExpr_FuncCall(Expr\FuncCall $node) : string

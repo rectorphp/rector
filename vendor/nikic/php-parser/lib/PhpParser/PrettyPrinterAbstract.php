@@ -68,9 +68,11 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
         BinaryOp\Mod::class => [40, 41, 40],
         BinaryOp\Plus::class => [50, 51, 50],
         BinaryOp\Minus::class => [50, 51, 50],
+        // FIXME: This precedence is incorrect for PHP 8.
         BinaryOp\Concat::class => [50, 51, 50],
         BinaryOp\ShiftLeft::class => [60, 61, 60],
         BinaryOp\ShiftRight::class => [60, 61, 60],
+        BinaryOp\Pipe::class => [65, 66, 65],
         BinaryOp\Smaller::class => [70, 70, 70],
         BinaryOp\SmallerOrEqual::class => [70, 70, 70],
         BinaryOp\Greater::class => [70, 70, 70],
@@ -111,6 +113,7 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
         Expr\Include_::class => [220, -1, -1],
         Expr\ArrowFunction::class => [230, -1, -1],
         Expr\Throw_::class => [240, -1, -1],
+        Expr\Cast\Void_::class => [250, -1, -1],
     ];
     /** @var int Current indentation level. */
     protected int $indentLevel;
@@ -1155,7 +1158,7 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
             return;
         }
         $this->fixupMap = [Expr\Instanceof_::class => ['expr' => self::FIXUP_PREC_UNARY, 'class' => self::FIXUP_NEW], Expr\Ternary::class => ['cond' => self::FIXUP_PREC_LEFT, 'else' => self::FIXUP_PREC_RIGHT], Expr\Yield_::class => ['value' => self::FIXUP_PREC_UNARY], Expr\FuncCall::class => ['name' => self::FIXUP_CALL_LHS], Expr\StaticCall::class => ['class' => self::FIXUP_STATIC_DEREF_LHS], Expr\ArrayDimFetch::class => ['var' => self::FIXUP_DEREF_LHS], Expr\ClassConstFetch::class => ['class' => self::FIXUP_STATIC_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\New_::class => ['class' => self::FIXUP_NEW], Expr\MethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\NullsafeMethodCall::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\StaticPropertyFetch::class => ['class' => self::FIXUP_STATIC_DEREF_LHS, 'name' => self::FIXUP_VAR_BRACED_NAME], Expr\PropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Expr\NullsafePropertyFetch::class => ['var' => self::FIXUP_DEREF_LHS, 'name' => self::FIXUP_BRACED_NAME], Scalar\InterpolatedString::class => ['parts' => self::FIXUP_ENCAPSED]];
-        $binaryOps = [BinaryOp\Pow::class, BinaryOp\Mul::class, BinaryOp\Div::class, BinaryOp\Mod::class, BinaryOp\Plus::class, BinaryOp\Minus::class, BinaryOp\Concat::class, BinaryOp\ShiftLeft::class, BinaryOp\ShiftRight::class, BinaryOp\Smaller::class, BinaryOp\SmallerOrEqual::class, BinaryOp\Greater::class, BinaryOp\GreaterOrEqual::class, BinaryOp\Equal::class, BinaryOp\NotEqual::class, BinaryOp\Identical::class, BinaryOp\NotIdentical::class, BinaryOp\Spaceship::class, BinaryOp\BitwiseAnd::class, BinaryOp\BitwiseXor::class, BinaryOp\BitwiseOr::class, BinaryOp\BooleanAnd::class, BinaryOp\BooleanOr::class, BinaryOp\Coalesce::class, BinaryOp\LogicalAnd::class, BinaryOp\LogicalXor::class, BinaryOp\LogicalOr::class];
+        $binaryOps = [BinaryOp\Pow::class, BinaryOp\Mul::class, BinaryOp\Div::class, BinaryOp\Mod::class, BinaryOp\Plus::class, BinaryOp\Minus::class, BinaryOp\Concat::class, BinaryOp\ShiftLeft::class, BinaryOp\ShiftRight::class, BinaryOp\Smaller::class, BinaryOp\SmallerOrEqual::class, BinaryOp\Greater::class, BinaryOp\GreaterOrEqual::class, BinaryOp\Equal::class, BinaryOp\NotEqual::class, BinaryOp\Identical::class, BinaryOp\NotIdentical::class, BinaryOp\Spaceship::class, BinaryOp\BitwiseAnd::class, BinaryOp\BitwiseXor::class, BinaryOp\BitwiseOr::class, BinaryOp\BooleanAnd::class, BinaryOp\BooleanOr::class, BinaryOp\Coalesce::class, BinaryOp\LogicalAnd::class, BinaryOp\LogicalXor::class, BinaryOp\LogicalOr::class, BinaryOp\Pipe::class];
         foreach ($binaryOps as $binaryOp) {
             $this->fixupMap[$binaryOp] = ['left' => self::FIXUP_PREC_LEFT, 'right' => self::FIXUP_PREC_RIGHT];
         }

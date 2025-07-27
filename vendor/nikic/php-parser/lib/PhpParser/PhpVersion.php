@@ -29,7 +29,7 @@ class PhpVersion
      */
     public static function getNewestSupported() : self
     {
-        return self::fromComponents(8, 4);
+        return self::fromComponents(8, 5);
     }
     /**
      * Get the host PHP version, that is the PHP version we're currently running on.

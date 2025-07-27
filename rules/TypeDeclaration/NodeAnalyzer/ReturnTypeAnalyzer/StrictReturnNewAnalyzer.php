@@ -54,28 +54,33 @@ final class StrictReturnNewAnalyzer
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike, $returns)) {
             return null;
         }
-        if (\count($returns) !== 1) {
-            return null;
-        }
-        // exact one return of variable
-        $onlyReturn = $returns[0];
-        if (!$onlyReturn->expr instanceof Variable) {
-            return null;
-        }
-        $returnType = $this->nodeTypeResolver->getType($onlyReturn->expr);
-        if (!$returnType instanceof ObjectType) {
-            return null;
-        }
+        // in case of more returns, we need to check if they all return the same variable
         $createdVariablesToTypes = $this->resolveCreatedVariablesToTypes($functionLike);
-        $returnedVariableName = $this->nodeNameResolver->getName($onlyReturn->expr);
-        $className = $createdVariablesToTypes[$returnedVariableName] ?? null;
-        if (!\is_string($className)) {
-            return $className;
+        $alwaysReturnedClassNames = [];
+        foreach ($returns as $return) {
+            // exact one return of variable
+            if (!$return->expr instanceof Variable) {
+                return null;
+            }
+            $returnType = $this->nodeTypeResolver->getType($return->expr);
+            if (!$returnType instanceof ObjectType) {
+                return null;
+            }
+            $returnedVariableName = $this->nodeNameResolver->getName($return->expr);
+            $className = $createdVariablesToTypes[$returnedVariableName] ?? null;
+            if (!\is_string($className)) {
+                return null;
+            }
+            if ($returnType->getClassName() !== $className) {
+                return null;
+            }
+            $alwaysReturnedClassNames[] = $className;
         }
-        if ($returnType->getClassName() === $className) {
-            return $className;
+        $uniqueAlwaysReturnedClasses = \array_unique($alwaysReturnedClassNames);
+        if (\count($uniqueAlwaysReturnedClasses) !== 1) {
+            return null;
         }
-        return null;
+        return $uniqueAlwaysReturnedClasses[0];
     }
     /**
      * @return array<string, string>

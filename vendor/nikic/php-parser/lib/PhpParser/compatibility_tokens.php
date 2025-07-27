@@ -24,6 +24,9 @@ if (!\function_exists('PhpParser\\defineCompatibilityTokens')) {
             'T_PUBLIC_SET',
             'T_PROTECTED_SET',
             'T_PRIVATE_SET',
+            // PHP 8.5
+            'T_PIPE',
+            'T_VOID_CAST',
         ];
         // PHP-Parser might be used together with another library that also emulates some or all
         // of these tokens. Perform a sanity-check that all already defined tokens have been
