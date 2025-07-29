@@ -21,6 +21,7 @@ use PHPStan\Type\IntersectionType;
 use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -110,6 +111,10 @@ CODE_SAMPLE
         }
         $hasAssign = (bool) $this->betterNodeFinder->findFirstInstanceOf($node->cond, Assign::class);
         if ($hasAssign) {
+            return null;
+        }
+        $type = ScopeFetcher::fetch($node)->getNativeType($node->cond);
+        if (!$type->isTrue()->yes()) {
             return null;
         }
         if ($node->stmts === []) {
