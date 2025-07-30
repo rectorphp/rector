@@ -4,10 +4,18 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\NodeVisitor;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ArrayDimFetchToMethodCall;
@@ -26,36 +34,136 @@ class ArrayDimFetchToMethodCallRector extends AbstractRector implements Configur
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change array dim fetch to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
-$app['someService'];
+$object['key'];
+$object['key'] = 'value';
+isset($object['key']);
+unset($object['key']);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$app->make('someService');
+$object->get('key');
+$object->set('key', 'value');
+$object->has('key');
+$object->unset('key');
 CODE_SAMPLE
-, [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'make')])]);
+, [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'get', 'set', 'has', 'unset')])]);
     }
     public function getNodeTypes() : array
     {
-        return [ArrayDimFetch::class];
+        return [Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
     }
     /**
-     * @param ArrayDimFetch $node
+     * @template TNode of ArrayDimFetch|Assign|Isset_|Unset_
+     * @param TNode $node
+     * @return ($node is Unset_ ? Stmt[]|int : ($node is Isset_ ? Expr|int : MethodCall|int|null))
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node)
     {
-        if (!$node->dim instanceof Node) {
-            return null;
+        if ($node instanceof Unset_) {
+            return $this->handleUnset($node);
         }
-        foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
-            if (!$this->isObjectType($node->var, $arrayDimFetchToMethodCall->getObjectType())) {
-                continue;
+        if ($node instanceof Isset_) {
+            return $this->handleIsset($node);
+        }
+        if ($node instanceof Assign) {
+            if (!$node->var instanceof ArrayDimFetch) {
+                return null;
             }
-            return new MethodCall($node->var, $arrayDimFetchToMethodCall->getMethod(), [new Arg($node->dim)]);
+            return $this->getMethodCall($node->var, 'set', $node->expr) ?? NodeVisitor::DONT_TRAVERSE_CHILDREN;
         }
-        return null;
+        return $this->getMethodCall($node, 'get');
     }
     public function configure(array $configuration) : void
     {
         Assert::allIsInstanceOf($configuration, ArrayDimFetchToMethodCall::class);
         $this->arrayDimFetchToMethodCalls = $configuration;
+    }
+    /**
+     * @return \PhpParser\Node\Expr|int|null
+     */
+    private function handleIsset(Isset_ $node)
+    {
+        $issets = [];
+        $exprs = [];
+        foreach ($node->vars as $var) {
+            if ($var instanceof ArrayDimFetch) {
+                $methodCall = $this->getMethodCall($var, 'exists');
+                if ($methodCall !== null) {
+                    $exprs[] = $methodCall;
+                    continue;
+                }
+            }
+            $issets[] = $var;
+        }
+        if ($exprs === []) {
+            return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+        }
+        if ($issets !== []) {
+            $node->vars = $issets;
+            \array_unshift($exprs, $node);
+        }
+        return \array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry === null ? $expr : new BooleanAnd($carry, $expr), null);
+    }
+    /**
+     * @return Stmt[]|int
+     */
+    private function handleUnset(Unset_ $node)
+    {
+        $unsets = [];
+        $stmts = [];
+        foreach ($node->vars as $var) {
+            if ($var instanceof ArrayDimFetch) {
+                $methodCall = $this->getMethodCall($var, 'unset');
+                if ($methodCall !== null) {
+                    $stmts[] = new Expression($methodCall);
+                    continue;
+                }
+            }
+            $unsets[] = $var;
+        }
+        if ($stmts === []) {
+            return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+        }
+        if ($unsets !== []) {
+            $node->vars = $unsets;
+            \array_unshift($stmts, $node);
+        }
+        return $stmts;
+    }
+    /**
+     * @param 'get'|'set'|'exists'|'unset' $action
+     */
+    private function getMethodCall(ArrayDimFetch $fetch, string $action, ?Expr $value = null) : ?MethodCall
+    {
+        if (!$fetch->dim instanceof Node) {
+            return null;
+        }
+        foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
+            if (!$this->isObjectType($fetch->var, $arrayDimFetchToMethodCall->getObjectType())) {
+                continue;
+            }
+            switch ($action) {
+                case 'get':
+                    $method = $arrayDimFetchToMethodCall->getMethod();
+                    break;
+                case 'set':
+                    $method = $arrayDimFetchToMethodCall->getSetMethod();
+                    break;
+                case 'exists':
+                    $method = $arrayDimFetchToMethodCall->getExistsMethod();
+                    break;
+                case 'unset':
+                    $method = $arrayDimFetchToMethodCall->getUnsetMethod();
+                    break;
+            }
+            if ($method === null) {
+                continue;
+            }
+            $args = [new Arg($fetch->dim)];
+            if ($value instanceof Expr) {
+                $args[] = new Arg($value);
+            }
+            return new MethodCall($fetch->var, $method, $args);
+        }
+        return null;
     }
 }
