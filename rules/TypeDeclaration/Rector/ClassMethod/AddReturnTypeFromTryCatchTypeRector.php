@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Type\Type;
@@ -127,6 +128,12 @@ CODE_SAMPLE
                 }
                 $catchReturnTypes[] = $currentCatchType;
             }
+            if ($tryCatch->finally instanceof Finally_) {
+                $finallyReturnType = $this->matchReturnType($tryCatch->finally);
+                if ($finallyReturnType instanceof Type) {
+                    $catchReturnTypes[] = $finallyReturnType;
+                }
+            }
         }
         if (!$tryReturnType instanceof Type) {
             return null;
@@ -144,11 +151,11 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\TryCatch|\PhpParser\Node\Stmt\Catch_ $tryOrCatch
+     * @param \PhpParser\Node\Stmt\TryCatch|\PhpParser\Node\Stmt\Catch_|\PhpParser\Node\Stmt\Finally_ $tryOrCatchOrFinally
      */
-    private function matchReturnType($tryOrCatch) : ?Type
+    private function matchReturnType($tryOrCatchOrFinally) : ?Type
     {
-        foreach ($tryOrCatch->stmts as $stmt) {
+        foreach ($tryOrCatchOrFinally->stmts as $stmt) {
             if (!$stmt instanceof Return_) {
                 continue;
             }
