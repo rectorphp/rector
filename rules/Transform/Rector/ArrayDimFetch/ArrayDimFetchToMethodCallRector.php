@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -49,7 +50,7 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
+        return [AssignOp::class, Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
     }
     /**
      * @template TNode of ArrayDimFetch|Assign|Isset_|Unset_
@@ -58,6 +59,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof AssignOp) {
+            return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+        }
         if ($node instanceof Unset_) {
             return $this->handleUnset($node);
         }
