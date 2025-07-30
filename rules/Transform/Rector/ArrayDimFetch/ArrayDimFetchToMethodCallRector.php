@@ -26,7 +26,7 @@ use RectorPrefix202507\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ArrayDimFetch\ArrayDimFetchToMethodCallRector\ArrayDimFetchToMethodCallRectorTest
  */
-class ArrayDimFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class ArrayDimFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var ArrayDimFetchToMethodCall[]
@@ -84,14 +84,14 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr|int|null
      */
-    private function handleIsset(Isset_ $node)
+    private function handleIsset(Isset_ $isset)
     {
         $issets = [];
         $exprs = [];
-        foreach ($node->vars as $var) {
+        foreach ($isset->vars as $var) {
             if ($var instanceof ArrayDimFetch) {
                 $methodCall = $this->getMethodCall($var, 'exists');
-                if ($methodCall !== null) {
+                if ($methodCall instanceof MethodCall) {
                     $exprs[] = $methodCall;
                     continue;
                 }
@@ -102,22 +102,22 @@ CODE_SAMPLE
             return NodeVisitor::DONT_TRAVERSE_CHILDREN;
         }
         if ($issets !== []) {
-            $node->vars = $issets;
-            \array_unshift($exprs, $node);
+            $isset->vars = $issets;
+            \array_unshift($exprs, $isset);
         }
-        return \array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry === null ? $expr : new BooleanAnd($carry, $expr), null);
+        return \array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr, null);
     }
     /**
      * @return Stmt[]|int
      */
-    private function handleUnset(Unset_ $node)
+    private function handleUnset(Unset_ $unset)
     {
         $unsets = [];
         $stmts = [];
-        foreach ($node->vars as $var) {
+        foreach ($unset->vars as $var) {
             if ($var instanceof ArrayDimFetch) {
                 $methodCall = $this->getMethodCall($var, 'unset');
-                if ($methodCall !== null) {
+                if ($methodCall instanceof MethodCall) {
                     $stmts[] = new Expression($methodCall);
                     continue;
                 }
@@ -128,21 +128,21 @@ CODE_SAMPLE
             return NodeVisitor::DONT_TRAVERSE_CHILDREN;
         }
         if ($unsets !== []) {
-            $node->vars = $unsets;
-            \array_unshift($stmts, $node);
+            $unset->vars = $unsets;
+            \array_unshift($stmts, $unset);
         }
         return $stmts;
     }
     /**
      * @param 'get'|'set'|'exists'|'unset' $action
      */
-    private function getMethodCall(ArrayDimFetch $fetch, string $action, ?Expr $value = null) : ?MethodCall
+    private function getMethodCall(ArrayDimFetch $arrayDimFetch, string $action, ?Expr $expr = null) : ?MethodCall
     {
-        if (!$fetch->dim instanceof Node) {
+        if (!$arrayDimFetch->dim instanceof Node) {
             return null;
         }
         foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
-            if (!$this->isObjectType($fetch->var, $arrayDimFetchToMethodCall->getObjectType())) {
+            if (!$this->isObjectType($arrayDimFetch->var, $arrayDimFetchToMethodCall->getObjectType())) {
                 continue;
             }
             switch ($action) {
@@ -162,11 +162,11 @@ CODE_SAMPLE
             if ($method === null) {
                 continue;
             }
-            $args = [new Arg($fetch->dim)];
-            if ($value instanceof Expr) {
-                $args[] = new Arg($value);
+            $args = [new Arg($arrayDimFetch->dim)];
+            if ($expr instanceof Expr) {
+                $args[] = new Arg($expr);
             }
-            return new MethodCall($fetch->var, $method, $args);
+            return new MethodCall($arrayDimFetch->var, $method, $args);
         }
         return null;
     }

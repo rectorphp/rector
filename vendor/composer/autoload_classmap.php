@@ -2647,6 +2647,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnArrayDocblockBasedOnArrayMapRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnArrayDocblockBasedOnArrayMapRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeFromTryCatchTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeFromTryCatchTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php',

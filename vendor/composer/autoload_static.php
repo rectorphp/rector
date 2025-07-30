@@ -2866,6 +2866,7 @@ class ComposerStaticInit862b1df6d786e8a213663bef46e1a232
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnArrayDocblockBasedOnArrayMapRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnArrayDocblockBasedOnArrayMapRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeFromTryCatchTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeFromTryCatchTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddTypeFromResourceDocblockRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddTypeFromResourceDocblockRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php',

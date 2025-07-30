@@ -17,6 +17,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeR
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromPropertyTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeFromTryCatchTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
@@ -97,6 +98,7 @@ final class TypeDeclarationLevel
         AddParamTypeBasedOnPHPUnitDataProviderRector::class,
         TypedPropertyFromStrictSetUpRector::class,
         ReturnTypeFromStrictNativeCallRector::class,
+        AddReturnTypeFromTryCatchTypeRector::class,
         ReturnTypeFromStrictTypedCallRector::class,
         ChildDoctrineRepositoryClassTypeRector::class,
         // param
