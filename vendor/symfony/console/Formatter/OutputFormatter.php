@@ -8,10 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Formatter;
+namespace RectorPrefix202508\Symfony\Component\Console\Formatter;
 
-use RectorPrefix202507\Symfony\Component\Console\Exception\InvalidArgumentException;
-use function RectorPrefix202507\Symfony\Component\String\b;
+use RectorPrefix202508\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202508\Symfony\Component\Console\Helper\Helper;
+use function RectorPrefix202508\Symfony\Component\String\b;
 /**
  * Formatter class for console output.
  *
@@ -123,9 +124,11 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             if (0 != $pos && '\\' == $message[$pos - 1]) {
                 continue;
             }
+            // convert byte position to character position.
+            $pos = Helper::length(\substr($message, 0, $pos));
             // add the text up to the next tag
-            $output .= $this->applyCurrentStyle(\substr($message, $offset, $pos - $offset), $output, $width, $currentLineLength);
-            $offset = $pos + \strlen($text);
+            $output .= $this->applyCurrentStyle(Helper::substr($message, $offset, $pos - $offset), $output, $width, $currentLineLength);
+            $offset = $pos + Helper::length($text);
             // opening tag?
             if ($open = '/' !== $text[1]) {
                 $tag = $matches[1][$i][0];
@@ -143,7 +146,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
                 $this->styleStack->pop($style);
             }
         }
-        $output .= $this->applyCurrentStyle(\substr($message, $offset), $output, $width, $currentLineLength);
+        $output .= $this->applyCurrentStyle(Helper::substr($message, $offset), $output, $width, $currentLineLength);
         return \strtr($output, ["\x00" => '\\', '\\<' => '<', '\\>' => '>']);
     }
     public function getStyleStack() : OutputFormatterStyleStack
@@ -199,8 +202,16 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             $text = \ltrim($text);
         }
         if ($currentLineLength) {
-            $prefix = \substr($text, 0, $i = $width - $currentLineLength) . "\n";
-            $text = \substr($text, $i);
+            $lines = \explode("\n", $text, 2);
+            $prefix = Helper::substr($lines[0], 0, $i = $width - $currentLineLength) . "\n";
+            $text = Helper::substr($lines[0], $i);
+            if (isset($lines[1])) {
+                // $prefix may contain the full first line in which the \n is already a part of $prefix.
+                if ('' !== $text) {
+                    $text .= "\n";
+                }
+                $text .= $lines[1];
+            }
         } else {
             $prefix = '';
         }
@@ -211,8 +222,8 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             $text = "\n" . $text;
         }
         $lines = \explode("\n", $text);
-        foreach ($lines as $line) {
-            $currentLineLength += \strlen($line);
+        foreach ($lines as $i => $line) {
+            $currentLineLength = 0 === $i ? $currentLineLength + Helper::length($line) : Helper::length($line);
             if ($width <= $currentLineLength) {
                 $currentLineLength = 0;
             }

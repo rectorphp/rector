@@ -8,13 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Messenger;
+namespace RectorPrefix202508\Symfony\Component\Console\Messenger;
 
-use RectorPrefix202507\Symfony\Component\Console\Application;
-use RectorPrefix202507\Symfony\Component\Console\Command\Command;
-use RectorPrefix202507\Symfony\Component\Console\Exception\RunCommandFailedException;
-use RectorPrefix202507\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix202507\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix202508\Symfony\Component\Console\Application;
+use RectorPrefix202508\Symfony\Component\Console\Command\Command;
+use RectorPrefix202508\Symfony\Component\Console\Exception\RunCommandFailedException;
+use RectorPrefix202508\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202508\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix202508\Symfony\Component\Messenger\Exception\RecoverableExceptionInterface;
+use RectorPrefix202508\Symfony\Component\Messenger\Exception\UnrecoverableExceptionInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
@@ -35,6 +37,8 @@ final class RunCommandMessageHandler
         $this->application->setCatchExceptions($message->catchExceptions);
         try {
             $exitCode = $this->application->run($input, $output);
+        } catch (UnrecoverableExceptionInterface|RecoverableExceptionInterface $e) {
+            throw $e;
         } catch (\Throwable $e) {
             throw new RunCommandFailedException($e, new RunCommandContext($message, Command::FAILURE, $output->fetch()));
         }

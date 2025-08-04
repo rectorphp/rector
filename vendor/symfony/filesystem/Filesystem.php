@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Filesystem;
+namespace RectorPrefix202508\Symfony\Component\Filesystem;
 
-use RectorPrefix202507\Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use RectorPrefix202507\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix202507\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix202508\Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use RectorPrefix202508\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix202508\Symfony\Component\Filesystem\Exception\IOException;
 /**
  * Provides basic utility to manipulate the file system.
  *
@@ -210,7 +210,7 @@ class Filesystem
      *
      * This method always throws on Windows, as the underlying PHP function is not supported.
      *
-     * @see https://www.php.net/chown
+     * @see https://php.net/chown
      *
      * @param string|int $user      A user name or number
      * @param bool       $recursive Whether change the owner recursively or not
@@ -242,7 +242,7 @@ class Filesystem
      *
      * This method always throws on Windows, as the underlying PHP function is not supported.
      *
-     * @see https://www.php.net/chgrp
+     * @see https://php.net/chgrp
      *
      * @param string|int $group     A group name or number
      * @param bool       $recursive Whether change the group recursively or not

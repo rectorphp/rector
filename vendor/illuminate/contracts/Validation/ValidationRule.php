@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Validation;
+namespace RectorPrefix202508\Illuminate\Contracts\Validation;
 
 use Closure;
 interface ValidationRule

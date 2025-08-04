@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202507\Nette\Utils;
+namespace RectorPrefix202508\Nette\Utils;
 
-use RectorPrefix202507\Nette;
+use RectorPrefix202508\Nette;
 class Helpers
 {
     public const IsWindows = \PHP_OS_FAMILY === 'Windows';

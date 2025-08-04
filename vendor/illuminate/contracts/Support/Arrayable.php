@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Support;
+namespace RectorPrefix202508\Illuminate\Contracts\Support;
 
 /**
  * @template TKey of array-key

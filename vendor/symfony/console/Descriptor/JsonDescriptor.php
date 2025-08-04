@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix202508\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix202507\Symfony\Component\Console\Application;
-use RectorPrefix202507\Symfony\Component\Console\Command\Command;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202508\Symfony\Component\Console\Application;
+use RectorPrefix202508\Symfony\Component\Console\Command\Command;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputOption;
 /**
  * JSON descriptor.
  *
@@ -80,7 +80,7 @@ class JsonDescriptor extends Descriptor
     }
     private function getInputOptionData(InputOption $option, bool $negated = \false) : array
     {
-        return $negated ? ['name' => '--no-' . $option->getName(), 'shortcut' => '', 'accept_value' => \false, 'is_value_required' => \false, 'is_multiple' => \false, 'description' => 'Negate the "--' . $option->getName() . '" option', 'default' => \false] : ['name' => '--' . $option->getName(), 'shortcut' => $option->getShortcut() ? '-' . \str_replace('|', '|-', $option->getShortcut()) : '', 'accept_value' => $option->acceptValue(), 'is_value_required' => $option->isValueRequired(), 'is_multiple' => $option->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $option->getDescription()), 'default' => \INF === $option->getDefault() ? 'INF' : $option->getDefault()];
+        return $negated ? ['name' => '--no-' . $option->getName(), 'shortcut' => '', 'accept_value' => \false, 'is_value_required' => \false, 'is_multiple' => \false, 'description' => 'Negate the "--' . $option->getName() . '" option', 'default' => null === $option->getDefault() ? null : !$option->getDefault()] : ['name' => '--' . $option->getName(), 'shortcut' => $option->getShortcut() ? '-' . \str_replace('|', '|-', $option->getShortcut()) : '', 'accept_value' => $option->acceptValue(), 'is_value_required' => $option->isValueRequired(), 'is_multiple' => $option->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $option->getDescription()), 'default' => \INF === $option->getDefault() ? 'INF' : $option->getDefault()];
     }
     private function getInputDefinitionData(InputDefinition $definition) : array
     {

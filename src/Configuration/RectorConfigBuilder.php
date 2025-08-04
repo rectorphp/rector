@@ -36,8 +36,8 @@ use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202507\Symfony\Component\Finder\Finder;
-use RectorPrefix202507\Webmozart\Assert\Assert;
+use RectorPrefix202508\Symfony\Component\Finder\Finder;
+use RectorPrefix202508\Webmozart\Assert\Assert;
 /**
  * @api
  */

@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Cache;
+namespace RectorPrefix202508\Illuminate\Contracts\Cache;
 
 use Closure;
-use RectorPrefix202507\Psr\SimpleCache\CacheInterface;
+use RectorPrefix202508\Psr\SimpleCache\CacheInterface;
 interface Repository extends CacheInterface
 {
     /**

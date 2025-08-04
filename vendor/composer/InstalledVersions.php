@@ -9,10 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Composer;
+namespace RectorPrefix202508\Composer;
 
-use RectorPrefix202507\Composer\Autoload\ClassLoader;
-use RectorPrefix202507\Composer\Semver\VersionParser;
+use RectorPrefix202508\Composer\Autoload\ClassLoader;
+use RectorPrefix202508\Composer\Semver\VersionParser;
 /**
  * This class is copied in every Composer installed project and available to all
  *
@@ -62,7 +62,7 @@ class InstalledVersions
         if (1 === \count($packages)) {
             return $packages[0];
         }
-        return \array_keys(\array_flip(\call_user_func_array('RectorPrefix202507\\array_merge', $packages)));
+        return \array_keys(\array_flip(\call_user_func_array('RectorPrefix202508\\array_merge', $packages)));
     }
     /**
      * Returns a list of all package names with a specific type e.g. 'library'
@@ -301,7 +301,7 @@ class InstalledVersions
     private static function getInstalled()
     {
         if (null === self::$canGetVendors) {
-            self::$canGetVendors = \method_exists('RectorPrefix202507\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
+            self::$canGetVendors = \method_exists('RectorPrefix202508\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
         }
         $installed = array();
         $copiedLocalDir = \false;

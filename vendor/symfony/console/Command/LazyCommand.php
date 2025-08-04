@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Command;
+namespace RectorPrefix202508\Symfony\Component\Console\Command;
 
-use RectorPrefix202507\Symfony\Component\Console\Application;
-use RectorPrefix202507\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202507\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202507\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix202507\Symfony\Component\Console\Helper\HelperInterface;
-use RectorPrefix202507\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202507\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Application;
+use RectorPrefix202508\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202508\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202508\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202508\Symfony\Component\Console\Helper\HelperInterface;
+use RectorPrefix202508\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

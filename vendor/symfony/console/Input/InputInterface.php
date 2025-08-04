@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Input;
+namespace RectorPrefix202508\Symfony\Component\Console\Input;
 
-use RectorPrefix202507\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202507\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202508\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202508\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * InputInterface is the interface implemented by all input classes.
  *

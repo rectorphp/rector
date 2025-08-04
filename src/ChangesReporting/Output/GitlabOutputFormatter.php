@@ -7,7 +7,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix202507\Nette\Utils\Json;
+use RectorPrefix202508\Nette\Utils\Json;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Util\FileHasher;
 use Rector\ValueObject\Configuration;

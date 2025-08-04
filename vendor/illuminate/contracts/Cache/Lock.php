@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Cache;
+namespace RectorPrefix202508\Illuminate\Contracts\Cache;
 
 interface Lock
 {

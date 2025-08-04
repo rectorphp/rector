@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Auth;
+namespace RectorPrefix202508\Illuminate\Contracts\Auth;
 
 interface Authenticatable
 {

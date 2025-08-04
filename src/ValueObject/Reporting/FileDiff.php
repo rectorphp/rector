@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\ValueObject\Reporting;
 
-use RectorPrefix202507\Nette\Utils\Strings;
+use RectorPrefix202508\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202507\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix202507\Webmozart\Assert\Assert;
+use RectorPrefix202508\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202508\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
 {
     /**

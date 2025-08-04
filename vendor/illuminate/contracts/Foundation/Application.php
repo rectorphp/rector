@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202507\Illuminate\Contracts\Foundation;
+namespace RectorPrefix202508\Illuminate\Contracts\Foundation;
 
-use RectorPrefix202507\Illuminate\Contracts\Container\Container;
+use RectorPrefix202508\Illuminate\Contracts\Container\Container;
 interface Application extends Container
 {
     /**

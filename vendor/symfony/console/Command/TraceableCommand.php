@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Symfony\Component\Console\Command;
+namespace RectorPrefix202508\Symfony\Component\Console\Command;
 
-use RectorPrefix202507\Symfony\Component\Console\Application;
-use RectorPrefix202507\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202507\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202507\Symfony\Component\Console\Helper\HelperInterface;
-use RectorPrefix202507\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202507\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202507\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202507\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix202508\Symfony\Component\Console\Application;
+use RectorPrefix202508\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202508\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202508\Symfony\Component\Console\Helper\HelperInterface;
+use RectorPrefix202508\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202508\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @internal
  *
@@ -257,7 +257,7 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
         $this->options = $input->getOptions();
         $event = $this->stopwatch->start($this->getName(), 'command');
         try {
-            $this->exitCode = parent::run($input, $output);
+            $this->exitCode = $this->command->run($input, $output);
         } finally {
             $event->stop();
             if ($output instanceof ConsoleOutputInterface && $output->isDebug()) {

@@ -7,16 +7,16 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use Generator;
-use RectorPrefix202507\Nette\Utils\FileSystem;
-use RectorPrefix202507\Nette\Utils\Strings;
+use RectorPrefix202508\Nette\Utils\FileSystem;
+use RectorPrefix202508\Nette\Utils\Strings;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\JsonFileSystem;
-use RectorPrefix202507\Symfony\Component\Console\Command\Command;
-use RectorPrefix202507\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202507\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202507\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202507\Symfony\Component\Finder\Finder;
-use RectorPrefix202507\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202508\Symfony\Component\Console\Command\Command;
+use RectorPrefix202508\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202508\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202508\Symfony\Component\Finder\Finder;
+use RectorPrefix202508\Symfony\Component\Finder\SplFileInfo;
 final class CustomRuleCommand extends Command
 {
     /**

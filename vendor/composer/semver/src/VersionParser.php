@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202507\Composer\Semver;
+namespace RectorPrefix202508\Composer\Semver;
 
-use RectorPrefix202507\Composer\Semver\Constraint\ConstraintInterface;
-use RectorPrefix202507\Composer\Semver\Constraint\MatchAllConstraint;
-use RectorPrefix202507\Composer\Semver\Constraint\MultiConstraint;
-use RectorPrefix202507\Composer\Semver\Constraint\Constraint;
+use RectorPrefix202508\Composer\Semver\Constraint\ConstraintInterface;
+use RectorPrefix202508\Composer\Semver\Constraint\MatchAllConstraint;
+use RectorPrefix202508\Composer\Semver\Constraint\MultiConstraint;
+use RectorPrefix202508\Composer\Semver\Constraint\Constraint;
 /**
  * Version parser.
  *

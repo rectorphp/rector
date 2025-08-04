@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteUtils\Rector\StaticCall;
 
-use RectorPrefix202507\Nette\Utils\Json;
+use RectorPrefix202508\Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;

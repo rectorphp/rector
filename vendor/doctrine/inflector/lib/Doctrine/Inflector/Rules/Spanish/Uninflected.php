@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202507\Doctrine\Inflector\Rules\Spanish;
+namespace RectorPrefix202508\Doctrine\Inflector\Rules\Spanish;
 
-use RectorPrefix202507\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202508\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /** @return Pattern[] */
