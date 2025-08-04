@@ -19,7 +19,7 @@ use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 /**
- * @implements NodeTypeResolverInterface<scalar>
+ * @implements NodeTypeResolverInterface<Scalar>
  */
 final class ScalarTypeResolver implements NodeTypeResolverInterface
 {
