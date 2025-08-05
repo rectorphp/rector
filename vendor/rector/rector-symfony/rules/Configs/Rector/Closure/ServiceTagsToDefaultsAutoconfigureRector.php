@@ -95,6 +95,9 @@ CODE_SAMPLE
             if (!$this->isName($node->name, 'tag')) {
                 return null;
             }
+            if (\count($node->getArgs()) > 1) {
+                return null;
+            }
             // is autoconfigureable tag?
             $firstArg = $node->getArgs()[0];
             $tagValue = $this->valueResolver->getValue($firstArg->value);
