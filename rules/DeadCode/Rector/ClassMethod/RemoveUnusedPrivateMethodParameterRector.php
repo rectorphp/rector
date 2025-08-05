@@ -179,9 +179,6 @@ CODE_SAMPLE
             if (!$subNode instanceof MethodCall && !$subNode instanceof StaticCall) {
                 return \false;
             }
-            if ($subNode->isFirstClassCallable()) {
-                return \false;
-            }
             $nodeToCheck = $subNode instanceof MethodCall ? $subNode->var : $subNode->class;
             if (!$this->isObjectType($nodeToCheck, $classObjectType)) {
                 return \false;
