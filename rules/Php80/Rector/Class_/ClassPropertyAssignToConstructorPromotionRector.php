@@ -201,6 +201,9 @@ CODE_SAMPLE
             if (!$this->renameProperty && $paramName !== $propertyName) {
                 continue;
             }
+            if ($property->type instanceof Node && $param->type instanceof Node && $property->hooks !== [] && !$this->nodeComparator->areNodesEqual($property->type, $param->type)) {
+                continue;
+            }
             $hasChanged = \true;
             // remove property from class
             $propertyStmtKey = $property->getAttribute(AttributeKey::STMT_KEY);
