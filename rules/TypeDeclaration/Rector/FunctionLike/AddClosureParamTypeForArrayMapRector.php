@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
-use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Param;
+use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
