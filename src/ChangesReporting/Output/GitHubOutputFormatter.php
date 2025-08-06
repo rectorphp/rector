@@ -87,7 +87,7 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
         // TODO: Should be removed once github will have fixed it issue.
         unset($annotationProperties['endLine']);
         $nonNullProperties = \array_filter($annotationProperties, static fn($value): bool => $value !== null);
-        $sanitizedProperties = \array_map(fn($key, $value): string => \sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), \array_keys($nonNullProperties), $nonNullProperties);
+        $sanitizedProperties = \array_map(fn(string $key, $value): string => \sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), \array_keys($nonNullProperties), $nonNullProperties);
         return \implode(',', $sanitizedProperties);
     }
     /**
