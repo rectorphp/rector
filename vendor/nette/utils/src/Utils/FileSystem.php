@@ -8,6 +8,8 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function array_pop, chmod, decoct, dirname, end, fclose, file_exists, file_get_contents, file_put_contents, fopen, implode, is_dir, is_file, is_link, mkdir, preg_match, preg_split, realpath, rename, rmdir, rtrim, sprintf, str_replace, stream_copy_to_stream, stream_is_local, strtr;
+use const DIRECTORY_SEPARATOR;
 /**
  * File system tool.
  */
@@ -19,9 +21,9 @@ final class FileSystem
      */
     public static function createDir(string $dir, int $mode = 0777) : void
     {
-        if (!\is_dir($dir) && !@\mkdir($dir, $mode, \true) && !\is_dir($dir)) {
+        if (!is_dir($dir) && !@mkdir($dir, $mode, \true) && !is_dir($dir)) {
             // @ - dir may already exist
-            throw new Nette\IOException(\sprintf("Unable to create directory '%s' with mode %s. %s", self::normalizePath($dir), \decoct($mode), Helpers::getLastError()));
+            throw new Nette\IOException(sprintf("Unable to create directory '%s' with mode %s. %s", self::normalizePath($dir), decoct($mode), Helpers::getLastError()));
         }
     }
     /**
@@ -31,11 +33,11 @@ final class FileSystem
      */
     public static function copy(string $origin, string $target, bool $overwrite = \true) : void
     {
-        if (\stream_is_local($origin) && !\file_exists($origin)) {
-            throw new Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
-        } elseif (!$overwrite && \file_exists($target)) {
-            throw new Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
-        } elseif (\is_dir($origin)) {
+        if (stream_is_local($origin) && !file_exists($origin)) {
+            throw new Nette\IOException(sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
+        } elseif (!$overwrite && file_exists($target)) {
+            throw new Nette\InvalidStateException(sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
+        } elseif (is_dir($origin)) {
             static::createDir($target);
             foreach (new \FilesystemIterator($target) as $item) {
                 static::delete($item->getPathname());
@@ -48,10 +50,10 @@ final class FileSystem
                 }
             }
         } else {
-            static::createDir(\dirname($target));
-            if (@\stream_copy_to_stream(static::open($origin, 'rb'), static::open($target, 'wb')) === \false) {
+            static::createDir(dirname($target));
+            if (@stream_copy_to_stream(static::open($origin, 'rb'), static::open($target, 'wb')) === \false) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to copy file '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to copy file '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), Helpers::getLastError()));
             }
         }
     }
@@ -62,10 +64,10 @@ final class FileSystem
      */
     public static function open(string $path, string $mode)
     {
-        $f = @\fopen($path, $mode);
+        $f = @fopen($path, $mode);
         // @ is escalated to exception
         if (!$f) {
-            throw new Nette\IOException(\sprintf("Unable to open file '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
+            throw new Nette\IOException(sprintf("Unable to open file '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
         }
         return $f;
     }
@@ -75,19 +77,19 @@ final class FileSystem
      */
     public static function delete(string $path) : void
     {
-        if (\is_file($path) || \is_link($path)) {
-            $func = \DIRECTORY_SEPARATOR === '\\' && \is_dir($path) ? 'rmdir' : 'unlink';
+        if (is_file($path) || is_link($path)) {
+            $func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
             if (!@$func($path)) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to delete '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to delete '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
             }
-        } elseif (\is_dir($path)) {
+        } elseif (is_dir($path)) {
             foreach (new \FilesystemIterator($path) as $item) {
                 static::delete($item->getPathname());
             }
-            if (!@\rmdir($path)) {
+            if (!@rmdir($path)) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to delete directory '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to delete directory '%s'. %s", self::normalizePath($path), Helpers::getLastError()));
             }
         }
     }
@@ -98,18 +100,18 @@ final class FileSystem
      */
     public static function rename(string $origin, string $target, bool $overwrite = \true) : void
     {
-        if (!$overwrite && \file_exists($target)) {
-            throw new Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
-        } elseif (!\file_exists($origin)) {
-            throw new Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
+        if (!$overwrite && file_exists($target)) {
+            throw new Nette\InvalidStateException(sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
+        } elseif (!file_exists($origin)) {
+            throw new Nette\IOException(sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
         } else {
-            static::createDir(\dirname($target));
-            if (\realpath($origin) !== \realpath($target)) {
+            static::createDir(dirname($target));
+            if (realpath($origin) !== realpath($target)) {
                 static::delete($target);
             }
-            if (!@\rename($origin, $target)) {
+            if (!@rename($origin, $target)) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to rename file or directory '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to rename file or directory '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), Helpers::getLastError()));
             }
         }
     }
@@ -119,10 +121,10 @@ final class FileSystem
      */
     public static function read(string $file) : string
     {
-        $content = @\file_get_contents($file);
+        $content = @file_get_contents($file);
         // @ is escalated to exception
         if ($content === \false) {
-            throw new Nette\IOException(\sprintf("Unable to read file '%s'. %s", self::normalizePath($file), Helpers::getLastError()));
+            throw new Nette\IOException(sprintf("Unable to read file '%s'. %s", self::normalizePath($file), Helpers::getLastError()));
         }
         return $content;
     }
@@ -138,14 +140,14 @@ final class FileSystem
             $counter = 0;
             do {
                 $line = Callback::invokeSafe('fgets', [$f], function ($error) use($file) {
-                    throw new Nette\IOException(\sprintf("Unable to read file '%s'. %s", self::normalizePath($file), $error));
+                    throw new Nette\IOException(sprintf("Unable to read file '%s'. %s", self::normalizePath($file), $error));
                 });
                 if ($line === \false) {
-                    \fclose($f);
+                    fclose($f);
                     break;
                 }
                 if ($stripNewLines) {
-                    $line = \rtrim($line, "\r\n");
+                    $line = rtrim($line, "\r\n");
                 }
                 (yield $counter++ => $line);
             } while (\true);
@@ -157,14 +159,14 @@ final class FileSystem
      */
     public static function write(string $file, string $content, ?int $mode = 0666) : void
     {
-        static::createDir(\dirname($file));
-        if (@\file_put_contents($file, $content) === \false) {
+        static::createDir(dirname($file));
+        if (@file_put_contents($file, $content) === \false) {
             // @ is escalated to exception
-            throw new Nette\IOException(\sprintf("Unable to write file '%s'. %s", self::normalizePath($file), Helpers::getLastError()));
+            throw new Nette\IOException(sprintf("Unable to write file '%s'. %s", self::normalizePath($file), Helpers::getLastError()));
         }
-        if ($mode !== null && !@\chmod($file, $mode)) {
+        if ($mode !== null && !@chmod($file, $mode)) {
             // @ is escalated to exception
-            throw new Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($file), \decoct($mode), Helpers::getLastError()));
+            throw new Nette\IOException(sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($file), decoct($mode), Helpers::getLastError()));
         }
     }
     /**
@@ -174,21 +176,21 @@ final class FileSystem
      */
     public static function makeWritable(string $path, int $dirMode = 0777, int $fileMode = 0666) : void
     {
-        if (\is_file($path)) {
-            if (!@\chmod($path, $fileMode)) {
+        if (is_file($path)) {
+            if (!@chmod($path, $fileMode)) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($path), \decoct($fileMode), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($path), decoct($fileMode), Helpers::getLastError()));
             }
-        } elseif (\is_dir($path)) {
+        } elseif (is_dir($path)) {
             foreach (new \FilesystemIterator($path) as $item) {
                 static::makeWritable($item->getPathname(), $dirMode, $fileMode);
             }
-            if (!@\chmod($path, $dirMode)) {
+            if (!@chmod($path, $dirMode)) {
                 // @ is escalated to exception
-                throw new Nette\IOException(\sprintf("Unable to chmod directory '%s' to mode %s. %s", self::normalizePath($path), \decoct($dirMode), Helpers::getLastError()));
+                throw new Nette\IOException(sprintf("Unable to chmod directory '%s' to mode %s. %s", self::normalizePath($path), decoct($dirMode), Helpers::getLastError()));
             }
         } else {
-            throw new Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($path)));
+            throw new Nette\IOException(sprintf("File or directory '%s' not found.", self::normalizePath($path)));
         }
     }
     /**
@@ -196,30 +198,30 @@ final class FileSystem
      */
     public static function isAbsolute(string $path) : bool
     {
-        return (bool) \preg_match('#([a-z]:)?[/\\\\]|[a-z][a-z0-9+.-]*://#Ai', $path);
+        return (bool) preg_match('#([a-z]:)?[/\\\\]|[a-z][a-z0-9+.-]*://#Ai', $path);
     }
     /**
      * Normalizes `..` and `.` and directory separators in path.
      */
     public static function normalizePath(string $path) : string
     {
-        $parts = $path === '' ? [] : \preg_split('~[/\\\\]+~', $path);
+        $parts = $path === '' ? [] : preg_split('~[/\\\\]+~', $path);
         $res = [];
         foreach ($parts as $part) {
-            if ($part === '..' && $res && \end($res) !== '..' && \end($res) !== '') {
-                \array_pop($res);
+            if ($part === '..' && $res && end($res) !== '..' && end($res) !== '') {
+                array_pop($res);
             } elseif ($part !== '.') {
                 $res[] = $part;
             }
         }
-        return $res === [''] ? \DIRECTORY_SEPARATOR : \implode(\DIRECTORY_SEPARATOR, $res);
+        return $res === [''] ? DIRECTORY_SEPARATOR : implode(DIRECTORY_SEPARATOR, $res);
     }
     /**
      * Joins all segments of the path and normalizes the result.
      */
     public static function joinPaths(string ...$paths) : string
     {
-        return self::normalizePath(\implode('/', $paths));
+        return self::normalizePath(implode('/', $paths));
     }
     /**
      * Resolves a path against a base path. If the path is absolute, returns it directly, if it's relative, joins it with the base path.
@@ -240,14 +242,14 @@ final class FileSystem
      */
     public static function unixSlashes(string $path) : string
     {
-        return \strtr($path, '\\', '/');
+        return strtr($path, '\\', '/');
     }
     /**
      * Converts slashes to platform-specific directory separators.
      */
     public static function platformSlashes(string $path) : string
     {
-        return \DIRECTORY_SEPARATOR === '/' ? \strtr($path, '\\', '/') : \str_replace(':\\\\', '://', \strtr($path, '/', '\\'));
+        return DIRECTORY_SEPARATOR === '/' ? strtr($path, '\\', '/') : str_replace(':\\\\', '://', strtr($path, '/', '\\'));
         // protocol://
     }
 }

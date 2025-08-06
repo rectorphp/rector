@@ -8,6 +8,8 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function constant, current, defined, end, explode, file_get_contents, implode, ltrim, next, ord, strrchr, strtolower, substr;
+use const PHP_VERSION_ID, T_AS, T_CLASS, T_COMMENT, T_CURLY_OPEN, T_DOC_COMMENT, T_DOLLAR_OPEN_CURLY_BRACES, T_ENUM, T_INTERFACE, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAMESPACE, T_NS_SEPARATOR, T_STRING, T_TRAIT, T_USE, T_WHITESPACE, TOKEN_PARSE;
 /**
  * PHP reflection helpers.
  */
@@ -24,13 +26,14 @@ final class Reflection
     {
         return Validators::isClassKeyword($name);
     }
-    /** @deprecated use native ReflectionParameter::getDefaultValue()
-     * @return mixed */
+    /**
+     * @return mixed
+     */
     public static function getParameterDefaultValue(\ReflectionParameter $param)
     {
         if ($param->isDefaultValueConstant()) {
             $const = $orig = $param->getDefaultValueConstantName();
-            $pair = \explode('::', $const);
+            $pair = explode('::', $const);
             if (isset($pair[1])) {
                 $pair[0] = Type::resolve($pair[0], $param);
                 try {
@@ -40,14 +43,14 @@ final class Reflection
                     throw new \ReflectionException("Unable to resolve constant {$orig} used as default value of {$name}.", 0, $e);
                 }
                 return $rcc->getValue();
-            } elseif (!\defined($const)) {
-                $const = \substr((string) \strrchr($const, '\\'), 1);
-                if (!\defined($const)) {
+            } elseif (!defined($const)) {
+                $const = substr((string) strrchr($const, '\\'), 1);
+                if (!defined($const)) {
                     $name = self::toString($param);
                     throw new \ReflectionException("Unable to resolve constant {$orig} used as default value of {$name}.");
                 }
             }
-            return \constant($const);
+            return constant($const);
         }
         return $param->getDefaultValue();
     }
@@ -75,7 +78,7 @@ final class Reflection
             return $method;
         }
         $hash = [$method->getFileName(), $method->getStartLine(), $method->getEndLine()];
-        if (($alias = $decl->getTraitAliases()[$method->name] ?? null) && ($m = new \ReflectionMethod(...\explode('::', $alias, 2))) && $hash === [$m->getFileName(), $m->getStartLine(), $m->getEndLine()]) {
+        if (($alias = $decl->getTraitAliases()[$method->name] ?? null) && ($m = new \ReflectionMethod(...explode('::', $alias, 2))) && $hash === [$m->getFileName(), $m->getStartLine(), $m->getEndLine()]) {
             return self::getMethodDeclaringMethod($m);
         }
         foreach ($decl->getTraits() as $trait) {
@@ -100,7 +103,7 @@ final class Reflection
         } elseif ($ref instanceof \ReflectionMethod) {
             return $ref->getDeclaringClass()->name . '::' . $ref->name . '()';
         } elseif ($ref instanceof \ReflectionFunction) {
-            return \PHP_VERSION_ID >= 80200 && $ref->isAnonymous() ? '{closure}()' : $ref->name . '()';
+            return PHP_VERSION_ID >= 80200 && $ref->isAnonymous() ? '{closure}()' : $ref->name . '()';
         } elseif ($ref instanceof \ReflectionProperty) {
             return self::getPropertyDeclaringClass($ref)->name . '::$' . $ref->name;
         } elseif ($ref instanceof \ReflectionParameter) {
@@ -116,7 +119,7 @@ final class Reflection
      */
     public static function expandClassName(string $name, \ReflectionClass $context) : string
     {
-        $lower = \strtolower($name);
+        $lower = strtolower($name);
         if (empty($name)) {
             throw new Nette\InvalidArgumentException('Class name must not be empty.');
         } elseif (Validators::isBuiltinType($lower)) {
@@ -127,13 +130,13 @@ final class Reflection
             return $context->getParentClass() ? $context->getParentClass()->name : 'parent';
         } elseif ($name[0] === '\\') {
             // fully qualified name
-            return \ltrim($name, '\\');
+            return ltrim($name, '\\');
         }
         $uses = self::getUseStatements($context);
-        $parts = \explode('\\', $name, 2);
+        $parts = explode('\\', $name, 2);
         if (isset($uses[$parts[0]])) {
             $parts[0] = $uses[$parts[0]];
-            return \implode('\\', $parts);
+            return implode('\\', $parts);
         } elseif ($context->inNamespace()) {
             return $context->getNamespaceName() . '\\' . $name;
         } else {
@@ -151,7 +154,7 @@ final class Reflection
             if ($class->isInternal()) {
                 $cache[$name] = [];
             } else {
-                $code = \file_get_contents($class->getFileName());
+                $code = file_get_contents($class->getFileName());
                 $cache = self::parseUseStatements($code, $name) + $cache;
             }
         }
@@ -163,7 +166,7 @@ final class Reflection
     private static function parseUseStatements(string $code, ?string $forClass = null) : array
     {
         try {
-            $tokens = \token_get_all($code, \TOKEN_PARSE);
+            $tokens = \token_get_all($code, TOKEN_PARSE);
         } catch (\ParseError $e) {
             \trigger_error($e->getMessage(), \E_USER_NOTICE);
             $tokens = [];
@@ -171,19 +174,19 @@ final class Reflection
         $namespace = $class = null;
         $classLevel = $level = 0;
         $res = $uses = [];
-        $nameTokens = [\T_STRING, \T_NS_SEPARATOR, \T_NAME_QUALIFIED, \T_NAME_FULLY_QUALIFIED];
-        while ($token = \current($tokens)) {
-            \next($tokens);
+        $nameTokens = [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED];
+        while ($token = current($tokens)) {
+            next($tokens);
             switch ($token->id) {
-                case \T_NAMESPACE:
-                    $namespace = \ltrim(self::fetch($tokens, $nameTokens) . '\\', '\\');
+                case T_NAMESPACE:
+                    $namespace = ltrim(self::fetch($tokens, $nameTokens) . '\\', '\\');
                     $uses = [];
                     break;
-                case \T_CLASS:
-                case \T_INTERFACE:
-                case \T_TRAIT:
-                case \PHP_VERSION_ID < 80100 ? \T_CLASS : \T_ENUM:
-                    if ($name = self::fetch($tokens, \T_STRING)) {
+                case T_CLASS:
+                case T_INTERFACE:
+                case T_TRAIT:
+                case PHP_VERSION_ID < 80100 ? T_CLASS : T_ENUM:
+                    if ($name = self::fetch($tokens, T_STRING)) {
                         $class = $namespace . $name;
                         $classLevel = $level + 1;
                         $res[$class] = $uses;
@@ -192,38 +195,38 @@ final class Reflection
                         }
                     }
                     break;
-                case \T_USE:
+                case T_USE:
                     while (!$class && ($name = self::fetch($tokens, $nameTokens))) {
-                        $name = \ltrim($name, '\\');
+                        $name = ltrim($name, '\\');
                         if (self::fetch($tokens, '{')) {
                             while ($suffix = self::fetch($tokens, $nameTokens)) {
-                                if (self::fetch($tokens, \T_AS)) {
-                                    $uses[self::fetch($tokens, \T_STRING)] = $name . $suffix;
+                                if (self::fetch($tokens, T_AS)) {
+                                    $uses[self::fetch($tokens, T_STRING)] = $name . $suffix;
                                 } else {
-                                    $tmp = \explode('\\', $suffix);
-                                    $uses[\end($tmp)] = $name . $suffix;
+                                    $tmp = explode('\\', $suffix);
+                                    $uses[end($tmp)] = $name . $suffix;
                                 }
                                 if (!self::fetch($tokens, ',')) {
                                     break;
                                 }
                             }
-                        } elseif (self::fetch($tokens, \T_AS)) {
-                            $uses[self::fetch($tokens, \T_STRING)] = $name;
+                        } elseif (self::fetch($tokens, T_AS)) {
+                            $uses[self::fetch($tokens, T_STRING)] = $name;
                         } else {
-                            $tmp = \explode('\\', $name);
-                            $uses[\end($tmp)] = $name;
+                            $tmp = explode('\\', $name);
+                            $uses[end($tmp)] = $name;
                         }
                         if (!self::fetch($tokens, ',')) {
                             break;
                         }
                     }
                     break;
-                case \T_CURLY_OPEN:
-                case \T_DOLLAR_OPEN_CURLY_BRACES:
-                case \ord('{'):
+                case T_CURLY_OPEN:
+                case T_DOLLAR_OPEN_CURLY_BRACES:
+                case ord('{'):
                     $level++;
                     break;
-                case \ord('}'):
+                case ord('}'):
                     if ($level === $classLevel) {
                         $class = $classLevel = 0;
                     }
@@ -238,13 +241,13 @@ final class Reflection
     private static function fetch(array &$tokens, $take) : ?string
     {
         $res = null;
-        while ($token = \current($tokens)) {
+        while ($token = current($tokens)) {
             if ($token->is($take)) {
                 $res .= $token->text;
-            } elseif (!$token->is([\T_DOC_COMMENT, \T_WHITESPACE, \T_COMMENT])) {
+            } elseif (!$token->is([T_DOC_COMMENT, T_WHITESPACE, T_COMMENT])) {
                 break;
             }
-            \next($tokens);
+            next($tokens);
         }
         return $res;
     }

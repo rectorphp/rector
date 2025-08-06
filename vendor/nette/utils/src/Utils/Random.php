@@ -9,6 +9,8 @@ namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
 use Random\Randomizer;
+use function strlen;
+use const PHP_VERSION_ID;
 /**
  * Secure random string generator.
  */
@@ -23,12 +25,12 @@ final class Random
     {
         $charlist = \preg_replace_callback('#.-.#', fn(array $m): string => \implode('', \range($m[0][0], $m[0][2])), $charlist);
         $charlist = \count_chars($charlist, 3);
-        $chLen = \strlen($charlist);
+        $chLen = strlen($charlist);
         if ($length < 1) {
             throw new Nette\InvalidArgumentException('Length must be greater than zero.');
         } elseif ($chLen < 2) {
             throw new Nette\InvalidArgumentException('Character list must contain at least two chars.');
-        } elseif (\PHP_VERSION_ID >= 80300) {
+        } elseif (PHP_VERSION_ID >= 80300) {
             return (new Randomizer())->getBytesFromString($charlist, $length);
         }
         $res = '';

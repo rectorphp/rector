@@ -8,6 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function is_array;
 /**
  * Utilities for iterables.
  */
@@ -212,7 +213,7 @@ final class Iterables
                 return $iterable;
             case $iterable instanceof \IteratorAggregate:
                 return self::toIterator($iterable->getIterator());
-            case \is_array($iterable):
+            case is_array($iterable):
                 return new \ArrayIterator($iterable);
             default:
                 throw new Nette\ShouldNotHappenException();

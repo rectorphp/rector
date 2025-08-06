@@ -8,6 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function hexdec, ltrim, max, min, round, strlen;
 /**
  * Represent RGB color (0..255) with opacity (0..1).
  */
@@ -26,12 +27,12 @@ class ImageColor
      */
     public static function hex(string $hex) : self
     {
-        $hex = \ltrim($hex, '#');
-        $len = \strlen($hex);
+        $hex = ltrim($hex, '#');
+        $len = strlen($hex);
         if ($len === 3 || $len === 4) {
-            return new self((int) \hexdec($hex[0]) * 17, (int) \hexdec($hex[1]) * 17, (int) \hexdec($hex[2]) * 17, (int) \hexdec($hex[3] ?? 'F') * 17 / 255);
+            return new self((int) hexdec($hex[0]) * 17, (int) hexdec($hex[1]) * 17, (int) hexdec($hex[2]) * 17, (int) hexdec($hex[3] ?? 'F') * 17 / 255);
         } elseif ($len === 6 || $len === 8) {
-            return new self((int) \hexdec($hex[0] . $hex[1]), (int) \hexdec($hex[2] . $hex[3]), (int) \hexdec($hex[4] . $hex[5]), (int) \hexdec(($hex[6] ?? 'F') . ($hex[7] ?? 'F')) / 255);
+            return new self((int) hexdec($hex[0] . $hex[1]), (int) hexdec($hex[2] . $hex[3]), (int) hexdec($hex[4] . $hex[5]), (int) hexdec(($hex[6] ?? 'F') . ($hex[7] ?? 'F')) / 255);
         } else {
             throw new Nette\InvalidArgumentException('Invalid hex color format.');
         }
@@ -42,13 +43,13 @@ class ImageColor
         $this->green = $green;
         $this->blue = $blue;
         $this->opacity = $opacity;
-        $this->red = \max(0, \min(255, $red));
-        $this->green = \max(0, \min(255, $green));
-        $this->blue = \max(0, \min(255, $blue));
-        $this->opacity = \max(0, \min(1, $opacity));
+        $this->red = max(0, min(255, $red));
+        $this->green = max(0, min(255, $green));
+        $this->blue = max(0, min(255, $blue));
+        $this->opacity = max(0, min(1, $opacity));
     }
     public function toRGBA() : array
     {
-        return [\max(0, \min(255, $this->red)), \max(0, \min(255, $this->green)), \max(0, \min(255, $this->blue)), \max(0, \min(127, (int) \round(127 - $this->opacity * 127)))];
+        return [max(0, min(255, $this->red)), max(0, min(255, $this->green)), max(0, min(255, $this->blue)), max(0, min(127, (int) round(127 - $this->opacity * 127)))];
     }
 }

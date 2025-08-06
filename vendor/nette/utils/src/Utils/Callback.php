@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
-use function is_array, is_object, is_string;
+use function explode, func_get_args, ini_get, is_array, is_callable, is_object, is_string, preg_replace, restore_error_handler, set_error_handler, sprintf, str_contains, str_ends_with;
 /**
  * PHP callable tools.
  */
@@ -21,20 +21,20 @@ final class Callback
      */
     public static function invokeSafe(string $function, array $args, callable $onError)
     {
-        $prev = \set_error_handler(function ($severity, $message, $file) use($onError, &$prev, $function) : ?bool {
+        $prev = set_error_handler(function ($severity, $message, $file) use($onError, &$prev, $function) : ?bool {
             if ($file === __FILE__) {
-                $msg = \ini_get('html_errors') ? Html::htmlToText($message) : $message;
-                $msg = \preg_replace("#^{$function}\\(.*?\\): #", '', $msg);
+                $msg = ini_get('html_errors') ? Html::htmlToText($message) : $message;
+                $msg = preg_replace("#^{$function}\\(.*?\\): #", '', $msg);
                 if ($onError($msg, $severity) !== \false) {
                     return null;
                 }
             }
-            return $prev ? $prev(...\func_get_args()) : \false;
+            return $prev ? $prev(...func_get_args()) : \false;
         });
         try {
             return $function(...$args);
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
     /**
@@ -46,8 +46,8 @@ final class Callback
      */
     public static function check($callable, bool $syntax = \false)
     {
-        if (!\is_callable($callable, $syntax)) {
-            throw new Nette\InvalidArgumentException($syntax ? 'Given value is not a callable type.' : \sprintf("Callback '%s' is not callable.", self::toString($callable)));
+        if (!is_callable($callable, $syntax)) {
+            throw new Nette\InvalidArgumentException($syntax ? 'Given value is not a callable type.' : sprintf("Callback '%s' is not callable.", self::toString($callable)));
         }
         return $callable;
     }
@@ -61,7 +61,7 @@ final class Callback
             $inner = self::unwrap($callable);
             return '{closure' . ($inner instanceof \Closure ? '}' : ' ' . self::toString($inner) . '}');
         } else {
-            \is_callable(is_object($callable) ? [$callable, '__invoke'] : $callable, \true, $textual);
+            is_callable(is_object($callable) ? [$callable, '__invoke'] : $callable, \true, $textual);
             return $textual;
         }
     }
@@ -77,7 +77,7 @@ final class Callback
             $callable = self::unwrap($callable);
         }
         if (is_string($callable) && \strpos($callable, '::') !== \false) {
-            return new ReflectionMethod(...\explode('::', $callable, 2));
+            return new ReflectionMethod(...explode('::', $callable, 2));
         } elseif (is_array($callable)) {
             return new ReflectionMethod($callable[0], $callable[1]);
         } elseif (is_object($callable) && !$callable instanceof \Closure) {

@@ -8,6 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function abs, is_finite, is_nan, max, round;
 /**
  * Floating-point numbers comparison.
  */
@@ -17,11 +18,11 @@ class Floats
     private const Epsilon = 1.0E-10;
     public static function isZero(float $value) : bool
     {
-        return \abs($value) < self::Epsilon;
+        return abs($value) < self::Epsilon;
     }
     public static function isInteger(float $value) : bool
     {
-        return \abs(\round($value) - $value) < self::Epsilon;
+        return abs(round($value) - $value) < self::Epsilon;
     }
     /**
      * Compare two floats. If $a < $b it returns -1, if they are equal it returns 0 and if $a > $b it returns 1
@@ -29,13 +30,13 @@ class Floats
      */
     public static function compare(float $a, float $b) : int
     {
-        if (\is_nan($a) || \is_nan($b)) {
+        if (is_nan($a) || is_nan($b)) {
             throw new \LogicException('Trying to compare NAN');
-        } elseif (!\is_finite($a) && !\is_finite($b) && $a === $b) {
+        } elseif (!is_finite($a) && !is_finite($b) && $a === $b) {
             return 0;
         }
-        $diff = \abs($a - $b);
-        if ($diff < self::Epsilon || $diff / \max(\abs($a), \abs($b)) < self::Epsilon) {
+        $diff = abs($a - $b);
+        if ($diff < self::Epsilon || $diff / max(abs($a), abs($b)) < self::Epsilon) {
             return 0;
         }
         return $a < $b ? -1 : 1;

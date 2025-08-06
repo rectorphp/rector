@@ -8,6 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use const DIRECTORY_SEPARATOR;
 /**
  * Represents the file or directory returned by the Finder.
  * @internal do not create instances directly
@@ -33,7 +34,7 @@ final class FileInfo extends \SplFileInfo
      */
     public function getRelativePathname() : string
     {
-        return ($this->relativePath === '' ? '' : $this->relativePath . \DIRECTORY_SEPARATOR) . $this->getBasename();
+        return ($this->relativePath === '' ? '' : $this->relativePath . DIRECTORY_SEPARATOR) . $this->getBasename();
     }
     /**
      * Returns the contents of the file.

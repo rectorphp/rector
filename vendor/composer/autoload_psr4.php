@@ -35,6 +35,7 @@ return array(
     'RectorPrefix202508\\Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'RectorPrefix202508\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix202508\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
+    'RectorPrefix202508\\Nette\\' => array($vendorDir . '/nette/utils/src'),
     'RectorPrefix202508\\Illuminate\\Contracts\\' => array($vendorDir . '/illuminate/contracts'),
     'RectorPrefix202508\\Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'RectorPrefix202508\\Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),

@@ -8,6 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
 use RectorPrefix202508\Nette;
+use function count, is_array, is_scalar, sprintf;
 /**
  * Provides objects to work as array.
  * @template T
@@ -25,7 +26,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
     {
         $obj = new static();
         foreach ($array as $key => $value) {
-            $obj->{$key} = $recursive && \is_array($value) ? static::from($value) : $value;
+            $obj->{$key} = $recursive && is_array($value) ? static::from($value) : $value;
         }
         return $obj;
     }
@@ -44,23 +45,23 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
      */
     public function count() : int
     {
-        return \count((array) $this);
+        return count((array) $this);
     }
     /**
-     * Replaces or appends a item.
+     * Replaces or appends an item.
      * @param  array-key  $key
      * @param  T  $value
      */
     public function offsetSet($key, $value) : void
     {
-        if (!\is_scalar($key)) {
+        if (!is_scalar($key)) {
             // prevents null
-            throw new Nette\InvalidArgumentException(\sprintf('Key must be either a string or an integer, %s given.', \get_debug_type($key)));
+            throw new Nette\InvalidArgumentException(sprintf('Key must be either a string or an integer, %s given.', \get_debug_type($key)));
         }
         $this->{$key} = $value;
     }
     /**
-     * Returns a item.
+     * Returns an item.
      * @param  array-key  $key
      * @return T
      */
@@ -70,7 +71,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
         return $this->{$key};
     }
     /**
-     * Determines whether a item exists.
+     * Determines whether an item exists.
      * @param  array-key  $key
      */
     public function offsetExists($key) : bool

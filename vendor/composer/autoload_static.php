@@ -50,6 +50,7 @@ class ComposerStaticInit637fffe8153e0b8c33fed1ed89863932
             'RectorPrefix202508\\Psr\\Log\\' => 27,
             'RectorPrefix202508\\Psr\\Container\\' => 33,
             'RectorPrefix202508\\OndraM\\CiDetector\\' => 37,
+            'RectorPrefix202508\\Nette\\' => 25,
             'RectorPrefix202508\\Illuminate\\Contracts\\' => 40,
             'RectorPrefix202508\\Illuminate\\Container\\' => 40,
             'RectorPrefix202508\\Fidry\\CpuCoreCounter\\' => 40,
@@ -189,6 +190,10 @@ class ComposerStaticInit637fffe8153e0b8c33fed1ed89863932
         'RectorPrefix202508\\OndraM\\CiDetector\\' => 
         array (
             0 => __DIR__ . '/..' . '/ondram/ci-detector/src',
+        ),
+        'RectorPrefix202508\\Nette\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nette/utils/src',
         ),
         'RectorPrefix202508\\Illuminate\\Contracts\\' => 
         array (

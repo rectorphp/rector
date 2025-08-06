@@ -7,6 +7,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202508\Nette\Utils;
 
+use function explode, is_string, str_contains;
 /**
  * ReflectionMethod preserving the original class name.
  * @internal
@@ -19,8 +20,8 @@ final class ReflectionMethod extends \ReflectionMethod
      */
     public function __construct($objectOrMethod, ?string $method = null)
     {
-        if (\is_string($objectOrMethod) && \strpos($objectOrMethod, '::') !== \false) {
-            [$objectOrMethod, $method] = \explode('::', $objectOrMethod, 2);
+        if (is_string($objectOrMethod) && \strpos($objectOrMethod, '::') !== \false) {
+            [$objectOrMethod, $method] = explode('::', $objectOrMethod, 2);
         }
         parent::__construct($objectOrMethod, $method);
         $this->originalClass = new \ReflectionClass($objectOrMethod);
