@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FuncCall;
 
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -21,6 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrowFunctionParamArrayWhereDimFetchRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     */
     private BetterNodeFinder $betterNodeFinder;
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
@@ -73,7 +78,7 @@ CODE_SAMPLE
             $skippedVariableNames = \array_merge($isArrayVariableNames, $instanceofVariableNames);
             $dimFetchVariableNames = $this->resolveDimFetchVariableNames($closureExpr);
             foreach ($closureExpr->getParams() as $closureParam) {
-                if ($closureParam->type instanceof \PhpParser\Node) {
+                if ($closureParam->type instanceof Node) {
                     // param is known already
                     continue;
                 }
@@ -103,16 +108,12 @@ CODE_SAMPLE
      */
     private function resolveDimFetchVariableNames($closureExpr) : array
     {
-        if ($closureExpr instanceof ArrowFunction) {
-            $closureNodes = [$closureExpr->expr];
-        } else {
-            $closureNodes = $closureExpr->stmts;
-        }
+        $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
         /** @var ArrayDimFetch[] $arrayDimFetches */
         $arrayDimFetches = $this->betterNodeFinder->findInstancesOfScoped($closureNodes, ArrayDimFetch::class);
         $usedDimFetchVariableNames = [];
         foreach ($arrayDimFetches as $arrayDimFetch) {
-            if ($arrayDimFetch->var instanceof Node\Expr\Variable) {
+            if ($arrayDimFetch->var instanceof Variable) {
                 $usedDimFetchVariableNames[] = (string) $this->getName($arrayDimFetch->var);
             }
         }
@@ -124,11 +125,7 @@ CODE_SAMPLE
      */
     private function resolveIsArrayVariables($closureExpr) : array
     {
-        if ($closureExpr instanceof ArrowFunction) {
-            $closureNodes = [$closureExpr->expr];
-        } else {
-            $closureNodes = $closureExpr->stmts;
-        }
+        $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
         /** @var FuncCall[] $funcCalls */
         $funcCalls = $this->betterNodeFinder->findInstancesOfScoped($closureNodes, FuncCall::class);
         $variableNames = [];
@@ -137,7 +134,7 @@ CODE_SAMPLE
                 continue;
             }
             $firstArgExpr = $funcCall->getArgs()[0]->value;
-            if (!$firstArgExpr instanceof Node\Expr\Variable) {
+            if (!$firstArgExpr instanceof Variable) {
                 continue;
             }
             $variableNames[] = (string) $this->getName($firstArgExpr);
@@ -150,16 +147,12 @@ CODE_SAMPLE
      */
     private function resolveInstanceofVariables($closureExpr) : array
     {
-        if ($closureExpr instanceof ArrowFunction) {
-            $closureNodes = [$closureExpr->expr];
-        } else {
-            $closureNodes = $closureExpr->stmts;
-        }
-        /** @var Node\Expr\Instanceof_[] $instanceOfs */
-        $instanceOfs = $this->betterNodeFinder->findInstancesOfScoped($closureNodes, Node\Expr\Instanceof_::class);
+        $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
+        /** @var Instanceof_[] $instanceOfs */
+        $instanceOfs = $this->betterNodeFinder->findInstancesOfScoped($closureNodes, Instanceof_::class);
         $variableNames = [];
         foreach ($instanceOfs as $instanceOf) {
-            if (!$instanceOf->expr instanceof Node\Expr\Variable) {
+            if (!$instanceOf->expr instanceof Variable) {
                 continue;
             }
             $variableNames[] = (string) $this->getName($instanceOf->expr);
