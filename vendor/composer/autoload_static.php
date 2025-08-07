@@ -1389,6 +1389,7 @@ class ComposerStaticInit637fffe8153e0b8c33fed1ed89863932
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\DynamicDocBlockPropertyToNativePropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/DynamicDocBlockPropertyToNativePropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
+        'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\StaticToSelfStaticMethodCallOnFinalClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/StaticToSelfStaticMethodCallOnFinalClassRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
         'Rector\\CodeQuality\\Rector\\Empty_\\SimplifyEmptyCheckOnEmptyArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php',
