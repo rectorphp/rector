@@ -7,9 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -61,6 +64,7 @@ CODE_SAMPLE
         if (\count($node->getArgs()) !== 2) {
             return null;
         }
+        $hasChanged = \false;
         foreach (NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS as $functionName => $positions) {
             if (!$this->isName($node, $functionName)) {
                 continue;
@@ -78,18 +82,21 @@ CODE_SAMPLE
                 continue;
             }
             $passedExprType = $this->getType($node->getArgs()[$arrayPosition]->value);
-            if ($passedExprType instanceof ConstantArrayType || $passedExprType instanceof ArrayType) {
-                $singlePassedExprType = $passedExprType->getItemType();
-                if ($singlePassedExprType instanceof MixedType) {
-                    continue;
-                }
-                $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($singlePassedExprType, TypeKind::PARAM);
-                if (!$paramType instanceof Node) {
-                    continue;
-                }
-                $arrowFunctionParam->type = $paramType;
-                return $node;
+            $singlePassedExprType = $this->resolveArrayItemType($passedExprType);
+            if (!$singlePassedExprType instanceof Type) {
+                continue;
             }
+            if ($singlePassedExprType instanceof MixedType) {
+                continue;
+            }
+            $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($singlePassedExprType, TypeKind::PARAM);
+            if (!$paramType instanceof Node) {
+                continue;
+            }
+            $hasChanged = \true;
+            $arrowFunctionParam->type = $paramType;
+        }
+        if ($hasChanged === \false) {
             return null;
         }
         return $node;
@@ -97,5 +104,26 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::SCALAR_TYPES;
+    }
+    private function resolveArrayItemType(Type $mainType) : ?Type
+    {
+        if ($mainType instanceof ConstantArrayType || $mainType instanceof ArrayType) {
+            return $mainType->getItemType();
+        }
+        if ($mainType instanceof IntersectionType) {
+            foreach ($mainType->getTypes() as $subType) {
+                if ($subType instanceof AccessoryArrayListType) {
+                    continue;
+                }
+                if (!$subType->isArray()->yes()) {
+                    continue;
+                }
+                if (!$subType instanceof ArrayType) {
+                    continue;
+                }
+                return $subType->getItemType();
+            }
+        }
+        return null;
     }
 }

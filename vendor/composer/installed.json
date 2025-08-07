@@ -625,12 +625,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "34f1ba0f5576d7433a7c60fad946ec0667d44620"
+                "reference": "c930ca4e3cf4f17dcfb03037703679d2396d2ede"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/34f1ba0f5576d7433a7c60fad946ec0667d44620",
-                "reference": "34f1ba0f5576d7433a7c60fad946ec0667d44620",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/c930ca4e3cf4f17dcfb03037703679d2396d2ede",
+                "reference": "c930ca4e3cf4f17dcfb03037703679d2396d2ede",
                 "shasum": ""
             },
             "require": {
@@ -654,7 +654,7 @@
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2025-08-01T02:17:40+00:00",
+            "time": "2025-08-06T21:43:34+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
