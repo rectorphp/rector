@@ -50,8 +50,8 @@ final class FormInstanceToFormClassConstFetchConverter
         if ($formClassName === null) {
             return null;
         }
-        // better skip and ahndle manualyl
-        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParmaeters($argValue)) {
+        // better skip and handle manually
+        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParameters($argValue)) {
             return null;
         }
         if ($argValue instanceof New_ && $argValue->getArgs() !== []) {
@@ -65,7 +65,7 @@ final class FormInstanceToFormClassConstFetchConverter
         $currentArg->value = $classConstFetch;
         return $methodCall;
     }
-    private function isVariableOfTypeWithRequiredConstructorParmaeters(Variable $variable) : bool
+    private function isVariableOfTypeWithRequiredConstructorParameters(Variable $variable) : bool
     {
         // if form type is object with constructor args, handle manually
         $variableType = $this->nodeTypeResolver->getType($variable);

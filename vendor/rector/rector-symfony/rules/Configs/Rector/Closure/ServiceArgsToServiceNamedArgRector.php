@@ -190,7 +190,7 @@ CODE_SAMPLE
         if ($arrayItem->key instanceof Expr) {
             return $this->valueResolver->getValue($arrayItem->key);
         }
-        // fallbakc in case of empty array item
+        // fallback in case of empty array item
         return $key;
     }
 }

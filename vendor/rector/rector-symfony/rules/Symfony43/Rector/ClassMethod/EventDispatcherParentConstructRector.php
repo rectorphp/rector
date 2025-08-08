@@ -94,7 +94,7 @@ CODE_SAMPLE
         return new Expression($staticCall);
     }
     /**
-     * Looks for "parent::<methodName>
+     * Looks for "parent::<methodName>"
      */
     private function hasParentCallOfMethod(ClassMethod $classMethod, string $method) : bool
     {

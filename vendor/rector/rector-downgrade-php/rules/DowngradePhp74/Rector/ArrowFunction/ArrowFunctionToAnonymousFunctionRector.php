@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
@@ -83,7 +84,7 @@ CODE_SAMPLE
         if ($node->expr instanceof Assign && $node->expr->expr instanceof Variable) {
             $isFound = (bool) $this->betterNodeFinder->findFirst($anonymousFunctionFactory->uses, fn(Node $subNode): bool => $subNode instanceof Variable && $this->nodeComparator->areNodesEqual($subNode, $node->expr->expr));
             if (!$isFound) {
-                $isAlsoParam = \in_array($node->expr->expr->name, \array_map(static fn($param) => $param->var instanceof Variable ? $param->var->name : null, $node->params));
+                $isAlsoParam = \in_array($node->expr->expr->name, \array_map(static fn(Param $param) => $param->var instanceof Variable ? $param->var->name : null, $node->params));
                 if (!$isAlsoParam) {
                     $anonymousFunctionFactory->uses[] = new ClosureUse($node->expr->expr);
                 }

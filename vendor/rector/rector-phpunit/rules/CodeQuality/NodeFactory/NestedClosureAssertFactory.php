@@ -30,7 +30,7 @@ final class NestedClosureAssertFactory
         if ($callableFirstArg->value instanceof ArrowFunction) {
             $arrowFunction = $callableFirstArg->value;
             if ($arrowFunction->expr instanceof Identical) {
-                // unwrap closure arrow function to direct assert as more readalbe
+                // unwrap closure arrow function to direct assert as more readable
                 $identical = $arrowFunction->expr;
                 if ($identical->left instanceof Variable) {
                     return $this->createAssertSameParameters($identical->right, $assertKey);
