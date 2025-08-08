@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
@@ -43,6 +44,9 @@ final class DeadVarTagValueNodeAnalyzer
             return \false;
         }
         if ($varTagValueNode->description !== '') {
+            return \false;
+        }
+        if ($varTagValueNode->type instanceof GenericTypeNode) {
             return \false;
         }
         // is strict type superior to doc type? keep strict type only

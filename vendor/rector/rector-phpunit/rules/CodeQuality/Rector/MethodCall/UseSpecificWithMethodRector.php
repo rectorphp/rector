@@ -77,6 +77,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($node->getArgs() as $i => $argNode) {
             if (!$argNode->value instanceof MethodCall) {
                 continue;
@@ -86,7 +87,11 @@ CODE_SAMPLE
                 continue;
             }
             $node->args[$i] = $methodCall->getArgs()[0];
+            $hasChanged = \true;
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
 }

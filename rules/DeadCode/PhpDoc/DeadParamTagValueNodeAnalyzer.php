@@ -8,6 +8,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -79,6 +80,9 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if ($paramTagValueNode->description !== '') {
+            return \false;
+        }
+        if ($paramTagValueNode->type instanceof GenericTypeNode) {
             return \false;
         }
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $functionLike);

@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\Type\TypeCombinator;
@@ -72,6 +73,9 @@ final class DeadReturnTagValueNodeAnalyzer
             return \false;
         }
         if ($returnTagValueNode->description !== '') {
+            return \false;
+        }
+        if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return \false;
         }
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $functionLike);

@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Php81\NodeManipulator\AttributeGroupNewLiner;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
