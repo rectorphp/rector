@@ -88,12 +88,12 @@ use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
  * From the safest rules to more changing ones.
  *
  * @experimental This list can change in time, based on community feedback,
- * what rules are safer than other. The safest rules will be always in the top.
+ * what rules are safer than others. The safest rules will be always in the top.
  */
 final class CodeQualityLevel
 {
     /**
-     * The rule order matters, as its used in withCodeQualityLevel() method
+     * The rule order matters, as it's used in the withCodeQualityLevel() method
      * Place the safest rules first, follow by more complex ones
      *
      * @var array<class-string<RectorInterface>>

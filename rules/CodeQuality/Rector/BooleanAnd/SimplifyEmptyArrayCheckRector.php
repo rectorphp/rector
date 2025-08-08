@@ -43,7 +43,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
      */
     public function refactor(Node $node) : ?Node
     {
-        $twoNodeMatch = $this->resolvetwoNodeMatch($node);
+        $twoNodeMatch = $this->resolveTwoNodeMatch($node);
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }
@@ -60,7 +60,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         }
         return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
     }
-    private function resolvetwoNodeMatch(BooleanAnd $booleanAnd) : ?TwoNodeMatch
+    private function resolveTwoNodeMatch(BooleanAnd $booleanAnd) : ?TwoNodeMatch
     {
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $booleanAnd,

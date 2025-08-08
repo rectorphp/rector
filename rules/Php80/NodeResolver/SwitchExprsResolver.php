@@ -115,7 +115,7 @@ final class SwitchExprsResolver
         if (\count($case->stmts) !== 1) {
             return \false;
         }
-        // throws expressoin
+        // throws expression
         if ($case->stmts[0] instanceof Throw_) {
             return \true;
         }

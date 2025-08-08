@@ -72,7 +72,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $maxIndexCatches = \count($catches) - 1;
         foreach ($catches as $key => $catchItem) {
-            if (!$this->isJustThrowedSameVariable($catchItem)) {
+            if (!$this->isJustThrownSameVariable($catchItem)) {
                 continue;
             }
             /** @var FullyQualified $type */
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $node->catches = $catches;
         return $node;
     }
-    private function isJustThrowedSameVariable(Catch_ $catch) : bool
+    private function isJustThrownSameVariable(Catch_ $catch) : bool
     {
         if ($this->isEmpty($catch->stmts)) {
             return \false;
@@ -129,7 +129,7 @@ CODE_SAMPLE
             if (!$this->isObjectType($fullyQualified, new ObjectType($nextCatchType->toString()))) {
                 continue;
             }
-            if (!$this->isJustThrowedSameVariable($nextCatch)) {
+            if (!$this->isJustThrownSameVariable($nextCatch)) {
                 return \true;
             }
         }

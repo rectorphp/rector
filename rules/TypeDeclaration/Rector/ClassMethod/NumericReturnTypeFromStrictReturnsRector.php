@@ -145,14 +145,14 @@ CODE_SAMPLE
         $isAlwaysFloat = \true;
         $isAlwaysInt = \true;
         foreach ($returns as $return) {
-            $epxr = $return->expr;
-            if ($epxr instanceof UnaryMinus) {
-                $epxr = $epxr->expr;
+            $expr = $return->expr;
+            if ($expr instanceof UnaryMinus) {
+                $expr = $expr->expr;
             }
-            if (!$epxr instanceof Float_) {
+            if (!$expr instanceof Float_) {
                 $isAlwaysFloat = \false;
             }
-            if (!$epxr instanceof Int_) {
+            if (!$expr instanceof Int_) {
                 $isAlwaysInt = \false;
             }
         }

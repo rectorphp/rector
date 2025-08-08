@@ -67,7 +67,7 @@ final class UseImportNameMatcher
      */
     private function resolveName(string $prefix, string $tag, UseItem $useItem) : string
     {
-        // useuse can be renamed on the fly, so just in case, use the original one
+        // UseItem can be renamed on the fly, so just in case, use the original one
         $originalUseUseNode = $useItem->getAttribute(AttributeKey::ORIGINAL_NODE);
         if (!$originalUseUseNode instanceof UseItem) {
             throw new ShouldNotHappenException();
@@ -88,7 +88,7 @@ final class UseImportNameMatcher
     }
     private function isUseMatchingName(string $tag, UseItem $useItem) : bool
     {
-        // useuse can be renamed on the fly, so just in case, use the original one
+        // UseItem can be renamed on the fly, so just in case, use the original one
         $originalUseUseNode = $useItem->getAttribute(AttributeKey::ORIGINAL_NODE);
         if (!$originalUseUseNode instanceof UseItem) {
             return \false;

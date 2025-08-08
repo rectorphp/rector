@@ -44,7 +44,7 @@ final class UseAliasNameMatcher
                 if (\count($annotationParts) !== \count($attributeParts)) {
                     continue;
                 }
-                // now we now we are matching correct contanct and old and new have the same number of parts
+                // now we are matching correct contact and old and new have the same number of parts
                 $useImportPartCount = \substr_count($originalUseUseNode->name->toString(), '\\') + 1;
                 $newAttributeImportPart = \array_slice($attributeParts, 0, $useImportPartCount);
                 $newAttributeImport = \implode('\\', $newAttributeImportPart);

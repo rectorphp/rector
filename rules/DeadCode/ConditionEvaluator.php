@@ -31,7 +31,7 @@ final class ConditionEvaluator
             return $this->evaluateVersionCompareCondition($condition);
         }
         if ($condition instanceof BinaryToVersionCompareCondition) {
-            return $this->isEvaluedAsTrue($condition);
+            return $this->isEvaluatedAsTrue($condition);
         }
         return null;
     }
@@ -49,7 +49,7 @@ final class ConditionEvaluator
         }
         return \version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion());
     }
-    private function isEvaluedAsTrue(BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
+    private function isEvaluatedAsTrue(BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
     {
         $versionCompareResult = $this->evaluateVersionCompareCondition($binaryToVersionCompareCondition->getVersionCompareCondition());
         if ($binaryToVersionCompareCondition->getBinaryClass() === Identical::class) {
