@@ -12,7 +12,11 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([ArrayFirstLastRector::class]);
-    $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [new RemoveFuncCallArg('openssl_pkey_derive', 2)]);
+    $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
+        new RemoveFuncCallArg('openssl_pkey_derive', 2),
+        // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_the_exclude_disabled_parameter_of_get_defined_functions
+        new RemoveFuncCallArg('get_defined_functions', 0),
+    ]);
     // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_splobjectstoragecontains_splobjectstorageattach_and_splobjectstoragedetach
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('SplObjectStorage', 'contains', 'offsetExists'), new MethodCallRename('SplObjectStorage', 'attach', 'offsetSet'), new MethodCallRename('SplObjectStorage', 'detach', 'offsetUnset')]);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
