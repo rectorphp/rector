@@ -75,6 +75,9 @@ CODE_SAMPLE
             if (!$firstArgExpr instanceof ArrowFunction && !$firstArgExpr instanceof Closure) {
                 continue;
             }
+            if (\count($firstArgExpr->getParams()) !== 1) {
+                continue;
+            }
             $arrowFunction = $firstArgExpr;
             $arrowFunctionParam = $arrowFunction->getParams()[0];
             // param is known already
