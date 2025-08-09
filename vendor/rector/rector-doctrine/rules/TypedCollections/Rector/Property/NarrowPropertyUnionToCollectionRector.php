@@ -119,8 +119,8 @@ CODE_SAMPLE
         if (!$property->type instanceof UnionType) {
             return \false;
         }
-        foreach ($property->type->types as $uniontedType) {
-            if (!$this->isCollectionName($uniontedType)) {
+        foreach ($property->type->types as $unionedType) {
+            if (!$this->isCollectionName($unionedType)) {
                 continue;
             }
             // narrow to pure collection

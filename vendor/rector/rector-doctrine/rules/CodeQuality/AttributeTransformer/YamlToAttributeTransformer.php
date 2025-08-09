@@ -34,9 +34,9 @@ final class YamlToAttributeTransformer
     }
     public function transform(Class_ $class, EntityMapping $entityMapping) : bool
     {
-        $hasTrasnformedClass = $this->transformClass($class, $entityMapping);
-        $hasTrasnformedProperties = $this->transformProperties($class, $entityMapping);
-        return $hasTrasnformedClass || $hasTrasnformedProperties;
+        $hasTransformedClass = $this->transformClass($class, $entityMapping);
+        $hasTransformedProperties = $this->transformProperties($class, $entityMapping);
+        return $hasTransformedClass || $hasTransformedProperties;
     }
     private function transformClass(Class_ $class, EntityMapping $entityMapping) : bool
     {
