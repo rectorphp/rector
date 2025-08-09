@@ -369,7 +369,24 @@ final class RectorConfigBuilder
      * What PHP sets should be applied? By default the same version
      * as composer.json has is used
      */
-    public function withPhpSets(bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false, bool $php70 = \false, bool $php56 = \false, bool $php55 = \false, bool $php54 = \false, bool $php53 = \false, bool $php84 = \false) : self
+    public function withPhpSets(
+        bool $php83 = \false,
+        bool $php82 = \false,
+        bool $php81 = \false,
+        bool $php80 = \false,
+        bool $php74 = \false,
+        bool $php73 = \false,
+        bool $php72 = \false,
+        bool $php71 = \false,
+        bool $php70 = \false,
+        bool $php56 = \false,
+        bool $php55 = \false,
+        bool $php54 = \false,
+        bool $php53 = \false,
+        // place on later as BC break when used in php 7.x without named arg
+        bool $php84 = \false,
+        bool $php85 = \false
+    ) : self
     {
         if ($this->isWithPhpSetsUsed === \true) {
             throw new InvalidConfigurationException(\sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
@@ -434,6 +451,8 @@ final class RectorConfigBuilder
             $targetPhpVersion = PhpVersion::PHP_83;
         } elseif ($php84) {
             $targetPhpVersion = PhpVersion::PHP_84;
+        } elseif ($php85) {
+            $targetPhpVersion = PhpVersion::PHP_85;
         } else {
             throw new InvalidConfigurationException('Invalid PHP version set');
         }
