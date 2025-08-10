@@ -159,8 +159,8 @@ CODE_SAMPLE
     private function refactorArrayConstValue(Array_ $array) : ?Array_
     {
         $hasChanged = \false;
-        $newArray = new Array_();
-        $newArray->setAttributes($array->getAttributes());
+        $newArray = clone $array;
+        $newArray->items = [];
         foreach ($array->items as $item) {
             $newArray->items[] = $item;
             $type = $this->resolveItemType($item);
