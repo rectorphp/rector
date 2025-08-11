@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace RectorPrefix202508\Doctrine\Inflector;
 
 use RectorPrefix202508\Doctrine\Inflector\Rules\English;
+use RectorPrefix202508\Doctrine\Inflector\Rules\Esperanto;
 use RectorPrefix202508\Doctrine\Inflector\Rules\French;
+use RectorPrefix202508\Doctrine\Inflector\Rules\Italian;
 use RectorPrefix202508\Doctrine\Inflector\Rules\NorwegianBokmal;
 use RectorPrefix202508\Doctrine\Inflector\Rules\Portuguese;
 use RectorPrefix202508\Doctrine\Inflector\Rules\Spanish;
@@ -22,8 +24,12 @@ final class InflectorFactory
         switch ($language) {
             case Language::ENGLISH:
                 return new English\InflectorFactory();
+            case Language::ESPERANTO:
+                return new Esperanto\InflectorFactory();
             case Language::FRENCH:
                 return new French\InflectorFactory();
+            case Language::ITALIAN:
+                return new Italian\InflectorFactory();
             case Language::NORWEGIAN_BOKMAL:
                 return new NorwegianBokmal\InflectorFactory();
             case Language::PORTUGUESE:

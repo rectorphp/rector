@@ -40,7 +40,7 @@ return array(
     'RectorPrefix202508\\Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'RectorPrefix202508\\Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'RectorPrefix202508\\Evenement\\' => array($vendorDir . '/evenement/evenement/src'),
-    'RectorPrefix202508\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),
+    'RectorPrefix202508\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/src'),
     'RectorPrefix202508\\Composer\\XdebugHandler\\' => array($vendorDir . '/composer/xdebug-handler/src'),
     'RectorPrefix202508\\Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
     'RectorPrefix202508\\Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
