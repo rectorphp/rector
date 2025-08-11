@@ -2403,6 +2403,7 @@ class ComposerStaticInit637fffe8153e0b8c33fed1ed89863932
         'Rector\\Php84\\Rector\\MethodCall\\NewMethodCallWithoutParenthesesRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/MethodCall/NewMethodCallWithoutParenthesesRector.php',
         'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
         'Rector\\Php85\\Rector\\ArrayDimFetch\\ArrayFirstLastRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ArrayDimFetch/ArrayFirstLastRector.php',
+        'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
