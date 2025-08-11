@@ -5,7 +5,6 @@ namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -49,13 +48,10 @@ CODE_SAMPLE
         return [FuncCall::class, MethodCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param MethodCall|FuncCall $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->name instanceof Expr) {
-            return null;
-        }
         if ($node instanceof FuncCall && !$this->isName($node->name, 'finfo_buffer')) {
             return null;
         }
@@ -73,37 +69,37 @@ CODE_SAMPLE
         return PhpVersionFeature::DEPRECATE_FINFO_BUFFER_CONTEXT;
     }
     /**
-     * @param FuncCall|MethodCall $funcCall
+     * @param FuncCall|MethodCall $callLike
      */
-    private function removeContextArg(CallLike $funcCall) : bool
+    private function removeContextArg(CallLike $callLike) : bool
     {
         // In `finfo::buffer` method calls, the first parameter, compared to `finfo_buffer`, does not exist.
         $methodArgCorrection = 0;
-        if ($funcCall instanceof MethodCall) {
+        if ($callLike instanceof MethodCall) {
             $methodArgCorrection = -1;
         }
-        if (\count($funcCall->args) <= 2 + $methodArgCorrection) {
+        if (\count($callLike->args) <= 2 + $methodArgCorrection) {
             return \false;
         }
         // Cannot handle variadic args
-        foreach ($funcCall->args as $position => $arg) {
+        foreach ($callLike->args as $position => $arg) {
             if (!$arg instanceof Arg) {
                 return \false;
             }
         }
         /** @var array<Arg> $args */
-        $args = $funcCall->args;
+        $args = $callLike->args;
         // Argument 3 ($flags) and argument 4 ($context) are optional, thus named parameters must be considered
         if (!$this->argsAnalyzer->hasNamedArg($args)) {
             if (\count($args) < 4 + $methodArgCorrection) {
                 return \false;
             }
-            unset($funcCall->args[3 + $methodArgCorrection]);
+            unset($callLike->args[3 + $methodArgCorrection]);
             return \true;
         }
         foreach ($args as $position => $arg) {
             if ($arg->name instanceof Identifier && $arg->name->name === 'context') {
-                unset($funcCall->args[$position]);
+                unset($callLike->args[$position]);
                 return \true;
             }
         }
