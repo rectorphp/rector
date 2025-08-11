@@ -2948,6 +2948,7 @@ class ComposerStaticInit637fffe8153e0b8c33fed1ed89863932
         'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromDocblockSetUpDefinedRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromDocblockSetUpDefinedRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromJMSSerializerAttributeTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromJMSSerializerAttributeTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',

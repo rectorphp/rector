@@ -12,6 +12,7 @@ use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRec
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
@@ -126,5 +127,6 @@ final class TypeDeclarationLevel
         TypedPropertyFromJMSSerializerAttributeTypeRector::class,
         // possibly based on docblocks, but also helpful, intentionally last
         AddArrayFunctionClosureParamTypeRector::class,
+        TypedPropertyFromDocblockSetUpDefinedRector::class,
     ];
 }
