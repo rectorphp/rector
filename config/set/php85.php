@@ -17,6 +17,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class]);
     $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
+        // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_key_length_parameter_of_openssl_pkey_derive
         new RemoveFuncCallArg('openssl_pkey_derive', 2),
         // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_the_exclude_disabled_parameter_of_get_defined_functions
         new RemoveFuncCallArg('get_defined_functions', 0),
