@@ -10,6 +10,7 @@ use Rector\Doctrine\CodeQuality\Rector\Class_\RemoveEmptyTableAttributeRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromColumnTypeRector;
 use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromToOneRelationTypeRector;
+use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToManyRector;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 return static function (RectorConfig $rectorConfig) : void {
@@ -20,6 +21,7 @@ return static function (RectorConfig $rectorConfig) : void {
         // typed properties in entities from annotations/attributes
         TypedPropertyFromColumnTypeRector::class,
         TypedPropertyFromToOneRelationTypeRector::class,
+        CompleteReturnDocblockFromToManyRector::class,
         // annotations generics
         AddAnnotationToRepositoryRector::class,
     ]);
