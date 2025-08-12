@@ -243,6 +243,10 @@ CODE_SAMPLE
         if ($classMethodPhpDocInfo->getParamTagValueNodes() === []) {
             return;
         }
+        $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodes()[0] ?? null;
+        if ($paramTagValueNode instanceof ParamTagValueNode && $paramTagValueNode->description !== '') {
+            return;
+        }
         $classMethodPhpDocInfo->removeByType(ParamTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
@@ -253,6 +257,9 @@ CODE_SAMPLE
             return;
         }
         if (!$classMethodPhpDocInfo->getReturnTagValue() instanceof ReturnTagValueNode) {
+            return;
+        }
+        if ($classMethodPhpDocInfo->getReturnTagValue()->description !== '') {
             return;
         }
         $classMethodPhpDocInfo->removeByType(ReturnTagValueNode::class);
