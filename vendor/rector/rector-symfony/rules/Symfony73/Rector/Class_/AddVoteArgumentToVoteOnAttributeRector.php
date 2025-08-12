@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
@@ -89,7 +90,7 @@ CODE_SAMPLE
         if (\count($classMethod->params) !== 3) {
             return null;
         }
-        $classMethod->params[] = new Param(new Variable('vote'), new ConstFetch(new Name('null')), new Node\NullableType(new FullyQualified(self::VOTE_CLASS)));
+        $classMethod->params[] = new Param(new Variable('vote'), new ConstFetch(new Name('null')), new NullableType(new FullyQualified(self::VOTE_CLASS)));
         return $node;
     }
 }

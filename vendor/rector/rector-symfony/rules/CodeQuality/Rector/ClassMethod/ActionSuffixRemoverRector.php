@@ -7,7 +7,9 @@ use RectorPrefix202508\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,9 +22,14 @@ final class ActionSuffixRemoverRector extends AbstractRector
      * @readonly
      */
     private ControllerMethodAnalyzer $controllerMethodAnalyzer;
-    public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -60,6 +67,10 @@ CODE_SAMPLE
             return null;
         }
         if ($node->name->toString() === 'getAction') {
+            return null;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod(\rtrim($node->name->toString(), 'Action'))) {
             return null;
         }
         return $this->removeSuffix($node, 'Action');
