@@ -9,6 +9,7 @@ use RectorPrefix202508\Webmozart\Assert\Assert;
 final class RenameCast
 {
     /**
+     * @var class-string<Cast>
      * @readonly
      */
     private string $fromCastExprClass;
@@ -20,9 +21,11 @@ final class RenameCast
      * @readonly
      */
     private int $toCastKind;
+    /**
+     * @param class-string<Cast> $fromCastExprClass
+     */
     public function __construct(string $fromCastExprClass, int $fromCastKind, int $toCastKind)
     {
-        /** @var class-string<Cast> */
         $this->fromCastExprClass = $fromCastExprClass;
         $this->fromCastKind = $fromCastKind;
         $this->toCastKind = $toCastKind;
