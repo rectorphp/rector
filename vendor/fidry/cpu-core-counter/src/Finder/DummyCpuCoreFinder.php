@@ -33,6 +33,7 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
     {
         $this->count = $count;
     }
+    /** @phpstan-ignore return.unusedType */
     public function find() : ?int
     {
         return $this->count;

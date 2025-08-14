@@ -31,12 +31,14 @@ final class ProcOpenExecutor implements ProcessExecutor
             // stdout
             ['pipe', 'wb'],
         ], $pipes);
+        // https://github.com/phpstan/phpstan/issues/13197
+        /** @var array{resource, resource, resource} $pipes */
         if (!is_resource($process)) {
             return null;
         }
         fclose($pipes[0]);
-        $stdout = (string) stream_get_contents($pipes[1]);
-        $stderr = (string) stream_get_contents($pipes[2]);
+        $stdout = stream_get_contents($pipes[1]);
+        $stderr = stream_get_contents($pipes[2]);
         proc_close($process);
         return [$stdout, $stderr];
     }
