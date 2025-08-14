@@ -26,7 +26,7 @@ final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes multi catch of same exception to single one | separated.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change multiple catch statements of the same exception to a single one `|` separated', [new CodeSample(<<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 $exception) {

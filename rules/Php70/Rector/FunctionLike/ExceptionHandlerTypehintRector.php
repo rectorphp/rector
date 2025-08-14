@@ -26,7 +26,7 @@ final class ExceptionHandlerTypehintRector extends AbstractRector implements Min
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change typehint from `Exception` to `Throwable`.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change typehint from `Exception` to `Throwable`', [new CodeSample(<<<'CODE_SAMPLE'
 function handler(Exception $exception) { ... }
 set_exception_handler('handler');
 CODE_SAMPLE

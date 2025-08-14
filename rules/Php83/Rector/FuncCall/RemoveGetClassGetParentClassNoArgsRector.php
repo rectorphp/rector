@@ -20,7 +20,7 @@ final class RemoveGetClassGetParentClassNoArgsRector extends AbstractRector impl
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace calls to get_class() and get_parent_class() without arguments with self::class and parent::class.', [new CodeSample(<<<'OLD_CODE_SAMPLE'
+        return new RuleDefinition('Replace calls to `get_class()` and `get_parent_class()` without arguments with `self::class` and `parent::class`', [new CodeSample(<<<'OLD_CODE_SAMPLE'
 class Example extends StdClass {
     public function whoAreYou() {
         return get_class() . ' daughter of ' . get_parent_class();

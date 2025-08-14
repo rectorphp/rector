@@ -48,7 +48,7 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns defined annotations above properties and methods to their new values.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turn defined annotations above properties and methods to their new values', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase

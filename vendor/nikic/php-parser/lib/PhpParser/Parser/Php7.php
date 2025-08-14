@@ -1007,19 +1007,25 @@ class Php7 extends \PhpParser\ParserAbstract
         }, 486 => static function ($self, $stackPos) {
             $self->semValue = new Expr\Include_($self->semStack[$stackPos - (2 - 2)], Expr\Include_::TYPE_REQUIRE_ONCE, $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
         }, 487 => static function ($self, $stackPos) {
-            $self->semValue = new Expr\Cast\Int_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
+            $attrs = $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]);
+            $attrs['kind'] = $self->getIntCastKind($self->semStack[$stackPos - (2 - 1)]);
+            $self->semValue = new Expr\Cast\Int_($self->semStack[$stackPos - (2 - 2)], $attrs);
         }, 488 => static function ($self, $stackPos) {
             $attrs = $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]);
             $attrs['kind'] = $self->getFloatCastKind($self->semStack[$stackPos - (2 - 1)]);
             $self->semValue = new Expr\Cast\Double($self->semStack[$stackPos - (2 - 2)], $attrs);
         }, 489 => static function ($self, $stackPos) {
-            $self->semValue = new Expr\Cast\String_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
+            $attrs = $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]);
+            $attrs['kind'] = $self->getStringCastKind($self->semStack[$stackPos - (2 - 1)]);
+            $self->semValue = new Expr\Cast\String_($self->semStack[$stackPos - (2 - 2)], $attrs);
         }, 490 => static function ($self, $stackPos) {
             $self->semValue = new Expr\Cast\Array_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
         }, 491 => static function ($self, $stackPos) {
             $self->semValue = new Expr\Cast\Object_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
         }, 492 => static function ($self, $stackPos) {
-            $self->semValue = new Expr\Cast\Bool_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
+            $attrs = $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]);
+            $attrs['kind'] = $self->getBoolCastKind($self->semStack[$stackPos - (2 - 1)]);
+            $self->semValue = new Expr\Cast\Bool_($self->semStack[$stackPos - (2 - 2)], $attrs);
         }, 493 => static function ($self, $stackPos) {
             $self->semValue = new Expr\Cast\Unset_($self->semStack[$stackPos - (2 - 2)], $self->getAttributes($self->tokenStartStack[$stackPos - (2 - 1)], $self->tokenEndStack[$stackPos]));
         }, 494 => static function ($self, $stackPos) {
@@ -1157,10 +1163,10 @@ class Php7 extends \PhpParser\ParserAbstract
             $attrs = $self->getAttributes($self->tokenStartStack[$stackPos - (4 - 1)], $self->tokenEndStack[$stackPos]);
             $attrs['kind'] = Expr\Array_::KIND_LONG;
             $self->semValue = new Expr\Array_($self->semStack[$stackPos - (4 - 3)], $attrs);
-            $self->createdArrays->attach($self->semValue);
+            $self->createdArrays->offsetSet($self->semValue);
         }, 562 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (1 - 1)];
-            $self->createdArrays->attach($self->semValue);
+            $self->createdArrays->offsetSet($self->semValue);
         }, 563 => static function ($self, $stackPos) {
             $self->semValue = Scalar\String_::fromString($self->semStack[$stackPos - (1 - 1)], $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]), $self->phpVersion->supportsUnicodeEscapes());
         }, 564 => static function ($self, $stackPos) {

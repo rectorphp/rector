@@ -70,7 +70,7 @@ class Param extends NodeAbstract
         if ($public) {
             return \true;
         }
-        if ($this->hooks === []) {
+        if (!$this->isPromoted()) {
             return \false;
         }
         return ($this->flags & Modifiers::VISIBILITY_MASK) === 0;

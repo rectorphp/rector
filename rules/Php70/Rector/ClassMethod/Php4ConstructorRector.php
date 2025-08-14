@@ -50,7 +50,7 @@ final class Php4ConstructorRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes PHP 4 style constructor to __construct.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change PHP 4 style constructor to `__construct`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function SomeClass()

@@ -32,7 +32,7 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Prior PHP 8.2 FilesystemIterator::SKIP_DOTS was always set and could not be removed, therefore FilesystemIterator::SKIP_DOTS is added in order to keep this behaviour.', [new CodeSample('new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME);', 'new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::SKIP_DOTS);')]);
+        return new RuleDefinition('Prior PHP 8.2 FilesystemIterator::SKIP_DOTS was always set and could not be removed, therefore FilesystemIterator::SKIP_DOTS is added in order to keep this behaviour', [new CodeSample('new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME);', 'new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::SKIP_DOTS);')]);
     }
     public function getNodeTypes() : array
     {
