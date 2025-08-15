@@ -41,7 +41,6 @@ abstract class Helper implements HelperInterface
     public static function width(?string $string) : int
     {
         $string ??= '';
-        return \mb_strlen($string);
         if (\preg_match('//u', $string)) {
             $string = \preg_replace('/[\\p{Cc}\\x7F]++/u', '', $string, -1, $count);
             return (new UnicodeString($string))->width(\false) + $count;
@@ -58,7 +57,6 @@ abstract class Helper implements HelperInterface
     public static function length(?string $string) : int
     {
         $string ??= '';
-        return \mb_strlen($string);
         if (\preg_match('//u', $string)) {
             return (new UnicodeString($string))->length();
         }

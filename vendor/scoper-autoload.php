@@ -32,7 +32,7 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
 humbug_phpscoper_expose_class('SameBeforeAfterFixtureDetector', 'RectorPrefix202508\SameBeforeAfterFixtureDetector');
 humbug_phpscoper_expose_class('NoPhpFileInFixturesDetector', 'RectorPrefix202508\NoPhpFileInFixturesDetector');
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202508\AutoloadIncluder');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit7997d2a6d1f6f02bc7709b8039d505e5', 'RectorPrefix202508\ComposerAutoloaderInit7997d2a6d1f6f02bc7709b8039d505e5');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit7e5378a9f76bdf91928418d7d46a4747', 'RectorPrefix202508\ComposerAutoloaderInit7e5378a9f76bdf91928418d7d46a4747');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202508\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202508\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202508\Normalizer');

@@ -2046,11 +2046,6 @@
             },
             "time": "2025-07-30T10:38:54+00:00",
             "type": "library",
-            "extra": {
-                "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-console-helper-helper-php.patch"
-                ]
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
