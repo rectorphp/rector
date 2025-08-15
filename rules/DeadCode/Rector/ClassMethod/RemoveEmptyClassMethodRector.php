@@ -93,7 +93,7 @@ CODE_SAMPLE
             if ($stmt->isAbstract()) {
                 continue;
             }
-            if ($stmt->isFinal() && !$node->isFinal() && FeatureFlags::treatClassesAsFinal() === \false) {
+            if ($stmt->isFinal() && !$node->isFinal() && FeatureFlags::treatClassesAsFinal($node) === \false) {
                 continue;
             }
             if ($this->shouldSkipNonFinalNonPrivateClassMethod($node, $stmt)) {
@@ -112,8 +112,8 @@ CODE_SAMPLE
     }
     private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
-        if ($class->isFinal() || FeatureFlags::treatClassesAsFinal()) {
-            return $class->isAbstract();
+        if ($class->isFinal() || FeatureFlags::treatClassesAsFinal($class)) {
+            return \false;
         }
         if ($classMethod->isMagic()) {
             return \false;
