@@ -4,15 +4,12 @@ declare (strict_types=1);
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitor;
@@ -156,15 +153,14 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param array<class-string<T>>|class-string<T> $types
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function hasInstancesOfInFunctionLikeScoped($functionLike, $types) : bool
+    public function hasInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types) : bool
     {
         if (\is_string($types)) {
             $types = [$types];
         }
         $isFoundNode = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, static function (Node $subNode) use($types, &$isFoundNode) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $subNode) use($types, &$isFoundNode) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -180,12 +176,11 @@ final class BetterNodeFinder
     }
     /**
      * @return Return_[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function findReturnsScoped($functionLike) : array
+    public function findReturnsScoped(FunctionLike $functionLike) : array
     {
         $returns = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $subNode) use(&$returns) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use(&$returns) : ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -237,20 +232,18 @@ final class BetterNodeFinder
      * @template T of Node
      * @param array<class-string<T>>|class-string<T> $types
      * @return array<T>
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function findInstancesOfInFunctionLikeScoped($functionLike, $types) : array
+    public function findInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types) : array
     {
         return $this->findInstancesOfScoped([$functionLike], $types);
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function findFirstInFunctionLikeScoped($functionLike, callable $filter) : ?Node
+    public function findFirstInFunctionLikeScoped(FunctionLike $functionLike, callable $filter) : ?Node
     {
         $scopedNode = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $subNode) use(&$scopedNode, $filter) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use(&$scopedNode, $filter) : ?int {
             if (!$filter($subNode)) {
                 if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

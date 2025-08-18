@@ -167,10 +167,7 @@ CODE_SAMPLE
         }
         return $this->isObjectType($node->var, new ObjectType('MyCLabs\\Enum\\Enum'));
     }
-    /**
-     * @return null|\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
-     */
-    private function getNonEnumReturnTypeExpr(Node $node)
+    private function getNonEnumReturnTypeExpr(Node $node) : ?Expr
     {
         if (!$node instanceof StaticCall && !$node instanceof MethodCall) {
             return null;

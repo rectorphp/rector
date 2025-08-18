@@ -34,6 +34,7 @@ use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FuncCall\RemoveFilterVarOnExactTypeRector;
+use Rector\DeadCode\Rector\FunctionLike\NarrowTooWideReturnTypeRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
@@ -131,5 +132,6 @@ final class DeadCodeLevel
         RemoveEmptyClassMethodRector::class,
         RemoveDeadReturnRector::class,
         RemoveArgumentFromDefaultParentCallRector::class,
+        NarrowTooWideReturnTypeRector::class,
     ];
 }
