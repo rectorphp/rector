@@ -77,13 +77,19 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertEquals'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        if (\count($node->getArgs()) < 2) {
+            return null;
+        }
         $expectedArg = $node->getArgs()[0];
         if (!$expectedArg->value instanceof String_ && !$expectedArg->value instanceof LNumber) {
             return null;
         }
         $expectedType = $this->getType($expectedArg->value);
         $variableExpr = $node->getArgs()[1]->value;
-        $variableType = $this->getType($variableExpr);
+        $variableType = $this->nodeTypeResolver->getNativeType($variableExpr);
         $directVariableType = TypeCombinator::removeNull($variableType);
         if ($expectedType->isLiteralString()->yes() && $directVariableType->isInteger()->yes()) {
             // update expected type to provided type
