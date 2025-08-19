@@ -56,20 +56,26 @@ final class PrivatesAccessor
     private function createAccessibleMethodReflection(object $object, string $methodName) : ReflectionMethod
     {
         $reflection = new ReflectionMethod($object, $methodName);
-        $reflection->setAccessible(\true);
+        if (\PHP_VERSION_ID < 80100) {
+            $reflection->setAccessible(\true);
+        }
         return $reflection;
     }
     private function resolvePropertyReflection(object $object, string $propertyName) : ReflectionProperty
     {
         if (\property_exists($object, $propertyName)) {
             $reflection = new ReflectionProperty($object, $propertyName);
-            $reflection->setAccessible(\true);
+            if (\PHP_VERSION_ID < 80100) {
+                $reflection->setAccessible(\true);
+            }
             return $reflection;
         }
         $parentClass = \get_parent_class($object);
         if ($parentClass !== \false) {
             $reflection = new ReflectionProperty($parentClass, $propertyName);
-            $reflection->setAccessible(\true);
+            if (\PHP_VERSION_ID < 80100) {
+                $reflection->setAccessible(\true);
+            }
             return $reflection;
         }
         $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));

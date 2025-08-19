@@ -6,11 +6,16 @@ namespace Rector\DowngradePhp81\Rector\StmtsAwareInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Naming\Naming\VariableNaming;
@@ -52,7 +57,9 @@ class SomeClass
     public function run($object)
     {
         $reflectionProperty = new ReflectionProperty($object, 'bar');
-        $reflectionProperty->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $reflectionProperty->setAccessible(true);
+        }
 
         return $reflectionProperty->getValue($object);
     }
@@ -107,6 +114,9 @@ CODE_SAMPLE
                 if ($this->isSetAccessibleMethodCall($nextStmt)) {
                     continue;
                 }
+                if ($this->isSetAccessibleIfMethodCall($nextStmt)) {
+                    continue;
+                }
                 \array_splice($node->stmts, $key + 1, 0, [$this->createSetAccessibleExpression($variable)]);
             } else {
                 $previousStmts = [new Expression(new Assign($variable, $new)), $this->createSetAccessibleExpression($variable)];
@@ -120,11 +130,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createSetAccessibleExpression(Expr $expr) : Expression
+    private function createSetAccessibleExpression(Expr $expr) : If_
     {
         $args = [$this->nodeFactory->createArg($this->nodeFactory->createTrue())];
         $setAccessibleMethodCall = $this->nodeFactory->createMethodCall($expr, 'setAccessible', $args);
-        return new Expression($setAccessibleMethodCall);
+        return new If_(new Smaller(new ConstFetch(new Name('PHP_VERSION_ID')), new Int_(80100)), ['stmts' => [new Expression($setAccessibleMethodCall)]]);
     }
     private function isSetAccessibleMethodCall(?Stmt $stmt) : bool
     {
@@ -136,5 +146,24 @@ CODE_SAMPLE
         }
         $methodCall = $stmt->expr;
         return $this->isName($methodCall->name, 'setAccessible');
+    }
+    private function isSetAccessibleIfMethodCall(?Stmt $stmt) : bool
+    {
+        if (!$stmt instanceof If_) {
+            return \false;
+        }
+        if (!$stmt->cond instanceof Smaller) {
+            return \false;
+        }
+        if (!$stmt->cond->left instanceof ConstFetch || !$this->isName($stmt->cond->left->name, 'PHP_VERSION_ID')) {
+            return \false;
+        }
+        if (!$stmt->cond->right instanceof Int_ || $stmt->cond->right->value !== 80100) {
+            return \false;
+        }
+        if (\count($stmt->stmts) !== 1) {
+            return \false;
+        }
+        return $this->isSetAccessibleMethodCall($stmt->stmts[0]);
     }
 }

@@ -78,7 +78,9 @@ final class CommandDataCollector extends DataCollector
     {
         $class = $this->data['command']->getType();
         $r = new \ReflectionMethod($class, 'execute');
-        $r->setAccessible(\true);
+        if (\PHP_VERSION_ID < 80100) {
+            $r->setAccessible(\true);
+        }
         if (Command::class !== $r->getDeclaringClass()) {
             return ['executor' => $class . '::' . $r->name, 'file' => $r->getFileName(), 'line' => $r->getStartLine()];
         }

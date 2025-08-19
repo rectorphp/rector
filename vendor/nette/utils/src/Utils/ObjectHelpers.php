@@ -54,7 +54,9 @@ final class ObjectHelpers
         if (method_exists($class, $method)) {
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
-            $rm->setAccessible(\true);
+            if (\PHP_VERSION_ID < 80100) {
+                $rm->setAccessible(\true);
+            }
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
             throw new MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {
@@ -78,7 +80,9 @@ final class ObjectHelpers
         if (method_exists($class, $method)) {
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
-            $rm->setAccessible(\true);
+            if (\PHP_VERSION_ID < 80100) {
+                $rm->setAccessible(\true);
+            }
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
             throw new MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {
@@ -162,7 +166,9 @@ final class ObjectHelpers
             $prop = \false;
             try {
                 $rp = new \ReflectionProperty($class, $name);
-                $rp->setAccessible(\true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $rp->setAccessible(\true);
+                }
                 if ($rp->isPublic() && !$rp->isStatic()) {
                     $prop = $name >= 'onA' && $name < 'on_' ? 'event' : \true;
                 }
