@@ -48,6 +48,8 @@ final class RenameCastRector extends AbstractRector implements ConfigurableRecto
             }
             $node->setAttribute(AttributeKey::KIND, $renameCast->getToCastKind());
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $node->setAttribute('startTokenPos', -1);
+            $node->setAttribute('endTokenPos', -1);
             return $node;
         }
         return null;
