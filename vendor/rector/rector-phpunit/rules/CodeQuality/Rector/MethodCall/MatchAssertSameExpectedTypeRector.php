@@ -6,7 +6,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\TypeCombinator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
         $expectedArg = $node->getArgs()[0];
-        if (!$expectedArg->value instanceof String_ && !$expectedArg->value instanceof LNumber) {
+        if (!$expectedArg->value instanceof String_ && !$expectedArg->value instanceof Int_) {
             return null;
         }
         $expectedType = $this->getType($expectedArg->value);
@@ -93,7 +93,7 @@ CODE_SAMPLE
         $directVariableType = TypeCombinator::removeNull($variableType);
         if ($expectedType->isLiteralString()->yes() && $directVariableType->isInteger()->yes()) {
             // update expected type to provided type
-            $expectedArg->value = new LNumber((int) $expectedArg->value->value);
+            $expectedArg->value = new Int_((int) $expectedArg->value->value);
             return $node;
         }
         if ($expectedType->isInteger()->yes() && $directVariableType->isString()->yes()) {
