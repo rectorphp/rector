@@ -28,7 +28,7 @@
         "php": ">=7.1.0"
     },
     "require-dev": {
-        "phpstan\/phpstan": "1.10.39 || 1.4.10",
+        "phpstan\/phpstan": "1.12.28 || 1.4.10",
         "phpunit\/phpunit": "^9.6 || ^7.5"
     },
     "autoload": {

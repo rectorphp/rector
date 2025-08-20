@@ -78,6 +78,7 @@ final class Promise implements PromiseInterface
     public function finally(callable $onFulfilledOrRejected) : PromiseInterface
     {
         return $this->then(static function ($value) use($onFulfilledOrRejected) : PromiseInterface {
+            /** @var T $value */
             return resolve($onFulfilledOrRejected())->then(function () use($value) {
                 return $value;
             });

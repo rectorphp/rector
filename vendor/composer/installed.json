@@ -1391,27 +1391,27 @@
         },
         {
             "name": "react\/promise",
-            "version": "v3.2.0",
-            "version_normalized": "3.2.0.0",
+            "version": "v3.3.0",
+            "version_normalized": "3.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/promise.git",
-                "reference": "8a164643313c71354582dc850b42b33fa12a4b63"
+                "reference": "23444f53a813a3296c1368bb104793ce8d88f04a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/8a164643313c71354582dc850b42b33fa12a4b63",
-                "reference": "8a164643313c71354582dc850b42b33fa12a4b63",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/23444f53a813a3296c1368bb104793ce8d88f04a",
+                "reference": "23444f53a813a3296c1368bb104793ce8d88f04a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0"
             },
             "require-dev": {
-                "phpstan\/phpstan": "1.10.39 || 1.4.10",
+                "phpstan\/phpstan": "1.12.28 || 1.4.10",
                 "phpunit\/phpunit": "^9.6 || ^7.5"
             },
-            "time": "2024-05-24T10:39:05+00:00",
+            "time": "2025-08-19T18:57:03+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1455,7 +1455,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/promise\/issues",
-                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v3.2.0"
+                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v3.3.0"
             },
             "funding": [
                 {
@@ -1868,12 +1868,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "8f7905fe0d2acb163a306933a4c9c302c15cf9cf"
+                "reference": "d39d176871bcd433009eddce305f3cb6b16ba37d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/8f7905fe0d2acb163a306933a4c9c302c15cf9cf",
-                "reference": "8f7905fe0d2acb163a306933a4c9c302c15cf9cf",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d39d176871bcd433009eddce305f3cb6b16ba37d",
+                "reference": "d39d176871bcd433009eddce305f3cb6b16ba37d",
                 "shasum": ""
             },
             "require": {
@@ -1903,7 +1903,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-08-12T02:50:14+00:00",
+            "time": "2025-08-20T08:24:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2316,8 +2316,8 @@
         },
         {
             "name": "symfony\/polyfill-intl-normalizer",
-            "version": "v1.32.0",
-            "version_normalized": "1.32.0.0",
+            "version": "v1.33.0",
+            "version_normalized": "1.33.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer.git",
@@ -2380,7 +2380,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.32.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.33.0"
             },
             "funding": [
                 {
@@ -2392,6 +2392,10 @@
                     "type": "github"
                 },
                 {
+                    "url": "https:\/\/github.com\/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
                     "type": "tidelift"
                 }
@@ -2400,8 +2404,8 @@
         },
         {
             "name": "symfony\/polyfill-mbstring",
-            "version": "v1.32.0",
-            "version_normalized": "1.32.0.0",
+            "version": "v1.33.0",
+            "version_normalized": "1.33.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-mbstring.git",
@@ -2464,7 +2468,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-mbstring\/tree\/v1.32.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-mbstring\/tree\/v1.33.0"
             },
             "funding": [
                 {
@@ -2473,6 +2477,10 @@
                 },
                 {
                     "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/github.com\/nicolas-grekas",
                     "type": "github"
                 },
                 {
