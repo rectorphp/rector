@@ -641,4 +641,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATED_ATTRIBUTE_ON_CONSTANT = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_semicolon_after_case_in_switch_statement
+     * @var int
+     */
+    public const COLON_AFTER_SWITCH_CASE = \Rector\ValueObject\PhpVersion::PHP_85;
 }

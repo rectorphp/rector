@@ -21,10 +21,10 @@ final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRect
     /**
      * @readonly
      */
-    private DeprecatedAnnotationToDeprecatedAttributeConverter $converter;
-    public function __construct(DeprecatedAnnotationToDeprecatedAttributeConverter $converter)
+    private DeprecatedAnnotationToDeprecatedAttributeConverter $deprecatedAnnotationToDeprecatedAttributeConverter;
+    public function __construct(DeprecatedAnnotationToDeprecatedAttributeConverter $deprecatedAnnotationToDeprecatedAttributeConverter)
     {
-        $this->converter = $converter;
+        $this->deprecatedAnnotationToDeprecatedAttributeConverter = $deprecatedAnnotationToDeprecatedAttributeConverter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        return $this->converter->convert($node);
+        return $this->deprecatedAnnotationToDeprecatedAttributeConverter->convert($node);
     }
     public function provideMinPhpVersion() : int
     {
