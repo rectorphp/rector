@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
 use Rector\Config\RectorConfig;
+use Rector\Php85\Rector\Const_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php85\Rector\ArrayDimFetch\ArrayFirstLastRector;
 use Rector\Php85\Rector\ClassMethod\NullDebugInfoReturnRector;
 use Rector\Php85\Rector\FuncCall\RemoveFinfoBufferContextArgRector;
@@ -21,7 +22,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameCast;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class]);
+    $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class, DeprecatedAnnotationToDeprecatedAttributeRector::class]);
     $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
         // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_key_length_parameter_of_openssl_pkey_derive
         new RemoveFuncCallArg('openssl_pkey_derive', 2),

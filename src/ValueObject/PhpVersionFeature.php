@@ -636,4 +636,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATED_NULL_DEBUG_INFO_RETURN = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @see https://wiki.php.net/rfc/attributes-on-constants
+     * @var int
+     */
+    public const DEPRECATED_ATTRIBUTE_ON_CONSTANT = \Rector\ValueObject\PhpVersion::PHP_85;
 }
