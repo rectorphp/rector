@@ -52,7 +52,11 @@ CODE_SAMPLE
             if ($endTokenPos < 0) {
                 continue;
             }
-            $startCaseStmtsPos = \count($case->stmts) === 0 ? isset($node->cases[$key + 1]) ? $node->cases[$key + 1]->getStartTokenPos() : $node->getEndTokenPos() : $case->stmts[0]->getStartTokenPos();
+            if (\count($case->stmts) === 0) {
+                $startCaseStmtsPos = isset($node->cases[$key + 1]) ? $node->cases[$key + 1]->getStartTokenPos() : $node->getEndTokenPos();
+            } else {
+                $startCaseStmtsPos = $case->stmts[0]->getStartTokenPos();
+            }
             if ($startCaseStmtsPos < 0) {
                 continue;
             }
