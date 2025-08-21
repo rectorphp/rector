@@ -204,10 +204,12 @@ CODE_SAMPLE
                 $param->type = $parameterTypeNode;
                 $hasChanged = \true;
             }
-            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
-            if ($returnTypeNode instanceof Node) {
-                $innerArg->returnType = $returnTypeNode;
-                $hasChanged = \true;
+            if (!$innerArg->returnType instanceof Node) {
+                $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
+                if ($returnTypeNode instanceof Node) {
+                    $innerArg->returnType = $returnTypeNode;
+                    $hasChanged = \true;
+                }
             }
         });
         if (!$hasChanged) {
