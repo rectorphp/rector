@@ -2157,7 +2157,6 @@ class ComposerStaticInit7e5378a9f76bdf91928418d7d46a4747
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\FlipAssertRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/FlipAssertRector.php',
-        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\MatchAssertEqualsExpectedTypeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/MatchAssertEqualsExpectedTypeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowIdenticalWithConsecutiveRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowIdenticalWithConsecutiveRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowSingleWillReturnCallbackRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowSingleWillReturnCallbackRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
