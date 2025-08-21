@@ -105,4 +105,8 @@ final class SymfonyClass
      * @var string
      */
     public const FORM_BUILDER = 'Symfony\\Component\\Form\\FormBuilderInterface';
+    /**
+     * @var string
+     */
+    public const CONTAINER_CONFIGURATOR = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
 }

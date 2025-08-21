@@ -559,11 +559,7 @@ class Strings
                     $replacement = fn($m) => $replacement(self::bytesToChars($subject, [$m])[0]);
                 }
             }
-            if (PHP_VERSION_ID < 70400) {
-    return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit]);
-}
-
-return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit, 0, $flags]);
+            return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit, 0, $flags]);
         } elseif (is_array($pattern) && is_string(key($pattern))) {
             $replacement = array_values($pattern);
             $pattern = array_keys($pattern);

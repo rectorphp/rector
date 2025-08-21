@@ -11,6 +11,7 @@ use PhpParser\NodeVisitor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Symfony\Enum\SymfonyClass;
 final class SymfonyPhpClosureDetector
 {
     /**
@@ -40,7 +41,7 @@ final class SymfonyPhpClosureDetector
         if (!$firstParam->type instanceof FullyQualified) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($firstParam->type, 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator');
+        return $this->nodeNameResolver->isName($firstParam->type, SymfonyClass::CONTAINER_CONFIGURATOR);
     }
     public function hasDefaultsAutoconfigure(Closure $closure) : bool
     {

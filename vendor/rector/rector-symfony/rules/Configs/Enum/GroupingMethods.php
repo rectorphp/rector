@@ -8,5 +8,5 @@ final class GroupingMethods
     /**
      * @var array<string, string>
      */
-    public const GROUPING_METHOD_NAME_TO_SPLIT = ['connections' => 'connection', 'entity_managers' => 'entityManager', 'mappings' => 'mapping'];
+    public const GROUPING_METHOD_NAME_TO_SPLIT = ['connections' => 'connection', 'entity_managers' => 'entityManager', 'mappings' => 'mapping', 'handlers' => 'handler', 'pools' => 'pool'];
 }

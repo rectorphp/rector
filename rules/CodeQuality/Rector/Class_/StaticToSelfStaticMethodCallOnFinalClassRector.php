@@ -89,9 +89,9 @@ CODE_SAMPLE
             if (!$classReflection->hasNativeMethod($methodName)) {
                 return null;
             }
-            $methodReflection = $classReflection->getNativeMethod($methodName);
+            $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
             // avoid overlapped change
-            if (!$methodReflection->isStatic()) {
+            if (!$extendedMethodReflection->isStatic()) {
                 return null;
             }
             $hasChanged = \true;
