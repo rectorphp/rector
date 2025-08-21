@@ -15,31 +15,36 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector\ConvertStaticPrivateConstantToSelfRectorTest
  *
  * @see https://3v4l.org/8Y0ba
+ * @see https://3v4l.org/ZIeA1
  * @see https://phpstan.org/r/11d4c850-1a40-4fae-b665-291f96104d11
  */
 final class ConvertStaticPrivateConstantToSelfRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replaces static::* access to private constants with self::*', [new CodeSample(<<<'CODE_SAMPLE'
-final class Foo
+        return new RuleDefinition('Replaces static::* constant access with self::* for private constants and in final classes.', [new CodeSample(<<<'CODE_SAMPLE'
+class Foo
 {
     private const BAR = 'bar';
+    public const BAZ = 'baz';
 
     public function run()
     {
         $bar = static::BAR;
+        $baz = static::BAZ;
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final class Foo
+class Foo
 {
     private const BAR = 'bar';
+    public const BAZ = 'baz';
 
     public function run()
     {
         $bar = self::BAR;
+        $baz = static::BAZ;
     }
 }
 CODE_SAMPLE
@@ -57,7 +62,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
-        if ($node->getConstants() === []) {
+        if ($node->getConstants() === [] && !$node->isFinal()) {
             return null;
         }
         $class = $node;
