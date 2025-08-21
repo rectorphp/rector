@@ -8,13 +8,15 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\Enum\ObjectReference;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
+ * @see https://3v4l.org/VbcrN
  * @see \Rector\Tests\CodeQuality\Rector\Class_\StaticToSelfStaticMethodCallOnFinalClassRector\StaticToSelfStaticMethodCallOnFinalClassRectorTest
  */
 final class StaticToSelfStaticMethodCallOnFinalClassRector extends AbstractRector
@@ -67,7 +69,12 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use(&$hasChanged, $node) : ?StaticCall {
+        $scope = ScopeFetcher::fetch($node);
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use(&$hasChanged, $classReflection) : ?StaticCall {
             if (!$subNode instanceof StaticCall) {
                 return null;
             }
@@ -79,13 +86,12 @@ CODE_SAMPLE
                 return null;
             }
             $methodName = (string) $this->getName($subNode->name);
-            $targetClassMethod = $node->getMethod($methodName);
-            // skip call non-existing method from current class to ensure transformation is safe
-            if (!$targetClassMethod instanceof ClassMethod) {
+            if (!$classReflection->hasNativeMethod($methodName)) {
                 return null;
             }
+            $methodReflection = $classReflection->getNativeMethod($methodName);
             // avoid overlapped change
-            if (!$targetClassMethod->isStatic()) {
+            if (!$methodReflection->isStatic()) {
                 return null;
             }
             $hasChanged = \true;
