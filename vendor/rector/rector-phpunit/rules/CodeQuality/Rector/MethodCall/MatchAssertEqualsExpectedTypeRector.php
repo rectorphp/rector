@@ -14,9 +14,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\MethodCall\MatchAssertSameExpectedTypeRector\MatchAssertSameExpectedTypeRectorTest
+ * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\MethodCall\MatchAssertEqualsExpectedTypeRector\MatchAssertEqualsExpectedTypeRectorTest
  */
-final class MatchAssertSameExpectedTypeRector extends AbstractRector
+final class MatchAssertEqualsExpectedTypeRector extends AbstractRector
 {
     /**
      * @readonly
@@ -28,14 +28,14 @@ final class MatchAssertSameExpectedTypeRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Correct expected type in assertSame() method to match strict type of passed variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Correct expected type in assertEquals() method to match strict type of passed variable', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
 {
     public function run()
     {
-        $this->assertSame('123', $this->getOrderId());
+        $this->assertEquals('123', $this->getOrderId());
     }
 
     private function getOrderId(): int
@@ -51,7 +51,7 @@ class SomeTest extends TestCase
 {
     public function run()
     {
-        $this->assertSame(123, $this->getOrderId());
+        $this->assertEquals(123, $this->getOrderId());
     }
 
     private function getOrderId(): int
@@ -74,7 +74,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertEquals'])) {
+        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertEquals'])) {
             return null;
         }
         if ($node->isFirstClassCallable()) {
