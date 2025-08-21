@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -25,6 +26,7 @@ use Rector\PHPUnit\CodeQuality\Reflection\MethodParametersAndReturnTypesResolver
 use Rector\PHPUnit\CodeQuality\ValueObject\ParamTypesAndReturnType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -50,15 +52,20 @@ final class TypeWillReturnCallableArrowFunctionRector extends AbstractRector
      */
     private MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver;
     /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
      * @var string
      */
     private const WILL_RETURN_CALLBACK = 'willReturnCallback';
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, StaticTypeMapper $staticTypeMapper, SetUpAssignedMockTypesResolver $setUpAssignedMockTypesResolver, MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, StaticTypeMapper $staticTypeMapper, SetUpAssignedMockTypesResolver $setUpAssignedMockTypesResolver, MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver, ReflectionResolver $reflectionResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->setUpAssignedMockTypesResolver = $setUpAssignedMockTypesResolver;
         $this->methodParametersAndReturnTypesResolver = $methodParametersAndReturnTypesResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -128,8 +135,12 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        $currentClassReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$currentClassReflection instanceof ClassReflection) {
+            return null;
+        }
         $propertyNameToMockedTypes = $this->setUpAssignedMockTypesResolver->resolveFromClass($node);
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use(&$hasChanged, $propertyNameToMockedTypes) {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use(&$hasChanged, $propertyNameToMockedTypes, $currentClassReflection) {
             if (!$node instanceof MethodCall || $node->isFirstClassCallable()) {
                 return null;
             }
@@ -165,7 +176,7 @@ CODE_SAMPLE
                 return null;
             }
             $hasChanged = \false;
-            $parameterTypesAndReturnType = $this->methodParametersAndReturnTypesResolver->resolveFromReflection($callerType, $methodName);
+            $parameterTypesAndReturnType = $this->methodParametersAndReturnTypesResolver->resolveFromReflection($callerType, $methodName, $currentClassReflection);
             if (!$parameterTypesAndReturnType instanceof ParamTypesAndReturnType) {
                 return null;
             }
@@ -193,14 +204,11 @@ CODE_SAMPLE
                 $param->type = $parameterTypeNode;
                 $hasChanged = \true;
             }
-            if (!$innerArg->returnType instanceof Node) {
-                $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
-                if ($returnTypeNode instanceof Node) {
-                    $innerArg->returnType = $returnTypeNode;
-                    $hasChanged = \true;
-                }
+            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
+            if ($returnTypeNode instanceof Node) {
+                $innerArg->returnType = $returnTypeNode;
+                $hasChanged = \true;
             }
-            $hasChanged = \true;
         });
         if (!$hasChanged) {
             return null;
