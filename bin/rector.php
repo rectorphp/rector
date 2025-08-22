@@ -121,7 +121,7 @@ try {
         // report fatal errors in console format
         $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesAccessor());
         $symfonyStyle = $symfonyStyleFactory->create();
-        $symfonyStyle->error($throwable->getMessage());
+        $symfonyStyle->error(\str_replace("\r\n", "\n", $throwable->getMessage()));
     }
     exit(Command::FAILURE);
 }
