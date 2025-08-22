@@ -4,23 +4,23 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Configuration\Parameter\FeatureFlags;
-use Rector\Enum\ObjectReference;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://3v4l.org/VbcrN
- * @see \Rector\Tests\CodeQuality\Rector\Class_\StaticToSelfStaticMethodCallOnFinalClassRector\StaticToSelfStaticMethodCallOnFinalClassRectorTest
+ * @deprecated Use ConvertStaticToSelfRector instead
  */
 final class StaticToSelfStaticMethodCallOnFinalClassRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private \Rector\CodeQuality\Rector\Class_\ConvertStaticToSelfRector $convertStaticToSelfRector;
+    public function __construct(\Rector\CodeQuality\Rector\Class_\ConvertStaticToSelfRector $convertStaticToSelfRector)
+    {
+        $this->convertStaticToSelfRector = $convertStaticToSelfRector;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change `static::methodCall()` to `self::methodCall()` on final class', [new CodeSample(<<<'CODE_SAMPLE'
@@ -65,42 +65,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
-        if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal($node) === \false) {
-            return null;
-        }
-        $hasChanged = \false;
-        $scope = ScopeFetcher::fetch($node);
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
-        }
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use(&$hasChanged, $classReflection) : ?StaticCall {
-            if (!$subNode instanceof StaticCall) {
-                return null;
-            }
-            if (!$this->isName($subNode->class, ObjectReference::STATIC)) {
-                return null;
-            }
-            // skip dynamic method
-            if (!$subNode->name instanceof Identifier) {
-                return null;
-            }
-            $methodName = (string) $this->getName($subNode->name);
-            if (!$classReflection->hasNativeMethod($methodName)) {
-                return null;
-            }
-            $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
-            // avoid overlapped change
-            if (!$extendedMethodReflection->isStatic()) {
-                return null;
-            }
-            $hasChanged = \true;
-            $subNode->class = new Name('self');
-            return $subNode;
-        });
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        return $this->convertStaticToSelfRector->refactor($node);
     }
 }
