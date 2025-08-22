@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -13,14 +14,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StaticToSelfStaticMethodCallOnFinalClassRector extends AbstractRector
 {
-    /**
-     * @readonly
-     */
-    private \Rector\CodeQuality\Rector\Class_\ConvertStaticToSelfRector $convertStaticToSelfRector;
-    public function __construct(\Rector\CodeQuality\Rector\Class_\ConvertStaticToSelfRector $convertStaticToSelfRector)
-    {
-        $this->convertStaticToSelfRector = $convertStaticToSelfRector;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change `static::methodCall()` to `self::methodCall()` on final class', [new CodeSample(<<<'CODE_SAMPLE'
@@ -65,6 +58,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Class_
     {
-        return $this->convertStaticToSelfRector->refactor($node);
+        throw new ShouldNotHappenException(\sprintf('The %s rule is deprecated. Use %s instead', self::class, \Rector\CodeQuality\Rector\Class_\ConvertStaticToSelfRector::class));
     }
 }

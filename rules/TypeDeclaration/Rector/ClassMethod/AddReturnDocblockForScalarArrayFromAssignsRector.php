@@ -131,8 +131,8 @@ CODE_SAMPLE
             return null;
         }
         $scalarArrayTypes = [];
-        foreach ($returnedVariableNames as $variableName) {
-            $scalarType = $this->resolveScalarArrayTypeForVariable($node, $variableName);
+        foreach ($returnedVariableNames as $returnedVariableName) {
+            $scalarType = $this->resolveScalarArrayTypeForVariable($node, $returnedVariableName);
             if ($scalarType instanceof Type) {
                 $scalarArrayTypes[] = $scalarType;
             } else {
@@ -180,11 +180,9 @@ CODE_SAMPLE
         $arrayHasInitialized = \false;
         $arrayHasDimAssigns = \false;
         foreach ($assigns as $assign) {
-            if ($assign->var instanceof Variable && $this->isName($assign->var, $variableName)) {
-                if ($assign->expr instanceof Array_ && $assign->expr->items === []) {
-                    $arrayHasInitialized = \true;
-                    continue;
-                }
+            if ($assign->var instanceof Variable && $this->isName($assign->var, $variableName) && ($assign->expr instanceof Array_ && $assign->expr->items === [])) {
+                $arrayHasInitialized = \true;
+                continue;
             }
             if (!$assign->var instanceof ArrayDimFetch) {
                 continue;
