@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\InterpolatedString;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -121,7 +122,10 @@ final class AssertEqualsToSameRector extends AbstractRector
             return \true;
         }
         // can happen with magic process
-        return $secondArgType instanceof NeverType;
+        if ($secondArgType instanceof NeverType) {
+            return \true;
+        }
+        return $args[0]->value instanceof String_ && \is_numeric($args[0]->value->value);
     }
     private function shouldSkipConstantArrayType(Expr $expr) : bool
     {
