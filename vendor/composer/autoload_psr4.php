@@ -9,6 +9,8 @@ return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
+    'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),

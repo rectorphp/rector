@@ -2809,6 +2809,8 @@ return array(
     'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => $baseDir . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
     'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
     'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
+    'Symfony\\Polyfill\\Ctype\\Ctype' => $vendorDir . '/symfony/polyfill-ctype/Ctype.php',
+    'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => $vendorDir . '/symfony/polyfill-intl-grapheme/Grapheme.php',
     'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Normalizer.php',
     'Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
