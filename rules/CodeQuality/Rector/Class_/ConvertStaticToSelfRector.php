@@ -150,7 +150,7 @@ CODE_SAMPLE
                 $declaringClass = $reflection->getDeclaringClass();
                 $nativeReflectionClass = $declaringClass->getNativeReflection();
                 $constantName = $reflection->getName();
-                if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::FINAL_CLASS_CONSTANTS)) {
+                if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::FINAL_CLASS_CONSTANTS) && \PHP_VERSION_ID >= PhpVersionFeature::FINAL_CLASS_CONSTANTS) {
                     // PHP 8.1+
                     $nativeReflection = $nativeReflectionClass->getReflectionConstant($constantName);
                     $memberIsFinal = $nativeReflection instanceof ReflectionClassConstant && $nativeReflection->isFinal();
