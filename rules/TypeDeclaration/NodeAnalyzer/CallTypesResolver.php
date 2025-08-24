@@ -67,16 +67,16 @@ final class CallTypesResolver
         $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         // "self" in another object is not correct, this make it independent
         $argValueType = $this->correctSelfType($argValueType);
+        $type = $this->nodeTypeResolver->getType($arg->value);
+        if (!$type->equals($argValueType) && $this->typeComparator->isSubtype($type, $argValueType)) {
+            return $type;
+        }
         if (!$argValueType instanceof ObjectType) {
             return $argValueType;
         }
         // fix false positive generic type on string
         if (!$this->reflectionProvider->hasClass($argValueType->getClassName())) {
             return new MixedType();
-        }
-        $type = $this->nodeTypeResolver->getType($arg->value);
-        if (!$type->equals($argValueType) && $this->typeComparator->isSubtype($type, $argValueType)) {
-            return $type;
         }
         return $argValueType;
     }

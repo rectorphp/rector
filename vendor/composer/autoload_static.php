@@ -2027,6 +2027,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
         'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
         'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
+        'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyArrayTypeCorrector' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyArrayTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\GenericClassStringTypeCorrector' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeCorrector/GenericClassStringTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/NodeTypeResolver.php',

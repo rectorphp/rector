@@ -50,6 +50,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyArrayTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
@@ -81,6 +82,10 @@ final class NodeTypeResolver
     /**
      * @readonly
      */
+    private AccessoryNonEmptyArrayTypeCorrector $accessoryNonEmptyArrayTypeCorrector;
+    /**
+     * @readonly
+     */
     private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
      * @readonly
@@ -97,13 +102,14 @@ final class NodeTypeResolver
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, iterable $nodeTypeResolvers)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, AccessoryNonEmptyArrayTypeCorrector $accessoryNonEmptyArrayTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, iterable $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->reflectionProvider = $reflectionProvider;
         $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
+        $this->accessoryNonEmptyArrayTypeCorrector = $accessoryNonEmptyArrayTypeCorrector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -194,8 +200,7 @@ final class NodeTypeResolver
         }
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type instanceof Type) {
-            $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
-            $type = $this->genericClassStringTypeCorrector->correct($type);
+            $type = $this->correctType($type);
             if ($type instanceof ObjectType) {
                 $scope = $node->getAttribute(AttributeKey::SCOPE);
                 $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $type, $scope, \true);
@@ -216,9 +221,7 @@ final class NodeTypeResolver
         if (!$node instanceof Expr) {
             return new MixedType();
         }
-        $type = $scope->getType($node);
-        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
-        $type = $this->genericClassStringTypeCorrector->correct($type);
+        $type = $this->correctType($scope->getType($node));
         // hot fix for phpstan not resolving chain method calls
         if (!$node instanceof MethodCall) {
             return $type;
@@ -235,6 +238,12 @@ final class NodeTypeResolver
     {
         $nodeType = $this->getType($node);
         return TypeCombinator::containsNull($nodeType);
+    }
+    private function correctType(Type $type) : Type
+    {
+        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+        $type = $this->genericClassStringTypeCorrector->correct($type);
+        return $this->accessoryNonEmptyArrayTypeCorrector->correct($type);
     }
     public function getNativeType(Expr $expr) : Type
     {
@@ -257,7 +266,7 @@ final class NodeTypeResolver
             if ($this->isAnonymousObjectType($type)) {
                 return new ObjectWithoutClassType();
             }
-            return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+            return $this->correctType($type);
         }
         return $this->resolveNativeUnionType($type);
     }
