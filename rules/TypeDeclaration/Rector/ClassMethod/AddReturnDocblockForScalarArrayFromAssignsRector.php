@@ -4,30 +4,30 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PHPStan\Type\Type;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\IntegerType;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Expr\Variable;
-use Rector\Rector\AbstractRector;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector\AddReturnDocblockForScalarArrayFromAssignsRectorTest
  */
