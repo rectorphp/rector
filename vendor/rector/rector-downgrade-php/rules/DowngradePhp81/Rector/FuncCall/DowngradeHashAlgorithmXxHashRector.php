@@ -6,10 +6,14 @@ namespace Rector\DowngradePhp81\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\IntegerRangeType;
 use Rector\DeadCode\ConditionResolver;
@@ -73,14 +77,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Ternary::class, FuncCall::class];
+        return [If_::class, Ternary::class, FuncCall::class];
     }
     /**
-     * @param Ternary|FuncCall $node
+     * @param If_|Ternary|FuncCall $node
      * @return null|int|\PhpParser\Node
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof If_) {
+            if ($this->isVersionCompareIf($node)) {
+                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            }
+            return null;
+        }
         if ($node instanceof Ternary) {
             if ($this->isVersionCompareTernary($node)) {
                 return NodeVisitor::DONT_TRAVERSE_CHILDREN;
@@ -102,6 +112,29 @@ CODE_SAMPLE
         $arg = $args[$this->argNamedKey];
         $arg->value = new String_(self::REPLACEMENT_ALGORITHM);
         return $node;
+    }
+    private function isVersionCompareIf(If_ $if) : bool
+    {
+        if ($if->cond instanceof FuncCall) {
+            // per use case reported only
+            if (\count($if->stmts) !== 1) {
+                return \false;
+            }
+            $versionCompare = $this->conditionResolver->resolveFromExpr($if->cond);
+            if (!$versionCompare instanceof VersionCompareCondition || $versionCompare->getSecondVersion() !== 80100) {
+                return \false;
+            }
+            if ($versionCompare->getCompareSign() !== '>=') {
+                return \false;
+            }
+            if ($if->stmts[0] instanceof Expression && $if->stmts[0]->expr instanceof Assign && $if->stmts[0]->expr->expr instanceof FuncCall) {
+                return $this->isName($if->stmts[0]->expr->expr, 'hash');
+            }
+            if ($if->stmts[0] instanceof Return_ && $if->stmts[0]->expr instanceof FuncCall) {
+                return $this->isName($if->stmts[0]->expr, 'hash');
+            }
+        }
+        return \false;
     }
     private function isVersionCompareTernary(Ternary $ternary) : bool
     {
