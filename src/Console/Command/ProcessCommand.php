@@ -146,7 +146,7 @@ EOF
         // 1. warn about rules registered in both withRules() and sets to avoid bloated rector.php configs
         $setAndRulesDuplicatedRegistrations = $configuration->getBothSetAndRulesDuplicatedRegistrations();
         if ($setAndRulesDuplicatedRegistrations !== []) {
-            $this->symfonyStyle->warning(\sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', \PHP_EOL . \PHP_EOL, \implode(' * ', $setAndRulesDuplicatedRegistrations) . \PHP_EOL));
+            $this->symfonyStyle->warning(\sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", \implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
         }
         // 2. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
@@ -158,7 +158,7 @@ EOF
             }
             // read from cli paths arguments, eg: vendor/bin/rector process A B C which A, B, and C not exists
             $isSingular = \count($paths) === 1;
-            $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', \PHP_EOL . \PHP_EOL . ' - ', \implode(\PHP_EOL . ' - ', $paths)));
+            $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', "\n\n" . ' - ', \implode("\n" . ' - ', $paths)));
             return ExitCode::FAILURE;
         }
         // autoload paths is register to DynamicSourceLocatorProvider,
@@ -234,6 +234,6 @@ EOF
     private function reportLevelOverflow(LevelOverflow $levelOverflow) : void
     {
         $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? \sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : \sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
-        $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), \PHP_EOL, $suggestedSetMethod));
+        $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), "\n", $suggestedSetMethod));
     }
 }

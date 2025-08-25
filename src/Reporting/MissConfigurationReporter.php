@@ -44,7 +44,7 @@ final class MissConfigurationReporter
         if (!$this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
             return;
         }
-        $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', \PHP_EOL . \PHP_EOL));
+        $this->symfonyStyle->warning(\sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', "\n\n"));
         \sleep(3);
     }
     public function reportStartWithShortOpenTag() : void
@@ -54,8 +54,8 @@ final class MissConfigurationReporter
             return;
         }
         $suffix = \count($files) > 1 ? 's were' : ' was';
-        $fileList = \implode(\PHP_EOL, $files);
-        $this->symfonyStyle->warning(\sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, \PHP_EOL . \PHP_EOL, $fileList));
+        $fileList = \implode("\n", $files);
+        $this->symfonyStyle->warning(\sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, "\n\n", $fileList));
         \sleep(3);
     }
 }
