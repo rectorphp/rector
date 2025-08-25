@@ -8,8 +8,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\IntegerRangeType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -89,7 +91,16 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        return !$this->isName($funcCall, 'hash');
+        if (!$this->isName($funcCall, 'hash')) {
+            return \true;
+        }
+        $scope = ScopeFetcher::fetch($funcCall);
+        $type = $scope->getPhpVersion()->getType();
+        if (!$type instanceof IntegerRangeType) {
+            // next todo: check version_compare() and if() usage
+            return \false;
+        }
+        return $type->getMin() === 80100;
     }
     /**
      * @param Arg[] $args
