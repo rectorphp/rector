@@ -5,10 +5,15 @@ namespace Rector\DowngradePhp81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\IntegerRangeType;
+use Rector\DeadCode\ConditionResolver;
+use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
@@ -28,13 +33,18 @@ final class DowngradeHashAlgorithmXxHashRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * @readonly
+     */
+    private ConditionResolver $conditionResolver;
     private const HASH_ALGORITHMS_TO_DOWNGRADE = ['xxh32' => \MHASH_XXH32, 'xxh64' => \MHASH_XXH64, 'xxh3' => \MHASH_XXH3, 'xxh128' => \MHASH_XXH128];
     private const REPLACEMENT_ALGORITHM = 'md5';
     private int $argNamedKey;
-    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver)
+    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver, ConditionResolver $conditionResolver)
     {
         $this->argsAnalyzer = $argsAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->conditionResolver = $conditionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -63,13 +73,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [Ternary::class, FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Ternary|FuncCall $node
+     * @return null|int|\PhpParser\Node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
+        if ($node instanceof Ternary) {
+            if ($this->isVersionCompareTernary($node)) {
+                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            }
+            return null;
+        }
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -85,6 +102,21 @@ CODE_SAMPLE
         $arg = $args[$this->argNamedKey];
         $arg->value = new String_(self::REPLACEMENT_ALGORITHM);
         return $node;
+    }
+    private function isVersionCompareTernary(Ternary $ternary) : bool
+    {
+        if ($ternary->if instanceof Expr && $ternary->cond instanceof FuncCall) {
+            $versionCompare = $this->conditionResolver->resolveFromExpr($ternary->cond);
+            if ($versionCompare instanceof VersionCompareCondition && $versionCompare->getSecondVersion() === 80100) {
+                if ($versionCompare->getCompareSign() === '>=') {
+                    return $ternary->if instanceof FuncCall && $this->isName($ternary->if, 'hash');
+                }
+                if ($versionCompare->getCompareSign() === '<') {
+                    return $ternary->else instanceof FuncCall && $this->isName($ternary->else, 'hash');
+                }
+            }
+        }
+        return \false;
     }
     private function shouldSkip(FuncCall $funcCall) : bool
     {
