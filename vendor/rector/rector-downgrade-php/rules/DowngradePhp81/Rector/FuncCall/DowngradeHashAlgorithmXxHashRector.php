@@ -162,7 +162,6 @@ CODE_SAMPLE
         $scope = ScopeFetcher::fetch($funcCall);
         $type = $scope->getPhpVersion()->getType();
         if (!$type instanceof IntegerRangeType) {
-            // next todo: check version_compare() and if() usage
             return \false;
         }
         return $type->getMin() === 80100;
