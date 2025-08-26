@@ -5,7 +5,6 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
@@ -51,7 +50,7 @@ final class ClassMethodParamTypeCompleter
                 continue;
             }
             // skip if param type already filled
-            if ($param->type instanceof Identifier) {
+            if ($param->type instanceof Node) {
                 continue;
             }
             // update parameter

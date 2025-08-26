@@ -17,6 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedCaseInSwitchRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
     private BetterStandardPrinter $betterStandardPrinter;
     private bool $hasChanged = \false;
     public function __construct(BetterStandardPrinter $betterStandardPrinter)
