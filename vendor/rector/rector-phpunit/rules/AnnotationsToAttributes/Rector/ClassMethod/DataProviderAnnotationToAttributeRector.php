@@ -149,7 +149,7 @@ CODE_SAMPLE
             if ($desiredTagValueNode->value instanceof GenericTagValueNode) {
                 $originalAttributeValue = $desiredTagValueNode->value->value;
             } else {
-                $originalAttributeValue = $desiredTagValueNode->value->identifierTypeNode->name;
+                $originalAttributeValue = $desiredTagValueNode->value->getOriginalContent();
             }
             $node->attrGroups[] = $this->createAttributeGroup(\strtok($originalAttributeValue, " \t\n\r\x00\v"));
             // cleanup

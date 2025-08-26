@@ -15,7 +15,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 final class CallTypesResolver
 {
@@ -31,16 +30,11 @@ final class CallTypesResolver
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    /**
-     * @readonly
-     */
-    private TypeComparator $typeComparator;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, TypeComparator $typeComparator)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
-        $this->typeComparator = $typeComparator;
     }
     /**
      * @param MethodCall[]|StaticCall[] $calls
@@ -73,10 +67,6 @@ final class CallTypesResolver
         // fix false positive generic type on string
         if (!$this->reflectionProvider->hasClass($argValueType->getClassName())) {
             return new MixedType();
-        }
-        $type = $this->nodeTypeResolver->getType($arg->value);
-        if (!$type->equals($argValueType) && $this->typeComparator->isSubtype($type, $argValueType)) {
-            return $type;
         }
         return $argValueType;
     }
