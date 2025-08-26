@@ -89,12 +89,12 @@ CODE_SAMPLE
         /** @var Case_[] */
         $result = [];
         /** @var int[] */
-        $processedCasesNumbers = [];
+        $processedCasesKeys = [];
         foreach ($switch->cases as $outerCaseKey => $outerCase) {
-            if (\in_array($outerCaseKey, $processedCasesNumbers)) {
+            if (\in_array($outerCaseKey, $processedCasesKeys)) {
                 continue;
             }
-            $processedCasesNumbers[] = $outerCaseKey;
+            $processedCasesKeys[] = $outerCaseKey;
             if ($outerCase->stmts === []) {
                 $result[] = $outerCase;
                 continue;
@@ -104,7 +104,7 @@ CODE_SAMPLE
             /** @var Case_[] */
             $equalCases = [];
             foreach ($switch->cases as $innerCaseKey => $innerCase) {
-                if (\in_array($innerCaseKey, $processedCasesNumbers)) {
+                if (\in_array($innerCaseKey, $processedCasesKeys)) {
                     continue;
                 }
                 if ($innerCase->stmts === []) {
@@ -112,25 +112,21 @@ CODE_SAMPLE
                     continue;
                 }
                 if ($this->areSwitchStmtsEqualsAndWithBreak($outerCase, $innerCase)) {
-                    if ($casesWithoutStmts !== []) {
-                        foreach ($casesWithoutStmts as $caseWithoutStmtsKey => $caseWithoutStmts) {
-                            $equalCases[] = $caseWithoutStmts;
-                            $processedCasesNumbers[] = $caseWithoutStmtsKey;
-                        }
-                        $casesWithoutStmts = [];
+                    foreach ($casesWithoutStmts as $caseWithoutStmtsKey => $caseWithoutStmts) {
+                        $equalCases[] = $caseWithoutStmts;
+                        $processedCasesKeys[] = $caseWithoutStmtsKey;
                     }
                     $innerCase->stmts = [];
                     $equalCases[] = $innerCase;
-                    $processedCasesNumbers[] = $innerCaseKey;
-                    $this->hasChanged = \true;
-                } else {
-                    $casesWithoutStmts = [];
+                    $processedCasesKeys[] = $innerCaseKey;
                 }
+                $casesWithoutStmts = [];
             }
             if ($equalCases === []) {
                 $result[] = $outerCase;
                 continue;
             }
+            $this->hasChanged = \true;
             $equalCases[\array_key_last($equalCases)]->stmts = $outerCase->stmts;
             $outerCase->stmts = [];
             $result = \array_merge($result, \array_merge([$outerCase], $equalCases));
@@ -150,10 +146,7 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($currentCase->stmts as $stmt) {
-            if ($stmt instanceof Break_) {
-                return \true;
-            }
-            if ($stmt instanceof Return_) {
+            if ($stmt instanceof Break_ || $stmt instanceof Return_) {
                 return \true;
             }
         }
@@ -161,6 +154,8 @@ CODE_SAMPLE
     }
     private function areSwitchStmtsEqualsConsideringComments(Case_ $currentCase, Case_ $nextCase) : bool
     {
-        return $this->betterStandardPrinter->print($currentCase->stmts) === $this->betterStandardPrinter->print($nextCase->stmts);
+        $currentCasePrintResult = $this->betterStandardPrinter->print($currentCase->stmts);
+        $nextCasePrintResult = $this->betterStandardPrinter->print($nextCase->stmts);
+        return $currentCasePrintResult === $nextCasePrintResult;
     }
 }
