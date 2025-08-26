@@ -121,6 +121,10 @@ CODE_SAMPLE
         $usedDimFetchVariableNames = [];
         foreach ($arrayDimFetches as $arrayDimFetch) {
             if ($arrayDimFetch->var instanceof Variable) {
+                $type = $this->nodeTypeResolver->getNativeType($arrayDimFetch->var);
+                if ($type->isString()->yes()) {
+                    continue;
+                }
                 $usedDimFetchVariableNames[] = (string) $this->getName($arrayDimFetch->var);
             }
         }
