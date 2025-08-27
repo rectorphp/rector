@@ -90,6 +90,9 @@ CODE_SAMPLE
             }
             $cond = $cond->right;
         }
+        if ($subIf->cond instanceof BinaryOp && !$subIf->cond->left instanceof BinaryOp) {
+            $subIf->cond->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
         $this->commentsMerger->keepComments($node, [$subIf]);
