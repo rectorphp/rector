@@ -5,31 +5,17 @@ namespace Rector\Php81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\Native\ExtendedNativeParameterReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\Reflection\ParametersAcceptor;
-use PHPStan\Type\ErrorType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php81\Enum\NameNullToStrictNullFunctionMap;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Php81\NodeManipulator\NullToStrictStringConverter;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
@@ -52,17 +38,12 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
     /**
      * @readonly
      */
-    private PropertyFetchAnalyzer $propertyFetchAnalyzer;
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, ValueResolver $valueResolver)
+    private NullToStrictStringConverter $nullToStrictStringConverter;
+    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, NullToStrictStringConverter $nullToStrictStringConverter)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->valueResolver = $valueResolver;
+        $this->nullToStrictStringConverter = $nullToStrictStringConverter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -119,7 +100,7 @@ CODE_SAMPLE
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $node, $scope);
         $isChanged = \false;
         foreach ($positions as $position) {
-            $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position, $isTrait, $scope, $parametersAcceptor);
+            $result = $this->nullToStrictStringConverter->convertIfNull($node, $args, (int) $position, $isTrait, $scope, $parametersAcceptor);
             if ($result instanceof Node) {
                 $node = $result;
                 $isChanged = \true;
@@ -153,113 +134,6 @@ CODE_SAMPLE
             $positions[] = $position;
         }
         return $positions;
-    }
-    /**
-     * @param Arg[] $args
-     * @param int|string $position
-     */
-    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor) : ?FuncCall
-    {
-        if (!isset($args[$position])) {
-            return null;
-        }
-        $argValue = $args[$position]->value;
-        if ($this->valueResolver->isNull($argValue)) {
-            $args[$position]->value = new String_('');
-            $funcCall->args = $args;
-            return $funcCall;
-        }
-        if ($this->shouldSkipValue($argValue, $scope, $isTrait)) {
-            return null;
-        }
-        $parameter = $parametersAcceptor->getParameters()[$position] ?? null;
-        if ($parameter instanceof ExtendedNativeParameterReflection && $parameter->getType() instanceof UnionType) {
-            $parameterType = $parameter->getType();
-            if (!$this->isValidUnionType($parameterType)) {
-                return null;
-            }
-        }
-        if ($argValue instanceof Ternary && !$this->shouldSkipValue($argValue->else, $scope, $isTrait)) {
-            if ($this->valueResolver->isNull($argValue->else)) {
-                $argValue->else = new String_('');
-            } else {
-                $argValue->else = new CastString_($argValue->else);
-            }
-            $args[$position]->value = $argValue;
-            $funcCall->args = $args;
-            return $funcCall;
-        }
-        $args[$position]->value = new CastString_($argValue);
-        $funcCall->args = $args;
-        return $funcCall;
-    }
-    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait) : bool
-    {
-        $type = $this->nodeTypeResolver->getType($expr);
-        if ($type->isString()->yes()) {
-            return \true;
-        }
-        $nativeType = $this->nodeTypeResolver->getNativeType($expr);
-        if ($nativeType->isString()->yes()) {
-            return \true;
-        }
-        if ($this->shouldSkipType($type)) {
-            return \true;
-        }
-        if ($expr instanceof InterpolatedString) {
-            return \true;
-        }
-        if ($this->isAnErrorType($expr, $nativeType, $scope)) {
-            return \true;
-        }
-        return $this->shouldSkipTrait($expr, $type, $isTrait);
-    }
-    private function isValidUnionType(Type $type) : bool
-    {
-        if (!$type instanceof UnionType) {
-            return \false;
-        }
-        foreach ($type->getTypes() as $childType) {
-            if ($childType->isString()->yes()) {
-                continue;
-            }
-            if ($childType->isNull()->yes()) {
-                continue;
-            }
-            return \false;
-        }
-        return \true;
-    }
-    private function shouldSkipType(Type $type) : bool
-    {
-        return !$type instanceof MixedType && !$type->isNull()->yes() && !$this->isValidUnionType($type);
-    }
-    private function shouldSkipTrait(Expr $expr, Type $type, bool $isTrait) : bool
-    {
-        if (!$type instanceof MixedType) {
-            return \false;
-        }
-        if (!$isTrait) {
-            return \false;
-        }
-        if ($type->isExplicitMixed()) {
-            return \false;
-        }
-        if (!$expr instanceof MethodCall) {
-            return $this->propertyFetchAnalyzer->isLocalPropertyFetch($expr);
-        }
-        return \true;
-    }
-    private function isAnErrorType(Expr $expr, Type $type, Scope $scope) : bool
-    {
-        if ($type instanceof ErrorType) {
-            return \true;
-        }
-        $parentScope = $scope->getParentScope();
-        if ($parentScope instanceof Scope) {
-            return $parentScope->getType($expr) instanceof ErrorType;
-        }
-        return $type instanceof MixedType && !$type->isExplicitMixed() && $type->getSubtractedType() instanceof NullType;
     }
     /**
      * @return int[]|string[]
