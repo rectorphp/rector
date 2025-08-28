@@ -149,6 +149,9 @@ CODE_SAMPLE
             // has parent class?
             return $class->extends instanceof FullyQualified;
         }
+        if ($this->isName($classMethod, MethodName::CLONE)) {
+            return !$classMethod->isPublic();
+        }
         return $this->isName($classMethod, MethodName::INVOKE);
     }
     private function hasDeprecatedAnnotation(ClassMethod $classMethod) : bool
