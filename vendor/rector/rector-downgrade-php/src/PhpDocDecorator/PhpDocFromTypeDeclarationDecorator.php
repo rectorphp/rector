@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -100,7 +101,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function decorateReturn($functionLike) : void
+    public function decorateReturn($functionLike, ?Type $requireType = null) : void
     {
         if (!$functionLike->returnType instanceof Node) {
             return;
@@ -136,6 +137,10 @@ final class PhpDocFromTypeDeclarationDecorator
             $returnType = $classMethod->returnType;
             if ($returnType instanceof Node && $returnType instanceof FullyQualified) {
                 $functionLike->returnType = new FullyQualified($returnType->toString());
+                break;
+            }
+            if ($requireType instanceof NeverType && $returnType instanceof Identifier && $this->nodeNameResolver->isName($returnType, 'void')) {
+                $functionLike->returnType = new Identifier('void');
                 break;
             }
         }
@@ -194,7 +199,7 @@ final class PhpDocFromTypeDeclarationDecorator
         if (!$this->isTypeMatch($functionLike->returnType, $requireType)) {
             return \false;
         }
-        $this->decorateReturn($functionLike);
+        $this->decorateReturn($functionLike, $requireType);
         return \true;
     }
     private function isRequireReturnTypeWillChange(ClassReflection $classReflection, ClassMethod $classMethod) : bool
