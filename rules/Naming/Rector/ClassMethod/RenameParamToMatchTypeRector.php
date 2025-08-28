@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
@@ -16,6 +17,8 @@ use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
+use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,14 +47,19 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      * @readonly
      */
     private ParamRenamer $paramRenamer;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
     private bool $hasChanged = \false;
-    public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, ParamRenamer $paramRenamer)
+    public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, ParamRenamer $paramRenamer, ReflectionResolver $reflectionResolver)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->expectedNameResolver = $expectedNameResolver;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
         $this->paramRenameFactory = $paramRenameFactory;
         $this->paramRenamer = $paramRenamer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -93,6 +101,9 @@ CODE_SAMPLE
             if ($param->variadic) {
                 continue;
             }
+            if ($node instanceof ClassMethod && $this->shouldSkipClassMethodFromVendor($node)) {
+                return null;
+            }
             $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
             if ($expectedName === null) {
                 continue;
@@ -115,6 +126,32 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function shouldSkipClassMethodFromVendor(ClassMethod $classMethod) : bool
+    {
+        if ($classMethod->isPrivate()) {
+            return \false;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        $ancestors = \array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
+        $methodName = $this->getName($classMethod);
+        foreach ($ancestors as $ancestor) {
+            // internal
+            if ($ancestor->getFileName() === null) {
+                continue;
+            }
+            if (!$ancestor->hasNativeMethod($methodName)) {
+                continue;
+            }
+            $path = PathNormalizer::normalize($ancestor->getFileName());
+            if (\strpos($path, '/vendor/') !== \false) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
