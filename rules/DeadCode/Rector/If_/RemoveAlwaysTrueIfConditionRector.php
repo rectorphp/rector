@@ -20,6 +20,7 @@ use PhpParser\NodeVisitor;
 use PHPStan\Type\IntersectionType;
 use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
 use Rector\NodeAnalyzer\ExprAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
@@ -120,6 +121,8 @@ CODE_SAMPLE
         if ($node->stmts === []) {
             return NodeVisitor::REMOVE_NODE;
         }
+        $node->stmts[0]->setAttribute(AttributeKey::COMMENTS, \array_merge($node->getComments(), $node->stmts[0]->getComments()));
+        $node->stmts[0]->setAttribute(AttributeKey::HAS_MERGED_COMMENTS, \true);
         return $node->stmts;
     }
     private function shouldSkipFromVariable(Expr $expr) : bool
