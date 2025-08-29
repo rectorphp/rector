@@ -221,6 +221,9 @@ CODE_SAMPLE
         if (!$param->isPromoted() || $this->visibilityManipulator->isReadonly($param)) {
             return null;
         }
+        if ($param->hooks !== []) {
+            return null;
+        }
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
             return null;
         }
