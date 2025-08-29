@@ -229,6 +229,9 @@ CODE_SAMPLE
         if (!$this->valueResolver->isTrue($returnStmt->expr)) {
             return \false;
         }
+        if (!$foreach->valueVar instanceof Variable) {
+            return \false;
+        }
         $type = $this->nodeTypeResolver->getNativeType($foreach->expr);
         return $type->isArray()->yes();
     }

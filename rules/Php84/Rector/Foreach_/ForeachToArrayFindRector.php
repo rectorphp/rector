@@ -148,6 +148,9 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($assignment->expr, $foreach->valueVar)) {
             return \false;
         }
+        if (!$foreach->valueVar instanceof Variable) {
+            return \false;
+        }
         $type = $this->nodeTypeResolver->getNativeType($foreach->expr);
         return $type->isArray()->yes();
     }
