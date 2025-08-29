@@ -133,6 +133,9 @@ final class ChangedNodeScopeRefresher
     private function setLineAttributesOnClass(Class_ $class, $node) : void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$class], function (Node $subNode) use($node) : Node {
+            if ($subNode->getStartLine() > 0 && $subNode->getEndLine() > 0) {
+                return $subNode;
+            }
             $subNode->setAttribute('startLine', $node->getStartLine());
             $subNode->setAttribute('endLine', $node->getEndLine());
             return $subNode;
