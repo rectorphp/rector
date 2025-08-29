@@ -238,6 +238,6 @@ class OutputFormatter implements WrappableOutputFormatterInterface
     private function addLineBreaks(string $text, int $width) : string
     {
         $encoding = \mb_detect_encoding($text, null, \true) ?: 'UTF-8';
-        return b($text)->toCodePointString($encoding)->wordwrap($width, "\n", \true)->toByteString($encoding);
+        return b($text)->toUnicodeString($encoding)->wordwrap($width, "\n", \true)->toByteString($encoding);
     }
 }

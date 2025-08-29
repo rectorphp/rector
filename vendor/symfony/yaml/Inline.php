@@ -404,7 +404,7 @@ class Inline
                 throw new ParseException('Missing mapping key.', self::$parsedLineNumber + 1, $mapping);
             }
             if ('!php/const' === $key || '!php/enum' === $key) {
-                $key .= ' ' . self::parseScalar($mapping, $flags, [':'], $i, \false);
+                $key .= ' ' . self::parseScalar($mapping, $flags, ['(?<!:):(?!:)'], $i, \false);
                 $key = self::evaluateScalar($key, $flags);
             }
             if (\false === ($i = \strpos($mapping, ':', $i))) {
