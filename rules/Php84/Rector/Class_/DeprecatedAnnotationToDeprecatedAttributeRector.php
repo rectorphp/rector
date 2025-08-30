@@ -30,20 +30,6 @@ final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRect
     {
         return new RuleDefinition('Change @deprecated annotation to Deprecated attribute', [new CodeSample(<<<'CODE_SAMPLE'
 /**
- * @deprecated 1.0.0 Use SomeOtherClass instead
- */
-class SomeClass
-{
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-#[\Deprecated(message: 'Use SomeOtherClass instead', since: '1.0.0')]
-class SomeClass
-{
-}
-CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
-/**
  * @deprecated 1.0.0 Use SomeOtherFunction instead
  */
 function someFunction()

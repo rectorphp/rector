@@ -5,18 +5,19 @@ namespace PHPStan\PhpDocParser\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function sprintf;
 class ArrayShapeItemNode implements Node
 {
     use NodeAttributes;
-    /** @var ConstExprIntegerNode|ConstExprStringNode|IdentifierTypeNode|null */
+    /** @var ConstExprIntegerNode|ConstExprStringNode|ConstFetchNode|IdentifierTypeNode|null */
     public $keyName;
     public bool $optional;
     public \PHPStan\PhpDocParser\Ast\Type\TypeNode $valueType;
     /**
-     * @param ConstExprIntegerNode|ConstExprStringNode|IdentifierTypeNode|null $keyName
+     * @param ConstExprIntegerNode|ConstExprStringNode|ConstFetchNode|IdentifierTypeNode|null $keyName
      */
     public function __construct($keyName, bool $optional, \PHPStan\PhpDocParser\Ast\Type\TypeNode $valueType)
     {

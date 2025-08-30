@@ -652,7 +652,7 @@ class TypeParser
     }
     /**
      * @phpstan-impure
-     * @return Ast\ConstExpr\ConstExprIntegerNode|Ast\ConstExpr\ConstExprStringNode|Ast\Type\IdentifierTypeNode
+     * @return Ast\ConstExpr\ConstExprIntegerNode|Ast\ConstExpr\ConstExprStringNode|Ast\ConstExpr\ConstFetchNode|Ast\Type\IdentifierTypeNode
      */
     private function parseArrayShapeKey(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens)
     {
@@ -668,8 +668,15 @@ class TypeParser
             $key = new Ast\ConstExpr\ConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\ConstExprStringNode::DOUBLE_QUOTED);
             $tokens->next();
         } else {
-            $key = new Ast\Type\IdentifierTypeNode($tokens->currentTokenValue());
+            $identifier = $tokens->currentTokenValue();
             $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
+            if ($tokens->tryConsumeTokenType(Lexer::TOKEN_DOUBLE_COLON)) {
+                $classConstantName = $tokens->currentTokenValue();
+                $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
+                $key = new Ast\ConstExpr\ConstFetchNode($identifier, $classConstantName);
+            } else {
+                $key = new Ast\Type\IdentifierTypeNode($identifier);
+            }
         }
         return $this->enrichWithAttributes($tokens, $key, $startLine, $startIndex);
     }
