@@ -239,12 +239,6 @@ final class NodeTypeResolver
         $nodeType = $this->getType($node);
         return TypeCombinator::containsNull($nodeType);
     }
-    private function correctType(Type $type) : Type
-    {
-        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
-        $type = $this->genericClassStringTypeCorrector->correct($type);
-        return $this->accessoryNonEmptyArrayTypeCorrector->correct($type);
-    }
     public function getNativeType(Expr $expr) : Type
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
@@ -333,6 +327,12 @@ final class NodeTypeResolver
             return \true;
         }
         return $classReflection->hasTraitUse($objectType->getClassName());
+    }
+    private function correctType(Type $type) : Type
+    {
+        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+        $type = $this->genericClassStringTypeCorrector->correct($type);
+        return $this->accessoryNonEmptyArrayTypeCorrector->correct($type);
     }
     /**
      * Allow pull type from
