@@ -2177,6 +2177,7 @@ return array(
     'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => $baseDir . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
     'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => $baseDir . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
+    'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => $baseDir . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
     'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => $baseDir . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper.php',

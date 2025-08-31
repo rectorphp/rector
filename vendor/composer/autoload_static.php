@@ -2425,6 +2425,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
         'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
+        'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
         'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',

@@ -651,4 +651,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATE_NULL_ARG_IN_ARRAY_KEY_EXISTS_FUNCTION = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @see https://wiki.php.net/rfc/deprecations_php_8_5#eprecate_passing_integers_outside_the_interval_0_255_to_chr
+     * @var int
+     */
+    public const DEPRECATE_OUTSIDE_INTERVEL_VAL_IN_CHR_FUNCTION = \Rector\ValueObject\PhpVersion::PHP_85;
 }
