@@ -109,4 +109,8 @@ final class SymfonyClass
      * @var string
      */
     public const CONTAINER_CONFIGURATOR = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
+    /**
+     * @var string
+     */
+    public const PARAMETER_BAG = 'Symfony\\Component\\HttpFoundation\\ParameterBag';
 }
