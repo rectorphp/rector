@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202508\React\Dns\Query;
+namespace RectorPrefix202509\React\Dns\Query;
 
-use RectorPrefix202508\React\Promise\Promise;
+use RectorPrefix202509\React\Promise\Promise;
 /**
  * Cooperatively resolves hosts via the given base executor to ensure same query is not run concurrently
  *

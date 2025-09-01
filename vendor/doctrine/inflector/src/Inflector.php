@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202508\Doctrine\Inflector;
+namespace RectorPrefix202509\Doctrine\Inflector;
 
 use RuntimeException;
 use function chr;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202508\Illuminate\Contracts\Debug;
+namespace RectorPrefix202509\Illuminate\Contracts\Debug;
 
 use Throwable;
 interface ExceptionHandler

@@ -15,7 +15,7 @@ use Rector\PHPUnit\ValueObject\TestClassSuffixesConfig;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202508\Webmozart\Assert\Assert;
+use RectorPrefix202509\Webmozart\Assert\Assert;
 use function array_filter;
 use function array_merge;
 use function count;

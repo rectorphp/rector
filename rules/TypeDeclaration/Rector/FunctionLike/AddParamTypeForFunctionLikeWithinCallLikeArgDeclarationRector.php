@@ -23,7 +23,7 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeForFunctionLikeWithinCallLike
 use Rector\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202508\Webmozart\Assert\Assert;
+use RectorPrefix202509\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector\AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRectorTest
  */

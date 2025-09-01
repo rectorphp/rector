@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\Application\File;
-use RectorPrefix202508\Webmozart\Assert\Assert;
+use RectorPrefix202509\Webmozart\Assert\Assert;
 abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**

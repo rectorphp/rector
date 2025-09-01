@@ -59,7 +59,7 @@
             "src\/"
         ],
         "psr-4": {
-            "RectorPrefix202508\\Nette\\": "src"
+            "RectorPrefix202509\\Nette\\": "src"
         }
     },
     "minimum-stability": "dev",

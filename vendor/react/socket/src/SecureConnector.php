@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202508\React\Socket;
+namespace RectorPrefix202509\React\Socket;
 
-use RectorPrefix202508\React\EventLoop\Loop;
-use RectorPrefix202508\React\EventLoop\LoopInterface;
-use RectorPrefix202508\React\Promise;
+use RectorPrefix202509\React\EventLoop\Loop;
+use RectorPrefix202509\React\EventLoop\LoopInterface;
+use RectorPrefix202509\React\Promise;
 use BadMethodCallException;
 use InvalidArgumentException;
 use UnexpectedValueException;
@@ -87,7 +87,7 @@ final class SecureConnector implements ConnectorInterface
             }
             throw $e;
         });
-        return new \RectorPrefix202508\React\Promise\Promise(function ($resolve, $reject) use($promise) {
+        return new \RectorPrefix202509\React\Promise\Promise(function ($resolve, $reject) use($promise) {
             $promise->then($resolve, $reject);
         }, function ($_, $reject) use(&$promise, $uri, &$connected) {
             if ($connected) {

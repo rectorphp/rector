@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202508\Illuminate\Contracts\Routing;
+namespace RectorPrefix202509\Illuminate\Contracts\Routing;
 
 interface ResponseFactory
 {

@@ -12,7 +12,7 @@ use Rector\PhpParser\Node\NodeFactory;
 use Rector\Symfony\Configs\Enum\GroupingMethods;
 use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\Utils\StringUtils;
-use RectorPrefix202508\Webmozart\Assert\Assert;
+use RectorPrefix202509\Webmozart\Assert\Assert;
 final class NestedConfigCallsFactory
 {
     /**

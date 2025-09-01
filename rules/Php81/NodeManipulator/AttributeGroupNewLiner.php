@@ -6,7 +6,7 @@ namespace Rector\Php81\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use Rector\ValueObject\Application\File;
-use RectorPrefix202508\Webmozart\Assert\Assert;
+use RectorPrefix202509\Webmozart\Assert\Assert;
 final class AttributeGroupNewLiner
 {
     public function newLine(File $file, Node $node) : void

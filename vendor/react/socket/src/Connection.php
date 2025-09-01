@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix202508\React\Socket;
+namespace RectorPrefix202509\React\Socket;
 
-use RectorPrefix202508\Evenement\EventEmitter;
-use RectorPrefix202508\React\EventLoop\LoopInterface;
-use RectorPrefix202508\React\Stream\DuplexResourceStream;
-use RectorPrefix202508\React\Stream\Util;
-use RectorPrefix202508\React\Stream\WritableResourceStream;
-use RectorPrefix202508\React\Stream\WritableStreamInterface;
+use RectorPrefix202509\Evenement\EventEmitter;
+use RectorPrefix202509\React\EventLoop\LoopInterface;
+use RectorPrefix202509\React\Stream\DuplexResourceStream;
+use RectorPrefix202509\React\Stream\Util;
+use RectorPrefix202509\React\Stream\WritableResourceStream;
+use RectorPrefix202509\React\Stream\WritableStreamInterface;
 /**
  * The actual connection implementation for ConnectionInterface
  *
