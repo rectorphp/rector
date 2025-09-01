@@ -1899,6 +1899,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddCoversClassAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddCoversClassAttributeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParamTypeFromDependsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParamTypeFromDependsRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParentSetupCallOnSetupRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParentSetupCallOnSetupRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddReturnTypeToDependedRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddReturnTypeToDependedRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\NarrowUnusedSetUpDefinedPropertyRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/NarrowUnusedSetUpDefinedPropertyRector.php',
