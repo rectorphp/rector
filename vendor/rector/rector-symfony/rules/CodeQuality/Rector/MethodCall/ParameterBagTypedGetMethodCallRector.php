@@ -5,6 +5,7 @@ namespace Rector\Symfony\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Bool_;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
@@ -58,13 +59,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, Bool_::class];
+        return [MethodCall::class, Bool_::class, FuncCall::class];
     }
     /**
-     * @param MethodCall|Bool_ $node
+     * @param MethodCall|Bool_|FuncCall $node
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node instanceof FuncCall && $this->isName($node->name, 'filter_var')) {
+            return $this->refactorFilterVarFuncCall($node);
+        }
         if ($node instanceof Bool_) {
             if (!$node->expr instanceof MethodCall) {
                 return null;
@@ -103,5 +107,24 @@ CODE_SAMPLE
             return $methodCall;
         }
         return null;
+    }
+    private function refactorFilterVarFuncCall(FuncCall $funcCall) : ?MethodCall
+    {
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
+        // needs at least 2 args
+        if (\count($funcCall->getArgs()) < 2) {
+            return null;
+        }
+        $flagArg = $funcCall->getArgs()[1];
+        if (!$this->valueResolver->isValue($flagArg->value, 'FILTER_VALIDATE_BOOLEAN')) {
+            return null;
+        }
+        $exprArg = $funcCall->getArgs()[0];
+        if (!$exprArg->value instanceof MethodCall) {
+            return null;
+        }
+        return $this->refactorMethodCall($exprArg->value);
     }
 }
