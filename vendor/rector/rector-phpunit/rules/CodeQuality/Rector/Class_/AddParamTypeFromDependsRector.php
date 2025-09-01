@@ -47,7 +47,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
 {
-    public function test()
+    public function test(): \stdClass
     {
         return new \stdClass();
     }
@@ -65,7 +65,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
 {
-    public function test()
+    public function test(): \stdClass
     {
         return new \stdClass();
     }
