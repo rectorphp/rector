@@ -131,4 +131,10 @@ final class SetList
      * @var string
      */
     public const BEHAT_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../../config/set/behat-annotations-to-attributes.php';
+    /**
+     * @experimental Check generic types in runtime with assert. Generics for impatient people.
+     *
+     * @var string
+     */
+    public const ASSERT = __DIR__ . '/../../../config/set/assert.php';
 }
