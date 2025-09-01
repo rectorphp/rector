@@ -2735,6 +2735,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\Symfony\\Set\\SetProvider\\SymfonySetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/SymfonySetProvider.php',
         'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
         'Rector\\Symfony\\Set\\SwiftMailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
+        'Rector\\Symfony\\Set\\SymfonyInternalSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonyInternalSetList.php',
         'Rector\\Symfony\\Set\\SymfonySetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonySetList.php',
         'Rector\\Symfony\\Set\\TwigSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigSetList.php',
         'Rector\\Symfony\\SwiftMailer\\Rector\\ClassMethod\\SwiftMessageToEmailRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php',

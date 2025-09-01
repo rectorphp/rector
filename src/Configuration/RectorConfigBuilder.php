@@ -30,6 +30,7 @@ use Rector\Set\Enum\SetGroup;
 use Rector\Set\SetManager;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
@@ -346,13 +347,13 @@ final class RectorConfigBuilder
             $this->sets[] = DoctrineSetList::GEDMO_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($fosRest || $all) {
-            $this->sets[] = __DIR__ . '/../../vendor/rector/rector-symfony/config/sets/fosrest/annotations-to-attributes.php';
+            $this->sets[] = SymfonyInternalSetList::FOS_REST_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($jms || $all) {
-            $this->sets[] = __DIR__ . '/../../vendor/rector/rector-symfony/config/sets/jms/annotations-to-attributes.php';
+            $this->sets[] = SymfonyInternalSetList::JMS_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($sensiolabs || $all) {
-            $this->sets[] = __DIR__ . '/../../vendor/rector/rector-symfony/config/sets/sensiolabs/annotations-to-attributes.php';
+            $this->sets[] = SymfonyInternalSetList::SENSIOLABS_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($phpunit || $all) {
             $this->sets[] = PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES;

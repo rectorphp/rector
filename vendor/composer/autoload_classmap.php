@@ -2487,6 +2487,7 @@ return array(
     'Rector\\Symfony\\Set\\SetProvider\\SymfonySetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/SymfonySetProvider.php',
     'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
     'Rector\\Symfony\\Set\\SwiftMailerSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
+    'Rector\\Symfony\\Set\\SymfonyInternalSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonyInternalSetList.php',
     'Rector\\Symfony\\Set\\SymfonySetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonySetList.php',
     'Rector\\Symfony\\Set\\TwigSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigSetList.php',
     'Rector\\Symfony\\SwiftMailer\\Rector\\ClassMethod\\SwiftMessageToEmailRector' => $vendorDir . '/rector/rector-symfony/rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php',
