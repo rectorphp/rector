@@ -87,7 +87,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
                 continue;
             }
             $this->identifierManipulator->renameNodeWithMap($node, ['assertTrue' => $binaryOpWithAssertMethod->getAssetMethodName(), 'assertFalse' => $binaryOpWithAssertMethod->getNotAssertMethodName()]);
-            $this->changeArgumentsOrder($node);
+            $shouldKeepOrder = $binaryOp instanceof Greater || $binaryOp instanceof GreaterOrEqual || $binaryOp instanceof Smaller || $binaryOp instanceof SmallerOrEqual;
+            $this->changeArgumentsOrder($node, $shouldKeepOrder);
             return $node;
         }
         return null;
@@ -95,12 +96,12 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function changeArgumentsOrder($node) : void
+    private function changeArgumentsOrder($node, bool $shouldKeepOrder) : void
     {
         $oldArguments = $node->getArgs();
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
-        if ($this->isConstantValue($expression->left)) {
+        if ($this->isConstantValue($expression->left) && !$shouldKeepOrder) {
             $firstArgument = new Arg($expression->left);
             $secondArgument = new Arg($expression->right);
         } else {
