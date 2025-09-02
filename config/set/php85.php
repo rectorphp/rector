@@ -19,6 +19,7 @@ use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
 use Rector\Renaming\Rector\Cast\RenameCastRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
+use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -65,4 +66,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->ruleWithConfiguration(RenameCastRector::class, [new RenameCast(Int_::class, Int_::KIND_INTEGER, Int_::KIND_INT), new RenameCast(Bool_::class, Bool_::KIND_BOOLEAN, Bool_::KIND_BOOL), new RenameCast(Double::class, Double::KIND_DOUBLE, Double::KIND_FLOAT), new RenameCast(String_::class, String_::KIND_BINARY, String_::KIND_STRING)]);
     // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_no-op_functions_from_the_resource_to_object_conversion
     $rectorConfig->ruleWithConfiguration(WrapFuncCallWithPhpVersionIdCheckerRector::class, [new WrapFuncCallWithPhpVersionIdChecker('curl_close', 80500), new WrapFuncCallWithPhpVersionIdChecker('curl_share_close', 80500), new WrapFuncCallWithPhpVersionIdChecker('finfo_close', 80500), new WrapFuncCallWithPhpVersionIdChecker('imagedestroy', 80500), new WrapFuncCallWithPhpVersionIdChecker('xml_parser_free', 80500)]);
+    // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_filter_default_constant
+    $rectorConfig->ruleWithConfiguration(RenameConstantRector::class, ['FILTER_DEFAULT' => 'FILTER_UNSAFE_RAW']);
 };
