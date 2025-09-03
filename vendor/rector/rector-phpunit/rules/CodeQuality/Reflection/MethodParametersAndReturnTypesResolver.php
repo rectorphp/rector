@@ -16,7 +16,6 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Enum\ClassName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\CodeQuality\ValueObject\ParamTypesAndReturnType;
 final class MethodParametersAndReturnTypesResolver
 {
@@ -72,8 +71,7 @@ final class MethodParametersAndReturnTypesResolver
         if (!$classReflection->hasNativeMethod($methodName)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($call);
-        $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
+        $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
         return $this->resolveParameterTypes($extendedMethodReflection, $classReflection);
     }
     /**
