@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Reflection;
 
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ExtendedMethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -12,9 +15,19 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Enum\ClassName;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\CodeQuality\ValueObject\ParamTypesAndReturnType;
 final class MethodParametersAndReturnTypesResolver
 {
+    /**
+     * @readonly
+     */
+    private NodeTypeResolver $nodeTypeResolver;
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
     public function resolveFromReflection(IntersectionType $intersectionType, string $methodName, ClassReflection $currentClassReflection) : ?ParamTypesAndReturnType
     {
         foreach ($intersectionType->getTypes() as $intersectionedType) {
@@ -39,9 +52,34 @@ final class MethodParametersAndReturnTypesResolver
         return null;
     }
     /**
+     * @return null|Type[]
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    public function resolveCallParameterTypes($call) : ?array
+    {
+        if (!$call->name instanceof Identifier) {
+            return null;
+        }
+        $methodName = $call->name->toString();
+        $callerType = $this->nodeTypeResolver->getType($call instanceof MethodCall ? $call->var : $call->class);
+        if (!$callerType instanceof ObjectType) {
+            return null;
+        }
+        $classReflection = $callerType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        if (!$classReflection->hasNativeMethod($methodName)) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($call);
+        $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
+        return $this->resolveParameterTypes($extendedMethodReflection, $classReflection);
+    }
+    /**
      * @return Type[]
      */
-    private function resolveParameterTypes(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection) : array
+    public function resolveParameterTypes(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection) : array
     {
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         $parameterTypes = [];

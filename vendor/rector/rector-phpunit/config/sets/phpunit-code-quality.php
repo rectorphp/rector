@@ -38,6 +38,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\MatchAssertSameExpectedTypeRect
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowSingleWillReturnCallbackRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\ScalarArgumentToExpectedParamTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsStringRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
@@ -68,6 +69,7 @@ return static function (RectorConfig $rectorConfig) : void {
         StringCastAssertStringContainsStringRector::class,
         AddParamTypeFromDependsRector::class,
         AddReturnTypeToDependedRector::class,
+        ScalarArgumentToExpectedParamTypeRector::class,
         NarrowUnusedSetUpDefinedPropertyRector::class,
         // specific asserts
         AssertCompareOnCountableWithMethodToAssertCountRector::class,
