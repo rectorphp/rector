@@ -19,9 +19,9 @@ final class InstalledPackageResolver
      */
     private ?string $projectDirectory = null;
     /**
-     * @var InstalledPackage[]
+     * @var null|InstalledPackage[]
      */
-    private array $resolvedInstalledPackages = [];
+    private ?array $resolvedInstalledPackages = null;
     public function __construct(?string $projectDirectory = null)
     {
         $this->projectDirectory = $projectDirectory;
@@ -36,8 +36,8 @@ final class InstalledPackageResolver
      */
     public function resolve() : array
     {
-        // cache
-        if ($this->resolvedInstalledPackages !== []) {
+        // already cached, even only empty array
+        if ($this->resolvedInstalledPackages !== null) {
             return $this->resolvedInstalledPackages;
         }
         $installedPackagesFilePath = self::resolveVendorDir() . '/composer/installed.json';

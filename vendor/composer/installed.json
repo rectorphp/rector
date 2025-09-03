@@ -507,8 +507,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.45.2",
-            "version_normalized": "11.45.2.0",
+            "version": "v11.45.3",
+            "version_normalized": "11.45.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -564,8 +564,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.45.2",
-            "version_normalized": "11.45.2.0",
+            "version": "v11.45.3",
+            "version_normalized": "11.45.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
