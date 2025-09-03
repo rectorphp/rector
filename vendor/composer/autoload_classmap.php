@@ -1635,6 +1635,7 @@ return array(
     'Rector\\DowngradePhp83\\Rector\\ClassConstFetch\\DowngradeDynamicClassConstFetchRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConstFetch/DowngradeDynamicClassConstFetchRector.php',
     'Rector\\DowngradePhp83\\Rector\\ClassConst\\DowngradeTypedClassConstRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php',
     'Rector\\DowngradePhp83\\Rector\\Class_\\DowngradeReadonlyAnonymousClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/Class_/DowngradeReadonlyAnonymousClassRector.php',
+    'Rector\\DowngradePhp83\\Rector\\FuncCall\\DowngradeJsonValidateRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/FuncCall/DowngradeJsonValidateRector.php',
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAllRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAllRector.php',
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAnyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAnyRector.php',
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindKeyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindKeyRector.php',
