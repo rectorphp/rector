@@ -144,11 +144,8 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall || $node->isFirstClassCallable()) {
                 return null;
             }
-            if (!$this->isName($node->name, self::WILL_RETURN_CALLBACK)) {
-                return null;
-            }
-            $innerArg = $node->getArgs()[0]->value;
-            if (!$innerArg instanceof ArrowFunction && !$innerArg instanceof Closure) {
+            $innerClosure = $this->matchInnerClosure($node);
+            if (!$innerClosure instanceof Node) {
                 return null;
             }
             if (!$node->var instanceof MethodCall) {
@@ -180,7 +177,7 @@ CODE_SAMPLE
             if (!$parameterTypesAndReturnType instanceof ParamTypesAndReturnType) {
                 return null;
             }
-            foreach ($innerArg->params as $key => $param) {
+            foreach ($innerClosure->params as $key => $param) {
                 // avoid typing variadic parameters
                 if ($param->variadic) {
                     continue;
@@ -204,10 +201,10 @@ CODE_SAMPLE
                 $param->type = $parameterTypeNode;
                 $hasChanged = \true;
             }
-            if (!$innerArg->returnType instanceof Node) {
+            if (!$innerClosure->returnType instanceof Node) {
                 $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
                 if ($returnTypeNode instanceof Node) {
-                    $innerArg->returnType = $returnTypeNode;
+                    $innerClosure->returnType = $returnTypeNode;
                     $hasChanged = \true;
                 }
             }
@@ -216,6 +213,32 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    /**
+     * @return null|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure
+     */
+    public function matchInnerClosure(MethodCall $methodCall)
+    {
+        if ($this->isName($methodCall->name, 'with')) {
+            // special case for nested callback
+            $withFirstArg = $methodCall->getArgs()[0];
+            if ($withFirstArg->value instanceof MethodCall) {
+                $nestedMethodCall = $withFirstArg->value;
+                if ($this->isName($nestedMethodCall->name, 'callback')) {
+                    $nestedArg = $nestedMethodCall->getArgs()[0];
+                    if ($nestedArg->value instanceof ArrowFunction || $nestedArg->value instanceof Closure) {
+                        return $nestedArg->value;
+                    }
+                }
+            }
+        }
+        if ($this->isName($methodCall->name, self::WILL_RETURN_CALLBACK)) {
+            $innerArg = $methodCall->getArgs()[0];
+            if ($innerArg->value instanceof ArrowFunction || $innerArg->value instanceof Closure) {
+                return $innerArg->value;
+            }
+        }
+        return null;
     }
     /**
      * @param array<string, string> $propertyNameToMockedTypes
