@@ -46,6 +46,9 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
                 return $functionFqnName;
             }
         }
+        if (\is_string($namespaceName)) {
+            return $namespaceName;
+        }
         return (string) $node->name;
     }
 }
