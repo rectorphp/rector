@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use Rector\Php80\NodeResolver\StrFalseComparisonResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\ValueObject\PolyfillPackage;
@@ -24,9 +23,9 @@ use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
+ * @see \Rector\Tests\Php80\Rector\NotIdentical\MbStrContainsRector\MbStrContainsRectorTest
  */
-final class StrContainsRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
+final class MbStrContainsRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
 {
     /**
      * @readonly
@@ -35,7 +34,7 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     /**
      * @var string[]
      */
-    private const OLD_STR_NAMES = ['strpos', 'strstr'];
+    private const OLD_STR_NAMES = ['mb_strpos', 'mb_strstr'];
     public function __construct(StrFalseComparisonResolver $strFalseComparisonResolver)
     {
         $this->strFalseComparisonResolver = $strFalseComparisonResolver;
@@ -46,12 +45,12 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace mb_strpos() !== false and mb_strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
-        return strpos('abc', 'a') !== false;
+        return mb_strpos('abc', 'a') !== false;
     }
 }
 CODE_SAMPLE
@@ -87,8 +86,8 @@ CODE_SAMPLE
         }
         if (isset($funcCall->getArgs()[2])) {
             $secondArg = $funcCall->getArgs()[2];
-            if ($this->isName($funcCall->name, 'strpos') && !$this->isIntegerZero($secondArg->value)) {
-                $funcCall->args[0] = new Arg($this->nodeFactory->createFuncCall('substr', [$funcCall->args[0], $secondArg]));
+            if ($this->isName($funcCall->name, 'mb_strpos') && !$this->isIntegerZero($secondArg->value)) {
+                $funcCall->args[0] = new Arg($this->nodeFactory->createFuncCall('mb_substr', [$funcCall->args[0], $secondArg]));
             }
             unset($funcCall->args[2]);
         }
