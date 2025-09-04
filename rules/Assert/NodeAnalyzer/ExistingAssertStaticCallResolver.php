@@ -32,7 +32,7 @@ final class ExistingAssertStaticCallResolver
             if (!$staticCall->class instanceof Name) {
                 continue;
             }
-            if ($staticCall->class->toString() !== AssertClassName::ASSERT) {
+            if (!\in_array($staticCall->class->toString(), [AssertClassName::WEBMOZART, AssertClassName::BEBERLEI], \true)) {
                 continue;
             }
             $existingAssertCallHashes[] = $standard->prettyPrintExpr($staticCall);
