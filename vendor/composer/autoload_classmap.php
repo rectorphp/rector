@@ -2166,6 +2166,7 @@ return array(
     'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => $baseDir . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
     'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => $baseDir . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
     'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => $baseDir . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',
+    'Rector\\Php83\\Rector\\BooleanAnd\\JsonValidateRector' => $baseDir . '/rules/Php83/Rector/BooleanAnd/JsonValidateRector.php',
     'Rector\\Php83\\Rector\\ClassConst\\AddTypeToConstRector' => $baseDir . '/rules/Php83/Rector/ClassConst/AddTypeToConstRector.php',
     'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => $baseDir . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
     'Rector\\Php83\\Rector\\Class_\\ReadOnlyAnonymousClassRector' => $baseDir . '/rules/Php83/Rector/Class_/ReadOnlyAnonymousClassRector.php',

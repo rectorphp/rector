@@ -2414,6 +2414,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
         'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
         'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',
+        'Rector\\Php83\\Rector\\BooleanAnd\\JsonValidateRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/BooleanAnd/JsonValidateRector.php',
         'Rector\\Php83\\Rector\\ClassConst\\AddTypeToConstRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassConst/AddTypeToConstRector.php',
         'Rector\\Php83\\Rector\\ClassMethod\\AddOverrideAttributeToOverriddenMethodsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/ClassMethod/AddOverrideAttributeToOverriddenMethodsRector.php',
         'Rector\\Php83\\Rector\\Class_\\ReadOnlyAnonymousClassRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/Class_/ReadOnlyAnonymousClassRector.php',
