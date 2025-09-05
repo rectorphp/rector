@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\IntegerType;
@@ -105,9 +106,15 @@ CODE_SAMPLE
             }
             // remove null
             $knownParameterType = TypeCombinator::removeNull($knownParameterType);
-            if ($knownParameterType instanceof StringType && $arg->value instanceof Int_) {
-                $arg->value = new String_((string) $arg->value->value);
-                $hasChanged = \true;
+            if ($knownParameterType instanceof StringType) {
+                if ($arg->value instanceof Int_) {
+                    $arg->value = new String_((string) $arg->value->value);
+                    $hasChanged = \true;
+                }
+                if ($arg->value instanceof Float_) {
+                    $arg->value = new String_((string) $arg->value->value);
+                    $hasChanged = \true;
+                }
             }
             if ($knownParameterType instanceof IntegerType && $arg->value instanceof String_) {
                 $arg->value = new Int_((int) $arg->value->value);
@@ -145,6 +152,9 @@ CODE_SAMPLE
                 return \true;
             }
             if ($arg->value instanceof String_) {
+                return \true;
+            }
+            if ($arg->value instanceof Float_) {
                 return \true;
             }
         }
