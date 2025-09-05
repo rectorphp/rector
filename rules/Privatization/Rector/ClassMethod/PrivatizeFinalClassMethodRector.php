@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
+use Rector\Privatization\Guard\LaravelModelGuard;
 use Rector\Privatization\Guard\OverrideByParentClassGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -37,12 +38,17 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private LaravelModelGuard $laravelModelGuard;
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder, LaravelModelGuard $laravelModelGuard)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->overrideByParentClassGuard = $overrideByParentClassGuard;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->laravelModelGuard = $laravelModelGuard;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -90,6 +96,9 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
+                continue;
+            }
+            if ($this->laravelModelGuard->isProtectedMethod($classReflection, $classMethod)) {
                 continue;
             }
             if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod, $classReflection)) {

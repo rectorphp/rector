@@ -2504,6 +2504,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/UseAddingPostRector.php',
         'Rector\\PostRector\\ValueObject\\PropertyMetadata' => __DIR__ . '/../..' . '/src/PostRector/ValueObject/PropertyMetadata.php',
+        'Rector\\Privatization\\Guard\\LaravelModelGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/LaravelModelGuard.php',
         'Rector\\Privatization\\Guard\\OverrideByParentClassGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/OverrideByParentClassGuard.php',
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',

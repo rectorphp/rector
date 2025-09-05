@@ -2256,6 +2256,7 @@ return array(
     'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => $baseDir . '/src/PostRector/Rector/UnusedImportRemovingPostRector.php',
     'Rector\\PostRector\\Rector\\UseAddingPostRector' => $baseDir . '/src/PostRector/Rector/UseAddingPostRector.php',
     'Rector\\PostRector\\ValueObject\\PropertyMetadata' => $baseDir . '/src/PostRector/ValueObject/PropertyMetadata.php',
+    'Rector\\Privatization\\Guard\\LaravelModelGuard' => $baseDir . '/rules/Privatization/Guard/LaravelModelGuard.php',
     'Rector\\Privatization\\Guard\\OverrideByParentClassGuard' => $baseDir . '/rules/Privatization/Guard/OverrideByParentClassGuard.php',
     'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => $baseDir . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
     'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => $baseDir . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
