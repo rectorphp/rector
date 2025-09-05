@@ -123,6 +123,9 @@ CODE_SAMPLE
     private function resolveReturnTypeOfDependsMethod(ClassMethod $classMethod, Class_ $class) : ?Node
     {
         $dependsMethodName = $this->resolveDependsAnnotationOrAttributeMethod($classMethod);
+        if ($dependsMethodName === null || $dependsMethodName === '') {
+            return null;
+        }
         $dependsClassMethod = $class->getMethod($dependsMethodName);
         if (!$dependsClassMethod instanceof ClassMethod) {
             return null;
