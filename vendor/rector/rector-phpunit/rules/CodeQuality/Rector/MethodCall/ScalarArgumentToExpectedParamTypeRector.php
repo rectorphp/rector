@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
@@ -96,11 +97,21 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $callParameterTypes = $this->methodParametersAndReturnTypesResolver->resolveCallParameterTypes($node);
+        $callParameterNames = $this->methodParametersAndReturnTypesResolver->resolveCallParameterNames($node);
         foreach ($node->getArgs() as $key => $arg) {
             if (!$arg->value instanceof Scalar) {
                 continue;
             }
             $knownParameterType = $callParameterTypes[$key] ?? null;
+            if ($arg->name instanceof Identifier) {
+                $argName = $arg->name->toString();
+                foreach ($callParameterNames as $keyParameterNames => $callParameterName) {
+                    if ($argName === $callParameterName) {
+                        $knownParameterType = $callParameterTypes[$keyParameterNames] ?? null;
+                        break;
+                    }
+                }
+            }
             if (!$knownParameterType instanceof Type) {
                 continue;
             }

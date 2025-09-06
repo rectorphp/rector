@@ -75,6 +75,30 @@ final class MethodParametersAndReturnTypesResolver
         return $this->resolveParameterTypes($extendedMethodReflection, $classReflection);
     }
     /**
+     * @return string[]
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    public function resolveCallParameterNames($call) : array
+    {
+        if (!$call->name instanceof Identifier) {
+            return [];
+        }
+        $methodName = $call->name->toString();
+        $callerType = $this->nodeTypeResolver->getType($call instanceof MethodCall ? $call->var : $call->class);
+        if (!$callerType instanceof ObjectType) {
+            return [];
+        }
+        $classReflection = $callerType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return [];
+        }
+        if (!$classReflection->hasNativeMethod($methodName)) {
+            return [];
+        }
+        $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
+        return $this->resolveParameterNames($extendedMethodReflection);
+    }
+    /**
      * @return Type[]
      */
     public function resolveParameterTypes(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection) : array
@@ -90,6 +114,18 @@ final class MethodParametersAndReturnTypesResolver
             $parameterTypes[] = $parameterType;
         }
         return $parameterTypes;
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveParameterNames(ExtendedMethodReflection $extendedMethodReflection) : array
+    {
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
+        $parameterNames = [];
+        foreach ($extendedParametersAcceptor->getParameters() as $parameterReflection) {
+            $parameterNames[] = $parameterReflection->getName();
+        }
+        return $parameterNames;
     }
     /**
      * @return \PHPStan\Type\ObjectType|\PHPStan\Type\Type
