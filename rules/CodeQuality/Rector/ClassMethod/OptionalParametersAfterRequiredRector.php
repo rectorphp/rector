@@ -73,26 +73,29 @@ CODE_SAMPLE
             if ($previousParam instanceof Param && $previousParam->default instanceof Expr) {
                 $hasChanged = \true;
                 $param->default = new ConstFetch(new Name('null'));
-                $paramType = $param->type;
-                if (!$paramType instanceof Node) {
+                if (!$param->type instanceof Node) {
                     continue;
                 }
-                if ($paramType instanceof NullableType) {
+                if ($param->type instanceof NullableType) {
                     continue;
                 }
-                if ($paramType instanceof UnionType || $paramType instanceof IntersectionType) {
-                    foreach ($paramType->types as $unionedType) {
+                if ($param->type instanceof UnionType) {
+                    foreach ($param->type->types as $unionedType) {
                         if ($unionedType instanceof Identifier && $this->isName($unionedType, 'null')) {
                             continue 2;
                         }
                     }
-                    $paramType->types[] = new Identifier('null');
+                    $param->type->types[] = new Identifier('null');
                     continue;
                 }
-                if ($paramType instanceof ComplexType) {
+                if ($param->type instanceof IntersectionType) {
+                    $param->type = new UnionType([$param->type, new Identifier('null')]);
                     continue;
                 }
-                $param->type = new NullableType($paramType);
+                if ($param->type instanceof ComplexType) {
+                    continue;
+                }
+                $param->type = new NullableType($param->type);
             }
         }
         return $hasChanged ? $node : null;
