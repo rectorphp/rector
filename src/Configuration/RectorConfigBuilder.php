@@ -787,13 +787,17 @@ final class RectorConfigBuilder
         $this->registerServices[] = new RegisteredService($className, $alias, $tag);
         return $this;
     }
-    public function withDowngradeSets(bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false) : self
+    public function withDowngradeSets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false) : self
     {
         $pickedArguments = \array_filter(\func_get_args());
         if (\count($pickedArguments) !== 1) {
             throw new InvalidConfigurationException('Pick only one PHP version target in "withDowngradeSets()". All rules down to this version will be used.');
         }
-        if ($php82) {
+        if ($php84) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_84;
+        } elseif ($php83) {
+            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_83;
+        } elseif ($php82) {
             $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_82;
         } elseif ($php81) {
             $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_81;
