@@ -50,7 +50,10 @@ final class LaravelModelGuard
             return \false;
         }
         $name = (string) $this->nodeNameResolver->getName($classMethod->name);
-        return $this->isAttributeMethod($name, $classMethod) || $this->isScopeMethod($name, $classMethod);
+        if ($this->isAttributeMethod($name, $classMethod)) {
+            return \true;
+        }
+        return $this->isScopeMethod($name, $classMethod);
     }
     private function isAttributeMethod(string $name, ClassMethod $classMethod) : bool
     {
