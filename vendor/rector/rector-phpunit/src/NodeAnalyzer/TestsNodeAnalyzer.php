@@ -35,7 +35,7 @@ final class TestsNodeAnalyzer
     /**
      * @var string[]
      */
-    private const TEST_CASE_OBJECT_CLASSES = ['PHPUnit\\Framework\\TestCase', 'PHPUnit_Framework_TestCase'];
+    private const TEST_CASE_OBJECT_CLASSES = [PHPUnitClassName::TEST_CASE, PHPUnitClassName::TEST_CASE_LEGACY];
     public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

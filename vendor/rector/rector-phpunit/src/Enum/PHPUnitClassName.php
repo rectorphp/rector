@@ -12,5 +12,9 @@ final class PHPUnitClassName
     /**
      * @var string
      */
+    public const TEST_CASE_LEGACY = 'PHPUnit_Framework_TestCase';
+    /**
+     * @var string
+     */
     public const ASSERT = 'PHPUnit\\Framework\\Assert';
 }

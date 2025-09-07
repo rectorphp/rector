@@ -1944,6 +1944,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\VariableNameToTypeCollection' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/VariableNameToTypeCollection.php',
     'Rector\\PHPUnit\\Composer\\ProjectPackageVersionResolver' => $vendorDir . '/rector/rector-phpunit/src/Composer/ProjectPackageVersionResolver.php',
     'Rector\\PHPUnit\\Enum\\AssertMethod' => $vendorDir . '/rector/rector-phpunit/src/Enum/AssertMethod.php',
+    'Rector\\PHPUnit\\Enum\\BehatClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/BehatClassName.php',
     'Rector\\PHPUnit\\Enum\\ConsecutiveMethodName' => $vendorDir . '/rector/rector-phpunit/src/Enum/ConsecutiveMethodName.php',
     'Rector\\PHPUnit\\Enum\\ConsecutiveVariable' => $vendorDir . '/rector/rector-phpunit/src/Enum/ConsecutiveVariable.php',
     'Rector\\PHPUnit\\Enum\\PHPUnitClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/PHPUnitClassName.php',
