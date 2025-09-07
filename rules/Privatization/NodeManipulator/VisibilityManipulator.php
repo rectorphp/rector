@@ -55,7 +55,7 @@ final class VisibilityManipulator
     }
     /**
      * @api
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\ClassConst $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function makeFinal($node) : void
     {
@@ -63,11 +63,11 @@ final class VisibilityManipulator
     }
     /**
      * @api
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
     public function makeNonFinal($node) : void
     {
-        if (!$node->isFinal()) {
+        if (!$this->hasVisibility($node, Visibility::FINAL)) {
             return;
         }
         $node->flags -= Modifiers::FINAL;
