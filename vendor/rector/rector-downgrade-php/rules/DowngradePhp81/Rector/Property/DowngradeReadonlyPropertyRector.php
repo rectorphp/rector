@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
@@ -98,37 +97,30 @@ CODE_SAMPLE
         if (!$this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
-        $hasChangedDoc = \false;
         $hasChanged = \false;
         foreach ($node->params as $param) {
             if (!$this->visibilityManipulator->isReadonly($param)) {
                 continue;
             }
-            if ($this->addPhpDocTag($param)) {
-                $hasChangedDoc = \true;
-            }
+            $this->addPhpDocTag($param);
             $this->visibilityManipulator->removeReadonly($param);
             $hasChanged = \true;
         }
         if (!$hasChanged) {
             return null;
         }
-        if ($hasChangedDoc) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
         return $node;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    private function addPhpDocTag($node): bool
+    private function addPhpDocTag($node): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->hasByName(self::TAGNAME)) {
-            return \false;
+            return;
         }
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . self::TAGNAME, new GenericTagValueNode('')));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return \true;
     }
 }

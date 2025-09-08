@@ -92,6 +92,9 @@ CODE_SAMPLE
             }
             $hasChanged = \true;
             $this->visibilityManipulator->makeNonFinal($param);
+            if (!$param->isPromoted()) {
+                $this->visibilityManipulator->makePublic($param);
+            }
             $this->addPhpDocTag($param);
         }
         if ($hasChanged) {
@@ -102,14 +105,13 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Builder\Property|\PhpParser\Node\Param $node
      */
-    private function addPhpDocTag($node): bool
+    private function addPhpDocTag($node): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->hasByName(self::TAGNAME)) {
-            return \false;
+            return;
         }
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . self::TAGNAME, new GenericTagValueNode('')));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return \true;
     }
 }
