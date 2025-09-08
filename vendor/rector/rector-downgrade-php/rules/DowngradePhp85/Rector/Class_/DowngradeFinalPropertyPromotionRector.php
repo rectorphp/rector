@@ -48,7 +48,7 @@ final class DowngradeFinalPropertyPromotionRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change constructor final property promotion to @final annotation assign', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change constructor final property promotion to @final tag', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
