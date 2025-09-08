@@ -21,7 +21,7 @@ final class RemoveMethodCallParamRector extends AbstractRector implements Config
      * @var RemoveMethodCallParam[]
      */
     private array $removeMethodCallParams = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove parameter of method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -46,14 +46,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         if ($node->isFirstClassCallable()) {
@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, RemoveMethodCallParam::class);
         $this->removeMethodCallParams = $configuration;
@@ -89,7 +89,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function isCallerObjectType($call, RemoveMethodCallParam $removeMethodCallParam) : bool
+    private function isCallerObjectType($call, RemoveMethodCallParam $removeMethodCallParam): bool
     {
         if ($call instanceof MethodCall) {
             return $this->isObjectType($call->var, $removeMethodCallParam->getObjectType());

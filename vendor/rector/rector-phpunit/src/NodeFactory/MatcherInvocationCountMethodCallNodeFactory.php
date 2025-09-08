@@ -18,16 +18,16 @@ final class MatcherInvocationCountMethodCallNodeFactory
     {
         $this->projectPackageVersionResolver = $projectPackageVersionResolver;
     }
-    public function create() : MethodCall
+    public function create(): MethodCall
     {
         $invocationMethodName = $this->getInvocationMethodName();
         $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
         return new MethodCall($matcherVariable, new Identifier($invocationMethodName));
     }
-    private function getInvocationMethodName() : string
+    private function getInvocationMethodName(): string
     {
         $projectPHPUnitVersion = $this->projectPackageVersionResolver->findPackageVersion('phpunit/phpunit');
-        if ($projectPHPUnitVersion === null || \version_compare($projectPHPUnitVersion, '10.0', '>=')) {
+        if ($projectPHPUnitVersion === null || version_compare($projectPHPUnitVersion, '10.0', '>=')) {
             // phpunit 10 naming
             return 'numberOfInvocations';
         }

@@ -30,7 +30,7 @@ final class ReplaceServiceArgument
     {
         return $this->oldValue;
     }
-    public function getNewValueExpr() : Expr
+    public function getNewValueExpr(): Expr
     {
         return $this->newValueExpr;
     }

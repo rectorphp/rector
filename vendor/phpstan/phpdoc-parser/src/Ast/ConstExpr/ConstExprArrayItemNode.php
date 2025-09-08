@@ -15,7 +15,7 @@ class ConstExprArrayItemNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\Cons
         $this->key = $key;
         $this->value = $value;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->key !== null) {
             return sprintf('%s => %s', $this->key, $this->value);

@@ -32,7 +32,7 @@ final class NullDebugInfoReturnRector extends AbstractRector implements MinPhpVe
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces `null` return value with empty array in `__debugInfo` methods', [new CodeSample(<<<'CODE_SAMPLE'
 new class
@@ -55,20 +55,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, '__debugInfo')) {
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use(&$hasChanged) {
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$hasChanged) {
             if ($node instanceof Class_ || $node instanceof Function_ || $node instanceof Closure) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATED_NULL_DEBUG_INFO_RETURN;
     }

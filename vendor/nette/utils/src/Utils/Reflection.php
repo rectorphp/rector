@@ -17,12 +17,12 @@ final class Reflection
 {
     use Nette\StaticClass;
     /** @deprecated use Nette\Utils\Validators::isBuiltinType() */
-    public static function isBuiltinType(string $type) : bool
+    public static function isBuiltinType(string $type): bool
     {
         return Validators::isBuiltinType($type);
     }
     /** @deprecated use Nette\Utils\Validators::isClassKeyword() */
-    public static function isClassKeyword(string $name) : bool
+    public static function isClassKeyword(string $name): bool
     {
         return Validators::isClassKeyword($name);
     }
@@ -57,7 +57,7 @@ final class Reflection
     /**
      * Returns a reflection of a class or trait that contains a declaration of given property. Property can also be declared in the trait.
      */
-    public static function getPropertyDeclaringClass(\ReflectionProperty $prop) : \ReflectionClass
+    public static function getPropertyDeclaringClass(\ReflectionProperty $prop): \ReflectionClass
     {
         foreach ($prop->getDeclaringClass()->getTraits() as $trait) {
             if ($trait->hasProperty($prop->name) && $trait->getProperty($prop->name)->getDocComment() === $prop->getDocComment()) {
@@ -70,7 +70,7 @@ final class Reflection
      * Returns a reflection of a method that contains a declaration of $method.
      * Usually, each method is its own declaration, but the body of the method can also be in the trait and under a different name.
      */
-    public static function getMethodDeclaringMethod(\ReflectionMethod $method) : \ReflectionMethod
+    public static function getMethodDeclaringMethod(\ReflectionMethod $method): \ReflectionMethod
     {
         // file & line guessing as workaround for insufficient PHP reflection
         $decl = $method->getDeclaringClass();
@@ -91,12 +91,12 @@ final class Reflection
     /**
      * Finds out if reflection has access to PHPdoc comments. Comments may not be available due to the opcode cache.
      */
-    public static function areCommentsAvailable() : bool
+    public static function areCommentsAvailable(): bool
     {
         static $res;
-        return $res ?? ($res = (bool) (new \ReflectionMethod(self::class, __FUNCTION__))->getDocComment());
+        return $res ?? $res = (bool) (new \ReflectionMethod(self::class, __FUNCTION__))->getDocComment();
     }
-    public static function toString(\Reflector $ref) : string
+    public static function toString(\Reflector $ref): string
     {
         if ($ref instanceof \ReflectionClass) {
             return $ref->name;
@@ -117,7 +117,7 @@ final class Reflection
      * Thus, it returns how the PHP parser would understand $name if it were written in the body of the class $context.
      * @throws Nette\InvalidArgumentException
      */
-    public static function expandClassName(string $name, \ReflectionClass $context) : string
+    public static function expandClassName(string $name, \ReflectionClass $context): string
     {
         $lower = strtolower($name);
         if (empty($name)) {
@@ -144,7 +144,7 @@ final class Reflection
         }
     }
     /** @return array<string, class-string> of [alias => class] */
-    public static function getUseStatements(\ReflectionClass $class) : array
+    public static function getUseStatements(\ReflectionClass $class): array
     {
         if ($class->isAnonymous()) {
             throw new Nette\NotImplementedException('Anonymous classes are not supported.');
@@ -163,12 +163,12 @@ final class Reflection
     /**
      * Parses PHP code to [class => [alias => class, ...]]
      */
-    private static function parseUseStatements(string $code, ?string $forClass = null) : array
+    private static function parseUseStatements(string $code, ?string $forClass = null): array
     {
         try {
-            $tokens = \token_get_all($code, TOKEN_PARSE);
+            $tokens = token_get_all($code, TOKEN_PARSE);
         } catch (\ParseError $e) {
-            \trigger_error($e->getMessage(), \E_USER_NOTICE);
+            trigger_error($e->getMessage(), \E_USER_NOTICE);
             $tokens = [];
         }
         $namespace = $class = null;
@@ -196,7 +196,7 @@ final class Reflection
                     }
                     break;
                 case T_USE:
-                    while (!$class && ($name = self::fetch($tokens, $nameTokens))) {
+                    while (!$class && $name = self::fetch($tokens, $nameTokens)) {
                         $name = ltrim($name, '\\');
                         if (self::fetch($tokens, '{')) {
                             while ($suffix = self::fetch($tokens, $nameTokens)) {
@@ -238,7 +238,7 @@ final class Reflection
     /**
      * @param string|int|mixed[] $take
      */
-    private static function fetch(array &$tokens, $take) : ?string
+    private static function fetch(array &$tokens, $take): ?string
     {
         $res = null;
         while ($token = current($tokens)) {

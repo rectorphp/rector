@@ -30,19 +30,19 @@ final class ParamRename
         $this->variable = $variable;
         $this->functionLike = $functionLike;
     }
-    public function getCurrentName() : string
+    public function getCurrentName(): string
     {
         return $this->currentName;
     }
-    public function getExpectedName() : string
+    public function getExpectedName(): string
     {
         return $this->expectedName;
     }
-    public function getFunctionLike() : FunctionLike
+    public function getFunctionLike(): FunctionLike
     {
         return $this->functionLike;
     }
-    public function getVariable() : Variable
+    public function getVariable(): Variable
     {
         return $this->variable;
     }

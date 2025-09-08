@@ -24,10 +24,10 @@ final class EntityMapping
     public function __construct(string $className, array $propertyMapping)
     {
         $this->className = $className;
-        Assert::allString(\array_keys($propertyMapping));
+        Assert::allString(array_keys($propertyMapping));
         $this->entityMapping = $propertyMapping;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }
@@ -35,7 +35,7 @@ final class EntityMapping
      * @return mixed[]|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchFieldPropertyMapping($property) : ?array
+    public function matchFieldPropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['fields'][$propertyName] ?? null;
@@ -44,7 +44,7 @@ final class EntityMapping
      * @return mixed[]|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchEmbeddedPropertyMapping($property) : ?array
+    public function matchEmbeddedPropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['embedded'][$propertyName] ?? null;
@@ -53,7 +53,7 @@ final class EntityMapping
      * @return array<string, mixed>|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchManyToManyPropertyMapping($property) : ?array
+    public function matchManyToManyPropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['manyToMany'][$propertyName] ?? null;
@@ -62,7 +62,7 @@ final class EntityMapping
      * @return array<string, mixed>|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchManyToOnePropertyMapping($property) : ?array
+    public function matchManyToOnePropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['manyToOne'][$propertyName] ?? null;
@@ -71,7 +71,7 @@ final class EntityMapping
      * @return array<string, mixed>|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchOneToManyPropertyMapping($property) : ?array
+    public function matchOneToManyPropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['oneToMany'][$propertyName] ?? null;
@@ -79,7 +79,7 @@ final class EntityMapping
     /**
      * @return array<string, mixed>
      */
-    public function getClassMapping() : array
+    public function getClassMapping(): array
     {
         $classMapping = $this->entityMapping;
         unset($classMapping['fields']);
@@ -90,7 +90,7 @@ final class EntityMapping
      * @return array<string, mixed>|null
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function matchIdPropertyMapping($property) : ?array
+    public function matchIdPropertyMapping($property): ?array
     {
         $propertyName = $this->getPropertyName($property);
         return $this->entityMapping['id'][$propertyName] ?? null;
@@ -98,7 +98,7 @@ final class EntityMapping
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    private function getPropertyName($property) : string
+    private function getPropertyName($property): string
     {
         if ($property instanceof Property) {
             return $property->props[0]->name->toString();

@@ -46,7 +46,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_ || $node instanceof Switch_) {
             $this->processContextInLoop($node);
@@ -87,13 +87,13 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         $this->processContextInClass($node);
         return null;
     }
-    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch) : void
+    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch): void
     {
         if ($arrayDimFetch->var instanceof PropertyFetch || $arrayDimFetch->var instanceof StaticPropertyFetch) {
             $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
         }
     }
-    private function processContextInClass(Node $node) : void
+    private function processContextInClass(Node $node): void
     {
         if ($node instanceof Class_) {
             if ($node->extends instanceof FullyQualified) {
@@ -104,7 +104,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             }
         }
     }
-    private function processContextInAttribute(Attribute $attribute) : void
+    private function processContextInAttribute(Attribute $attribute): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attribute->args, static function (Node $subNode) {
             if ($subNode instanceof Array_) {
@@ -113,7 +113,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             return null;
         });
     }
-    private function processContextInUnset(Unset_ $unset) : void
+    private function processContextInUnset(Unset_ $unset): void
     {
         foreach ($unset->vars as $var) {
             $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
@@ -122,7 +122,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
-    private function processContextInIf($node) : void
+    private function processContextInIf($node): void
     {
         foreach ($node->stmts as $stmt) {
             if ($stmt instanceof Break_) {
@@ -133,7 +133,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     /**
      * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\Switch_ $node
      */
-    private function processContextInLoop($node) : void
+    private function processContextInLoop($node): void
     {
         if ($node instanceof Foreach_) {
             if ($node->keyVar instanceof Variable) {
@@ -142,7 +142,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             $node->valueVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
         }
         $stmts = $node instanceof Switch_ ? $node->cases : $node->stmts;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }

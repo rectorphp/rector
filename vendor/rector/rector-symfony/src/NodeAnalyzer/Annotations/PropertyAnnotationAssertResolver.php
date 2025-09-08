@@ -29,7 +29,7 @@ final class PropertyAnnotationAssertResolver
         $this->doctrineAnnotationFromNewFactory = $doctrineAnnotationFromNewFactory;
         $this->stmtMethodCallMatcher = $stmtMethodCallMatcher;
     }
-    public function resolve(Stmt $stmt) : ?PropertyAndAnnotation
+    public function resolve(Stmt $stmt): ?PropertyAndAnnotation
     {
         $methodCall = $this->stmtMethodCallMatcher->match($stmt, 'addPropertyConstraint');
         if (!$methodCall instanceof MethodCall) {
@@ -38,7 +38,7 @@ final class PropertyAnnotationAssertResolver
         $args = $methodCall->getArgs();
         $constraintsExpr = $args[1]->value;
         $propertyName = $this->valueResolver->getValue($args[0]->value);
-        if (!\is_string($propertyName)) {
+        if (!is_string($propertyName)) {
             return null;
         }
         if (!$constraintsExpr instanceof New_) {

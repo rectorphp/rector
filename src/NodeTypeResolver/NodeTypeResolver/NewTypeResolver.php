@@ -40,18 +40,18 @@ final class NewTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         if ($node->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($node->class);
-            if (!\in_array($className, [ObjectReference::SELF, ObjectReference::PARENT], \true)) {
+            if (!in_array($className, [ObjectReference::SELF, ObjectReference::PARENT], \true)) {
                 return new ObjectType($className);
             }
         }
@@ -66,7 +66,7 @@ final class NewTypeResolver implements NodeTypeResolverInterface
         }
         return $scope->getType($node);
     }
-    private function resolveAnonymousClassType(New_ $new) : ObjectWithoutClassType
+    private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
     {
         if (!$new->class instanceof Class_) {
             return new ObjectWithoutClassType();

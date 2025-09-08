@@ -38,9 +38,9 @@ final class ComplexNodeRemover
      * @param int[] $paramKeysToBeRemoved
      * @return int[]
      */
-    public function processRemoveParamWithKeys(ClassMethod $classMethod, array $paramKeysToBeRemoved) : array
+    public function processRemoveParamWithKeys(ClassMethod $classMethod, array $paramKeysToBeRemoved): array
     {
-        $totalKeys = \count($classMethod->params) - 1;
+        $totalKeys = count($classMethod->params) - 1;
         $removedParamKeys = [];
         $phpdocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
@@ -50,7 +50,7 @@ final class ComplexNodeRemover
                     // no next param, break the inner loop, remove the param
                     break;
                 }
-                if (\in_array($nextKey, $paramKeysToBeRemoved, \true)) {
+                if (in_array($nextKey, $paramKeysToBeRemoved, \true)) {
                     // keep searching next key not in $paramKeysToBeRemoved
                     continue;
                 }

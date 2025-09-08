@@ -12,9 +12,9 @@ interface AnnotationToAttributeMapperInterface
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool;
+    public function isCandidate($value): bool;
     /**
      * @param T $value
      */
-    public function map($value) : Node;
+    public function map($value): Node;
 }

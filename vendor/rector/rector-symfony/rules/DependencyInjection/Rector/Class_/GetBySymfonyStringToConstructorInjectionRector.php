@@ -37,14 +37,14 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
     /**
      * @var array<string, string>
      */
-    private const SYMFONY_NAME_TO_TYPE_MAP = ['validator' => SymfonyClass::VALIDATOR_INTERFACE, 'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE, 'logger' => SymfonyClass::LOGGER_INTERFACE, 'jms_serializer' => SymfonyClass::JMS_SERIALIZER_INTERFACE, 'translator' => SymfonyClass::TRANSLATOR_INTERFACE, 'session' => SymfonyClass::SESSION_INTERFACRE, 'security.token_storage' => SymfonyClass::TOKEN_STORAGE_INTERFACE, 'router' => 'Symfony\\Component\\Routing\\RouterInterface', 'request_stack' => 'Symfony\\Component\\HttpFoundation\\RequestStack', 'http_kernel' => 'Symfony\\Component\\HttpKernel\\HttpKernelInterface', 'serializer' => 'Symfony\\Component\\Serializer\\SerializerInterface', 'security.authorization_checker' => 'Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface', 'templating' => 'Symfony\\Component\\Templating\\EngineInterface', 'twig' => 'Twig\\Environment', 'doctrine' => 'Doctrine\\Persistence\\ManagerRegistry', 'form.factory' => 'Symfony\\Component\\Form\\FormFactoryInterface', 'security.csrf.token_manager' => 'Symfony\\Component\\Security\\Core\\Authorization\\CsrfTokenManagerInterface', 'parameter_bag' => 'Symfony\\Component\\DependencyInjection\\ParameterBag\\ContainerBagInterface', 'message_bus' => 'Symfony\\Component\\Messenger\\MessageBusInterface', 'messenger.default_bus' => 'Symfony\\Component\\Messenger\\MessageBusInterface'];
+    private const SYMFONY_NAME_TO_TYPE_MAP = ['validator' => SymfonyClass::VALIDATOR_INTERFACE, 'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE, 'logger' => SymfonyClass::LOGGER_INTERFACE, 'jms_serializer' => SymfonyClass::JMS_SERIALIZER_INTERFACE, 'translator' => SymfonyClass::TRANSLATOR_INTERFACE, 'session' => SymfonyClass::SESSION_INTERFACRE, 'security.token_storage' => SymfonyClass::TOKEN_STORAGE_INTERFACE, 'router' => 'Symfony\Component\Routing\RouterInterface', 'request_stack' => 'Symfony\Component\HttpFoundation\RequestStack', 'http_kernel' => 'Symfony\Component\HttpKernel\HttpKernelInterface', 'serializer' => 'Symfony\Component\Serializer\SerializerInterface', 'security.authorization_checker' => 'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface', 'templating' => 'Symfony\Component\Templating\EngineInterface', 'twig' => 'Twig\Environment', 'doctrine' => 'Doctrine\Persistence\ManagerRegistry', 'form.factory' => 'Symfony\Component\Form\FormFactoryInterface', 'security.csrf.token_manager' => 'Symfony\Component\Security\Core\Authorization\CsrfTokenManagerInterface', 'parameter_bag' => 'Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface', 'message_bus' => 'Symfony\Component\Messenger\MessageBusInterface', 'messenger.default_bus' => 'Symfony\Component\Messenger\MessageBusInterface'];
     public function __construct(ClassDependencyManipulator $classDependencyManipulator, ThisGetTypeMatcher $thisGetTypeMatcher, PropertyNaming $propertyNaming)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->thisGetTypeMatcher = $thisGetTypeMatcher;
         $this->propertyNaming = $propertyNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Converts typical Symfony services like $this->get("validator") in commands/controllers to constructor injection (step 3/x)', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -76,25 +76,25 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
         }
         $propertyMetadatas = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$propertyMetadatas) : ?Node {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas): ?Node {
             if (!$node instanceof MethodCall) {
                 return null;
             }
             $serviceName = $this->thisGetTypeMatcher->matchString($node);
-            if (!\is_string($serviceName)) {
+            if (!is_string($serviceName)) {
                 return null;
             }
             $serviceType = self::SYMFONY_NAME_TO_TYPE_MAP[$serviceName] ?? null;
@@ -114,7 +114,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         $scope = ScopeFetcher::fetch($class);
         $classReflection = $scope->getClassReflection();

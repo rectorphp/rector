@@ -73,14 +73,14 @@ final class WorkerCommand extends Command
         $this->configurationRuleFilter = $configurationRuleFilter;
         parent::__construct();
     }
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('worker');
         $this->setDescription('[INTERNAL] Support for parallel process');
         ProcessConfigureDecorator::decorate($this);
         parent::configure();
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);
@@ -89,7 +89,7 @@ final class WorkerCommand extends Command
         $parallelIdentifier = $configuration->getParallelIdentifier();
         $tcpConnector = new TcpConnector($streamSelectLoop);
         $promise = $tcpConnector->connect('127.0.0.1:' . $configuration->getParallelPort());
-        $promise->then(function (ConnectionInterface $connection) use($parallelIdentifier, $configuration, $output) : void {
+        $promise->then(function (ConnectionInterface $connection) use ($parallelIdentifier, $configuration, $output): void {
             $inDecoder = new Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
             $outEncoder = new Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
             $outEncoder->write([ReactCommand::ACTION => Action::HELLO, ReactCommand::IDENTIFIER => $parallelIdentifier]);
@@ -98,26 +98,26 @@ final class WorkerCommand extends Command
         $streamSelectLoop->run();
         return self::SUCCESS;
     }
-    private function runWorker(Encoder $encoder, Decoder $decoder, Configuration $configuration, OutputInterface $output) : void
+    private function runWorker(Encoder $encoder, Decoder $decoder, Configuration $configuration, OutputInterface $output): void
     {
         $this->additionalAutoloader->autoloadPaths();
         $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
         if ($configuration->isDebug()) {
-            $preFileCallback = static function (string $filePath) use($output) : void {
+            $preFileCallback = static function (string $filePath) use ($output): void {
                 $output->writeln($filePath);
             };
         } else {
             $preFileCallback = null;
         }
         // 1. handle system error
-        $handleErrorCallback = static function (Throwable $throwable) use($encoder) : void {
+        $handleErrorCallback = static function (Throwable $throwable) use ($encoder): void {
             $systemError = new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
             $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::SYSTEM_ERRORS => [$systemError], Bridge::FILES_COUNT => 0, Bridge::SYSTEM_ERRORS_COUNT => 1]]);
             $encoder->end();
         };
         $encoder->on(ReactEvent::ERROR, $handleErrorCallback);
         // 2. collect diffs + errors from file processor
-        $decoder->on(ReactEvent::DATA, function (array $json) use($preFileCallback, $encoder, $configuration) : void {
+        $decoder->on(ReactEvent::DATA, function (array $json) use ($preFileCallback, $encoder, $configuration): void {
             $action = $json[ReactCommand::ACTION];
             if ($action !== Action::MAIN) {
                 return;
@@ -129,7 +129,7 @@ final class WorkerCommand extends Command
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
-            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs(), Bridge::FILES_COUNT => \count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => \count($processResult->getSystemErrors())]]);
+            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs(), Bridge::FILES_COUNT => count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => count($processResult->getSystemErrors())]]);
         });
         $decoder->on(ReactEvent::ERROR, $handleErrorCallback);
     }

@@ -40,7 +40,7 @@ use Rector\Doctrine\TypedCollections\Rector\New_\RemoveNewArrayCollectionWrapRec
 use Rector\Doctrine\TypedCollections\Rector\NullsafeMethodCall\RemoveNullsafeOnCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Property\NarrowPropertyUnionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Property\TypedPropertyFromToManyRelationTypeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         // init
         InitializeCollectionInConstructorRector::class,

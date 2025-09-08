@@ -24,7 +24,7 @@ final class StringCastAssertStringContainsStringRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Cast 2nd argument in assertStringContainsString() to a string if not yet', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<MethodCall|StaticCall>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }

@@ -28,7 +28,7 @@ final class OrdSingleByteRector extends AbstractRector implements MinPhpVersionI
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace ord($str) with ord($str[0])', [new CodeSample(<<<'CODE_SAMPLE'
 echo ord('abc');
@@ -38,14 +38,14 @@ echo ord('a');
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -63,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
         $value = $this->valueResolver->getValue($argExpr);
-        $isInt = \is_int($value);
+        $isInt = is_int($value);
         if (!$argExpr instanceof Int_) {
             if ($isInt) {
                 return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
         $node->args = $args;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_ORD_WITH_MULTIBYTE_STRING;
     }

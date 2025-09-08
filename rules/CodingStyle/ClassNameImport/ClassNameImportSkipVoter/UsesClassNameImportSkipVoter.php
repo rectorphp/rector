@@ -25,7 +25,7 @@ final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInte
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
-    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
+    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file);
         foreach ($useImportTypes as $useImportType) {

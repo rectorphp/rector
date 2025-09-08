@@ -24,7 +24,7 @@ final class ExprUsedInNodeAnalyzer
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
-    public function isUsed(Node $node, Variable $variable) : bool
+    public function isUsed(Node $node, Variable $variable): bool
     {
         if ($node instanceof Include_) {
             return \true;

@@ -37,32 +37,32 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
         $this->reflectionProvider = $reflectionProvider;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::IS_ITERABLE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes is_array + Traversable check to is_iterable', [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanOr::class];
     }
     /**
      * @param BooleanOr $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip()) {
             return null;
         }
         return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable');
     }
-    private function shouldSkip() : bool
+    private function shouldSkip(): bool
     {
         if ($this->reflectionProvider->hasFunction(new Name('is_iterable'), null)) {
             return \false;

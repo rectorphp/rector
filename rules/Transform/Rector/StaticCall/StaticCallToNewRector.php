@@ -22,7 +22,7 @@ final class StaticCallToNewRector extends AbstractRector implements Configurable
      * @var StaticCallToNew[]
      */
     private array $staticCallsToNews = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static call to new instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -47,14 +47,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNew) {
             if (!$this->isName($node->class, $staticCallToNew->getClass())) {
@@ -74,7 +74,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, StaticCallToNew::class);
         $this->staticCallsToNews = $configuration;

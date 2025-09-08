@@ -47,7 +47,7 @@ abstract class Output implements OutputInterface
     {
         $this->formatter = $formatter;
     }
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter(): OutputFormatterInterface
     {
         return $this->formatter;
     }
@@ -58,7 +58,7 @@ abstract class Output implements OutputInterface
     {
         $this->formatter->setDecorated($decorated);
     }
-    public function isDecorated() : bool
+    public function isDecorated(): bool
     {
         return $this->formatter->isDecorated();
     }
@@ -69,23 +69,23 @@ abstract class Output implements OutputInterface
     {
         $this->verbosity = $level;
     }
-    public function getVerbosity() : int
+    public function getVerbosity(): int
     {
         return $this->verbosity;
     }
-    public function isQuiet() : bool
+    public function isQuiet(): bool
     {
         return self::VERBOSITY_QUIET === $this->verbosity;
     }
-    public function isVerbose() : bool
+    public function isVerbose(): bool
     {
         return self::VERBOSITY_VERBOSE <= $this->verbosity;
     }
-    public function isVeryVerbose() : bool
+    public function isVeryVerbose(): bool
     {
         return self::VERBOSITY_VERY_VERBOSE <= $this->verbosity;
     }
-    public function isDebug() : bool
+    public function isDebug(): bool
     {
         return self::VERBOSITY_DEBUG <= $this->verbosity;
     }
@@ -103,7 +103,7 @@ abstract class Output implements OutputInterface
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
     {
-        if (!\is_iterable($messages)) {
+        if (!is_iterable($messages)) {
             $messages = [$messages];
         }
         $types = self::OUTPUT_NORMAL | self::OUTPUT_RAW | self::OUTPUT_PLAIN;
@@ -121,7 +121,7 @@ abstract class Output implements OutputInterface
                 case OutputInterface::OUTPUT_RAW:
                     break;
                 case OutputInterface::OUTPUT_PLAIN:
-                    $message = \strip_tags($this->formatter->format($message));
+                    $message = strip_tags($this->formatter->format($message));
                     break;
             }
             $this->doWrite($message ?? '', $newline);
@@ -132,5 +132,5 @@ abstract class Output implements OutputInterface
      *
      * @return void
      */
-    protected abstract function doWrite(string $message, bool $newline);
+    abstract protected function doWrite(string $message, bool $newline);
 }

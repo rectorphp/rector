@@ -26,11 +26,11 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
     private array $intlBundleClassesToNewClasses = [];
     public function __construct()
     {
-        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\\Component\\Intl\\ResourceBundle\\LanguageBundleInterface', 'Symfony\\Component\\Intl\\Languages', ['getLanguageNames' => 'getNames', 'getLanguageName' => 'getName']);
-        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\\Component\\Intl\\ResourceBundle\\RegionBundleInterface', 'Symfony\\Component\\Intl\\Currencies', ['getCountryNames' => 'getNames', 'getCountryName' => 'getName']);
-        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\\Component\\Intl\\ResourceBundle\\CurrencyBundleInterface', 'Symfony\\Component\\Intl\\Currencies', ['getCurrencyNames' => 'getNames', 'getCurrencyName' => 'getName', 'getCurrencySymbol' => 'getSymbol', 'getFractionDigits' => 'getFractionDigits']);
+        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\LanguageBundleInterface', 'Symfony\Component\Intl\Languages', ['getLanguageNames' => 'getNames', 'getLanguageName' => 'getName']);
+        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\RegionBundleInterface', 'Symfony\Component\Intl\Currencies', ['getCountryNames' => 'getNames', 'getCountryName' => 'getName']);
+        $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\CurrencyBundleInterface', 'Symfony\Component\Intl\Currencies', ['getCurrencyNames' => 'getNames', 'getCurrencyName' => 'getName', 'getCurrencySymbol' => 'getSymbol', 'getFractionDigits' => 'getFractionDigits']);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Intl static bundle method were changed to direct static calls', [new CodeSample(<<<'CODE_SAMPLE'
 $currencyBundle = \Symfony\Component\Intl\Intl::getCurrencyBundle();
@@ -45,14 +45,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?StaticCall
+    public function refactor(Node $node): ?StaticCall
     {
         foreach ($this->intlBundleClassesToNewClasses as $intlBundleClassToNewClass) {
             if (!$this->isObjectType($node->var, new ObjectType($intlBundleClassToNewClass->getOldClass()))) {

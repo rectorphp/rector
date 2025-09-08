@@ -31,7 +31,7 @@ final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
         $this->classConstManipulator = $classConstManipulator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused class constants', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -56,14 +56,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassConst::class];
     }
     /**
      * @param ClassConst $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node): ?int
     {
         if ($this->shouldSkipClassConst($node)) {
             return null;
@@ -77,12 +77,12 @@ CODE_SAMPLE
         }
         return NodeVisitor::REMOVE_NODE;
     }
-    private function shouldSkipClassConst(ClassConst $classConst) : bool
+    private function shouldSkipClassConst(ClassConst $classConst): bool
     {
         if (!$classConst->isPrivate()) {
             return \true;
         }
-        if (\count($classConst->consts) !== 1) {
+        if (count($classConst->consts) !== 1) {
             return \true;
         }
         $scope = ScopeFetcher::fetch($classConst);
@@ -92,10 +92,10 @@ CODE_SAMPLE
         }
         return $this->hasParentClassOfEnumSuffix($classReflection);
     }
-    private function hasParentClassOfEnumSuffix(ClassReflection $classReflection) : bool
+    private function hasParentClassOfEnumSuffix(ClassReflection $classReflection): bool
     {
         foreach ($classReflection->getParentClassesNames() as $parentClassesName) {
-            if (\substr_compare($parentClassesName, 'Enum', -\strlen('Enum')) === 0) {
+            if (substr_compare($parentClassesName, 'Enum', -strlen('Enum')) === 0) {
                 return \true;
             }
         }

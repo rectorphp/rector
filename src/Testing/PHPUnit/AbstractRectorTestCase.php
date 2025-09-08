@@ -42,7 +42,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     /**
      * Restore default parameters
      */
-    public static function tearDownAfterClass() : void
+    public static function tearDownAfterClass(): void
     {
         SimpleParameterProvider::setParameter(Option::AUTO_IMPORT_NAMES, \false);
         SimpleParameterProvider::setParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES, \false);
@@ -54,14 +54,14 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         SimpleParameterProvider::setParameter(Option::NEW_LINE_ON_FLUENT_CALL, \false);
         SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, \false);
     }
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $configFile = $this->provideConfigFilePath();
         // cleanup all registered rectors, so you can use only the new ones
         $rectorConfig = self::getContainer();
         // boot once for config + test case to avoid booting again and again for every test fixture
-        $cacheKey = \sha1($configFile . static::class);
+        $cacheKey = sha1($configFile . static::class);
         if (!isset(self::$cacheByRuleAndConfig[$cacheKey])) {
             // reset
             /** @var RewindableGenerator<int, ResetableInterface> $resetables */
@@ -76,7 +76,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
             $this->bootFromConfigFiles([$configFile]);
             $rectorsGenerator = $rectorConfig->tagged(RectorInterface::class);
-            $rectors = $rectorsGenerator instanceof RewindableGenerator ? \iterator_to_array($rectorsGenerator->getIterator()) : [];
+            $rectors = $rectorsGenerator instanceof RewindableGenerator ? iterator_to_array($rectorsGenerator->getIterator()) : [];
             /** @var RectorNodeTraverser $rectorNodeTraverser */
             $rectorNodeTraverser = $rectorConfig->make(RectorNodeTraverser::class);
             $rectorNodeTraverser->refreshPhpRectors($rectors);
@@ -92,18 +92,18 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $bootstrapFilesIncluder = $this->make(BootstrapFilesIncluder::class);
         $bootstrapFilesIncluder->includeBootstrapFiles();
     }
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         // clear temporary file
-        if (\is_string($this->inputFilePath)) {
+        if (is_string($this->inputFilePath)) {
             FileSystem::delete($this->inputFilePath);
         }
     }
-    protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
+    protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
     }
-    protected function doTestFile(string $fixtureFilePath, bool $includeFixtureDirectoryAsSource = \false) : void
+    protected function doTestFile(string $fixtureFilePath, bool $includeFixtureDirectoryAsSource = \false): void
     {
         // prepare input file contents and expected file output contents
         $fixtureFileContents = FileSystem::read($fixtureFilePath);
@@ -125,43 +125,43 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         FileSystem::write($inputFilePath, $inputFileContents, null);
         $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath, $includeFixtureDirectoryAsSource);
     }
-    protected function doTestFileExpectingWarningAboutRuleApplied(string $fixtureFilePath, string $expectedRuleApplied) : void
+    protected function doTestFileExpectingWarningAboutRuleApplied(string $fixtureFilePath, string $expectedRuleApplied): void
     {
-        \ob_start();
+        ob_start();
         $this->doTestFile($fixtureFilePath);
-        $content = \ob_get_clean();
-        $fixtureName = \basename($fixtureFilePath);
+        $content = ob_get_clean();
+        $fixtureName = basename($fixtureFilePath);
         $testClass = static::class;
         $this->assertSame(\PHP_EOL . 'WARNING: On fixture file "' . $fixtureName . '" for test "' . $testClass . '"' . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . ' * ' . $expectedRuleApplied . \PHP_EOL, $content);
     }
-    private function forgetRectorsRules() : void
+    private function forgetRectorsRules(): void
     {
         $rectorConfig = self::getContainer();
         // 1. forget tagged services
         ContainerMemento::forgetTag($rectorConfig, RectorInterface::class);
         // 2. remove after binding too, to avoid setting configuration over and over again
         $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->propertyClosure($rectorConfig, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks) : array {
-            foreach (\array_keys($afterResolvingCallbacks) as $key) {
+        $privatesAccessor->propertyClosure($rectorConfig, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks): array {
+            foreach (array_keys($afterResolvingCallbacks) as $key) {
                 if ($key === AbstractRector::class) {
                     continue;
                 }
-                if (\is_a($key, RectorInterface::class, \true)) {
+                if (is_a($key, RectorInterface::class, \true)) {
                     unset($afterResolvingCallbacks[$key]);
                 }
             }
             return $afterResolvingCallbacks;
         });
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath, bool $includeFixtureDirectoryAsSource) : void
+    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath, bool $includeFixtureDirectoryAsSource): void
     {
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
         // the file is now changed (if any rule matches)
         $rectorTestResult = $this->processFilePath($originalFilePath, $includeFixtureDirectoryAsSource);
         $changedContents = $rectorTestResult->getChangedContents();
-        $fixtureFilename = \basename($fixtureFilePath);
-        $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
-        $numAppliedRectorClasses = \count($rectorTestResult->getAppliedRectorClasses());
+        $fixtureFilename = basename($fixtureFilePath);
+        $failureMessage = sprintf('Failed on fixture file "%s"', $fixtureFilename);
+        $numAppliedRectorClasses = count($rectorTestResult->getAppliedRectorClasses());
         // give more context about used rules in case of set testing
         $appliedRulesList = '';
         if ($numAppliedRectorClasses > 0) {
@@ -180,14 +180,14 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $this->assertStringMatchesFormat($expectedFileContents, $changedContents, $failureMessage);
         }
         if ($inputFileContents === $expectedFileContents && $numAppliedRectorClasses > 0) {
-            $failureMessage = \PHP_EOL . \sprintf('WARNING: On fixture file "%s" for test "%s"', $fixtureFilename, static::class) . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . $appliedRulesList;
+            $failureMessage = \PHP_EOL . sprintf('WARNING: On fixture file "%s" for test "%s"', $fixtureFilename, static::class) . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . $appliedRulesList;
             echo $failureMessage;
         }
     }
-    private function processFilePath(string $filePath, bool $includeFixtureDirectoryAsSource) : RectorTestResult
+    private function processFilePath(string $filePath, bool $includeFixtureDirectoryAsSource): RectorTestResult
     {
         if ($includeFixtureDirectoryAsSource) {
-            $fixtureDirectory = \dirname($filePath);
+            $fixtureDirectory = dirname($filePath);
             $this->dynamicSourceLocatorProvider->addDirectories([$fixtureDirectory]);
         } else {
             $this->dynamicSourceLocatorProvider->setFilePath($filePath);
@@ -200,16 +200,16 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         $changedFileContents = FileSystem::read($filePath);
         return new RectorTestResult($changedFileContents, $processResult);
     }
-    private function createInputFilePath(string $fixtureFilePath) : string
+    private function createInputFilePath(string $fixtureFilePath): string
     {
-        $inputFileDirectory = \dirname($fixtureFilePath);
+        $inputFileDirectory = dirname($fixtureFilePath);
         // remove ".inc" suffix
-        if (\substr_compare($fixtureFilePath, '.inc', -\strlen('.inc')) === 0) {
+        if (substr_compare($fixtureFilePath, '.inc', -strlen('.inc')) === 0) {
             $trimmedFixtureFilePath = Strings::substring($fixtureFilePath, 0, -4);
         } else {
             $trimmedFixtureFilePath = $fixtureFilePath;
         }
-        $fixtureBasename = \pathinfo($trimmedFixtureFilePath, \PATHINFO_BASENAME);
+        $fixtureBasename = pathinfo($trimmedFixtureFilePath, \PATHINFO_BASENAME);
         return $inputFileDirectory . '/' . $fixtureBasename;
     }
 }

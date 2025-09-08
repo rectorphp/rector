@@ -29,7 +29,7 @@ final class CreateFormTypeOptionsArgMover
     /**
      * @param Arg[] $argNodes
      */
-    public function moveArgumentsToOptions(MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?MethodCall
+    public function moveArgumentsToOptions(MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes): ?MethodCall
     {
         $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
         // set default data in between
@@ -58,7 +58,7 @@ final class CreateFormTypeOptionsArgMover
      * @param Arg[] $args
      * @return array<string, Arg>
      */
-    private function resolveNamesToArgs(string $className, array $args) : array
+    private function resolveNamesToArgs(string $className, array $args): array
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return [];
@@ -75,7 +75,7 @@ final class CreateFormTypeOptionsArgMover
      * @param Arg[] $args
      * @return array<string, Arg>
      */
-    private function createArgsByName(ReflectionMethod $constructorReflectionMethod, array $args) : array
+    private function createArgsByName(ReflectionMethod $constructorReflectionMethod, array $args): array
     {
         $namesToArgs = [];
         foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {

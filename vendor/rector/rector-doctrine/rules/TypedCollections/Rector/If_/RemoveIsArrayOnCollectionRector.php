@@ -28,7 +28,7 @@ final class RemoveIsArrayOnCollectionRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class, Ternary::class];
     }
@@ -43,7 +43,7 @@ final class RemoveIsArrayOnCollectionRector extends AbstractRector
         }
         return $this->refactorTernary($node);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if instance of collection on already known Collection type', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorTernary(Ternary $ternary) : ?Expr
+    private function refactorTernary(Ternary $ternary): ?Expr
     {
         $isNegated = \false;
         if ($ternary->cond instanceof Identical && $this->isName($ternary->cond->right, 'false')) {

@@ -71,7 +71,7 @@ final class CpuCoreCounter
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
-    public function getAvailableForParallelisation(int $reservedCpus = 0, ?int $countLimit = null, ?float $loadLimit = null, ?float $systemLoadAverage = 0.0) : ParallelisationResult
+    public function getAvailableForParallelisation(int $reservedCpus = 0, ?int $countLimit = null, ?float $loadLimit = null, ?float $systemLoadAverage = 0.0): ParallelisationResult
     {
         self::checkCountLimit($countLimit);
         self::checkLoadLimit($loadLimit);
@@ -100,7 +100,7 @@ final class CpuCoreCounter
      *
      * @return positive-int
      */
-    public function getCount() : int
+    public function getCount(): int
     {
         // Memoize result
         if (null === $this->count) {
@@ -113,7 +113,7 @@ final class CpuCoreCounter
      *
      * @return positive-int
      */
-    public function getCountWithFallback(int $fallback) : int
+    public function getCountWithFallback(int $fallback): int
     {
         try {
             return $this->getCount();
@@ -124,7 +124,7 @@ final class CpuCoreCounter
     /**
      * This method is mostly for debugging purposes.
      */
-    public function trace() : string
+    public function trace(): string
     {
         $output = [];
         foreach ($this->finders as $finder) {
@@ -144,7 +144,7 @@ final class CpuCoreCounter
      *
      * @return positive-int
      */
-    private function findCount() : int
+    private function findCount(): int
     {
         foreach ($this->finders as $finder) {
             $cores = $finder->find();
@@ -159,7 +159,7 @@ final class CpuCoreCounter
      *
      * @return array{CpuCoreFinder, positive-int}
      */
-    public function getFinderAndCores() : array
+    public function getFinderAndCores(): array
     {
         foreach ($this->finders as $finder) {
             $cores = $finder->find();
@@ -172,18 +172,18 @@ final class CpuCoreCounter
     /**
      * @return positive-int|null
      */
-    public static function getKubernetesLimit() : ?int
+    public static function getKubernetesLimit(): ?int
     {
         $finder = new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
         return $finder->find();
     }
-    private static function checkCountLimit(?int $countLimit) : void
+    private static function checkCountLimit(?int $countLimit): void
     {
         if (0 === $countLimit) {
             throw new InvalidArgumentException('The count limit must be a non zero integer. Got "0".');
         }
     }
-    private static function checkLoadLimit(?float $loadLimit) : void
+    private static function checkLoadLimit(?float $loadLimit): void
     {
         if (null === $loadLimit) {
             return;
@@ -192,7 +192,7 @@ final class CpuCoreCounter
             throw new InvalidArgumentException(sprintf('The load limit must be in the range [0., 1.], got "%s".', $loadLimit));
         }
     }
-    private static function checkSystemLoadAverage(?float $systemLoadAverage) : void
+    private static function checkSystemLoadAverage(?float $systemLoadAverage): void
     {
         if (null !== $systemLoadAverage && $systemLoadAverage < 0.0) {
             throw new InvalidArgumentException(sprintf('The system load average must be a positive float, got "%s".', $systemLoadAverage));

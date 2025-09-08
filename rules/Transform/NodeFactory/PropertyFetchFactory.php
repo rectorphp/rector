@@ -17,7 +17,7 @@ final class PropertyFetchFactory
     {
         $this->propertyNaming = $propertyNaming;
     }
-    public function createFromType(ObjectType $objectType) : PropertyFetch
+    public function createFromType(ObjectType $objectType): PropertyFetch
     {
         $thisVariable = new Variable('this');
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType->getClassName());

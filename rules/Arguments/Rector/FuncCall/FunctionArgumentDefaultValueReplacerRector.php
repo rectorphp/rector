@@ -29,7 +29,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Streamline the operator arguments of `version_compare` function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'gte');
@@ -42,14 +42,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\FuncCall
     {
         $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $configuration;

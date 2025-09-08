@@ -54,7 +54,7 @@ final class ReturnTypeFromStrictConstantReturnRector extends AbstractRector impl
         $this->typeFactory = $typeFactory;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add strict type declaration based on returned constants', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -83,14 +83,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($node->returnType instanceof Node) {
@@ -117,14 +117,14 @@ CODE_SAMPLE
     /**
      * @return PhpVersion::*
      */
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_70;
     }
     /**
      * @param Return_[] $returns
      */
-    private function matchAlwaysReturnConstFetch(array $returns) : ?Type
+    private function matchAlwaysReturnConstFetch(array $returns): ?Type
     {
         $classConstFetchTypes = [];
         foreach ($returns as $return) {

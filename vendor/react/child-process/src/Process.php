@@ -113,7 +113,7 @@ class Process extends EventEmitter
             // manual type check to support legacy PHP < 7.1
             throw new \InvalidArgumentException('Argument #4 ($fds) expected null|array');
         }
-        if (!\function_exists('proc_open')) {
+        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202509\proc_open')) {
             throw new \LogicException('The Process class relies on proc_open(), which is not available on your PHP installation.');
         }
         $this->cmd = $cmd;
@@ -163,7 +163,7 @@ class Process extends EventEmitter
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         if ($this->isRunning()) {
             throw new \RuntimeException('Process is already running');
@@ -193,7 +193,7 @@ class Process extends EventEmitter
             $options['suppress_errors'] = \true;
         }
         $errstr = '';
-        \set_error_handler(function ($_, $error) use(&$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errstr) {
             // Match errstr from PHP's warning message.
             // proc_open(/dev/does-not-exist): Failed to open stream: No such file or directory
             $errstr = $error;
@@ -207,7 +207,7 @@ class Process extends EventEmitter
         // count open process pipes and await close event for each to drain buffers before detecting exit
         $that = $this;
         $closeCount = 0;
-        $streamCloseHandler = function () use(&$closeCount, $loop, $interval, $that) {
+        $streamCloseHandler = function () use (&$closeCount, $loop, $interval, $that) {
             $closeCount--;
             if ($closeCount > 0) {
                 return;
@@ -219,7 +219,7 @@ class Process extends EventEmitter
                 return;
             }
             // close not detected immediately => check regularly
-            $loop->addPeriodicTimer($interval, function ($timer) use($that, $loop) {
+            $loop->addPeriodicTimer($interval, function ($timer) use ($that, $loop) {
                 if (!$that->isRunning()) {
                     $loop->cancelTimer($timer);
                     $that->close();
@@ -400,12 +400,12 @@ class Process extends EventEmitter
      * @see \Symfony\Component\Process\Process::isSigchildEnabled()
      * @return bool
      */
-    public static final function isSigchildEnabled()
+    final public static function isSigchildEnabled()
     {
         if (null !== self::$sigchild) {
             return self::$sigchild;
         }
-        if (!\function_exists('phpinfo')) {
+        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202509\phpinfo')) {
             return self::$sigchild = \false;
             // @codeCoverageIgnore
         }
@@ -423,7 +423,7 @@ class Process extends EventEmitter
      * @param bool $sigchild
      * @return void
      */
-    public static final function setSigchildEnabled($sigchild)
+    final public static function setSigchildEnabled($sigchild)
     {
         self::$sigchild = (bool) $sigchild;
     }

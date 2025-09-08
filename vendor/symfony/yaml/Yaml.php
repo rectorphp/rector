@@ -86,7 +86,7 @@ class Yaml
      * @param int                       $indent The amount of spaces to use for indentation of nested nodes
      * @param int-mask-of<self::DUMP_*> $flags  A bit field of DUMP_* constants to customize the dumped YAML string
      */
-    public static function dump($input, int $inline = 2, int $indent = 4, int $flags = 0) : string
+    public static function dump($input, int $inline = 2, int $indent = 4, int $flags = 0): string
     {
         $yaml = new Dumper($indent);
         return $yaml->dump($input, $inline, 0, $flags);

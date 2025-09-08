@@ -23,23 +23,23 @@ final class Line
         $this->type = $type;
         $this->content = $content;
     }
-    public function content() : string
+    public function content(): string
     {
         return $this->content;
     }
-    public function type() : int
+    public function type(): int
     {
         return $this->type;
     }
-    public function isAdded() : bool
+    public function isAdded(): bool
     {
         return $this->type === self::ADDED;
     }
-    public function isRemoved() : bool
+    public function isRemoved(): bool
     {
         return $this->type === self::REMOVED;
     }
-    public function isUnchanged() : bool
+    public function isUnchanged(): bool
     {
         return $this->type === self::UNCHANGED;
     }

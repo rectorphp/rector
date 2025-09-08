@@ -15,7 +15,7 @@ final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
      * @param TNode[] $nodes
      * @return TNode[]|FileWithoutNamespace[]
      */
-    public function traverse(array $nodes) : array
+    public function traverse(array $nodes): array
     {
         foreach ($nodes as $node) {
             if ($node instanceof Namespace_) {

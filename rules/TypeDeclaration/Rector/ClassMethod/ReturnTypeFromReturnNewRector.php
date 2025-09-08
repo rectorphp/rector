@@ -100,7 +100,7 @@ final class ReturnTypeFromReturnNewRector extends AbstractRector implements MinP
         $this->returnAnalyzer = $returnAnalyzer;
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type to function like with return new', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -125,14 +125,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         // already filled
@@ -147,13 +147,13 @@ CODE_SAMPLE
             return null;
         }
         $returnedNewClassName = $this->strictReturnNewAnalyzer->matchAlwaysReturnVariableNew($node);
-        if (\is_string($returnedNewClassName)) {
+        if (is_string($returnedNewClassName)) {
             $node->returnType = new FullyQualified($returnedNewClassName);
             return $node;
         }
         return $this->refactorDirectReturnNew($node, $returns);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
@@ -218,7 +218,7 @@ CODE_SAMPLE
      * @param Return_[] $returns
      * @return Type[]|null
      */
-    private function resolveReturnNewType(array $returns) : ?array
+    private function resolveReturnNewType(array $returns): ?array
     {
         $newTypes = [];
         foreach ($returns as $return) {
@@ -236,7 +236,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function isResponseInsideController(Type $returnType, $functionLike) : bool
+    private function isResponseInsideController(Type $returnType, $functionLike): bool
     {
         if (!$functionLike instanceof ClassMethod) {
             return \false;

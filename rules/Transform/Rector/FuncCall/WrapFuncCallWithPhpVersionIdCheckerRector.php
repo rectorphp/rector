@@ -32,7 +32,7 @@ final class WrapFuncCallWithPhpVersionIdCheckerRector extends AbstractRector imp
      * @var WrapFuncCallWithPhpVersionIdChecker[]
      */
     private array $wrapFuncCallWithPhpVersionIdCheckers = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Wraps function calls without assignment in a condition to check for a PHP version id', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 no_op_function();
@@ -47,7 +47,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
@@ -88,12 +88,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, WrapFuncCallWithPhpVersionIdChecker::class);
         $this->wrapFuncCallWithPhpVersionIdCheckers = $configuration;
     }
-    private function isWrappedFuncCall(StmtsAwareInterface $stmtsAware) : bool
+    private function isWrappedFuncCall(StmtsAwareInterface $stmtsAware): bool
     {
         if (!$stmtsAware instanceof If_) {
             return \false;
@@ -102,7 +102,7 @@ CODE_SAMPLE
         if (!$phpVersionId instanceof Int_) {
             return \false;
         }
-        if (\count($stmtsAware->stmts) !== 1) {
+        if (count($stmtsAware->stmts) !== 1) {
             return \false;
         }
         $childStmt = $stmtsAware->stmts[0];
@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function getPhpVersionId(Expr $expr) : ?Int_
+    private function getPhpVersionId(Expr $expr): ?Int_
     {
         if ($expr instanceof BooleanAnd) {
             return $this->getPhpVersionId($expr->left) ?? $this->getPhpVersionId($expr->right);

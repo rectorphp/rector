@@ -25,7 +25,7 @@ final class DoctrineEntityDetector
         $this->doctrineEntityAnalyzer = $doctrineEntityAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function detect(Class_ $class) : bool
+    public function detect(Class_ $class): bool
     {
         // A. check annotations
         if ($this->doctrineEntityAnalyzer->hasClassAnnotation($class)) {

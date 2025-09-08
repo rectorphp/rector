@@ -20,11 +20,11 @@ class Label extends Stmt
         $this->attributes = $attributes;
         $this->name = \is_string($name) ? new Identifier($name) : $name;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Label';
     }

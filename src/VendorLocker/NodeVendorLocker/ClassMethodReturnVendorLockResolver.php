@@ -30,7 +30,7 @@ final class ClassMethodReturnVendorLockResolver
         $this->reflectionResolver = $reflectionResolver;
         $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
     }
-    public function isVendorLocked(ClassMethod $classMethod) : bool
+    public function isVendorLocked(ClassMethod $classMethod): bool
     {
         if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
             return \true;
@@ -45,7 +45,7 @@ final class ClassMethodReturnVendorLockResolver
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->isVendorLockedByAncestors($classReflection, $methodName);
     }
-    private function isVendorLockedByAncestors(ClassReflection $classReflection, string $methodName) : bool
+    private function isVendorLockedByAncestors(ClassReflection $classReflection, string $methodName): bool
     {
         foreach ($classReflection->getAncestors() as $ancestorClassReflections) {
             if ($ancestorClassReflections === $classReflection) {

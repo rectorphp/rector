@@ -32,7 +32,7 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
         $this->conditionInverter = $conditionInverter;
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nested ifs to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -71,14 +71,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         if ($node->stmts === null) {
             return null;
@@ -97,7 +97,7 @@ CODE_SAMPLE
             }
             $newStmts = $this->processNestedIfsWithOnlyReturn($nestedIfsWithOnlyReturn, $nextStmt);
             // replace nested ifs with many separate ifs
-            \array_splice($node->stmts, $key, 1, $newStmts);
+            array_splice($node->stmts, $key, 1, $newStmts);
             return $node;
         }
         return null;
@@ -106,10 +106,10 @@ CODE_SAMPLE
      * @param If_[] $nestedIfsWithOnlyReturn
      * @return If_[]
      */
-    private function processNestedIfsWithOnlyReturn(array $nestedIfsWithOnlyReturn, Return_ $nextReturn) : array
+    private function processNestedIfsWithOnlyReturn(array $nestedIfsWithOnlyReturn, Return_ $nextReturn): array
     {
         // add nested if openly after this
-        $nestedIfsWithOnlyReturnCount = \count($nestedIfsWithOnlyReturn);
+        $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
         $newStmts = [];
         /** @var int $key */
         foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
@@ -118,7 +118,7 @@ CODE_SAMPLE
                 $newStmts[] = $nestedIfWithOnlyReturn;
             } else {
                 $standaloneIfs = $this->createStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $nextReturn);
-                $newStmts = \array_merge($newStmts, $standaloneIfs);
+                $newStmts = array_merge($newStmts, $standaloneIfs);
             }
         }
         // $newStmts[] = $nextReturn;
@@ -127,7 +127,7 @@ CODE_SAMPLE
     /**
      * @return If_[]
      */
-    private function createStandaloneIfsWithReturn(If_ $onlyReturnIf, Return_ $return) : array
+    private function createStandaloneIfsWithReturn(If_ $onlyReturnIf, Return_ $return): array
     {
         $invertedCondExpr = $this->conditionInverter->createInvertedCondition($onlyReturnIf->cond);
         // special case

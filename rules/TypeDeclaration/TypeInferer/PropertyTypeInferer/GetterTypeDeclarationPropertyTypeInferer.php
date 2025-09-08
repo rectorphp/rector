@@ -30,7 +30,7 @@ final class GetterTypeDeclarationPropertyTypeInferer
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferProperty(Property $property, Class_ $class) : ?Type
+    public function inferProperty(Property $property, Class_ $class): ?Type
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);

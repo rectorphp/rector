@@ -8,22 +8,22 @@ use RectorPrefix202509\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202509\Webmozart\Assert\Assert;
 final class RectorConfigsResolver
 {
-    public function provide() : BootstrapConfigs
+    public function provide(): BootstrapConfigs
     {
         $argvInput = new ArgvInput();
         $mainConfigFile = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
         return new BootstrapConfigs($mainConfigFile, []);
     }
-    private function resolveFromInput(ArgvInput $argvInput) : ?string
+    private function resolveFromInput(ArgvInput $argvInput): ?string
     {
         $configFile = $this->getOptionValue($argvInput, ['--config', '-c']);
         if ($configFile === null) {
             return null;
         }
         Assert::fileExists($configFile);
-        return \realpath($configFile);
+        return realpath($configFile);
     }
-    private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile) : ?string
+    private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile): ?string
     {
         $configFile = $this->resolveFromInput($argvInput);
         if ($configFile !== null) {
@@ -31,10 +31,10 @@ final class RectorConfigsResolver
         }
         return $this->createFallbackFileInfoIfFound($fallbackFile);
     }
-    private function createFallbackFileInfoIfFound(string $fallbackFile) : ?string
+    private function createFallbackFileInfoIfFound(string $fallbackFile): ?string
     {
-        $rootFallbackFile = \getcwd() . \DIRECTORY_SEPARATOR . $fallbackFile;
-        if (!\is_file($rootFallbackFile)) {
+        $rootFallbackFile = getcwd() . \DIRECTORY_SEPARATOR . $fallbackFile;
+        if (!is_file($rootFallbackFile)) {
             return null;
         }
         return $rootFallbackFile;
@@ -42,7 +42,7 @@ final class RectorConfigsResolver
     /**
      * @param string[] $optionNames
      */
-    private function getOptionValue(ArgvInput $argvInput, array $optionNames) : ?string
+    private function getOptionValue(ArgvInput $argvInput, array $optionNames): ?string
     {
         foreach ($optionNames as $optionName) {
             if ($argvInput->hasParameterOption($optionName, \true)) {

@@ -51,7 +51,7 @@ final class ListRulesCommand extends Command
         $this->rectors = $rectors;
         parent::__construct();
     }
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('list-rules');
         $this->setDescription('Show loaded Rectors');
@@ -59,7 +59,7 @@ final class ListRulesCommand extends Command
         $this->addOption(Option::OUTPUT_FORMAT, null, InputOption::VALUE_REQUIRED, 'Select output format', ConsoleOutputFormatter::NAME);
         $this->addOption(Option::ONLY, null, InputOption::VALUE_REQUIRED, 'Fully qualified rule class name');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $onlyRule = $input->getOption(Option::ONLY);
         if ($onlyRule !== null) {
@@ -80,26 +80,26 @@ final class ListRulesCommand extends Command
             $this->symfonyStyle->listing($skippedClasses);
         }
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->note(\sprintf('Loaded %d rules', \count($rectorClasses)));
+        $this->symfonyStyle->note(sprintf('Loaded %d rules', count($rectorClasses)));
         return Command::SUCCESS;
     }
     /**
      * @return array<class-string<RectorInterface>>
      */
-    private function resolveRectorClasses(?string $onlyRule) : array
+    private function resolveRectorClasses(?string $onlyRule): array
     {
-        $customRectors = \array_filter($this->rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
+        $customRectors = array_filter($this->rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
         if ($onlyRule !== null) {
             $customRectors = $this->configurationRuleFilter->filterOnlyRule($customRectors, $onlyRule);
         }
-        $rectorClasses = \array_map(static fn(RectorInterface $rector): string => \get_class($rector), $customRectors);
-        \sort($rectorClasses);
-        return \array_unique($rectorClasses);
+        $rectorClasses = array_map(static fn(RectorInterface $rector): string => get_class($rector), $customRectors);
+        sort($rectorClasses);
+        return array_unique($rectorClasses);
     }
     /**
      * @return string[]
      */
-    private function getSkippedCheckers() : array
+    private function getSkippedCheckers(): array
     {
         $skippedCheckers = [];
         foreach ($this->skippedClassResolver->resolve() as $checkerClass => $fileList) {

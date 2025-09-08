@@ -13,7 +13,7 @@ use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
  */
 final class CloningPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
-    public function enterNode(Node $node) : Node
+    public function enterNode(Node $node): Node
     {
         $clonedNode = clone $node;
         if (!$clonedNode->hasAttribute(PhpDocAttributeKey::ORIG_NODE)) {

@@ -50,7 +50,7 @@ final class DowngradeHashAlgorithmXxHashRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->conditionResolver = $conditionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade hash algorithm xxh32, xxh64, xxh3 or xxh128 by default to md5. You can configure the algorithm to downgrade.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -75,7 +75,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class, Ternary::class, FuncCall::class];
     }
@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
         $this->argNamedKey = 0;
         $algorithm = $this->getHashAlgorithm($node->getArgs());
-        if ($algorithm === null || !\array_key_exists($algorithm, self::HASH_ALGORITHMS_TO_DOWNGRADE)) {
+        if ($algorithm === null || !array_key_exists($algorithm, self::HASH_ALGORITHMS_TO_DOWNGRADE)) {
             return null;
         }
         $args = $node->getArgs();
@@ -113,11 +113,11 @@ CODE_SAMPLE
         $arg->value = new String_(self::REPLACEMENT_ALGORITHM);
         return $node;
     }
-    private function isVersionCompareIf(If_ $if) : bool
+    private function isVersionCompareIf(If_ $if): bool
     {
         if ($if->cond instanceof FuncCall) {
             // per use case reported only
-            if (\count($if->stmts) !== 1) {
+            if (count($if->stmts) !== 1) {
                 return \false;
             }
             $versionCompare = $this->conditionResolver->resolveFromExpr($if->cond);
@@ -136,7 +136,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isVersionCompareTernary(Ternary $ternary) : bool
+    private function isVersionCompareTernary(Ternary $ternary): bool
     {
         if ($ternary->if instanceof Expr && $ternary->cond instanceof FuncCall) {
             $versionCompare = $this->conditionResolver->resolveFromExpr($ternary->cond);
@@ -151,7 +151,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall): bool
     {
         if ($funcCall->isFirstClassCallable()) {
             return \true;
@@ -169,7 +169,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function getHashAlgorithm(array $args) : ?string
+    private function getHashAlgorithm(array $args): ?string
     {
         $arg = null;
         if ($this->argsAnalyzer->hasNamedArg($args)) {
@@ -193,9 +193,9 @@ CODE_SAMPLE
                 return null;
         }
     }
-    private function mapConstantToString(string $constant) : string
+    private function mapConstantToString(string $constant): string
     {
-        $mappedConstant = \array_search(\constant($constant), self::HASH_ALGORITHMS_TO_DOWNGRADE, \true);
+        $mappedConstant = array_search(constant($constant), self::HASH_ALGORITHMS_TO_DOWNGRADE, \true);
         return $mappedConstant !== \false ? $mappedConstant : $constant;
     }
 }

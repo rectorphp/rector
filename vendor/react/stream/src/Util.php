@@ -26,30 +26,30 @@ final class Util
         }
         $dest->emit('pipe', array($source));
         // forward all source data events as $dest->write()
-        $source->on('data', $dataer = function ($data) use($source, $dest) {
+        $source->on('data', $dataer = function ($data) use ($source, $dest) {
             $feedMore = $dest->write($data);
             if (\false === $feedMore) {
                 $source->pause();
             }
         });
-        $dest->on('close', function () use($source, $dataer) {
+        $dest->on('close', function () use ($source, $dataer) {
             $source->removeListener('data', $dataer);
             $source->pause();
         });
         // forward destination drain as $source->resume()
-        $dest->on('drain', $drainer = function () use($source) {
+        $dest->on('drain', $drainer = function () use ($source) {
             $source->resume();
         });
-        $source->on('close', function () use($dest, $drainer) {
+        $source->on('close', function () use ($dest, $drainer) {
             $dest->removeListener('drain', $drainer);
         });
         // forward end event from source as $dest->end()
         $end = isset($options['end']) ? $options['end'] : \true;
         if ($end) {
-            $source->on('end', $ender = function () use($dest) {
+            $source->on('end', $ender = function () use ($dest) {
                 $dest->end();
             });
-            $dest->on('close', function () use($source, $ender) {
+            $dest->on('close', function () use ($source, $ender) {
                 $source->removeListener('end', $ender);
             });
         }
@@ -58,7 +58,7 @@ final class Util
     public static function forwardEvents($source, $target, array $events)
     {
         foreach ($events as $event) {
-            $source->on($event, function () use($event, $target) {
+            $source->on($event, function () use ($event, $target) {
                 $target->emit($event, \func_get_args());
             });
         }

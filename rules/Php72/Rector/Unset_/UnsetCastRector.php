@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnsetCastRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_UNSET_CAST;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove `(unset)` cast', [new CodeSample(<<<'CODE_SAMPLE'
 $different = (unset) $value;
@@ -40,7 +40,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Unset_::class, Assign::class, Expression::class];
     }
@@ -61,7 +61,7 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createNull();
     }
-    private function refactorAssign(Assign $assign) : ?FuncCall
+    private function refactorAssign(Assign $assign): ?FuncCall
     {
         if (!$assign->expr instanceof Unset_) {
             return null;

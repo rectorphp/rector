@@ -53,7 +53,7 @@ final class DowngradeNewInInitializerRector extends AbstractRector
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace New in initializers', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -79,14 +79,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FunctionLike::class];
     }
     /**
      * @param FunctionLike $node
      */
-    public function refactor(Node $node) : ?FunctionLike
+    public function refactor(Node $node): ?FunctionLike
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         $node = $this->convertArrowFunctionToClosure($node);
         return $this->replaceNewInParams($node);
     }
-    private function shouldSkip(FunctionLike $functionLike) : bool
+    private function shouldSkip(FunctionLike $functionLike): bool
     {
         foreach ($functionLike->getParams() as $param) {
             if ($this->isParamSkipped($param)) {
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function convertArrowFunctionToClosure(FunctionLike $functionLike) : FunctionLike
+    private function convertArrowFunctionToClosure(FunctionLike $functionLike): FunctionLike
     {
         if (!$functionLike instanceof ArrowFunction) {
             return $functionLike;
@@ -113,7 +113,7 @@ CODE_SAMPLE
         $stmts = [new Return_($functionLike->expr)];
         return $this->anonymousFunctionFactory->create($functionLike->params, $stmts, $functionLike->returnType, $functionLike->static);
     }
-    private function isParamSkipped(Param $param) : bool
+    private function isParamSkipped(Param $param): bool
     {
         if ($param->var instanceof Error) {
             return \true;
@@ -165,7 +165,7 @@ CODE_SAMPLE
             return $functionLike;
         }
         $functionLike->stmts ??= [];
-        $functionLike->stmts = \array_merge($stmts, $functionLike->stmts);
+        $functionLike->stmts = array_merge($stmts, $functionLike->stmts);
         return $functionLike;
     }
     /**

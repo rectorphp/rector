@@ -11,14 +11,14 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Stringable;
 final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->type instanceof CallableTypeNode) {
-            return \sprintf('(%s)[]', (string) $this->type);
+            return sprintf('(%s)[]', (string) $this->type);
         }
         $typeAsString = (string) $this->type;
         if ($this->isGenericArrayCandidate($this->type)) {
-            return \sprintf('array<%s>', $typeAsString);
+            return sprintf('array<%s>', $typeAsString);
         }
         if ($this->type instanceof ArrayTypeNode) {
             return $this->printArrayType($this->type);
@@ -28,7 +28,7 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
         }
         return $typeAsString . '[]';
     }
-    private function isGenericArrayCandidate(TypeNode $typeNode) : bool
+    private function isGenericArrayCandidate(TypeNode $typeNode): bool
     {
         $hasGenericTypeParent = (bool) $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT);
         if (!$hasGenericTypeParent) {
@@ -36,16 +36,16 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
         }
         return $typeNode instanceof UnionTypeNode || $typeNode instanceof ArrayTypeNode;
     }
-    private function printArrayType(ArrayTypeNode $arrayTypeNode) : string
+    private function printArrayType(ArrayTypeNode $arrayTypeNode): string
     {
         $typeAsString = (string) $arrayTypeNode;
-        $singleTypesAsString = \explode('|', $typeAsString);
+        $singleTypesAsString = explode('|', $typeAsString);
         foreach ($singleTypesAsString as $key => $singleTypeAsString) {
             $singleTypesAsString[$key] = $singleTypeAsString . '[]';
         }
-        return \implode('|', $singleTypesAsString);
+        return implode('|', $singleTypesAsString);
     }
-    private function printUnionType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : string
+    private function printUnionType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): string
     {
         $unionedTypes = [];
         if ($bracketsAwareUnionTypeNode->isWrappedInBrackets()) {
@@ -54,6 +54,6 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
         foreach ($bracketsAwareUnionTypeNode->types as $unionedType) {
             $unionedTypes[] = $unionedType . '[]';
         }
-        return \implode('|', $unionedTypes);
+        return implode('|', $unionedTypes);
     }
 }

@@ -39,7 +39,7 @@ final class ExplicitNullableParamTypeRector extends AbstractRector implements Mi
         $this->valueResolver = $valueResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make implicit nullable param to explicit', [new CodeSample(<<<'CODE_SAMPLE'
 function foo(string $param = null) {}
@@ -49,14 +49,14 @@ function foo(?string $param = null) {}
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Param::class];
     }
     /**
      * @param Param $node
      */
-    public function refactor(Node $node) : ?Param
+    public function refactor(Node $node): ?Param
     {
         if (!$node->type instanceof Node) {
             return null;
@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_IMPLICIT_NULLABLE_PARAM_TYPE;
     }

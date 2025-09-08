@@ -24,14 +24,14 @@ final class PhpDocValueToNodeMapper
         $this->nodeFactory = $nodeFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function mapGenericTagValueNode(GenericTagValueNode $genericTagValueNode) : Expr
+    public function mapGenericTagValueNode(GenericTagValueNode $genericTagValueNode): Expr
     {
-        if (\strpos($genericTagValueNode->value, '::') !== \false) {
-            [$class, $constant] = \explode('::', $genericTagValueNode->value);
+        if (strpos($genericTagValueNode->value, '::') !== \false) {
+            [$class, $constant] = explode('::', $genericTagValueNode->value);
             $name = new Name($class);
             return $this->nodeFactory->createClassConstFetchFromName($name, $constant);
         }
-        $reference = \ltrim($genericTagValueNode->value, '\\');
+        $reference = ltrim($genericTagValueNode->value, '\\');
         if ($this->reflectionProvider->hasClass($reference)) {
             return $this->nodeFactory->createClassConstReference($reference);
         }

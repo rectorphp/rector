@@ -19,7 +19,7 @@ final class MethodReflectionResolver
     /**
      * @param class-string $className
      */
-    public function resolveMethodReflection(string $className, string $methodName, ?Scope $scope) : ?MethodReflection
+    public function resolveMethodReflection(string $className, string $methodName, ?Scope $scope): ?MethodReflection
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;

@@ -27,11 +27,11 @@ class Ternary extends Expr
         $this->if = $if;
         $this->else = $else;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['cond', 'if', 'else'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Ternary';
     }

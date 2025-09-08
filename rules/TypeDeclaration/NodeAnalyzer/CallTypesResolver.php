@@ -40,7 +40,7 @@ final class CallTypesResolver
      * @param MethodCall[]|StaticCall[] $calls
      * @return array<int, Type>
      */
-    public function resolveStrictTypesFromCalls(array $calls) : array
+    public function resolveStrictTypesFromCalls(array $calls): array
     {
         $staticTypesByArgumentPosition = [];
         foreach ($calls as $call) {
@@ -56,7 +56,7 @@ final class CallTypesResolver
         // unite to single type
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
-    private function resolveStrictArgValueType(Arg $arg) : Type
+    private function resolveStrictArgValueType(Arg $arg): Type
     {
         $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         // "self" in another object is not correct, this make it independent
@@ -70,7 +70,7 @@ final class CallTypesResolver
         }
         return $argValueType;
     }
-    private function correctSelfType(Type $argValueType) : Type
+    private function correctSelfType(Type $argValueType): Type
     {
         if ($argValueType instanceof ThisType) {
             return new ObjectType($argValueType->getClassName());
@@ -81,7 +81,7 @@ final class CallTypesResolver
      * @param array<int, Type[]> $staticTypesByArgumentPosition
      * @return array<int, Type>
      */
-    private function unionToSingleType(array $staticTypesByArgumentPosition) : array
+    private function unionToSingleType(array $staticTypesByArgumentPosition): array
     {
         $staticTypeByArgumentPosition = [];
         foreach ($staticTypesByArgumentPosition as $position => $staticTypes) {
@@ -89,7 +89,7 @@ final class CallTypesResolver
             // narrow parents to most child type
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
         }
-        if (\count($staticTypeByArgumentPosition) !== 1) {
+        if (count($staticTypeByArgumentPosition) !== 1) {
             return $staticTypeByArgumentPosition;
         }
         if (!$staticTypeByArgumentPosition[0]->isNull()->yes()) {
@@ -97,7 +97,7 @@ final class CallTypesResolver
         }
         return [new MixedType()];
     }
-    private function narrowParentObjectTreeToSingleObjectChildType(Type $type) : Type
+    private function narrowParentObjectTreeToSingleObjectChildType(Type $type): Type
     {
         if (!$type instanceof UnionType) {
             return $type;
@@ -117,7 +117,7 @@ final class CallTypesResolver
         }
         return $firstUnionedType;
     }
-    private function isTypeWithClassNameOnly(UnionType $unionType) : bool
+    private function isTypeWithClassNameOnly(UnionType $unionType): bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
             $className = ClassNameFromObjectTypeResolver::resolve($unionedType);

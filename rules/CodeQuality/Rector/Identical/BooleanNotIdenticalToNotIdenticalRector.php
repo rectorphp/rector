@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BooleanNotIdenticalToNotIdenticalRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Negated identical boolean compare to not identical compare (does not apply to non-bool values)', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class, BooleanNot::class];
     }
     /**
      * @param Identical|BooleanNot $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Identical) {
             return $this->processIdentical($node);
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processIdentical(Identical $identical) : ?NotIdentical
+    private function processIdentical(Identical $identical): ?NotIdentical
     {
         $leftType = $this->getType($identical->left);
         if (!$leftType->isBoolean()->yes()) {

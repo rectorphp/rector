@@ -30,7 +30,7 @@ final class AutoloadIncluder
      * @var string[]
      */
     private array $alreadyLoadedAutoloadFiles = [];
-    public function includeDependencyOrRepositoryVendorAutoloadIfExists() : void
+    public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
         if (\class_exists(LazyContainerFactory::class)) {
@@ -43,14 +43,14 @@ final class AutoloadIncluder
      * In case Rector is installed as vendor dependency,
      * this autoloads the project vendor/autoload.php, including Rector
      */
-    public function autoloadProjectAutoloaderFile() : void
+    public function autoloadProjectAutoloaderFile(): void
     {
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../../autoload.php');
     }
     /**
      * In case Rector is installed as global dependency
      */
-    public function autoloadRectorInstalledAsGlobalDependency() : void
+    public function autoloadRectorInstalledAsGlobalDependency(): void
     {
         if (\dirname(__DIR__) === \dirname(\getcwd(), 2)) {
             return;
@@ -60,7 +60,7 @@ final class AutoloadIncluder
         }
         $this->loadIfExistsAndNotLoadedYet('vendor/autoload.php');
     }
-    public function autoloadFromCommandLine() : void
+    public function autoloadFromCommandLine(): void
     {
         $cliArgs = $_SERVER['argv'];
         $aOptionPosition = \array_search('-a', $cliArgs, \true);
@@ -79,7 +79,7 @@ final class AutoloadIncluder
         }
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
-    public function loadIfExistsAndNotLoadedYet(string $filePath) : void
+    public function loadIfExistsAndNotLoadedYet(string $filePath): void
     {
         if (!\file_exists($filePath)) {
             return;
@@ -93,7 +93,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias('RectorPrefix202509\\AutoloadIncluder', 'AutoloadIncluder', \false);
+\class_alias('RectorPrefix202509\AutoloadIncluder', 'AutoloadIncluder', \false);
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }

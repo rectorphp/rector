@@ -31,7 +31,7 @@ final class AutowireClassMethodFactory
     /**
      * @param PropertyMetadata[] $propertyMetadatas
      */
-    public function create(Trait_ $trait, array $propertyMetadatas) : ClassMethod
+    public function create(Trait_ $trait, array $propertyMetadatas): ClassMethod
     {
         $traitName = $this->nodeNameResolver->getShortName($trait);
         $autowireClassMethod = new ClassMethod('autowire' . $traitName);
@@ -46,7 +46,7 @@ final class AutowireClassMethodFactory
         }
         return $autowireClassMethod;
     }
-    private function createAutowiredParam(PropertyMetadata $propertyMetadata) : Param
+    private function createAutowiredParam(PropertyMetadata $propertyMetadata): Param
     {
         $param = new Param(new Variable($propertyMetadata->getName()));
         $objectType = $propertyMetadata->getType();

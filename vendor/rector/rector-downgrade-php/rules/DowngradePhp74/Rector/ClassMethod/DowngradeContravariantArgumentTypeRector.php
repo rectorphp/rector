@@ -61,11 +61,11 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove contravariant argument type declarations', [new CodeSample(<<<'CODE_SAMPLE'
 class ParentType {}
@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->params === []) {
             return null;
@@ -128,7 +128,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function isNullableParam(Param $param, $functionLike) : bool
+    private function isNullableParam(Param $param, $functionLike): bool
     {
         if ($param->variadic) {
             return \false;
@@ -150,7 +150,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function getDifferentParamTypeFromAncestorClass(Param $param, $functionLike) : ?string
+    private function getDifferentParamTypeFromAncestorClass(Param $param, $functionLike): ?string
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
         if (!$classReflection instanceof ClassReflection) {
@@ -174,7 +174,7 @@ CODE_SAMPLE
         $methodName = $this->getName($functionLike);
         // parent classes or implemented interfaces
         /** @var ClassReflection[] $parentClassReflections */
-        $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($parentClassReflections as $parentClassReflection) {
             $parentReflectionMethod = $this->resolveParentReflectionMethod($parentClassReflection, $methodName);
             if (!$parentReflectionMethod instanceof ReflectionMethod) {
@@ -187,7 +187,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveParentReflectionMethod(ClassReflection $classReflection, string $methodName) : ?ReflectionMethod
+    private function resolveParentReflectionMethod(ClassReflection $classReflection, string $methodName): ?ReflectionMethod
     {
         if (!$classReflection->hasMethod($methodName)) {
             return null;
@@ -199,7 +199,7 @@ CODE_SAMPLE
         // Find the param we're looking for
         return $nativeReflection->getMethod($methodName);
     }
-    private function getDifferentParamTypeFromReflectionMethod(ReflectionMethod $reflectionMethod, string $paramName, string $paramTypeName) : ?string
+    private function getDifferentParamTypeFromReflectionMethod(ReflectionMethod $reflectionMethod, string $paramName, string $paramTypeName): ?string
     {
         /** @var ReflectionParameter[] $parentReflectionMethodParams */
         $parentReflectionMethodParams = $reflectionMethod->getParameters();
@@ -228,7 +228,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(Param $param, $functionLike) : void
+    private function refactorParam(Param $param, $functionLike): void
     {
         if (!$this->isNullableParam($param, $functionLike)) {
             return;
@@ -240,7 +240,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function decorateWithDocBlock($functionLike, Param $param) : void
+    private function decorateWithDocBlock($functionLike, Param $param): void
     {
         if (!$param->type instanceof Node) {
             return;

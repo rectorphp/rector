@@ -27,7 +27,7 @@ final class AddArrowFunctionReturnTypeRector extends AbstractRector implements M
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add known return type to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
 fn () => [];
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrowFunction::class];
     }
     /**
      * @param ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->returnType instanceof Node) {
             return null;
@@ -68,7 +68,7 @@ CODE_SAMPLE
         $node->returnType = $returnTypeNode;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARROW_FUNCTION;
     }

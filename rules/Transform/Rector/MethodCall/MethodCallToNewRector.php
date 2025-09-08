@@ -26,12 +26,12 @@ class MethodCallToNewRector extends AbstractRector implements ConfigurableRector
     /**
      * @param MethodCallToNew[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, MethodCallToNew::class);
         $this->methodCallToNew = $configuration;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change method call to new class', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $object->createResponse(['a' => 1]);
@@ -41,14 +41,14 @@ new Response(['a' => 1]);
 CODE_SAMPLE
 , [new MethodCallToNew(new ObjectType('ResponseFactory'), 'createResponse', 'Response')])]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?New_
+    public function refactor(Node $node): ?New_
     {
         if ($node->isFirstClassCallable()) {
             return null;

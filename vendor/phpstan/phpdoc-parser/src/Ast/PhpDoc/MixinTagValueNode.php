@@ -17,7 +17,7 @@ class MixinTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagVal
         $this->type = $type;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->type} {$this->description}");
     }

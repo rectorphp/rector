@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SplitGroupedClassConstantsRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Separate class constant to own lines', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -34,7 +34,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassConst::class];
     }
@@ -42,24 +42,24 @@ CODE_SAMPLE
      * @param ClassConst $node
      * @return ClassConst[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
-        if (\count($node->consts) < 2) {
+        if (count($node->consts) < 2) {
             return null;
         }
         /** @var Const_[] $allConsts */
         $allConsts = $node->consts;
         /** @var Const_ $firstConst */
-        $firstConst = \array_shift($allConsts);
+        $firstConst = array_shift($allConsts);
         $node->consts = [$firstConst];
         $nextClassConsts = $this->createNextClassConsts($allConsts, $node);
-        return \array_merge([$node], $nextClassConsts);
+        return array_merge([$node], $nextClassConsts);
     }
     /**
      * @param Const_[] $consts
      * @return ClassConst[]
      */
-    private function createNextClassConsts(array $consts, ClassConst $classConst) : array
+    private function createNextClassConsts(array $consts, ClassConst $classConst): array
     {
         $decoratedConsts = [];
         foreach ($consts as $const) {

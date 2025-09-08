@@ -16,7 +16,7 @@ final class ParamAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function getParamByName(string $desiredParamName, FunctionLike $functionLike) : ?Param
+    public function getParamByName(string $desiredParamName, FunctionLike $functionLike): ?Param
     {
         foreach ($functionLike->getParams() as $param) {
             $paramName = $this->nodeNameResolver->getName($param);

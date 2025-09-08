@@ -12,7 +12,7 @@ final class SymfonySetProvider implements SetProviderInterface
     /**
      * @return SetInterface[]
      */
-    public function provide() : array
+    public function provide(): array
     {
         return [
             new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/symfony/configs.php'),

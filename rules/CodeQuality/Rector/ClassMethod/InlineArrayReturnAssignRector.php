@@ -39,7 +39,7 @@ final class InlineArrayReturnAssignRector extends AbstractRector
         $this->variableDimFetchAssignResolver = $variableDimFetchAssignResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Inline just in time array dim fetch assigns to direct return', [new CodeSample(<<<'CODE_SAMPLE'
 function getPerson()
@@ -65,20 +65,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $stmts = (array) $node->stmts;
-        if (\count($stmts) < 3) {
+        if (count($stmts) < 3) {
             return null;
         }
-        $firstStmt = \array_shift($stmts);
+        $firstStmt = array_shift($stmts);
         $variable = $this->matchVariableAssignOfEmptyArray($firstStmt);
         if (!$variable instanceof Variable) {
             return null;
@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (!$this->areAssignExclusiveToDimFetch($stmts)) {
             return null;
         }
-        $lastStmt = \array_pop($stmts);
+        $lastStmt = array_pop($stmts);
         if (!$lastStmt instanceof Stmt) {
             return null;
         }
@@ -101,7 +101,7 @@ CODE_SAMPLE
         $node->stmts = [new Return_($array)];
         return $node;
     }
-    private function matchVariableAssignOfEmptyArray(Stmt $stmt) : ?Variable
+    private function matchVariableAssignOfEmptyArray(Stmt $stmt): ?Variable
     {
         if (!$stmt instanceof Expression) {
             return null;
@@ -118,7 +118,7 @@ CODE_SAMPLE
         }
         return $assign->var;
     }
-    private function isReturnOfVariable(Stmt $stmt, Variable $variable) : bool
+    private function isReturnOfVariable(Stmt $stmt, Variable $variable): bool
     {
         if (!$stmt instanceof Return_) {
             return \false;
@@ -131,7 +131,7 @@ CODE_SAMPLE
     /**
      * @param KeyAndExpr[] $keysAndExprs
      */
-    private function createArray(array $keysAndExprs) : Array_
+    private function createArray(array $keysAndExprs): Array_
     {
         $arrayItems = [];
         foreach ($keysAndExprs as $keyAndExpr) {
@@ -147,9 +147,9 @@ CODE_SAMPLE
      *
      * @param Stmt[] $stmts
      */
-    private function areAssignExclusiveToDimFetch(array $stmts) : bool
+    private function areAssignExclusiveToDimFetch(array $stmts): bool
     {
-        $lastKey = \array_key_last($stmts);
+        $lastKey = array_key_last($stmts);
         foreach ($stmts as $key => $stmt) {
             if ($key === $lastKey) {
                 // skip last item

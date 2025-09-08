@@ -21,15 +21,15 @@ final class BareSingleAssignIf
         $this->if = $if;
         $this->assign = $assign;
     }
-    public function getIfCondExpr() : Expr
+    public function getIfCondExpr(): Expr
     {
         return $this->if->cond;
     }
-    public function getIf() : If_
+    public function getIf(): If_
     {
         return $this->if;
     }
-    public function getAssign() : Assign
+    public function getAssign(): Assign
     {
         return $this->assign;
     }

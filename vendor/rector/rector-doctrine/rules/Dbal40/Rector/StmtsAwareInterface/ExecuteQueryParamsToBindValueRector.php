@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExecuteQueryParamsToBindValueRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change executeQuery() with parameters to bindValue() with explicit values', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\DBAL\Statement;
@@ -53,23 +53,23 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         $nodeFinder = new NodeFinder();
         $hasChanged = \false;
-        $objectType = new ObjectType('Doctrine\\DBAL\\Statement');
+        $objectType = new ObjectType('Doctrine\DBAL\Statement');
         foreach ((array) $node->stmts as $key => $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
             }
-            $executeQueryMethodCall = $nodeFinder->findFirst($stmt, function (Node $node) use($objectType) : bool {
+            $executeQueryMethodCall = $nodeFinder->findFirst($stmt, function (Node $node) use ($objectType): bool {
                 if (!$node instanceof MethodCall) {
                     return \false;
                 }
@@ -79,7 +79,7 @@ CODE_SAMPLE
                 if (!$this->isName($node->name, 'executeQuery')) {
                     return \false;
                 }
-                return \count($node->getArgs()) === 1;
+                return count($node->getArgs()) === 1;
             });
             if (!$executeQueryMethodCall instanceof MethodCall) {
                 continue;
@@ -89,14 +89,14 @@ CODE_SAMPLE
             $executeQueryMethodCall->args = [];
             $hasChanged = \true;
             $bindValueForeach = $this->createBindValueForeach($executeQueryMethodCall->var, $stmtsExpr);
-            \array_splice($node->stmts, $key, 1, [$bindValueForeach, $stmt]);
+            array_splice($node->stmts, $key, 1, [$bindValueForeach, $stmt]);
         }
         if ($hasChanged) {
             return $node;
         }
         return null;
     }
-    private function createBindValueForeach(Expr $statementExpr, Expr $stmtsExpr) : Foreach_
+    private function createBindValueForeach(Expr $statementExpr, Expr $stmtsExpr): Foreach_
     {
         $positionVariable = new Variable('position');
         $parameterVariable = new Variable('parameter');

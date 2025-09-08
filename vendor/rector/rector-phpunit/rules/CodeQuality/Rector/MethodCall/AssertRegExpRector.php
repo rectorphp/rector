@@ -60,21 +60,21 @@ final class AssertRegExpRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertSame(1, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertRegExp("/^Message for ".*"\\.$/", $string, $message);'), new CodeSample('$this->assertEquals(false, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertNotRegExp("/^Message for ".*"\\.$/", $string, $message);')]);
+        return new RuleDefinition('Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);', '$this->assertRegExp("/^Message for ".*"\.$/", $string, $message);'), new CodeSample('$this->assertEquals(false, preg_match("/^Message for ".*"\.$/", $string), $message);', '$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -123,7 +123,7 @@ final class AssertRegExpRector extends AbstractRector
         }
         return null;
     }
-    private function resolveOldCondition(Expr $expr) : int
+    private function resolveOldCondition(Expr $expr): int
     {
         if ($expr instanceof Int_) {
             return $expr->value;
@@ -136,19 +136,19 @@ final class AssertRegExpRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod($node, string $oldMethodName, int $oldCondition) : void
+    private function renameMethod($node, string $oldMethodName, int $oldCondition): void
     {
-        if (\in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 1 || \in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 0) {
+        if (in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 1 || in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 0) {
             $node->name = new Identifier('assertRegExp');
         }
-        if (\in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 0 || \in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 1) {
+        if (in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 0 || in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 1) {
             $node->name = new Identifier('assertNotRegExp');
         }
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function moveFunctionArgumentsUp($node) : void
+    private function moveFunctionArgumentsUp($node): void
     {
         $oldArguments = $node->getArgs();
         /** @var FuncCall $pregMatchFunction */
@@ -156,6 +156,6 @@ final class AssertRegExpRector extends AbstractRector
         $regex = $pregMatchFunction->getArgs()[0];
         $variable = $pregMatchFunction->getArgs()[1];
         unset($oldArguments[0], $oldArguments[1]);
-        $node->args = \array_merge([$regex, $variable], $oldArguments);
+        $node->args = array_merge([$regex, $variable], $oldArguments);
     }
 }

@@ -47,7 +47,7 @@ final class ExpectedNameResolver
         $this->propertyNaming = $propertyNaming;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
-    public function resolveForParamIfNotYet(Param $param) : ?string
+    public function resolveForParamIfNotYet(Param $param): ?string
     {
         if ($param->type instanceof UnionType) {
             return null;
@@ -58,12 +58,12 @@ final class ExpectedNameResolver
         }
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param->var);
-        if ($currentName === $expectedName || \substr_compare($currentName, \ucfirst($expectedName), -\strlen(\ucfirst($expectedName))) === 0) {
+        if ($currentName === $expectedName || substr_compare($currentName, ucfirst($expectedName), -strlen(ucfirst($expectedName))) === 0) {
             return null;
         }
         return $expectedName;
     }
-    public function resolveForAssignNonNew(Assign $assign) : ?string
+    public function resolveForAssignNonNew(Assign $assign): ?string
     {
         if ($assign->expr instanceof New_) {
             return null;
@@ -75,7 +75,7 @@ final class ExpectedNameResolver
         $variable = $assign->var;
         return $this->nodeNameResolver->getName($variable);
     }
-    public function resolveForAssignNew(Assign $assign) : ?string
+    public function resolveForAssignNew(Assign $assign): ?string
     {
         if (!$assign->expr instanceof New_) {
             return null;
@@ -102,7 +102,7 @@ final class ExpectedNameResolver
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    public function resolveForCall($expr) : ?string
+    public function resolveForCall($expr): ?string
     {
         if ($this->isDynamicNameCall($expr)) {
             return null;
@@ -129,7 +129,7 @@ final class ExpectedNameResolver
         }
         return null;
     }
-    public function resolveForForeach(VariableAndCallForeach $variableAndCallForeach) : ?string
+    public function resolveForForeach(VariableAndCallForeach $variableAndCallForeach): ?string
     {
         $call = $variableAndCallForeach->getCall();
         if ($this->isDynamicNameCall($call)) {
@@ -163,14 +163,14 @@ final class ExpectedNameResolver
         }
         return $expectedNameFromMethodName->getSingularized();
     }
-    private function isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull(Type $returnedType, ?ExpectedName $expectedName) : bool
+    private function isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull(Type $returnedType, ?ExpectedName $expectedName): bool
     {
         return $returnedType instanceof ArrayType && $expectedName instanceof ExpectedName;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function isDynamicNameCall($expr) : bool
+    private function isDynamicNameCall($expr): bool
     {
         if ($expr->name instanceof StaticCall) {
             return \true;
@@ -180,7 +180,7 @@ final class ExpectedNameResolver
         }
         return $expr->name instanceof FuncCall;
     }
-    private function resolveReturnTypeFromArrayType(ArrayType $arrayType) : ?Type
+    private function resolveReturnTypeFromArrayType(ArrayType $arrayType): ?Type
     {
         if (!$arrayType->getIterableValueType() instanceof ObjectType) {
             return null;

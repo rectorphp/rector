@@ -45,7 +45,7 @@ final class AssignManipulator
      * Matches:
      * list([1, 2]) = each($items)
      */
-    public function matchListAndEach(Assign $assign) : ?ListAndEach
+    public function matchListAndEach(Assign $assign): ?ListAndEach
     {
         // could be behind error suppress
         if ($assign->expr instanceof ErrorSuppress) {
@@ -73,9 +73,9 @@ final class AssignManipulator
      * @api doctrine
      * @return array<PropertyFetch|StaticPropertyFetch>
      */
-    public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike) : array
+    public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
     {
-        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) : bool {
+        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node): bool {
             if (!$this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
                 return \false;
             }

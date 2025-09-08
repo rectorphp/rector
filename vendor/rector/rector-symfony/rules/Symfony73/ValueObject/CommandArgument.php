@@ -24,15 +24,15 @@ final class CommandArgument
         $this->mode = $mode;
         $this->description = $description;
     }
-    public function getName() : Expr
+    public function getName(): Expr
     {
         return $this->name;
     }
-    public function getMode() : Expr
+    public function getMode(): Expr
     {
         return $this->mode;
     }
-    public function getDescription() : Expr
+    public function getDescription(): Expr
     {
         return $this->description;
     }

@@ -55,7 +55,7 @@ final class AddParamArrayDocblockBasedOnCallableNativeFuncCallRector extends Abs
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add param array docblock based on callable native function call', [new CodeSample(<<<'CODE_SAMPLE'
 function process(array $items): void
@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
@@ -103,14 +103,14 @@ CODE_SAMPLE
             return null;
         }
         $paramsWithType = [];
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use($variableNamesWithArrayType, $node, &$paramsWithType) : ?int {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use ($variableNamesWithArrayType, $node, &$paramsWithType): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$subNode instanceof FuncCall) {
                 return null;
             }
-            if (!$this->isNames($subNode, \array_keys(NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS))) {
+            if (!$this->isNames($subNode, array_keys(NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS))) {
                 return null;
             }
             if ($subNode->isFirstClassCallable()) {
@@ -120,7 +120,7 @@ CODE_SAMPLE
             if ($this->argsAnalyzer->hasNamedArg($args)) {
                 return null;
             }
-            if (\count($args) < 2) {
+            if (count($args) < 2) {
                 return null;
             }
             $funcCallName = (string) $this->getName($subNode);
@@ -142,7 +142,7 @@ CODE_SAMPLE
                 return null;
             }
             // no params or more than 2 params
-            if ($callbackArgValue->params === [] || \count($callbackArgValue->params) > 2) {
+            if ($callbackArgValue->params === [] || count($callbackArgValue->params) > 2) {
                 return null;
             }
             foreach ($callbackArgValue->params as $callbackArgValueParam) {
@@ -166,12 +166,12 @@ CODE_SAMPLE
             if ($paramType instanceof MixedType) {
                 return null;
             }
-            $paramsWithType[$this->getName($paramToUpdate)] = \array_unique(\array_merge($paramsWithType[$this->getName($paramToUpdate)] ?? [], [$paramType]), \SORT_REGULAR);
+            $paramsWithType[$this->getName($paramToUpdate)] = array_unique(array_merge($paramsWithType[$this->getName($paramToUpdate)] ?? [], [$paramType]), \SORT_REGULAR);
             return null;
         });
         $hasChanged = \false;
         foreach ($paramsWithType as $paramName => $type) {
-            $type = \count($type) > 1 ? TypeCombinator::union(...$type) : \current($type);
+            $type = count($type) > 1 ? TypeCombinator::union(...$type) : current($type);
             /** @var Param $paramByName */
             $paramByName = $this->getParamByName($node, $paramName);
             $this->phpDocTypeChanger->changeParamType($node, $phpDocInfo, new ArrayType(new MixedType(), $type), $paramByName, $paramName);
@@ -185,7 +185,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function getParamByName($node, string $paramName) : ?Param
+    private function getParamByName($node, string $paramName): ?Param
     {
         foreach ($node->params as $param) {
             if ($this->isName($param, $paramName)) {
@@ -198,7 +198,7 @@ CODE_SAMPLE
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function collectVariableNamesWithArrayType($node, PhpDocInfo $phpDocInfo) : array
+    private function collectVariableNamesWithArrayType($node, PhpDocInfo $phpDocInfo): array
     {
         $variableNamesWithArrayType = [];
         foreach ($node->params as $param) {

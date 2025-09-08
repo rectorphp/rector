@@ -19,7 +19,7 @@ final class OverrideByParentClassGuard
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isLegal(Class_ $class) : bool
+    public function isLegal(Class_ $class): bool
     {
         if ($class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString())) {
             return \false;

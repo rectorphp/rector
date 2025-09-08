@@ -23,15 +23,15 @@ final class CacheFilePaths
         $this->secondDirectory = $secondDirectory;
         $this->filePath = $filePath;
     }
-    public function getFirstDirectory() : string
+    public function getFirstDirectory(): string
     {
         return $this->firstDirectory;
     }
-    public function getSecondDirectory() : string
+    public function getSecondDirectory(): string
     {
         return $this->secondDirectory;
     }
-    public function getFilePath() : string
+    public function getFilePath(): string
     {
         return $this->filePath;
     }

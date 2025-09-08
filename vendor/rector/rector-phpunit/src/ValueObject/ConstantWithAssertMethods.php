@@ -23,15 +23,15 @@ final class ConstantWithAssertMethods
         $this->assetMethodName = $assetMethodName;
         $this->notAssertMethodName = $notAssertMethodName;
     }
-    public function getConstant() : string
+    public function getConstant(): string
     {
         return $this->constant;
     }
-    public function getAssetMethodName() : string
+    public function getAssetMethodName(): string
     {
         return $this->assetMethodName;
     }
-    public function getNotAssertMethodName() : string
+    public function getNotAssertMethodName(): string
     {
         return $this->notAssertMethodName;
     }

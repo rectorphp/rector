@@ -81,7 +81,7 @@ trait EventEmitterTrait
             $this->onceListeners = [];
         }
     }
-    public function listeners($event = null) : array
+    public function listeners($event = null): array
     {
         if ($event === null) {
             $events = [];

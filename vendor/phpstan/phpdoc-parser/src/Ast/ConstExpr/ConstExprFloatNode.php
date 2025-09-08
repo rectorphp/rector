@@ -12,7 +12,7 @@ class ConstExprFloatNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExp
     {
         $this->value = $value;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->value;
     }

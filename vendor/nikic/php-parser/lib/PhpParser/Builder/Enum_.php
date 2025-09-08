@@ -79,7 +79,7 @@ class Enum_ extends \PhpParser\Builder\Declaration
         } elseif ($stmt instanceof Stmt\ClassConst) {
             $this->constants[] = $stmt;
         } else {
-            throw new \LogicException(\sprintf('Unexpected node of type "%s"', $stmt->getType()));
+            throw new \LogicException(sprintf('Unexpected node of type "%s"', $stmt->getType()));
         }
         return $this;
     }
@@ -100,8 +100,8 @@ class Enum_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Enum_ The built enum node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
-        return new Stmt\Enum_($this->name, ['scalarType' => $this->scalarType, 'implements' => $this->implements, 'stmts' => \array_merge($this->uses, $this->enumCases, $this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new Stmt\Enum_($this->name, ['scalarType' => $this->scalarType, 'implements' => $this->implements, 'stmts' => array_merge($this->uses, $this->enumCases, $this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

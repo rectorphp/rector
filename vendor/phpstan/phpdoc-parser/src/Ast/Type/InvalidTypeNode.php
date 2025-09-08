@@ -14,11 +14,11 @@ class InvalidTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $this->exceptionArgs = [$exception->getCurrentTokenValue(), $exception->getCurrentTokenType(), $exception->getCurrentOffset(), $exception->getExpectedTokenType(), $exception->getExpectedTokenValue(), $exception->getCurrentTokenLine()];
     }
-    public function getException() : ParserException
+    public function getException(): ParserException
     {
         return new ParserException(...$this->exceptionArgs);
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return '*Invalid type*';
     }

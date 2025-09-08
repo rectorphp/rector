@@ -23,21 +23,21 @@ final class CombinedAssignRector extends AbstractRector
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify $value = $value + 5; assignments to shorter ones', [new CodeSample('$value = $value + 5;', '$value += 5;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->expr instanceof BinaryOp) {
             return null;

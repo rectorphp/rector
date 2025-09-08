@@ -23,7 +23,7 @@ final class RemoveNullsafeOnCollectionRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove nullsafe check on method call on a Collection type', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -53,14 +53,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [NullsafeMethodCall::class];
     }
     /**
      * @param NullsafeMethodCall $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         if (!$this->collectionTypeDetector->isCollectionNonNullableType($node->var)) {
             return null;

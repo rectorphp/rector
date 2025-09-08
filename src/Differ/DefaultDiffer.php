@@ -16,7 +16,7 @@ final class DefaultDiffer
         $strictUnifiedDiffOutputBuilder = new StrictUnifiedDiffOutputBuilder(['fromFile' => 'Original', 'toFile' => 'New']);
         $this->differ = new Differ($strictUnifiedDiffOutputBuilder);
     }
-    public function diff(string $old, string $new) : string
+    public function diff(string $old, string $new): string
     {
         return $this->differ->diff($old, $new);
     }

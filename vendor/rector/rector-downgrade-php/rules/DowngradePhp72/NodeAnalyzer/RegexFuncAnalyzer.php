@@ -22,7 +22,7 @@ final class RegexFuncAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function matchRegexFuncCall(FuncCall $funcCall) : ?FuncCall
+    public function matchRegexFuncCall(FuncCall $funcCall): ?FuncCall
     {
         if ($this->nodeNameResolver->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
             return $funcCall;
@@ -35,7 +35,7 @@ final class RegexFuncAnalyzer
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
         $variableType = $scope->getType($variable);
         foreach ($variableType->getConstantStrings() as $constantStringType) {
-            if (\in_array($constantStringType->getValue(), self::REGEX_FUNCTION_NAMES, \true)) {
+            if (in_array($constantStringType->getValue(), self::REGEX_FUNCTION_NAMES, \true)) {
                 return $funcCall;
             }
         }

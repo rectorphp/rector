@@ -25,17 +25,17 @@ final class NodeComparator
      * Removes all comments from both nodes
      * @param Node|Node[]|null $node
      */
-    public function printWithoutComments($node) : string
+    public function printWithoutComments($node): string
     {
         $node = $this->commentRemover->removeFromNode($node);
         $content = $this->betterStandardPrinter->print($node);
-        return \trim($content);
+        return trim($content);
     }
     /**
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
-    public function areNodesEqual($firstNode, $secondNode) : bool
+    public function areNodesEqual($firstNode, $secondNode): bool
     {
         if ($firstNode instanceof Node && !$secondNode instanceof Node) {
             return \false;
@@ -43,13 +43,13 @@ final class NodeComparator
         if (!$firstNode instanceof Node && $secondNode instanceof Node) {
             return \false;
         }
-        if (\is_array($firstNode) && !\is_array($secondNode)) {
+        if (is_array($firstNode) && !is_array($secondNode)) {
             return \false;
         }
-        if (!\is_array($secondNode)) {
+        if (!is_array($secondNode)) {
             return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
         }
-        if (\is_array($firstNode)) {
+        if (is_array($firstNode)) {
             return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
         }
         return \false;
@@ -58,7 +58,7 @@ final class NodeComparator
      * @api
      * @param Node[] $availableNodes
      */
-    public function isNodeEqual(Node $singleNode, array $availableNodes) : bool
+    public function isNodeEqual(Node $singleNode, array $availableNodes): bool
     {
         foreach ($availableNodes as $availableNode) {
             if ($this->areNodesEqual($singleNode, $availableNode)) {
@@ -70,13 +70,13 @@ final class NodeComparator
     /**
      * Checks even clone nodes
      */
-    public function areSameNode(Node $firstNode, Node $secondNode) : bool
+    public function areSameNode(Node $firstNode, Node $secondNode): bool
     {
         if ($firstNode === $secondNode) {
             return \true;
         }
-        $firstClass = \get_class($firstNode);
-        $secondClass = \get_class($secondNode);
+        $firstClass = get_class($firstNode);
+        $secondClass = get_class($secondNode);
         if ($firstClass !== $secondClass) {
             return \false;
         }

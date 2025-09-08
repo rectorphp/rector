@@ -26,7 +26,7 @@ final class NodeTransformer
      * @var string
      * @see https://regex101.com/r/XFc3qA/1
      */
-    private const PERCENT_TEXT_REGEX = '#^%\\w$#';
+    private const PERCENT_TEXT_REGEX = '#^%\w$#';
     /**
      * @api used in phpunit symfony
      *
@@ -36,7 +36,7 @@ final class NodeTransformer
      * to:
      * - ["Hi %s", $name]
      */
-    public function transformSprintfToArray(FuncCall $sprintfFuncCall) : ?Array_
+    public function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
     {
         $sprintfStringAndArgs = $this->splitMessageAndArgs($sprintfFuncCall);
         if (!$sprintfStringAndArgs instanceof SprintfStringAndArgs) {
@@ -49,7 +49,7 @@ final class NodeTransformer
         foreach ($messageParts as $messagePart) {
             if (StringUtils::isMatch($messagePart, self::PERCENT_TEXT_REGEX)) {
                 /** @var Expr $messagePartNode */
-                $messagePartNode = \array_shift($arrayItems);
+                $messagePartNode = array_shift($arrayItems);
             } else {
                 $messagePartNode = new String_($messagePart);
             }
@@ -60,7 +60,7 @@ final class NodeTransformer
     /**
      * @return Expression[]
      */
-    public function transformArrayToYields(Array_ $array) : array
+    public function transformArrayToYields(Array_ $array): array
     {
         $yields = [];
         foreach ($array->items as $arrayItem) {
@@ -77,7 +77,7 @@ final class NodeTransformer
     /**
      * @api symfony
      */
-    public function transformConcatToStringArray(Concat $concat) : Array_
+    public function transformConcatToStringArray(Concat $concat): Array_
     {
         $arrayItems = $this->transformConcatToItems($concat);
         $expr = BuilderHelpers::normalizeValue($arrayItems);
@@ -86,7 +86,7 @@ final class NodeTransformer
         }
         return $expr;
     }
-    private function splitMessageAndArgs(FuncCall $sprintfFuncCall) : ?SprintfStringAndArgs
+    private function splitMessageAndArgs(FuncCall $sprintfFuncCall): ?SprintfStringAndArgs
     {
         $stringArgument = null;
         $arrayItems = [];
@@ -111,23 +111,23 @@ final class NodeTransformer
     /**
      * @return string[]
      */
-    private function splitBySpace(string $value) : array
+    private function splitBySpace(string $value): array
     {
-        $value = \str_getcsv($value, ' ', '"', '\\');
-        return \array_filter($value);
+        $value = str_getcsv($value, ' ', '"', '\\');
+        return array_filter($value);
     }
     /**
      * @return mixed[]
      */
-    private function transformConcatToItems(Concat $concat) : array
+    private function transformConcatToItems(Concat $concat): array
     {
         $arrayItems = $this->transformConcatItemToArrayItems($concat->left);
-        return \array_merge($arrayItems, $this->transformConcatItemToArrayItems($concat->right));
+        return array_merge($arrayItems, $this->transformConcatItemToArrayItems($concat->right));
     }
     /**
      * @return mixed[]|Expr[]|String_[]
      */
-    private function transformConcatItemToArrayItems(Expr $expr) : array
+    private function transformConcatItemToArrayItems(Expr $expr): array
     {
         if ($expr instanceof Concat) {
             return $this->transformConcatToItems($expr);
@@ -138,7 +138,7 @@ final class NodeTransformer
         $arrayItems = [];
         $parts = $this->splitBySpace($expr->value);
         foreach ($parts as $part) {
-            if (\trim($part) !== '') {
+            if (trim($part) !== '') {
                 $arrayItems[] = new String_($part);
             }
         }

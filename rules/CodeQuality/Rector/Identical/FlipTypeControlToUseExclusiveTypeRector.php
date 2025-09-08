@@ -36,7 +36,7 @@ final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Flip type control from null compare to use exclusive instanceof object', [new CodeSample(<<<'CODE_SAMPLE'
 function process(?DateTime $dateTime)
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class, NotIdentical::class];
     }
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $expr = $this->matchNullComparedExpr($node);
         if (!$expr instanceof Expr) {
@@ -94,7 +94,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
      */
-    private function matchNullComparedExpr($binaryOp) : ?Expr
+    private function matchNullComparedExpr($binaryOp): ?Expr
     {
         if ($this->valueResolver->isNull($binaryOp->left)) {
             return $binaryOp->right;

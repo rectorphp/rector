@@ -30,7 +30,7 @@ final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRe
     {
         $this->attributePresenceDetector = $attributePresenceDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow #[Security] attribute with inner single "is_granted/has_role" condition string to #[IsGranted] attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -50,14 +50,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [AttributeGroup::class];
     }
     /**
      * @param AttributeGroup $node
      */
-    public function refactor(Node $node) : ?AttributeGroup
+    public function refactor(Node $node): ?AttributeGroup
     {
         if (!$this->attributePresenceDetector->detect(SensioAttribute::SECURITY)) {
             return null;
@@ -70,7 +70,7 @@ CODE_SAMPLE
             if (!$firstArgValue instanceof String_) {
                 continue;
             }
-            $matches = Strings::match($firstArgValue->value, '#^(is_granted|has_role)\\(\'(?<access_right>[A-Za-z_]+)\'\\)$#');
+            $matches = Strings::match($firstArgValue->value, '#^(is_granted|has_role)\(\'(?<access_right>[A-Za-z_]+)\'\)$#');
             if (!isset($matches['access_right'])) {
                 continue;
             }

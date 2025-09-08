@@ -24,25 +24,25 @@ final class ProcessPool
     {
         $this->tcpServer = $tcpServer;
     }
-    public function getProcess(string $identifier) : ParallelProcess
+    public function getProcess(string $identifier): ParallelProcess
     {
         if (!\array_key_exists($identifier, $this->processes)) {
             throw new ParallelShouldNotHappenException(\sprintf('Process "%s" not found.', $identifier));
         }
         return $this->processes[$identifier];
     }
-    public function attachProcess(string $identifier, ParallelProcess $parallelProcess) : void
+    public function attachProcess(string $identifier, ParallelProcess $parallelProcess): void
     {
         $this->processes[$identifier] = $parallelProcess;
     }
-    public function tryQuitProcess(string $identifier) : void
+    public function tryQuitProcess(string $identifier): void
     {
         if (!\array_key_exists($identifier, $this->processes)) {
             return;
         }
         $this->quitProcess($identifier);
     }
-    public function quitProcess(string $identifier) : void
+    public function quitProcess(string $identifier): void
     {
         $parallelProcess = $this->getProcess($identifier);
         $parallelProcess->quit();
@@ -52,7 +52,7 @@ final class ProcessPool
         }
         $this->tcpServer->close();
     }
-    public function quitAll() : void
+    public function quitAll(): void
     {
         foreach (\array_keys($this->processes) as $identifier) {
             $this->quitProcess($identifier);

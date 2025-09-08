@@ -42,7 +42,7 @@ final class VariableRenamer
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function renameVariableInFunctionLike(FunctionLike $functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : bool
+    public function renameVariableInFunctionLike(FunctionLike $functionLike, string $oldName, string $expectedName, ?Assign $assign = null): bool
     {
         $isRenamingActive = \false;
         if (!$assign instanceof Assign) {
@@ -51,7 +51,7 @@ final class VariableRenamer
         $hasRenamed = \false;
         $currentStmt = null;
         $currentFunctionLike = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use($oldName, $expectedName, $assign, &$isRenamingActive, &$hasRenamed, &$currentStmt, &$currentFunctionLike) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive, &$hasRenamed, &$currentStmt, &$currentFunctionLike) {
             // skip param names
             if ($node instanceof Param) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -84,7 +84,7 @@ final class VariableRenamer
         });
         return $hasRenamed;
     }
-    private function isParamInParentFunction(Variable $variable, ?FunctionLike $functionLike) : bool
+    private function isParamInParentFunction(Variable $variable, ?FunctionLike $functionLike): bool
     {
         if (!$functionLike instanceof FunctionLike) {
             return \false;
@@ -105,7 +105,7 @@ final class VariableRenamer
         }
         return \false;
     }
-    private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName, ?Stmt $currentStmt) : ?Variable
+    private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName, ?Stmt $currentStmt): ?Variable
     {
         if (!$this->nodeNameResolver->isName($variable, $oldName)) {
             return null;
@@ -118,7 +118,7 @@ final class VariableRenamer
     /**
      * Expression doc block has higher priority
      */
-    private function resolvePhpDocInfo(Variable $variable, ?Stmt $currentStmt) : PhpDocInfo
+    private function resolvePhpDocInfo(Variable $variable, ?Stmt $currentStmt): PhpDocInfo
     {
         if ($currentStmt instanceof Stmt) {
             return $this->phpDocInfoFactory->createFromNodeOrEmpty($currentStmt);

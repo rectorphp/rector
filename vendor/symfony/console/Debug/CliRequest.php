@@ -28,7 +28,7 @@ final class CliRequest extends Request
         parent::__construct(attributes: ['_controller' => \get_class($command->command), '_virtual_type' => 'command'], server: $_SERVER);
     }
     // Methods below allow to populate a profile, thus enable search and filtering
-    public function getUri() : string
+    public function getUri(): string
     {
         if ($this->server->has('SYMFONY_CLI_BINARY_NAME')) {
             $binary = $this->server->get('SYMFONY_CLI_BINARY_NAME') . ' console';
@@ -37,11 +37,11 @@ final class CliRequest extends Request
         }
         return $binary . ' ' . $this->command->input;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->command->isInteractive ? 'INTERACTIVE' : 'BATCH';
     }
-    public function getResponse() : Response
+    public function getResponse(): Response
     {
         return new class($this->command->exitCode) extends Response
         {
@@ -54,13 +54,13 @@ final class CliRequest extends Request
                 $this->exitCode = $exitCode;
                 parent::__construct();
             }
-            public function getStatusCode() : int
+            public function getStatusCode(): int
             {
                 return $this->exitCode;
             }
         };
     }
-    public function getClientIp() : string
+    public function getClientIp(): string
     {
         $application = $this->command->getApplication();
         return $application->getName() . ' ' . $application->getVersion();

@@ -26,7 +26,7 @@ final class RemoveDuplicatedCaseInSwitchRector extends AbstractRector
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('2 following switch keys with identical  will be reduced to one result', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -68,16 +68,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (\count($node->cases) < 2) {
+        if (count($node->cases) < 2) {
             return null;
         }
         $this->hasChanged = \false;
@@ -87,14 +87,14 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function removeDuplicatedCases(Switch_ $switch) : void
+    private function removeDuplicatedCases(Switch_ $switch): void
     {
         /** @var Case_[] */
         $result = [];
         /** @var int[] */
         $processedCasesKeys = [];
         foreach ($switch->cases as $outerCaseKey => $outerCase) {
-            if (\in_array($outerCaseKey, $processedCasesKeys)) {
+            if (in_array($outerCaseKey, $processedCasesKeys)) {
                 continue;
             }
             $processedCasesKeys[] = $outerCaseKey;
@@ -107,7 +107,7 @@ CODE_SAMPLE
             /** @var Case_[] */
             $equalCases = [];
             foreach ($switch->cases as $innerCaseKey => $innerCase) {
-                if (\in_array($innerCaseKey, $processedCasesKeys)) {
+                if (in_array($innerCaseKey, $processedCasesKeys)) {
                     continue;
                 }
                 if ($innerCase->stmts === []) {
@@ -130,13 +130,13 @@ CODE_SAMPLE
                 continue;
             }
             $this->hasChanged = \true;
-            $equalCases[\array_key_last($equalCases)]->stmts = $outerCase->stmts;
+            $equalCases[array_key_last($equalCases)]->stmts = $outerCase->stmts;
             $outerCase->stmts = [];
-            $result = \array_merge($result, \array_merge([$outerCase], $equalCases));
+            $result = array_merge($result, array_merge([$outerCase], $equalCases));
         }
         $switch->cases = $result;
     }
-    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextCase) : bool
+    private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $nextCase): bool
     {
         /**
          * Skip multi no stmts
@@ -155,7 +155,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function areSwitchStmtsEqualsConsideringComments(Case_ $currentCase, Case_ $nextCase) : bool
+    private function areSwitchStmtsEqualsConsideringComments(Case_ $currentCase, Case_ $nextCase): bool
     {
         $currentCasePrintResult = $this->betterStandardPrinter->print($currentCase->stmts);
         $nextCasePrintResult = $this->betterStandardPrinter->print($nextCase->stmts);

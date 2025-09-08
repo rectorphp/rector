@@ -26,9 +26,9 @@ final class MessengerHelper
      * @readonly
      */
     private ServiceMapProvider $serviceMapProvider;
-    public const MESSAGE_HANDLER_INTERFACE = 'Symfony\\Component\\Messenger\\Handler\\MessageHandlerInterface';
-    public const MESSAGE_SUBSCRIBER_INTERFACE = 'Symfony\\Component\\Messenger\\Handler\\MessageSubscriberInterface';
-    public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler';
+    public const MESSAGE_HANDLER_INTERFACE = 'Symfony\Component\Messenger\Handler\MessageHandlerInterface';
+    public const MESSAGE_SUBSCRIBER_INTERFACE = 'Symfony\Component\Messenger\Handler\MessageSubscriberInterface';
+    public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\Component\Messenger\Attribute\AsMessageHandler';
     private string $messengerTagName = 'messenger.message_handler';
     /**
      * @var ServiceDefinition[]
@@ -43,7 +43,7 @@ final class MessengerHelper
     /**
      * @return array<string, mixed>
      */
-    public function extractOptionsFromServiceDefinition(ServiceDefinition $serviceDefinition) : array
+    public function extractOptionsFromServiceDefinition(ServiceDefinition $serviceDefinition): array
     {
         $options = [];
         foreach ($serviceDefinition->getTags() as $tag) {
@@ -60,7 +60,7 @@ final class MessengerHelper
     /**
      * @return ServiceDefinition[]
      */
-    public function getHandlersFromServices() : array
+    public function getHandlersFromServices(): array
     {
         if ($this->handlersFromServices !== []) {
             return $this->handlersFromServices;
@@ -78,7 +78,7 @@ final class MessengerHelper
     {
         $args = $this->phpAttributeGroupFactory->createArgsFromItems($options, self::AS_MESSAGE_HANDLER_ATTRIBUTE);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
-        $node->attrGroups = \array_merge($node->attrGroups, [new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)])]);
+        $node->attrGroups = array_merge($node->attrGroups, [new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)])]);
         return $node;
     }
 }

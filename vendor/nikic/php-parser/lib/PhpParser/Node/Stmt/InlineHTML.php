@@ -19,11 +19,11 @@ class InlineHTML extends Stmt
         $this->attributes = $attributes;
         $this->value = $value;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['value'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_InlineHTML';
     }

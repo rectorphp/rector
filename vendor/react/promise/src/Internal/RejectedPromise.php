@@ -39,7 +39,7 @@ final class RejectedPromise implements PromiseInterface
         try {
             $handler($this->reason);
         } catch (\Throwable $e) {
-            \preg_match('/^([^:\\s]++)(.*+)$/sm', (string) $e, $match);
+            \preg_match('/^([^:\s]++)(.*+)$/sm', (string) $e, $match);
             \assert(isset($match[1], $match[2]));
             $message = 'Fatal error: Uncaught ' . $match[1] . ' from unhandled promise rejection handler' . $match[2];
             \error_log($message);
@@ -52,7 +52,7 @@ final class RejectedPromise implements PromiseInterface
      * @param ?(callable(\Throwable): (PromiseInterface<TRejected>|TRejected)) $onRejected
      * @return PromiseInterface<($onRejected is null ? never : TRejected)>
      */
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         if (null === $onRejected) {
             return $this;
@@ -70,7 +70,7 @@ final class RejectedPromise implements PromiseInterface
      * @param callable(TThrowable): (PromiseInterface<TRejected>|TRejected) $onRejected
      * @return PromiseInterface<TRejected>
      */
-    public function catch(callable $onRejected) : PromiseInterface
+    public function catch(callable $onRejected): PromiseInterface
     {
         if (!_checkTypehint($onRejected, $this->reason)) {
             return $this;
@@ -80,15 +80,15 @@ final class RejectedPromise implements PromiseInterface
          */
         return $this->then(null, $onRejected);
     }
-    public function finally(callable $onFulfilledOrRejected) : PromiseInterface
+    public function finally(callable $onFulfilledOrRejected): PromiseInterface
     {
-        return $this->then(null, function (\Throwable $reason) use($onFulfilledOrRejected) : PromiseInterface {
-            return resolve($onFulfilledOrRejected())->then(function () use($reason) : PromiseInterface {
+        return $this->then(null, function (\Throwable $reason) use ($onFulfilledOrRejected): PromiseInterface {
+            return resolve($onFulfilledOrRejected())->then(function () use ($reason): PromiseInterface {
                 return new RejectedPromise($reason);
             });
         });
     }
-    public function cancel() : void
+    public function cancel(): void
     {
         $this->handled = \true;
     }
@@ -96,7 +96,7 @@ final class RejectedPromise implements PromiseInterface
      * @deprecated 3.0.0 Use `catch()` instead
      * @see self::catch()
      */
-    public function otherwise(callable $onRejected) : PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->catch($onRejected);
     }
@@ -104,7 +104,7 @@ final class RejectedPromise implements PromiseInterface
      * @deprecated 3.0.0 Use `always()` instead
      * @see self::always()
      */
-    public function always(callable $onFulfilledOrRejected) : PromiseInterface
+    public function always(callable $onFulfilledOrRejected): PromiseInterface
     {
         return $this->finally($onFulfilledOrRejected);
     }

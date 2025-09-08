@@ -60,7 +60,7 @@ final class AnnotationWithValueToAttributeRector extends AbstractRector implemen
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change annotations with value to attribute', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -81,23 +81,23 @@ final class SomeTest extends TestCase
 {
 }
 CODE_SAMPLE
-, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\\Framework\\Attributes\\BackupGlobals', ['enabled' => \true, 'disabled' => \false])])]);
+, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', ['enabled' => \true, 'disabled' => \false])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -121,9 +121,9 @@ CODE_SAMPLE
                 $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems($annotationWithValueToAttribute->getAttributeClass(), [$attributeValue]);
                 if ($node instanceof ClassMethod && $annotationWithValueToAttribute->getIsOnClassLevel() && $this->currentClass instanceof Class_) {
                     Assert::isInstanceOf($this->currentClass, Class_::class);
-                    $this->currentClass->attrGroups = \array_merge($this->currentClass->attrGroups, [$attributeGroup]);
+                    $this->currentClass->attrGroups = array_merge($this->currentClass->attrGroups, [$attributeGroup]);
                 } else {
-                    $node->attrGroups = \array_merge($node->attrGroups, [$attributeGroup]);
+                    $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);
                 }
                 // cleanup
                 $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
@@ -139,7 +139,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, AnnotationWithValueToAttribute::class);
         $this->annotationWithValueToAttributes = $configuration;
@@ -154,7 +154,7 @@ CODE_SAMPLE
             // no map? convert value as it is
             return $genericTagValueNode->value;
         }
-        $originalValue = \strtolower($genericTagValueNode->value);
+        $originalValue = strtolower($genericTagValueNode->value);
         return $valueMap[$originalValue];
     }
 }

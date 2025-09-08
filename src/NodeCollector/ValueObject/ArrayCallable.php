@@ -26,15 +26,15 @@ final class ArrayCallable
         $this->method = $method;
         RectorAssert::className($class);
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getCallerExpr() : Expr
+    public function getCallerExpr(): Expr
     {
         return $this->callerExpr;
     }

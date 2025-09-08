@@ -25,11 +25,11 @@ final class MigrateQueryBuilderResetQueryPartRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change QueryBuilder::resetQueryPart() to $queryBuilder->reset*()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeRepository
@@ -62,9 +62,9 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Doctrine\\DBAL\\Query\\QueryBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Doctrine\DBAL\Query\QueryBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'resetQueryPart')) {

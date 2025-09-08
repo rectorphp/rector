@@ -20,13 +20,13 @@ final class ArrayDimFetchTypeResolver
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolve(ArrayDimFetch $arrayDimFetch, Assign $assign) : ArrayType
+    public function resolve(ArrayDimFetch $arrayDimFetch, Assign $assign): ArrayType
     {
         $keyStaticType = $this->resolveDimType($arrayDimFetch);
         $valueStaticType = $this->nodeTypeResolver->getType($assign->expr);
         return new ArrayType($keyStaticType, $valueStaticType);
     }
-    private function resolveDimType(ArrayDimFetch $arrayDimFetch) : Type
+    private function resolveDimType(ArrayDimFetch $arrayDimFetch): Type
     {
         if ($arrayDimFetch->dim instanceof Expr) {
             return $this->nodeTypeResolver->getType($arrayDimFetch->dim);

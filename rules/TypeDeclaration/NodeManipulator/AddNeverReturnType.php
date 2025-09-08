@@ -65,7 +65,7 @@ final class AddNeverReturnType
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function shouldSkip($node, Scope $scope) : bool
+    private function shouldSkip($node, Scope $scope): bool
     {
         // already has return type, and non-void
         // it can be "never" return itself, or other return type
@@ -90,14 +90,14 @@ final class AddNeverReturnType
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function hasReturnOrYields($node) : bool
+    private function hasReturnOrYields($node): bool
     {
-        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Return_::class, Yield_::class, YieldFrom::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES));
+        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, array_merge([Return_::class, Yield_::class, YieldFrom::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES));
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function hasNeverNodesOrNeverFuncCalls($node) : bool
+    private function hasNeverNodesOrNeverFuncCalls($node): bool
     {
         $hasNeverNodes = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn(Node $subNode): bool => $subNode instanceof Expression && $subNode->expr instanceof Throw_);
         if ($hasNeverNodes) {

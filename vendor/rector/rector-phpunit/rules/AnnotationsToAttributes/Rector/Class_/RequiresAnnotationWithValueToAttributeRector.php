@@ -52,7 +52,7 @@ final class RequiresAnnotationWithValueToAttributeRector extends AbstractRector 
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change Requires annotations with values to attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -121,18 +121,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -144,7 +144,7 @@ CODE_SAMPLE
                 $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
                 if ($requiresAttributeGroups !== []) {
                     $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-                    $node->attrGroups = \array_merge($node->attrGroups, $requiresAttributeGroups);
+                    $node->attrGroups = array_merge($node->attrGroups, $requiresAttributeGroups);
                     $this->removeMethodRequiresAnnotations($phpDocInfo);
                     $hasChanged = \true;
                 }
@@ -155,7 +155,7 @@ CODE_SAMPLE
                     $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
                     if ($requiresAttributeGroups !== []) {
                         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
-                        $classMethod->attrGroups = \array_merge($classMethod->attrGroups, $requiresAttributeGroups);
+                        $classMethod->attrGroups = array_merge($classMethod->attrGroups, $requiresAttributeGroups);
                         $this->removeMethodRequiresAnnotations($phpDocInfo);
                         $hasChanged = \true;
                     }
@@ -164,55 +164,55 @@ CODE_SAMPLE
         }
         return $hasChanged ? $node : null;
     }
-    private function createAttributeGroup(string $annotationValue) : ?AttributeGroup
+    private function createAttributeGroup(string $annotationValue): ?AttributeGroup
     {
-        $annotationValues = \explode(' ', $annotationValue, 2);
-        $type = \array_shift($annotationValues);
-        $attributeValue = \array_shift($annotationValues);
+        $annotationValues = explode(' ', $annotationValue, 2);
+        $type = array_shift($annotationValues);
+        $attributeValue = array_shift($annotationValues);
         switch ($type) {
             case 'PHP':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresPhp';
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhp';
                 $attributeValue = [$attributeValue];
                 break;
             case 'PHPUnit':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresPhpunit';
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhpunit';
                 $attributeValue = [$attributeValue];
                 break;
             case 'OS':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresOperatingSystem';
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresOperatingSystem';
                 $attributeValue = [$attributeValue];
                 break;
             case 'OSFAMILY':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresOperatingSystemFamily';
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily';
                 $attributeValue = [$attributeValue];
                 break;
             case 'function':
-                if (\strpos((string) $attributeValue, '::') !== \false) {
-                    $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresMethod';
-                    $attributeValue = \explode('::', (string) $attributeValue);
+                if (strpos((string) $attributeValue, '::') !== \false) {
+                    $attributeClass = 'PHPUnit\Framework\Attributes\RequiresMethod';
+                    $attributeValue = explode('::', (string) $attributeValue);
                     $attributeValue[0] .= '::class';
                 } else {
-                    $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresFunction';
+                    $attributeClass = 'PHPUnit\Framework\Attributes\RequiresFunction';
                     $attributeValue = [$attributeValue];
                 }
                 break;
             case 'extension':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresPhpExtension';
-                $attributeValue = \explode(' ', (string) $attributeValue, 2);
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhpExtension';
+                $attributeValue = explode(' ', (string) $attributeValue, 2);
                 break;
             case 'setting':
-                $attributeClass = 'PHPUnit\\Framework\\Attributes\\RequiresSetting';
-                $attributeValue = \explode(' ', (string) $attributeValue, 2);
+                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresSetting';
+                $attributeValue = explode(' ', (string) $attributeValue, 2);
                 break;
             default:
                 return null;
         }
-        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, \array_merge($attributeValue));
+        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, array_merge($attributeValue));
     }
     /**
      * @return array<string, AttributeGroup|null>
      */
-    private function handleRequires(PhpDocInfo $phpDocInfo) : array
+    private function handleRequires(PhpDocInfo $phpDocInfo): array
     {
         $attributeGroups = [];
         $desiredTagValueNodes = $phpDocInfo->getTagsByName('requires');
@@ -226,7 +226,7 @@ CODE_SAMPLE
         }
         return $attributeGroups;
     }
-    private function removeMethodRequiresAnnotations(PhpDocInfo $phpDocInfo) : bool
+    private function removeMethodRequiresAnnotations(PhpDocInfo $phpDocInfo): bool
     {
         $hasChanged = \false;
         $desiredTagValueNodes = $phpDocInfo->getTagsByName('requires');

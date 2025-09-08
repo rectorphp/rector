@@ -55,7 +55,7 @@ final class RemoveNullFromNullableCollectionTypeRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove null from a nullable Collection, as empty ArrayCollection is preferred instead to keep property/class method type strict and always a collection', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -85,7 +85,7 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Property::class];
     }
@@ -100,9 +100,9 @@ CODE_SAMPLE
         }
         return $this->refactorClassMethod($node);
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod): ?\PhpParser\Node\Stmt\ClassMethod
     {
-        if (\count($classMethod->params) !== 1) {
+        if (count($classMethod->params) !== 1) {
             return null;
         }
         // nullable might be on purpose, e.g. via data provider
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorProperty(Property $property) : ?Property
+    private function refactorProperty(Property $property): ?Property
     {
         if ($property->type instanceof NullableType && $this->hasNativeCollectionType($property->type)) {
             // unwrap nullable type
@@ -156,8 +156,8 @@ CODE_SAMPLE
             }
             if ($hasChanged) {
                 // only one type left, lets use it directly
-                if (\count($unionTypeNode->types) === 1) {
-                    $onlyType = \array_pop($unionTypeNode->types);
+                if (count($unionTypeNode->types) === 1) {
+                    $onlyType = array_pop($unionTypeNode->types);
                     $finalType = $onlyType;
                 } else {
                     $finalType = $unionTypeNode;
@@ -179,7 +179,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\NullableType $node
      */
-    private function hasNativeCollectionType($node) : bool
+    private function hasNativeCollectionType($node): bool
     {
         if (!$node->type instanceof Name) {
             return \false;

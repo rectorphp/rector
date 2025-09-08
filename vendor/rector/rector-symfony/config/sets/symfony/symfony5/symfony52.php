@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-form.php');

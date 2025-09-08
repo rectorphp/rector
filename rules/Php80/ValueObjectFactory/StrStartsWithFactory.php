@@ -7,12 +7,12 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFactory
 {
-    public function createFromFuncCall(FuncCall $funcCall, bool $isPositive) : ?StrStartsWith
+    public function createFromFuncCall(FuncCall $funcCall, bool $isPositive): ?StrStartsWith
     {
         if ($funcCall->isFirstClassCallable()) {
             return null;
         }
-        if (\count($funcCall->getArgs()) < 2) {
+        if (count($funcCall->getArgs()) < 2) {
             return null;
         }
         $haystack = $funcCall->getArgs()[0]->value;

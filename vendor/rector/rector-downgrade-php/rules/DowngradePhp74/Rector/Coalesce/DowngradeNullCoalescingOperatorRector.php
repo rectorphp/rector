@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullCoalescingOperatorRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove null coalescing operator ??=', [new CodeSample(<<<'CODE_SAMPLE'
 $array = [];
@@ -31,14 +31,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [AssignCoalesce::class];
     }
     /**
      * @param AssignCoalesce $node
      */
-    public function refactor(Node $node) : Assign
+    public function refactor(Node $node): Assign
     {
         return new Assign($node->var, new Coalesce($node->var, $node->expr));
     }

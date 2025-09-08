@@ -36,7 +36,7 @@ final class DowngradeArraySpreadStringKeyRector extends AbstractRector
         $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;
         $this->arraySpreadAnalyzer = $arraySpreadAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace array spread with string key to array_merge function', [new CodeSample(<<<'CODE_SAMPLE'
 $parts = ['a' => 'b'];
@@ -55,14 +55,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($node)) {
             return null;
@@ -74,7 +74,7 @@ CODE_SAMPLE
         $scope = ScopeFetcher::fetch($node);
         return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope);
     }
-    private function shouldSkipArray(Array_ $array) : bool
+    private function shouldSkipArray(Array_ $array): bool
     {
         foreach ($array->items as $item) {
             if (!$item instanceof ArrayItem) {

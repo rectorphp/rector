@@ -23,22 +23,22 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
  */
 final class ObjectTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return ObjectType::class;
     }
     /**
      * @param ObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        $type = TypeTraverser::map($type, static function (Type $type, callable $traverse) : Type {
+        $type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
             if (!$type instanceof ObjectType) {
                 return $traverse($type);
             }
-            $typeClass = \get_class($type);
+            $typeClass = get_class($type);
             // early native ObjectType check
-            if ($typeClass === 'PHPStan\\Type\\ObjectType') {
+            if ($typeClass === 'PHPStan\Type\ObjectType') {
                 return new ObjectType('\\' . $type->getClassName());
             }
             if ($type instanceof FullyQualifiedObjectType) {
@@ -54,7 +54,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if ($type instanceof SelfObjectType) {
             return new Name('self');
@@ -64,7 +64,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
         }
         if ($type instanceof FullyQualifiedObjectType) {
             $className = $type->getClassName();
-            if (\strncmp($className, '\\', \strlen('\\')) === 0) {
+            if (strncmp($className, '\\', strlen('\\')) === 0) {
                 // skip leading \
                 return new FullyQualified(Strings::substring($className, 1));
             }

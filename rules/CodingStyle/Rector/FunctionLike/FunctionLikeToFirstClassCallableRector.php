@@ -22,7 +22,7 @@ use RectorPrefix202509\Webmozart\Assert\Assert;
  */
 final class FunctionLikeToFirstClassCallableRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('converts function like to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
 function ($parameter) { return Call::to($parameter); }
@@ -32,7 +32,7 @@ Call::to(...);
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrowFunction::class, Closure::class];
     }
@@ -63,7 +63,7 @@ CODE_SAMPLE
             }
             return null;
         }
-        if (\count($node->stmts) != 1 || !$node->getStmts()[0] instanceof Return_) {
+        if (count($node->stmts) != 1 || !$node->getStmts()[0] instanceof Return_) {
             return null;
         }
         $callLike = $node->getStmts()[0]->expr;
@@ -79,14 +79,14 @@ CODE_SAMPLE
      * @param Node\Param[] $params
      * @param Node\Arg[] $args
      */
-    private function sameParamsForArgs(array $params, array $args) : bool
+    private function sameParamsForArgs(array $params, array $args): bool
     {
         Assert::allIsInstanceOf($args, Arg::class);
         Assert::allIsInstanceOf($params, Param::class);
-        if (\count($args) > \count($params)) {
+        if (count($args) > count($params)) {
             return \false;
         }
-        if (\count($args) === 1 && $args[0]->unpack) {
+        if (count($args) === 1 && $args[0]->unpack) {
             return $params[0]->variadic;
         }
         foreach ($args as $key => $arg) {
@@ -102,13 +102,13 @@ CODE_SAMPLE
      * @param Param[] $params
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
      */
-    private function isNonDependantMethod($expr, array $params) : bool
+    private function isNonDependantMethod($expr, array $params): bool
     {
         Assert::allIsInstanceOf($params, Param::class);
         $found = \false;
         foreach ($params as $param) {
             if ($expr instanceof MethodCall) {
-                $this->traverseNodesWithCallable($expr->var, function (Node $node) use($param, &$found) {
+                $this->traverseNodesWithCallable($expr->var, function (Node $node) use ($param, &$found) {
                     if ($this->nodeComparator->areNodesEqual($node, $param->var)) {
                         $found = \true;
                     }
@@ -116,7 +116,7 @@ CODE_SAMPLE
                 });
             }
             if ($expr instanceof StaticCall) {
-                $this->traverseNodesWithCallable($expr->class, function (Node $node) use($param, &$found) {
+                $this->traverseNodesWithCallable($expr->class, function (Node $node) use ($param, &$found) {
                     if ($this->nodeComparator->areNodesEqual($node, $param->var)) {
                         $found = \true;
                     }
@@ -132,7 +132,7 @@ CODE_SAMPLE
     /**
      * @param Param[] $params
      */
-    private function notUsingByRef(array $params) : bool
+    private function notUsingByRef(array $params): bool
     {
         Assert::allIsInstanceOf($params, Param::class);
         foreach ($params as $param) {
@@ -145,7 +145,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function notUsingNamedArgs(array $args) : bool
+    private function notUsingNamedArgs(array $args): bool
     {
         Assert::allIsInstanceOf($args, Arg::class);
         foreach ($args as $arg) {

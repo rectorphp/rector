@@ -24,7 +24,7 @@ final class DoctrineAnnotationFactory
     /**
      * @api downgrade
      */
-    public function createFromAttribute(Attribute $attribute, string $className) : DoctrineAnnotationTagValueNode
+    public function createFromAttribute(Attribute $attribute, string $className): DoctrineAnnotationTagValueNode
     {
         $items = $this->createItemsFromArgs($attribute->args);
         $identifierTypeNode = new IdentifierTypeNode($className);
@@ -34,7 +34,7 @@ final class DoctrineAnnotationFactory
      * @param Arg[] $args
      * @return mixed[]
      */
-    private function createItemsFromArgs(array $args) : array
+    private function createItemsFromArgs(array $args): array
     {
         $items = [];
         foreach ($args as $arg) {

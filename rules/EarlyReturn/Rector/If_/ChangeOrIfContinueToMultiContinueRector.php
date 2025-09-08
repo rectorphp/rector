@@ -25,7 +25,7 @@ final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
     {
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `if a || b` to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
@@ -75,7 +75,7 @@ CODE_SAMPLE
      * @param If_ $node
      * @return null|If_[]
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if (!$this->ifManipulator->isIfWithOnly($node, Continue_::class)) {
             return null;
@@ -88,7 +88,7 @@ CODE_SAMPLE
     /**
      * @return null|If_[]
      */
-    private function processMultiIfContinue(If_ $if) : ?array
+    private function processMultiIfContinue(If_ $if): ?array
     {
         $node = clone $if;
         /** @var Continue_ $continue */
@@ -105,10 +105,10 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs) : array
+    private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs): array
     {
         while ($expr instanceof BooleanOr) {
-            $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $continue, $ifs));
+            $ifs = array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $continue, $ifs));
             $ifs[] = new If_($expr->right, ['stmts' => [$continue]]);
             $expr = $expr->right;
         }
@@ -120,7 +120,7 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs): array
     {
         $left = $booleanOr->left;
         if (!$left instanceof BooleanOr) {

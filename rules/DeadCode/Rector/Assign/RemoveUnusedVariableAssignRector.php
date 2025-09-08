@@ -56,7 +56,7 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused assigns to variables', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -80,7 +80,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
@@ -124,23 +124,23 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function cleanCastedExpr(Expr $expr) : Expr
+    private function cleanCastedExpr(Expr $expr): Expr
     {
         if (!$expr instanceof Cast) {
             return $expr;
         }
         return $this->cleanCastedExpr($expr->expr);
     }
-    private function hasCallLikeInAssignExpr(Expr $expr) : bool
+    private function hasCallLikeInAssignExpr(Expr $expr): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->sideEffectNodeDetector->detectCallExpr($subNode));
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function shouldSkip(array $stmts) : bool
+    private function shouldSkip(array $stmts): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node): bool {
             if ($node instanceof Include_) {
                 return \true;
             }
@@ -154,7 +154,7 @@ CODE_SAMPLE
      * @param array<int, Stmt> $stmts
      * @return array<int, string>
      */
-    private function resolvedAssignedVariablesByStmtPosition(array $stmts) : array
+    private function resolvedAssignedVariablesByStmtPosition(array $stmts): array
     {
         $assignedVariableNamesByStmtPosition = [];
         $refVariableNames = [];
@@ -173,7 +173,7 @@ CODE_SAMPLE
                 continue;
             }
             $variableName = $this->getName($assign->var);
-            if (!\is_string($variableName)) {
+            if (!is_string($variableName)) {
                 continue;
             }
             if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
@@ -189,7 +189,7 @@ CODE_SAMPLE
     /**
      * @param string[] $refVariableNames
      */
-    private function shouldSkipVariable(Variable $variable, string $variableName, array $refVariableNames) : bool
+    private function shouldSkipVariable(Variable $variable, string $variableName, array $refVariableNames): bool
     {
         if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return \true;
@@ -197,6 +197,6 @@ CODE_SAMPLE
         if ($this->variableAnalyzer->isUsedByReference($variable)) {
             return \true;
         }
-        return \in_array($variableName, $refVariableNames, \true);
+        return in_array($variableName, $refVariableNames, \true);
     }
 }

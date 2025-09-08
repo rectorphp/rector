@@ -12,7 +12,7 @@ final class SymfonyRouteTagValueNodeFactory
     /**
      * @param ArrayItemNode[] $arrayItemNodes
      */
-    public function createFromItems(array $arrayItemNodes) : DoctrineAnnotationTagValueNode
+    public function createFromItems(array $arrayItemNodes): DoctrineAnnotationTagValueNode
     {
         $identifierTypeNode = new IdentifierTypeNode(SymfonyAnnotation::ROUTE);
         return new DoctrineAnnotationTagValueNode($identifierTypeNode, null, $arrayItemNodes, 'path');

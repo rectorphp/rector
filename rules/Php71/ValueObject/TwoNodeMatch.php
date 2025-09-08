@@ -19,11 +19,11 @@ final class TwoNodeMatch
         $this->firstExpr = $firstExpr;
         $this->secondExpr = $secondExpr;
     }
-    public function getFirstExpr() : Expr
+    public function getFirstExpr(): Expr
     {
         return $this->firstExpr;
     }
-    public function getSecondExpr() : Expr
+    public function getSecondExpr(): Expr
     {
         return $this->secondExpr;
     }

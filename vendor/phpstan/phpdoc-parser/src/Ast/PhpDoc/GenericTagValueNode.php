@@ -13,7 +13,7 @@ class GenericTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
     {
         $this->value = $value;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->value;
     }

@@ -44,7 +44,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsS
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         ConstructClassMethodToSetUpTestCaseRector::class,
         AssertSameTrueFalseToAssertTrueFalseRector::class,

@@ -21,7 +21,7 @@ final class DocBlockClassRenamer
     /**
      * @param OldToNewType[] $oldToNewTypes
      */
-    public function renamePhpDocType(PhpDocInfo $phpDocInfo, array $oldToNewTypes, Node $currentPhpNode) : bool
+    public function renamePhpDocType(PhpDocInfo $phpDocInfo, array $oldToNewTypes, Node $currentPhpNode): bool
     {
         if ($oldToNewTypes === []) {
             return \false;

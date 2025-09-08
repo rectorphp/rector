@@ -16,7 +16,7 @@ final class NamedArgsFactory
      * @param array<string|int, mixed|Expr> $values
      * @return list<Arg>
      */
-    public function createFromValues(array $values) : array
+    public function createFromValues(array $values): array
     {
         $args = [];
         foreach ($values as $key => $argValue) {
@@ -29,7 +29,7 @@ final class NamedArgsFactory
             }
             $expr = BuilderHelpers::normalizeValue($argValue);
             // for named arguments
-            if (!$name instanceof Identifier && \is_string($key)) {
+            if (!$name instanceof Identifier && is_string($key)) {
                 $name = new Identifier($key);
             }
             $this->normalizeStringDoubleQuote($expr);
@@ -37,16 +37,16 @@ final class NamedArgsFactory
         }
         return $args;
     }
-    private function normalizeStringDoubleQuote(Expr $expr) : void
+    private function normalizeStringDoubleQuote(Expr $expr): void
     {
         if (!$expr instanceof String_) {
             return;
         }
         // avoid escaping quotes + preserve newlines
-        if (\strpos($expr->value, "'") === \false) {
+        if (strpos($expr->value, "'") === \false) {
             return;
         }
-        if (\strpos($expr->value, "\n") !== \false) {
+        if (strpos($expr->value, "\n") !== \false) {
             return;
         }
         $expr->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);

@@ -30,14 +30,14 @@ final class IdGeneratorAttributeTransformer implements PropertyAttributeTransfor
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $idMapping = $entityMapping->matchIdPropertyMapping($property);
-        if (!\is_array($idMapping)) {
+        if (!is_array($idMapping)) {
             return \false;
         }
         $generator = $idMapping[EntityMappingKey::GENERATOR] ?? null;
-        if (!\is_array($generator)) {
+        if (!is_array($generator)) {
             return \false;
         }
         // make sure strategy is uppercase as constant value
@@ -46,7 +46,7 @@ final class IdGeneratorAttributeTransformer implements PropertyAttributeTransfor
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::GENERATED_VALUE;
     }
@@ -54,10 +54,10 @@ final class IdGeneratorAttributeTransformer implements PropertyAttributeTransfor
      * @param array<string, mixed> $generator
      * @return array<string, mixed>
      */
-    private function normalizeStrategy(array $generator) : array
+    private function normalizeStrategy(array $generator): array
     {
-        if (isset($generator[EntityMappingKey::STRATEGY]) && \in_array($generator[EntityMappingKey::STRATEGY], self::AVAILABLE_STRATEGIES, \true)) {
-            $generator[EntityMappingKey::STRATEGY] = \strtoupper($generator[EntityMappingKey::STRATEGY]);
+        if (isset($generator[EntityMappingKey::STRATEGY]) && in_array($generator[EntityMappingKey::STRATEGY], self::AVAILABLE_STRATEGIES, \true)) {
+            $generator[EntityMappingKey::STRATEGY] = strtoupper($generator[EntityMappingKey::STRATEGY]);
         }
         return $generator;
     }

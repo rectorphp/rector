@@ -11,17 +11,17 @@ final class ExtensionConfigResolver
      * @api
      * @return string[]
      */
-    public function provide() : array
+    public function provide(): array
     {
         $configFilePaths = [];
-        if (!\class_exists('Rector\\RectorInstaller\\GeneratedConfig')) {
+        if (!class_exists('Rector\RectorInstaller\GeneratedConfig')) {
             return $configFilePaths;
         }
-        $generatedConfigReflectionClass = new ReflectionClass('Rector\\RectorInstaller\\GeneratedConfig');
+        $generatedConfigReflectionClass = new ReflectionClass('Rector\RectorInstaller\GeneratedConfig');
         if ($generatedConfigReflectionClass->getFileName() === \false) {
             return $configFilePaths;
         }
-        $generatedConfigDirectory = \dirname($generatedConfigReflectionClass->getFileName());
+        $generatedConfigDirectory = dirname($generatedConfigReflectionClass->getFileName());
         foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
             /** @var string[] $includedFiles */
             $includedFiles = $extensionConfig['extra']['includes'] ?? [];
@@ -30,7 +30,7 @@ final class ExtensionConfigResolver
                 if ($includedFilePath === null) {
                     /** @var string $installPath */
                     $installPath = $extensionConfig['install_path'];
-                    $includedFilePath = \sprintf('%s/%s', $installPath, $includedFile);
+                    $includedFilePath = sprintf('%s/%s', $installPath, $includedFile);
                 }
                 $configFilePaths[] = $includedFilePath;
             }
@@ -40,16 +40,16 @@ final class ExtensionConfigResolver
     /**
      * @param array<string, mixed> $extensionConfig
      */
-    private function resolveIncludeFilePath(array $extensionConfig, string $generatedConfigDirectory, string $includedFile) : ?string
+    private function resolveIncludeFilePath(array $extensionConfig, string $generatedConfigDirectory, string $includedFile): ?string
     {
         if (!isset($extensionConfig['relative_install_path'])) {
             return null;
         }
-        $includedFilePath = \sprintf('%s/%s/%s', $generatedConfigDirectory, (string) $extensionConfig['relative_install_path'], $includedFile);
-        if (!\file_exists($includedFilePath)) {
+        $includedFilePath = sprintf('%s/%s/%s', $generatedConfigDirectory, (string) $extensionConfig['relative_install_path'], $includedFile);
+        if (!file_exists($includedFilePath)) {
             return null;
         }
-        if (!\is_readable($includedFilePath)) {
+        if (!is_readable($includedFilePath)) {
             return null;
         }
         return $includedFilePath;

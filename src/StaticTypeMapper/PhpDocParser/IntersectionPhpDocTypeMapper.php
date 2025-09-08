@@ -25,14 +25,14 @@ final class IntersectionPhpDocTypeMapper implements PhpDocTypeMapperInterface
     {
         $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return IntersectionTypeNode::class;
     }
     /**
      * @param IntersectionTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         $intersectionedTypes = [];
         foreach ($typeNode->types as $intersectionedTypeNode) {

@@ -39,7 +39,7 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->filePathHelper = $filePathHelper;
         $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
     }
-    public function shouldSkipClassMethod(ClassMethod $classMethod, Scope $scope) : bool
+    public function shouldSkipClassMethod(ClassMethod $classMethod, Scope $scope): bool
     {
         if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
             return \true;
@@ -60,7 +60,7 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         return !$this->isReturnTypeChangeAllowed($classMethod, $scope);
     }
-    private function isReturnTypeChangeAllowed(ClassMethod $classMethod, Scope $scope) : bool
+    private function isReturnTypeChangeAllowed(ClassMethod $classMethod, Scope $scope): bool
     {
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
@@ -94,10 +94,10 @@ final class ClassMethodReturnTypeOverrideGuard
         $currentFileName = $currentClassReflection->getFileName();
         // child (current)
         $normalizedCurrentFileName = $this->filePathHelper->normalizePathAndSchema($currentFileName);
-        $isCurrentInVendor = \strpos($normalizedCurrentFileName, '/vendor/') !== \false;
+        $isCurrentInVendor = strpos($normalizedCurrentFileName, '/vendor/') !== \false;
         // parent
         $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
-        $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
+        $isParentInVendor = strpos($normalizedFileName, '/vendor/') !== \false;
         return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }
 }

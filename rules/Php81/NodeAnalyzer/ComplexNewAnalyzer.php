@@ -19,7 +19,7 @@ final class ComplexNewAnalyzer
     {
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function isDynamic(New_ $new) : bool
+    public function isDynamic(New_ $new): bool
     {
         if (!$new->class instanceof FullyQualified) {
             return \true;
@@ -44,14 +44,14 @@ final class ComplexNewAnalyzer
         }
         return \false;
     }
-    private function isAllowedNew(Expr $expr) : bool
+    private function isAllowedNew(Expr $expr): bool
     {
         if ($expr instanceof New_) {
             return !$this->isDynamic($expr);
         }
         return \false;
     }
-    private function isAllowedArray(Array_ $array) : bool
+    private function isAllowedArray(Array_ $array): bool
     {
         if (!$this->exprAnalyzer->isDynamicArray($array)) {
             return \true;

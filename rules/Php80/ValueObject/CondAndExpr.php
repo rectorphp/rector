@@ -39,14 +39,14 @@ final class CondAndExpr
         $this->matchKind = $matchKind;
         $this->comments = $comments;
     }
-    public function getExpr() : Expr
+    public function getExpr(): Expr
     {
         return $this->expr;
     }
     /**
      * @return Expr[]|null
      */
-    public function getCondExprs() : ?array
+    public function getCondExprs(): ?array
     {
         // internally checked by PHPStan, cannot be empty array
         if ($this->condExprs === []) {
@@ -55,26 +55,26 @@ final class CondAndExpr
         if ($this->condExprs === null) {
             return null;
         }
-        return \array_values($this->condExprs);
+        return array_values($this->condExprs);
     }
     /**
      * @return MatchKind::*
      */
-    public function getMatchKind() : string
+    public function getMatchKind(): string
     {
         return $this->matchKind;
     }
     /**
      * @param MatchKind::* $matchKind
      */
-    public function equalsMatchKind(string $matchKind) : bool
+    public function equalsMatchKind(string $matchKind): bool
     {
         return $this->matchKind === $matchKind;
     }
     /**
      * @return Comment[]
      */
-    public function getComments() : array
+    public function getComments(): array
     {
         return $this->comments;
     }

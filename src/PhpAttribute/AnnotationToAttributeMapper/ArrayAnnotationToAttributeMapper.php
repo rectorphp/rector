@@ -28,21 +28,21 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
     {
         $this->valueResolver = $valueResolver;
     }
-    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper): void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
-        return \is_array($value);
+        return is_array($value);
     }
     /**
      * @param mixed[] $value
      */
-    public function map($value) : Expr
+    public function map($value): Expr
     {
         $arrayItems = [];
         foreach ($value as $key => $singleValue) {
@@ -60,7 +60,7 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
                 $arrayItems[] = $this->resolveValueExprWithSingleQuoteHandling($valueExpr);
             } else {
                 $keyExpr = null;
-                if (!\is_int($key)) {
+                if (!is_int($key)) {
                     $keyExpr = $this->annotationToAttributeMapper->map($key);
                     Assert::isInstanceOf($keyExpr, Expr::class);
                 }
@@ -69,9 +69,9 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
         }
         return new Array_($arrayItems);
     }
-    private function resolveValueExprWithSingleQuoteHandling(ArrayItem $arrayItem) : ArrayItem
+    private function resolveValueExprWithSingleQuoteHandling(ArrayItem $arrayItem): ArrayItem
     {
-        if (!$arrayItem->key instanceof Expr && $arrayItem->value instanceof ClassConstFetch && $arrayItem->value->class instanceof Name && \strpos((string) $arrayItem->value->class, "'") !== \false) {
+        if (!$arrayItem->key instanceof Expr && $arrayItem->value instanceof ClassConstFetch && $arrayItem->value->class instanceof Name && strpos((string) $arrayItem->value->class, "'") !== \false) {
             $arrayItem->value = new String_($this->valueResolver->getValue($arrayItem->value));
             return $arrayItem;
         }
@@ -80,11 +80,11 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
     /**
      * @param mixed $value
      */
-    private function isRemoveArrayPlaceholder($value) : bool
+    private function isRemoveArrayPlaceholder($value): bool
     {
-        if (!\is_array($value)) {
+        if (!is_array($value)) {
             return \false;
         }
-        return \in_array(DocTagNodeState::REMOVE_ARRAY, $value, \true);
+        return in_array(DocTagNodeState::REMOVE_ARRAY, $value, \true);
     }
 }

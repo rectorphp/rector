@@ -23,7 +23,7 @@ class CallableTypeParameterNode implements Node
         $this->parameterName = $parameterName;
         $this->isOptional = $isOptional;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $type = "{$this->type} ";
         $isReference = $this->isReference ? '&' : '';

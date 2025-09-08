@@ -55,7 +55,7 @@ final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move metadata from loadValidatorMetadata() to property/getter/method annotations', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Validator\Constraints as Assert;
@@ -90,14 +90,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $loadValidatorMetadataClassMethod = $node->getMethod('loadValidatorMetadata');
         if (!$loadValidatorMetadataClassMethod instanceof ClassMethod) {
@@ -130,7 +130,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorClassMethodAndAnnotation(Class_ $class, ClassMethodAndAnnotation $classMethodAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
+    private function refactorClassMethodAndAnnotation(Class_ $class, ClassMethodAndAnnotation $classMethodAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
     {
         foreach ($classMethodAndAnnotation->getPossibleMethodNames() as $possibleMethodName) {
             $classMethod = $class->getMethod($possibleMethodName);
@@ -143,7 +143,7 @@ CODE_SAMPLE
             unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
         }
     }
-    private function refactorPropertyAndAnnotation(Class_ $class, PropertyAndAnnotation $propertyAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
+    private function refactorPropertyAndAnnotation(Class_ $class, PropertyAndAnnotation $propertyAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
     {
         $property = $class->getProperty($propertyAndAnnotation->getProperty());
         if (!$property instanceof Property) {
@@ -154,7 +154,7 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
         unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
     }
-    private function refactorClassAnnotation(Class_ $class, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
+    private function refactorClassAnnotation(Class_ $class, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
     {
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $classPhpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);

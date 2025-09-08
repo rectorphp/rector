@@ -21,11 +21,11 @@ final class RenameAttribute
         $this->oldAttribute = $oldAttribute;
         $this->newAttribute = $newAttribute;
     }
-    public function getOldAttribute() : string
+    public function getOldAttribute(): string
     {
         return $this->oldAttribute;
     }
-    public function getNewAttribute() : string
+    public function getNewAttribute(): string
     {
         return $this->newAttribute;
     }

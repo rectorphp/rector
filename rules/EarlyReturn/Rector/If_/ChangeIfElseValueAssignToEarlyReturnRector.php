@@ -34,7 +34,7 @@ final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
         $this->ifManipulator = $ifManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change if/else value to early return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -68,14 +68,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         if ($node->stmts === null) {
             return null;
@@ -95,7 +95,7 @@ CODE_SAMPLE
             if (!$this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($if, $stmt->expr)) {
                 continue;
             }
-            $lastIfStmtKey = \array_key_last($if->stmts);
+            $lastIfStmtKey = array_key_last($if->stmts);
             /** @var Assign $assign */
             $assign = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
             $returnLastIf = new Return_($assign->expr);
@@ -110,9 +110,9 @@ CODE_SAMPLE
             $this->mirrorComments($stmt, $assign);
             $if->else = null;
             $stmt->expr = $assign->expr;
-            $lastStmt = \array_pop($node->stmts);
-            $elseStmtsExceptLast = \array_slice($elseStmts, 0, -1);
-            $node->stmts = \array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
+            $lastStmt = array_pop($node->stmts);
+            $elseStmtsExceptLast = array_slice($elseStmts, 0, -1);
+            $node->stmts = array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
             return $node;
         }
         return null;

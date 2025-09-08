@@ -18,11 +18,11 @@ final class ClassNameAndFilePath
         $this->className = $className;
         $this->filePath = $filePath;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }
-    public function getFilePath() : string
+    public function getFilePath(): string
     {
         return $this->filePath;
     }

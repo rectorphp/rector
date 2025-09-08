@@ -20,7 +20,7 @@ final class TestClassSuffixesConfig
     /**
      * @return string[]
      */
-    public function getSuffixes() : array
+    public function getSuffixes(): array
     {
         return $this->suffixes;
     }

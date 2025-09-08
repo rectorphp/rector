@@ -64,7 +64,7 @@ final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
      * @see https://regex101.com/r/hW09Vt/1
      * @var string
      */
-    private const METHOD_NAME_REGEX = '#^(?<method_name>\\w+)(\\(\\))?#';
+    private const METHOD_NAME_REGEX = '#^(?<method_name>\w+)(\(\))?#';
     public function __construct(TypeFactory $typeFactory, TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper)
     {
         $this->typeFactory = $typeFactory;
@@ -73,7 +73,7 @@ final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(self::ERROR_MESSAGE, [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -116,14 +116,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -153,7 +153,7 @@ CODE_SAMPLE
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode|\PhpParser\Node\Attribute $dataProviderNode
      */
-    private function inferParam(Class_ $class, int $parameterPosition, $dataProviderNode) : Type
+    private function inferParam(Class_ $class, int $parameterPosition, $dataProviderNode): Type
     {
         $dataProviderClassMethod = $this->resolveDataProviderClassMethod($class, $dataProviderNode);
         if (!$dataProviderClassMethod instanceof ClassMethod) {
@@ -170,7 +170,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Attribute|\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $dataProviderNode
      */
-    private function resolveDataProviderClassMethod(Class_ $class, $dataProviderNode) : ?ClassMethod
+    private function resolveDataProviderClassMethod(Class_ $class, $dataProviderNode): ?ClassMethod
     {
         if ($dataProviderNode instanceof Attribute) {
             $value = $dataProviderNode->args[0]->value;
@@ -193,7 +193,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function resolveReturnStaticArrayTypeByParameterPosition(array $returns, int $parameterPosition) : Type
+    private function resolveReturnStaticArrayTypeByParameterPosition(array $returns, int $parameterPosition): Type
     {
         $firstReturnedExpr = $returns[0]->expr;
         if (!$firstReturnedExpr instanceof Array_) {
@@ -208,7 +208,7 @@ CODE_SAMPLE
     /**
      * @param Yield_[] $yields
      */
-    private function resolveYieldStaticArrayTypeByParameterPosition(array $yields, int $parameterPosition) : Type
+    private function resolveYieldStaticArrayTypeByParameterPosition(array $yields, int $parameterPosition): Type
     {
         $paramOnPositionTypes = [];
         foreach ($yields as $yield) {
@@ -246,7 +246,7 @@ CODE_SAMPLE
     /**
      * @return Type[]
      */
-    private function resolveParamOnPositionTypes(Array_ $array, int $parameterPosition) : array
+    private function resolveParamOnPositionTypes(Array_ $array, int $parameterPosition): array
     {
         $paramOnPositionTypes = [];
         foreach ($array->items as $singleDataProvidedSet) {
@@ -265,19 +265,19 @@ CODE_SAMPLE
         }
         return $paramOnPositionTypes;
     }
-    private function resolveDataProviderNodes(ClassMethod $classMethod) : DataProviderNodes
+    private function resolveDataProviderNodes(ClassMethod $classMethod): DataProviderNodes
     {
         $attributes = $this->getPhpDataProviderAttributes($classMethod);
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         $phpdocNodes = $classMethodPhpDocInfo instanceof PhpDocInfo ? $classMethodPhpDocInfo->getTagsByName('@dataProvider') : [];
-        return new DataProviderNodes(\array_merge($attributes, $phpdocNodes));
+        return new DataProviderNodes(array_merge($attributes, $phpdocNodes));
     }
     /**
      * @return array<array-key, Attribute>
      */
-    private function getPhpDataProviderAttributes(ClassMethod $classMethod) : array
+    private function getPhpDataProviderAttributes(ClassMethod $classMethod): array
     {
-        $attributeName = 'PHPUnit\\Framework\\Attributes\\DataProvider';
+        $attributeName = 'PHPUnit\Framework\Attributes\DataProvider';
         /** @var AttributeGroup[] $attrGroups */
         $attrGroups = $classMethod->attrGroups;
         $dataProviders = [];
@@ -294,7 +294,7 @@ CODE_SAMPLE
     /**
      * @param array<Attribute|PhpDocTagNode> $dataProviderNodes
      */
-    private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, array $dataProviderNodes) : bool
+    private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, array $dataProviderNodes): bool
     {
         $hasChanged = \false;
         foreach ($classMethod->getParams() as $parameterPosition => $param) {

@@ -22,7 +22,7 @@ final class VariadicAnalyzer
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    public function hasVariadicParameters($call) : bool
+    public function hasVariadicParameters($call): bool
     {
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($functionLikeReflection === null) {
@@ -33,7 +33,7 @@ final class VariadicAnalyzer
     /**
      * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
-    private function hasVariadicVariant($functionLikeReflection) : bool
+    private function hasVariadicVariant($functionLikeReflection): bool
     {
         foreach ($functionLikeReflection->getVariants() as $variant) {
             // can be any number of arguments → nothing to limit here

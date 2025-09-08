@@ -20,7 +20,7 @@ final class ThisGetTypeMatcher
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function matchString(MethodCall $methodCall) : ?string
+    public function matchString(MethodCall $methodCall): ?string
     {
         $getExpr = $this->matchGetExpr($methodCall);
         if (!$getExpr instanceof String_) {
@@ -28,7 +28,7 @@ final class ThisGetTypeMatcher
         }
         return $getExpr->value;
     }
-    public function match(MethodCall $methodCall) : ?string
+    public function match(MethodCall $methodCall): ?string
     {
         $getExpr = $this->matchGetExpr($methodCall);
         if (!$getExpr instanceof ClassConstFetch) {
@@ -40,7 +40,7 @@ final class ThisGetTypeMatcher
         }
         return $this->nodeNameResolver->getName($getExpr->class);
     }
-    private function isValidContainerCall(MethodCall $methodCall) : bool
+    private function isValidContainerCall(MethodCall $methodCall): bool
     {
         if ($methodCall->var instanceof MethodCall && $this->nodeNameResolver->isName($methodCall->var->name, 'getContainer')) {
             return \true;
@@ -50,7 +50,7 @@ final class ThisGetTypeMatcher
         }
         return $methodCall->var instanceof PropertyFetch && $this->nodeNameResolver->isName($methodCall->var->var, 'this') && $this->nodeNameResolver->isName($methodCall->var->name, 'container');
     }
-    private function matchGetExpr(MethodCall $methodCall) : ?Expr
+    private function matchGetExpr(MethodCall $methodCall): ?Expr
     {
         if ($methodCall->isFirstClassCallable()) {
             return null;
@@ -61,7 +61,7 @@ final class ThisGetTypeMatcher
         if (!$this->isValidContainerCall($methodCall)) {
             return null;
         }
-        if (\count($methodCall->getArgs()) !== 1) {
+        if (count($methodCall->getArgs()) !== 1) {
             return null;
         }
         $firstArg = $methodCall->getArgs()[0];

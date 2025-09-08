@@ -19,11 +19,11 @@ final class DowngradeNewMethodCallWithoutParenthesesRector extends AbstractRecto
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add parentheses on new method call without parentheses', [new CodeSample(<<<'CODE_SAMPLE'
 new Request()->withMethod('GET')->withUri('/hello-world');
@@ -36,7 +36,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->var instanceof New_) {
             return null;

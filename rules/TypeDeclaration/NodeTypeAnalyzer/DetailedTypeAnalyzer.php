@@ -14,22 +14,22 @@ final class DetailedTypeAnalyzer
      * @var int
      */
     private const MAX_NUMBER_OF_TYPES = 3;
-    public function isTooDetailed(Type $type) : bool
+    public function isTooDetailed(Type $type): bool
     {
         if ($type instanceof UnionType) {
-            return \count($type->getTypes()) > self::MAX_NUMBER_OF_TYPES;
+            return count($type->getTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
         if ($type instanceof ConstantArrayType) {
-            return \count($type->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
+            return count($type->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
         if ($type instanceof GenericObjectType) {
             return $this->isTooDetailedGenericObjectType($type);
         }
         return \false;
     }
-    private function isTooDetailedGenericObjectType(GenericObjectType $genericObjectType) : bool
+    private function isTooDetailedGenericObjectType(GenericObjectType $genericObjectType): bool
     {
-        if (\count($genericObjectType->getTypes()) !== 1) {
+        if (count($genericObjectType->getTypes()) !== 1) {
             return \false;
         }
         $genericType = $genericObjectType->getTypes()[0];

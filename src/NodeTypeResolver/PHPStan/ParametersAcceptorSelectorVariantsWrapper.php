@@ -16,7 +16,7 @@ final class ParametersAcceptorSelectorVariantsWrapper
      * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $reflection
      * @param \PhpParser\Node\Expr\CallLike|\PhpParser\Node\FunctionLike $node
      */
-    public static function select($reflection, $node, Scope $scope) : ParametersAcceptor
+    public static function select($reflection, $node, Scope $scope): ParametersAcceptor
     {
         $variants = $reflection->getVariants();
         if ($node instanceof FunctionLike) {

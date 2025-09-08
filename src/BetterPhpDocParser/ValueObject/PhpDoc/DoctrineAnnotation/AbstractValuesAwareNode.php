@@ -30,7 +30,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     /**
      * @api
      */
-    public function removeValue(string $desiredKey) : void
+    public function removeValue(string $desiredKey): void
     {
         foreach ($this->values as $key => $value) {
             if (!$this->isValueKeyEquals($value, $desiredKey)) {
@@ -44,14 +44,14 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     /**
      * @return ArrayItemNode[]
      */
-    public function getValues() : array
+    public function getValues(): array
     {
         return $this->values;
     }
     /**
      * @return ArrayItemNode[]
      */
-    public function getValuesWithSilentKey() : array
+    public function getValuesWithSilentKey(): array
     {
         if ($this->silentKey === null) {
             return $this->values;
@@ -66,7 +66,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
         return $silentKeyAwareValues;
     }
-    public function getValue(string $desiredKey) : ?ArrayItemNode
+    public function getValue(string $desiredKey): ?ArrayItemNode
     {
         foreach ($this->values as $value) {
             if ($this->isValueKeyEquals($value, $desiredKey)) {
@@ -75,7 +75,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
         return null;
     }
-    public function getSilentValue() : ?ArrayItemNode
+    public function getSilentValue(): ?ArrayItemNode
     {
         foreach ($this->values as $value) {
             if ($value->key === null) {
@@ -84,23 +84,23 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
         return null;
     }
-    public function markAsChanged() : void
+    public function markAsChanged(): void
     {
         $this->hasChanged = \true;
     }
-    public function getOriginalContent() : ?string
+    public function getOriginalContent(): ?string
     {
         return $this->originalContent;
     }
     /**
      * @param mixed[] $values
      */
-    protected function printValuesContent(array $values) : string
+    protected function printValuesContent(array $values): string
     {
         $itemContents = '';
-        $lastItemKey = \array_key_last($values);
+        $lastItemKey = array_key_last($values);
         foreach ($values as $key => $value) {
-            if (\is_int($key)) {
+            if (is_int($key)) {
                 $itemContents .= $this->stringifyValue($value);
             } else {
                 $itemContents .= $key . '=' . $this->stringifyValue($value);
@@ -111,7 +111,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
         return $itemContents;
     }
-    private function isValueKeyEquals(ArrayItemNode $arrayItemNode, string $desiredKey) : bool
+    private function isValueKeyEquals(ArrayItemNode $arrayItemNode, string $desiredKey): bool
     {
         if ($arrayItemNode->key instanceof StringNode) {
             return $arrayItemNode->key->value === $desiredKey;
@@ -121,7 +121,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     /**
      * @param mixed $value
      */
-    private function stringifyValue($value) : string
+    private function stringifyValue($value): string
     {
         // @todo resolve original casing
         if ($value === \false) {
@@ -130,13 +130,13 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         if ($value === \true) {
             return 'true';
         }
-        if (\is_int($value)) {
+        if (is_int($value)) {
             return (string) $value;
         }
-        if (\is_float($value)) {
+        if (is_float($value)) {
             return (string) $value;
         }
-        if (\is_array($value)) {
+        if (is_array($value)) {
             return $this->printValuesContent($value);
         }
         return (string) $value;

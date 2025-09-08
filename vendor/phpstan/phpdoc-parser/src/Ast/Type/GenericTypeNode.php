@@ -28,7 +28,7 @@ class GenericTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
         $this->genericTypes = $genericTypes;
         $this->variances = $variances;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $genericTypes = [];
         foreach ($this->genericTypes as $index => $type) {

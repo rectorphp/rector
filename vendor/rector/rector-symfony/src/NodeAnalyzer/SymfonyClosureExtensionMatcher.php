@@ -26,22 +26,22 @@ final class SymfonyClosureExtensionMatcher
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function match(Closure $closure) : ?ExtensionKeyAndConfiguration
+    public function match(Closure $closure): ?ExtensionKeyAndConfiguration
     {
-        if (\count($closure->stmts) > 1) {
+        if (count($closure->stmts) > 1) {
             $extensionNames = $this->resolveExtensionNames($closure);
-            if (\count($extensionNames) > 2) {
+            if (count($extensionNames) > 2) {
                 return null;
             }
             if ($extensionNames === []) {
                 return null;
             }
             // warn use early about it, to avoid silent skip
-            $errorMessage = \sprintf('Split extensions "%s" to multiple separated files first', \implode('", "', $extensionNames));
+            $errorMessage = sprintf('Split extensions "%s" to multiple separated files first', implode('", "', $extensionNames));
             throw new ShouldNotHappenException($errorMessage);
         }
         // must be exactly single line
-        if (\count($closure->stmts) !== 1) {
+        if (count($closure->stmts) !== 1) {
             return null;
         }
         $onlyStmt = $closure->stmts[0];
@@ -54,7 +54,7 @@ final class SymfonyClosureExtensionMatcher
         $methodCall = $onlyStmt->expr;
         $args = $methodCall->getArgs();
         $extensionKey = $this->matchExtensionName($methodCall);
-        if (!\is_string($extensionKey)) {
+        if (!is_string($extensionKey)) {
             return null;
         }
         $secondArg = $args[1];
@@ -63,7 +63,7 @@ final class SymfonyClosureExtensionMatcher
         }
         return new ExtensionKeyAndConfiguration($extensionKey, $secondArg->value);
     }
-    private function matchExtensionName(MethodCall $methodCall) : ?string
+    private function matchExtensionName(MethodCall $methodCall): ?string
     {
         if (!$this->nodeNameResolver->isName($methodCall->name, 'extension')) {
             return null;
@@ -75,7 +75,7 @@ final class SymfonyClosureExtensionMatcher
     /**
      * @return string[]
      */
-    private function resolveExtensionNames(Closure $closure) : array
+    private function resolveExtensionNames(Closure $closure): array
     {
         $extensionNames = [];
         foreach ($closure->stmts as $stmt) {
@@ -87,7 +87,7 @@ final class SymfonyClosureExtensionMatcher
                 continue;
             }
             $extensionName = $this->matchExtensionName($expr);
-            if (!\is_string($extensionName)) {
+            if (!is_string($extensionName)) {
                 continue;
             }
             $extensionNames[] = $extensionName;

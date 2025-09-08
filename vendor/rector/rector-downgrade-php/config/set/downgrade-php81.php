@@ -21,7 +21,7 @@ use Rector\DowngradePhp81\Rector\StmtsAwareInterface\DowngradeSetAccessibleRefle
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
     $rectorConfig->rules([DowngradeFinalizePublicClassConstantRector::class, DowngradeFirstClassCallableSyntaxRector::class, DowngradeNeverTypeDeclarationRector::class, DowngradePureIntersectionTypeRector::class, DowngradeNewInInitializerRector::class, DowngradePhp81ResourceReturnToObjectRector::class, DowngradeReadonlyPropertyRector::class, DowngradeArraySpreadStringKeyRector::class, DowngradeArrayIsListRector::class, DowngradeSetAccessibleReflectionPropertyRector::class, DowngradeIsEnumRector::class, DowngradeOctalNumberRector::class, DowngradeHashAlgorithmXxHashRector::class]);
     // @see https://php.watch/versions/8.1/internal-method-return-types#reflection

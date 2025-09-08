@@ -27,7 +27,7 @@ final class TargetEntityResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function resolveFromAttribute(Attribute $attribute) : ?string
+    public function resolveFromAttribute(Attribute $attribute): ?string
     {
         foreach ($attribute->args as $arg) {
             if (!$arg->name instanceof Identifier) {
@@ -40,7 +40,7 @@ final class TargetEntityResolver
         }
         return null;
     }
-    public function resolveFromExpr(Expr $targetEntityExpr) : ?string
+    public function resolveFromExpr(Expr $targetEntityExpr): ?string
     {
         if ($targetEntityExpr instanceof ClassConstFetch) {
             $targetEntity = (string) $this->nodeNameResolver->getName($targetEntityExpr->class);
@@ -56,7 +56,7 @@ final class TargetEntityResolver
             }
             return $targetEntity;
         }
-        $errorMessage = \sprintf('Add support for "%s" targetEntity in "%s"', \get_class($targetEntityExpr), self::class);
+        $errorMessage = sprintf('Add support for "%s" targetEntity in "%s"', get_class($targetEntityExpr), self::class);
         throw new NotImplementedYetException($errorMessage);
     }
 }

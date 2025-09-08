@@ -24,15 +24,15 @@ final class VersionCompareCondition implements ConditionInterface
         $this->secondVersion = $secondVersion;
         $this->compareSign = $compareSign;
     }
-    public function getFirstVersion() : int
+    public function getFirstVersion(): int
     {
         return $this->firstVersion;
     }
-    public function getSecondVersion() : int
+    public function getSecondVersion(): int
     {
         return $this->secondVersion;
     }
-    public function getCompareSign() : ?string
+    public function getCompareSign(): ?string
     {
         return $this->compareSign;
     }

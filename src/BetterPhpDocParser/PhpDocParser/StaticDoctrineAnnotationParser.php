@@ -32,7 +32,7 @@ final class StaticDoctrineAnnotationParser
      * @var string
      * @see https://regex101.com/r/Pthg5d/1
      */
-    private const END_OF_VALUE_CHARACTERS_REGEX = '/^[)} \\r\\n"\']+$/i';
+    private const END_OF_VALUE_CHARACTERS_REGEX = '/^[)} \r\n"\']+$/i';
     public function __construct(PlainValueParser $plainValueParser, ArrayParser $arrayParser)
     {
         $this->plainValueParser = $plainValueParser;
@@ -43,7 +43,7 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
+    public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return [];
@@ -80,14 +80,14 @@ final class StaticDoctrineAnnotationParser
             $key => $value,
         ];
     }
-    public function getCommentFromRestOfAnnotation(BetterTokenIterator $tokenIterator, string $annotationContent) : string
+    public function getCommentFromRestOfAnnotation(BetterTokenIterator $tokenIterator, string $annotationContent): string
     {
         // we skip all the remaining tokens from the end of the declaration of values
-        while (\preg_match(self::END_OF_VALUE_CHARACTERS_REGEX, $tokenIterator->currentTokenValue())) {
+        while (preg_match(self::END_OF_VALUE_CHARACTERS_REGEX, $tokenIterator->currentTokenValue())) {
             $tokenIterator->next();
         }
         // the remaining of the annotation content is the comment
-        $comment = \substr($annotationContent, $tokenIterator->currentTokenOffset());
+        $comment = substr($annotationContent, $tokenIterator->currentTokenOffset());
         // we only keep the first line as this will be added as a line comment at the end of the attribute
         $commentLines = NewLineSplitter::split($comment);
         return $commentLines[0];
@@ -97,12 +97,12 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    private function resolveAnnotationValues(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
+    private function resolveAnnotationValues(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         $values = [];
         $resolvedValue = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
-        if (\is_array($resolvedValue)) {
-            $values = \array_merge($values, $resolvedValue);
+        if (is_array($resolvedValue)) {
+            $values = array_merge($values, $resolvedValue);
         } else {
             $values[] = $resolvedValue;
         }
@@ -113,8 +113,8 @@ final class StaticDoctrineAnnotationParser
                 continue;
             }
             $nestedValues = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
-            if (\is_array($nestedValues)) {
-                $values = \array_merge($values, $nestedValues);
+            if (is_array($nestedValues)) {
+                $values = array_merge($values, $nestedValues);
             } else {
                 if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_END)) {
                     break;

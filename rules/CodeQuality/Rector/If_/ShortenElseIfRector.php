@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ShortenElseIfRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Shorten `else`/`if` to `elseif`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,24 +52,24 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         return $this->shortenElseIf($node);
     }
-    private function shortenElseIf(If_ $node) : ?If_
+    private function shortenElseIf(If_ $node): ?If_
     {
         if (!$node->else instanceof Else_) {
             return null;
         }
         $else = $node->else;
-        if (\count($else->stmts) !== 1) {
+        if (count($else->stmts) !== 1) {
             return null;
         }
         $if = $else->stmts[0];
@@ -86,13 +86,13 @@ CODE_SAMPLE
             $nop->setAttribute(AttributeKey::COMMENTS, $if->getComments());
             $if->stmts[] = $nop;
         } else {
-            $currentStmt = \current($if->stmts);
-            $mergedComments = \array_merge($if->getComments(), $currentStmt->getComments());
+            $currentStmt = current($if->stmts);
+            $mergedComments = array_merge($if->getComments(), $currentStmt->getComments());
             $currentStmt->setAttribute(AttributeKey::COMMENTS, $mergedComments);
         }
         $node->elseifs[] = new ElseIf_($if->cond, $if->stmts);
         $node->else = $if->else;
-        $node->elseifs = \array_merge($node->elseifs, $if->elseifs);
+        $node->elseifs = array_merge($node->elseifs, $if->elseifs);
         return $node;
     }
 }

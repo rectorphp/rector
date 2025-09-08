@@ -45,7 +45,7 @@ final class StrictReturnNewAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function matchAlwaysReturnVariableNew($functionLike) : ?string
+    public function matchAlwaysReturnVariableNew($functionLike): ?string
     {
         if ($functionLike->stmts === null) {
             return null;
@@ -68,7 +68,7 @@ final class StrictReturnNewAnalyzer
             }
             $returnedVariableName = $this->nodeNameResolver->getName($return->expr);
             $className = $createdVariablesToTypes[$returnedVariableName] ?? null;
-            if (!\is_string($className)) {
+            if (!is_string($className)) {
                 return null;
             }
             if ($returnType->getClassName() !== $className) {
@@ -76,8 +76,8 @@ final class StrictReturnNewAnalyzer
             }
             $alwaysReturnedClassNames[] = $className;
         }
-        $uniqueAlwaysReturnedClasses = \array_unique($alwaysReturnedClassNames);
-        if (\count($uniqueAlwaysReturnedClasses) !== 1) {
+        $uniqueAlwaysReturnedClasses = array_unique($alwaysReturnedClassNames);
+        if (count($uniqueAlwaysReturnedClasses) !== 1) {
             return null;
         }
         return $uniqueAlwaysReturnedClasses[0];
@@ -86,7 +86,7 @@ final class StrictReturnNewAnalyzer
      * @return array<string, string>
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function resolveCreatedVariablesToTypes($functionLike) : array
+    private function resolveCreatedVariablesToTypes($functionLike): array
     {
         $createdVariablesToTypes = [];
         // what new is assigned to it?
@@ -105,14 +105,14 @@ final class StrictReturnNewAnalyzer
                 continue;
             }
             $className = $this->nodeNameResolver->getName($assignedExpr->class);
-            if (!\is_string($className)) {
+            if (!is_string($className)) {
                 continue;
             }
             $createdVariablesToTypes[$variableName] = $className;
         }
         return $createdVariablesToTypes;
     }
-    private function matchAssignToVariable(Stmt $stmt) : ?AssignToVariable
+    private function matchAssignToVariable(Stmt $stmt): ?AssignToVariable
     {
         if (!$stmt instanceof Expression) {
             return null;
@@ -126,7 +126,7 @@ final class StrictReturnNewAnalyzer
             return null;
         }
         $variableName = $this->nodeNameResolver->getName($assignedVar);
-        if (!\is_string($variableName)) {
+        if (!is_string($variableName)) {
             return null;
         }
         return new AssignToVariable($variableName, $assign->expr);

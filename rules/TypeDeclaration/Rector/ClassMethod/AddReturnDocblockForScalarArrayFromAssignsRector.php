@@ -56,7 +56,7 @@ final class AddReturnDocblockForScalarArrayFromAssignsRector extends AbstractRec
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add @return docblock for scalar array from strict array assignments', [new CodeSample(<<<'CODE_SAMPLE'
 function getSomeItems()
@@ -105,14 +105,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $returnType = $phpDocInfo->getReturnType();
@@ -156,7 +156,7 @@ CODE_SAMPLE
      * @param Return_[] $returnsScoped
      * @return string[]
      */
-    private function extractReturnedVariableNames(array $returnsScoped) : array
+    private function extractReturnedVariableNames(array $returnsScoped): array
     {
         $variableNames = [];
         foreach ($returnsScoped as $returnScoped) {
@@ -168,12 +168,12 @@ CODE_SAMPLE
                 $variableNames[] = $variableName;
             }
         }
-        return \array_unique($variableNames);
+        return array_unique($variableNames);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function resolveScalarArrayTypeForVariable($node, string $variableName) : ?Type
+    private function resolveScalarArrayTypeForVariable($node, string $variableName): ?Type
     {
         $assigns = $this->betterNodeFinder->findInstancesOfScoped([$node], Assign::class);
         $scalarTypes = [];
@@ -220,7 +220,7 @@ CODE_SAMPLE
         }
         return $firstType;
     }
-    private function resolveScalarType(Expr $expr) : ?Type
+    private function resolveScalarType(Expr $expr): ?Type
     {
         if ($expr instanceof String_) {
             return new StringType();

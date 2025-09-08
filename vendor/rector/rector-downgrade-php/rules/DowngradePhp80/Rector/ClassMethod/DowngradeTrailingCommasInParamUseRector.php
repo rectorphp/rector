@@ -32,7 +32,7 @@ final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
         $this->trailingCommaRemover = $trailingCommaRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove trailing commas in param or use list', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -73,21 +73,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Closure) {
             $this->processUses($node);
         }
         return $this->processParams($node);
     }
-    private function processUses(Closure $node) : ?Node
+    private function processUses(Closure $node): ?Node
     {
         if ($node->uses === []) {
             return null;
@@ -97,7 +97,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function processParams($node) : ?Node
+    private function processParams($node): ?Node
     {
         if ($node->params === []) {
             return null;
@@ -108,9 +108,9 @@ CODE_SAMPLE
      * @param ClosureUse[]|Param[] $array
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function cleanTrailingComma($node, array $array) : ?Node
+    private function cleanTrailingComma($node, array $array): ?Node
     {
-        $lastPosition = \array_key_last($array);
+        $lastPosition = array_key_last($array);
         $last = $array[$lastPosition];
         if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
             return null;

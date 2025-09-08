@@ -30,7 +30,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
      */
     private const ARGUMENT_DEFAULT_VALUES = [2 => 0, 3 => '', 4 => '', 5 => \false, 6 => \false];
     private int $highestIndex = 1;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert setcookie option array to arguments', [new CodeSample(<<<'CODE_SAMPLE'
 setcookie('name', $value, ['expires' => 360]);
@@ -43,14 +43,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -58,7 +58,7 @@ CODE_SAMPLE
         $node->args = $this->composeNewArgs($node);
         return $node;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall): bool
     {
         if (!$this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return \true;
@@ -67,7 +67,7 @@ CODE_SAMPLE
             return \true;
         }
         $args = $funcCall->getArgs();
-        if (\count($args) < 3) {
+        if (count($args) < 3) {
             return \true;
         }
         $thirdArg = $args[2];
@@ -76,11 +76,11 @@ CODE_SAMPLE
     /**
      * @return Arg[]
      */
-    private function composeNewArgs(FuncCall $funcCall) : array
+    private function composeNewArgs(FuncCall $funcCall): array
     {
         $this->highestIndex = 1;
         $args = $funcCall->getArgs();
-        if (\count($args) < 3) {
+        if (count($args) < 3) {
             return [];
         }
         $firstArg = $args[0];
@@ -107,10 +107,10 @@ CODE_SAMPLE
             $newArgs[$order] = new Arg($value);
         }
         $newArgs = $this->fillMissingArgumentsWithDefaultValues($newArgs);
-        \ksort($newArgs);
+        ksort($newArgs);
         return $newArgs;
     }
-    private function isMappableArrayKey(string $key) : bool
+    private function isMappableArrayKey(string $key): bool
     {
         return isset(self::ARGUMENT_ORDER[$key]);
     }
@@ -118,7 +118,7 @@ CODE_SAMPLE
      * @param array<int, Arg> $args
      * @return array<int, Arg>
      */
-    private function fillMissingArgumentsWithDefaultValues(array $args) : array
+    private function fillMissingArgumentsWithDefaultValues(array $args): array
     {
         for ($i = 1; $i < $this->highestIndex; ++$i) {
             if (isset($args[$i])) {
@@ -128,9 +128,9 @@ CODE_SAMPLE
         }
         return $args;
     }
-    private function createDefaultValueArg(int $argumentIndex) : Arg
+    private function createDefaultValueArg(int $argumentIndex): Arg
     {
-        if (!\array_key_exists($argumentIndex, self::ARGUMENT_DEFAULT_VALUES)) {
+        if (!array_key_exists($argumentIndex, self::ARGUMENT_DEFAULT_VALUES)) {
             throw new ShouldNotHappenException();
         }
         $argumentDefaultValue = self::ARGUMENT_DEFAULT_VALUES[$argumentIndex];

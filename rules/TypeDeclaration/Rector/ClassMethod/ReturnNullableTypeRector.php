@@ -41,7 +41,7 @@ final class ReturnNullableTypeRector extends AbstractRector implements MinPhpVer
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnTypeInferer = $returnTypeInferer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add basic ? nullable type to class methods and functions, as of PHP 7.1', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -74,18 +74,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULLABLE_TYPE;
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         // empty body, nothing to resolve

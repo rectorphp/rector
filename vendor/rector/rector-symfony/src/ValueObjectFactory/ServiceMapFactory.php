@@ -18,13 +18,13 @@ final class ServiceMapFactory
      * @var string
      */
     private const TAG = 'tag';
-    public function createFromFileContent(string $configFilePath) : ServiceMap
+    public function createFromFileContent(string $configFilePath): ServiceMap
     {
         $fileContents = FileSystem::read($configFilePath);
         // "@" intentionally
-        $xml = @\simplexml_load_string($fileContents);
+        $xml = @simplexml_load_string($fileContents);
         if ($xml === \false) {
-            throw new XmlContainerNotExistsException(\sprintf('Container "%s" cannot be parsed', $configFilePath));
+            throw new XmlContainerNotExistsException(sprintf('Container "%s" cannot be parsed', $configFilePath));
         }
         /** @var ServiceDefinition[] $services */
         $services = [];
@@ -33,12 +33,12 @@ final class ServiceMapFactory
         foreach ($xml->services->service as $def) {
             /** @var SimpleXMLElement $attrs */
             $attrs = $def->attributes();
-            if (!(\property_exists($attrs, 'id') && $attrs->id instanceof SimpleXMLElement)) {
+            if (!(property_exists($attrs, 'id') && $attrs->id instanceof SimpleXMLElement)) {
                 continue;
             }
             $def = $this->convertXmlToArray($def);
             $tags = $this->createTagFromXmlElement($def);
-            if (\in_array('container.excluded', \array_column($tags, 'name'), \true)) {
+            if (in_array('container.excluded', array_column($tags, 'name'), \true)) {
                 continue;
             }
             $service = $this->createServiceFromXmlAndTagsData($attrs, $tags);
@@ -51,7 +51,7 @@ final class ServiceMapFactory
         $services = $this->createAliasServiceDefinitions($aliases, $services);
         return new ServiceMap($services);
     }
-    public function createEmpty() : ServiceMap
+    public function createEmpty(): ServiceMap
     {
         return new ServiceMap([]);
     }
@@ -59,13 +59,13 @@ final class ServiceMapFactory
      * @param mixed[] $def
      * @return mixed[]
      */
-    private function createTagFromXmlElement(array $def) : array
+    private function createTagFromXmlElement(array $def): array
     {
         if (!isset($def[self::TAG])) {
             return [];
         }
         $tags = [];
-        if (\is_array($def[self::TAG])) {
+        if (is_array($def[self::TAG])) {
             $tags = $def[self::TAG];
         } else {
             $tags[] = $def[self::TAG];
@@ -75,17 +75,17 @@ final class ServiceMapFactory
     /**
      * @param mixed[] $tags
      */
-    private function createServiceFromXmlAndTagsData(SimpleXMLElement $attrs, array $tags) : ServiceDefinition
+    private function createServiceFromXmlAndTagsData(SimpleXMLElement $attrs, array $tags): ServiceDefinition
     {
         $tags = $this->createTagsFromData($tags);
-        return new ServiceDefinition(\strncmp((string) $attrs->id, '.', \strlen('.')) === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, \property_exists($attrs, 'class') && $attrs->class instanceof SimpleXMLElement ? (string) $attrs->class : null, !(\property_exists($attrs, 'public') && $attrs->public instanceof SimpleXMLElement) || (string) $attrs->public !== 'false', \property_exists($attrs, 'synthetic') && $attrs->synthetic instanceof SimpleXMLElement && (string) $attrs->synthetic === 'true', \property_exists($attrs, 'alias') && $attrs->alias instanceof SimpleXMLElement ? (string) $attrs->alias : null, $tags);
+        return new ServiceDefinition(strncmp((string) $attrs->id, '.', strlen('.')) === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, property_exists($attrs, 'class') && $attrs->class instanceof SimpleXMLElement ? (string) $attrs->class : null, !(property_exists($attrs, 'public') && $attrs->public instanceof SimpleXMLElement) || (string) $attrs->public !== 'false', property_exists($attrs, 'synthetic') && $attrs->synthetic instanceof SimpleXMLElement && (string) $attrs->synthetic === 'true', property_exists($attrs, 'alias') && $attrs->alias instanceof SimpleXMLElement ? (string) $attrs->alias : null, $tags);
     }
     /**
      * @param ServiceDefinition[] $aliases
      * @param ServiceDefinition[] $services
      * @return ServiceDefinition[]
      */
-    private function createAliasServiceDefinitions(array $aliases, array $services) : array
+    private function createAliasServiceDefinitions(array $aliases, array $services): array
     {
         foreach ($aliases as $service) {
             $alias = $service->getAlias();
@@ -104,11 +104,11 @@ final class ServiceMapFactory
      * @param mixed[] $tagsData
      * @return Tag[]|EventListenerTag[]
      */
-    private function createTagsFromData(array $tagsData) : array
+    private function createTagsFromData(array $tagsData): array
     {
         $tagValueObjects = [];
         foreach ($tagsData as $key => $tag) {
-            if (\is_string($tag)) {
+            if (is_string($tag)) {
                 $tagValueObjects[$key] = new Tag($tag);
                 continue;
             }
@@ -126,12 +126,12 @@ final class ServiceMapFactory
     /**
      * @return mixed[]
      */
-    private function convertXmlToArray(SimpleXMLElement $simpleXMLElement) : array
+    private function convertXmlToArray(SimpleXMLElement $simpleXMLElement): array
     {
         $data = Json::decode(Json::encode((array) $simpleXMLElement), Json::FORCE_ARRAY);
         $data = $this->unWrapAttributes($data);
         foreach ($data as $key => $value) {
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 $data = $this->convertedNestedArrayOrXml($value, $data, $key);
             } elseif ($value instanceof SimpleXMLElement) {
                 $data[$key] = $this->convertXmlToArray($value);
@@ -143,7 +143,7 @@ final class ServiceMapFactory
      * @param mixed[] $data
      * @return mixed[]
      */
-    private function unWrapAttributes(array $data) : array
+    private function unWrapAttributes(array $data): array
     {
         if (isset($data['@attributes'])) {
             foreach ($data['@attributes'] as $key => $value) {
@@ -159,12 +159,12 @@ final class ServiceMapFactory
      * @return mixed[]
      * @param string|int $key
      */
-    private function convertedNestedArrayOrXml(array $value, array $data, $key) : array
+    private function convertedNestedArrayOrXml(array $value, array $data, $key): array
     {
         foreach ($value as $subKey => $subValue) {
             if ($subValue instanceof SimpleXMLElement) {
                 $data[$key][$subKey] = $this->convertXmlToArray($subValue);
-            } elseif (\is_array($subValue)) {
+            } elseif (is_array($subValue)) {
                 $data[$key][$subKey] = $this->unWrapAttributes($subValue);
             }
         }

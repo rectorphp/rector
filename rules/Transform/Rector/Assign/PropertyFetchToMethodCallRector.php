@@ -23,7 +23,7 @@ final class PropertyFetchToMethodCallRector extends AbstractRector implements Co
      * @var PropertyFetchToMethodCall[]
      */
     private array $propertiesToMethodCalls = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace properties assign calls be defined methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $result = $object->property;
@@ -42,14 +42,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class, PropertyFetch::class];
     }
     /**
      * @param PropertyFetch|Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign && $node->var instanceof PropertyFetch) {
             return $this->processSetter($node);
@@ -62,12 +62,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, PropertyFetchToMethodCall::class);
         $this->propertiesToMethodCalls = $configuration;
     }
-    private function processSetter(Assign $assign) : ?Node
+    private function processSetter(Assign $assign): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assign->var;
@@ -83,7 +83,7 @@ CODE_SAMPLE
         $variable = $propertyFetchNode->var;
         return $this->nodeFactory->createMethodCall($variable, $propertyToMethodCall->getNewSetMethod(), $args);
     }
-    private function processGetter(PropertyFetch $propertyFetch) : ?Node
+    private function processGetter(PropertyFetch $propertyFetch): ?Node
     {
         $propertyFetchToMethodCall = $this->matchPropertyFetchCandidate($propertyFetch);
         if (!$propertyFetchToMethodCall instanceof PropertyFetchToMethodCall) {
@@ -99,7 +99,7 @@ CODE_SAMPLE
         }
         return $propertyFetch;
     }
-    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch) : ?PropertyFetchToMethodCall
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyFetchToMethodCall
     {
         foreach ($this->propertiesToMethodCalls as $propertyToMethodCall) {
             if (!$this->isName($propertyFetch, $propertyToMethodCall->getOldProperty())) {

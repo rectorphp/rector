@@ -6,7 +6,7 @@ namespace Rector\Renaming\Contract;
 use PHPStan\Type\ObjectType;
 interface RenameClassConstFetchInterface
 {
-    public function getOldObjectType() : ObjectType;
-    public function getOldConstant() : string;
-    public function getNewConstant() : string;
+    public function getOldObjectType(): ObjectType;
+    public function getOldConstant(): string;
+    public function getNewConstant(): string;
 }

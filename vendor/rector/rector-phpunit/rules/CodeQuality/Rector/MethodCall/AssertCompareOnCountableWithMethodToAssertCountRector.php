@@ -27,7 +27,7 @@ final class AssertCompareOnCountableWithMethodToAssertCountRector extends Abstra
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces use of assertSame and assertEquals on Countable objects with count method', [new CodeSample(<<<'CODE_SAMPLE'
 $this->assertSame(1, $countable->count());
@@ -40,7 +40,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<MethodCall|StaticCall>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
@@ -57,7 +57,7 @@ CODE_SAMPLE
             return null;
         }
         $assertArgs = $node->getArgs();
-        if (\count($assertArgs) < 2) {
+        if (count($assertArgs) < 2) {
             return null;
         }
         $comparedExpr = $assertArgs[1]->value;
@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod($node) : void
+    private function renameMethod($node): void
     {
         if ($this->isNames($node->name, ['assertSame', 'assertEquals'])) {
             $node->name = new Identifier('assertCount');

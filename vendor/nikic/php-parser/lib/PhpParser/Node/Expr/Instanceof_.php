@@ -25,11 +25,11 @@ class Instanceof_ extends Expr
         $this->expr = $expr;
         $this->class = $class;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['expr', 'class'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Instanceof';
     }

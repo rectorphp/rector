@@ -28,7 +28,7 @@ final class SwiftMessageToEmailRector extends AbstractRector
     /**
      * @var string
      */
-    private const EMAIL_FQN = 'Symfony\\Component\\Mime\\Email';
+    private const EMAIL_FQN = 'Symfony\Component\Mime\Email';
     /**
      * @var string
      */
@@ -41,9 +41,9 @@ final class SwiftMessageToEmailRector extends AbstractRector
      * @var array<string, ?string>
      */
     private array $addressesMapping = ['addBcc' => null, 'addCc' => null, 'addFrom' => null, 'addReplyTo' => null, 'addTo' => null, 'setBcc' => 'bcc', 'setCc' => 'cc', 'setFrom' => 'from', 'setReplyTo' => 'replyTo', 'setTo' => 'to'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert \\Swift_Message into an \\Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert \Swift_Message into an \Symfony\Component\Mime\Email', [new CodeSample(<<<'CODE_SAMPLE'
 $message = (new \Swift_Message('Hello Email'))
         ->setFrom('send@example.com')
         ->setTo(['recipient@example.com' => 'Recipient'])
@@ -68,17 +68,17 @@ $message = (new Email())
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) : ?Node {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged): ?Node {
             if ($node instanceof ClassMethod && $node->returnType instanceof FullyQualified && $this->isName($node->returnType, self::SWIFT_MESSAGE_FQN)) {
                 $node->returnType = new FullyQualified(self::EMAIL_FQN);
                 $hasChanged = \true;
@@ -128,15 +128,15 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function handleBasicMapping(MethodCall $methodCall, string $name) : void
+    private function handleBasicMapping(MethodCall $methodCall, string $name): void
     {
-        if (\array_key_exists($name, $this->basicMapping)) {
+        if (array_key_exists($name, $this->basicMapping)) {
             $methodCall->name = new Identifier($this->basicMapping[$name]);
         }
     }
-    private function handleAddressMapping(MethodCall $methodCall, string $name) : void
+    private function handleAddressMapping(MethodCall $methodCall, string $name): void
     {
-        if (\array_key_exists($name, $this->addressesMapping)) {
+        if (array_key_exists($name, $this->addressesMapping)) {
             if ($this->addressesMapping[$name] !== null) {
                 $methodCall->name = new Identifier($this->addressesMapping[$name]);
             }
@@ -163,9 +163,9 @@ CODE_SAMPLE
             }
         }
     }
-    private function handleBody(MethodCall $methodCall, string $name) : void
+    private function handleBody(MethodCall $methodCall, string $name): void
     {
-        if (!\in_array($name, ['setBody', 'addPart'], \true)) {
+        if (!in_array($name, ['setBody', 'addPart'], \true)) {
             return;
         }
         if ($methodCall->args[1] instanceof Arg && $methodCall->args[1]->value instanceof String_ && $methodCall->args[1]->value->value === 'text/html') {
@@ -175,9 +175,9 @@ CODE_SAMPLE
         }
         $methodCall->args = [$methodCall->args[0]];
     }
-    private function handleAttach(MethodCall $methodCall) : void
+    private function handleAttach(MethodCall $methodCall): void
     {
-        $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use($methodCall) : Node {
+        $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use ($methodCall): Node {
             if ($node instanceof StaticCall && $this->isName($node->name, 'fromPath')) {
                 $methodCall->args[0] = $node->args[0];
             }
@@ -193,7 +193,7 @@ CODE_SAMPLE
         });
         $methodCall->name = new Identifier('attachFromPath');
     }
-    private function handleId(MethodCall $methodCall) : MethodCall
+    private function handleId(MethodCall $methodCall): MethodCall
     {
         $methodCall->name = new Identifier('getHeaders');
         return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($methodCall, 'get', [$this->nodeFactory->createArg(new String_('Content-ID'))]), 'toString');
@@ -201,8 +201,8 @@ CODE_SAMPLE
     /**
      * @param Arg[] $addressArguments
      */
-    private function createAddress(array $addressArguments) : New_
+    private function createAddress(array $addressArguments): New_
     {
-        return new New_(new FullyQualified('Symfony\\Component\\Mime\\Address'), $addressArguments);
+        return new New_(new FullyQualified('Symfony\Component\Mime\Address'), $addressArguments);
     }
 }

@@ -20,9 +20,9 @@ if ('cli' !== \PHP_SAPI) {
  */
 use RectorPrefix202509\Symfony\Component\Console\Application;
 use RectorPrefix202509\Symfony\Component\Yaml\Command\LintCommand;
-function includeIfExists(string $file) : bool
+function includeIfExists(string $file): bool
 {
-    return \file_exists($file) && (include $file);
+    return \file_exists($file) && include $file;
 }
 if (!includeIfExists(__DIR__ . '/../../../../autoload.php') && !includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
     \fwrite(\STDERR, 'Install dependencies using Composer.' . \PHP_EOL);

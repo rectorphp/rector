@@ -37,7 +37,7 @@ final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersi
         $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error', [new CodeSample(<<<'CODE_SAMPLE'
 json_encode($content);
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // if found, skip it :)
         $hasJsonErrorFuncCall = (bool) $this->betterNodeFinder->findFirst($node, fn(Node $node): bool => $this->isNames($node, ['json_last_error', 'json_last_error_msg']));
@@ -67,7 +67,7 @@ CODE_SAMPLE
             return null;
         }
         $this->hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $currentNode) : ?FuncCall {
+        $this->traverseNodesWithCallable($node, function (Node $currentNode): ?FuncCall {
             if (!$currentNode instanceof FuncCall) {
                 return null;
             }
@@ -87,11 +87,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::JSON_EXCEPTION;
     }
-    private function shouldSkipFuncCall(FuncCall $funcCall) : bool
+    private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         if ($funcCall->isFirstClassCallable()) {
             return \true;
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
         return $this->isFirstValueStringOrArray($funcCall);
     }
-    private function processJsonEncode(FuncCall $funcCall) : ?FuncCall
+    private function processJsonEncode(FuncCall $funcCall): ?FuncCall
     {
         if (isset($funcCall->args[1])) {
             return null;
@@ -118,7 +118,7 @@ CODE_SAMPLE
         $funcCall->args[1] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
-    private function processJsonDecode(FuncCall $funcCall) : ?FuncCall
+    private function processJsonDecode(FuncCall $funcCall): ?FuncCall
     {
         if (isset($funcCall->args[3])) {
             return null;
@@ -134,20 +134,20 @@ CODE_SAMPLE
         $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
-    private function createConstFetch(string $name) : ConstFetch
+    private function createConstFetch(string $name): ConstFetch
     {
         return new ConstFetch(new Name($name));
     }
-    private function isFirstValueStringOrArray(FuncCall $funcCall) : bool
+    private function isFirstValueStringOrArray(FuncCall $funcCall): bool
     {
         if (!isset($funcCall->getArgs()[0])) {
             return \false;
         }
         $firstArg = $funcCall->getArgs()[0];
         $value = $this->valueResolver->getValue($firstArg->value);
-        if (\is_string($value)) {
+        if (is_string($value)) {
             return \true;
         }
-        return \is_array($value);
+        return is_array($value);
     }
 }

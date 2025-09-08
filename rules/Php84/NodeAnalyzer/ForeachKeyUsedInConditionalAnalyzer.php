@@ -22,7 +22,7 @@ final class ForeachKeyUsedInConditionalAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isUsed(Variable $variable, Expr $expr) : bool
+    public function isUsed(Variable $variable, Expr $expr): bool
     {
         $keyVarName = (string) $this->nodeNameResolver->getName($variable);
         return (bool) $this->betterNodeFinder->findVariableOfName($expr, $keyVarName);

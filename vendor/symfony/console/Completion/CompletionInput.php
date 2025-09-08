@@ -38,9 +38,9 @@ final class CompletionInput extends ArgvInput
      *
      * This is required for shell completions without COMP_WORDS support.
      */
-    public static function fromString(string $inputStr, int $currentIndex) : self
+    public static function fromString(string $inputStr, int $currentIndex): self
     {
-        \preg_match_all('/(?<=^|\\s)([\'"]?)(.+?)(?<!\\\\)\\1(?=$|\\s)/', $inputStr, $tokens);
+        preg_match_all('/(?<=^|\s)([\'"]?)(.+?)(?<!\\\\)\1(?=$|\s)/', $inputStr, $tokens);
         return self::fromTokens($tokens[0], $currentIndex);
     }
     /**
@@ -49,20 +49,20 @@ final class CompletionInput extends ArgvInput
      * @param string[] $tokens       the set of split tokens (e.g. COMP_WORDS or argv)
      * @param int      $currentIndex the index of the cursor (e.g. COMP_CWORD)
      */
-    public static function fromTokens(array $tokens, int $currentIndex) : self
+    public static function fromTokens(array $tokens, int $currentIndex): self
     {
         $input = new self($tokens);
         $input->tokens = $tokens;
         $input->currentIndex = $currentIndex;
         return $input;
     }
-    public function bind(InputDefinition $definition) : void
+    public function bind(InputDefinition $definition): void
     {
         parent::bind($definition);
         $relevantToken = $this->getRelevantToken();
         if ('-' === $relevantToken[0]) {
             // the current token is an input option: complete either option name or option value
-            [$optionToken, $optionValue] = \explode('=', $relevantToken, 2) + ['', ''];
+            [$optionToken, $optionValue] = explode('=', $relevantToken, 2) + ['', ''];
             $option = $this->getOptionFromToken($optionToken);
             if (null === $option && !$this->isCursorFree()) {
                 $this->completionType = self::TYPE_OPTION_NAME;
@@ -72,12 +72,12 @@ final class CompletionInput extends ArgvInput
             if (($nullsafeVariable1 = $option) ? $nullsafeVariable1->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $option->getName();
-                $this->completionValue = $optionValue ?: (\strncmp($optionToken, '--', \strlen('--')) !== 0 ? \substr($optionToken, 2) : '');
+                $this->completionValue = $optionValue ?: (strncmp($optionToken, '--', strlen('--')) !== 0 ? substr($optionToken, 2) : '');
                 return;
             }
         }
         $previousToken = $this->tokens[$this->currentIndex - 1];
-        if ('-' === $previousToken[0] && '' !== \trim($previousToken, '-')) {
+        if ('-' === $previousToken[0] && '' !== trim($previousToken, '-')) {
             // check if previous option accepted a value
             $previousOption = $this->getOptionFromToken($previousToken);
             if (($nullsafeVariable2 = $previousOption) ? $nullsafeVariable2->acceptValue() : null) {
@@ -96,7 +96,7 @@ final class CompletionInput extends ArgvInput
             $argumentValue = $this->arguments[$argumentName];
             $this->completionName = $argumentName;
             if (\is_array($argumentValue)) {
-                $this->completionValue = $argumentValue ? $argumentValue[\array_key_last($argumentValue)] : null;
+                $this->completionValue = $argumentValue ? $argumentValue[array_key_last($argumentValue)] : null;
             } else {
                 $this->completionValue = $argumentValue;
             }
@@ -125,7 +125,7 @@ final class CompletionInput extends ArgvInput
      *
      * @return self::TYPE_*
      */
-    public function getCompletionType() : string
+    public function getCompletionType(): string
     {
         return $this->completionType;
     }
@@ -134,26 +134,26 @@ final class CompletionInput extends ArgvInput
      *
      * @return string|null returns null when completing an option name
      */
-    public function getCompletionName() : ?string
+    public function getCompletionName(): ?string
     {
         return $this->completionName;
     }
     /**
      * The value already typed by the user (or empty string).
      */
-    public function getCompletionValue() : string
+    public function getCompletionValue(): string
     {
         return $this->completionValue;
     }
-    public function mustSuggestOptionValuesFor(string $optionName) : bool
+    public function mustSuggestOptionValuesFor(string $optionName): bool
     {
         return self::TYPE_OPTION_VALUE === $this->getCompletionType() && $optionName === $this->getCompletionName();
     }
-    public function mustSuggestArgumentValuesFor(string $argumentName) : bool
+    public function mustSuggestArgumentValuesFor(string $argumentName): bool
     {
         return self::TYPE_ARGUMENT_VALUE === $this->getCompletionType() && $argumentName === $this->getCompletionName();
     }
-    protected function parseToken(string $token, bool $parseOptions) : bool
+    protected function parseToken(string $token, bool $parseOptions): bool
     {
         try {
             return parent::parseToken($token, $parseOptions);
@@ -162,9 +162,9 @@ final class CompletionInput extends ArgvInput
         }
         return $parseOptions;
     }
-    private function getOptionFromToken(string $optionToken) : ?InputOption
+    private function getOptionFromToken(string $optionToken): ?InputOption
     {
-        $optionName = \ltrim($optionToken, '-');
+        $optionName = ltrim($optionToken, '-');
         if (!$optionName) {
             return null;
         }
@@ -178,14 +178,14 @@ final class CompletionInput extends ArgvInput
     /**
      * The token of the cursor, or the last token if the cursor is at the end of the input.
      */
-    private function getRelevantToken() : string
+    private function getRelevantToken(): string
     {
         return $this->tokens[$this->isCursorFree() ? $this->currentIndex - 1 : $this->currentIndex];
     }
     /**
      * Whether the cursor is "free" (i.e. at the end of the input preceded by a space).
      */
-    private function isCursorFree() : bool
+    private function isCursorFree(): bool
     {
         $nrOfTokens = \count($this->tokens);
         if ($this->currentIndex > $nrOfTokens) {
@@ -193,7 +193,7 @@ final class CompletionInput extends ArgvInput
         }
         return $this->currentIndex >= $nrOfTokens;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $str = '';
         foreach ($this->tokens as $i => $token) {
@@ -206,6 +206,6 @@ final class CompletionInput extends ArgvInput
         if ($this->currentIndex > $i) {
             $str .= '|';
         }
-        return \rtrim($str);
+        return rtrim($str);
     }
 }

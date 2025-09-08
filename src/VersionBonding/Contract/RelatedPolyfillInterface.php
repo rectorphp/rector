@@ -12,5 +12,5 @@ interface RelatedPolyfillInterface
     /**
      * @return PolyfillPackage::*
      */
-    public function providePolyfillPackage() : string;
+    public function providePolyfillPackage(): string;
 }

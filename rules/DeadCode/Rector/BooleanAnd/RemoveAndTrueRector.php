@@ -23,7 +23,7 @@ final class RemoveAndTrueRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove `and true` that has no added value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -48,14 +48,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanAnd::class];
     }
     /**
      * @param BooleanAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->isTrueOrBooleanAndTrues($node->left)) {
             return $node->right;
@@ -65,7 +65,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isTrueOrBooleanAndTrues(Expr $expr) : bool
+    private function isTrueOrBooleanAndTrues(Expr $expr): bool
     {
         if ($this->valueResolver->isTrue($expr)) {
             return \true;

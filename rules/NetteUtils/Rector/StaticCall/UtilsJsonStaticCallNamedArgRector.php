@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UtilsJsonStaticCallNamedArgRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `' . Json::class . '::encode()` and `decode()` to named args', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\Utils\Json;
@@ -32,22 +32,22 @@ $decodedJson = Json::decode($json, forceArrays: true);
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isName($node->class, 'Nette\\Utils\\Json')) {
+        if (!$this->isName($node->class, 'Nette\Utils\Json')) {
             return null;
         }
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) < 2) {
+        if (count($node->getArgs()) < 2) {
             return null;
         }
         if (!$this->isNames($node->name, ['encode', 'decode'])) {

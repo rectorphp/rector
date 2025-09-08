@@ -15,7 +15,7 @@ final class SecurityAccessDecisionManagerConfigArrayHandler
     /**
      * @return array<Expression<MethodCall>>
      */
-    public function handle(Array_ $array, Variable $variable, string $mainMethodName) : array
+    public function handle(Array_ $array, Variable $variable, string $mainMethodName): array
     {
         if (!$array->items[0] instanceof ArrayItem) {
             return [];

@@ -16,7 +16,7 @@ final class DoctrineSetProvider implements SetProviderInterface
     /**
      * @return SetInterface[]
      */
-    public function provide() : array
+    public function provide(): array
     {
         return [
             new Set(SetGroup::DOCTRINE, 'Code Quality', __DIR__ . '/../../../config/sets/doctrine-code-quality.php'),

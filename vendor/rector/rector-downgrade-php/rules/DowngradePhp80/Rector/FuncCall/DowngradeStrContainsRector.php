@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStrContainsRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace str_contains() with strpos() !== false', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -43,7 +43,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class, BooleanNot::class];
     }
@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $funcCall->getArgs();
-        if (\count($args) < 2) {
+        if (count($args) < 2) {
             return null;
         }
         $haystack = $args[0]->value;
@@ -72,7 +72,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
      */
-    private function matchStrContainsOrNotStrContains($expr) : ?FuncCall
+    private function matchStrContainsOrNotStrContains($expr): ?FuncCall
     {
         $expr = $expr instanceof BooleanNot ? $expr->expr : $expr;
         if (!$expr instanceof FuncCall) {

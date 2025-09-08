@@ -7,8 +7,8 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
 final class FullyQualifiedIdentifierTypeNode extends IdentifierTypeNode
 {
-    public function __toString() : string
+    public function __toString(): string
     {
-        return '\\' . \ltrim($this->name, '\\');
+        return '\\' . ltrim($this->name, '\\');
     }
 }

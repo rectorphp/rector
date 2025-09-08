@@ -27,11 +27,11 @@ final class SprintfStringAndArgs
     /**
      * @return Expr[]
      */
-    public function getArrayItems() : array
+    public function getArrayItems(): array
     {
         return $this->arrayItems;
     }
-    public function getStringValue() : string
+    public function getStringValue(): string
     {
         return $this->string->value;
     }

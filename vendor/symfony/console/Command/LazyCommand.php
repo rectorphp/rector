@@ -35,11 +35,11 @@ final class LazyCommand extends Command
         $this->command = $commandFactory;
         $this->isEnabled = $isEnabled;
     }
-    public function ignoreValidationErrors() : void
+    public function ignoreValidationErrors(): void
     {
         $this->getCommand()->ignoreValidationErrors();
     }
-    public function setApplication(?Application $application = null) : void
+    public function setApplication(?Application $application = null): void
     {
         if (1 > \func_num_args()) {
             trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
@@ -49,22 +49,22 @@ final class LazyCommand extends Command
         }
         parent::setApplication($application);
     }
-    public function setHelperSet(HelperSet $helperSet) : void
+    public function setHelperSet(HelperSet $helperSet): void
     {
         if ($this->command instanceof parent) {
             $this->command->setHelperSet($helperSet);
         }
         parent::setHelperSet($helperSet);
     }
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
-    public function run(InputInterface $input, OutputInterface $output) : int
+    public function run(InputInterface $input, OutputInterface $output): int
     {
         return $this->getCommand()->run($input, $output);
     }
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         $this->getCommand()->complete($input, $suggestions);
     }
@@ -79,7 +79,7 @@ final class LazyCommand extends Command
     /**
      * @internal
      */
-    public function mergeApplicationDefinition(bool $mergeArgs = \true) : void
+    public function mergeApplicationDefinition(bool $mergeArgs = \true): void
     {
         $this->getCommand()->mergeApplicationDefinition($mergeArgs);
     }
@@ -92,11 +92,11 @@ final class LazyCommand extends Command
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : InputDefinition
+    public function getDefinition(): InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : InputDefinition
+    public function getNativeDefinition(): InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }
@@ -107,7 +107,7 @@ final class LazyCommand extends Command
      */
     public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null)
     {
-        $suggestedValues = 5 <= \func_num_args() ? \func_get_arg(4) : [];
+        $suggestedValues = 5 <= \func_num_args() ? func_get_arg(4) : [];
         $this->getCommand()->addArgument($name, $mode, $description, $default, $suggestedValues);
         return $this;
     }
@@ -119,7 +119,7 @@ final class LazyCommand extends Command
      */
     public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null)
     {
-        $suggestedValues = 6 <= \func_num_args() ? \func_get_arg(5) : [];
+        $suggestedValues = 6 <= \func_num_args() ? func_get_arg(5) : [];
         $this->getCommand()->addOption($name, $shortcut, $mode, $description, $default, $suggestedValues);
         return $this;
     }
@@ -139,15 +139,15 @@ final class LazyCommand extends Command
         $this->getCommand()->setHelp($help);
         return $this;
     }
-    public function getHelp() : string
+    public function getHelp(): string
     {
         return $this->getCommand()->getHelp();
     }
-    public function getProcessedHelp() : string
+    public function getProcessedHelp(): string
     {
         return $this->getCommand()->getProcessedHelp();
     }
-    public function getSynopsis(bool $short = \false) : string
+    public function getSynopsis(bool $short = \false): string
     {
         return $this->getCommand()->getSynopsis($short);
     }
@@ -159,15 +159,15 @@ final class LazyCommand extends Command
         $this->getCommand()->addUsage($usage);
         return $this;
     }
-    public function getUsages() : array
+    public function getUsages(): array
     {
         return $this->getCommand()->getUsages();
     }
-    public function getHelper(string $name) : HelperInterface
+    public function getHelper(string $name): HelperInterface
     {
         return $this->getCommand()->getHelper($name);
     }
-    public function getCommand() : parent
+    public function getCommand(): parent
     {
         if (!$this->command instanceof \Closure) {
             return $this->command;

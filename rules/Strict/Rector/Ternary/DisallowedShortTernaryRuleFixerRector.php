@@ -30,9 +30,9 @@ final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRul
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\DisallowedConstructs\\DisallowedShortTernaryRule');
+        $errorMessage = sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule');
         return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class ShortTernaryArray
 {
@@ -56,14 +56,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Ternary
+    public function refactor(Node $node): ?Ternary
     {
         $this->hasChanged = \false;
         // skip non-short ternary
@@ -88,7 +88,7 @@ CODE_SAMPLE
         $node->cond = $compareExpr;
         return $node;
     }
-    private function refactorResetFuncCall(Ternary $ternary, FuncCall $resetFuncCall, Scope $scope) : void
+    private function refactorResetFuncCall(Ternary $ternary, FuncCall $resetFuncCall, Scope $scope): void
     {
         $ternary->if = $ternary->cond;
         if ($resetFuncCall->isFirstClassCallable()) {

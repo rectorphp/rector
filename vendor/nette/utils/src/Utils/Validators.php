@@ -68,7 +68,7 @@ class Validators
      * @throws AssertionException
      * @param mixed $value
      */
-    public static function assert($value, string $expected, string $label = 'variable') : void
+    public static function assert($value, string $expected, string $label = 'variable'): void
     {
         if (!static::is($value, $expected)) {
             $expected = str_replace(['|', ':'], [' or ', ' in range '], $expected);
@@ -77,7 +77,7 @@ class Validators
             if (is_int($value) || is_float($value) || is_string($value) && strlen($value) < 40) {
                 $type .= ' ' . var_export($value, \true);
             } elseif (is_object($value)) {
-                $type .= ' ' . \get_class($value);
+                $type .= ' ' . get_class($value);
             }
             throw new AssertionException("The {$label} expects to be {$expected}, {$type} given.");
         }
@@ -87,7 +87,7 @@ class Validators
      * @param  mixed[]  $array
      * @throws AssertionException
      */
-    public static function assertField(array $array, $key, ?string $expected = null, string $label = "item '%' in array") : void
+    public static function assertField(array $array, $key, ?string $expected = null, string $label = "item '%' in array"): void
     {
         if (!array_key_exists($key, $array)) {
             throw new AssertionException('Missing ' . str_replace('%', $key, $label) . '.');
@@ -99,15 +99,15 @@ class Validators
      * Verifies that the value is of expected types separated by pipe.
      * @param mixed $value
      */
-    public static function is($value, string $expected) : bool
+    public static function is($value, string $expected): bool
     {
         foreach (explode('|', $expected) as $item) {
-            if (\substr_compare($item, '[]', -strlen('[]')) === 0) {
+            if (substr_compare($item, '[]', -strlen('[]')) === 0) {
                 if (is_iterable($value) && self::everyIs($value, substr($item, 0, -2))) {
                     return \true;
                 }
                 continue;
-            } elseif (\strncmp($item, '?', strlen('?')) === 0) {
+            } elseif (strncmp($item, '?', strlen('?')) === 0) {
                 $item = substr($item, 1);
                 if ($value === null) {
                     return \true;
@@ -151,7 +151,7 @@ class Validators
      * Finds whether all values are of expected types separated by pipe.
      * @param  mixed[]  $values
      */
-    public static function everyIs(iterable $values, string $expected) : bool
+    public static function everyIs(iterable $values, string $expected): bool
     {
         foreach ($values as $value) {
             if (!static::is($value, $expected)) {
@@ -165,7 +165,7 @@ class Validators
      * @return ($value is int|float ? true : false)
      * @param mixed $value
      */
-    public static function isNumber($value) : bool
+    public static function isNumber($value): bool
     {
         return is_int($value) || is_float($value);
     }
@@ -174,7 +174,7 @@ class Validators
      * @return ($value is non-empty-string ? bool : ($value is int ? true : false))
      * @param mixed $value
      */
-    public static function isNumericInt($value) : bool
+    public static function isNumericInt($value): bool
     {
         return is_int($value) || is_string($value) && preg_match('#^[+-]?[0-9]+$#D', $value);
     }
@@ -183,15 +183,15 @@ class Validators
      * @return ($value is non-empty-string ? bool : ($value is int|float ? true : false))
      * @param mixed $value
      */
-    public static function isNumeric($value) : bool
+    public static function isNumeric($value): bool
     {
-        return is_float($value) || is_int($value) || is_string($value) && preg_match('#^[+-]?([0-9]++\\.?[0-9]*|\\.[0-9]+)$#D', $value);
+        return is_float($value) || is_int($value) || is_string($value) && preg_match('#^[+-]?([0-9]++\.?[0-9]*|\.[0-9]+)$#D', $value);
     }
     /**
      * Checks if the value is a syntactically correct callback.
      * @param mixed $value
      */
-    public static function isCallable($value) : bool
+    public static function isCallable($value): bool
     {
         return $value && is_callable($value, \true);
     }
@@ -199,7 +199,7 @@ class Validators
      * Checks if the value is a valid UTF-8 string.
      * @param mixed $value
      */
-    public static function isUnicode($value) : bool
+    public static function isUnicode($value): bool
     {
         return is_string($value) && preg_match('##u', $value);
     }
@@ -208,13 +208,13 @@ class Validators
      * @return ($value is 0|''|false|null ? true : false)
      * @param mixed $value
      */
-    public static function isNone($value) : bool
+    public static function isNone($value): bool
     {
         return $value == null;
         // intentionally ==
     }
     /** @internal */
-    public static function isMixed() : bool
+    public static function isMixed(): bool
     {
         return \true;
     }
@@ -224,7 +224,7 @@ class Validators
      * @return ($value is list ? true : false)
      * @param mixed $value
      */
-    public static function isList($value) : bool
+    public static function isList($value): bool
     {
         return Arrays::isList($value);
     }
@@ -233,7 +233,7 @@ class Validators
      * Numbers, strings and DateTime objects can be compared.
      * @param mixed $value
      */
-    public static function isInRange($value, array $range) : bool
+    public static function isInRange($value, array $range): bool
     {
         if ($value === null || !(isset($range[0]) || isset($range[1]))) {
             return \false;
@@ -255,7 +255,7 @@ class Validators
     /**
      * Checks if the value is a valid email address. It does not verify that the domain actually exists, only the syntax is verified.
      */
-    public static function isEmail(string $value) : bool
+    public static function isEmail(string $value): bool
     {
         $atom = "[-a-z0-9!#\$%&'*+/=?^_`{|}~]";
         // RFC 5322 unquoted characters in local-part
@@ -274,7 +274,7 @@ XX
     /**
      * Checks if the value is a valid URL address.
      */
-    public static function isUrl(string $value) : bool
+    public static function isUrl(string $value): bool
     {
         $alpha = "a-z\x80-\xff";
         return (bool) preg_match(<<<XX
@@ -296,43 +296,43 @@ XX
     /**
      * Checks if the value is a valid URI address, that is, actually a string beginning with a syntactically valid schema.
      */
-    public static function isUri(string $value) : bool
+    public static function isUri(string $value): bool
     {
-        return (bool) preg_match('#^[a-z\\d+\\.-]+:\\S+$#Di', $value);
+        return (bool) preg_match('#^[a-z\d+\.-]+:\S+$#Di', $value);
     }
     /**
      * Checks whether the input is a class, interface or trait.
      * @deprecated
      */
-    public static function isType(string $type) : bool
+    public static function isType(string $type): bool
     {
         return class_exists($type) || interface_exists($type) || trait_exists($type);
     }
     /**
      * Checks whether the input is a valid PHP identifier.
      */
-    public static function isPhpIdentifier(string $value) : bool
+    public static function isPhpIdentifier(string $value): bool
     {
-        return preg_match('#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$#D', $value) === 1;
+        return preg_match('#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#D', $value) === 1;
     }
     /**
      * Determines if type is PHP built-in type. Otherwise, it is the class name.
      */
-    public static function isBuiltinType(string $type) : bool
+    public static function isBuiltinType(string $type): bool
     {
         return isset(self::BuiltinTypes[strtolower($type)]);
     }
     /**
      * Determines if type is special class name self/parent/static.
      */
-    public static function isClassKeyword(string $name) : bool
+    public static function isClassKeyword(string $name): bool
     {
         return (bool) preg_match('#^(self|parent|static)$#Di', $name);
     }
     /**
      * Checks whether the given type declaration is syntactically valid.
      */
-    public static function isTypeDeclaration(string $type) : bool
+    public static function isTypeDeclaration(string $type): bool
     {
         return (bool) preg_match(<<<'XX'
 ~((?n)

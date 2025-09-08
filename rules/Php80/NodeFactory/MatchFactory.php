@@ -39,7 +39,7 @@ final class MatchFactory
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    public function createFromCondAndExprs(Expr $condExpr, array $condAndExprs, ?Stmt $nextStmt) : ?MatchResult
+    public function createFromCondAndExprs(Expr $condExpr, array $condAndExprs, ?Stmt $nextStmt): ?MatchResult
     {
         $shouldRemoteNextStmt = \false;
         // is default value missing? maybe it can be found in next stmt
@@ -72,7 +72,7 @@ final class MatchFactory
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    private function resolveAssignVar(array $condAndExprs) : ?Expr
+    private function resolveAssignVar(array $condAndExprs): ?Expr
     {
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();

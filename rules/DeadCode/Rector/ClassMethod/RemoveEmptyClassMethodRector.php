@@ -53,7 +53,7 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove empty class methods not required by parents', [new CodeSample(<<<'CODE_SAMPLE'
 class OrphanClass
@@ -73,14 +73,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
+    private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod): bool
     {
         if ($class->isFinal() || FeatureFlags::treatClassesAsFinal($class)) {
             return \false;
@@ -123,7 +123,7 @@ CODE_SAMPLE
         }
         return $classMethod->isPublic();
     }
-    private function shouldSkipClassMethod(Class_ $class, ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(Class_ $class, ClassMethod $classMethod): bool
     {
         // is method called somewhere else in the class?
         $scope = ScopeFetcher::fetch($class);
@@ -154,7 +154,7 @@ CODE_SAMPLE
         }
         return $this->isName($classMethod, MethodName::INVOKE);
     }
-    private function hasDeprecatedAnnotation(ClassMethod $classMethod) : bool
+    private function hasDeprecatedAnnotation(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {

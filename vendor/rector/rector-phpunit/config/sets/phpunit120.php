@@ -5,6 +5,6 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\RemoveOverrideFinalConstructTestCaseRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(RemoveOverrideFinalConstructTestCaseRector::class);
 };

@@ -48,31 +48,31 @@ final class SetProviderCollector
             new DoctrineSetProvider(),
             new TwigSetProvider(),
         ];
-        $this->setProviders = \array_merge($setProviders, $extraSetProviders);
+        $this->setProviders = array_merge($setProviders, $extraSetProviders);
     }
     /**
      * @return array<SetProviderInterface>
      */
-    public function provide() : array
+    public function provide(): array
     {
         return $this->setProviders;
     }
     /**
      * @return array<SetInterface>
      */
-    public function provideSets() : array
+    public function provideSets(): array
     {
         $sets = [];
         foreach ($this->setProviders as $setProvider) {
-            $sets = \array_merge($sets, $setProvider->provide());
+            $sets = array_merge($sets, $setProvider->provide());
         }
         return $sets;
     }
     /**
      * @return array<ComposerTriggeredSet>
      */
-    public function provideComposerTriggeredSets() : array
+    public function provideComposerTriggeredSets(): array
     {
-        return \array_filter($this->provideSets(), fn(SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
+        return array_filter($this->provideSets(), fn(SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
     }
 }

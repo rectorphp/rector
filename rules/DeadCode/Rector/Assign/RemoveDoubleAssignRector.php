@@ -33,7 +33,7 @@ final class RemoveDoubleAssignRector extends AbstractRector
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify useless double assigns', [new CodeSample(<<<'CODE_SAMPLE'
 $value = 1;
@@ -44,14 +44,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function isSelfReferencing(Assign $assign) : bool
+    private function isSelfReferencing(Assign $assign): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode));
     }

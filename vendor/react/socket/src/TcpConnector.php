@@ -19,7 +19,7 @@ final class TcpConnector implements ConnectorInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->loop = $loop ?: Loop::get();
         $this->context = $context;
@@ -69,8 +69,8 @@ final class TcpConnector implements ConnectorInterface
         }
         // wait for connection
         $loop = $this->loop;
-        return new Promise\Promise(function ($resolve, $reject) use($loop, $stream, $uri) {
-            $loop->addWriteStream($stream, function ($stream) use($loop, $resolve, $reject, $uri) {
+        return new Promise\Promise(function ($resolve, $reject) use ($loop, $stream, $uri) {
+            $loop->addWriteStream($stream, function ($stream) use ($loop, $resolve, $reject, $uri) {
                 $loop->removeWriteStream($stream);
                 // The following hack looks like the only way to
                 // detect connection refused errors with PHP's stream sockets.
@@ -88,10 +88,10 @@ final class TcpConnector implements ConnectorInterface
                         // This is only known to work on Linux, Mac and Windows are known to not support this.
                         $errno = 0;
                         $errstr = '';
-                        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+                        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
                             // Match errstr from PHP's warning message.
                             // fwrite(): send of 1 bytes failed with errno=111 Connection refused
-                            \preg_match('/errno=(\\d+) (.+)/', $error, $m);
+                            \preg_match('/errno=(\d+) (.+)/', $error, $m);
                             $errno = isset($m[1]) ? (int) $m[1] : 0;
                             $errstr = isset($m[2]) ? $m[2] : $error;
                         });
@@ -109,7 +109,7 @@ final class TcpConnector implements ConnectorInterface
                     $resolve(new Connection($stream, $loop));
                 }
             });
-        }, function () use($loop, $stream, $uri) {
+        }, function () use ($loop, $stream, $uri) {
             $loop->removeWriteStream($stream);
             \fclose($stream);
             // @codeCoverageIgnoreStart

@@ -12,7 +12,7 @@ class ParserFactory
      * accept code for the newest supported version, but will try to accommodate code that becomes
      * invalid in newer versions or changes in interpretation.
      */
-    public function createForVersion(\PhpParser\PhpVersion $version) : \PhpParser\Parser
+    public function createForVersion(\PhpParser\PhpVersion $version): \PhpParser\Parser
     {
         if ($version->isHostVersion()) {
             $lexer = new \PhpParser\Lexer();
@@ -29,7 +29,7 @@ class ParserFactory
      * versions will be accepted if there have been no relevant backwards-compatibility breaks in
      * PHP.
      */
-    public function createForNewestSupportedVersion() : \PhpParser\Parser
+    public function createForNewestSupportedVersion(): \PhpParser\Parser
     {
         return $this->createForVersion(\PhpParser\PhpVersion::getNewestSupported());
     }
@@ -37,7 +37,7 @@ class ParserFactory
      * Create a parser targeting the host PHP version, that is the PHP version we're currently
      * running on. This parser will not use any token emulation.
      */
-    public function createForHostVersion() : \PhpParser\Parser
+    public function createForHostVersion(): \PhpParser\Parser
     {
         return $this->createForVersion(\PhpParser\PhpVersion::getHostVersion());
     }

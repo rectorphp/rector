@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RealToFloatTypeCastRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_REAL;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change deprecated `(real)` to `(float)`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -49,14 +49,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Double::class];
     }
     /**
      * @param Double $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $kind = $node->getAttribute(AttributeKey::KIND);
         if ($kind !== Double::KIND_REAL) {

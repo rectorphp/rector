@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SingleInArrayToCompareRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes in_array() with single element to ===', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanNot::class, FuncCall::class];
     }
     /**
      * @param BooleanNot|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof BooleanNot) {
             if (!$node->expr instanceof FuncCall) {
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
         return $this->processCompare($firstArrayItem, $node);
     }
-    private function resolveArrayItem(FuncCall $funcCall) : ?ArrayItem
+    private function resolveArrayItem(FuncCall $funcCall): ?ArrayItem
     {
         if (!$this->isName($funcCall, 'in_array')) {
             return null;
@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
         /** @var Array_ $arrayNode */
         $arrayNode = $funcCall->args[1]->value;
-        if (\count($arrayNode->items) !== 1) {
+        if (count($arrayNode->items) !== 1) {
             return null;
         }
         $firstArrayItem = $arrayNode->items[0];
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
         return $firstArrayItem;
     }
-    private function processCompare(ArrayItem $firstArrayItem, FuncCall $funcCall, bool $isNegated = \false) : Node
+    private function processCompare(ArrayItem $firstArrayItem, FuncCall $funcCall, bool $isNegated = \false): Node
     {
         $firstArrayItemValue = $firstArrayItem->value;
         $firstArg = $funcCall->getArgs()[0];

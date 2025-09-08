@@ -13,9 +13,9 @@ interface NodeNameResolverInterface
     /**
      * @return class-string<TNode>
      */
-    public function getNode() : string;
+    public function getNode(): string;
     /**
      * @param TNode $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string;
+    public function resolve(Node $node, ?Scope $scope): ?string;
 }

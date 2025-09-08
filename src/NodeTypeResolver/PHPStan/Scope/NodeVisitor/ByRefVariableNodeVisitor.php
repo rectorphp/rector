@@ -23,7 +23,7 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if ($node instanceof AssignRef) {
             $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
@@ -38,7 +38,7 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
         if ($stmts === null) {
             return null;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $subNode) use(&$byRefVariableNames) : ?\PhpParser\Node\Expr\Variable {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $subNode) use (&$byRefVariableNames): ?\PhpParser\Node\Expr\Variable {
             if ($subNode instanceof Closure) {
                 $byRefVariableNames = $this->resolveClosureUseIsByRefAttribute($subNode, $byRefVariableNames);
                 return null;
@@ -46,7 +46,7 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
             if (!$subNode instanceof Variable) {
                 return null;
             }
-            if (!\in_array($subNode->name, $byRefVariableNames, \true)) {
+            if (!in_array($subNode->name, $byRefVariableNames, \true)) {
                 return null;
             }
             $subNode->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
@@ -58,7 +58,7 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
      * @param string[] $byRefVariableNames
      * @return string[]
      */
-    private function resolveParamIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames) : array
+    private function resolveParamIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames): array
     {
         foreach ($functionLike->getParams() as $param) {
             if ($param->byRef && $param->var instanceof Variable && !$param->var->name instanceof Expr) {
@@ -74,7 +74,7 @@ final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements Scop
      * @param string[] $byRefVariableNames
      * @return string[]
      */
-    private function resolveClosureUseIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames) : array
+    private function resolveClosureUseIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames): array
     {
         if (!$functionLike instanceof Closure) {
             return $byRefVariableNames;

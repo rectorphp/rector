@@ -41,7 +41,7 @@ final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRe
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -76,14 +76,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -103,16 +103,16 @@ CODE_SAMPLE
         $contextOptions->items[] = new ArrayItem($this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue), new String_(self::NEW_OPTION_NAME));
         return $node;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall): bool
     {
         if (!$this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
             return \true;
         }
-        $reflectionExtractorObjectType = new ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
+        $reflectionExtractorObjectType = new ObjectType('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor');
         if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return \true;
         }
-        if (\count($methodCall->args) < 3) {
+        if (count($methodCall->args) < 3) {
             return \true;
         }
         $thirdArg = $methodCall->args[2];
@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
         return $contextOptions->items === [];
     }
-    private function getContextOptionValue(MethodCall $methodCall) : ?bool
+    private function getContextOptionValue(MethodCall $methodCall): ?bool
     {
         $thirdArg = $methodCall->args[2];
         if (!$thirdArg instanceof Arg) {
@@ -151,14 +151,14 @@ CODE_SAMPLE
         }
         return $contextOptionValue;
     }
-    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue) : BitwiseOr
+    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
     {
-        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_GET');
-        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_SET');
+        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_GET');
+        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_SET');
         if (!$enableMagicCallExtractionValue) {
             return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
-        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_CALL');
+        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_CALL');
         return new BitwiseOr(new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
     }
 }

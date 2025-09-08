@@ -21,11 +21,11 @@ class Error extends Expr
     {
         $this->attributes = $attributes;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return [];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Error';
     }

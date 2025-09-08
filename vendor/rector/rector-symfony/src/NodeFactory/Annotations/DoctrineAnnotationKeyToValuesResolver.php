@@ -25,7 +25,7 @@ final class DoctrineAnnotationKeyToValuesResolver
     /**
      * @return array<string|null, mixed>|mixed[]
      */
-    public function resolveFromExpr(Expr $expr) : array
+    public function resolveFromExpr(Expr $expr): array
     {
         $annotationKeyToValues = [];
         if ($expr instanceof Array_) {
@@ -50,7 +50,7 @@ final class DoctrineAnnotationKeyToValuesResolver
         }
         return $annotationKeyToValues;
     }
-    private function resolveKey(ArrayItem $arrayItem) : ?string
+    private function resolveKey(ArrayItem $arrayItem): ?string
     {
         if (!$arrayItem->key instanceof Expr) {
             return null;

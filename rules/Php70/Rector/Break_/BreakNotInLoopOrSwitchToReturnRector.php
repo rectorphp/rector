@@ -34,11 +34,11 @@ final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector implemen
     {
         $this->contextAnalyzer = $contextAnalyzer;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_BREAK_OUTSIDE_LOOP;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert break outside for/foreach/switch context to return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -71,7 +71,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class, Break_::class];
     }
@@ -82,7 +82,7 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         if ($node instanceof Switch_) {
-            $this->traverseNodesWithCallable($node->cases, static function (Node $subNode) : ?int {
+            $this->traverseNodesWithCallable($node->cases, static function (Node $subNode): ?int {
                 if ($subNode instanceof Class_ || $subNode instanceof FunctionLike && !$subNode instanceof ArrowFunction) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }

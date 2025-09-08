@@ -28,14 +28,14 @@ final class DowngradeObjectTypeDeclarationRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class, Closure::class];
     }
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $objectWithoutClassType = new ObjectWithoutClassType();
         $hasChanged = \false;
@@ -54,7 +54,7 @@ final class DowngradeObjectTypeDeclarationRector extends AbstractRector
         }
         return $node;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove the "object" param and return type, add a @param and @return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass

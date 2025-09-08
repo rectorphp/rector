@@ -8,7 +8,7 @@ final class PHPUnitClassName
     /**
      * @var string
      */
-    public const TEST_CASE = 'PHPUnit\\Framework\\TestCase';
+    public const TEST_CASE = 'PHPUnit\Framework\TestCase';
     /**
      * @var string
      */
@@ -16,5 +16,5 @@ final class PHPUnitClassName
     /**
      * @var string
      */
-    public const ASSERT = 'PHPUnit\\Framework\\Assert';
+    public const ASSERT = 'PHPUnit\Framework\Assert';
 }

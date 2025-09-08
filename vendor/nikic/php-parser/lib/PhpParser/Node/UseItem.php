@@ -31,24 +31,24 @@ class UseItem extends NodeAbstract
         $this->name = $name;
         $this->alias = \is_string($alias) ? new \PhpParser\Node\Identifier($alias) : $alias;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['type', 'name', 'alias'];
     }
     /**
      * Get alias. If not explicitly given this is the last component of the used name.
      */
-    public function getAlias() : \PhpParser\Node\Identifier
+    public function getAlias(): \PhpParser\Node\Identifier
     {
         if (null !== $this->alias) {
             return $this->alias;
         }
         return new \PhpParser\Node\Identifier($this->name->getLast());
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'UseItem';
     }
 }
 // @deprecated compatibility alias
-\class_alias(\PhpParser\Node\UseItem::class, \PhpParser\Node\Stmt\UseUse::class);
+class_alias(\PhpParser\Node\UseItem::class, \PhpParser\Node\Stmt\UseUse::class);

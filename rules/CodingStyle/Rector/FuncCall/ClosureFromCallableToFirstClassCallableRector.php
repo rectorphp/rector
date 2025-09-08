@@ -27,21 +27,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `Closure::fromCallable()` to first class callable syntax', [new CodeSample('Closure::fromCallable([$obj, \'method\']);', '$obj->method(...);'), new CodeSample("Closure::fromCallable('trim');", 'trim(...);'), new CodeSample("Closure::fromCallable(['SomeClass', 'staticMethod']);", 'SomeClass::staticMethod(...);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -54,7 +54,7 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
             return new FuncCall($this->toFullyQualified($arg->value->value), [new VariadicPlaceholder()]);
         }
         if ($arg->value instanceof Array_) {
-            if (!\array_key_exists(0, $arg->value->items) || !\array_key_exists(1, $arg->value->items) || !$arg->value->items[1]->value instanceof String_) {
+            if (!array_key_exists(0, $arg->value->items) || !array_key_exists(1, $arg->value->items) || !$arg->value->items[1]->value instanceof String_) {
                 return null;
             }
             if ($arg->value->items[0]->value instanceof Variable) {
@@ -76,11 +76,11 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
     }
-    public function shouldSkip(StaticCall $staticCall) : bool
+    public function shouldSkip(StaticCall $staticCall): bool
     {
         if (!$staticCall->class instanceof Name) {
             return \true;
@@ -95,12 +95,12 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
             return \true;
         }
         $args = $staticCall->getArgs();
-        return \count($args) !== 1;
+        return count($args) !== 1;
     }
-    public function toFullyQualified(string $functionName) : FullyQualified
+    public function toFullyQualified(string $functionName): FullyQualified
     {
         // in case there's already a \ prefix, remove it
-        $functionName = \ltrim($functionName, '\\');
+        $functionName = ltrim($functionName, '\\');
         return new FullyQualified($functionName);
     }
 }

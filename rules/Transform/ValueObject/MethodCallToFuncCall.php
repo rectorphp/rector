@@ -23,15 +23,15 @@ final class MethodCallToFuncCall
         $this->methodName = $methodName;
         $this->functionName = $functionName;
     }
-    public function getObjectType() : string
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function getFunctionName() : string
+    public function getFunctionName(): string
     {
         return $this->functionName;
     }

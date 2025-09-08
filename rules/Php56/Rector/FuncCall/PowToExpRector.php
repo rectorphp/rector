@@ -18,21 +18,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PowToExpRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes `pow(val, val2)` to `**` (exp) parameter', [new CodeSample('pow(1, 2);', '1**2;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'pow')) {
             return null;
@@ -47,7 +47,7 @@ final class PowToExpRector extends AbstractRector implements MinPhpVersionInterf
         }
         return new Pow($firstExpr, $secondExpr);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::EXP_OPERATOR;
     }

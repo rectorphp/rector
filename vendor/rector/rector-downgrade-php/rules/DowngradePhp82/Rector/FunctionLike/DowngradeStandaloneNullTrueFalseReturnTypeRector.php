@@ -51,11 +51,11 @@ final class DowngradeStandaloneNullTrueFalseReturnTypeRector extends AbstractRec
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FunctionLike::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade standalone return null, true, or false', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -80,14 +80,14 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $returnType = $node->returnType;
         if (!$returnType instanceof Identifier) {
             return null;
         }
         $returnTypeName = $this->getName($returnType);
-        if (!\in_array($returnTypeName, ['null', 'false', 'true'], \true)) {
+        if (!in_array($returnTypeName, ['null', 'false', 'true'], \true)) {
             return null;
         }
         // in closure and arrow function can't add `@return null` docblock as they are Expr
@@ -97,7 +97,7 @@ CODE_SAMPLE
         $node->returnType = $this->resolveNativeType($node, $returnType);
         return $node;
     }
-    private function resolveType(Identifier $identifier) : Type
+    private function resolveType(Identifier $identifier): Type
     {
         $nodeName = $this->getName($identifier);
         if ($nodeName === 'null') {
@@ -116,7 +116,7 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod) {
             $returnTypeFromParent = $this->resolveParentNativeReturnType($node);
             if ($returnTypeFromParent instanceof UnionType || $returnTypeFromParent instanceof NullableType) {
-                $this->traverseNodesWithCallable($returnTypeFromParent, static function (Node $subNode) : Node {
+                $this->traverseNodesWithCallable($returnTypeFromParent, static function (Node $subNode): Node {
                     $subNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
                     return $subNode;
                 });
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
         return new Identifier('bool');
     }
-    private function resolveParentNativeReturnType(ClassMethod $classMethod) : ?Node
+    private function resolveParentNativeReturnType(ClassMethod $classMethod): ?Node
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
             return null;
         }
         $methodName = $classMethod->name->toString();
-        $parents = \array_merge(\is_array($classReflection->getParents()) ? $classReflection->getParents() : \iterator_to_array($classReflection->getParents()), \is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : \iterator_to_array($classReflection->getInterfaces()));
+        $parents = array_merge(is_array($classReflection->getParents()) ? $classReflection->getParents() : iterator_to_array($classReflection->getParents()), is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : iterator_to_array($classReflection->getInterfaces()));
         foreach ($parents as $parent) {
             if (!$parent->hasMethod($methodName)) {
                 continue;

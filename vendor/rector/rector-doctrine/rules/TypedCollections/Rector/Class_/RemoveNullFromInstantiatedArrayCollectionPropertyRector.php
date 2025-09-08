@@ -32,7 +32,7 @@ final class RemoveNullFromInstantiatedArrayCollectionPropertyRector extends Abst
         $this->entityLikeClassDetector = $entityLikeClassDetector;
         $this->initializedArrayCollectionPropertyResolver = $initializedArrayCollectionPropertyResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove nullability from instantiated ArrayCollection properties, set it to Collection', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -67,14 +67,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->entityLikeClassDetector->detect($node)) {
             return null;

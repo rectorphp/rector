@@ -8,11 +8,11 @@ final class ClassName
     /**
      * @var string
      */
-    public const TEST_CASE_CLASS = 'PHPUnit\\Framework\\TestCase';
+    public const TEST_CASE_CLASS = 'PHPUnit\Framework\TestCase';
     /**
      * @var string
      */
-    public const MOCK_OBJECT = 'PHPUnit\\Framework\\MockObject\\MockObject';
+    public const MOCK_OBJECT = 'PHPUnit\Framework\MockObject\MockObject';
     /**
      * @var string
      */
@@ -20,9 +20,9 @@ final class ClassName
     /**
      * @var string
      */
-    public const JMS_TYPE = 'JMS\\Serializer\\Annotation\\Type';
+    public const JMS_TYPE = 'JMS\Serializer\Annotation\Type';
     /**
      * @var string
      */
-    public const DOCTRINE_ENTITY = 'Doctrine\\ORM\\Mapping\\Entity';
+    public const DOCTRINE_ENTITY = 'Doctrine\ORM\Mapping\Entity';
 }

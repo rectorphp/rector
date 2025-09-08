@@ -36,7 +36,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes) : array
+    public function beforeTraverse(array $nodes): array
     {
         // no nodes → just return
         if ($nodes === []) {
@@ -59,7 +59,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         }
         return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode);
     }
-    public function enterNode(Node $node) : int
+    public function enterNode(Node $node): int
     {
         /**
          * We stop the traversal because all the work has already been done in the beforeTraverse() function
@@ -79,7 +79,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @return Stmt[]
      * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
-    private function resolveNodesWithImportedUses(array $nodes, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace) : array
+    private function resolveNodesWithImportedUses(array $nodes, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace): array
     {
         // A. has namespace? add under it
         if ($namespace instanceof Namespace_) {
@@ -97,11 +97,11 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @return FullyQualifiedObjectType[]
      */
-    private function filterOutNonNamespacedNames(array $useImportTypes) : array
+    private function filterOutNonNamespacedNames(array $useImportTypes): array
     {
         $namespacedUseImportTypes = [];
         foreach ($useImportTypes as $useImportType) {
-            if (\strpos($useImportType->getClassName(), '\\') === \false) {
+            if (strpos($useImportType->getClassName(), '\\') === \false) {
                 continue;
             }
             $namespacedUseImportTypes[] = $useImportType;

@@ -22,7 +22,7 @@ final class StaticClosureRector extends AbstractRector
     {
         $this->staticGuard = $staticGuard;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Closure to be static when possible', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
@@ -47,14 +47,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->staticGuard->isLegal($node)) {
             return null;

@@ -20,7 +20,7 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
      * @var MethodCallToPropertyFetch[]
      */
     private array $methodCallsToPropertyFetches = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn method call `$this->getFirstname()` to property fetch `$this->firstname`', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -45,14 +45,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallsToPropertyFetches as $methodCallToPropertyFetch) {
             if (!$this->isName($node->name, $methodCallToPropertyFetch->getOldMethod())) {
@@ -68,7 +68,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, MethodCallToPropertyFetch::class);
         $this->methodCallsToPropertyFetches = $configuration;

@@ -51,7 +51,7 @@ final class StaticTypeMapper
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType) : TypeNode
+    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
     {
         return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType);
     }
@@ -59,15 +59,15 @@ final class StaticTypeMapper
      * @param TypeKind::* $typeKind
      * @return Name|ComplexType|Identifier|null
      */
-    public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, string $typeKind) : ?Node
+    public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, string $typeKind): ?Node
     {
         return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
     }
-    public function mapPhpParserNodePHPStanType(Node $node) : Type
+    public function mapPhpParserNodePHPStanType(Node $node): Type
     {
         return $this->phpParserNodeMapper->mapToPHPStanType($node);
     }
-    public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node) : Type
+    public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
         if ($phpDocTagValueNode instanceof TemplateTagValueNode) {
             // special case
@@ -80,9 +80,9 @@ final class StaticTypeMapper
         if ($phpDocTagValueNode instanceof ReturnTagValueNode || $phpDocTagValueNode instanceof ParamTagValueNode || $phpDocTagValueNode instanceof VarTagValueNode || $phpDocTagValueNode instanceof ThrowsTagValueNode) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($phpDocTagValueNode));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
     }
-    public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node) : Type
+    public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
         return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);

@@ -74,7 +74,7 @@ class Bound
         if ($this == $other) {
             return \false;
         }
-        $compareResult = \version_compare($this->getVersion(), $other->getVersion());
+        $compareResult = version_compare($this->getVersion(), $other->getVersion());
         // Not the same version means we don't need to check if the bounds are inclusive or not
         if (0 !== $compareResult) {
             return ('>' === $operator ? 1 : -1) === $compareResult;
@@ -84,7 +84,7 @@ class Bound
     }
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getVersion(), $this->isInclusive() ? 'inclusive' : 'exclusive');
+        return sprintf('%s [%s]', $this->getVersion(), $this->isInclusive() ? 'inclusive' : 'exclusive');
     }
     /**
      * @return self

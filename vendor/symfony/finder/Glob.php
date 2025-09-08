@@ -37,7 +37,7 @@ class Glob
     /**
      * Returns a regexp which is the equivalent of the glob pattern.
      */
-    public static function toRegex(string $glob, bool $strictLeadingDot = \true, bool $strictWildcardSlash = \true, string $delimiter = '#') : string
+    public static function toRegex(string $glob, bool $strictLeadingDot = \true, bool $strictWildcardSlash = \true, string $delimiter = '#'): string
     {
         $firstByte = \true;
         $escaping = \false;
@@ -47,7 +47,7 @@ class Glob
         for ($i = 0; $i < $sizeGlob; ++$i) {
             $car = $glob[$i];
             if ($firstByte && $strictLeadingDot && '.' !== $car) {
-                $regex .= '(?=[^\\.])';
+                $regex .= '(?=[^\.])';
             }
             $firstByte = '/' === $car;
             if ($firstByte && $strictWildcardSlash && isset($glob[$i + 2]) && '**' === $glob[$i + 1] . $glob[$i + 2] && (!isset($glob[$i + 3]) || '/' === $glob[$i + 3])) {
@@ -56,22 +56,22 @@ class Glob
                     $car .= '?';
                 }
                 if ($strictLeadingDot) {
-                    $car = '(?=[^\\.])' . $car;
+                    $car = '(?=[^\.])' . $car;
                 }
                 $car = '/(?:' . $car . ')*';
                 $i += 2 + isset($glob[$i + 3]);
                 if ('/' === $delimiter) {
-                    $car = \str_replace('/', '\\/', $car);
+                    $car = str_replace('/', '\/', $car);
                 }
             }
             if ($delimiter === $car || '.' === $car || '(' === $car || ')' === $car || '|' === $car || '+' === $car || '^' === $car || '$' === $car) {
                 $regex .= "\\{$car}";
             } elseif ('*' === $car) {
-                $regex .= $escaping ? '\\*' : ($strictWildcardSlash ? '[^/]*' : '.*');
+                $regex .= $escaping ? '\*' : ($strictWildcardSlash ? '[^/]*' : '.*');
             } elseif ('?' === $car) {
-                $regex .= $escaping ? '\\?' : ($strictWildcardSlash ? '[^/]' : '.');
+                $regex .= $escaping ? '\?' : ($strictWildcardSlash ? '[^/]' : '.');
             } elseif ('{' === $car) {
-                $regex .= $escaping ? '\\{' : '(';
+                $regex .= $escaping ? '\{' : '(';
                 if (!$escaping) {
                     ++$inCurlies;
                 }

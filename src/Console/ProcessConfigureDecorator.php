@@ -10,7 +10,7 @@ use RectorPrefix202509\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix202509\Symfony\Component\Console\Input\InputOption;
 final class ProcessConfigureDecorator
 {
-    public static function decorate(Command $command) : void
+    public static function decorate(Command $command): void
     {
         $command->addArgument(Option::SOURCE, InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Files or directories to be upgraded.');
         $command->addOption(Option::DRY_RUN, Option::DRY_RUN_SHORT, InputOption::VALUE_NONE, 'Only see the diff of changes, do not save them to files.');

@@ -30,7 +30,7 @@ final class SetUpBeforeClassToSetUpRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change setUpBeforeClass() to setUp() if not needed', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -73,14 +73,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $className = $this->getName($node);
         if ($className === null) {
@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
         $changedPropertyNames = [];
         // replace static property fetches
-        $this->traverseNodesWithCallable($setUpBeforeClassMethod, function (Node $node) use(&$changedPropertyNames) {
+        $this->traverseNodesWithCallable($setUpBeforeClassMethod, function (Node $node) use (&$changedPropertyNames) {
             if (!$node instanceof Assign) {
                 return null;
             }
@@ -108,7 +108,7 @@ CODE_SAMPLE
             }
             $node->var = new PropertyFetch(new Variable('this'), $staticPropertyFetch->name);
             $propertyName = $this->getName($staticPropertyFetch->name);
-            if (!\is_string($propertyName)) {
+            if (!is_string($propertyName)) {
                 return null;
             }
             $changedPropertyNames[] = $propertyName;
@@ -132,7 +132,7 @@ CODE_SAMPLE
             }
         }
         // replace same property access in the class
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use($changedPropertyNames) : ?PropertyFetch {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use ($changedPropertyNames): ?PropertyFetch {
             if (!$node instanceof StaticPropertyFetch) {
                 return null;
             }

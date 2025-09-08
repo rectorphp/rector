@@ -41,9 +41,9 @@ final class TypedPropertyFromToManyRelationTypeRector extends AbstractRector imp
         $this->staticTypeMapper = $staticTypeMapper;
         $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "Doctrine\\Common\\Collections\\Collection" type declaration, based on @ORM\\*toMany and @ODM\\*toMany annotations/attributes', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "Doctrine\Common\Collections\Collection" type declaration, based on @ORM\*toMany and @ODM\*toMany annotations/attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
@@ -79,14 +79,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Property
+    public function refactor(Node $node): ?Property
     {
         if ($node->type !== null && $this->isName($node->type, DoctrineClass::COLLECTION)) {
             return null;
@@ -106,7 +106,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }

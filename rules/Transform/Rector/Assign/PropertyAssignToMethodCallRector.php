@@ -22,7 +22,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector implements C
      * @var PropertyAssignToMethodCall[]
      */
     private array $propertyAssignsToMethodCalls = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn property assign of specific type and property name to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeClass;
@@ -37,14 +37,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->var instanceof PropertyFetch) {
             return null;
@@ -66,7 +66,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, PropertyAssignToMethodCall::class);
         $this->propertyAssignsToMethodCalls = $configuration;

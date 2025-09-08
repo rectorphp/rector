@@ -56,7 +56,7 @@ final class RemoveUnusedPrivateMethodRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused private method', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeController
@@ -86,21 +86,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classMethods = $node->getMethods();
         if ($classMethods === []) {
             return null;
         }
         $filter = static fn(ClassMethod $classMethod): bool => $classMethod->isPrivate();
-        $privateMethods = \array_filter($classMethods, $filter);
+        $privateMethods = array_filter($classMethods, $filter);
         if ($privateMethods === []) {
             return null;
         }
@@ -121,7 +121,7 @@ CODE_SAMPLE
             if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $privateMethod, $scope)) {
                 continue;
             }
-            if (\in_array($this->getName($privateMethod), $collectionTestMethodsUsesPrivateProvider, \true)) {
+            if (in_array($this->getName($privateMethod), $collectionTestMethodsUsesPrivateProvider, \true)) {
                 continue;
             }
             unset($node->stmts[$privateMethod->getAttribute(AttributeKey::STMT_KEY)]);
@@ -136,9 +136,9 @@ CODE_SAMPLE
      * @param ClassMethod[] $classMethods
      * @return string[]
      */
-    private function collectTestMethodsUsesPrivateDataProvider(ClassReflection $classReflection, Class_ $class, array $classMethods) : array
+    private function collectTestMethodsUsesPrivateDataProvider(ClassReflection $classReflection, Class_ $class, array $classMethods): array
     {
-        if (!$classReflection->is('PHPUnit\\Framework\\TestCase')) {
+        if (!$classReflection->is('PHPUnit\Framework\TestCase')) {
             return [];
         }
         $privateMethods = [];
@@ -158,12 +158,12 @@ CODE_SAMPLE
                     }
                 }
             }
-            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\\Framework\\Attributes\\DataProvider')) {
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\Framework\Attributes\DataProvider')) {
                 foreach ($classMethod->attrGroups as $attrGroup) {
                     foreach ($attrGroup->attrs as $attr) {
-                        if ($attr->name->toString() === 'PHPUnit\\Framework\\Attributes\\DataProvider') {
+                        if ($attr->name->toString() === 'PHPUnit\Framework\Attributes\DataProvider') {
                             $argValue = $attr->args[0]->value->value ?? '';
-                            if (\is_string($argValue)) {
+                            if (is_string($argValue)) {
                                 $dataProviderMethod = $class->getMethod($argValue);
                                 if ($dataProviderMethod instanceof ClassMethod && $dataProviderMethod->isPrivate()) {
                                     $privateMethods[] = $argValue;
@@ -176,7 +176,7 @@ CODE_SAMPLE
         }
         return $privateMethods;
     }
-    private function shouldSkip(ClassMethod $classMethod, ?ClassReflection $classReflection) : bool
+    private function shouldSkip(ClassMethod $classMethod, ?ClassReflection $classReflection): bool
     {
         if (!$classReflection instanceof ClassReflection) {
             return \true;
@@ -200,10 +200,10 @@ CODE_SAMPLE
     /**
      * @param ClassMethod[] $classMethods
      */
-    private function hasDynamicMethodCallOnFetchThis(array $classMethods) : bool
+    private function hasDynamicMethodCallOnFetchThis(array $classMethods): bool
     {
         foreach ($classMethods as $classMethod) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $subNode) : bool {
+            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $subNode): bool {
                 if (!$subNode instanceof MethodCall) {
                     return \false;
                 }

@@ -31,9 +31,9 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
      */
     public function newLine(int $count = 1)
     {
-        $this->output->write(\str_repeat(\PHP_EOL, $count));
+        $this->output->write(str_repeat(\PHP_EOL, $count));
     }
-    public function createProgressBar(int $max = 0) : ProgressBar
+    public function createProgressBar(int $max = 0): ProgressBar
     {
         return new ProgressBar($this->output, $max);
     }
@@ -60,7 +60,7 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     {
         $this->output->setVerbosity($level);
     }
-    public function getVerbosity() : int
+    public function getVerbosity(): int
     {
         return $this->output->getVerbosity();
     }
@@ -71,7 +71,7 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     {
         $this->output->setDecorated($decorated);
     }
-    public function isDecorated() : bool
+    public function isDecorated(): bool
     {
         return $this->output->isDecorated();
     }
@@ -82,23 +82,23 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     {
         $this->output->setFormatter($formatter);
     }
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter(): OutputFormatterInterface
     {
         return $this->output->getFormatter();
     }
-    public function isQuiet() : bool
+    public function isQuiet(): bool
     {
         return $this->output->isQuiet();
     }
-    public function isVerbose() : bool
+    public function isVerbose(): bool
     {
         return $this->output->isVerbose();
     }
-    public function isVeryVerbose() : bool
+    public function isVeryVerbose(): bool
     {
         return $this->output->isVeryVerbose();
     }
-    public function isDebug() : bool
+    public function isDebug(): bool
     {
         return $this->output->isDebug();
     }

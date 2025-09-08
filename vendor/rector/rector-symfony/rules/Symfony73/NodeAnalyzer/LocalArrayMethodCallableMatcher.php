@@ -20,7 +20,7 @@ final class LocalArrayMethodCallableMatcher
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function match(Expr $expr, ObjectType $objectType) : ?string
+    public function match(Expr $expr, ObjectType $objectType): ?string
     {
         if ($expr instanceof MethodCall) {
             if (!$expr->name instanceof Identifier) {

@@ -53,14 +53,14 @@ final class PhpAttributeGroupFactory
         $this->annotationToAttributeIntegerValueCaster = $annotationToAttributeIntegerValueCaster;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
     }
-    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute, ?string $value = null) : AttributeGroup
+    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute, ?string $value = null): AttributeGroup
     {
         return $this->createFromClass($annotationToAttribute->getAttributeClass(), $value);
     }
     /**
      * @param AttributeName::*|string $attributeClass
      */
-    public function createFromClass(string $attributeClass, ?string $value = null) : AttributeGroup
+    public function createFromClass(string $attributeClass, ?string $value = null): AttributeGroup
     {
         $fullyQualified = new FullyQualified($attributeClass);
         $attribute = new Attribute($fullyQualified);
@@ -74,7 +74,7 @@ final class PhpAttributeGroupFactory
      * @api tests
      * @param mixed[] $items
      */
-    public function createFromClassWithItems(string $attributeClass, array $items) : AttributeGroup
+    public function createFromClassWithItems(string $attributeClass, array $items): AttributeGroup
     {
         $fullyQualified = new FullyQualified($attributeClass);
         $args = $this->createArgsFromItems($items);
@@ -84,7 +84,7 @@ final class PhpAttributeGroupFactory
     /**
      * @param Use_[] $uses
      */
-    public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses) : AttributeGroup
+    public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses): AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithSilentKey();
         $args = $this->createArgsFromItems($values, '', $annotationToAttribute->getClassReferenceFields());
@@ -110,7 +110,7 @@ final class PhpAttributeGroupFactory
      *
      * @return list<Arg>
      */
-    public function createArgsFromItems(array $items, string $attributeClass = '', array $classReferencedFields = []) : array
+    public function createArgsFromItems(array $items, string $attributeClass = '', array $classReferencedFields = []): array
     {
         $mappedItems = $this->annotationToAttributeMapper->map($items);
         $this->mapClassReferences($mappedItems, $classReferencedFields);
@@ -122,7 +122,7 @@ final class PhpAttributeGroupFactory
      * @param string[] $classReferencedFields
      * @param \PhpParser\Node\Expr|string $expr
      */
-    private function mapClassReferences($expr, array $classReferencedFields) : void
+    private function mapClassReferences($expr, array $classReferencedFields): void
     {
         if (!$expr instanceof Array_) {
             return;
@@ -134,7 +134,7 @@ final class PhpAttributeGroupFactory
             if (!$arrayItem->key instanceof String_) {
                 continue;
             }
-            if (!\in_array($arrayItem->key->value, $classReferencedFields)) {
+            if (!in_array($arrayItem->key->value, $classReferencedFields)) {
                 continue;
             }
             if ($arrayItem->value instanceof ClassConstFetch) {

@@ -19,11 +19,11 @@ class YieldFrom extends Expr
         $this->attributes = $attributes;
         $this->expr = $expr;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['expr'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_YieldFrom';
     }

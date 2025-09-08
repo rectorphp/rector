@@ -12,11 +12,11 @@ final class FilesystemTweaker
      *
      * @return string[]
      */
-    public function resolveWithFnmatch(array $paths) : array
+    public function resolveWithFnmatch(array $paths): array
     {
         $absolutePathsFound = [];
         foreach ($paths as $path) {
-            if (\strpos($path, '*') !== \false) {
+            if (strpos($path, '*') !== \false) {
                 $foundPaths = $this->foundInGlob($path);
                 $absolutePathsFound = $this->appendPaths($foundPaths, $absolutePathsFound);
             } else {
@@ -30,10 +30,10 @@ final class FilesystemTweaker
      * @param string[] $absolutePathsFound
      * @return string[]
      */
-    private function appendPaths(array $foundPaths, array $absolutePathsFound) : array
+    private function appendPaths(array $foundPaths, array $absolutePathsFound): array
     {
         foreach ($foundPaths as $foundPath) {
-            $foundPath = \realpath($foundPath);
+            $foundPath = realpath($foundPath);
             if ($foundPath === \false) {
                 continue;
             }
@@ -44,10 +44,10 @@ final class FilesystemTweaker
     /**
      * @return string[]
      */
-    private function foundInGlob(string $path) : array
+    private function foundInGlob(string $path): array
     {
         /** @var string[] $paths */
-        $paths = (array) \glob($path);
-        return \array_filter($paths, static fn(string $path): bool => \file_exists($path));
+        $paths = (array) glob($path);
+        return array_filter($paths, static fn(string $path): bool => file_exists($path));
     }
 }

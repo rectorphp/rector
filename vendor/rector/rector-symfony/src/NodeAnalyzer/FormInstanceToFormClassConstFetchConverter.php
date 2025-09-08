@@ -39,7 +39,7 @@ final class FormInstanceToFormClassConstFetchConverter
         $this->formTypeClassResolver = $formTypeClassResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition) : ?MethodCall
+    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?MethodCall
     {
         $args = $methodCall->getArgs();
         if (!isset($args[$position])) {
@@ -65,7 +65,7 @@ final class FormInstanceToFormClassConstFetchConverter
         $currentArg->value = $classConstFetch;
         return $methodCall;
     }
-    private function isVariableOfTypeWithRequiredConstructorParameters(Variable $variable) : bool
+    private function isVariableOfTypeWithRequiredConstructorParameters(Variable $variable): bool
     {
         // if form type is object with constructor args, handle manually
         $variableType = $this->nodeTypeResolver->getType($variable);

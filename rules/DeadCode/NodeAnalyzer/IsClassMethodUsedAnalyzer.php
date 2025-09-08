@@ -73,7 +73,7 @@ final class IsClassMethodUsedAnalyzer
         $this->reflectionResolver = $reflectionResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function isClassMethodUsed(Class_ $class, ClassMethod $classMethod, Scope $scope) : bool
+    public function isClassMethodUsed(Class_ $class, ClassMethod $classMethod, Scope $scope): bool
     {
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         // 1. direct normal calls
@@ -95,42 +95,42 @@ final class IsClassMethodUsedAnalyzer
         // 4. private method exists in trait and is overwritten by the class
         return $this->doesMethodExistInTrait($classMethod, $classMethodName);
     }
-    private function isClassMethodUsedInLocalStaticCall(Class_ $class, string $classMethodName) : bool
+    private function isClassMethodUsedInLocalStaticCall(Class_ $class, string $classMethodName): bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var StaticCall[] $staticCalls */
         $staticCalls = $this->betterNodeFinder->findInstanceOf($class, StaticCall::class);
         return $this->callCollectionAnalyzer->isExists($staticCalls, $classMethodName, $className);
     }
-    private function isClassMethodCalledInLocalMethodCall(Class_ $class, string $classMethodName) : bool
+    private function isClassMethodCalledInLocalMethodCall(Class_ $class, string $classMethodName): bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
     }
-    private function isClassMethodCalledInLocalNullsafeMethodCall(Class_ $class, string $classMethodName) : bool
+    private function isClassMethodCalledInLocalNullsafeMethodCall(Class_ $class, string $classMethodName): bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         /** @var NullsafeMethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, NullsafeMethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
     }
-    private function isInArrayMap(Class_ $class, Array_ $array) : bool
+    private function isInArrayMap(Class_ $class, Array_ $array): bool
     {
         if (!$array->getAttribute(ArrayMapArgVisitor::ATTRIBUTE_NAME) instanceof Arg) {
             return \false;
         }
-        if (\count($array->items) !== 2) {
+        if (count($array->items) !== 2) {
             return \false;
         }
         $value = $this->valueResolver->getValue($array->items[1]->value);
-        if (!\is_string($value)) {
+        if (!is_string($value)) {
             return \false;
         }
         return $class->getMethod($value) instanceof ClassMethod;
     }
-    private function isClassMethodCalledInLocalArrayCall(Class_ $class, ClassMethod $classMethod, Scope $scope) : bool
+    private function isClassMethodCalledInLocalArrayCall(Class_ $class, ClassMethod $classMethod, Scope $scope): bool
     {
         /** @var Array_[] $arrays */
         $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
@@ -154,7 +154,7 @@ final class IsClassMethodUsedAnalyzer
         }
         return \false;
     }
-    private function shouldSkipArrayCallable(Class_ $class, ?\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable) : bool
+    private function shouldSkipArrayCallable(Class_ $class, ?\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable): bool
     {
         if (!$arrayCallable instanceof ArrayCallable) {
             return \true;
@@ -162,7 +162,7 @@ final class IsClassMethodUsedAnalyzer
         // is current class method?
         return !$this->nodeNameResolver->isName($class, $arrayCallable->getClass());
     }
-    private function doesMethodExistInTrait(ClassMethod $classMethod, string $classMethodName) : bool
+    private function doesMethodExistInTrait(ClassMethod $classMethod, string $classMethodName): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
@@ -177,7 +177,7 @@ final class IsClassMethodUsedAnalyzer
         }
         return \false;
     }
-    private function isUsedByTrait(Trait_ $trait, string $classMethodName, string $className) : bool
+    private function isUsedByTrait(Trait_ $trait, string $classMethodName, string $className): bool
     {
         foreach ($trait->getMethods() as $classMethod) {
             if ($classMethod->name->toString() === $classMethodName) {
@@ -187,7 +187,7 @@ final class IsClassMethodUsedAnalyzer
              * Trait can't detect class type, so it rely on "this" or "self" or "static" or "ClassName::methodName()" usage...
              */
             $callMethod = null;
-            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $subNode) use($className, $classMethodName, &$callMethod) : ?int {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $subNode) use ($className, $classMethodName, &$callMethod): ?int {
                 if ($subNode instanceof Class_ || $subNode instanceof Function_) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
@@ -207,7 +207,7 @@ final class IsClassMethodUsedAnalyzer
         }
         return \false;
     }
-    private function isStaticCallMatch(Node $subNode, string $className, string $classMethodName) : bool
+    private function isStaticCallMatch(Node $subNode, string $className, string $classMethodName): bool
     {
         if (!$subNode instanceof StaticCall) {
             return \false;

@@ -20,7 +20,7 @@ use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstan
 use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\StringCastDebugResponseRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         RedirectToRouteRector::class,
         EventListenerToEventSubscriberRector::class,

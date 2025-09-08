@@ -49,14 +49,14 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         $this->objectTypeMapper = $objectTypeMapper;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return IntersectionType::class;
     }
     /**
      * @param IntersectionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $typeNode = $type->toPhpDocNode();
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
@@ -80,7 +80,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
             if ($type instanceof MixedType && $type->isExplicitMixed()) {
                 return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            $astNode->name = '\\' . \ltrim($astNode->name, '\\');
+            $astNode->name = '\\' . ltrim($astNode->name, '\\');
             return $astNode;
         });
         return $typeNode;
@@ -88,7 +88,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     /**
      * @param IntersectionType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::INTERSECTION_TYPES)) {
             return null;
@@ -110,8 +110,8 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         if ($intersectionedTypeNodes === []) {
             return null;
         }
-        if (\count($intersectionedTypeNodes) === 1) {
-            return \current($intersectionedTypeNodes);
+        if (count($intersectionedTypeNodes) === 1) {
+            return current($intersectionedTypeNodes);
         }
         if ($typeKind === TypeKind::UNION && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_INTERSECTION_TYPES)) {
             return null;

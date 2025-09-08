@@ -17,7 +17,7 @@ final class AttributeValueResolver
      * @see https://regex101.com/r/CL9ktz/4
      */
     private const END_SLASH_REGEX = '#\\\\$#';
-    public function resolve(AnnotationToAttribute $annotationToAttribute, PhpDocTagNode $phpDocTagNode) : ?AttributeValueAndDocComment
+    public function resolve(AnnotationToAttribute $annotationToAttribute, PhpDocTagNode $phpDocTagNode): ?AttributeValueAndDocComment
     {
         if (!$annotationToAttribute->getUseValueAsAttributeArgument()) {
             return null;
@@ -31,7 +31,7 @@ final class AttributeValueResolver
                     $docValue = $originalContent;
                 }
             } else {
-                $attributeComment = \ltrim($originalContent, $docValue);
+                $attributeComment = ltrim($originalContent, $docValue);
                 if ($attributeComment !== '') {
                     $docValue .= "\n" . $attributeComment;
                 }
@@ -39,14 +39,14 @@ final class AttributeValueResolver
         }
         $docComment = '';
         // special case for newline
-        if (\strpos($docValue, "\n") !== \false) {
+        if (strpos($docValue, "\n") !== \false) {
             $keepJoining = \true;
             $docValueLines = NewLineSplitter::split($docValue);
             $joinDocValue = '';
             $hasPreviousEndSlash = \false;
             foreach ($docValueLines as $key => $docValueLine) {
                 if ($keepJoining) {
-                    $joinDocValue .= \rtrim($docValueLine, '\\\\');
+                    $joinDocValue .= rtrim($docValueLine, '\\\\');
                 }
                 if (Strings::match($docValueLine, self::END_SLASH_REGEX) === null) {
                     if ($hasPreviousEndSlash === \false && $key > 0) {

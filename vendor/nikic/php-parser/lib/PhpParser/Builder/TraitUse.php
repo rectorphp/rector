@@ -57,7 +57,7 @@ class TraitUse implements Builder
      *
      * @return Node The built node
      */
-    public function getNode() : Node
+    public function getNode(): Node
     {
         return new Stmt\TraitUse($this->traits, $this->adaptations);
     }

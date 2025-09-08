@@ -9,18 +9,18 @@ use PHPStan\Type\Type;
  */
 final class ScalarTypeComparator
 {
-    public function areEqualScalar(Type $firstType, Type $secondType) : bool
+    public function areEqualScalar(Type $firstType, Type $secondType): bool
     {
         if ($firstType->isString()->yes() && $secondType->isString()->yes()) {
             // prevents "class-string" vs "string"
-            $firstTypeClass = \get_class($firstType);
-            $secondTypeClass = \get_class($secondType);
+            $firstTypeClass = get_class($firstType);
+            $secondTypeClass = get_class($secondType);
             return $firstTypeClass === $secondTypeClass;
         }
         if ($firstType->isInteger()->yes() && $secondType->isInteger()->yes()) {
             // prevents "int<min, max>" vs "int"
-            $firstTypeClass = \get_class($firstType);
-            $secondTypeClass = \get_class($secondType);
+            $firstTypeClass = get_class($firstType);
+            $secondTypeClass = get_class($secondType);
             return $firstTypeClass === $secondTypeClass;
         }
         if ($firstType->isFloat()->yes() && $secondType->isFloat()->yes()) {
@@ -34,7 +34,7 @@ final class ScalarTypeComparator
     /**
      * E.g. first is string, second is bool
      */
-    public function areDifferentScalarTypes(Type $firstType, Type $secondType) : bool
+    public function areDifferentScalarTypes(Type $firstType, Type $secondType): bool
     {
         if (!$firstType->isScalar()->yes()) {
             return \false;
@@ -50,10 +50,10 @@ final class ScalarTypeComparator
             return \false;
         }
         if (!$firstType->isString()->yes()) {
-            return \get_class($firstType) !== \get_class($secondType);
+            return get_class($firstType) !== get_class($secondType);
         }
         if (!$secondType->isClassString()->yes()) {
-            return \get_class($firstType) !== \get_class($secondType);
+            return get_class($firstType) !== get_class($secondType);
         }
         return \false;
     }

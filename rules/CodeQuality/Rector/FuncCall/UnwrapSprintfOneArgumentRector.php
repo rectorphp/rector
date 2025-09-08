@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnwrapSprintfOneArgumentRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Unwrap `sprintf()` with one argument', [new CodeSample(<<<'CODE_SAMPLE'
 echo sprintf('value');
@@ -26,14 +26,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -41,7 +41,7 @@ CODE_SAMPLE
         if (!$this->isName($node, 'sprintf')) {
             return null;
         }
-        if (\count($node->getArgs()) > 1) {
+        if (count($node->getArgs()) > 1) {
             return null;
         }
         $firstArg = $node->getArgs()[0];

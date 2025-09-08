@@ -97,7 +97,7 @@ class Decoder extends EventEmitter implements ReadableStreamInterface
             if ($this->options === 0) {
                 $data = \json_decode($data, $this->assoc, $this->depth);
             } else {
-                \assert(\PHP_VERSION_ID >= 50400);
+                assert(\PHP_VERSION_ID >= 50400);
                 $data = \json_decode($data, $this->assoc, $this->depth, $this->options);
             }
             // @codeCoverageIgnoreEnd

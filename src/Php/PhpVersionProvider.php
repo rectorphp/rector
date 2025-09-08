@@ -20,7 +20,7 @@ final class PhpVersionProvider
      * @var string
      * @see https://regex101.com/r/qBMnbl/1
      */
-    private const VALID_PHP_VERSION_REGEX = '#^\\d{5,6}$#';
+    private const VALID_PHP_VERSION_REGEX = '#^\d{5,6}$#';
     /**
      * @var int|null
      */
@@ -28,7 +28,7 @@ final class PhpVersionProvider
     /**
      * @return PhpVersion::*
      */
-    public function provide() : int
+    public function provide(): int
     {
         if (SimpleParameterProvider::hasParameter(Option::PHP_VERSION_FEATURES)) {
             $this->phpVersionFeatures = SimpleParameterProvider::provideIntParameter(Option::PHP_VERSION_FEATURES);
@@ -42,8 +42,8 @@ final class PhpVersionProvider
             // so we don't have to keep with up with newest version
             return PhpVersion::PHP_10;
         }
-        $projectComposerJson = \getcwd() . '/composer.json';
-        if (\file_exists($projectComposerJson)) {
+        $projectComposerJson = getcwd() . '/composer.json';
+        if (file_exists($projectComposerJson)) {
             $phpVersion = ComposerJsonPhpVersionResolver::resolve($projectComposerJson);
             if ($phpVersion !== null) {
                 return $this->phpVersionFeatures = $phpVersion;
@@ -52,14 +52,14 @@ final class PhpVersionProvider
         // fallback to current PHP runtime version
         return $this->phpVersionFeatures = \PHP_VERSION_ID;
     }
-    public function isAtLeastPhpVersion(int $phpVersion) : bool
+    public function isAtLeastPhpVersion(int $phpVersion): bool
     {
         return $phpVersion <= $this->provide();
     }
     /**
      * @param mixed $phpVersionFeatures
      */
-    private function validatePhpVersionFeaturesParameter($phpVersionFeatures) : void
+    private function validatePhpVersionFeaturesParameter($phpVersionFeatures): void
     {
         if ($phpVersionFeatures === null) {
             return;
@@ -67,10 +67,10 @@ final class PhpVersionProvider
         // get all constants
         $phpVersionReflectionClass = new ReflectionClass(PhpVersion::class);
         // @todo check
-        if (\in_array($phpVersionFeatures, $phpVersionReflectionClass->getConstants(), \true)) {
+        if (in_array($phpVersionFeatures, $phpVersionReflectionClass->getConstants(), \true)) {
             return;
         }
-        if (!\is_int($phpVersionFeatures)) {
+        if (!is_int($phpVersionFeatures)) {
             $this->throwInvalidTypeException($phpVersionFeatures);
         }
         if (StringUtils::isMatch((string) $phpVersionFeatures, self::VALID_PHP_VERSION_REGEX) && $phpVersionFeatures >= PhpVersion::PHP_53 - 1) {
@@ -84,7 +84,7 @@ final class PhpVersionProvider
      */
     private function throwInvalidTypeException($phpVersionFeatures)
     {
-        $errorMessage = \sprintf('Parameter "%s::%s" must be int, "%s" given.%sUse constant from "%s" to provide it, e.g. "%s::%s"', Option::class, 'PHP_VERSION_FEATURES', (string) $phpVersionFeatures, \PHP_EOL, PhpVersion::class, PhpVersion::class, 'PHP_80');
+        $errorMessage = sprintf('Parameter "%s::%s" must be int, "%s" given.%sUse constant from "%s" to provide it, e.g. "%s::%s"', Option::class, 'PHP_VERSION_FEATURES', (string) $phpVersionFeatures, \PHP_EOL, PhpVersion::class, PhpVersion::class, 'PHP_80');
         throw new InvalidConfigurationException($errorMessage);
     }
 }

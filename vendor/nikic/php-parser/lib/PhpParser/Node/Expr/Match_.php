@@ -22,11 +22,11 @@ class Match_ extends Node\Expr
         $this->cond = $cond;
         $this->arms = $arms;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['cond', 'arms'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Match';
     }

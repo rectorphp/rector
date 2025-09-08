@@ -37,19 +37,19 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allString($configuration[self::SENSITIVE_PARAMETERS] ?? []);
         $this->sensitiveParameters = (array) ($configuration[self::SENSITIVE_PARAMETERS] ?? []);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Param::class];
     }
     /**
      * @param Node\Param $node
      */
-    public function refactor(Node $node) : ?Param
+    public function refactor(Node $node): ?Param
     {
         if (!$this->isNames($node, $this->sensitiveParameters)) {
             return null;
@@ -60,7 +60,7 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
         $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('SensitiveParameter'))]);
         return $node;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add SensitiveParameter attribute to method and function configured parameters', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -80,7 +80,7 @@ class SomeClass
 CODE_SAMPLE
 , [self::SENSITIVE_PARAMETERS => ['password']])]);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SENSITIVE_PARAMETER_ATTRIBUTE;
     }

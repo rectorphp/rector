@@ -41,14 +41,14 @@ final class UnionPhpDocTypeMapper implements PhpDocTypeMapperInterface
         $this->intersectionPhpDocTypeMapper = $intersectionPhpDocTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return UnionTypeNode::class;
     }
     /**
      * @param UnionTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         $unionedTypes = [];
         foreach ($typeNode->types as $unionedTypeNode) {

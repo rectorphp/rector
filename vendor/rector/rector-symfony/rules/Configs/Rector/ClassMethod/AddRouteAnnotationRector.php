@@ -54,14 +54,14 @@ final class AddRouteAnnotationRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->symfonyRoutesProvider->provide() === []) {
             return null;
@@ -107,7 +107,7 @@ final class AddRouteAnnotationRector extends AbstractRector
         }
         return null;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Collect routes from Symfony project router and add Route annotation to controller action', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -135,7 +135,7 @@ final class SomeController extends AbstractController
 CODE_SAMPLE
 )]);
     }
-    private function resolveControllerReference(Class_ $class, ClassMethod $classMethod) : ?string
+    private function resolveControllerReference(Class_ $class, ClassMethod $classMethod): ?string
     {
         $className = $this->getName($class);
         $methodName = $this->getName($classMethod);
@@ -147,7 +147,7 @@ CODE_SAMPLE
     /**
      * @return ArrayItemNode[]
      */
-    private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata) : array
+    private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
     {
         $arrayItemNodes = [];
         $arrayItemNodes[] = new ArrayItemNode(new StringNode($symfonyRouteMetadata->getPath()), 'path');
@@ -185,7 +185,7 @@ CODE_SAMPLE
     /**
      * @return SymfonyRouteMetadata[]
      */
-    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference) : array
+    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): array
     {
         $matches = [];
         foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadatum) {
@@ -198,20 +198,20 @@ CODE_SAMPLE
     /**
      * @param mixed[] $values
      */
-    private function createCurlyQuoted(array $values) : CurlyListNode
+    private function createCurlyQuoted(array $values): CurlyListNode
     {
         $methodsArrayItems = $this->arrayParser->createArrayFromValues($values);
         $curlyListNode = new CurlyListNode($methodsArrayItems);
         foreach ($curlyListNode->values as $nestedMethodsArrayItem) {
-            if (\is_string($nestedMethodsArrayItem->value)) {
+            if (is_string($nestedMethodsArrayItem->value)) {
                 $nestedMethodsArrayItem->value = new StringNode($nestedMethodsArrayItem->value);
             }
-            if (\is_string($nestedMethodsArrayItem->key)) {
+            if (is_string($nestedMethodsArrayItem->key)) {
                 $nestedMethodsArrayItem->key = new StringNode($nestedMethodsArrayItem->key);
             }
             if ($nestedMethodsArrayItem->value === null) {
                 $nestedMethodsArrayItem->value = 'null';
-            } elseif (\is_bool($nestedMethodsArrayItem->value)) {
+            } elseif (is_bool($nestedMethodsArrayItem->value)) {
                 $nestedMethodsArrayItem->value = $nestedMethodsArrayItem->value ? 'true' : 'false';
             }
         }

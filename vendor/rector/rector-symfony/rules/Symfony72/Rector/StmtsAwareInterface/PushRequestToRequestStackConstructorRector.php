@@ -32,9 +32,9 @@ final class PushRequestToRequestStackConstructorRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Move push(request) to "Symfony\\Component\\HttpFoundation\\RequestStack" constructor', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move push(request) to "Symfony\Component\HttpFoundation\RequestStack" constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use PHPUnit\Framework\TestCase;
@@ -65,14 +65,14 @@ class SomeClass extends TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function matchRequestStackAssignExpr(Expression $expression) : ?New_
+    private function matchRequestStackAssignExpr(Expression $expression): ?New_
     {
         // 1. find new RequestStack assign
         if (!$expression->expr instanceof Assign) {

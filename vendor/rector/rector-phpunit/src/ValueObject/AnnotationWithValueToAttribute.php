@@ -32,22 +32,22 @@ final class AnnotationWithValueToAttribute
         $this->valueMap = $valueMap;
         $this->isOnClassLevel = $isOnClassLevel;
     }
-    public function getAnnotationName() : string
+    public function getAnnotationName(): string
     {
         return $this->annotationName;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         return $this->attributeClass;
     }
     /**
      * @return array<mixed, mixed>
      */
-    public function getValueMap() : array
+    public function getValueMap(): array
     {
         return $this->valueMap;
     }
-    public function getIsOnClassLevel() : bool
+    public function getIsOnClassLevel(): bool
     {
         return $this->isOnClassLevel;
     }

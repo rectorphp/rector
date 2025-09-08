@@ -12,7 +12,7 @@ final class VariableNaming
     /**
      * @api used in downgrade
      */
-    public function createCountedValueName(string $valueName, ?Scope $scope) : string
+    public function createCountedValueName(string $valueName, ?Scope $scope): string
     {
         if (!$scope instanceof Scope) {
             return $valueName;

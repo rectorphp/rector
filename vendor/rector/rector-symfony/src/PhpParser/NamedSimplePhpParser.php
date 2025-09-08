@@ -22,7 +22,7 @@ final class NamedSimplePhpParser
     /**
      * @return Stmt[]
      */
-    public function parseString(string $content) : array
+    public function parseString(string $content): array
     {
         $stmts = $this->phpParser->parse($content);
         if ($stmts === null) {

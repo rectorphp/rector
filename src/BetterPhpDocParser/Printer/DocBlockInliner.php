@@ -16,7 +16,7 @@ final class DocBlockInliner
      * @see https://regex101.com/r/U5OUV4/4
      */
     private const NEWLINE_MIDDLE_DOC_REGEX = "#(?:\r\n|\n) \\* #";
-    public function inline(string $docContent) : string
+    public function inline(string $docContent): string
     {
         $docContent = Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
         return Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');

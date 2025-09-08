@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SplitDoubleAssignRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Split multiple inline assigns to each own lines default value, to prevent undefined array issues', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -43,7 +43,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
@@ -51,7 +51,7 @@ CODE_SAMPLE
      * @param Expression $node
      * @return Expression[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if (!$node->expr instanceof Assign) {
             return null;
@@ -70,7 +70,7 @@ CODE_SAMPLE
     /**
      * @return Expression[]
      */
-    private function collectExpressions(Assign $assign, Expr $expr) : array
+    private function collectExpressions(Assign $assign, Expr $expr): array
     {
         /** @var Expression[] $expressions */
         $expressions = [];
@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
         return $expressions;
     }
-    private function resolveLastAssignExpr(Assign $assign) : Expr
+    private function resolveLastAssignExpr(Assign $assign): Expr
     {
         if (!$assign->expr instanceof Assign) {
             return $assign->expr;

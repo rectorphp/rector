@@ -21,13 +21,13 @@ interface CpuCoreFinder
      * information for the unit tests, since integration tests are quite complicated
      * as dependent on complex infrastructures.
      */
-    public function diagnose() : string;
+    public function diagnose(): string;
     /**
      * Find the number of CPU cores. If it could not find it, returns null. The
      * means used to find the cores are at the implementation discretion.
      *
      * @return positive-int|null
      */
-    public function find() : ?int;
-    public function toString() : string;
+    public function find(): ?int;
+    public function toString(): string;
 }

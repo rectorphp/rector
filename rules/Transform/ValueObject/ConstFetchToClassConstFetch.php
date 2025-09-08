@@ -27,15 +27,15 @@ final class ConstFetchToClassConstFetch
         RectorAssert::className($this->newClassName);
         RectorAssert::constantName($this->newConstName);
     }
-    public function getOldConstName() : string
+    public function getOldConstName(): string
     {
         return $this->oldConstName;
     }
-    public function getNewClassName() : string
+    public function getNewClassName(): string
     {
         return $this->newClassName;
     }
-    public function getNewConstName() : string
+    public function getNewConstName(): string
     {
         return $this->newConstName;
     }

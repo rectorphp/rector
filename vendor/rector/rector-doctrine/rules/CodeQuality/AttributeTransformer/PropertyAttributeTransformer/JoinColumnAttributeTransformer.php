@@ -24,13 +24,13 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $hasChangedManyToMany = $this->transformMapping($property, $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null);
         $hasChangedManyToOne = $this->transformMapping($property, $entityMapping->matchManyToOnePropertyMapping($property));
         return $hasChangedManyToMany || $hasChangedManyToOne;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::JOIN_COLUMN;
     }
@@ -38,19 +38,19 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
      * @param array<string, array<string, mixed>>|null $mapping
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    private function transformMapping($property, ?array $mapping) : bool
+    private function transformMapping($property, ?array $mapping): bool
     {
-        if (!\is_array($mapping)) {
+        if (!is_array($mapping)) {
             return \false;
         }
         $singleJoinColumn = $mapping['joinColumn'] ?? null;
-        if (\is_array($singleJoinColumn)) {
+        if (is_array($singleJoinColumn)) {
             $name = $singleJoinColumn['name'];
             unset($singleJoinColumn['name']);
             $mapping['joinColumns'][$name] = $singleJoinColumn;
         }
         $joinColumns = $mapping['joinColumns'] ?? null;
-        if (!\is_array($joinColumns)) {
+        if (!is_array($joinColumns)) {
             return \false;
         }
         $hasChanged = \false;
@@ -64,9 +64,9 @@ final class JoinColumnAttributeTransformer implements PropertyAttributeTransform
      * @param int|string $columnName
      * @param mixed $joinColumn
      */
-    private function createJoinColumnAttrGroup($columnName, $joinColumn) : AttributeGroup
+    private function createJoinColumnAttrGroup($columnName, $joinColumn): AttributeGroup
     {
-        $joinColumn = \array_merge(['name' => $columnName], $joinColumn);
+        $joinColumn = array_merge(['name' => $columnName], $joinColumn);
         $args = $this->nodeFactory->createArgs($joinColumn);
         return AttributeFactory::createGroup($this->getClassName(), $args);
     }

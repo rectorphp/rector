@@ -43,27 +43,27 @@ final class ArgumentAdderWithoutDefaultValue
         $this->scope = $scope;
         RectorAssert::className($class);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->class);
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function getArgumentName() : ?string
+    public function getArgumentName(): ?string
     {
         return $this->argumentName;
     }
-    public function getArgumentType() : ?Type
+    public function getArgumentType(): ?Type
     {
         return $this->argumentType;
     }
-    public function getScope() : ?string
+    public function getScope(): ?string
     {
         return $this->scope;
     }

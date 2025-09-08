@@ -20,14 +20,14 @@ final class ClassConstFetchTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {

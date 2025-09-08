@@ -60,7 +60,7 @@ final class DowngradeThrowExprRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade throw expression', [new CodeSample(<<<'CODE_SAMPLE'
 echo $variable ?? throw new RuntimeException();
@@ -77,7 +77,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrowFunction::class, Expression::class, Return_::class];
     }
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
         return $this->refactorDirectCoalesce($node);
     }
-    private function refactorArrowFunctionReturn(ArrowFunction $arrowFunction) : ?Closure
+    private function refactorArrowFunctionReturn(ArrowFunction $arrowFunction): ?Closure
     {
         if (!$arrowFunction->expr instanceof Throw_) {
             return null;
@@ -194,14 +194,14 @@ CODE_SAMPLE
         }
         return [$if, new Expression($assign)];
     }
-    private function hasThrowInAssignExpr(Assign $assign) : bool
+    private function hasThrowInAssignExpr(Assign $assign): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($assign->expr, static fn(Node $node): bool => $node instanceof Throw_);
     }
     /**
      * @return Node[]|null
      */
-    private function refactorReturn(Return_ $return) : ?array
+    private function refactorReturn(Return_ $return): ?array
     {
         $throw = $this->betterNodeFinder->findFirstInstanceOf($return, Throw_::class);
         if (!$throw instanceof Throw_) {
@@ -227,7 +227,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createIf(Coalesce $coalesce, Throw_ $throw) : If_
+    private function createIf(Coalesce $coalesce, Throw_ $throw): If_
     {
         $conditionalExpr = $coalesce->left;
         if ($conditionalExpr instanceof Variable || $conditionalExpr instanceof ArrayDimFetch || $conditionalExpr instanceof PropertyFetch) {
@@ -250,7 +250,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function refactorDirectCoalesce(Expression $expression) : ?array
+    private function refactorDirectCoalesce(Expression $expression): ?array
     {
         /** @var Coalesce[] $coalesces */
         $coalesces = $this->betterNodeFinder->findInstanceOf($expression, Coalesce::class);
@@ -262,7 +262,7 @@ CODE_SAMPLE
             $throwExpr = $coalesce->right;
             $if = new If_(new Identical($coalesce->left, new ConstFetch(new Name('null'))), ['stmts' => [new Expression($throwExpr)]]);
             // replace coalsese with left :)
-            $this->traverseNodesWithCallable($expression, static function (Node $node) : ?Expr {
+            $this->traverseNodesWithCallable($expression, static function (Node $node): ?Expr {
                 if (!$node instanceof Coalesce) {
                     return null;
                 }

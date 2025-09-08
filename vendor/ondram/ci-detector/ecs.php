@@ -9,7 +9,7 @@ use RectorPrefix202509\PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer;
 use RectorPrefix202509\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix202509\Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use RectorPrefix202509\Symplify\EasyCodingStandard\ValueObject\Option;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::SKIP, [__DIR__ . '/tests/PropertiesPrinterHelper.php']);
     $containerConfigurator->import(__DIR__ . '/vendor/lmc/coding-standard/ecs.php');

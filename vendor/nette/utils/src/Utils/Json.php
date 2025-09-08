@@ -29,7 +29,7 @@ final class Json
      * @param bool|int $pretty
      * @param mixed $value
      */
-    public static function encode($value, $pretty = \false, bool $asciiSafe = \false, bool $htmlSafe = \false, bool $forceObjects = \false) : string
+    public static function encode($value, $pretty = \false, bool $asciiSafe = \false, bool $htmlSafe = \false, bool $forceObjects = \false): string
     {
         if (is_int($pretty)) {
             // back compatibility

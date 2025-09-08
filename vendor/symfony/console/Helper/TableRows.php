@@ -20,7 +20,7 @@ class TableRows implements \IteratorAggregate
     {
         $this->generator = $generator;
     }
-    public function getIterator() : \Traversable
+    public function getIterator(): \Traversable
     {
         return ($this->generator)();
     }

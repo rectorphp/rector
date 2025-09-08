@@ -32,7 +32,7 @@ class TrimmedBufferOutput extends Output
     /**
      * Empties buffer and returns its content.
      */
-    public function fetch() : string
+    public function fetch(): string
     {
         $content = $this->buffer;
         $this->buffer = '';
@@ -47,6 +47,6 @@ class TrimmedBufferOutput extends Output
         if ($newline) {
             $this->buffer .= \PHP_EOL;
         }
-        $this->buffer = \substr($this->buffer, 0 - $this->maxLength);
+        $this->buffer = substr($this->buffer, 0 - $this->maxLength);
     }
 }

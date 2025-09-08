@@ -60,9 +60,9 @@ final class ParallelProcess
      * @param callable(Throwable $onError) : void $onError
      * @param callable(?int $onExit, string $output) : void $onExit
      */
-    public function start(callable $onData, callable $onError, callable $onExit) : void
+    public function start(callable $onData, callable $onError, callable $onExit): void
     {
-        $tmp = \tmpfile();
+        $tmp = tmpfile();
         if ($tmp === \false) {
             throw new ParallelShouldNotHappenException('Failed creating temp file.');
         }
@@ -71,32 +71,32 @@ final class ParallelProcess
         $this->process->start($this->loop);
         $this->onData = $onData;
         $this->onError = $onError;
-        $this->process->on(ReactEvent::EXIT, function ($exitCode) use($onExit) : void {
+        $this->process->on(ReactEvent::EXIT, function ($exitCode) use ($onExit): void {
             if ($this->stdErr === null) {
                 throw new ParallelShouldNotHappenException();
             }
             $this->cancelTimer();
-            \rewind($this->stdErr);
+            rewind($this->stdErr);
             /** @var string $streamContents */
-            $streamContents = \stream_get_contents($this->stdErr);
+            $streamContents = stream_get_contents($this->stdErr);
             $onExit($exitCode, $streamContents);
-            \fclose($this->stdErr);
+            fclose($this->stdErr);
         });
     }
     /**
      * @param mixed[] $data
      */
-    public function request(array $data) : void
+    public function request(array $data): void
     {
         $this->cancelTimer();
         $this->encoder->write($data);
-        $this->timer = $this->loop->addTimer($this->timetoutInSeconds, function () : void {
+        $this->timer = $this->loop->addTimer($this->timetoutInSeconds, function (): void {
             $onError = $this->onError;
-            $errorMessage = \sprintf('Child process timed out after %d seconds', $this->timetoutInSeconds);
+            $errorMessage = sprintf('Child process timed out after %d seconds', $this->timetoutInSeconds);
             $onError(new Exception($errorMessage));
         });
     }
-    public function quit() : void
+    public function quit(): void
     {
         $this->cancelTimer();
         if (!$this->process->isRunning()) {
@@ -107,9 +107,9 @@ final class ParallelProcess
         }
         $this->encoder->end();
     }
-    public function bindConnection(Decoder $decoder, Encoder $encoder) : void
+    public function bindConnection(Decoder $decoder, Encoder $encoder): void
     {
-        $decoder->on(ReactEvent::DATA, function (array $json) : void {
+        $decoder->on(ReactEvent::DATA, function (array $json): void {
             $this->cancelTimer();
             if ($json[ReactCommand::ACTION] !== Action::RESULT) {
                 return;
@@ -118,16 +118,16 @@ final class ParallelProcess
             $onData($json[Content::RESULT]);
         });
         $this->encoder = $encoder;
-        $decoder->on(ReactEvent::ERROR, function (Throwable $throwable) : void {
+        $decoder->on(ReactEvent::ERROR, function (Throwable $throwable): void {
             $onError = $this->onError;
             $onError($throwable);
         });
-        $encoder->on(ReactEvent::ERROR, function (Throwable $throwable) : void {
+        $encoder->on(ReactEvent::ERROR, function (Throwable $throwable): void {
             $onError = $this->onError;
             $onError($throwable);
         });
     }
-    private function cancelTimer() : void
+    private function cancelTimer(): void
     {
         if (!$this->timer instanceof TimerInterface) {
             return;

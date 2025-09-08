@@ -13,19 +13,19 @@ use PhpParser\PhpVersion;
  */
 class ReadonlyFunctionTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulator
 {
-    public function getKeywordString() : string
+    public function getKeywordString(): string
     {
         return 'readonly';
     }
-    public function getKeywordToken() : int
+    public function getKeywordToken(): int
     {
         return \T_READONLY;
     }
-    public function getPhpVersion() : PhpVersion
+    public function getPhpVersion(): PhpVersion
     {
         return PhpVersion::fromComponents(8, 2);
     }
-    public function reverseEmulate(string $code, array $tokens) : array
+    public function reverseEmulate(string $code, array $tokens): array
     {
         // Don't bother
         return $tokens;

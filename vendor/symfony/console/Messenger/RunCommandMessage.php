@@ -40,7 +40,7 @@ class RunCommandMessage
         $this->throwOnFailure = $throwOnFailure;
         $this->catchExceptions = $catchExceptions;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->input;
     }

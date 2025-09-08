@@ -44,11 +44,11 @@ final class DowngradeNamedArgumentRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove named argument', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|New_|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $args = $node->getArgs();
         if (!$this->argsAnalyzer->hasNamedArg($args)) {
@@ -93,7 +93,7 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
      */
-    private function removeNamedArguments($node, array $args) : ?Node
+    private function removeNamedArguments($node, array $args): ?Node
     {
         if ($node instanceof New_) {
             $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);

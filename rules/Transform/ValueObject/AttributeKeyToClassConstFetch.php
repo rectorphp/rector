@@ -32,22 +32,22 @@ final class AttributeKeyToClassConstFetch
         $this->constantClass = $constantClass;
         $this->valuesToConstantsMap = $valuesToConstantsMap;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         return $this->attributeClass;
     }
-    public function getAttributeKey() : string
+    public function getAttributeKey(): string
     {
         return $this->attributeKey;
     }
-    public function getConstantClass() : string
+    public function getConstantClass(): string
     {
         return $this->constantClass;
     }
     /**
      * @return array<string, string>
      */
-    public function getValuesToConstantsMap() : array
+    public function getValuesToConstantsMap(): array
     {
         return $this->valuesToConstantsMap;
     }

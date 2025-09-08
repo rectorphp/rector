@@ -8,9 +8,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 final class ReturnEmptyArrayMethodRemover
 {
-    public function removeClassMethodIfArrayEmpty(Class_ $class, Array_ $returnArray, string $methodName) : void
+    public function removeClassMethodIfArrayEmpty(Class_ $class, Array_ $returnArray, string $methodName): void
     {
-        if (\count($returnArray->items) !== 0) {
+        if (count($returnArray->items) !== 0) {
             return;
         }
         foreach ($class->stmts as $key => $classStmt) {

@@ -17,7 +17,7 @@ final class StmtMethodCallMatcher
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function match(Stmt $stmt, string $methodName) : ?MethodCall
+    public function match(Stmt $stmt, string $methodName): ?MethodCall
     {
         if (!$stmt instanceof Expression) {
             return null;

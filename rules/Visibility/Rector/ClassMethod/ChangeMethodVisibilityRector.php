@@ -37,7 +37,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
         $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change visibility of method from parent class', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class FrameworkClass
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->methodVisibilities === []) {
             return null;
@@ -106,7 +106,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ChangeMethodVisibility::class);
         $this->methodVisibilities = $configuration;

@@ -106,7 +106,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         $this->reflectionProvider = $reflectionProvider;
         $this->attributeValueResolver = $attributeValueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change annotation to attribute', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
@@ -132,22 +132,22 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [new AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route')])]);
+, [new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Property::class, Param::class, ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class, Interface_::class];
     }
     /**
      * @param Class_|Property|Param|ClassMethod|Function_|Closure|ArrowFunction|Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->annotationsToAttributes === []) {
-            throw new InvalidConfigurationException(\sprintf('The "%s" rule requires configuration.', self::class));
+            throw new InvalidConfigurationException(sprintf('The "%s" rule requires configuration.', self::class));
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof PhpDocInfo) {
@@ -158,25 +158,25 @@ CODE_SAMPLE
         $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo, $uses);
         // 2. bare tags without annotation class, e.g. "@require"
         $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
-        $attributeGroups = \array_merge($annotationAttributeGroups, $genericAttributeGroups);
+        $attributeGroups = array_merge($annotationAttributeGroups, $genericAttributeGroups);
         if ($attributeGroups === []) {
             return null;
         }
         // 3. Reprint docblock
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         $this->attributeGroupNamedArgumentManipulator->decorate($attributeGroups);
-        $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
+        $node->attrGroups = array_merge($node->attrGroups, $attributeGroups);
         return $node;
     }
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $this->resolveWithChangedAttributesClass($configuration);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
@@ -184,7 +184,7 @@ CODE_SAMPLE
      * @param AnnotationToAttribute[] $configuration
      * @return AnnotationToAttribute[] $configuration
      */
-    private function resolveWithChangedAttributesClass(array $configuration) : array
+    private function resolveWithChangedAttributesClass(array $configuration): array
     {
         foreach ($configuration as $config) {
             /** @var AnnotationToAttribute $config */
@@ -198,25 +198,25 @@ CODE_SAMPLE
     /**
      * @return AttributeGroup[]
      */
-    private function processGenericTags(PhpDocInfo $phpDocInfo) : array
+    private function processGenericTags(PhpDocInfo $phpDocInfo): array
     {
         $attributeGroups = [];
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use(&$attributeGroups) {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use (&$attributeGroups) {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
             if (!$docNode->value instanceof GenericTagValueNode && !$docNode->value instanceof DoctrineAnnotationTagValueNode) {
                 return null;
             }
-            $tag = \trim($docNode->name, '@');
+            $tag = trim($docNode->name, '@');
             // not a basic one
-            if (\strpos($tag, '\\') !== \false) {
+            if (strpos($tag, '\\') !== \false) {
                 return null;
             }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
                 $desiredTag = $annotationToAttribute->getTag();
-                if (\strtolower($desiredTag) !== \strtolower($tag)) {
+                if (strtolower($desiredTag) !== strtolower($tag)) {
                     continue;
                 }
                 // make sure the attribute class really exists to avoid error on early upgrade
@@ -239,7 +239,7 @@ CODE_SAMPLE
      * @param Use_[] $uses
      * @return AttributeGroup[]
      */
-    private function processDoctrineAnnotationClasses(PhpDocInfo $phpDocInfo, array $uses) : array
+    private function processDoctrineAnnotationClasses(PhpDocInfo $phpDocInfo, array $uses): array
     {
         if ($phpDocInfo->getPhpDocNode()->children === []) {
             return [];
@@ -277,7 +277,7 @@ CODE_SAMPLE
         }
         return $attributeGroups;
     }
-    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?\Rector\Php80\ValueObject\AnnotationToAttribute
+    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): ?\Rector\Php80\ValueObject\AnnotationToAttribute
     {
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
             if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
@@ -287,7 +287,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isExistingAttributeClass(AnnotationToAttribute $annotationToAttribute) : bool
+    private function isExistingAttributeClass(AnnotationToAttribute $annotationToAttribute): bool
     {
         // make sure the attribute class really exists to avoid error on early upgrade
         if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {

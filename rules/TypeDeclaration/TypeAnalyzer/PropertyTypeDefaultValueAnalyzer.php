@@ -17,7 +17,7 @@ final class PropertyTypeDefaultValueAnalyzer
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function doesConflictWithDefaultValue(PropertyItem $propertyItem, Type $propertyType) : bool
+    public function doesConflictWithDefaultValue(PropertyItem $propertyItem, Type $propertyType): bool
     {
         if (!$propertyItem->default instanceof Expr) {
             return \false;

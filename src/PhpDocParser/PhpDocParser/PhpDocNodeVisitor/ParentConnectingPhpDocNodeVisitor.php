@@ -18,14 +18,14 @@ final class ParentConnectingPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDo
      * @var Node[]
      */
     private array $stack = [];
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(Node $node): void
     {
         $this->stack = [$node];
     }
-    public function enterNode(Node $node) : Node
+    public function enterNode(Node $node): Node
     {
         if ($this->stack !== []) {
-            $parentNode = $this->stack[\count($this->stack) - 1];
+            $parentNode = $this->stack[count($this->stack) - 1];
             $node->setAttribute(PhpDocAttributeKey::PARENT, $parentNode);
         }
         $this->stack[] = $node;
@@ -36,7 +36,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDo
      */
     public function leaveNode(Node $node)
     {
-        \array_pop($this->stack);
+        array_pop($this->stack);
         return null;
     }
 }

@@ -32,7 +32,7 @@ class MethodTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagVa
         $this->description = $description;
         $this->templateTypes = $templateTypes;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $static = $this->isStatic ? 'static ' : '';
         $returnType = $this->returnType !== null ? "{$this->returnType} " : '';

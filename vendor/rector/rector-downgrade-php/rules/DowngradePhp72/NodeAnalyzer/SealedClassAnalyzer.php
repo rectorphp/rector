@@ -9,7 +9,7 @@ final class SealedClassAnalyzer
     /**
      * This method is perfectly sealed, nothing to downgrade here
      */
-    public function isSealedClass(ClassReflection $classReflection) : bool
+    public function isSealedClass(ClassReflection $classReflection): bool
     {
         if (!$classReflection->isClass()) {
             return \false;
@@ -17,6 +17,6 @@ final class SealedClassAnalyzer
         if (!$classReflection->isFinal()) {
             return \false;
         }
-        return \count($classReflection->getAncestors()) === 1;
+        return count($classReflection->getAncestors()) === 1;
     }
 }

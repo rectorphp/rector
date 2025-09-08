@@ -24,15 +24,15 @@ final class AliasUsesResolver
      * @param Stmt[] $stmts
      * @return string[]
      */
-    public function resolveFromNode(Node $node, array $stmts) : array
+    public function resolveFromNode(Node $node, array $stmts): array
     {
         if (!$node instanceof Namespace_ && !$node instanceof FileWithoutNamespace) {
             /** @var Namespace_[]|FileWithoutNamespace[] $namespaces */
-            $namespaces = \array_filter($stmts, static fn(Stmt $stmt): bool => $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace);
-            if (\count($namespaces) !== 1) {
+            $namespaces = array_filter($stmts, static fn(Stmt $stmt): bool => $stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace);
+            if (count($namespaces) !== 1) {
                 return [];
             }
-            $node = \current($namespaces);
+            $node = current($namespaces);
         }
         return $this->resolveFromStmts($node->stmts);
     }
@@ -40,11 +40,11 @@ final class AliasUsesResolver
      * @param Stmt[] $stmts
      * @return string[]
      */
-    public function resolveFromStmts(array $stmts) : array
+    public function resolveFromStmts(array $stmts): array
     {
         $aliasedUses = [];
         /** @param Use_::TYPE_* $useType */
-        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use(&$aliasedUses) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use (&$aliasedUses): void {
             if ($useType !== Use_::TYPE_NORMAL) {
                 return;
             }

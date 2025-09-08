@@ -12,7 +12,7 @@ final class ClassNaming
     /**
      * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
      */
-    public function getShortName($name) : string
+    public function getShortName($name): string
     {
         if ($name instanceof ClassLike) {
             if (!$name->name instanceof Identifier) {
@@ -23,9 +23,9 @@ final class ClassNaming
         if ($name instanceof Name || $name instanceof Identifier) {
             $name = $name->toString();
         }
-        $name = \trim($name, '\\');
+        $name = trim($name, '\\');
         $shortName = Strings::after($name, '\\', -1);
-        if (\is_string($shortName)) {
+        if (is_string($shortName)) {
             return $shortName;
         }
         return $name;

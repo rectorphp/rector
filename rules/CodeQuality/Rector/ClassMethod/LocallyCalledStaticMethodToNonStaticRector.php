@@ -52,7 +52,7 @@ final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static method and local-only calls to non-static', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -85,14 +85,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod): ?ClassMethod
     {
         if (!$classMethod->isStatic()) {
             return null;
@@ -131,9 +131,9 @@ CODE_SAMPLE
         $classMethodName = $this->getName($classMethod);
         $className = $this->getName($class) ?? '';
         $shouldSkip = \false;
-        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use(&$shouldSkip, $classMethodName, $className) : ?int {
+        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use (&$shouldSkip, $classMethodName, $className): ?int {
             if (($node instanceof Closure || $node instanceof ArrowFunction) && $node->static) {
-                $this->traverseNodesWithCallable($node->getStmts(), function (Node $subNode) use(&$shouldSkip, $classMethodName, $className) : ?int {
+                $this->traverseNodesWithCallable($node->getStmts(), function (Node $subNode) use (&$shouldSkip, $classMethodName, $className): ?int {
                     if (!$subNode instanceof StaticCall) {
                         return null;
                     }
@@ -156,7 +156,7 @@ CODE_SAMPLE
         if ($shouldSkip) {
             return null;
         }
-        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use($classMethodName, $className) : ?MethodCall {
+        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use ($classMethodName, $className): ?MethodCall {
             if (!$node instanceof StaticCall) {
                 return null;
             }
@@ -176,7 +176,7 @@ CODE_SAMPLE
      * If the static class method is called in another static class method,
      * we should keep it to avoid calling $this in static
      */
-    private function isClassMethodCalledInAnotherStaticClassMethod(Class_ $class, ClassMethod $classMethod) : bool
+    private function isClassMethodCalledInAnotherStaticClassMethod(Class_ $class, ClassMethod $classMethod): bool
     {
         $currentClassNamespacedName = (string) $this->getName($class);
         $currentClassMethodName = $this->getName($classMethod);
@@ -187,7 +187,7 @@ CODE_SAMPLE
             if (!$checkedClassMethod->isStatic()) {
                 continue;
             }
-            $this->traverseNodesWithCallable($checkedClassMethod, function (Node $node) use($currentClassNamespacedName, $currentClassMethodName, &$isInsideStaticClassMethod) : ?int {
+            $this->traverseNodesWithCallable($checkedClassMethod, function (Node $node) use ($currentClassNamespacedName, $currentClassMethodName, &$isInsideStaticClassMethod): ?int {
                 if ($node instanceof Array_) {
                     $scope = $node->getAttribute(AttributeKey::SCOPE);
                     if ($scope instanceof Scope && $this->arrayCallableMethodMatcher->match($node, $scope, $currentClassMethodName)) {
@@ -217,11 +217,11 @@ CODE_SAMPLE
      * In case of never called method call,
      * it should be skipped and handled by another dead-code rule
      */
-    private function isNeverCalled(Class_ $class, ClassMethod $classMethod) : bool
+    private function isNeverCalled(Class_ $class, ClassMethod $classMethod): bool
     {
         $currentMethodName = $this->getName($classMethod);
         $nodeFinder = new NodeFinder();
-        $methodCall = $nodeFinder->findFirst($class, function (Node $node) use($currentMethodName) : bool {
+        $methodCall = $nodeFinder->findFirst($class, function (Node $node) use ($currentMethodName): bool {
             if ($node instanceof MethodCall && $node->var instanceof Variable && $this->isName($node->var, 'this') && $this->isName($node->name, $currentMethodName)) {
                 return \true;
             }

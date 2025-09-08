@@ -24,7 +24,7 @@ final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVe
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change multiple catch statements of the same exception to a single one `|` separated', [new CodeSample(<<<'CODE_SAMPLE'
 try {
@@ -47,16 +47,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [TryCatch::class];
     }
     /**
      * @param TryCatch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (\count($node->catches) < 2) {
+        if (count($node->catches) < 2) {
             return null;
         }
         $hasChanged = \false;
@@ -71,7 +71,7 @@ CODE_SAMPLE
                 // use current var as next var
                 $node->catches[$key + 1]->var = $node->catches[$key]->var;
                 // merge next types as current merge to next types
-                $node->catches[$key + 1]->types = \array_merge($node->catches[$key]->types, $node->catches[$key + 1]->types);
+                $node->catches[$key + 1]->types = array_merge($node->catches[$key]->types, $node->catches[$key + 1]->types);
                 unset($node->catches[$key]);
                 $hasChanged = \true;
             }
@@ -81,7 +81,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::MULTI_EXCEPTION_CATCH;
     }

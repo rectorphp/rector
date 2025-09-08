@@ -38,7 +38,7 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector impleme
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add reasonable default value when a required parameter follows an optional one', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeObject
@@ -61,7 +61,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class];
     }
@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
         return $hasChanged ? $node : null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULLABLE_TYPE;
     }
@@ -99,7 +99,7 @@ CODE_SAMPLE
      *
      * @param Node[] $types
      */
-    private function mapReasonableParamValue(array $types) : Expr
+    private function mapReasonableParamValue(array $types): Expr
     {
         foreach ($types as $type) {
             if ($this->isName($type, 'string')) {
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return new ConstFetch(new Name('null'));
     }
-    private function processParam(Param $param) : void
+    private function processParam(Param $param): void
     {
         if (!$param->type instanceof Node) {
             $param->default = new ConstFetch(new Name('null'));

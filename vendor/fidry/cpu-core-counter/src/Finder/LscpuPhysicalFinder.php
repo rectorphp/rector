@@ -24,19 +24,19 @@ use const PHP_EOL;
  */
 final class LscpuPhysicalFinder extends ProcOpenBasedFinder
 {
-    public function toString() : string
+    public function toString(): string
     {
         return 'LscpuPhysicalFinder';
     }
-    public function getCommand() : string
+    public function getCommand(): string
     {
         return 'lscpu -p';
     }
-    protected function countCpuCores(string $process) : ?int
+    protected function countCpuCores(string $process): ?int
     {
         $lines = explode(PHP_EOL, $process);
         /** @var string[]|false $actualLines */
-        $actualLines = preg_grep('/^\\d+/', $lines);
+        $actualLines = preg_grep('/^\d+/', $lines);
         if (!is_array($actualLines)) {
             return null;
         }

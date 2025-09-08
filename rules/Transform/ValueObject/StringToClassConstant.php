@@ -25,15 +25,15 @@ final class StringToClassConstant
         $this->constant = $constant;
         RectorAssert::className($class);
     }
-    public function getString() : string
+    public function getString(): string
     {
         return $this->string;
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class;
     }
-    public function getConstant() : string
+    public function getConstant(): string
     {
         return $this->constant;
     }

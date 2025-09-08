@@ -25,7 +25,7 @@ final class AddClosureNeverReturnTypeRector extends AbstractRector implements Mi
     {
         $this->addNeverReturnType = $addNeverReturnType;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add "never" return-type for closure that never return anything', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
@@ -42,19 +42,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         return $this->addNeverReturnType->add($node, $scope);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEVER_TYPE;
     }

@@ -19,14 +19,14 @@ class InterpolatedStringPart extends NodeAbstract
         $this->attributes = $attributes;
         $this->value = $value;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['value'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'InterpolatedStringPart';
     }
 }
 // @deprecated compatibility alias
-\class_alias(\PhpParser\Node\InterpolatedStringPart::class, \PhpParser\Node\Scalar\EncapsedStringPart::class);
+class_alias(\PhpParser\Node\InterpolatedStringPart::class, \PhpParser\Node\Scalar\EncapsedStringPart::class);

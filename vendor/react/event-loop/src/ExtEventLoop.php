@@ -193,7 +193,7 @@ final class ExtEventLoop implements LoopInterface
     private function createTimerCallback()
     {
         $timers = $this->timerEvents;
-        $this->timerCallback = function ($_, $__, $timer) use($timers) {
+        $this->timerCallback = function ($_, $__, $timer) use ($timers) {
             \call_user_func($timer->getCallback(), $timer);
             if (!$timer->isPeriodic() && $timers->contains($timer)) {
                 $this->cancelTimer($timer);
@@ -211,7 +211,7 @@ final class ExtEventLoop implements LoopInterface
     {
         $read =& $this->readListeners;
         $write =& $this->writeListeners;
-        $this->streamCallback = function ($stream, $flags) use(&$read, &$write) {
+        $this->streamCallback = function ($stream, $flags) use (&$read, &$write) {
             $key = (int) $stream;
             if (Event::READ === (Event::READ & $flags) && isset($read[$key])) {
                 \call_user_func($read[$key], $stream);

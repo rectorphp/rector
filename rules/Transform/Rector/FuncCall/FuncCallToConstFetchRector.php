@@ -21,7 +21,7 @@ final class FuncCallToConstFetchRector extends AbstractRector implements Configu
      * @var string[]
      */
     private array $functionsToConstants = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes use of function calls to use constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -46,20 +46,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $functionName = $this->getName($node);
-        if (!\is_string($functionName)) {
+        if (!is_string($functionName)) {
             return null;
         }
-        if (!\array_key_exists($functionName, $this->functionsToConstants)) {
+        if (!array_key_exists($functionName, $this->functionsToConstants)) {
             return null;
         }
         return new ConstFetch(new Name($this->functionsToConstants[$functionName]));
@@ -67,10 +67,10 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allString($configuration);
-        Assert::allString(\array_keys($configuration));
+        Assert::allString(array_keys($configuration));
         /** @var array<string, string> $configuration */
         $this->functionsToConstants = $configuration;
     }

@@ -39,7 +39,7 @@ final class UninitializedPropertyAnalyzer
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isUninitialized(Expr $expr) : bool
+    public function isUninitialized(Expr $expr): bool
     {
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;
@@ -61,7 +61,7 @@ final class UninitializedPropertyAnalyzer
         if (!$property instanceof Property) {
             return \false;
         }
-        if (\count($property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return \false;
         }
         if ($property->props[0]->default instanceof Expr) {

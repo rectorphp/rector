@@ -38,14 +38,14 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns assert() calls to their explicit PHPUnit assert alternative', [new CodeSample('assert($value === 100, "message");', '$this->assertSame(100, $value, "message");')]);
     }
     /**
      * @return class-string[]
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
@@ -108,7 +108,7 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
         }
         return $this->createCall($node, $methodName, $exprs);
     }
-    private function isBehatContext(FuncCall $funcCall) : bool
+    private function isBehatContext(FuncCall $funcCall): bool
     {
         $scope = ScopeFetcher::fetch($funcCall);
         if (!$scope->getClassReflection() instanceof ClassReflection) {
@@ -116,19 +116,19 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
         }
         $className = $scope->getClassReflection()->getName();
         // special case with static call
-        return \substr_compare($className, 'Context', -\strlen('Context')) === 0;
+        return substr_compare($className, 'Context', -strlen('Context')) === 0;
     }
-    private function isTestFilePath(FuncCall $funcCall) : bool
+    private function isTestFilePath(FuncCall $funcCall): bool
     {
         $scope = ScopeFetcher::fetch($funcCall);
         if (!$scope->getClassReflection() instanceof ClassReflection) {
             return \false;
         }
         $className = $scope->getClassReflection()->getName();
-        if (\substr_compare($className, 'Test', -\strlen('Test')) === 0) {
+        if (substr_compare($className, 'Test', -strlen('Test')) === 0) {
             return \true;
         }
-        return \substr_compare($className, 'TestCase', -\strlen('TestCase')) === 0;
+        return substr_compare($className, 'TestCase', -strlen('TestCase')) === 0;
     }
     /**
      * @param Expr[] $exprs

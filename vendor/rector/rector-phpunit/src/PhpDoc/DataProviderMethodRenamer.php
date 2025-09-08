@@ -24,7 +24,7 @@ final class DataProviderMethodRenamer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function removeTestPrefix(Class_ $class) : void
+    public function removeTestPrefix(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
@@ -34,11 +34,11 @@ final class DataProviderMethodRenamer
                     continue;
                 }
                 $oldMethodName = $phpDocTagNode->value->value;
-                if (\strncmp($oldMethodName, 'test', \strlen('test')) !== 0) {
+                if (strncmp($oldMethodName, 'test', strlen('test')) !== 0) {
                     continue;
                 }
                 $newMethodName = $this->createMethodNameWithoutPrefix($oldMethodName, 'test');
-                $phpDocTagNode->value->value = Strings::replace($oldMethodName, '#' . \preg_quote($oldMethodName, '#') . '#', $newMethodName);
+                $phpDocTagNode->value->value = Strings::replace($oldMethodName, '#' . preg_quote($oldMethodName, '#') . '#', $newMethodName);
                 // invoke reprint
                 $phpDocTagNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
                 $hasClassMethodChanged = \true;
@@ -48,9 +48,9 @@ final class DataProviderMethodRenamer
             }
         }
     }
-    private function createMethodNameWithoutPrefix(string $methodName, string $prefix) : string
+    private function createMethodNameWithoutPrefix(string $methodName, string $prefix): string
     {
-        $newMethodName = Strings::substring($methodName, \strlen($prefix));
-        return \lcfirst($newMethodName);
+        $newMethodName = Strings::substring($methodName, strlen($prefix));
+        return lcfirst($newMethodName);
     }
 }

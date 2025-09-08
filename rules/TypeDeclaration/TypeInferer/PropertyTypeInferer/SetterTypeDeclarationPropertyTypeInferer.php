@@ -31,7 +31,7 @@ final class SetterTypeDeclarationPropertyTypeInferer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function inferProperty(Property $property, Class_ $class) : ?Type
+    public function inferProperty(Property $property, Class_ $class): ?Type
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);

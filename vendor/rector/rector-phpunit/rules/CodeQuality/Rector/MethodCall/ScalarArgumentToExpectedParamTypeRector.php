@@ -46,7 +46,7 @@ final class ScalarArgumentToExpectedParamTypeRector extends AbstractRector
         $this->methodParametersAndReturnTypesResolver = $methodParametersAndReturnTypesResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Correct expected type in setter of tests, if param type is strictly defined', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -91,14 +91,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipCall($node)) {
             return null;
@@ -148,7 +148,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function shouldSkipCall($call) : bool
+    private function shouldSkipCall($call): bool
     {
         if (!$this->isInTestClass($call)) {
             return \true;
@@ -164,7 +164,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function hasStringOrNumberArguments($call) : bool
+    private function hasStringOrNumberArguments($call): bool
     {
         foreach ($call->getArgs() as $arg) {
             if ($arg->value instanceof Int_) {
@@ -182,7 +182,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function isInTestClass($call) : bool
+    private function isInTestClass($call): bool
     {
         $callerClassReflection = $this->reflectionResolver->resolveClassReflection($call);
         if (!$callerClassReflection instanceof ClassReflection) {

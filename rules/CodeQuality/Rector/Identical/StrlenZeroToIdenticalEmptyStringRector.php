@@ -25,7 +25,7 @@ final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes strlen comparison to 0 to direct empty string compare', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class];
     }
     /**
      * @param Identical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->left instanceof FuncCall) {
             return $this->processIdentical($node->right, $node->left);
@@ -67,7 +67,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processIdentical(Expr $expr, FuncCall $funcCall) : ?Identical
+    private function processIdentical(Expr $expr, FuncCall $funcCall): ?Identical
     {
         if (!$this->isName($funcCall, 'strlen')) {
             return null;

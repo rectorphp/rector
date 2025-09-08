@@ -21,7 +21,7 @@ final class CacheFactory
     /**
      * @api config factory
      */
-    public function create() : \Rector\Caching\Cache
+    public function create(): \Rector\Caching\Cache
     {
         $cacheDirectory = SimpleParameterProvider::provideStringParameter(Option::CACHE_DIR);
         $cacheClass = FileCacheStorage::class;

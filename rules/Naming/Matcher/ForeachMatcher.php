@@ -29,7 +29,7 @@ final class ForeachMatcher
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function match(Foreach_ $foreach, $functionLike) : ?VariableAndCallForeach
+    public function match(Foreach_ $foreach, $functionLike): ?VariableAndCallForeach
     {
         $call = $this->callMatcher->matchCall($foreach);
         if (!$call instanceof Node) {

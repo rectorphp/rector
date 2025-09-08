@@ -86,10 +86,10 @@ final class AddReturnTypeFromParam
     /**
      * @param Stmt[] $stmts
      */
-    private function findCurrentScopeReturn(array $stmts) : ?Return_
+    private function findCurrentScopeReturn(array $stmts): ?Return_
     {
         $return = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $node) use(&$return) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $node) use (&$return): ?int {
             // skip scope nesting
             if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 $return = null;
@@ -110,11 +110,11 @@ final class AddReturnTypeFromParam
     /**
      * @param Stmt[] $stmts
      */
-    private function shouldSkipParam(Param $param, array $stmts) : bool
+    private function shouldSkipParam(Param $param, array $stmts): bool
     {
         $paramName = $this->nodeNameResolver->getName($param);
         $isParamModified = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($paramName, &$isParamModified) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use ($paramName, &$isParamModified): ?int {
             // skip scope nesting
             if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -140,7 +140,7 @@ final class AddReturnTypeFromParam
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function shouldSkipNode($functionLike, Scope $scope) : bool
+    private function shouldSkipNode($functionLike, Scope $scope): bool
     {
         // type is already known, skip
         if ($functionLike->returnType instanceof Node) {

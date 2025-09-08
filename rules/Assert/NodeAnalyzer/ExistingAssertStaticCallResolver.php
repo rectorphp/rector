@@ -14,7 +14,7 @@ final class ExistingAssertStaticCallResolver
     /**
      * @return string[]
      */
-    public function resolve(ClassMethod $classMethod) : array
+    public function resolve(ClassMethod $classMethod): array
     {
         if ($classMethod->stmts === null) {
             return [];
@@ -32,7 +32,7 @@ final class ExistingAssertStaticCallResolver
             if (!$staticCall->class instanceof Name) {
                 continue;
             }
-            if (!\in_array($staticCall->class->toString(), [AssertClassName::WEBMOZART, AssertClassName::BEBERLEI], \true)) {
+            if (!in_array($staticCall->class->toString(), [AssertClassName::WEBMOZART, AssertClassName::BEBERLEI], \true)) {
                 continue;
             }
             $existingAssertCallHashes[] = $standard->prettyPrintExpr($staticCall);

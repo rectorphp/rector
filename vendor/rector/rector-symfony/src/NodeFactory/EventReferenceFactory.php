@@ -28,7 +28,7 @@ final class EventReferenceFactory
      * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
      * @return String_|ClassConstFetch
      */
-    public function createEventName(string $eventName, array $eventNamesToClassConstants) : Node
+    public function createEventName(string $eventName, array $eventNamesToClassConstants): Node
     {
         if ($this->reflectionProvider->hasClass($eventName)) {
             return $this->nodeFactory->createClassConstReference($eventName);

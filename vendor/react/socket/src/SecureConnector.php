@@ -22,7 +22,7 @@ final class SecureConnector implements ConnectorInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->connector = $connector;
         $this->streamEncryption = new StreamEncryption($loop ?: Loop::get(), \false);
@@ -30,7 +30,7 @@ final class SecureConnector implements ConnectorInterface
     }
     public function connect($uri)
     {
-        if (!\function_exists('stream_socket_enable_crypto')) {
+        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202509\stream_socket_enable_crypto')) {
             return Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)'));
             // @codeCoverageIgnore
         }
@@ -45,7 +45,7 @@ final class SecureConnector implements ConnectorInterface
         $encryption = $this->streamEncryption;
         $connected = \false;
         /** @var \React\Promise\PromiseInterface<ConnectionInterface> $promise */
-        $promise = $this->connector->connect(\str_replace('tls://', '', $uri))->then(function (ConnectionInterface $connection) use($context, $encryption, $uri, &$promise, &$connected) {
+        $promise = $this->connector->connect(\str_replace('tls://', '', $uri))->then(function (ConnectionInterface $connection) use ($context, $encryption, $uri, &$promise, &$connected) {
             // (unencrypted) TCP/IP connection succeeded
             $connected = \true;
             if (!$connection instanceof Connection) {
@@ -57,12 +57,12 @@ final class SecureConnector implements ConnectorInterface
                 \stream_context_set_option($connection->stream, 'ssl', $name, $value);
             }
             // try to enable encryption
-            return $promise = $encryption->enable($connection)->then(null, function ($error) use($connection, $uri) {
+            return $promise = $encryption->enable($connection)->then(null, function ($error) use ($connection, $uri) {
                 // establishing encryption failed => close invalid connection and return error
                 $connection->close();
                 throw new \RuntimeException('Connection to ' . $uri . ' failed during TLS handshake: ' . $error->getMessage(), $error->getCode());
             });
-        }, function (\Exception $e) use($uri) {
+        }, function (\Exception $e) use ($uri) {
             if ($e instanceof \RuntimeException) {
                 $message = \preg_replace('/^Connection to [^ ]+/', '', $e->getMessage());
                 $e = new \RuntimeException('Connection to ' . $uri . $message, $e->getCode(), $e);
@@ -87,9 +87,9 @@ final class SecureConnector implements ConnectorInterface
             }
             throw $e;
         });
-        return new \RectorPrefix202509\React\Promise\Promise(function ($resolve, $reject) use($promise) {
+        return new \RectorPrefix202509\React\Promise\Promise(function ($resolve, $reject) use ($promise) {
             $promise->then($resolve, $reject);
-        }, function ($_, $reject) use(&$promise, $uri, &$connected) {
+        }, function ($_, $reject) use (&$promise, $uri, &$connected) {
             if ($connected) {
                 $reject(new \RuntimeException('Connection to ' . $uri . ' cancelled during TLS handshake (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
             }

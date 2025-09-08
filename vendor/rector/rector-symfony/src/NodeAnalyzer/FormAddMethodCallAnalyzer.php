@@ -26,9 +26,9 @@ final class FormAddMethodCallAnalyzer
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->formObjectTypes = [new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new ObjectType('Symfony\\Component\\Form\\FormInterface')];
+        $this->formObjectTypes = [new ObjectType('Symfony\Component\Form\FormBuilderInterface'), new ObjectType('Symfony\Component\Form\FormInterface')];
     }
-    public function isMatching(MethodCall $methodCall) : bool
+    public function isMatching(MethodCall $methodCall): bool
     {
         if (!$this->nodeNameResolver->isName($methodCall->name, 'add')) {
             return \false;

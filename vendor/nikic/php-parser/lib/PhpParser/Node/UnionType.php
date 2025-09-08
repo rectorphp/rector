@@ -18,11 +18,11 @@ class UnionType extends \PhpParser\Node\ComplexType
         $this->attributes = $attributes;
         $this->types = $types;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['types'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'UnionType';
     }

@@ -28,14 +28,14 @@ final class Schedule
         $this->numberOfProcesses = $numberOfProcesses;
         $this->jobs = $jobs;
     }
-    public function getNumberOfProcesses() : int
+    public function getNumberOfProcesses(): int
     {
         return $this->numberOfProcesses;
     }
     /**
      * @return array<array<string>>
      */
-    public function getJobs() : array
+    public function getJobs(): array
     {
         return $this->jobs;
     }

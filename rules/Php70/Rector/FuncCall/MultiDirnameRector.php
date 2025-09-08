@@ -22,21 +22,21 @@ final class MultiDirnameRector extends AbstractRector implements MinPhpVersionIn
      */
     private const DIRNAME = 'dirname';
     private int $nestingLevel = 0;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes multiple dirname() calls to one with nesting level', [new CodeSample('dirname(dirname($path));', 'dirname($path, 2);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->nestingLevel = 0;
         if (!$this->isName($node, self::DIRNAME)) {
@@ -57,15 +57,15 @@ final class MultiDirnameRector extends AbstractRector implements MinPhpVersionIn
         $node->args[1] = new Arg(new Int_($this->nestingLevel));
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DIRNAME_LEVELS;
     }
-    private function shouldSkip() : bool
+    private function shouldSkip(): bool
     {
         return $this->nestingLevel < 2;
     }
-    private function matchNestedDirnameFuncCall(FuncCall $funcCall) : ?FuncCall
+    private function matchNestedDirnameFuncCall(FuncCall $funcCall): ?FuncCall
     {
         if (!$this->isName($funcCall, self::DIRNAME)) {
             return null;
@@ -74,11 +74,11 @@ final class MultiDirnameRector extends AbstractRector implements MinPhpVersionIn
             return null;
         }
         $args = $funcCall->getArgs();
-        if (\count($args) >= 3) {
+        if (count($args) >= 3) {
             return null;
         }
         // dirname($path, <LEVEL>);
-        if (\count($args) === 2) {
+        if (count($args) === 2) {
             if (!$args[1]->value instanceof Int_) {
                 return null;
             }

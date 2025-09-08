@@ -41,11 +41,11 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STATIC_CALL_ON_NON_STATIC;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes $this->call() to static method to static call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if (!$scope->isInClass()) {
@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         // skip PHPUnit calls, as they accept both self:: and $this-> formats
-        if ($classReflection->is('PHPUnit\\Framework\\TestCase')) {
+        if ($classReflection->is('PHPUnit\Framework\TestCase')) {
             return null;
         }
         $this->hasChanged = \false;
@@ -103,9 +103,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processThisToStatic(Class_ $class, ClassReflection $classReflection) : void
+    private function processThisToStatic(Class_ $class, ClassReflection $classReflection): void
     {
-        $this->traverseNodesWithCallable($class, function (Node $subNode) use($class, $classReflection) {
+        $this->traverseNodesWithCallable($class, function (Node $subNode) use ($class, $classReflection) {
             if ($subNode instanceof InterpolatedString) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -140,7 +140,7 @@ CODE_SAMPLE
     /**
      * @return ObjectReference::STATIC|ObjectReference::SELF
      */
-    private function resolveClassSelf(ClassReflection $classReflection, MethodCall $methodCall) : string
+    private function resolveClassSelf(ClassReflection $classReflection, MethodCall $methodCall): string
     {
         if ($classReflection->isFinalByKeyword()) {
             return ObjectReference::SELF;

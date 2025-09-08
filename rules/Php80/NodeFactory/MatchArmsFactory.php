@@ -14,7 +14,7 @@ final class MatchArmsFactory
      * @param CondAndExpr[] $condAndExprs
      * @return MatchArm[]
      */
-    public function createFromCondAndExprs(array $condAndExprs) : array
+    public function createFromCondAndExprs(array $condAndExprs): array
     {
         $matchArms = [];
         foreach ($condAndExprs as $key => $condAndExpr) {

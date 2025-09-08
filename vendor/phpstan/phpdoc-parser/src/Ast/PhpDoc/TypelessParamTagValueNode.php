@@ -20,7 +20,7 @@ class TypelessParamTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpD
         $this->parameterName = $parameterName;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $reference = $this->isReference ? '&' : '';
         $variadic = $this->isVariadic ? '...' : '';

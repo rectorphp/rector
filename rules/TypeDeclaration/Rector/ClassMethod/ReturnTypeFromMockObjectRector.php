@@ -45,7 +45,7 @@ final class ReturnTypeFromMockObjectRector extends AbstractRector implements Min
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add known property and return MockObject types', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeTest extends TestCase
@@ -69,14 +69,14 @@ class SomeTest extends TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         // type is already known
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
         // we need exactly 1 return
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if (\count($returns) !== 1) {
+        if (count($returns) !== 1) {
             return null;
         }
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
@@ -106,28 +106,28 @@ CODE_SAMPLE
         $node->returnType = new FullyQualified(ClassName::MOCK_OBJECT);
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
-    private function isIntersectionWithMockObjectType(Type $type) : bool
+    private function isIntersectionWithMockObjectType(Type $type): bool
     {
         if (!$type instanceof IntersectionType) {
             return \false;
         }
-        if (\count($type->getTypes()) !== 2) {
+        if (count($type->getTypes()) !== 2) {
             return \false;
         }
-        return \in_array(ClassName::MOCK_OBJECT, $type->getObjectClassNames());
+        return in_array(ClassName::MOCK_OBJECT, $type->getObjectClassNames());
     }
-    private function isMockObjectType(Type $returnType) : bool
+    private function isMockObjectType(Type $returnType): bool
     {
         if ($returnType instanceof ObjectType && $returnType->isInstanceOf(ClassName::MOCK_OBJECT)->yes()) {
             return \true;
         }
         return $this->isIntersectionWithMockObjectType($returnType);
     }
-    private function isInsideTestCaseClass(Scope $scope) : bool
+    private function isInsideTestCaseClass(Scope $scope): bool
     {
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {

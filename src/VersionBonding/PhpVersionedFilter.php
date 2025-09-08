@@ -27,14 +27,14 @@ final class PhpVersionedFilter
      * @param list<RectorInterface> $rectors
      * @return list<RectorInterface>
      */
-    public function filter(array $rectors) : array
+    public function filter(array $rectors): array
     {
         $minProjectPhpVersion = $this->phpVersionProvider->provide();
         $activeRectors = [];
         foreach ($rectors as $rector) {
             if ($rector instanceof RelatedPolyfillInterface) {
                 $polyfillPackageNames = $this->polyfillPackagesProvider->provide();
-                if (\in_array($rector->providePolyfillPackage(), $polyfillPackageNames, \true)) {
+                if (in_array($rector->providePolyfillPackage(), $polyfillPackageNames, \true)) {
                     $activeRectors[] = $rector;
                     continue;
                 }

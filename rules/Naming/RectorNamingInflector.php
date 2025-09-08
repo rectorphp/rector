@@ -20,7 +20,7 @@ final class RectorNamingInflector
     {
         $this->inflector = $inflector;
     }
-    public function singularize(string $name) : string
+    public function singularize(string $name): string
     {
         $matches = Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
         if ($matches === null) {

@@ -24,7 +24,7 @@ final class ConstructorManipulator
         $this->nodeFactory = $nodeFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function addStmtToConstructor(Class_ $class, Expression $newExpression) : void
+    public function addStmtToConstructor(Class_ $class, Expression $newExpression): void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod instanceof ClassMethod) {

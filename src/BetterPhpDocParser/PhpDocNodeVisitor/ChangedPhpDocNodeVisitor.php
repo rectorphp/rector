@@ -9,11 +9,11 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     private bool $hasChanged = \false;
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(Node $node): void
     {
         $this->hasChanged = \false;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         $origNode = $node->getAttribute(PhpDocAttributeKey::ORIG_NODE);
         if ($origNode === null) {
@@ -21,7 +21,7 @@ final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         return null;
     }
-    public function hasChanged() : bool
+    public function hasChanged(): bool
     {
         return $this->hasChanged;
     }

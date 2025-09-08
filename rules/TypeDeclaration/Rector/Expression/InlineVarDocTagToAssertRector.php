@@ -45,7 +45,7 @@ final class InlineVarDocTagToAssertRector extends AbstractRector implements MinP
         $this->docBlockUpdater = $docBlockUpdater;
         $this->typeExpressionFromVarTagResolver = $typeExpressionFromVarTagResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert inline `@var` tags to calls to `assert()`', [new CodeSample(<<<'CODE_SAMPLE'
 /** @var Foo $foo */
@@ -60,7 +60,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
@@ -68,7 +68,7 @@ CODE_SAMPLE
      * @param Expression $node
      * @return Node[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if (!$node->expr instanceof Assign) {
             return null;
@@ -87,7 +87,7 @@ CODE_SAMPLE
         $expressionVariableName = $node->expr->var->name;
         foreach ($phpDocInfo->getPhpDocNode()->getVarTagValues() as $varTagValueNode) {
             //remove $ from variable name
-            $variableName = \substr($varTagValueNode->variableName, 1);
+            $variableName = substr($varTagValueNode->variableName, 1);
             if ($variableName === $expressionVariableName && $varTagValueNode->description === '') {
                 $typeExpression = $this->typeExpressionFromVarTagResolver->resolveTypeExpressionFromVarTag($varTagValueNode->type, new Variable($variableName));
                 if ($typeExpression instanceof Expr) {
@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STRING_IN_ASSERT_ARG;
     }

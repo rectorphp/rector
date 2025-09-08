@@ -44,9 +44,9 @@ final class LaravelModelGuard
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isProtectedMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
+    public function isProtectedMethod(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
-        if (!$classReflection->is('Illuminate\\Database\\Eloquent\\Model')) {
+        if (!$classReflection->is('Illuminate\Database\Eloquent\Model')) {
             return \false;
         }
         $name = (string) $this->nodeNameResolver->getName($classMethod->name);
@@ -55,7 +55,7 @@ final class LaravelModelGuard
         }
         return $this->isScopeMethod($name, $classMethod);
     }
-    private function isAttributeMethod(string $name, ClassMethod $classMethod) : bool
+    private function isAttributeMethod(string $name, ClassMethod $classMethod): bool
     {
         if (StringUtils::isMatch($name, self::LARAVEL_MODEL_ATTRIBUTE_REGEX)) {
             return \true;
@@ -63,13 +63,13 @@ final class LaravelModelGuard
         if (!$classMethod->returnType instanceof Node) {
             return \false;
         }
-        return $this->nodeTypeResolver->isObjectType($classMethod->returnType, new ObjectType('Illuminate\\Database\\Eloquent\\Casts\\Attribute'));
+        return $this->nodeTypeResolver->isObjectType($classMethod->returnType, new ObjectType('Illuminate\Database\Eloquent\Casts\Attribute'));
     }
-    private function isScopeMethod(string $name, ClassMethod $classMethod) : bool
+    private function isScopeMethod(string $name, ClassMethod $classMethod): bool
     {
         if (StringUtils::isMatch($name, self::LARAVEL_MODEL_SCOPE_REGEX)) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Illuminate\\Database\\Eloquent\\Attributes\\Scope');
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Illuminate\Database\Eloquent\Attributes\Scope');
     }
 }

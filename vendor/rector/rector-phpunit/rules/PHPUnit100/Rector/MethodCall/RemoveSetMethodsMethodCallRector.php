@@ -40,7 +40,7 @@ final class RemoveSetMethodsMethodCallRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove "setMethods()" method as never used, move methods to "addMethods()" if non-existent or @method magic', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -72,14 +72,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -90,7 +90,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'setMethods')) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\MockObject\\MockBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('PHPUnit\Framework\MockObject\MockBuilder'))) {
             return null;
         }
         $mockedMagicMethodNames = $this->resolvedMockedMagicMethodNames($node);
@@ -107,11 +107,11 @@ CODE_SAMPLE
      *
      * @return string[]
      */
-    private function resolvedMockedMagicMethodNames(MethodCall $setMethodsMethodCall) : array
+    private function resolvedMockedMagicMethodNames(MethodCall $setMethodsMethodCall): array
     {
         $mockedClassName = $this->resolveMockedClassName($setMethodsMethodCall);
         // unable to resolve mocked class
-        if (!\is_string($mockedClassName)) {
+        if (!is_string($mockedClassName)) {
             return [];
         }
         $magicMethodNames = $this->resolveClassMagicMethodNames($mockedClassName);
@@ -120,31 +120,31 @@ CODE_SAMPLE
             return [];
         }
         $mockedMethodNames = $this->resolveSetMethodNames($setMethodsMethodCall);
-        $magicSetMethodNames = \array_intersect($mockedMethodNames, $magicMethodNames);
-        return \array_values($magicSetMethodNames);
+        $magicSetMethodNames = array_intersect($mockedMethodNames, $magicMethodNames);
+        return array_values($magicSetMethodNames);
     }
     /**
      * @return string[]
      */
-    private function resolveClassMagicMethodNames(string $className) : array
+    private function resolveClassMagicMethodNames(string $className): array
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return [];
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        return \array_keys($classReflection->getMethodTags());
+        return array_keys($classReflection->getMethodTags());
     }
     /**
      * @return string[]
      */
-    private function resolveSetMethodNames(MethodCall $setMethodsMethodCall) : array
+    private function resolveSetMethodNames(MethodCall $setMethodsMethodCall): array
     {
         if ($setMethodsMethodCall->isFirstClassCallable()) {
             return [];
         }
         $firstArg = $setMethodsMethodCall->getArgs()[0];
         $value = $this->valueResolver->getValue($firstArg->value);
-        if (!\is_array($value)) {
+        if (!is_array($value)) {
             return [];
         }
         return $value;

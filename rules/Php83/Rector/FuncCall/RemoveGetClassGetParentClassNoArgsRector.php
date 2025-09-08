@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveGetClassGetParentClassNoArgsRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace calls to `get_class()` and `get_parent_class()` without arguments with `self::class` and `parent::class`', [new CodeSample(<<<'OLD_CODE_SAMPLE'
 class Example extends StdClass {
@@ -39,19 +39,19 @@ NEW_CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 0) {
+        if (count($node->getArgs()) !== 0) {
             return null;
         }
         $target = null;
@@ -66,7 +66,7 @@ NEW_CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_GET_CLASS_WITHOUT_ARGS;
     }

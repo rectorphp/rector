@@ -74,7 +74,7 @@ final class NodeTraverser
      *
      * @return Node[] Traversed array of nodes
      */
-    public function traverse(array $nodes) : array
+    public function traverse(array $nodes): array
     {
         $this->stopTraversal = \false;
         foreach ($this->visitors as $visitor) {
@@ -101,7 +101,7 @@ final class NodeTraverser
      *
      * @return Node Result of traversal (may be original node or new one)
      */
-    private function traverseNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
+    private function traverseNode(\PHPStan\PhpDocParser\Ast\Node $node): \PHPStan\PhpDocParser\Ast\Node
     {
         $subNodeNames = array_keys(get_object_vars($node));
         foreach ($subNodeNames as $name) {
@@ -171,7 +171,7 @@ final class NodeTraverser
      *
      * @return mixed[] Result of traversal (may be original array or changed one)
      */
-    private function traverseArray(array $nodes) : array
+    private function traverseArray(array $nodes): array
     {
         $doNodes = [];
         foreach ($nodes as $i => &$node) {
@@ -245,7 +245,7 @@ final class NodeTraverser
         }
         return $nodes;
     }
-    private function ensureReplacementReasonable(\PHPStan\PhpDocParser\Ast\Node $old, \PHPStan\PhpDocParser\Ast\Node $new) : void
+    private function ensureReplacementReasonable(\PHPStan\PhpDocParser\Ast\Node $old, \PHPStan\PhpDocParser\Ast\Node $new): void
     {
         if ($old instanceof TypeNode && !$new instanceof TypeNode) {
             throw new LogicException(sprintf('Trying to replace TypeNode with %s', get_class($new)));

@@ -32,21 +32,21 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unnecessary ternary expressions', [new CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->if instanceof Expr) {
             return null;
@@ -80,7 +80,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
         return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
     }
-    private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition) : ?Node
+    private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $this->processTrueIfExpressionWithFalseElseExpression($condition);
@@ -93,7 +93,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
         return $this->processFalseIfExpressionWithTrueElseExpression($condition);
     }
-    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr) : Expr
+    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr): Expr
     {
         $exprType = $this->getType($expr);
         if ($exprType->isBoolean()->yes()) {
@@ -101,7 +101,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
         return new Bool_($expr);
     }
-    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr) : Expr
+    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr): Expr
     {
         if ($expr instanceof BooleanNot) {
             $negatedExprType = $this->getType($expr->expr);

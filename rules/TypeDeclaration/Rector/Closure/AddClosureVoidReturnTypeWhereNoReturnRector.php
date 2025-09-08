@@ -25,7 +25,7 @@ final class AddClosureVoidReturnTypeWhereNoReturnRector extends AbstractRector i
     {
         $this->silentVoidResolver = $silentVoidResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add closure return type void if there is no return', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // already has return type → skip
         if ($node->returnType instanceof Node) {
@@ -59,7 +59,7 @@ CODE_SAMPLE
         $node->returnType = new Identifier('void');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VOID_TYPE;
     }

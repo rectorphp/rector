@@ -25,9 +25,9 @@ final class Parser
     /**
      * @return Diff[]
      */
-    public function parse(string $string) : array
+    public function parse(string $string): array
     {
-        $lines = preg_split('(\\r\\n|\\r|\\n)', $string);
+        $lines = preg_split('(\r\n|\r|\n)', $string);
         if (!empty($lines) && $lines[count($lines) - 1] === '') {
             array_pop($lines);
         }
@@ -36,7 +36,7 @@ final class Parser
         $diff = null;
         $collected = [];
         for ($i = 0; $i < $lineCount; $i++) {
-            if (preg_match('#^---\\h+"?(?P<file>[^\\v\\t"]+)#', $lines[$i], $fromMatch) && preg_match('#^\\+\\+\\+\\h+"?(?P<file>[^\\v\\t"]+)#', $lines[$i + 1], $toMatch)) {
+            if (preg_match('#^---\h+"?(?P<file>[^\v\t"]+)#', $lines[$i], $fromMatch) && preg_match('#^\+\+\+\h+"?(?P<file>[^\v\t"]+)#', $lines[$i + 1], $toMatch)) {
                 if ($diff !== null) {
                     $this->parseFileDiff($diff, $collected);
                     $diffs[] = $diff;
@@ -47,7 +47,7 @@ final class Parser
                 $diff = new Diff($fromMatch['file'], $toMatch['file']);
                 $i++;
             } else {
-                if (preg_match('/^(?:diff --git |index [\\da-f.]+|[+-]{3} [ab])/', $lines[$i])) {
+                if (preg_match('/^(?:diff --git |index [\da-f.]+|[+-]{3} [ab])/', $lines[$i])) {
                     continue;
                 }
                 $collected[] = $lines[$i];
@@ -59,13 +59,13 @@ final class Parser
         }
         return $diffs;
     }
-    private function parseFileDiff(Diff $diff, array $lines) : void
+    private function parseFileDiff(Diff $diff, array $lines): void
     {
         $chunks = [];
         $chunk = null;
         $diffLines = [];
         foreach ($lines as $line) {
-            if (preg_match('/^@@\\s+-(?P<start>\\d+)(?:,\\s*(?P<startrange>\\d+))?\\s+\\+(?P<end>\\d+)(?:,\\s*(?P<endrange>\\d+))?\\s+@@/', $line, $match, \PREG_UNMATCHED_AS_NULL)) {
+            if (preg_match('/^@@\s+-(?P<start>\d+)(?:,\s*(?P<startrange>\d+))?\s+\+(?P<end>\d+)(?:,\s*(?P<endrange>\d+))?\s+@@/', $line, $match, \PREG_UNMATCHED_AS_NULL)) {
                 $chunk = new Chunk((int) $match['start'], isset($match['startrange']) ? max(0, (int) $match['startrange']) : 1, (int) $match['end'], isset($match['endrange']) ? max(0, (int) $match['endrange']) : 1);
                 $chunks[] = $chunk;
                 $diffLines = [];

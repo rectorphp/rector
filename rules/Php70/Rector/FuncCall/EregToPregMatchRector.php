@@ -39,25 +39,25 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
     {
         $this->eregToPcreTransformer = $eregToPcreTransformer;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_EREG_FUNCTION;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes ereg*() to preg*() calls', [new CodeSample('ereg("hi")', 'preg_match("#hi#");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class, Assign::class];
     }
     /**
      * @param FuncCall|Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof FuncCall) {
             return $this->refactorFuncCall($node);
@@ -70,7 +70,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         $node->expr = $this->createTernaryWithStrlenOfFirstMatch($funcCall);
         return $node;
     }
-    private function shouldSkipFuncCall(FuncCall $funcCall) : bool
+    private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         $functionName = $this->getName($funcCall);
         if ($functionName === null) {
@@ -84,7 +84,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         }
         return !isset($funcCall->getArgs()[0]);
     }
-    private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName) : void
+    private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName): void
     {
         $pattern = $string->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
@@ -92,7 +92,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         Assert::isInstanceOf($firstArg->value, String_::class);
         $firstArg->value->value = $pattern;
     }
-    private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName) : void
+    private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName): void
     {
         $pregQuotePatternNode = $this->nodeFactory->createFuncCall('preg_quote', [new Arg($variable), new Arg(new String_('#'))]);
         $startConcat = new Concat(new String_('#'), $pregQuotePatternNode);
@@ -108,7 +108,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
      * ↓
      * preg_split('# #', 'hey Tom', 1);
      */
-    private function processSplitLimitArgument(FuncCall $funcCall, string $functionName) : void
+    private function processSplitLimitArgument(FuncCall $funcCall, string $functionName): void
     {
         if (!isset($funcCall->args[2])) {
             return;
@@ -116,7 +116,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         if (!$funcCall->args[2] instanceof Arg) {
             return;
         }
-        if (\strncmp($functionName, 'split', \strlen('split')) !== 0) {
+        if (strncmp($functionName, 'split', strlen('split')) !== 0) {
             return;
         }
         // 3rd argument - $limit, 0 → 1
@@ -130,35 +130,35 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         }
         $limitNumberNode->value = 1;
     }
-    private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall) : Ternary
+    private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall): Ternary
     {
         $thirdArg = $funcCall->getArgs()[2];
         $arrayDimFetch = new ArrayDimFetch($thirdArg->value, new Int_(0));
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$arrayDimFetch]);
         return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
     }
-    private function isCaseInsensitiveFunction(string $functionName) : bool
+    private function isCaseInsensitiveFunction(string $functionName): bool
     {
-        if (\strpos($functionName, 'eregi') !== \false) {
+        if (strpos($functionName, 'eregi') !== \false) {
             return \true;
         }
-        return \strpos($functionName, 'spliti') !== \false;
+        return strpos($functionName, 'spliti') !== \false;
     }
-    private function isEregFuncCallWithThreeArgs(Expr $expr) : bool
+    private function isEregFuncCallWithThreeArgs(Expr $expr): bool
     {
         if (!$expr instanceof FuncCall) {
             return \false;
         }
         $functionName = $this->getName($expr);
-        if (!\is_string($functionName)) {
+        if (!is_string($functionName)) {
             return \false;
         }
-        if (!\in_array($functionName, ['ereg', 'eregi'], \true)) {
+        if (!in_array($functionName, ['ereg', 'eregi'], \true)) {
             return \false;
         }
         return isset($expr->getArgs()[2]);
     }
-    private function refactorFuncCall(FuncCall $funcCall) : ?FuncCall
+    private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
     {
         if ($this->shouldSkipFuncCall($funcCall)) {
             return null;

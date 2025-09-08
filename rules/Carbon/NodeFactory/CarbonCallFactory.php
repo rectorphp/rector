@@ -17,7 +17,7 @@ final class CarbonCallFactory
      * @var string
      * @see https://regex101.com/r/LLMrFw/1
      */
-    private const PLUS_MINUS_COUNT_REGEX = '#(?<operator>\\+|-)(\\s+)?(?<count>\\d+)(\\s+)?(?<unit>seconds|second|sec|minutes|minute|min|hours|hour|days|day|weeks|week|months|month|years|year)#';
+    private const PLUS_MINUS_COUNT_REGEX = '#(?<operator>\+|-)(\s+)?(?<count>\d+)(\s+)?(?<unit>seconds|second|sec|minutes|minute|min|hours|hour|days|day|weeks|week|months|month|years|year)#';
     /**
      * @var string
      * @see https://regex101.com/r/IhxHTO/1
@@ -60,7 +60,7 @@ final class CarbonCallFactory
         }
         return $carbonCall;
     }
-    private function createStaticCall(FullyQualified $carbonFullyQualified, String_ $string) : StaticCall
+    private function createStaticCall(FullyQualified $carbonFullyQualified, String_ $string): StaticCall
     {
         $startDate = Strings::match($string->value, self::STATIC_DATE_REGEX)[0] ?? 'now';
         return new StaticCall($carbonFullyQualified, new Identifier($startDate));
@@ -68,7 +68,7 @@ final class CarbonCallFactory
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $carbonCall
      */
-    private function createModifyMethodCall($carbonCall, Int_ $int, string $unit, string $operator) : ?MethodCall
+    private function createModifyMethodCall($carbonCall, Int_ $int, string $unit, string $operator): ?MethodCall
     {
         switch ($unit) {
             case 'sec':
@@ -119,7 +119,7 @@ final class CarbonCallFactory
         if ($unit === null || $operator === null) {
             return null;
         }
-        $methodName = $operator . \ucfirst($unit);
+        $methodName = $operator . ucfirst($unit);
         return new MethodCall($carbonCall, new Identifier($methodName), [new Arg($int)]);
     }
     /**
@@ -132,7 +132,7 @@ final class CarbonCallFactory
             return $staticCall;
         }
         $currentCall = $staticCall;
-        $callStack = \array_reverse($callStack);
+        $callStack = array_reverse($callStack);
         foreach ($callStack as $call) {
             $call->var = $currentCall;
             $currentCall = $call;

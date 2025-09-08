@@ -37,7 +37,7 @@ interface PromiseInterface
      * @param ?(callable(\Throwable): (PromiseInterface<TRejected>|TRejected)) $onRejected
      * @return PromiseInterface<($onRejected is null ? ($onFulfilled is null ? T : TFulfilled) : ($onFulfilled is null ? T|TRejected : TFulfilled|TRejected))>
      */
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : PromiseInterface;
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface;
     /**
      * Registers a rejection handler for promise. It is a shortcut for:
      *
@@ -53,7 +53,7 @@ interface PromiseInterface
      * @param callable(TThrowable): (PromiseInterface<TRejected>|TRejected) $onRejected
      * @return PromiseInterface<T|TRejected>
      */
-    public function catch(callable $onRejected) : PromiseInterface;
+    public function catch(callable $onRejected): PromiseInterface;
     /**
      * Allows you to execute "cleanup" type tasks in a promise chain.
      *
@@ -99,7 +99,7 @@ interface PromiseInterface
      * @param callable(): (void|PromiseInterface<void>) $onFulfilledOrRejected
      * @return PromiseInterface<T>
      */
-    public function finally(callable $onFulfilledOrRejected) : PromiseInterface;
+    public function finally(callable $onFulfilledOrRejected): PromiseInterface;
     /**
      * The `cancel()` method notifies the creator of the promise that there is no
      * further interest in the results of the operation.
@@ -109,7 +109,7 @@ interface PromiseInterface
      *
      * @return void
      */
-    public function cancel() : void;
+    public function cancel(): void;
     /**
      * [Deprecated] Registers a rejection handler for a promise.
      *
@@ -127,7 +127,7 @@ interface PromiseInterface
      * @deprecated 3.0.0 Use catch() instead
      * @see self::catch()
      */
-    public function otherwise(callable $onRejected) : PromiseInterface;
+    public function otherwise(callable $onRejected): PromiseInterface;
     /**
      * [Deprecated] Allows you to execute "cleanup" type tasks in a promise chain.
      *
@@ -143,5 +143,5 @@ interface PromiseInterface
      * @deprecated 3.0.0 Use finally() instead
      * @see self::finally()
      */
-    public function always(callable $onFulfilledOrRejected) : PromiseInterface;
+    public function always(callable $onFulfilledOrRejected): PromiseInterface;
 }

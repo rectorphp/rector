@@ -32,7 +32,7 @@ final class MultiDimensionalArrayToArrayDestructRector extends AbstractRector im
     {
         $this->nodeFinder = $nodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change multidimensional array access in foreach to array destruct', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -69,14 +69,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Foreach_::class];
     }
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $usedDestructedValues = $this->replaceValueArrayAccessorsInForeachTree($node);
         if ($usedDestructedValues !== []) {
@@ -85,7 +85,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_DESTRUCT;
     }
@@ -95,11 +95,11 @@ CODE_SAMPLE
      *
      * @return array<string, string> List of destructor variables we need to create in format array key name => variable name
      */
-    private function replaceValueArrayAccessorsInForeachTree(Foreach_ $foreach) : array
+    private function replaceValueArrayAccessorsInForeachTree(Foreach_ $foreach): array
     {
         $usedVariableNames = $this->getUsedVariableNamesInForeachTree($foreach);
         $createdDestructedVariables = [];
-        $this->traverseNodesWithCallable($foreach->stmts, function (Node $traverseNode) use($foreach, $usedVariableNames, &$createdDestructedVariables) {
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $traverseNode) use ($foreach, $usedVariableNames, &$createdDestructedVariables) {
             if (!$traverseNode instanceof ArrayDimFetch) {
                 return null;
             }
@@ -123,11 +123,11 @@ CODE_SAMPLE
      *
      * @return string[]
      */
-    private function getUsedVariableNamesInForeachTree(Foreach_ $foreach) : array
+    private function getUsedVariableNamesInForeachTree(Foreach_ $foreach): array
     {
         /** @var list<Variable> $variableNodes */
         $variableNodes = $this->nodeFinder->findInstanceOf($foreach, Variable::class);
-        return \array_unique(\array_map(fn(Variable $variable): string => (string) $this->getName($variable), $variableNodes));
+        return array_unique(array_map(fn(Variable $variable): string => (string) $this->getName($variable), $variableNodes));
     }
     /**
      * Get variable name that will be used for destructor syntax. If variable name is already occupied
@@ -135,17 +135,17 @@ CODE_SAMPLE
      *
      * @param list<string> $usedVariableNames
      */
-    private function getDestructedVariableName(array $usedVariableNames, String_ $string) : string
+    private function getDestructedVariableName(array $usedVariableNames, String_ $string): string
     {
         $desiredVariableName = $string->value;
-        if (\in_array($desiredVariableName, $usedVariableNames, \true) === \false) {
+        if (in_array($desiredVariableName, $usedVariableNames, \true) === \false) {
             return $desiredVariableName;
         }
         $i = 1;
-        $variableName = \sprintf('%s%s', $desiredVariableName, $i);
-        while (\in_array($variableName, $usedVariableNames, \true)) {
+        $variableName = sprintf('%s%s', $desiredVariableName, $i);
+        while (in_array($variableName, $usedVariableNames, \true)) {
             ++$i;
-            $variableName = \sprintf('%s%s', $desiredVariableName, $i);
+            $variableName = sprintf('%s%s', $desiredVariableName, $i);
         }
         return $variableName;
     }
@@ -156,7 +156,7 @@ CODE_SAMPLE
      *
      * @return list<ArrayItem>
      */
-    private function getArrayItems(array $usedDestructedValues) : array
+    private function getArrayItems(array $usedDestructedValues): array
     {
         $items = [];
         foreach ($usedDestructedValues as $key => $value) {

@@ -38,7 +38,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Namespace_ The built node
      */
-    public function getNode() : Node
+    public function getNode(): Node
     {
         return new Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
     }

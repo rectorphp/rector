@@ -41,7 +41,7 @@ final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change default value types to match Doctrine annotation type', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
@@ -76,14 +76,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(MappingClass::COLUMN);
@@ -103,18 +103,18 @@ CODE_SAMPLE
         if ($typeValue instanceof StringNode) {
             $typeValue = $typeValue->value;
         }
-        if (!\is_string($typeValue)) {
+        if (!is_string($typeValue)) {
             return null;
         }
-        if (\in_array($typeValue, ['bool', 'boolean'], \true)) {
+        if (in_array($typeValue, ['bool', 'boolean'], \true)) {
             return $this->refactorToBoolType($onlyProperty, $node);
         }
-        if (\in_array($typeValue, ['int', 'integer', 'bigint', 'smallint'], \true)) {
+        if (in_array($typeValue, ['int', 'integer', 'bigint', 'smallint'], \true)) {
             return $this->refactorToIntType($onlyProperty, $node);
         }
         return null;
     }
-    private function refactorToBoolType(PropertyItem $propertyItem, Property $property) : ?Property
+    private function refactorToBoolType(PropertyItem $propertyItem, Property $property): ?Property
     {
         if (!$propertyItem->default instanceof Expr) {
             return null;
@@ -130,7 +130,7 @@ CODE_SAMPLE
         }
         throw new NotImplementedYetException();
     }
-    private function refactorToIntType(PropertyItem $propertyItem, Property $property) : ?Property
+    private function refactorToIntType(PropertyItem $propertyItem, Property $property): ?Property
     {
         if (!$propertyItem->default instanceof Expr) {
             return null;

@@ -38,7 +38,7 @@ final class PropertyExistsWithoutAssertRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace deleted PHPUnit methods: assertClassHasStaticAttribute, classHasStaticAttribute and assertClassNotHasStaticAttribute by property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
 $this->assertClassHasStaticAttribute("Class", "property");
@@ -55,17 +55,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $map = self::RENAME_METHODS_WITH_OBJECT_MAP;
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, \array_keys($map))) {
+        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, array_keys($map))) {
             return null;
         }
         if ($node->isFirstClassCallable() || !isset($node->getArgs()[0], $node->getArgs()[1])) {
@@ -80,7 +80,7 @@ CODE_SAMPLE
         $funcCall = new FuncCall(new Name('property_exists'), [$secondNode, $firstNode]);
         $newArgs = $this->nodeFactory->createArgs([$funcCall]);
         unset($node->args[0], $node->args[1]);
-        $node->args = \array_merge($newArgs, $node->getArgs());
+        $node->args = array_merge($newArgs, $node->getArgs());
         $this->identifierManipulator->renameNodeWithMap($node, $map);
         return $node;
     }

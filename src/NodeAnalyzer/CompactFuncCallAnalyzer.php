@@ -21,12 +21,12 @@ final class CompactFuncCallAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isInCompact(FuncCall $funcCall, Variable $variable) : bool
+    public function isInCompact(FuncCall $funcCall, Variable $variable): bool
     {
         if (!$this->nodeNameResolver->isName($funcCall, 'compact')) {
             return \false;
         }
-        if (!\is_string($variable->name)) {
+        if (!is_string($variable->name)) {
             return \false;
         }
         return $this->isInArgOrArrayItemNodes($funcCall->args, $variable->name);
@@ -34,7 +34,7 @@ final class CompactFuncCallAnalyzer
     /**
      * @param array<int, Arg|VariadicPlaceholder|ArrayItem|null> $nodes
      */
-    private function isInArgOrArrayItemNodes(array $nodes, string $variableName) : bool
+    private function isInArgOrArrayItemNodes(array $nodes, string $variableName): bool
     {
         foreach ($nodes as $node) {
             if ($this->shouldSkip($node)) {
@@ -59,7 +59,7 @@ final class CompactFuncCallAnalyzer
     /**
      * @param \PhpParser\Node\Arg|\PhpParser\Node\VariadicPlaceholder|\PhpParser\Node\ArrayItem|null $node
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip($node): bool
     {
         if ($node === null) {
             return \true;

@@ -26,11 +26,11 @@ final class StringifyDefineRector extends AbstractRector implements MinPhpVersio
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STRING_IN_FIRST_DEFINE_ARG;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make first argument of define() string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -57,14 +57,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'define')) {
             return null;

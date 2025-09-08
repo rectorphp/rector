@@ -36,23 +36,23 @@ class ArrayDimFetchToMethodCall
         $this->existsMethod = $existsMethod;
         $this->unsetMethod = $unsetMethod;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return $this->objectType;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getSetMethod() : ?string
+    public function getSetMethod(): ?string
     {
         return $this->setMethod;
     }
-    public function getExistsMethod() : ?string
+    public function getExistsMethod(): ?string
     {
         return $this->existsMethod;
     }
-    public function getUnsetMethod() : ?string
+    public function getUnsetMethod(): ?string
     {
         return $this->unsetMethod;
     }

@@ -29,11 +29,11 @@ final class ListEachRector extends AbstractRector implements MinPhpVersionInterf
     {
         $this->assignManipulator = $assignManipulator;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_EACH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('each() function is deprecated, use key() and current() instead', [new CodeSample(<<<'CODE_SAMPLE'
 list($key, $callback) = each($callbacks);
@@ -48,7 +48,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
@@ -100,10 +100,10 @@ CODE_SAMPLE
         $keyAssign = new Assign($firstArrayItem->value, $keyFuncCall);
         return [new Expression($keyAssign), new Expression($currentAssign), new Expression($nextFuncCall)];
     }
-    private function shouldSkipAssign(ListAndEach $listAndEach) : bool
+    private function shouldSkipAssign(ListAndEach $listAndEach): bool
     {
         $list = $listAndEach->getList();
-        if (\count($list->items) !== 2) {
+        if (count($list->items) !== 2) {
             return \true;
         }
         // empty list → cannot handle

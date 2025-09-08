@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SeparateMultiUseImportsRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Split multi use imports and trait statements to standalone lines', [new CodeSample(<<<'CODE_SAMPLE'
 use A, B;
@@ -44,7 +44,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FileWithoutNamespace::class, Namespace_::class, Class_::class];
     }
@@ -60,7 +60,7 @@ CODE_SAMPLE
                 $refactorUseImport = $this->refactorUseImport($stmt);
                 if ($refactorUseImport !== null) {
                     unset($node->stmts[$key]);
-                    \array_splice($node->stmts, $key, 0, $refactorUseImport);
+                    array_splice($node->stmts, $key, 0, $refactorUseImport);
                     $hasChanged = \true;
                 }
                 continue;
@@ -69,7 +69,7 @@ CODE_SAMPLE
                 $refactorTraitUse = $this->refactorTraitUse($stmt);
                 if ($refactorTraitUse !== null) {
                     unset($node->stmts[$key]);
-                    \array_splice($node->stmts, $key, 0, $refactorTraitUse);
+                    array_splice($node->stmts, $key, 0, $refactorTraitUse);
                     $hasChanged = \true;
                 }
             }
@@ -82,9 +82,9 @@ CODE_SAMPLE
     /**
      * @return Use_[]|null $use
      */
-    private function refactorUseImport(Use_ $use) : ?array
+    private function refactorUseImport(Use_ $use): ?array
     {
-        if (\count($use->uses) < 2) {
+        if (count($use->uses) < 2) {
             return null;
         }
         $uses = [];
@@ -96,9 +96,9 @@ CODE_SAMPLE
     /**
      * @return TraitUse[]|null
      */
-    private function refactorTraitUse(TraitUse $traitUse) : ?array
+    private function refactorTraitUse(TraitUse $traitUse): ?array
     {
-        if (\count($traitUse->traits) < 2) {
+        if (count($traitUse->traits) < 2) {
             return null;
         }
         $traitUses = [];

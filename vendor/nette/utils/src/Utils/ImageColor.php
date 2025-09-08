@@ -18,14 +18,14 @@ class ImageColor
     public int $green;
     public int $blue;
     public float $opacity = 1;
-    public static function rgb(int $red, int $green, int $blue, float $opacity = 1) : self
+    public static function rgb(int $red, int $green, int $blue, float $opacity = 1): self
     {
         return new self($red, $green, $blue, $opacity);
     }
     /**
      * Accepts formats #RRGGBB, #RRGGBBAA, #RGB, #RGBA
      */
-    public static function hex(string $hex) : self
+    public static function hex(string $hex): self
     {
         $hex = ltrim($hex, '#');
         $len = strlen($hex);
@@ -48,7 +48,7 @@ class ImageColor
         $this->blue = max(0, min(255, $blue));
         $this->opacity = max(0, min(1, $opacity));
     }
-    public function toRGBA() : array
+    public function toRGBA(): array
     {
         return [max(0, min(255, $this->red)), max(0, min(255, $this->green)), max(0, min(255, $this->blue)), max(0, min(127, (int) round(127 - $this->opacity * 127)))];
     }

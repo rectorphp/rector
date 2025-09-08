@@ -44,7 +44,7 @@ class Question
     /**
      * Returns the question.
      */
-    public function getQuestion() : string
+    public function getQuestion(): string
     {
         return $this->question;
     }
@@ -59,7 +59,7 @@ class Question
     /**
      * Returns whether the user response accepts newline characters.
      */
-    public function isMultiline() : bool
+    public function isMultiline(): bool
     {
         return $this->multiline;
     }
@@ -76,7 +76,7 @@ class Question
     /**
      * Returns whether the user response must be hidden.
      */
-    public function isHidden() : bool
+    public function isHidden(): bool
     {
         return $this->hidden;
     }
@@ -98,7 +98,7 @@ class Question
     /**
      * In case the response cannot be hidden, whether to fallback on non-hidden question or not.
      */
-    public function isHiddenFallback() : bool
+    public function isHiddenFallback(): bool
     {
         return $this->hiddenFallback;
     }
@@ -115,7 +115,7 @@ class Question
     /**
      * Gets values for the autocompleter.
      */
-    public function getAutocompleterValues() : ?iterable
+    public function getAutocompleterValues(): ?iterable
     {
         $callback = $this->getAutocompleterCallback();
         return $callback ? $callback('') : null;
@@ -130,12 +130,12 @@ class Question
     public function setAutocompleterValues(?iterable $values)
     {
         if (\is_array($values)) {
-            $values = $this->isAssoc($values) ? \array_merge(\array_keys($values), \array_values($values)) : \array_values($values);
+            $values = $this->isAssoc($values) ? array_merge(array_keys($values), array_values($values)) : array_values($values);
             $callback = static fn() => $values;
         } elseif ($values instanceof \Traversable) {
-            $callback = static function () use($values) {
+            $callback = static function () use ($values) {
                 static $valueCache;
-                return $valueCache ??= \iterator_to_array($values, \false);
+                return $valueCache ??= iterator_to_array($values, \false);
             };
         } else {
             $callback = null;
@@ -145,7 +145,7 @@ class Question
     /**
      * Gets the callback function used for the autocompleter.
      */
-    public function getAutocompleterCallback() : ?callable
+    public function getAutocompleterCallback(): ?callable
     {
         return $this->autocompleterCallback;
     }
@@ -183,7 +183,7 @@ class Question
     /**
      * Gets the validator for the question.
      */
-    public function getValidator() : ?callable
+    public function getValidator(): ?callable
     {
         return $this->validator;
     }
@@ -209,7 +209,7 @@ class Question
      *
      * Null means an unlimited number of attempts.
      */
-    public function getMaxAttempts() : ?int
+    public function getMaxAttempts(): ?int
     {
         return $this->attempts;
     }
@@ -230,7 +230,7 @@ class Question
      *
      * The normalizer can ba a callable (a string), a closure or a class implementing __invoke.
      */
-    public function getNormalizer() : ?callable
+    public function getNormalizer(): ?callable
     {
         return $this->normalizer;
     }
@@ -239,9 +239,9 @@ class Question
      */
     protected function isAssoc(array $array)
     {
-        return (bool) \count(\array_filter(\array_keys($array), 'is_string'));
+        return (bool) \count(array_filter(array_keys($array), 'is_string'));
     }
-    public function isTrimmable() : bool
+    public function isTrimmable(): bool
     {
         return $this->trimmable;
     }

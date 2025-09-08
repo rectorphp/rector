@@ -48,11 +48,11 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector imple
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_CREATE_FUNCTION;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use anonymous functions instead of deprecated create_function()', [new CodeSample(<<<'CODE_SAMPLE'
 class ClassWithCreateFunction
@@ -79,7 +79,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
@@ -87,7 +87,7 @@ CODE_SAMPLE
      * @param FuncCall $node
      * @return Closure|null
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'create_function')) {
             return null;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) < 2) {
+        if (count($node->getArgs()) < 2) {
             return null;
         }
         $firstExpr = $node->getArgs()[0]->value;
@@ -117,7 +117,7 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function createParamsFromString(Expr $expr) : array
+    private function createParamsFromString(Expr $expr): array
     {
         $content = $this->inlineCodeParser->stringify($expr);
         $content = '<?php $value = function(' . $content . ') {};';
@@ -135,7 +135,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]
      */
-    private function parseStringToBody(Expr $expr) : array
+    private function parseStringToBody(Expr $expr): array
     {
         if (!$expr instanceof String_ && !$expr instanceof InterpolatedString && !$expr instanceof Concat) {
             // special case of code elsewhere
@@ -144,7 +144,7 @@ CODE_SAMPLE
         $content = $this->inlineCodeParser->stringify($expr);
         return $this->inlineCodeParser->parseString($content);
     }
-    private function createEval(Expr $expr) : Expression
+    private function createEval(Expr $expr): Expression
     {
         $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($expr)]);
         return new Expression($evalFuncCall);

@@ -54,33 +54,33 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return string[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null, bool $isKaizenEnabled = \false) : array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null, bool $isKaizenEnabled = \false): array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
         $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filteredFilePaths = \array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
+        $filteredFilePaths = array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
         // fallback append `.php` to be used for both $filteredFilePaths and $filteredFilePathsInDirectories
         $hasOnlySuffix = $onlySuffix !== null && $onlySuffix !== '';
-        if ($hasOnlySuffix && \substr_compare($onlySuffix, '.php', -\strlen('.php')) !== 0) {
+        if ($hasOnlySuffix && substr_compare($onlySuffix, '.php', -strlen('.php')) !== 0) {
             $onlySuffix .= '.php';
         }
         // filter files by specific suffix
         if ($hasOnlySuffix) {
             /** @var string $onlySuffix */
-            $fileWithSuffixFilter = static fn(string $filePath): bool => \substr_compare($filePath, $onlySuffix, -\strlen($onlySuffix)) === 0;
+            $fileWithSuffixFilter = static fn(string $filePath): bool => substr_compare($filePath, $onlySuffix, -strlen($onlySuffix)) === 0;
         } elseif ($suffixes !== []) {
-            $fileWithSuffixFilter = static function (string $filePath) use($suffixes) : bool {
-                $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
-                return \in_array($filePathExtension, $suffixes, \true);
+            $fileWithSuffixFilter = static function (string $filePath) use ($suffixes): bool {
+                $filePathExtension = pathinfo($filePath, \PATHINFO_EXTENSION);
+                return in_array($filePathExtension, $suffixes, \true);
             };
         } else {
             $fileWithSuffixFilter = fn(): bool => \true;
         }
-        $filteredFilePaths = \array_filter($filteredFilePaths, $fileWithSuffixFilter === null ? fn($value, $key): bool => !empty($value) : $fileWithSuffixFilter, $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
+        $filteredFilePaths = array_filter($filteredFilePaths, $fileWithSuffixFilter === null ? fn($value, $key): bool => !empty($value) : $fileWithSuffixFilter, $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
         // add file without extension after file extension filter
-        $filteredFilePaths = \array_merge($filteredFilePaths, SimpleParameterProvider::provideArrayParameter(Option::FILES_WITHOUT_EXTENSION));
-        $filteredFilePaths = \array_filter($filteredFilePaths, function (string $file) : bool {
+        $filteredFilePaths = array_merge($filteredFilePaths, SimpleParameterProvider::provideArrayParameter(Option::FILES_WITHOUT_EXTENSION));
+        $filteredFilePaths = array_filter($filteredFilePaths, function (string $file): bool {
             if ($this->isStartWithShortPHPTag(FileSystem::read($file))) {
                 SimpleParameterProvider::addParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES, $this->filePathHelper->relativePath($file));
                 return \false;
@@ -90,7 +90,7 @@ final class FilesFinder
         // filtering files in directories collection
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
-        $filePaths = \array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
+        $filePaths = array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
         $toBeChangedFiles = $this->unchangedFilesFilter->filterFilePaths($filePaths);
         // no files to be changed, early return empty
         if ($toBeChangedFiles === []) {
@@ -100,7 +100,7 @@ final class FilesFinder
             // enforce clear cache, because there is probably another files that
             // incrementally need to apply change on kaizen run
             $this->changedFilesDetector->clear();
-            return \array_unique($filePaths);
+            return array_unique($filePaths);
         }
         return $toBeChangedFiles;
     }
@@ -108,7 +108,7 @@ final class FilesFinder
      * @param string[] $paths
      * @return string[]
      */
-    public function findFilesInPaths(array $paths, Configuration $configuration) : array
+    public function findFilesInPaths(array $paths, Configuration $configuration): array
     {
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
@@ -118,16 +118,16 @@ final class FilesFinder
     /**
      * Exclude short "<?=" tags as lead to invalid changes
      */
-    private function isStartWithShortPHPTag(string $fileContent) : bool
+    private function isStartWithShortPHPTag(string $fileContent): bool
     {
-        return \strncmp(\ltrim($fileContent), '<?=', \strlen('<?=')) === 0;
+        return strncmp(ltrim($fileContent), '<?=', strlen('<?=')) === 0;
     }
     /**
      * @param string[] $directories
      * @param string[] $suffixes
      * @return string[]
      */
-    private function findInDirectories(array $directories, array $suffixes, bool $hasOnlySuffix, ?string $onlySuffix = null, bool $sortByName = \true) : array
+    private function findInDirectories(array $directories, array $suffixes, bool $hasOnlySuffix, ?string $onlySuffix = null, bool $sortByName = \true): array
     {
         if ($directories === []) {
             return [];
@@ -166,9 +166,9 @@ final class FilesFinder
     /**
      * @param string[] $suffixes
      */
-    private function normalizeSuffixesToPattern(array $suffixes) : string
+    private function normalizeSuffixesToPattern(array $suffixes): string
     {
-        $suffixesPattern = \implode('|', $suffixes);
-        return '#\\.(' . $suffixesPattern . ')$#';
+        $suffixesPattern = implode('|', $suffixes);
+        return '#\.(' . $suffixesPattern . ')$#';
     }
 }

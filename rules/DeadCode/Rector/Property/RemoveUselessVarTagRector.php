@@ -29,7 +29,7 @@ final class RemoveUselessVarTagRector extends AbstractRector
         $this->varTagRemover = $varTagRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused `@var` annotation for properties and class constants', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -51,14 +51,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class, ClassConst::class];
     }
     /**
      * @param Property|ClassConst $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasChanged = $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);

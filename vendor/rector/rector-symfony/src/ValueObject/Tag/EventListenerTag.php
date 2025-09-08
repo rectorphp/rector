@@ -21,30 +21,30 @@ final class EventListenerTag implements TagInterface
         $this->method = $method;
         $this->priority = $priority;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return 'kernel.event_listener';
     }
-    public function getEvent() : string
+    public function getEvent(): string
     {
         return $this->event;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return $this->priority;
     }
     /**
      * @return array<string, mixed>
      */
-    public function getData() : array
+    public function getData(): array
     {
         return ['method' => $this->method, 'priority' => $this->priority, 'event' => $this->event];
     }
-    public function changeMethod(string $methodName) : void
+    public function changeMethod(string $methodName): void
     {
         $this->method = $methodName;
     }

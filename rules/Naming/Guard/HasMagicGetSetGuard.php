@@ -15,7 +15,7 @@ final class HasMagicGetSetGuard
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isConflicting(PropertyRename $propertyRename) : bool
+    public function isConflicting(PropertyRename $propertyRename): bool
     {
         if (!$this->reflectionProvider->hasClass($propertyRename->getClassLikeName())) {
             return \false;

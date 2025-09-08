@@ -23,11 +23,11 @@ class Yield_ extends Expr
         $this->key = $key;
         $this->value = $value;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['key', 'value'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Yield';
     }

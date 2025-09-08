@@ -22,7 +22,7 @@ final class ReturnAnalyzer
      * @param Return_[] $returns
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function hasOnlyReturnWithExpr($functionLike, array $returns) : bool
+    public function hasOnlyReturnWithExpr($functionLike, array $returns): bool
     {
         if ($functionLike->stmts === null) {
             return \false;

@@ -24,21 +24,21 @@ final class AccessoryLiteralStringTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return AccessoryLiteralStringType::class;
     }
     /**
      * @param AccessoryLiteralStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
     /**
      * @param AccessoryLiteralStringType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;

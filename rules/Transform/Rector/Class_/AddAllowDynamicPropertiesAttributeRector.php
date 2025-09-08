@@ -51,7 +51,7 @@ final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector impl
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add the `AllowDynamicProperties` attribute to all classes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 namespace Example\Domain;
@@ -68,16 +68,16 @@ class SomeObject {
     public string $someProperty = 'hello world';
 }
 CODE_SAMPLE
-, ['Example\\*'])]);
+, ['Example\*'])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $transformOnNamespaces = $configuration;
         Assert::allString($transformOnNamespaces);
@@ -86,26 +86,26 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         return $this->addAllowDynamicPropertiesAttribute($node);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_DYNAMIC_PROPERTIES;
     }
-    private function isDescendantOfStdclass(Class_ $class) : bool
+    private function isDescendantOfStdclass(Class_ $class): bool
     {
         if (!$class->extends instanceof FullyQualified) {
             return \false;
         }
         $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($class);
-        return \in_array('stdClass', $ancestorClassNames, \true);
+        return in_array('stdClass', $ancestorClassNames, \true);
     }
-    private function hasNeededAttributeAlready(Class_ $class) : bool
+    private function hasNeededAttributeAlready(Class_ $class): bool
     {
         $nodeHasAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
         if ($nodeHasAttribute) {
@@ -116,12 +116,12 @@ CODE_SAMPLE
         }
         return $this->phpAttributeAnalyzer->hasInheritedPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
     }
-    private function addAllowDynamicPropertiesAttribute(Class_ $class) : Class_
+    private function addAllowDynamicPropertiesAttribute(Class_ $class): Class_
     {
         $class->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass(AttributeName::ALLOW_DYNAMIC_PROPERTIES);
         return $class;
     }
-    private function shouldSkip(Class_ $class) : bool
+    private function shouldSkip(Class_ $class): bool
     {
         if ($this->isDescendantOfStdclass($class)) {
             return \true;
@@ -138,20 +138,20 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isExistsWithWildCards(string $className) : bool
+    private function isExistsWithWildCards(string $className): bool
     {
-        $wildcardTransformOnNamespaces = \array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => \strpos($transformOnNamespace, '*') !== \false);
+        $wildcardTransformOnNamespaces = array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => strpos($transformOnNamespace, '*') !== \false);
         foreach ($wildcardTransformOnNamespaces as $wildcardTransformOnNamespace) {
-            if (!\fnmatch($wildcardTransformOnNamespace, $className, \FNM_NOESCAPE)) {
+            if (!fnmatch($wildcardTransformOnNamespace, $className, \FNM_NOESCAPE)) {
                 continue;
             }
             return \true;
         }
         return \false;
     }
-    private function isExistsWithClassName(string $className) : bool
+    private function isExistsWithClassName(string $className): bool
     {
-        $transformedClassNames = \array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => \strpos($transformOnNamespace, '*') === \false);
+        $transformedClassNames = array_filter($this->transformOnNamespaces, static fn(string $transformOnNamespace): bool => strpos($transformOnNamespace, '*') === \false);
         foreach ($transformedClassNames as $transformedClassName) {
             if (!$this->nodeNameResolver->isStringName($className, $transformedClassName)) {
                 continue;
@@ -160,7 +160,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function hasMagicSetMethod(Class_ $class) : bool
+    private function hasMagicSetMethod(Class_ $class): bool
     {
         $className = (string) $this->getName($class);
         $classReflection = $this->reflectionProvider->getClass($className);

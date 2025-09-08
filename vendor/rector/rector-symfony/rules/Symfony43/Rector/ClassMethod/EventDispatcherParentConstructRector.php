@@ -28,7 +28,7 @@ final class EventDispatcherParentConstructRector extends AbstractRector
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes parent construct method call in EventDispatcher class', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if (!$scope->isInClass()) {
@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection->is('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface')) {
+        if (!$classReflection->is('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
             return null;
         }
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
@@ -88,7 +88,7 @@ CODE_SAMPLE
         $node->stmts[] = $this->createParentStaticCall(MethodName::CONSTRUCT);
         return $node;
     }
-    private function createParentStaticCall(string $method) : Expression
+    private function createParentStaticCall(string $method): Expression
     {
         $staticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT, $method);
         return new Expression($staticCall);
@@ -96,9 +96,9 @@ CODE_SAMPLE
     /**
      * Looks for "parent::<methodName>"
      */
-    private function hasParentCallOfMethod(ClassMethod $classMethod, string $method) : bool
+    private function hasParentCallOfMethod(ClassMethod $classMethod, string $method): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($method) : bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use ($method): bool {
             if (!$node instanceof StaticCall) {
                 return \false;
             }

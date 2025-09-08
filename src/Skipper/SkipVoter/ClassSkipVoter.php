@@ -29,9 +29,9 @@ final class ClassSkipVoter
     /**
      * @param string|object $element
      */
-    public function match($element) : bool
+    public function match($element): bool
     {
-        if (\is_object($element)) {
+        if (is_object($element)) {
             return \true;
         }
         return $this->reflectionProvider->hasClass($element);
@@ -39,7 +39,7 @@ final class ClassSkipVoter
     /**
      * @param string|object $element
      */
-    public function shouldSkip($element, string $filePath) : bool
+    public function shouldSkip($element, string $filePath): bool
     {
         $skippedClasses = $this->skippedClassResolver->resolve();
         return $this->skipSkipper->doesMatchSkip($element, $filePath, $skippedClasses);

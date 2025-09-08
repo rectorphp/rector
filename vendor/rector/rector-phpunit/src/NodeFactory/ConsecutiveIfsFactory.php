@@ -38,7 +38,7 @@ final class ConsecutiveIfsFactory
     /**
      * @return Stmt[]
      */
-    public function createIfs(MethodCall $withConsecutiveMethodCall, MethodCall $numberOfInvocationsMethodCall) : array
+    public function createIfs(MethodCall $withConsecutiveMethodCall, MethodCall $numberOfInvocationsMethodCall): array
     {
         $ifs = [];
         $parametersVariable = new Variable(ConsecutiveVariable::PARAMETERS);
@@ -60,7 +60,7 @@ final class ConsecutiveIfsFactory
                     if ($this->nodeNameResolver->isName($assertMethodCall->name, 'equalTo')) {
                         $ifStmts[] = $this->createAssertMethodCall($assertMethodCall, $parametersVariable, $assertKey);
                     } elseif ($this->nodeNameResolver->isName($assertMethodCall->name, 'callback')) {
-                        $ifStmts = \array_merge($ifStmts, $this->nestedClosureAssertFactory->create($assertMethodCall, $assertKey));
+                        $ifStmts = array_merge($ifStmts, $this->nestedClosureAssertFactory->create($assertMethodCall, $assertKey));
                     } else {
                         $args = [new Arg($assertMethodCall), new Arg(new ArrayDimFetch(new Variable('parameters'), new Int_($assertKey)))];
                         $assertSameMethodCall = new MethodCall(new Variable('this'), new Identifier('assertSame'), $args);
@@ -93,7 +93,7 @@ final class ConsecutiveIfsFactory
         }
         return $ifs;
     }
-    private function createAssertMethodCall(MethodCall $assertMethodCall, Variable $parametersVariable, int $parameterPositionKey) : Expression
+    private function createAssertMethodCall(MethodCall $assertMethodCall, Variable $parametersVariable, int $parameterPositionKey): Expression
     {
         $assertMethodCall->name = new Identifier('assertEquals');
         $parametersArrayDimFetch = new ArrayDimFetch($parametersVariable, new Int_($parameterPositionKey));

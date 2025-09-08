@@ -34,7 +34,7 @@ final class AddPropertyTypeDeclarationRector extends AbstractRector implements C
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add type to property by added rules, mostly public/property by parent type', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends ParentClass
@@ -53,14 +53,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // type is already known
         if ($node->type !== null) {
@@ -91,12 +91,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddPropertyTypeDeclaration::class);
         $this->addPropertyTypeDeclarations = $configuration;
     }
-    private function isClassReflectionType(ClassReflection $classReflection, string $type) : bool
+    private function isClassReflectionType(ClassReflection $classReflection, string $type): bool
     {
         if ($classReflection->hasTraitUse($type)) {
             return \true;

@@ -19,7 +19,7 @@ final class ArrayTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor impleme
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof ArrayTypeNode) {
             return null;

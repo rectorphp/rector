@@ -22,7 +22,7 @@ interface NodeVisitor
      *
      * @return Node[]|null Array of nodes
      */
-    public function beforeTraverse(array $nodes) : ?array;
+    public function beforeTraverse(array $nodes): ?array;
     /**
      * Called when entering a node.
      *
@@ -79,5 +79,5 @@ interface NodeVisitor
      *
      * @return Node[]|null Array of nodes
      */
-    public function afterTraverse(array $nodes) : ?array;
+    public function afterTraverse(array $nodes): ?array;
 }

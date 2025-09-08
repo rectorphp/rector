@@ -11,16 +11,16 @@ use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public function activate(Composer $composer, IOInterface $io) : void
+    public function activate(Composer $composer, IOInterface $io): void
     {
     }
-    public function deactivate(Composer $composer, IOInterface $io) : void
+    public function deactivate(Composer $composer, IOInterface $io): void
     {
     }
-    public function uninstall(Composer $composer, IOInterface $io) : void
+    public function uninstall(Composer $composer, IOInterface $io): void
     {
     }
-    public function process(Event $event) : void
+    public function process(Event $event): void
     {
         $io = $event->getIO();
         $composer = $event->getComposer();
@@ -34,7 +34,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @return array<string, string>
      */
-    public static function getSubscribedEvents() : array
+    public static function getSubscribedEvents(): array
     {
         return [ScriptEvents::POST_INSTALL_CMD => 'process', ScriptEvents::POST_UPDATE_CMD => 'process'];
     }

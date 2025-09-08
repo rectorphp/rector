@@ -17,7 +17,7 @@ final class BinaryOpAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function matchFuncCallAndOtherExpr(BinaryOp $binaryOp, string $funcCallName) : ?FuncCallAndExpr
+    public function matchFuncCallAndOtherExpr(BinaryOp $binaryOp, string $funcCallName): ?FuncCallAndExpr
     {
         if ($binaryOp->left instanceof FuncCall) {
             if (!$this->nodeNameResolver->isName($binaryOp->left, $funcCallName)) {

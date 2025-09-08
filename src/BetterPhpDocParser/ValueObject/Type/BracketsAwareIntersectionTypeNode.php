@@ -7,8 +7,8 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use Stringable;
 final class BracketsAwareIntersectionTypeNode extends IntersectionTypeNode
 {
-    public function __toString() : string
+    public function __toString(): string
     {
-        return \implode('&', $this->types);
+        return implode('&', $this->types);
     }
 }

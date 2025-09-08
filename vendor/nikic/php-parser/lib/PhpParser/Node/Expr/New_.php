@@ -26,15 +26,15 @@ class New_ extends \PhpParser\Node\Expr\CallLike
         $this->class = $class;
         $this->args = $args;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['class', 'args'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_New';
     }
-    public function getRawArgs() : array
+    public function getRawArgs(): array
     {
         return $this->args;
     }

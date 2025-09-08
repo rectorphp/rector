@@ -13,14 +13,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class VariableNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return Variable::class;
     }
     /**
      * @param Variable $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->name instanceof Expr) {
             return null;

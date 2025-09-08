@@ -65,7 +65,7 @@ final class ParamTypeByMethodCallTypeRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeFactory = $typeFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change param type based on passed method call type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeTypedService
@@ -114,14 +114,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -140,14 +140,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->params === []) {
             return \true;
         }
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
-    private function shouldSkipParam(Param $param, ClassMethod $classMethod) : bool
+    private function shouldSkipParam(Param $param, ClassMethod $classMethod): bool
     {
         // already has type, skip
         if ($param->type instanceof Node) {
@@ -161,7 +161,7 @@ CODE_SAMPLE
     /**
      * @param array<StaticCall|MethodCall|FuncCall> $callers
      */
-    private function refactorClassMethod(ClassMethod $classMethod, array $callers) : bool
+    private function refactorClassMethod(ClassMethod $classMethod, array $callers): bool
     {
         $hasChanged = \false;
         foreach ($classMethod->params as $param) {

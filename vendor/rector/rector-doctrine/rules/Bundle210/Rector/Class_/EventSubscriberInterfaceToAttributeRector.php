@@ -38,11 +38,11 @@ final class EventSubscriberInterfaceToAttributeRector extends AbstractRector imp
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace EventSubscriberInterface with #[AsDoctrineListener] attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Event\PrePersistEventArgs;
@@ -97,14 +97,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->reflectionProvider->hasClass(DoctrineClass::AS_DOCTRINE_LISTENER_ATTRIBUTE)) {
             return null;
@@ -131,7 +131,7 @@ CODE_SAMPLE
     /**
      * @param array<int, Node\Stmt> $expressions
      */
-    private function handleArray(Class_ $class, array $expressions) : void
+    private function handleArray(Class_ $class, array $expressions): void
     {
         foreach ($expressions as $expression) {
             if (!$expression instanceof Return_ || !$expression->expr instanceof Array_) {
@@ -144,7 +144,7 @@ CODE_SAMPLE
     /**
      * @return array<Expr>
      */
-    private function parseArguments(Array_ $array) : array
+    private function parseArguments(Array_ $array): array
     {
         foreach ($array->items as $item) {
             if (!$item instanceof ArrayItem) {
@@ -157,13 +157,13 @@ CODE_SAMPLE
     /**
      * @param array<Expr> $arguments
      */
-    private function addAttribute(Class_ $class, array $arguments) : void
+    private function addAttribute(Class_ $class, array $arguments): void
     {
         foreach ($arguments as $argument) {
             $class->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(DoctrineClass::AS_DOCTRINE_LISTENER_ATTRIBUTE), [new Arg($argument, \false, \false, [], new Identifier('event'))])]);
         }
     }
-    private function hasImplements(Class_ $class, string $interfaceFQN) : bool
+    private function hasImplements(Class_ $class, string $interfaceFQN): bool
     {
         foreach ($class->implements as $implement) {
             if ($this->isName($implement, $interfaceFQN)) {
@@ -175,7 +175,7 @@ CODE_SAMPLE
     /**
      * @param array<string> $interfaceFQNS
      */
-    private function removeImplements(Class_ $class, array $interfaceFQNS) : void
+    private function removeImplements(Class_ $class, array $interfaceFQNS): void
     {
         foreach ($class->implements as $key => $implement) {
             if (!$this->isNames($implement, $interfaceFQNS)) {

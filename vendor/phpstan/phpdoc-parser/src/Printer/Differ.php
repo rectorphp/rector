@@ -41,7 +41,7 @@ class Differ
      *
      * @return DiffElem[] Diff (edit script)
      */
-    public function diff(array $old, array $new) : array
+    public function diff(array $old, array $new): array
     {
         [$trace, $x, $y] = $this->calculateTrace($old, $new);
         return $this->extractDiff($trace, $x, $y, $old, $new);
@@ -57,7 +57,7 @@ class Differ
      *
      * @return DiffElem[] Diff (edit script), including replace operations
      */
-    public function diffWithReplacements(array $old, array $new) : array
+    public function diffWithReplacements(array $old, array $new): array
     {
         return $this->coalesceReplacements($this->diff($old, $new));
     }
@@ -66,7 +66,7 @@ class Differ
      * @param T[] $new
      * @return array{array<int, array<int, int>>, int, int}
      */
-    private function calculateTrace(array $old, array $new) : array
+    private function calculateTrace(array $old, array $new): array
     {
         $n = count($old);
         $m = count($new);
@@ -100,7 +100,7 @@ class Differ
      * @param T[] $new
      * @return DiffElem[]
      */
-    private function extractDiff(array $trace, int $x, int $y, array $old, array $new) : array
+    private function extractDiff(array $trace, int $x, int $y, array $old, array $new): array
     {
         $result = [];
         for ($d = count($trace) - 1; $d >= 0; $d--) {
@@ -138,7 +138,7 @@ class Differ
      * @param DiffElem[] $diff
      * @return DiffElem[]
      */
-    private function coalesceReplacements(array $diff) : array
+    private function coalesceReplacements(array $diff): array
     {
         $newDiff = [];
         $c = count($diff);

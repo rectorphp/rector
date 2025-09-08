@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 final class PropertyDefaultAssignDetector
 {
-    public function detect(ClassLike $classLike, string $propertyName) : bool
+    public function detect(ClassLike $classLike, string $propertyName): bool
     {
         $property = $classLike->getProperty($propertyName);
         if (!$property instanceof Property) {

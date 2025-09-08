@@ -15,27 +15,27 @@ final class MemoryLimiter
      * @var string
      * @see https://regex101.com/r/pmiGUM/1
      */
-    private const VALID_MEMORY_LIMIT_REGEX = '#^-?\\d+[kMG]?$#i';
-    public function adjust(Configuration $configuration) : void
+    private const VALID_MEMORY_LIMIT_REGEX = '#^-?\d+[kMG]?$#i';
+    public function adjust(Configuration $configuration): void
     {
         $memoryLimit = $configuration->getMemoryLimit();
         if ($memoryLimit === null) {
             return;
         }
         $this->validateMemoryLimitFormat($memoryLimit);
-        $memorySetResult = \ini_set('memory_limit', $memoryLimit);
+        $memorySetResult = ini_set('memory_limit', $memoryLimit);
         if ($memorySetResult === \false) {
-            $errorMessage = \sprintf('Memory limit "%s" cannot be set.', $memoryLimit);
+            $errorMessage = sprintf('Memory limit "%s" cannot be set.', $memoryLimit);
             throw new InvalidConfigurationException($errorMessage);
         }
     }
-    private function validateMemoryLimitFormat(string $memoryLimit) : void
+    private function validateMemoryLimitFormat(string $memoryLimit): void
     {
         $memoryLimitFormatMatch = Strings::match($memoryLimit, self::VALID_MEMORY_LIMIT_REGEX);
         if ($memoryLimitFormatMatch !== null) {
             return;
         }
-        $errorMessage = \sprintf('Invalid memory limit format "%s".', $memoryLimit);
+        $errorMessage = sprintf('Invalid memory limit format "%s".', $memoryLimit);
         throw new InvalidConfigurationException($errorMessage);
     }
 }

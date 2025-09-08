@@ -47,7 +47,7 @@ final class VariableAndCallAssign
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
     }
-    public function getVariable() : Variable
+    public function getVariable(): Variable
     {
         return $this->variable;
     }
@@ -58,7 +58,7 @@ final class VariableAndCallAssign
     {
         return $this->expr;
     }
-    public function getVariableName() : string
+    public function getVariableName(): string
     {
         return $this->variableName;
     }
@@ -69,7 +69,7 @@ final class VariableAndCallAssign
     {
         return $this->functionLike;
     }
-    public function getAssign() : Assign
+    public function getAssign(): Assign
     {
         return $this->assign;
     }

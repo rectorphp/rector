@@ -15,13 +15,13 @@ final class RegexPatternDetector
      * @var array<string, string>
      */
     private const START_AND_END_DELIMITERS = ['(' => ')', '{' => '}', '[' => ']', '<' => '>'];
-    public function isRegexPattern(string $name) : bool
+    public function isRegexPattern(string $name): bool
     {
-        if (\strlen($name) <= 2) {
+        if (strlen($name) <= 2) {
             return \false;
         }
         $firstChar = $name[0];
-        $lastChar = $name[\strlen($name) - 1];
+        $lastChar = $name[strlen($name) - 1];
         if ($firstChar !== $lastChar) {
             foreach (self::START_AND_END_DELIMITERS as $start => $end) {
                 if ($firstChar !== $start) {
@@ -34,6 +34,6 @@ final class RegexPatternDetector
             }
             return \false;
         }
-        return \in_array($firstChar, self::POSSIBLE_DELIMITERS, \true);
+        return in_array($firstChar, self::POSSIBLE_DELIMITERS, \true);
     }
 }

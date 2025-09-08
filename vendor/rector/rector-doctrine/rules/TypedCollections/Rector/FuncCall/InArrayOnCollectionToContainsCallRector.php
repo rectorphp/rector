@@ -23,7 +23,7 @@ final class InArrayOnCollectionToContainsCallRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change in_array() on Collection typed property to ->contains() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -59,14 +59,14 @@ final class InArrayOnAssignedVariable
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         if ($node->isFirstClassCallable()) {
             return null;

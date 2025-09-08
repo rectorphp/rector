@@ -28,7 +28,7 @@ final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
     {
         $this->followedByNewlineOnlyMaybeWithSemicolonAnalyzer = $followedByNewlineOnlyMaybeWithSemicolonAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove indentation from heredoc/nowdoc', [new CodeSample(<<<'CODE_SAMPLE'
 $query = <<<SQL
@@ -49,17 +49,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [String_::class, InterpolatedString::class];
     }
     /**
      * @param InterpolatedString|String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $stringKind = $node->getAttribute(AttributeKey::KIND);
-        if (!\in_array($stringKind, self::HERENOW_DOC_KINDS, \true)) {
+        if (!in_array($stringKind, self::HERENOW_DOC_KINDS, \true)) {
             return null;
         }
         // skip correctly indented

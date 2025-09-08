@@ -33,14 +33,14 @@ final class RemoveIfCollectionIdenticalToNullRector extends AbstractRector
         $this->collectionTypeDetector = $collectionTypeDetector;
         $this->valueResolver = $valueResolver;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?If_
+    public function refactor(Node $node): ?If_
     {
         if ($node->cond instanceof BooleanOr) {
             $changedCond = $this->refactorBooleanOr($node->cond);
@@ -58,7 +58,7 @@ final class RemoveIfCollectionIdenticalToNullRector extends AbstractRector
         }
         return null;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove collection identical to null from if || condition', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -96,7 +96,7 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function refactorBooleanOr(BooleanOr $booleanOr) : ?Expr
+    private function refactorBooleanOr(BooleanOr $booleanOr): ?Expr
     {
         $leftCondition = $booleanOr->left;
         if (!$leftCondition instanceof Identical) {
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
         return $booleanOr->right;
     }
-    private function refactorBooleanAnd(BooleanAnd $booleanAnd) : ?Expr
+    private function refactorBooleanAnd(BooleanAnd $booleanAnd): ?Expr
     {
         $leftCondition = $booleanAnd->left;
         if (!$leftCondition instanceof NotIdentical) {

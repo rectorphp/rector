@@ -56,7 +56,7 @@ final class VarTagRemover
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
      */
-    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $property) : bool
+    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $property): bool
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         if (!$varTagValueNode instanceof VarTagValueNode) {
@@ -76,7 +76,7 @@ final class VarTagRemover
     /**
      * @api generic
      */
-    public function removeVarTag(Node $node) : bool
+    public function removeVarTag(Node $node): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
@@ -90,7 +90,7 @@ final class VarTagRemover
     /**
      * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    public function removeVarPhpTagValueNodeIfNotComment($node, Type $type) : void
+    public function removeVarPhpTagValueNodeIfNotComment($node, Type $type): void
     {
         if ($type instanceof TemplateObjectWithoutClassType) {
             return;
@@ -119,7 +119,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(VarTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
     }
-    private function shouldKeepSubtypes(Type $type, Type $varType) : bool
+    private function shouldKeepSubtypes(Type $type, Type $varType): bool
     {
         return !$this->typeComparator->areTypesEqual($type, $varType) && $this->typeComparator->isSubtype($varType, $type);
     }

@@ -28,17 +28,17 @@ final class UsedVariablesResolver
     /**
      * @return Variable[]
      */
-    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt) : array
+    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt): array
     {
         $consecutiveArgs = $withConsecutiveMethodCall->getArgs();
         $stmtVariables = $returnStmt instanceof Stmt ? $this->resolveUniqueVariables([$returnStmt]) : [];
-        return $this->resolveUniqueVariables(\array_merge($consecutiveArgs, $stmtVariables));
+        return $this->resolveUniqueVariables(array_merge($consecutiveArgs, $stmtVariables));
     }
     /**
      * @param Node[] $nodes
      * @return Variable[]
      */
-    private function resolveUniqueVariables(array $nodes) : array
+    private function resolveUniqueVariables(array $nodes): array
     {
         /** @var Variable[] $usedVariables */
         $usedVariables = $this->betterNodeFinder->findInstancesOfScoped($nodes, Variable::class);

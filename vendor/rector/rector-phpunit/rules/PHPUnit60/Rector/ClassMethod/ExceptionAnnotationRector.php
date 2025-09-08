@@ -56,7 +56,7 @@ final class ExceptionAnnotationRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes `@expectedException annotations to `expectException*()` methods', [new CodeSample(<<<'CODE_SAMPLE'
 /**
@@ -81,14 +81,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
             $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes($phpDocInfo->getTagsByName($annotationName), $methodName);
-            $node->stmts = \array_merge($methodCallExpressions, (array) $node->stmts);
+            $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
             $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationName);
             $hasChanged = \true;
         }

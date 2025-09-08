@@ -27,12 +27,12 @@ trait SmartObject
         if (ObjectHelpers::hasProperty($class, $name) === 'event') {
             // calling event handlers
             $handlers = $this->{$name} ?? null;
-            if (\is_iterable($handlers)) {
+            if (is_iterable($handlers)) {
                 foreach ($handlers as $handler) {
                     $handler(...$args);
                 }
             } elseif ($handlers !== null) {
-                throw new UnexpectedValueException("Property {$class}::\${$name} must be iterable or null, " . \get_debug_type($handlers) . ' given.');
+                throw new UnexpectedValueException("Property {$class}::\${$name} must be iterable or null, " . get_debug_type($handlers) . ' given.');
             }
             return null;
         }
@@ -57,12 +57,12 @@ trait SmartObject
             if (!($prop & 0b1)) {
                 throw new MemberAccessException("Cannot read a write-only property {$class}::\${$name}.");
             }
-            $m = ($prop & 0b10 ? 'get' : 'is') . \ucfirst($name);
+            $m = ($prop & 0b10 ? 'get' : 'is') . ucfirst($name);
             if ($prop & 0b10000) {
-                $trace = \debug_backtrace(0, 1)[0];
+                $trace = debug_backtrace(0, 1)[0];
                 // suppose this method is called from __call()
                 $loc = isset($trace['file'], $trace['line']) ? " in {$trace['file']} on line {$trace['line']}" : '';
-                \trigger_error("Property {$class}::\${$name} is deprecated, use {$class}::{$m}() method{$loc}.", \E_USER_DEPRECATED);
+                trigger_error("Property {$class}::\${$name} is deprecated, use {$class}::{$m}() method{$loc}.", \E_USER_DEPRECATED);
             }
             if ($prop & 0b100) {
                 // return by reference
@@ -79,7 +79,7 @@ trait SmartObject
      * @throws MemberAccessException if the property is not defined or is read-only
      * @param mixed $value
      */
-    public function __set(string $name, $value) : void
+    public function __set(string $name, $value): void
     {
         $class = static::class;
         if (ObjectHelpers::hasProperty($class, $name)) {
@@ -90,12 +90,12 @@ trait SmartObject
             if (!($prop & 0b1000)) {
                 throw new MemberAccessException("Cannot write to a read-only property {$class}::\${$name}.");
             }
-            $m = 'set' . \ucfirst($name);
+            $m = 'set' . ucfirst($name);
             if ($prop & 0b10000) {
-                $trace = \debug_backtrace(0, 1)[0];
+                $trace = debug_backtrace(0, 1)[0];
                 // suppose this method is called from __call()
                 $loc = isset($trace['file'], $trace['line']) ? " in {$trace['file']} on line {$trace['line']}" : '';
-                \trigger_error("Property {$class}::\${$name} is deprecated, use {$class}::{$m}() method{$loc}.", \E_USER_DEPRECATED);
+                trigger_error("Property {$class}::\${$name} is deprecated, use {$class}::{$m}() method{$loc}.", \E_USER_DEPRECATED);
             }
             $this->{$m}($value);
         } else {
@@ -105,14 +105,14 @@ trait SmartObject
     /**
      * @throws MemberAccessException
      */
-    public function __unset(string $name) : void
+    public function __unset(string $name): void
     {
         $class = static::class;
         if (!ObjectHelpers::hasProperty($class, $name)) {
             throw new MemberAccessException("Cannot unset the property {$class}::\${$name}.");
         }
     }
-    public function __isset(string $name) : bool
+    public function __isset(string $name): bool
     {
         return isset(ObjectHelpers::getMagicProperties(static::class)[$name]);
     }

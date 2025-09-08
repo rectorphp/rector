@@ -110,103 +110,103 @@ final class Configuration
         $this->onlySuffix = $onlySuffix;
         $this->levelOverflows = $levelOverflows;
         $this->kaizenStepCount = $kaizenStepCount;
-        if (\is_int($kaizenStepCount)) {
+        if (is_int($kaizenStepCount)) {
             Assert::positiveInteger($kaizenStepCount, 'Change "--kaizen" value to a positive integer');
         }
     }
-    public function isDryRun() : bool
+    public function isDryRun(): bool
     {
         return $this->isDryRun;
     }
-    public function shouldShowProgressBar() : bool
+    public function shouldShowProgressBar(): bool
     {
         return $this->showProgressBar;
     }
-    public function shouldClearCache() : bool
+    public function shouldClearCache(): bool
     {
         return $this->shouldClearCache;
     }
     /**
      * @return string[]
      */
-    public function getFileExtensions() : array
+    public function getFileExtensions(): array
     {
         Assert::notEmpty($this->fileExtensions);
         return $this->fileExtensions;
     }
-    public function getOnlyRule() : ?string
+    public function getOnlyRule(): ?string
     {
         return $this->onlyRule;
     }
     /**
      * @return string[]
      */
-    public function getPaths() : array
+    public function getPaths(): array
     {
         return $this->paths;
     }
-    public function getOutputFormat() : string
+    public function getOutputFormat(): string
     {
         return $this->outputFormat;
     }
-    public function shouldShowDiffs() : bool
+    public function shouldShowDiffs(): bool
     {
         return $this->showDiffs;
     }
-    public function getParallelPort() : ?string
+    public function getParallelPort(): ?string
     {
         return $this->parallelPort;
     }
-    public function getParallelIdentifier() : ?string
+    public function getParallelIdentifier(): ?string
     {
         return $this->parallelIdentifier;
     }
-    public function isParallel() : bool
+    public function isParallel(): bool
     {
         return $this->isParallel;
     }
-    public function getMemoryLimit() : ?string
+    public function getMemoryLimit(): ?string
     {
         return $this->memoryLimit;
     }
-    public function isDebug() : bool
+    public function isDebug(): bool
     {
         return $this->isDebug;
     }
-    public function isReportingWithRealPath() : bool
+    public function isReportingWithRealPath(): bool
     {
         return $this->reportingWithRealPath;
     }
-    public function getOnlySuffix() : ?string
+    public function getOnlySuffix(): ?string
     {
         return $this->onlySuffix;
     }
     /**
      * @return LevelOverflow[]
      */
-    public function getLevelOverflows() : array
+    public function getLevelOverflows(): array
     {
         return $this->levelOverflows;
     }
     /**
      * @return string[]
      */
-    public function getBothSetAndRulesDuplicatedRegistrations() : array
+    public function getBothSetAndRulesDuplicatedRegistrations(): array
     {
         $rootStandaloneRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::ROOT_STANDALONE_REGISTERED_RULES);
         $setRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::SET_REGISTERED_RULES);
-        $ruleDuplicatedRegistrations = \array_intersect($rootStandaloneRegisteredRules, $setRegisteredRules);
-        return \array_unique($ruleDuplicatedRegistrations);
+        $ruleDuplicatedRegistrations = array_intersect($rootStandaloneRegisteredRules, $setRegisteredRules);
+        return array_unique($ruleDuplicatedRegistrations);
     }
     /**
      * @return positive-int
      */
-    public function getKaizenStepCount() : int
+    public function getKaizenStepCount(): int
     {
         Assert::notNull($this->kaizenStepCount);
         return $this->kaizenStepCount;
     }
-    public function isKaizenEnabled() : bool
+    public function isKaizenEnabled(): bool
     {
         return $this->kaizenStepCount !== null;
     }

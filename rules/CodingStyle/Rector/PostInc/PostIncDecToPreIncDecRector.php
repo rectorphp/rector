@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PostIncDecToPreIncDecRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use ++$value or --$value  instead of `$value++` or `$value--`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -45,23 +45,23 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [For_::class, Expression::class];
     }
     /**
      * @param For_|Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Expression) {
             return $this->refactorExpression($node);
         }
         return $this->refactorFor($node);
     }
-    private function refactorFor(For_ $for) : ?\PhpParser\Node\Stmt\For_
+    private function refactorFor(For_ $for): ?\PhpParser\Node\Stmt\For_
     {
-        if (\count($for->loop) !== 1) {
+        if (count($for->loop) !== 1) {
             return null;
         }
         $singleLoopExpr = $for->loop[0];
@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
         return new PreDec($node->var);
     }
-    private function refactorExpression(Expression $expression) : ?Expression
+    private function refactorExpression(Expression $expression): ?Expression
     {
         if ($expression->expr instanceof PostInc || $expression->expr instanceof PostDec) {
             $expression->expr = $this->processPrePost($expression->expr);

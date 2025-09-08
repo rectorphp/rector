@@ -56,11 +56,11 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
         }
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         if ($buffer !== null && !$buffer instanceof WritableStreamInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #4 ($buffer) expected null|React\\Stream\\WritableStreamInterface');
+            throw new \InvalidArgumentException('Argument #4 ($buffer) expected null|React\Stream\WritableStreamInterface');
         }
         // Use unbuffered read operations on the underlying stream resource.
         // Reading chunks from the stream may otherwise leave unread bytes in
@@ -81,11 +81,11 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
         $this->bufferSize = $readChunkSize === null ? 65536 : (int) $readChunkSize;
         $this->buffer = $buffer;
         $that = $this;
-        $this->buffer->on('error', function ($error) use($that) {
+        $this->buffer->on('error', function ($error) use ($that) {
             $that->emit('error', array($error));
         });
         $this->buffer->on('close', array($this, 'close'));
-        $this->buffer->on('drain', function () use($that) {
+        $this->buffer->on('drain', function () use ($that) {
             $that->emit('drain');
         });
         $this->resume();
@@ -154,7 +154,7 @@ final class DuplexResourceStream extends EventEmitter implements DuplexStreamInt
     public function handleData($stream)
     {
         $error = null;
-        \set_error_handler(function ($errno, $errstr, $errfile, $errline) use(&$error) {
+        \set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$error) {
             $error = new \ErrorException($errstr, 0, $errno, $errfile, $errline);
         });
         $data = \stream_get_contents($stream, $this->bufferSize);

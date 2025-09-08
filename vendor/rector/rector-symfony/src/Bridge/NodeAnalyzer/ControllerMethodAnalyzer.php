@@ -18,7 +18,7 @@ final class ControllerMethodAnalyzer
     /**
      * Detect if is <some>Action() in Controller
      */
-    public function isAction(ClassMethod $classMethod) : bool
+    public function isAction(ClassMethod $classMethod): bool
     {
         if (!$this->controllerAnalyzer->isInsideController($classMethod)) {
             return \false;

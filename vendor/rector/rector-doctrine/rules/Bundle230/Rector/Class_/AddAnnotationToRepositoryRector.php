@@ -40,7 +40,7 @@ final class AddAnnotationToRepositoryRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add @extends ServiceEntityRepository<T> annotation to repository classes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -72,14 +72,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isRepositoryClass($node)) {
             return null;
@@ -91,14 +91,14 @@ CODE_SAMPLE
         $this->addAnnotationToNode($node, $entityClass);
         return $node;
     }
-    private function isRepositoryClass(Class_ $class) : bool
+    private function isRepositoryClass(Class_ $class): bool
     {
         if (!$class->extends instanceof Name) {
             return \false;
         }
         return $this->isName($class->extends, DoctrineClass::SERVICE_ENTITY_REPOSITORY);
     }
-    private function getEntityClassFromConstructor(Class_ $class) : ?string
+    private function getEntityClassFromConstructor(Class_ $class): ?string
     {
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod || $classMethod->stmts === null) {
@@ -124,18 +124,18 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function addAnnotationToNode(Class_ $class, string $entityClass) : void
+    private function addAnnotationToNode(Class_ $class, string $entityClass): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $genericsAnnotation = \sprintf('\\%s<\\%s>', DoctrineClass::SERVICE_ENTITY_REPOSITORY, $entityClass);
+        $genericsAnnotation = sprintf('\%s<\%s>', DoctrineClass::SERVICE_ENTITY_REPOSITORY, $entityClass);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@extends', new GenericTagValueNode($genericsAnnotation)));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
     }
-    private function hasExtendsAnnotation(Class_ $class) : bool
+    private function hasExtendsAnnotation(Class_ $class): bool
     {
         return $this->phpDocInfoFactory->createFromNodeOrEmpty($class)->hasByName('@extends');
     }
-    private function isParentConstructorCall(StaticCall $staticCall) : bool
+    private function isParentConstructorCall(StaticCall $staticCall): bool
     {
         return $this->isName($staticCall->class, 'parent') && $this->isName($staticCall->name, '__construct') && isset($staticCall->args[1]) && $staticCall->args[1] instanceof Arg && $staticCall->args[1]->value instanceof ClassConstFetch;
     }

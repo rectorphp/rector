@@ -13,7 +13,7 @@ use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 use Rector\DowngradePhp73\Rector\Unset_\DowngradeTrailingCommasInUnsetRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_72);
     $rectorConfig->rules([DowngradeFlexibleHeredocSyntaxRector::class, DowngradeListReferenceAssignmentRector::class, DowngradeTrailingCommasInFunctionCallsRector::class, DowngradeArrayKeyFirstLastRector::class, SetCookieOptionsArrayToArgumentsRector::class, DowngradeIsCountableRector::class, DowngradePhp73JsonConstRector::class, DowngradeTrailingCommasInUnsetRector::class]);
 };

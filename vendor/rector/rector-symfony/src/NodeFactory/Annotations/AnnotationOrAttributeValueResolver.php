@@ -25,7 +25,7 @@ final class AnnotationOrAttributeValueResolver
                 if ($templateParameterValue instanceof StringNode) {
                     $templateParameterValue = $templateParameterValue->value;
                 }
-                if (\is_string($templateParameterValue)) {
+                if (is_string($templateParameterValue)) {
                     return $templateParameterValue;
                 }
             }
@@ -35,7 +35,7 @@ final class AnnotationOrAttributeValueResolver
                 if ($arrayItemNodeValue instanceof StringNode) {
                     $arrayItemNodeValue = $arrayItemNodeValue->value;
                 }
-                if (\is_string($arrayItemNodeValue)) {
+                if (is_string($arrayItemNodeValue)) {
                     return $arrayItemNodeValue;
                 }
             }
@@ -52,7 +52,7 @@ final class AnnotationOrAttributeValueResolver
         }
         return null;
     }
-    private function isKeyEmptyOrMatch(Arg $attributeArg, string $desiredKey) : bool
+    private function isKeyEmptyOrMatch(Arg $attributeArg, string $desiredKey): bool
     {
         if (!$attributeArg->name instanceof Identifier) {
             return \true;

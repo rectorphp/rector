@@ -27,9 +27,9 @@ final class BooleanInTernaryOperatorRuleFixerRector extends AbstractFalsyScalarR
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\BooleansInConditions\\BooleanInTernaryOperatorRule');
+        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule');
         return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class ArrayCompare
 {
@@ -53,14 +53,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Ternary
+    public function refactor(Node $node): ?Ternary
     {
         // skip short ternary
         if (!$node->if instanceof Expr) {

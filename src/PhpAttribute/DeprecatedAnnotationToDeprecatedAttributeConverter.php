@@ -45,12 +45,12 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
      * @see https://regex101.com/r/qNytVk/1
      * @var string
      */
-    private const VERSION_MATCH_REGEX = '/^(?:(\\d+\\.\\d+\\.\\d+)\\s+)?(.*)$/';
+    private const VERSION_MATCH_REGEX = '/^(?:(\d+\.\d+\.\d+)\s+)?(.*)$/';
     /**
      * @see https://regex101.com/r/SVDPOB/1
      * @var string
      */
-    private const START_STAR_SPACED_REGEX = '#^ *\\*#ms';
+    private const START_STAR_SPACED_REGEX = '#^ *\*#ms';
     public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpAttributeGroupFactory $phpAttributeGroupFactory, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -61,7 +61,7 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
     /**
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Const_ $node
      */
-    public function convert($node) : ?Node
+    public function convert($node): ?Node
     {
         $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -69,14 +69,14 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
             $deprecatedAttributeGroup = $this->handleDeprecated($phpDocInfo);
             if ($deprecatedAttributeGroup instanceof AttributeGroup) {
                 $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-                $node->attrGroups = \array_merge($node->attrGroups, [$deprecatedAttributeGroup]);
+                $node->attrGroups = array_merge($node->attrGroups, [$deprecatedAttributeGroup]);
                 $this->removeDeprecatedAnnotations($phpDocInfo);
                 $hasChanged = \true;
             }
         }
         return $hasChanged ? $node : null;
     }
-    private function handleDeprecated(PhpDocInfo $phpDocInfo) : ?AttributeGroup
+    private function handleDeprecated(PhpDocInfo $phpDocInfo): ?AttributeGroup
     {
         $attributeGroup = null;
         $desiredTagValueNodes = $phpDocInfo->getTagsByName('deprecated');
@@ -90,7 +90,7 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
         }
         return $attributeGroup;
     }
-    private function createAttributeGroup(string $annotationValue) : AttributeGroup
+    private function createAttributeGroup(string $annotationValue): AttributeGroup
     {
         $matches = Strings::match($annotationValue, self::VERSION_MATCH_REGEX);
         if ($matches === null) {
@@ -99,9 +99,9 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
         }
         $since = $matches[1] ?? null;
         $message = $matches[2] ?? null;
-        return $this->phpAttributeGroupFactory->createFromClassWithItems('Deprecated', \array_filter(['message' => $message, 'since' => $since]));
+        return $this->phpAttributeGroupFactory->createFromClassWithItems('Deprecated', array_filter(['message' => $message, 'since' => $since]));
     }
-    private function removeDeprecatedAnnotations(PhpDocInfo $phpDocInfo) : bool
+    private function removeDeprecatedAnnotations(PhpDocInfo $phpDocInfo): bool
     {
         $hasChanged = \false;
         $desiredTagValueNodes = $phpDocInfo->getTagsByName('deprecated');

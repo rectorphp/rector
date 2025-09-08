@@ -25,7 +25,7 @@ final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements Sco
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof StmtsAwareInterface) {
             return null;
@@ -54,12 +54,12 @@ final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements Sco
     /**
      * @param string[] $globalVariableNames
      */
-    private function setIsGlobalVarAttribute(Stmt $stmt, array $globalVariableNames) : void
+    private function setIsGlobalVarAttribute(Stmt $stmt, array $globalVariableNames): void
     {
         if ($globalVariableNames === []) {
             return;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $subNode) use($globalVariableNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $subNode) use ($globalVariableNames) {
             if ($subNode instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -69,7 +69,7 @@ final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements Sco
             if ($subNode->name instanceof Expr) {
                 return null;
             }
-            if (!\in_array($subNode->name, $globalVariableNames, \true)) {
+            if (!in_array($subNode->name, $globalVariableNames, \true)) {
                 return null;
             }
             $subNode->setAttribute(AttributeKey::IS_GLOBAL_VAR, \true);

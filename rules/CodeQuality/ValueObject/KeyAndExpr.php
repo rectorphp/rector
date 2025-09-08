@@ -29,18 +29,18 @@ final class KeyAndExpr
         $this->expr = $expr;
         $this->comments = $comments;
     }
-    public function getKeyExpr() : ?Expr
+    public function getKeyExpr(): ?Expr
     {
         return $this->keyExpr;
     }
-    public function getExpr() : Expr
+    public function getExpr(): Expr
     {
         return $this->expr;
     }
     /**
      * @return Comment[]
      */
-    public function getComments() : array
+    public function getComments(): array
     {
         return $this->comments;
     }

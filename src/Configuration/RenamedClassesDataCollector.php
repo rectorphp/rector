@@ -11,7 +11,7 @@ final class RenamedClassesDataCollector implements ResetableInterface
      * @var array<string, string>
      */
     private array $oldToNewClasses = [];
-    public function reset() : void
+    public function reset(): void
     {
         $this->oldToNewClasses = [];
     }
@@ -19,27 +19,27 @@ final class RenamedClassesDataCollector implements ResetableInterface
      * keep public modifier and use internally on matchClassName() method
      * to keep API as on Configuration level
      */
-    public function hasOldClass(string $oldClass) : bool
+    public function hasOldClass(string $oldClass): bool
     {
         return isset($this->oldToNewClasses[$oldClass]);
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    public function addOldToNewClasses(array $oldToNewClasses) : void
+    public function addOldToNewClasses(array $oldToNewClasses): void
     {
         /** @var array<string, string> $oldToNewClasses */
-        $oldToNewClasses = \array_merge($this->oldToNewClasses, $oldToNewClasses);
+        $oldToNewClasses = array_merge($this->oldToNewClasses, $oldToNewClasses);
         $this->oldToNewClasses = $oldToNewClasses;
     }
     /**
      * @return array<string, string>
      */
-    public function getOldToNewClasses() : array
+    public function getOldToNewClasses(): array
     {
         return $this->oldToNewClasses;
     }
-    public function matchClassName(ObjectType $objectType) : ?ObjectType
+    public function matchClassName(ObjectType $objectType): ?ObjectType
     {
         $className = $objectType->getClassName();
         if (!$this->hasOldClass($className)) {
@@ -50,8 +50,8 @@ final class RenamedClassesDataCollector implements ResetableInterface
     /**
      * @return string[]
      */
-    public function getOldClasses() : array
+    public function getOldClasses(): array
     {
-        return \array_keys($this->oldToNewClasses);
+        return array_keys($this->oldToNewClasses);
     }
 }

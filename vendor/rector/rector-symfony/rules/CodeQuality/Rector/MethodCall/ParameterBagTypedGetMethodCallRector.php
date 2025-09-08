@@ -27,7 +27,7 @@ final class ParameterBagTypedGetMethodCallRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make use of specific ParameterBag::get*() method with native return type declaration', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation\Request;
@@ -57,14 +57,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, Bool_::class, FuncCall::class];
     }
     /**
      * @param MethodCall|Bool_|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof FuncCall && $this->isName($node->name, 'filter_var')) {
             return $this->refactorFilterVarFuncCall($node);
@@ -77,13 +77,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorMethodCall(MethodCall $methodCall) : ?MethodCall
+    private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
         if ($methodCall->isFirstClassCallable()) {
             return null;
         }
         // default value must be defined
-        if (\count($methodCall->getArgs()) !== 2) {
+        if (count($methodCall->getArgs()) !== 2) {
             return null;
         }
         if (!$this->isName($methodCall->name, 'get')) {
@@ -108,13 +108,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorFilterVarFuncCall(FuncCall $funcCall) : ?MethodCall
+    private function refactorFilterVarFuncCall(FuncCall $funcCall): ?MethodCall
     {
         if ($funcCall->isFirstClassCallable()) {
             return null;
         }
         // needs at least 2 args
-        if (\count($funcCall->getArgs()) < 2) {
+        if (count($funcCall->getArgs()) < 2) {
             return null;
         }
         $flagArg = $funcCall->getArgs()[1];

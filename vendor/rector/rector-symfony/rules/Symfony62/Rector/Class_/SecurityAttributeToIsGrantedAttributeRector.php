@@ -42,22 +42,22 @@ final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector i
      * @var string
      * @see https://regex101.com/r/Si1sDz/1
      */
-    private const SOLE_IS_GRANTED_REGEX = '#^is_granted\\((\\"|\')(?<role>[\\w]+)(\\"|\')\\)$#';
+    private const SOLE_IS_GRANTED_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\')\)$#';
     /**
      * @var string
      * @see https://regex101.com/r/NYRPrx/1
      */
-    private const IS_GRANTED_AND_SUBJECT_REGEX = '#^is_granted\\((\\"|\')(?<role>[\\w]+)(\\"|\'),\\s+(?<subject>\\w+)\\)$#';
+    private const IS_GRANTED_AND_SUBJECT_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\'),\s+(?<subject>\w+)\)$#';
     public function __construct(ReflectionProvider $reflectionProvider, AttributePresenceDetector $attributePresenceDetector)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->attributePresenceDetector = $attributePresenceDetector;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces #[Security] framework-bundle attribute with Symfony native #[IsGranted] one', [new CodeSample(<<<'CODE_SAMPLE'
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -97,14 +97,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, ClassMethod::class];
     }
     /**
      * @param Class_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->attributePresenceDetector->detect(SensioAttribute::SECURITY)) {
             return null;
@@ -162,9 +162,9 @@ CODE_SAMPLE
             }
         }
         $args = [new Arg($expr)];
-        return new New_(new FullyQualified('Symfony\\Component\\ExpressionLanguage\\Expression'), $args);
+        return new New_(new FullyQualified('Symfony\Component\ExpressionLanguage\Expression'), $args);
     }
-    private function resolveIsGrantedAttributeName() : string
+    private function resolveIsGrantedAttributeName(): string
     {
         if ($this->reflectionProvider->hasClass(SymfonyAttribute::IS_GRANTED)) {
             return SymfonyAttribute::IS_GRANTED;

@@ -16,7 +16,7 @@ class TypeAliasTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTa
         $this->alias = $alias;
         $this->type = $type;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->alias} {$this->type}");
     }

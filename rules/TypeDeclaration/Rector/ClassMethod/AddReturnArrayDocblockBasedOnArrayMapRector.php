@@ -60,7 +60,7 @@ final class AddReturnArrayDocblockBasedOnArrayMapRector extends AbstractRector
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add @return array docblock based on array_map() return strict type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -89,7 +89,7 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
@@ -137,7 +137,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function hasNonArrayReturnType($functionLike) : bool
+    private function hasNonArrayReturnType($functionLike): bool
     {
         if (!$functionLike->returnType instanceof Identifier) {
             return \false;

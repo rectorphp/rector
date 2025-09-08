@@ -26,11 +26,11 @@ final class ParamTypesAndReturnType
     /**
      * @return Type[]
      */
-    public function getParamTypes() : array
+    public function getParamTypes(): array
     {
         return $this->paramTypes;
     }
-    public function getReturnType() : ?Type
+    public function getReturnType(): ?Type
     {
         return $this->returnType;
     }

@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 final class SplArrayFixedTypeNarrower
 {
-    public function narrow(Type $paramType) : Type
+    public function narrow(Type $paramType): Type
     {
         if ($paramType->isSuperTypeOf(new ObjectType('SplFixedArray'))->no()) {
             return $paramType;
@@ -22,11 +22,11 @@ final class SplArrayFixedTypeNarrower
             return $paramType;
         }
         $types = [];
-        if ($className === 'PhpCsFixer\\Tokenizer\\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\\Tokenizer\\Token');
+        if ($className === 'PhpCsFixer\Tokenizer\Tokens') {
+            $types[] = new ObjectType('PhpCsFixer\Tokenizer\Token');
         }
-        if ($className === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
+        if ($className === 'PhpCsFixer\Doctrine\Annotation\Tokens') {
+            $types[] = new ObjectType('PhpCsFixer\Doctrine\Annotation\Token');
         }
         if ($types === []) {
             return $paramType;

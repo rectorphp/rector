@@ -31,7 +31,7 @@ final class SimplePhpParser
      * @api tests
      * @return Node[]
      */
-    public function parseFile(string $filePath) : array
+    public function parseFile(string $filePath): array
     {
         $fileContent = FileSystem::read($filePath);
         return $this->parseString($fileContent);
@@ -39,7 +39,7 @@ final class SimplePhpParser
     /**
      * @return Node[]
      */
-    public function parseString(string $fileContent) : array
+    public function parseString(string $fileContent): array
     {
         $fileContent = $this->ensureFileContentsHasOpeningTag($fileContent);
         $hasAddedSemicolon = \false;
@@ -57,9 +57,9 @@ final class SimplePhpParser
         $nodes = $this->restoreExpressionPreWrap($nodes, $hasAddedSemicolon);
         return $this->nodeTraverser->traverse($nodes);
     }
-    private function ensureFileContentsHasOpeningTag(string $fileContent) : string
+    private function ensureFileContentsHasOpeningTag(string $fileContent): string
     {
-        if (\strncmp(\trim($fileContent), '<?php', \strlen('<?php')) !== 0) {
+        if (strncmp(trim($fileContent), '<?php', strlen('<?php')) !== 0) {
             // prepend with PHP opening tag to make parse PHP code
             return '<?php ' . $fileContent;
         }
@@ -69,12 +69,12 @@ final class SimplePhpParser
      * @param Node[] $nodes
      * @return Node[]
      */
-    private function restoreExpressionPreWrap(array $nodes, bool $hasAddedSemicolon) : array
+    private function restoreExpressionPreWrap(array $nodes, bool $hasAddedSemicolon): array
     {
         if (!$hasAddedSemicolon) {
             return $nodes;
         }
-        if (\count($nodes) !== 1) {
+        if (count($nodes) !== 1) {
             return $nodes;
         }
         // remove added semicolon to be honest about Expression

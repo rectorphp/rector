@@ -81,7 +81,7 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
         $this->docBlockUpdater = $docBlockUpdater;
         $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Decorate read-only property with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -116,14 +116,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -151,11 +151,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::READONLY_PROPERTY;
     }
-    private function refactorProperty(Class_ $class, Property $property, Scope $scope) : ?Property
+    private function refactorProperty(Class_ $class, Property $property, Scope $scope): ?Property
     {
         // 1. is property read-only?
         if ($property->isReadonly()) {
@@ -193,7 +193,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    private function removeReadOnlyDoc($node) : void
+    private function removeReadOnlyDoc($node): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $readonlyDoc = $phpDocInfo->getByName('readonly');
@@ -209,7 +209,7 @@ CODE_SAMPLE
         $phpDocInfo->removeByName('readonly');
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
     }
-    private function refactorParam(Class_ $class, ClassMethod $classMethod, Param $param, Scope $scope) : ?\PhpParser\Node\Param
+    private function refactorParam(Class_ $class, ClassMethod $classMethod, Param $param, Scope $scope): ?\PhpParser\Node\Param
     {
         if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
@@ -243,7 +243,7 @@ CODE_SAMPLE
         $this->removeReadOnlyDoc($param);
         return $param;
     }
-    private function isPromotedPropertyAssigned(Class_ $class, Param $param) : bool
+    private function isPromotedPropertyAssigned(Class_ $class, Param $param): bool
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
@@ -254,7 +254,7 @@ CODE_SAMPLE
         }
         $propertyFetch = new PropertyFetch(new Variable('this'), $this->getName($param));
         $isAssigned = \false;
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use($propertyFetch, &$isAssigned) : ?int {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use ($propertyFetch, &$isAssigned): ?int {
             if (!$node instanceof Assign) {
                 return null;
             }
@@ -266,7 +266,7 @@ CODE_SAMPLE
         });
         return $isAssigned;
     }
-    private function shouldSkip(Class_ $class) : bool
+    private function shouldSkip(Class_ $class): bool
     {
         if ($class->isReadonly()) {
             return \true;
@@ -278,9 +278,9 @@ CODE_SAMPLE
         // skip "clone $this" cases, as can create unexpected write to local constructor property
         return $this->hasCloneThis($class);
     }
-    private function hasCloneThis(Class_ $class) : bool
+    private function hasCloneThis(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node): bool {
             if (!$node instanceof Clone_) {
                 return \false;
             }

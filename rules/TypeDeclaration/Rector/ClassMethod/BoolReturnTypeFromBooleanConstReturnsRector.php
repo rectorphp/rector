@@ -49,7 +49,7 @@ final class BoolReturnTypeFromBooleanConstReturnsRector extends AbstractRector i
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return bool, based on direct true/false returns', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -82,14 +82,14 @@ CODE_SAMPLE
     /**
      * @funcCall array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
@@ -105,14 +105,14 @@ CODE_SAMPLE
         $node->returnType = new Identifier('bool');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function shouldSkip(Node $node, Scope $scope) : bool
+    private function shouldSkip(Node $node, Scope $scope): bool
     {
         // already has the type, skip
         if ($node->returnType instanceof Node) {
@@ -123,7 +123,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function hasOnlyBooleanConstExprs(array $returns) : bool
+    private function hasOnlyBooleanConstExprs(array $returns): bool
     {
         foreach ($returns as $return) {
             if (!$return->expr instanceof ConstFetch) {

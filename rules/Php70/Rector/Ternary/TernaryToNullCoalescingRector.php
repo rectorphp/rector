@@ -29,21 +29,21 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes unneeded null check to ?? operator', [new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof Isset_) {
             return $this->processTernaryWithIsset($node, $node->cond);
@@ -74,11 +74,11 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE;
     }
-    private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset) : ?Coalesce
+    private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset): ?Coalesce
     {
         if (!$ternary->if instanceof Expr) {
             return null;
@@ -87,7 +87,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             return null;
         }
         // none or multiple isset values cannot be handled here
-        if (\count($isset->vars) > 1) {
+        if (count($isset->vars) > 1) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
@@ -95,7 +95,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         }
         return new Coalesce($ternary->if, $ternary->else);
     }
-    private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode) : bool
+    private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode): bool
     {
         if (!$this->valueResolver->isNull($possibleNullExpr)) {
             return \false;

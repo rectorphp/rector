@@ -27,7 +27,7 @@ final class RectifiedAnalyzer
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function hasRectified(string $rectorClass, Node $node) : bool
+    public function hasRectified(string $rectorClass, Node $node): bool
     {
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($this->hasConsecutiveCreatedByRule($rectorClass, $node, $originalNode)) {
@@ -41,7 +41,7 @@ final class RectifiedAnalyzer
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    private function hasConsecutiveCreatedByRule(string $rectorClass, Node $node, ?Node $originalNode) : bool
+    private function hasConsecutiveCreatedByRule(string $rectorClass, Node $node, ?Node $originalNode): bool
     {
         $createdByRuleNode = $originalNode ?? $node;
         /** @var class-string<RectorInterface>[] $createdByRule */
@@ -49,9 +49,9 @@ final class RectifiedAnalyzer
         if ($createdByRule === []) {
             return \false;
         }
-        return \end($createdByRule) === $rectorClass;
+        return end($createdByRule) === $rectorClass;
     }
-    private function isJustReprintedOverlappedTokenStart(Node $node, ?Node $originalNode) : bool
+    private function isJustReprintedOverlappedTokenStart(Node $node, ?Node $originalNode): bool
     {
         if ($originalNode instanceof Node) {
             return \false;
@@ -69,6 +69,6 @@ final class RectifiedAnalyzer
         if (!$this->scopeAnalyzer->isRefreshable($node)) {
             return \false;
         }
-        return !\in_array(AttributeKey::SCOPE, \array_keys($node->getAttributes()), \true);
+        return !in_array(AttributeKey::SCOPE, array_keys($node->getAttributes()), \true);
     }
 }

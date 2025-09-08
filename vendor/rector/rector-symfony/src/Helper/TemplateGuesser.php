@@ -33,12 +33,12 @@ final class TemplateGuesser
      * @var string
      * @see https://regex101.com/r/T6ItFG/1
      */
-    private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\\w]*Bundle)#';
+    private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
     /**
      * @var string
      * @see https://regex101.com/r/5dNkCC/2
      */
-    private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\\d])([A-Z])#';
+    private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
     /**
      * @var string
      * @see https://regex101.com/r/YUrmAD/1
@@ -54,14 +54,14 @@ final class TemplateGuesser
         $this->bundleClassResolver = $bundleClassResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveFromClassMethod(ClassMethod $classMethod) : string
+    public function resolveFromClassMethod(ClassMethod $classMethod): string
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
         $namespace = $scope->getNamespace();
-        if (!\is_string($namespace)) {
+        if (!is_string($namespace)) {
             throw new ShouldNotHappenException();
         }
         $classReflection = $scope->getClassReflection();
@@ -76,7 +76,7 @@ final class TemplateGuesser
     /**
      * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/v5.0.0/Templating/TemplateGuesser.php
      */
-    private function resolve(string $namespace, string $class, string $method) : string
+    private function resolve(string $namespace, string $class, string $method): string
     {
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
@@ -87,11 +87,11 @@ final class TemplateGuesser
             $fullPath .= $bundle . '/';
         }
         if ($controller !== '') {
-            $fullPath .= \strtolower($controller) . '/';
+            $fullPath .= strtolower($controller) . '/';
         }
-        return $fullPath . \strtolower($action) . '.html.twig';
+        return $fullPath . strtolower($action) . '.html.twig';
     }
-    private function resolveBundle(string $class, string $namespace) : string
+    private function resolveBundle(string $class, string $namespace): string
     {
         $shortBundleClass = $this->bundleClassResolver->resolveShortBundleClassFromControllerClass($class);
         if ($shortBundleClass !== null) {
@@ -101,13 +101,13 @@ final class TemplateGuesser
         $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
         return $bundle !== '' ? '@' . $bundle : '';
     }
-    private function resolveController(string $class) : string
+    private function resolveController(string $class): string
     {
         $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if ($match === null) {
             return '';
         }
         $controller = Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '$1_$2');
-        return \str_replace('\\', '/', $controller);
+        return str_replace('\\', '/', $controller);
     }
 }

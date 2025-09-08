@@ -11,7 +11,7 @@ use Stringable;
  */
 final class SpacelessPhpDocTagNode extends PhpDocTagNode
 {
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name . $this->value;
     }

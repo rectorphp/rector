@@ -21,11 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetClassOnNullRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_NULL_ON_GET_CLASS;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Null is no more allowed in `get_class()`', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -52,17 +52,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged) {
             if ($node instanceof Ternary) {
                 return NodeVisitor::STOP_TRAVERSAL;
             }
@@ -99,7 +99,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createGetClassFuncCall(FuncCall $oldFuncCall) : FuncCall
+    private function createGetClassFuncCall(FuncCall $oldFuncCall): FuncCall
     {
         $funcCall = new FuncCall($oldFuncCall->name, $oldFuncCall->args);
         $funcCall->setAttribute(AttributeKey::DO_NOT_CHANGE, \true);

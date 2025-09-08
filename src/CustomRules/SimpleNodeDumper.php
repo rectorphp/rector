@@ -21,17 +21,17 @@ final class SimpleNodeDumper
     /**
      * @param Node[]|Node|mixed[] $node
      */
-    public static function dump($node, bool $rootNode = \true) : string
+    public static function dump($node, bool $rootNode = \true): string
     {
         // display single root node directly to avoid useless nesting in output
-        if (\is_array($node) && \count($node) === 1 && $rootNode) {
+        if (is_array($node) && count($node) === 1 && $rootNode) {
             $node = $node[0];
         }
         if ($node instanceof Node) {
             return self::dumpSingleNode($node);
         }
         if (self::isStringList($node)) {
-            return \json_encode($node, \JSON_THROW_ON_ERROR);
+            return json_encode($node, \JSON_THROW_ON_ERROR);
         }
         $result = '[';
         foreach ($node as $key => $value) {
@@ -42,15 +42,15 @@ final class SimpleNodeDumper
                 $result .= 'false';
             } elseif ($value === \true) {
                 $result .= 'true';
-            } elseif (\is_string($value)) {
+            } elseif (is_string($value)) {
                 $result .= '"' . $value . '"';
-            } elseif (\is_scalar($value)) {
+            } elseif (is_scalar($value)) {
                 $result .= $value;
             } else {
-                $result .= \str_replace("\n", "\n    ", self::dump($value, \false));
+                $result .= str_replace("\n", "\n    ", self::dump($value, \false));
             }
         }
-        if (\count($node) === 0) {
+        if (count($node) === 0) {
             $result .= ']';
         } else {
             $result .= "\n]";
@@ -60,10 +60,10 @@ final class SimpleNodeDumper
     /**
      * @param mixed[] $items
      */
-    private static function isStringList(array $items) : bool
+    private static function isStringList(array $items): bool
     {
         foreach ($items as $item) {
-            if (!\is_string($item)) {
+            if (!is_string($item)) {
                 return \false;
             }
         }
@@ -72,7 +72,7 @@ final class SimpleNodeDumper
     /**
      * @param mixed $flags
      */
-    private static function dumpFlags($flags) : string
+    private static function dumpFlags($flags): string
     {
         $strs = [];
         if (($flags & Modifiers::PUBLIC) !== 0) {
@@ -97,14 +97,14 @@ final class SimpleNodeDumper
             $strs[] = 'MODIFIER_READONLY';
         }
         if ($strs !== []) {
-            return \implode(' | ', $strs) . ' (' . $flags . ')';
+            return implode(' | ', $strs) . ' (' . $flags . ')';
         }
         return (string) $flags;
     }
     /**
      * @param int|float|string $type
      */
-    private static function dumpIncludeType($type) : string
+    private static function dumpIncludeType($type): string
     {
         $map = [Include_::TYPE_INCLUDE => 'TYPE_INCLUDE', Include_::TYPE_INCLUDE_ONCE => 'TYPE_INCLUDE_ONCE', Include_::TYPE_REQUIRE => 'TYPE_REQUIRE', Include_::TYPE_REQUIRE_ONCE => 'TYPE_REQUIRE_ONCE'];
         if (!isset($map[$type])) {
@@ -115,7 +115,7 @@ final class SimpleNodeDumper
     /**
      * @param mixed $type
      */
-    private static function dumpUseType($type) : string
+    private static function dumpUseType($type): string
     {
         $map = [Use_::TYPE_UNKNOWN => 'TYPE_UNKNOWN', Use_::TYPE_NORMAL => 'TYPE_NORMAL', Use_::TYPE_FUNCTION => 'TYPE_FUNCTION', Use_::TYPE_CONSTANT => 'TYPE_CONSTANT'];
         if (!isset($map[$type])) {
@@ -123,18 +123,18 @@ final class SimpleNodeDumper
         }
         return $map[$type] . ' (' . $type . ')';
     }
-    private static function dumpSingleNode(Node $node) : string
+    private static function dumpSingleNode(Node $node): string
     {
-        $result = \get_class($node);
+        $result = get_class($node);
         // print simple nodes on same line, to make output more readable
-        if ($node instanceof Variable && \is_string($node->name)) {
+        if ($node instanceof Variable && is_string($node->name)) {
             $result .= '( name: "' . $node->name . '" )';
         } elseif ($node instanceof Identifier) {
             $result .= '( name: "' . $node->name . '" )';
         } elseif ($node instanceof Name) {
-            $result .= '( parts: ' . \json_encode($node->getParts(), \JSON_THROW_ON_ERROR) . ' )';
+            $result .= '( parts: ' . json_encode($node->getParts(), \JSON_THROW_ON_ERROR) . ' )';
         } elseif ($node instanceof Scalar && $node->getSubNodeNames() === ['value']) {
-            if (\is_string($node->value)) {
+            if (is_string($node->value)) {
                 $result .= '( value: "' . $node->value . '" )';
             } else {
                 $result .= '( value: ' . $node->value . ' )';
@@ -150,20 +150,20 @@ final class SimpleNodeDumper
                     $result .= 'false';
                 } elseif ($value === \true) {
                     $result .= 'true';
-                } elseif (\is_scalar($value)) {
+                } elseif (is_scalar($value)) {
                     if ($key === 'flags' || $key === 'newModifier') {
                         $result .= self::dumpFlags($value);
                     } elseif ($key === 'type' && $node instanceof Include_) {
                         $result .= self::dumpIncludeType($value);
                     } elseif ($key === 'type' && ($node instanceof Use_ || $node instanceof UseItem || $node instanceof GroupUse)) {
                         $result .= self::dumpUseType($value);
-                    } elseif (\is_string($value)) {
+                    } elseif (is_string($value)) {
                         $result .= '"' . $value . '"';
                     } else {
                         $result .= $value;
                     }
                 } else {
-                    $result .= \str_replace("\n", "\n    ", self::dump($value, \false));
+                    $result .= str_replace("\n", "\n    ", self::dump($value, \false));
                 }
             }
             $result .= "\n)";

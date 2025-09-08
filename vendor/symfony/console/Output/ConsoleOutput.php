@@ -51,7 +51,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
     /**
      * Creates a new output section.
      */
-    public function section() : ConsoleSectionOutput
+    public function section(): ConsoleSectionOutput
     {
         return new ConsoleSectionOutput($this->getStream(), $this->consoleSectionOutputs, $this->getVerbosity(), $this->isDecorated(), $this->getFormatter());
     }
@@ -79,7 +79,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
         parent::setVerbosity($level);
         $this->stderr->setVerbosity($level);
     }
-    public function getErrorOutput() : OutputInterface
+    public function getErrorOutput(): OutputInterface
     {
         return $this->stderr;
     }
@@ -94,7 +94,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
      * Returns true if current environment supports writing console output to
      * STDOUT.
      */
-    protected function hasStdoutSupport() : bool
+    protected function hasStdoutSupport(): bool
     {
         return \false === $this->isRunningOS400();
     }
@@ -102,7 +102,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
      * Returns true if current environment supports writing console output to
      * STDERR.
      */
-    protected function hasStderrSupport() : bool
+    protected function hasStderrSupport(): bool
     {
         return \false === $this->isRunningOS400();
     }
@@ -110,10 +110,10 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
      * Checks if current executing environment is IBM iSeries (OS400), which
      * doesn't properly convert character-encodings between ASCII to EBCDIC.
      */
-    private function isRunningOS400() : bool
+    private function isRunningOS400(): bool
     {
-        $checks = [\function_exists('php_uname') ? \php_uname('s') : '', \getenv('OSTYPE'), \PHP_OS];
-        return \false !== \stripos(\implode(';', $checks), 'OS400');
+        $checks = [\function_exists('php_uname') ? php_uname('s') : '', getenv('OSTYPE'), \PHP_OS];
+        return \false !== stripos(implode(';', $checks), 'OS400');
     }
     /**
      * @return resource
@@ -121,10 +121,10 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
     private function openOutputStream()
     {
         if (!$this->hasStdoutSupport()) {
-            return \fopen('php://output', 'w');
+            return fopen('php://output', 'w');
         }
         // Use STDOUT when possible to prevent from opening too many file descriptors
-        return \defined('STDOUT') ? \STDOUT : (@\fopen('php://stdout', 'w') ?: \fopen('php://output', 'w'));
+        return \defined('STDOUT') ? \STDOUT : (@fopen('php://stdout', 'w') ?: fopen('php://output', 'w'));
     }
     /**
      * @return resource
@@ -132,9 +132,9 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
     private function openErrorStream()
     {
         if (!$this->hasStderrSupport()) {
-            return \fopen('php://output', 'w');
+            return fopen('php://output', 'w');
         }
         // Use STDERR when possible to prevent from opening too many file descriptors
-        return \defined('STDERR') ? \STDERR : (@\fopen('php://stderr', 'w') ?: \fopen('php://output', 'w'));
+        return \defined('STDERR') ? \STDERR : (@fopen('php://stderr', 'w') ?: fopen('php://output', 'w'));
     }
 }

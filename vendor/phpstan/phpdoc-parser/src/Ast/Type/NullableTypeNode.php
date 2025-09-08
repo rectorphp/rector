@@ -12,7 +12,7 @@ class NullableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $this->type = $type;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return '?' . $this->type;
     }

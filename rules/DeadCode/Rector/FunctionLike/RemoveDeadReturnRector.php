@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadReturnRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove last return in the functions, since does not do anything', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -54,19 +54,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === [] || $node->stmts === null) {
             return null;
         }
-        $lastStmtKey = \array_key_last($node->stmts);
+        $lastStmtKey = array_key_last($node->stmts);
         $lastStmt = $node->stmts[$lastStmtKey];
         if ($lastStmt instanceof If_) {
             if (!$this->isBareIfWithOnlyStmtEmptyReturn($lastStmt)) {
@@ -84,7 +84,7 @@ CODE_SAMPLE
         unset($node->stmts[$lastStmtKey]);
         return $node;
     }
-    private function isBareIfWithOnlyStmtEmptyReturn(If_ $if) : bool
+    private function isBareIfWithOnlyStmtEmptyReturn(If_ $if): bool
     {
         if ($if->else instanceof Else_) {
             return \false;
@@ -92,7 +92,7 @@ CODE_SAMPLE
         if ($if->elseifs !== []) {
             return \false;
         }
-        if (\count($if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return \false;
         }
         $onlyStmt = $if->stmts[0];

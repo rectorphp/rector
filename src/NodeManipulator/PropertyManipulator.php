@@ -83,7 +83,7 @@ final class PropertyManipulator
     /**
      * @var string[]|class-string<Table>[]
      */
-    private const ALLOWED_NOT_READONLY_CLASS_ANNOTATIONS = ['ApiPlatform\\Core\\Annotation\\ApiResource', 'ApiPlatform\\Metadata\\ApiResource', 'Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Table', 'Doctrine\\ORM\\Mapping\\MappedSuperclass', 'Doctrine\\ORM\\Mapping\\Embeddable', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbeddedDocument'];
+    private const ALLOWED_NOT_READONLY_CLASS_ANNOTATIONS = ['ApiPlatform\Core\Annotation\ApiResource', 'ApiPlatform\Metadata\ApiResource', 'Doctrine\ORM\Mapping\Entity', 'Doctrine\ORM\Mapping\Table', 'Doctrine\ORM\Mapping\MappedSuperclass', 'Doctrine\ORM\Mapping\Embeddable', 'Doctrine\ODM\MongoDB\Mapping\Annotations\Document', 'Doctrine\ODM\MongoDB\Mapping\Annotations\EmbeddedDocument'];
     public function __construct(BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, PropertyFetchFinder $propertyFetchFinder, NodeNameResolver $nodeNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, NodeTypeResolver $nodeTypeResolver, PromotedPropertyResolver $promotedPropertyResolver, ConstructorAssignDetector $constructorAssignDetector, AstResolver $astResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, ContextAnalyzer $contextAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -101,7 +101,7 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
      */
-    public function isPropertyChangeableExceptConstructor(Class_ $class, $propertyOrParam, Scope $scope) : bool
+    public function isPropertyChangeableExceptConstructor(Class_ $class, $propertyOrParam, Scope $scope): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         if ($this->hasAllowedNotReadonlyAnnotationOrAttribute($phpDocInfo, $class)) {
@@ -133,7 +133,7 @@ final class PropertyManipulator
     /**
      * @api Used in rector-symfony
      */
-    public function resolveExistingClassPropertyNameByType(Class_ $class, ObjectType $objectType) : ?string
+    public function resolveExistingClassPropertyNameByType(Class_ $class, ObjectType $objectType): ?string
     {
         foreach ($class->getProperties() as $property) {
             $propertyType = $this->nodeTypeResolver->getType($property);
@@ -152,7 +152,7 @@ final class PropertyManipulator
         }
         return null;
     }
-    public function isUsedByTrait(ClassReflection $classReflection, string $propertyName) : bool
+    public function isUsedByTrait(ClassReflection $classReflection, string $propertyName): bool
     {
         foreach ($classReflection->getTraits() as $traitUse) {
             $trait = $this->astResolver->resolveClassFromClassReflection($traitUse);
@@ -165,7 +165,7 @@ final class PropertyManipulator
         }
         return \false;
     }
-    public function hasTraitWithSamePropertyOrWritten(ClassReflection $classReflection, string $propertyName) : bool
+    public function hasTraitWithSamePropertyOrWritten(ClassReflection $classReflection, string $propertyName): bool
     {
         foreach ($classReflection->getTraits() as $traitUse) {
             if ($traitUse->hasProperty($propertyName)) {
@@ -185,7 +185,7 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $propertyFetch
      */
-    private function isPropertyAssignedOnlyInConstructor(Class_ $class, string $propertyName, $propertyFetch, ?ClassMethod $classMethod) : bool
+    private function isPropertyAssignedOnlyInConstructor(Class_ $class, string $propertyName, $propertyFetch, ?ClassMethod $classMethod): bool
     {
         if (!$classMethod instanceof ClassMethod) {
             return \false;
@@ -197,7 +197,7 @@ final class PropertyManipulator
         }
         return $this->constructorAssignDetector->isPropertyAssigned($class, $propertyName);
     }
-    private function hasAllowedNotReadonlyAnnotationOrAttribute(PhpDocInfo $phpDocInfo, Class_ $class) : bool
+    private function hasAllowedNotReadonlyAnnotationOrAttribute(PhpDocInfo $phpDocInfo, Class_ $class): bool
     {
         if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_NOT_READONLY_CLASS_ANNOTATIONS)) {
             return \true;

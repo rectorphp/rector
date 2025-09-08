@@ -27,11 +27,11 @@ final class DowngradeReadonlyClassRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove "readonly" class type, decorate all properties to "readonly"', [new CodeSample(<<<'CODE_SAMPLE'
 final readonly class SomeClass
@@ -60,7 +60,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isAnonymous()) {
             return null;

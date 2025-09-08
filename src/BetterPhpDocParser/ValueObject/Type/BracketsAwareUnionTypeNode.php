@@ -23,14 +23,14 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
     /**
      * Preserve common format
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         if (!$this->isWrappedInBrackets) {
-            return \implode('|', $this->types);
+            return implode('|', $this->types);
         }
-        return '(' . \implode('|', $this->types) . ')';
+        return '(' . implode('|', $this->types) . ')';
     }
-    public function isWrappedInBrackets() : bool
+    public function isWrappedInBrackets(): bool
     {
         return $this->isWrappedInBrackets;
     }

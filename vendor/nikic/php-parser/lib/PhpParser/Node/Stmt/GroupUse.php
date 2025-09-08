@@ -31,11 +31,11 @@ class GroupUse extends Stmt
         $this->prefix = $prefix;
         $this->uses = $uses;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['type', 'prefix', 'uses'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_GroupUse';
     }

@@ -14,14 +14,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class ClassNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return ClassLike::class;
     }
     /**
      * @param ClassLike $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->namespacedName instanceof Name) {
             return $node->namespacedName->toString();

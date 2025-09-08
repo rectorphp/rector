@@ -37,7 +37,7 @@ final class MissingPropertiesFactory
      * @param DefinedPropertyWithType[] $definedPropertiesWithType
      * @return Property[]
      */
-    public function create(array $definedPropertiesWithType) : array
+    public function create(array $definedPropertiesWithType): array
     {
         $newProperties = [];
         foreach ($definedPropertiesWithType as $definedPropertyWithType) {
@@ -57,8 +57,8 @@ final class MissingPropertiesFactory
         }
         return $newProperties;
     }
-    private function isFromAlwaysDefinedMethod(DefinedPropertyWithType $definedPropertyWithType) : bool
+    private function isFromAlwaysDefinedMethod(DefinedPropertyWithType $definedPropertyWithType): bool
     {
-        return \in_array($definedPropertyWithType->getDefinedInMethodName(), [MethodName::CONSTRUCT, MethodName::SET_UP], \true);
+        return in_array($definedPropertyWithType->getDefinedInMethodName(), [MethodName::CONSTRUCT, MethodName::SET_UP], \true);
     }
 }

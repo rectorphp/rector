@@ -10,7 +10,7 @@ final class JsonFileSystem
     /**
      * @return array<string, mixed>
      */
-    public static function readFilePath(string $filePath) : array
+    public static function readFilePath(string $filePath): array
     {
         $fileContents = FileSystem::read($filePath);
         return Json::decode($fileContents, \true);
@@ -18,7 +18,7 @@ final class JsonFileSystem
     /**
      * @param array<string, mixed> $data
      */
-    public static function writeFile(string $filePath, array $data) : void
+    public static function writeFile(string $filePath, array $data): void
     {
         $json = Json::encode($data, \true);
         FileSystem::write($filePath, $json, null);

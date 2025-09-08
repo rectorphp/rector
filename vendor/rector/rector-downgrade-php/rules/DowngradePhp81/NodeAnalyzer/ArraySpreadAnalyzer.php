@@ -7,7 +7,7 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 final class ArraySpreadAnalyzer
 {
-    public function isArrayWithUnpack(Array_ $array) : bool
+    public function isArrayWithUnpack(Array_ $array): bool
     {
         // Check that any item in the array is the spread
         foreach ($array->items as $item) {

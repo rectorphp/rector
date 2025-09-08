@@ -35,7 +35,7 @@ final class PropertyFetchAssignManipulator
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function isAssignedMultipleTimesInConstructor(Class_ $class, Property $property) : bool
+    public function isAssignedMultipleTimesInConstructor(Class_ $class, Property $property): bool
     {
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {
@@ -43,7 +43,7 @@ final class PropertyFetchAssignManipulator
         }
         $count = 0;
         $propertyName = $this->nodeNameResolver->getName($property);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($propertyName, &$count) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use ($propertyName, &$count): ?int {
             // skip anonymous classes and inner function
             if ($node instanceof Class_ || $node instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

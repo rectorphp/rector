@@ -21,7 +21,7 @@ class ConditionalTypeForParameterNode implements \PHPStan\PhpDocParser\Ast\Type\
         $this->else = $else;
         $this->negated = $negated;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return sprintf('(%s %s %s ? %s : %s)', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
     }

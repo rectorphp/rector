@@ -24,7 +24,7 @@ final class UseImportsTraverser
      * @param Stmt[] $stmts
      * @param callable(Use_::TYPE_* $useType, UseItem $useUse, string $name):void $callable
      */
-    public function traverserStmts(array $stmts, callable $callable) : void
+    public function traverserStmts(array $stmts, callable $callable): void
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace) {
@@ -49,7 +49,7 @@ final class UseImportsTraverser
     /**
      * @param callable(Use_::TYPE_* $useType, UseItem $useUse, string $name):void $callable
      */
-    private function processGroupUse(GroupUse $groupUse, callable $callable) : void
+    private function processGroupUse(GroupUse $groupUse, callable $callable): void
     {
         if ($groupUse->type !== Use_::TYPE_UNKNOWN) {
             return;

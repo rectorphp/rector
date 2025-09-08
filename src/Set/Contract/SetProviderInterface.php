@@ -8,5 +8,5 @@ interface SetProviderInterface
     /**
      * @return SetInterface[]
      */
-    public function provide() : array;
+    public function provide(): array;
 }

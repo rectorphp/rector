@@ -18,9 +18,9 @@ final class ProjectPackageVersionResolver
     private InstalledPackageResolver $installedPackageResolver;
     public function __construct()
     {
-        $this->installedPackageResolver = new InstalledPackageResolver(\getcwd());
+        $this->installedPackageResolver = new InstalledPackageResolver(getcwd());
     }
-    public function findPackageVersion(string $packageName) : ?string
+    public function findPackageVersion(string $packageName): ?string
     {
         $rootProjectInstalledPackages = $this->installedPackageResolver->resolve();
         foreach ($rootProjectInstalledPackages as $rootProjectInstalledPackage) {

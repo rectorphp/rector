@@ -70,7 +70,7 @@ final class TypeNullableEntityFromDocblockRector extends AbstractRector
         $this->setterGetterFinder = $setterGetterFinder;
         $this->doctrineEntityDetector = $doctrineEntityDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add full nullable type coverage for Doctrine entity based on docblocks. Useful stepping stone to add type coverage while keeping entities safe to read and write getter/setters', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
@@ -134,14 +134,14 @@ class SomeEntity
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if (!$this->doctrineEntityDetector->detect($node)) {
             return null;
@@ -177,7 +177,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function removeVarTagIfNotUseful(Property $property) : void
+    private function removeVarTagIfNotUseful(Property $property): void
     {
         // remove @var docblock if not useful
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
@@ -194,7 +194,7 @@ CODE_SAMPLE
         $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
     }
-    private function decorateGetterClassMethodReturnType(Class_ $class, string $propertyName, Type $propertyType) : void
+    private function decorateGetterClassMethodReturnType(Class_ $class, string $propertyName, Type $propertyType): void
     {
         $getterClassMethod = $this->setterGetterFinder->findGetterClassMethod($class, $propertyName);
         if (!$getterClassMethod instanceof ClassMethod) {
@@ -212,13 +212,13 @@ CODE_SAMPLE
         $getterClassMethod->returnType = $returnTypeNode;
         $this->removeReturnDocblock($getterClassMethod);
     }
-    private function decorateSetterClassMethodParameterType(Class_ $class, string $propertyName, Type $propertyType) : void
+    private function decorateSetterClassMethodParameterType(Class_ $class, string $propertyName, Type $propertyType): void
     {
         $setterClassMethod = $this->setterGetterFinder->findSetterClassMethod($class, $propertyName);
         if (!$setterClassMethod instanceof ClassMethod) {
             return;
         }
-        if (\count($setterClassMethod->params) !== 1) {
+        if (count($setterClassMethod->params) !== 1) {
             return;
         }
         $soleParam = $setterClassMethod->params[0];
@@ -234,7 +234,7 @@ CODE_SAMPLE
         $soleParam->type = $parameterTypeNode;
         $this->removeParamDocblock($setterClassMethod);
     }
-    private function removeParamDocblock(ClassMethod $classMethod) : void
+    private function removeParamDocblock(ClassMethod $classMethod): void
     {
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {
@@ -250,7 +250,7 @@ CODE_SAMPLE
         $classMethodPhpDocInfo->removeByType(ParamTagValueNode::class);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
-    private function removeReturnDocblock(ClassMethod $classMethod) : void
+    private function removeReturnDocblock(ClassMethod $classMethod): void
     {
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {

@@ -40,13 +40,13 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $limitValue = $configuration[self::LIMIT_VALUE] ?? self::DEFAULT_LIMIT_VALUE;
         Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -73,28 +73,28 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Int_::class, Float_::class];
     }
     /**
      * @param Int_|Float_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
         if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
-        if (\strpos((string) $rawValue, '.') !== \false) {
-            [$mainPart, $decimalPart] = \explode('.', (string) $rawValue);
+        if (strpos((string) $rawValue, '.') !== \false) {
+            [$mainPart, $decimalPart] = explode('.', (string) $rawValue);
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
-            $literalSeparatedNumber = \implode('_', $chunks) . '.' . $decimalPart;
+            $literalSeparatedNumber = implode('_', $chunks) . '.' . $decimalPart;
         } else {
             $chunks = $this->strSplitNegative($rawValue, self::GROUP_SIZE);
-            $literalSeparatedNumber = \implode('_', $chunks);
+            $literalSeparatedNumber = implode('_', $chunks);
             // PHP converts: (string) 1000.0 -> "1000"!
-            if (\is_float($node->value)) {
+            if (is_float($node->value)) {
                 $literalSeparatedNumber .= '.0';
             }
         }
@@ -105,7 +105,7 @@ CODE_SAMPLE
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::LITERAL_SEPARATOR;
     }
@@ -113,20 +113,20 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $node
      * @param mixed $rawValue
      */
-    private function shouldSkip($node, $rawValue) : bool
+    private function shouldSkip($node, $rawValue): bool
     {
-        if (!\is_string($rawValue)) {
+        if (!is_string($rawValue)) {
             return \true;
         }
         // already contains separator
-        if (\strpos($rawValue, '_') !== \false) {
+        if (strpos($rawValue, '_') !== \false) {
             return \true;
         }
         if ($node->value < $this->limitValue) {
             return \true;
         }
         $kind = $node->getAttribute(AttributeKey::KIND);
-        if (\in_array($kind, [Int_::KIND_BIN, Int_::KIND_OCT, Int_::KIND_HEX], \true)) {
+        if (in_array($kind, [Int_::KIND_BIN, Int_::KIND_OCT, Int_::KIND_HEX], \true)) {
             return \true;
         }
         // e+/e-
@@ -134,20 +134,20 @@ CODE_SAMPLE
             return \true;
         }
         // too short
-        return \strlen($rawValue) <= self::GROUP_SIZE;
+        return strlen($rawValue) <= self::GROUP_SIZE;
     }
     /**
      * @param int<1, max> $length
      * @return string[]
      */
-    private function strSplitNegative(string $string, int $length) : array
+    private function strSplitNegative(string $string, int $length): array
     {
-        $inversed = \strrev($string);
+        $inversed = strrev($string);
         /** @var string[] $chunks */
-        $chunks = \str_split($inversed, $length);
-        $chunks = \array_reverse($chunks);
+        $chunks = str_split($inversed, $length);
+        $chunks = array_reverse($chunks);
         foreach ($chunks as $key => $chunk) {
-            $chunks[$key] = \strrev($chunk);
+            $chunks[$key] = strrev($chunk);
         }
         return $chunks;
     }

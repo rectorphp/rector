@@ -44,14 +44,14 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
         $this->identifierNodeMapper = $identifierNodeMapper;
         $this->intersectionTypeNodeMapper = $intersectionTypeNodeMapper;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return UnionType::class;
     }
     /**
      * @param UnionType $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         $types = [];
         foreach ($node->types as $unionedType) {

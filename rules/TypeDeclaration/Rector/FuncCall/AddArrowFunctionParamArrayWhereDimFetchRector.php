@@ -32,7 +32,7 @@ final class AddArrowFunctionParamArrayWhereDimFetchRector extends AbstractRector
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add function/closure param array type, if dim fetch is inside', [new CodeSample(<<<'CODE_SAMPLE'
 $array = [['name' => 'John']];
@@ -49,19 +49,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 2) {
+        if (count($node->getArgs()) !== 2) {
             return null;
         }
         $hasChanged = \false;
@@ -78,7 +78,7 @@ CODE_SAMPLE
             $closureItems = $node->getArgs()[$arrayPosition]->value;
             $isArrayVariableNames = $this->resolveIsArrayVariables($closureExpr);
             $instanceofVariableNames = $this->resolveInstanceofVariables($closureExpr);
-            $skippedVariableNames = \array_merge($isArrayVariableNames, $instanceofVariableNames);
+            $skippedVariableNames = array_merge($isArrayVariableNames, $instanceofVariableNames);
             $dimFetchVariableNames = $this->resolveDimFetchVariableNames($closureExpr);
             foreach ($closureExpr->getParams() as $closureParam) {
                 if ($closureParam->type instanceof Node) {
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
@@ -113,7 +113,7 @@ CODE_SAMPLE
      * @return string[]
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
      */
-    private function resolveDimFetchVariableNames($closureExpr) : array
+    private function resolveDimFetchVariableNames($closureExpr): array
     {
         $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
         /** @var ArrayDimFetch[] $arrayDimFetches */
@@ -134,7 +134,7 @@ CODE_SAMPLE
      * @return string[]
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
      */
-    private function resolveIsArrayVariables($closureExpr) : array
+    private function resolveIsArrayVariables($closureExpr): array
     {
         $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
         /** @var FuncCall[] $funcCalls */
@@ -156,7 +156,7 @@ CODE_SAMPLE
      * @return string[]
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
      */
-    private function resolveInstanceofVariables($closureExpr) : array
+    private function resolveInstanceofVariables($closureExpr): array
     {
         $closureNodes = $closureExpr instanceof ArrowFunction ? [$closureExpr->expr] : $closureExpr->stmts;
         /** @var Instanceof_[] $instanceOfs */

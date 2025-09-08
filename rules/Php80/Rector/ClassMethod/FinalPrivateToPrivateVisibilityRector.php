@@ -25,11 +25,11 @@ final class FinalPrivateToPrivateVisibilityRector extends AbstractRector impleme
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_FINAL_PRIVATE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change method visibility from final private to only private', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeNonFinal($node);
         return $node;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (!$classMethod->isFinal()) {
             return \true;

@@ -18,7 +18,7 @@ final class SwitchExprsResolver
     /**
      * @return CondAndExpr[]
      */
-    public function resolve(Switch_ $switch) : array
+    public function resolve(Switch_ $switch): array
     {
         $newSwitch = clone $switch;
         $condAndExpr = [];
@@ -76,7 +76,7 @@ final class SwitchExprsResolver
         }
         return $condAndExpr;
     }
-    private function moveDefaultCaseToLast(Switch_ $switch) : void
+    private function moveDefaultCaseToLast(Switch_ $switch): void
     {
         foreach ($switch->cases as $key => $case) {
             if ($case->cond instanceof Expr) {
@@ -102,17 +102,17 @@ final class SwitchExprsResolver
             break;
         }
     }
-    private function isValidCase(Case_ $case) : bool
+    private function isValidCase(Case_ $case): bool
     {
         // prepend to previous one
         if ($case->stmts === []) {
             return \true;
         }
-        if (\count($case->stmts) === 2 && $case->stmts[1] instanceof Break_) {
+        if (count($case->stmts) === 2 && $case->stmts[1] instanceof Break_) {
             return \true;
         }
         // default throws stmts
-        if (\count($case->stmts) !== 1) {
+        if (count($case->stmts) !== 1) {
             return \false;
         }
         // throws expression
@@ -126,7 +126,7 @@ final class SwitchExprsResolver
         // default value
         return !$case->cond instanceof Expr;
     }
-    private function areCasesValid(Switch_ $newSwitch) : bool
+    private function areCasesValid(Switch_ $newSwitch): bool
     {
         foreach ($newSwitch->cases as $case) {
             if (!$this->isValidCase($case)) {

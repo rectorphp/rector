@@ -45,7 +45,7 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
-    public function match($binaryOp) : ?StrStartsWith
+    public function match($binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
@@ -62,7 +62,7 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         }
         return null;
     }
-    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
         if ($this->isStrlenWithNeedleExpr($strStartsWith)) {
             return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
@@ -72,7 +72,7 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         }
         return null;
     }
-    private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith) : bool
+    private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith): bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
         if ($substrFuncCall->isFirstClassCallable()) {
@@ -94,7 +94,7 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         $comparedNeedleExpr = $strStartsWith->getNeedleExpr();
         return $this->nodeComparator->areNodesEqual($needleExpr, $comparedNeedleExpr);
     }
-    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith) : bool
+    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith): bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
         if ($substrFuncCall->isFirstClassCallable()) {
@@ -108,13 +108,13 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (!$expr instanceof String_) {
             return \false;
         }
-        if (\count($substrFuncCall->getArgs()) < 3) {
+        if (count($substrFuncCall->getArgs()) < 3) {
             return \false;
         }
         $lNumberLength = $substrFuncCall->getArgs()[2]->value;
         if (!$lNumberLength instanceof Int_) {
             return \false;
         }
-        return $lNumberLength->value === \strlen($expr->value);
+        return $lNumberLength->value === strlen($expr->value);
     }
 }

@@ -36,7 +36,7 @@ final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
         $this->argsAnalyzer = $argsAnalyzer;
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`, also updates AbstractController usages', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -83,7 +83,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         $args[0]->value = $exprs[0];
         $methodCall->args = $args;
-        if (\count($exprs) === 1) {
+        if (count($exprs) === 1) {
             return $methodCall;
         }
         $rightMethodCall = clone $methodCall;

@@ -54,7 +54,7 @@ final class AddReturnTypeFromTryCatchTypeRector extends AbstractRector
         $this->returnAnalyzer = $returnAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add known type declarations based on first-level try/catch return values', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -87,14 +87,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
@@ -153,7 +153,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\TryCatch|\PhpParser\Node\Stmt\Catch_|\PhpParser\Node\Stmt\Finally_ $tryOrCatchOrFinally
      */
-    private function matchReturnType($tryOrCatchOrFinally) : ?Type
+    private function matchReturnType($tryOrCatchOrFinally): ?Type
     {
         foreach ($tryOrCatchOrFinally->stmts as $stmt) {
             if (!$stmt instanceof Return_) {

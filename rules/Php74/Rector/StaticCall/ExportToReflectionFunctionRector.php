@@ -29,11 +29,11 @@ final class ExportToReflectionFunctionRector extends AbstractRector implements M
     {
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::EXPORT_TO_REFLECTION_FUNCTION;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change export() to ReflectionFunction alternatives', [new CodeSample(<<<'CODE_SAMPLE'
 $reflectionFunction = ReflectionFunction::export('foo');
@@ -48,14 +48,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->class instanceof Name) {
             return null;

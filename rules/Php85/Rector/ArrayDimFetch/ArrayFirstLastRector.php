@@ -25,7 +25,7 @@ final class ArrayFirstLastRector extends AbstractRector implements MinPhpVersion
      * @var string
      */
     private const ARRAY_KEY_LAST = 'array_key_last';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make use of array_first() and array_last()', [new CodeSample(<<<'CODE_SAMPLE'
 echo $array[array_key_first($array)];
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrayDimFetch::class];
     }
     /**
      * @param ArrayDimFetch $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(Node $node): ?FuncCall
     {
         if (!$node->dim instanceof FuncCall) {
             return null;
@@ -58,7 +58,7 @@ CODE_SAMPLE
         if ($node->dim->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->dim->getArgs()) !== 1) {
+        if (count($node->dim->getArgs()) !== 1) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($node->var, $node->dim->getArgs()[0]->value)) {
@@ -67,7 +67,7 @@ CODE_SAMPLE
         $functionName = $this->isName($node->dim, self::ARRAY_KEY_FIRST) ? 'array_first' : 'array_last';
         return $this->nodeFactory->createFuncCall($functionName, [$node->var]);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_FIRST_LAST;
     }

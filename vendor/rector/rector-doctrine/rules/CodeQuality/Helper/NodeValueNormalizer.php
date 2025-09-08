@@ -13,7 +13,7 @@ final class NodeValueNormalizer
     /**
      * @param Arg[] $args
      */
-    public static function ensureKeyIsClassConstFetch(array $args, string $argumentName) : void
+    public static function ensureKeyIsClassConstFetch(array $args, string $argumentName): void
     {
         foreach ($args as $arg) {
             if (!$arg->name instanceof Identifier) {

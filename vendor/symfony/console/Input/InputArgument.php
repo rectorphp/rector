@@ -62,7 +62,7 @@ class InputArgument
     /**
      * Returns the argument name.
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -71,7 +71,7 @@ class InputArgument
      *
      * @return bool true if parameter mode is self::REQUIRED, false otherwise
      */
-    public function isRequired() : bool
+    public function isRequired(): bool
     {
         return self::REQUIRED === (self::REQUIRED & $this->mode);
     }
@@ -80,7 +80,7 @@ class InputArgument
      *
      * @return bool true if mode is self::IS_ARRAY, false otherwise
      */
-    public function isArray() : bool
+    public function isArray(): bool
     {
         return self::IS_ARRAY === (self::IS_ARRAY & $this->mode);
     }
@@ -117,7 +117,7 @@ class InputArgument
     {
         return $this->default;
     }
-    public function hasCompletion() : bool
+    public function hasCompletion(): bool
     {
         return [] !== $this->suggestedValues;
     }
@@ -126,11 +126,11 @@ class InputArgument
      *
      * @see Command::complete()
      */
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         $values = $this->suggestedValues;
         if ($values instanceof \Closure && !\is_array($values = $values($input))) {
-            throw new LogicException(\sprintf('Closure for argument "%s" must return an array. Got "%s".', $this->name, \get_debug_type($values)));
+            throw new LogicException(\sprintf('Closure for argument "%s" must return an array. Got "%s".', $this->name, get_debug_type($values)));
         }
         if ($values) {
             $suggestions->suggestValues($values);
@@ -139,7 +139,7 @@ class InputArgument
     /**
      * Returns the description text.
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }

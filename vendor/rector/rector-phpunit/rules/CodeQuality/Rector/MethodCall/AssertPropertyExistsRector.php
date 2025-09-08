@@ -41,7 +41,7 @@ final class AssertPropertyExistsRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample(<<<'CODE_SAMPLE'
 $this->assertFalse(property_exists(new Class, "property"));
@@ -56,14 +56,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         unset($node->args[0]);
         $newArgs = $this->nodeFactory->createArgs([$secondArgument->value->value, $secondArg]);
-        $node->args = \array_merge($newArgs, $node->getArgs());
+        $node->args = array_merge($newArgs, $node->getArgs());
         $this->identifierManipulator->renameNodeWithMap($node, $map);
         return $node;
     }

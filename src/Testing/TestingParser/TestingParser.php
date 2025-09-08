@@ -38,7 +38,7 @@ final class TestingParser
         $this->currentFileProvider = $currentFileProvider;
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
     }
-    public function parseFilePathToFile(string $filePath) : File
+    public function parseFilePathToFile(string $filePath): File
     {
         // needed for PHPStan reflection, as it caches the last processed file
         $this->dynamicSourceLocatorProvider->setFilePath($filePath);
@@ -53,7 +53,7 @@ final class TestingParser
     /**
      * @return Node[]
      */
-    public function parseFileToDecoratedNodes(string $filePath) : array
+    public function parseFileToDecoratedNodes(string $filePath): array
     {
         // needed for PHPStan reflection, as it caches the last processed file
         $this->dynamicSourceLocatorProvider->setFilePath($filePath);

@@ -36,7 +36,7 @@ final class MyCLabsMethodCallToEnumConstRector extends AbstractRector implements
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor MyCLabs enum fetch to Enum const', [new CodeSample(<<<'CODE_SAMPLE'
 $name = SomeEnum::VALUE()->getKey();
@@ -49,14 +49,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->name instanceof Expr) {
             return null;
@@ -71,11 +71,11 @@ CODE_SAMPLE
         if ($node instanceof MethodCall) {
             return $this->refactorMethodCall($node, $enumCaseName);
         }
-        if (!$this->isObjectType($node->class, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node->class, new ObjectType('MyCLabs\Enum\Enum'))) {
             return null;
         }
         $className = $this->getName($node->class);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             return null;
         }
         if (!$this->isEnumConstant($className, $enumCaseName)) {
@@ -83,11 +83,11 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ENUM;
     }
-    private function isEnumConstant(string $className, string $constant) : bool
+    private function isEnumConstant(string $className, string $constant): bool
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return \false;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         $classReflection = $this->reflectionProvider->getClass($className);
         return $classReflection->hasConstant($constant);
     }
-    private function refactorGetKeyMethodCall(MethodCall $methodCall) : ?PropertyFetch
+    private function refactorGetKeyMethodCall(MethodCall $methodCall): ?PropertyFetch
     {
         if (!$methodCall->var instanceof StaticCall) {
             return $this->nodeFactory->createPropertyFetch($methodCall->var, 'name');
@@ -115,7 +115,7 @@ CODE_SAMPLE
         $classConstFetch = $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
         return new PropertyFetch($classConstFetch, 'name');
     }
-    private function refactorGetValueMethodCall(MethodCall $methodCall) : ?PropertyFetch
+    private function refactorGetValueMethodCall(MethodCall $methodCall): ?PropertyFetch
     {
         if (!$methodCall->var instanceof StaticCall) {
             return $this->nodeFactory->createPropertyFetch($methodCall->var, 'value');
@@ -135,7 +135,7 @@ CODE_SAMPLE
         $classConstFetch = $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
         return new PropertyFetch($classConstFetch, 'value');
     }
-    private function refactorEqualsMethodCall(MethodCall $methodCall) : ?Identical
+    private function refactorEqualsMethodCall(MethodCall $methodCall): ?Identical
     {
         $expr = $this->getNonEnumReturnTypeExpr($methodCall->var);
         if (!$expr instanceof Expr) {
@@ -160,14 +160,14 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function isCallerClassEnum($node) : bool
+    private function isCallerClassEnum($node): bool
     {
         if ($node instanceof StaticCall) {
-            return $this->isObjectType($node->class, new ObjectType('MyCLabs\\Enum\\Enum'));
+            return $this->isObjectType($node->class, new ObjectType('MyCLabs\Enum\Enum'));
         }
-        return $this->isObjectType($node->var, new ObjectType('MyCLabs\\Enum\\Enum'));
+        return $this->isObjectType($node->var, new ObjectType('MyCLabs\Enum\Enum'));
     }
-    private function getNonEnumReturnTypeExpr(Node $node) : ?Expr
+    private function getNonEnumReturnTypeExpr(Node $node): ?Expr
     {
         if (!$node instanceof StaticCall && !$node instanceof MethodCall) {
             return null;
@@ -199,7 +199,7 @@ CODE_SAMPLE
      */
     private function getValidEnumExpr(Node $node)
     {
-        switch (\get_class($node)) {
+        switch (get_class($node)) {
             case Variable::class:
             case PropertyFetch::class:
                 return $this->getPropertyFetchOrVariable($node);
@@ -215,12 +215,12 @@ CODE_SAMPLE
      */
     private function getPropertyFetchOrVariable($expr)
     {
-        if (!$this->isObjectType($expr, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($expr, new ObjectType('MyCLabs\Enum\Enum'))) {
             return null;
         }
         return $expr;
     }
-    private function getEnumConstFetch(StaticCall $staticCall) : ?\PhpParser\Node\Expr\ClassConstFetch
+    private function getEnumConstFetch(StaticCall $staticCall): ?\PhpParser\Node\Expr\ClassConstFetch
     {
         $className = $this->getName($staticCall->class);
         if ($className === null) {
@@ -240,7 +240,7 @@ CODE_SAMPLE
      */
     private function refactorMethodCall(MethodCall $methodCall, string $methodName)
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('MyCLabs\Enum\Enum'))) {
             return null;
         }
         if ($methodName === 'getKey') {
@@ -254,8 +254,8 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldOmitEnumCase(string $enumCaseName) : bool
+    private function shouldOmitEnumCase(string $enumCaseName): bool
     {
-        return \in_array($enumCaseName, self::ENUM_METHODS, \true);
+        return in_array($enumCaseName, self::ENUM_METHODS, \true);
     }
 }

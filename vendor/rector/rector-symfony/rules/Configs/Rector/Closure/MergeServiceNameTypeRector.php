@@ -31,7 +31,7 @@ final class MergeServiceNameTypeRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Merge name === type service registration, $services->set(SomeType::class, SomeType::class)', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -54,14 +54,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
@@ -73,9 +73,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function handleSetServices(Closure $closure) : void
+    private function handleSetServices(Closure $closure): void
     {
-        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) : ?MethodCall {
+        $this->traverseNodesWithCallable($closure->stmts, function (Node $node): ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -83,7 +83,7 @@ CODE_SAMPLE
                 return null;
             }
             // must be exactly 2 args
-            if (\count($node->args) !== 2) {
+            if (count($node->args) !== 2) {
                 return null;
             }
             // exchange type and service name
@@ -92,7 +92,7 @@ CODE_SAMPLE
             /** @var string $serviceName */
             $serviceName = $this->valueResolver->getValue($firstArg->value);
             $serviceType = $this->valueResolver->getValue($secondArg->value);
-            if (!\is_string($serviceType)) {
+            if (!is_string($serviceType)) {
                 return null;
             }
             if ($serviceName !== $serviceType) {
@@ -104,11 +104,11 @@ CODE_SAMPLE
             return $node;
         });
     }
-    private function isSetServices(MethodCall $methodCall) : bool
+    private function isSetServices(MethodCall $methodCall): bool
     {
         if (!$this->isName($methodCall->name, 'set')) {
             return \false;
         }
-        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'));
+        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator'));
     }
 }

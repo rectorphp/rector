@@ -34,11 +34,11 @@ final class BinaryOpBetweenNumberAndStringRector extends AbstractRector implemen
     {
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::BINARY_OP_NUMBER_STRING;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change binary operation between some number + string to PHP 7.1 compatible version', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -65,14 +65,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BinaryOp::class];
     }
     /**
      * @param BinaryOp $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Concat) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isStringOrStaticNonNumericString(Expr $expr) : bool
+    private function isStringOrStaticNonNumericString(Expr $expr): bool
     {
         // replace only scalar values, not variables/constants/etc.
         if (!$expr instanceof Scalar && !$expr instanceof Variable) {
@@ -106,11 +106,11 @@ CODE_SAMPLE
             return \false;
         }
         if ($expr instanceof String_) {
-            return !\is_numeric($expr->value);
+            return !is_numeric($expr->value);
         }
         $exprStaticType = $this->getType($expr);
         if ($exprStaticType instanceof ConstantStringType) {
-            return !\is_numeric($exprStaticType->getValue());
+            return !is_numeric($exprStaticType->getValue());
         }
         return \false;
     }

@@ -25,11 +25,11 @@ class Const_ extends NodeAbstract
         $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
         $this->value = $value;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'value'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Const';
     }

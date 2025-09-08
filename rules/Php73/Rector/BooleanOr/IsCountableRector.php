@@ -33,7 +33,7 @@ final class IsCountableRector extends AbstractRector implements MinPhpVersionInt
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes is_array + Countable check to is_countable', [new CodeSample(<<<'CODE_SAMPLE'
 is_array($foo) || $foo instanceof Countable;
@@ -46,29 +46,29 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanOr::class];
     }
     /**
      * @param BooleanOr $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip()) {
             return null;
         }
         return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable');
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::IS_COUNTABLE;
     }
-    public function providePolyfillPackage() : string
+    public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_73;
     }
-    private function shouldSkip() : bool
+    private function shouldSkip(): bool
     {
         return !$this->reflectionProvider->hasFunction(new Name('is_countable'), null);
     }

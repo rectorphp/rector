@@ -27,15 +27,15 @@ final class FuncCallToStaticCall
         RectorAssert::className($newClassName);
         RectorAssert::methodName($newMethodName);
     }
-    public function getOldFuncName() : string
+    public function getOldFuncName(): string
     {
         return $this->oldFuncName;
     }
-    public function getNewClassName() : string
+    public function getNewClassName(): string
     {
         return $this->newClassName;
     }
-    public function getNewMethodName() : string
+    public function getNewMethodName(): string
     {
         return $this->newMethodName;
     }

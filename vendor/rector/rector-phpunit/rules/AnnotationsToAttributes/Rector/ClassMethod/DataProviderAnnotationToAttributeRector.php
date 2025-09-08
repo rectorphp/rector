@@ -59,7 +59,7 @@ final class DataProviderAnnotationToAttributeRector extends AbstractRector imple
     /**
      * @var string
      */
-    private const DATA_PROVIDER_CLASS = 'PHPUnit\\Framework\\Attributes\\DataProvider';
+    private const DATA_PROVIDER_CLASS = 'PHPUnit\Framework\Attributes\DataProvider';
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpDocTagRemover $phpDocTagRemover, ReflectionResolver $reflectionResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -70,7 +70,7 @@ final class DataProviderAnnotationToAttributeRector extends AbstractRector imple
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change dataProvider annotations to attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -101,11 +101,11 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         /**
          * This rule just work for phpunit 10,
@@ -118,7 +118,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -151,25 +151,25 @@ CODE_SAMPLE
             } else {
                 $originalAttributeValue = $desiredTagValueNode->value->getOriginalContent();
             }
-            $node->attrGroups[] = $this->createAttributeGroup(\strtok($originalAttributeValue, " \t\n\r\x00\v"));
+            $node->attrGroups[] = $this->createAttributeGroup(strtok($originalAttributeValue, " \t\n\r\x00\v"));
             // cleanup
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    private function createAttributeGroup(string $originalAttributeValue) : AttributeGroup
+    private function createAttributeGroup(string $originalAttributeValue): AttributeGroup
     {
-        $methodName = \trim($originalAttributeValue, '()');
+        $methodName = trim($originalAttributeValue, '()');
         $className = '';
-        if (\strpos($methodName, '::') !== \false) {
-            [$className, $methodName] = \explode('::', $methodName, 2);
+        if (strpos($methodName, '::') !== \false) {
+            [$className, $methodName] = explode('::', $methodName, 2);
         }
         if ($className !== '') {
             if ($className[0] !== '\\') {
                 $className = '\\' . $className;
             }
-            return $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\DataProviderExternal', [$className . '::class', $methodName]);
+            return $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\Framework\Attributes\DataProviderExternal', [$className . '::class', $methodName]);
         }
         return $this->phpAttributeGroupFactory->createFromClassWithItems(self::DATA_PROVIDER_CLASS, [$methodName]);
     }

@@ -40,7 +40,7 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
-    public function match($binaryOp) : ?StrStartsWith
+    public function match($binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'strpos')) {
@@ -57,13 +57,13 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @return FuncCall|BooleanNot
      */
-    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): Node
     {
         $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');
         return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
     }
-    private function processBinaryOpLeft(BinaryOp $binaryOp, bool $isPositive) : ?StrStartsWith
+    private function processBinaryOpLeft(BinaryOp $binaryOp, bool $isPositive): ?StrStartsWith
     {
         if (!$this->valueResolver->isValue($binaryOp->right, 0)) {
             return null;
@@ -73,21 +73,21 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if ($funcCall->isFirstClassCallable()) {
             return null;
         }
-        if (\count($funcCall->getArgs()) < 2) {
+        if (count($funcCall->getArgs()) < 2) {
             return null;
         }
         $haystack = $funcCall->getArgs()[0]->value;
         $needle = $funcCall->getArgs()[1]->value;
         return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
-    private function processBinaryOpRight(BinaryOp $binaryOp, bool $isPositive) : ?StrStartsWith
+    private function processBinaryOpRight(BinaryOp $binaryOp, bool $isPositive): ?StrStartsWith
     {
         if (!$this->valueResolver->isValue($binaryOp->left, 0)) {
             return null;
         }
         /** @var FuncCall $funcCall */
         $funcCall = $binaryOp->right;
-        if (\count($funcCall->getArgs()) < 2) {
+        if (count($funcCall->getArgs()) < 2) {
             return null;
         }
         $haystack = $funcCall->getArgs()[0]->value;

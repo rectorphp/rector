@@ -23,7 +23,7 @@ final class RemoveUnreachableStatementRector extends AbstractRector
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unreachable statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -74,7 +74,7 @@ CODE_SAMPLE
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processCleanUpUnreachableStmts(StmtsAwareInterface $stmtsAware, array $stmts) : array
+    private function processCleanUpUnreachableStmts(StmtsAwareInterface $stmtsAware, array $stmts): array
     {
         foreach ($stmts as $key => $stmt) {
             if (!isset($stmts[$key - 1])) {
@@ -83,7 +83,7 @@ CODE_SAMPLE
             $previousStmt = $stmts[$key - 1];
             // unset...
             if ($this->terminatedNodeAnalyzer->isAlwaysTerminated($stmtsAware, $previousStmt, $stmt)) {
-                \array_splice($stmts, $key);
+                array_splice($stmts, $key);
                 return $stmts;
             }
         }

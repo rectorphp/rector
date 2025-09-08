@@ -49,7 +49,7 @@ final class GenericAnnotationToAttributeConverter
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
-    public function convert(Node $node, AnnotationToAttribute $annotationToAttribute) : ?AttributeGroup
+    public function convert(Node $node, AnnotationToAttribute $annotationToAttribute): ?AttributeGroup
     {
         if (!$this->isExistingAttributeClass($annotationToAttribute)) {
             return null;
@@ -64,7 +64,7 @@ final class GenericAnnotationToAttributeConverter
     /**
      * @param Use_[] $uses
      */
-    private function processDoctrineAnnotationClass(PhpDocInfo $phpDocInfo, array $uses, AnnotationToAttribute $annotationToAttribute) : ?AttributeGroup
+    private function processDoctrineAnnotationClass(PhpDocInfo $phpDocInfo, array $uses, AnnotationToAttribute $annotationToAttribute): ?AttributeGroup
     {
         if ($phpDocInfo->getPhpDocNode()->children === []) {
             return null;
@@ -91,7 +91,7 @@ final class GenericAnnotationToAttributeConverter
         }
         return $attributeGroups[0] ?? null;
     }
-    private function isExistingAttributeClass(AnnotationToAttribute $annotationToAttribute) : bool
+    private function isExistingAttributeClass(AnnotationToAttribute $annotationToAttribute): bool
     {
         // make sure the attribute class really exists to avoid error on early upgrade
         if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {

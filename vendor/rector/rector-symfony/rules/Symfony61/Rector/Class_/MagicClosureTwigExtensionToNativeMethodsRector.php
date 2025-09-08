@@ -34,7 +34,7 @@ final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRecto
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change TwigExtension function/filter magic closures to inlined and clear callables', [new CodeSample(<<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
@@ -79,16 +79,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->nodeTypeResolver->isObjectTypes($node, [new ObjectType('Twig_ExtensionInterface'), new ObjectType('Twig\\Extension\\ExtensionInterface')])) {
+        if (!$this->nodeTypeResolver->isObjectTypes($node, [new ObjectType('Twig_ExtensionInterface'), new ObjectType('Twig\Extension\ExtensionInterface')])) {
             return null;
         }
         $hasFunctionsChanged = \false;
@@ -107,14 +107,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_81;
     }
-    private function refactorClassMethod(ClassMethod $classMethod, Scope $scope) : bool
+    private function refactorClassMethod(ClassMethod $classMethod, Scope $scope): bool
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($classMethod, function (Node $node) use(&$hasChanged, $scope) : ?Node {
+        $this->traverseNodesWithCallable($classMethod, function (Node $node) use (&$hasChanged, $scope): ?Node {
             if (!$node instanceof Array_) {
                 return null;
             }

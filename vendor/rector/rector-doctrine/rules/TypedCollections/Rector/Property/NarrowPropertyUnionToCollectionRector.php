@@ -48,7 +48,7 @@ final class NarrowPropertyUnionToCollectionRector extends AbstractRector
         $this->unionCollectionTagValueNodeNarrower = $unionCollectionTagValueNodeNarrower;
         $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow union type to Collection type in property docblock and native type declaration', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -74,14 +74,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
@@ -100,21 +100,21 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function hasNativeTypeCollection(Property $property) : bool
+    private function hasNativeTypeCollection(Property $property): bool
     {
         if (!$property->type instanceof Name) {
             return \false;
         }
         return $this->isName($property->type, Collection::class);
     }
-    private function isCollectionName(Node $node) : bool
+    private function isCollectionName(Node $node): bool
     {
         if (!$node instanceof Name) {
             return \false;
         }
         return $this->isName($node, DoctrineClass::COLLECTION);
     }
-    private function refactorNativeUnionPropertyType(Property $property) : bool
+    private function refactorNativeUnionPropertyType(Property $property): bool
     {
         if (!$property->type instanceof UnionType) {
             return \false;
@@ -131,7 +131,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function refactorPropertyDocBlock(Property $property) : bool
+    private function refactorPropertyDocBlock(Property $property): bool
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
         if (!$propertyPhpDocInfo instanceof PhpDocInfo) {

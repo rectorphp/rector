@@ -40,7 +40,7 @@ final class ExprBoolCaster
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->nodeFactory = $nodeFactory;
     }
-    public function boolCastOrNullCompareIfNeeded(Expr $expr) : Expr
+    public function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
     {
         $exprStaticType = $this->nodeTypeResolver->getType($expr);
         if (!TypeCombinator::containsNull($exprStaticType)) {
@@ -63,7 +63,7 @@ final class ExprBoolCaster
         }
         return new Bool_($expr);
     }
-    private function isBoolCastNeeded(Expr $expr, Type $exprType) : bool
+    private function isBoolCastNeeded(Expr $expr, Type $exprType): bool
     {
         if ($expr instanceof BooleanNot) {
             return \false;

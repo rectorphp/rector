@@ -29,7 +29,7 @@ final class EnumAnalyzer
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveType(ClassReflection $classReflection) : ?Identifier
+    public function resolveType(ClassReflection $classReflection): ?Identifier
     {
         $class = $this->astResolver->resolveClassFromClassReflection($classReflection);
         if (!$class instanceof Enum_) {
@@ -43,18 +43,18 @@ final class EnumAnalyzer
         $enumExprTypes = $this->resolveEnumExprTypes($class);
         $enumExprTypeClasses = [];
         foreach ($enumExprTypes as $enumExprType) {
-            $enumExprTypeClasses[] = \get_class($enumExprType);
+            $enumExprTypeClasses[] = get_class($enumExprType);
         }
-        $uniqueEnumExprTypeClasses = \array_unique($enumExprTypeClasses);
-        if (\count($uniqueEnumExprTypeClasses) === 1) {
+        $uniqueEnumExprTypeClasses = array_unique($enumExprTypeClasses);
+        if (count($uniqueEnumExprTypeClasses) === 1) {
             $uniqueEnumExprTypeClass = $uniqueEnumExprTypeClasses[0];
-            if (\is_a($uniqueEnumExprTypeClass, StringType::class, \true)) {
+            if (is_a($uniqueEnumExprTypeClass, StringType::class, \true)) {
                 return new Identifier('string');
             }
-            if (\is_a($uniqueEnumExprTypeClass, IntegerType::class, \true)) {
+            if (is_a($uniqueEnumExprTypeClass, IntegerType::class, \true)) {
                 return new Identifier('int');
             }
-            if (\is_a($uniqueEnumExprTypeClass, FloatType::class, \true)) {
+            if (is_a($uniqueEnumExprTypeClass, FloatType::class, \true)) {
                 return new Identifier('float');
             }
         }
@@ -64,7 +64,7 @@ final class EnumAnalyzer
     /**
      * @return Type[]
      */
-    private function resolveEnumExprTypes(Enum_ $enum) : array
+    private function resolveEnumExprTypes(Enum_ $enum): array
     {
         $enumExprTypes = [];
         foreach ($enum->stmts as $classStmt) {
@@ -75,7 +75,7 @@ final class EnumAnalyzer
         }
         return $enumExprTypes;
     }
-    private function resolveEnumCaseType(EnumCase $enumCase) : Type
+    private function resolveEnumCaseType(EnumCase $enumCase): Type
     {
         $classExpr = $enumCase->expr;
         if ($classExpr instanceof Expr) {

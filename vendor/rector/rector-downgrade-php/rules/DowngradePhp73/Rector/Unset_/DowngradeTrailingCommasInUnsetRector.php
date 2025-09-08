@@ -28,7 +28,7 @@ final class DowngradeTrailingCommasInUnsetRector extends AbstractRector
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
         $this->trailingCommaRemover = $trailingCommaRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove trailing commas in unset', [new CodeSample(<<<'CODE_SAMPLE'
 unset(
@@ -47,17 +47,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Unset_::class];
     }
     /**
      * @param Unset_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->vars !== []) {
-            $lastArgumentPosition = \array_key_last($node->vars);
+            $lastArgumentPosition = array_key_last($node->vars);
             $last = $node->vars[$lastArgumentPosition];
             if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
                 return null;

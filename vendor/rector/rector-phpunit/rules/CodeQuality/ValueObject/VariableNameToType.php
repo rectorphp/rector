@@ -18,11 +18,11 @@ final class VariableNameToType
         $this->variableName = $variableName;
         $this->objectType = $objectType;
     }
-    public function getVariableName() : string
+    public function getVariableName(): string
     {
         return $this->variableName;
     }
-    public function getObjectType() : string
+    public function getObjectType(): string
     {
         return $this->objectType;
     }

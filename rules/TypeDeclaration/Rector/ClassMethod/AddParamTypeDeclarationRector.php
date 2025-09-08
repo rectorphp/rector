@@ -50,7 +50,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add param types where needed', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -73,14 +73,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddParamTypeDeclaration::class);
         $this->addParamTypeDeclarations = $configuration;
@@ -114,7 +114,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
-    private function shouldSkip($classLike, ClassMethod $classMethod) : bool
+    private function shouldSkip($classLike, ClassMethod $classMethod): bool
     {
         // skip class methods without args
         if ($classMethod->params === []) {
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return !$classLike->extends instanceof Name;
     }
-    private function refactorClassMethodWithTypehintByParameterPosition(ClassMethod $classMethod, AddParamTypeDeclaration $addParamTypeDeclaration) : void
+    private function refactorClassMethodWithTypehintByParameterPosition(ClassMethod $classMethod, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
         $parameter = $classMethod->params[$addParamTypeDeclaration->getPosition()] ?? null;
         if (!$parameter instanceof Param) {
@@ -134,7 +134,7 @@ CODE_SAMPLE
         }
         $this->refactorParameter($parameter, $addParamTypeDeclaration);
     }
-    private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration) : void
+    private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
         // already set → no change
         if ($param->type instanceof Node) {

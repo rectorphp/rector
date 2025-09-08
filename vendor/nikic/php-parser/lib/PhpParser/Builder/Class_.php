@@ -110,7 +110,7 @@ class Class_ extends \PhpParser\Builder\Declaration
         } elseif ($stmt instanceof Stmt\ClassConst) {
             $this->constants[] = $stmt;
         } else {
-            throw new \LogicException(\sprintf('Unexpected node of type "%s"', $stmt->getType()));
+            throw new \LogicException(sprintf('Unexpected node of type "%s"', $stmt->getType()));
         }
         return $this;
     }
@@ -131,8 +131,8 @@ class Class_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Class_ The built class node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
-        return new Stmt\Class_($this->name, ['flags' => $this->flags, 'extends' => $this->extends, 'implements' => $this->implements, 'stmts' => \array_merge($this->uses, $this->constants, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new Stmt\Class_($this->name, ['flags' => $this->flags, 'extends' => $this->extends, 'implements' => $this->implements, 'stmts' => array_merge($this->uses, $this->constants, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

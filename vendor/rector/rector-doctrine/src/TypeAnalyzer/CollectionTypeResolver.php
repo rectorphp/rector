@@ -69,7 +69,7 @@ final class CollectionTypeResolver
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function resolveFromTypeNode(TypeNode $typeNode, Node $node) : ?FullyQualifiedObjectType
+    public function resolveFromTypeNode(TypeNode $typeNode, Node $node): ?FullyQualifiedObjectType
     {
         if ($typeNode instanceof UnionTypeNode) {
             foreach ($typeNode->types as $unionedTypeNode) {
@@ -89,15 +89,15 @@ final class CollectionTypeResolver
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function hasIndexBy($property) : bool
+    public function hasIndexBy($property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if ($phpDocInfo instanceof PhpDocInfo && \strpos((string) $phpDocInfo->getPhpDocNode(), 'indexBy') !== \false) {
+        if ($phpDocInfo instanceof PhpDocInfo && strpos((string) $phpDocInfo->getPhpDocNode(), 'indexBy') !== \false) {
             return \true;
         }
         $attrGroups = $property->attrGroups;
         $hasIndexBy = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attrGroups, function (Node $node) use(&$hasIndexBy) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attrGroups, function (Node $node) use (&$hasIndexBy): ?int {
             if ($node instanceof Arg && $node->name instanceof Identifier && $node->name->toString() === 'indexBy') {
                 $hasIndexBy = \true;
                 return NodeTraverser::STOP_TRAVERSAL;
@@ -106,7 +106,7 @@ final class CollectionTypeResolver
         });
         return $hasIndexBy;
     }
-    public function resolveFromToManyProperty(Property $property) : ?FullyQualifiedObjectType
+    public function resolveFromToManyProperty(Property $property): ?FullyQualifiedObjectType
     {
         $doctrineAnnotationTagValueNodeOrAttribute = $this->attrinationFinder->getByMany($property, CollectionMapping::TO_MANY_CLASSES);
         if ($doctrineAnnotationTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
@@ -125,7 +125,7 @@ final class CollectionTypeResolver
         }
         return null;
     }
-    private function resolveFromDoctrineAnnotationTagValueNode(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Property $property) : ?FullyQualifiedObjectType
+    private function resolveFromDoctrineAnnotationTagValueNode(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Property $property): ?FullyQualifiedObjectType
     {
         $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue(EntityMappingKey::TARGET_ENTITY);
         // in case of ODM
@@ -138,7 +138,7 @@ final class CollectionTypeResolver
         if ($targetEntityClass instanceof StringNode) {
             $targetEntityClass = $targetEntityClass->value;
         }
-        if (!\is_string($targetEntityClass)) {
+        if (!is_string($targetEntityClass)) {
             return null;
         }
         $fullyQualifiedTargetEntity = $this->shortClassExpander->resolveFqnTargetEntity($targetEntityClass, $property);
@@ -148,13 +148,13 @@ final class CollectionTypeResolver
      * @param Arg[] $args
      * @param string[] $names
      */
-    private function findExprByArgNames(array $args, array $names) : ?Expr
+    private function findExprByArgNames(array $args, array $names): ?Expr
     {
         foreach ($args as $arg) {
             if (!$arg->name instanceof Identifier) {
                 continue;
             }
-            if (\in_array($arg->name->toString(), $names, \true)) {
+            if (in_array($arg->name->toString(), $names, \true)) {
                 return $arg->value;
             }
         }

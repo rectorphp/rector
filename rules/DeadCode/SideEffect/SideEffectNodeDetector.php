@@ -49,14 +49,14 @@ final class SideEffectNodeDetector
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function detect(Expr $expr) : bool
+    public function detect(Expr $expr): bool
     {
         if ($expr instanceof Assign) {
             return \true;
         }
         return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->detectCallExpr($subNode));
     }
-    public function detectCallExpr(Node $node) : bool
+    public function detectCallExpr(Node $node): bool
     {
         if (!$node instanceof Expr) {
             return \false;
@@ -70,8 +70,8 @@ final class SideEffectNodeDetector
         if (($node instanceof MethodCall || $node instanceof StaticCall) && $this->isTestMock($node)) {
             return \false;
         }
-        $exprClass = \get_class($node);
-        if (\in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, \true)) {
+        $exprClass = get_class($node);
+        if (in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, \true)) {
             return \true;
         }
         if ($node instanceof FuncCall) {
@@ -87,16 +87,16 @@ final class SideEffectNodeDetector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function isTestMock($node) : bool
+    private function isTestMock($node): bool
     {
-        $objectType = new ObjectType('PHPUnit\\Framework\\TestCase');
+        $objectType = new ObjectType('PHPUnit\Framework\TestCase');
         $nodeCaller = $node instanceof MethodCall ? $node->var : $node->class;
         if (!$this->nodeTypeResolver->isObjectType($nodeCaller, $objectType)) {
             return \false;
         }
         return $this->nodeNameResolver->isName($node->name, 'createMock');
     }
-    private function isPhpParser(New_ $new) : bool
+    private function isPhpParser(New_ $new): bool
     {
         if (!$new->class instanceof FullyQualified) {
             return \false;
@@ -105,7 +105,7 @@ final class SideEffectNodeDetector
         $namespace = Strings::before($className, '\\', 1);
         return $namespace === 'PhpParser';
     }
-    private function isClassCallerThrowable(StaticCall $staticCall) : bool
+    private function isClassCallerThrowable(StaticCall $staticCall): bool
     {
         $class = $staticCall->class;
         if (!$class instanceof Name) {
@@ -118,7 +118,7 @@ final class SideEffectNodeDetector
     /**
      * @param \PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\Variable $expr
      */
-    private function resolveVariable($expr) : ?Variable
+    private function resolveVariable($expr): ?Variable
     {
         while ($expr instanceof ArrayDimFetch) {
             $expr = $expr->var;

@@ -33,14 +33,14 @@ final class CastTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [Cast::class];
     }
     /**
      * @param Cast $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         foreach (self::CAST_CLASS_TO_TYPE_MAP as $castClass => $typeClass) {
             if ($node instanceof $castClass) {
@@ -53,6 +53,6 @@ final class CastTypeResolver implements NodeTypeResolverInterface
         if ($node instanceof Object_) {
             return new ObjectType('stdClass');
         }
-        throw new NotImplementedYetException(\get_class($node));
+        throw new NotImplementedYetException(get_class($node));
     }
 }

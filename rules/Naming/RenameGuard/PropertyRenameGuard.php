@@ -28,12 +28,12 @@ final class PropertyRenameGuard
         $this->dateTimeAtNamingConventionGuard = $dateTimeAtNamingConventionGuard;
         $this->hasMagicGetSetGuard = $hasMagicGetSetGuard;
     }
-    public function shouldSkip(PropertyRename $propertyRename) : bool
+    public function shouldSkip(PropertyRename $propertyRename): bool
     {
         if (!$propertyRename->isPrivateProperty()) {
             return \true;
         }
-        if ($this->nodeTypeResolver->isObjectType($propertyRename->getProperty(), new ObjectType('Ramsey\\Uuid\\UuidInterface'))) {
+        if ($this->nodeTypeResolver->isObjectType($propertyRename->getProperty(), new ObjectType('Ramsey\Uuid\UuidInterface'))) {
             return \true;
         }
         if ($this->dateTimeAtNamingConventionGuard->isConflicting($propertyRename)) {

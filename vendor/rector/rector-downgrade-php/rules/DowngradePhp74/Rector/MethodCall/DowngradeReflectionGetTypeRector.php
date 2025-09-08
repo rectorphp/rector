@@ -24,7 +24,7 @@ final class DowngradeReflectionGetTypeRector extends AbstractRector
      * @var string
      */
     private const SKIP_NODE = 'skip_node';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade reflection $reflection->getType() method call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -57,14 +57,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, Ternary::class, Instanceof_::class];
     }
     /**
      * @param MethodCall|Ternary|Instanceof_ $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node): ?\PhpParser\Node
     {
         if ($node instanceof Instanceof_) {
             $this->markSkipInstanceof($node);
@@ -86,7 +86,7 @@ CODE_SAMPLE
         $args = [new Arg($node->var), new Arg(new String_('getType'))];
         return new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
     }
-    private function markSkipInstanceof(Instanceof_ $instanceof) : void
+    private function markSkipInstanceof(Instanceof_ $instanceof): void
     {
         if (!$this->isName($instanceof->class, 'ReflectionNamedType')) {
             return;
@@ -97,7 +97,7 @@ CODE_SAMPLE
         // checked typed → safe
         $instanceof->expr->setAttribute(self::SKIP_NODE, \true);
     }
-    private function markSkipTernary(Ternary $ternary) : void
+    private function markSkipTernary(Ternary $ternary): void
     {
         if (!$ternary->if instanceof Expr) {
             return;

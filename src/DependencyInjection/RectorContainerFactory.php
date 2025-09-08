@@ -9,7 +9,7 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {
-    public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : Container
+    public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs): Container
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
         $mainConfigFile = $bootstrapConfigs->getMainConfigFile();
@@ -26,7 +26,7 @@ final class RectorContainerFactory
     /**
      * @param string[] $configFiles
      */
-    private function createFromConfigs(array $configFiles) : Container
+    private function createFromConfigs(array $configFiles): Container
     {
         $lazyContainerFactory = new \Rector\DependencyInjection\LazyContainerFactory();
         $rectorConfig = $lazyContainerFactory->create();

@@ -68,7 +68,7 @@ final class PhpDocTypeChanger
         $this->newPhpDocFromPHPStanTypeGuard = $newPhpDocFromPHPStanTypeGuard;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function changeVarType(Stmt $stmt, PhpDocInfo $phpDocInfo, Type $newType) : bool
+    public function changeVarType(Stmt $stmt, PhpDocInfo $phpDocInfo, Type $newType): bool
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@var')) {
@@ -99,7 +99,7 @@ final class PhpDocTypeChanger
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
         return \true;
     }
-    public function changeReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType) : bool
+    public function changeReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType): bool
     {
         // better not touch this, can crash
         if ($phpDocInfo->hasInvalidTag('@return')) {
@@ -126,7 +126,7 @@ final class PhpDocTypeChanger
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
         return \true;
     }
-    public function changeParamType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : bool
+    public function changeParamType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): bool
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {
@@ -156,7 +156,7 @@ final class PhpDocTypeChanger
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
         return \true;
     }
-    public function isAllowed(TypeNode $typeNode) : bool
+    public function isAllowed(TypeNode $typeNode): bool
     {
         if ($typeNode instanceof BracketsAwareUnionTypeNode || $typeNode instanceof BracketsAwareIntersectionTypeNode) {
             foreach ($typeNode->types as $type) {
@@ -168,18 +168,18 @@ final class PhpDocTypeChanger
         if ($typeNode instanceof ConstTypeNode && $typeNode->constExpr instanceof ConstFetchNode) {
             return \true;
         }
-        if (\in_array(\get_class($typeNode), self::ALLOWED_TYPES, \true)) {
+        if (in_array(get_class($typeNode), self::ALLOWED_TYPES, \true)) {
             return \true;
         }
         if (!$typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        return \in_array((string) $typeNode, self::ALLOWED_IDENTIFIER_TYPENODE_TYPES, \true);
+        return in_array((string) $typeNode, self::ALLOWED_IDENTIFIER_TYPENODE_TYPES, \true);
     }
     /**
      * @api downgrade
      */
-    public function changeVarTypeNode(Stmt $stmt, PhpDocInfo $phpDocInfo, TypeNode $typeNode) : void
+    public function changeVarTypeNode(Stmt $stmt, PhpDocInfo $phpDocInfo, TypeNode $typeNode): void
     {
         // add completely new one
         $varTagValueNode = new VarTagValueNode($typeNode, '', '');

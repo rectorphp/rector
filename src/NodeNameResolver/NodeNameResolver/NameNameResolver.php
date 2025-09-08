@@ -12,14 +12,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class NameNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return Name::class;
     }
     /**
      * @param Name $node
      */
-    public function resolve(Node $node, ?Scope $scope) : string
+    public function resolve(Node $node, ?Scope $scope): string
     {
         return $node->toString();
     }

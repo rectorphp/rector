@@ -22,14 +22,14 @@ final class FileWithoutNamespace extends Stmt implements StmtsAwareInterface
         $this->stmts = $stmts;
         parent::__construct();
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'FileWithoutNamespace';
     }
     /**
      * @return string[]
      */
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['stmts'];
     }

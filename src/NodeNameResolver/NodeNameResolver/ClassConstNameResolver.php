@@ -12,14 +12,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class ClassConstNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return ClassConst::class;
     }
     /**
      * @param ClassConst $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->consts === []) {
             return null;

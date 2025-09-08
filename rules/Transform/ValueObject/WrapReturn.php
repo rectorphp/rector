@@ -26,15 +26,15 @@ final class WrapReturn
         $this->isArrayWrap = $isArrayWrap;
         RectorAssert::className($type);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->type);
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function isArrayWrap() : bool
+    public function isArrayWrap(): bool
     {
         return $this->isArrayWrap;
     }

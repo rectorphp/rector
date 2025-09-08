@@ -49,11 +49,11 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class, ClassMethod::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove "readonly" property type, add a "@readonly" tag instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -85,7 +85,7 @@ CODE_SAMPLE
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Property) {
             if (!$this->visibilityManipulator->isReadonly($node)) {
@@ -121,7 +121,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    private function addPhpDocTag($node) : bool
+    private function addPhpDocTag($node): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->hasByName(self::TAGNAME)) {

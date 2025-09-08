@@ -19,7 +19,7 @@ class ParamOutTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
         $this->parameterName = $parameterName;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->type} {$this->parameterName} {$this->description}");
     }

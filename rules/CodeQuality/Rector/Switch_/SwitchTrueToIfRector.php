@@ -27,7 +27,7 @@ final class SwitchTrueToIfRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `switch (true)` to `if` statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class];
     }
@@ -77,7 +77,7 @@ CODE_SAMPLE
      * @param Switch_ $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if (!$this->valueResolver->isTrue($node->cond)) {
             return null;
@@ -85,7 +85,7 @@ CODE_SAMPLE
         $newStmts = [];
         $defaultCase = null;
         foreach ($node->cases as $case) {
-            if (!\end($case->stmts) instanceof Return_) {
+            if (!end($case->stmts) instanceof Return_) {
                 return null;
             }
             if (!$case->cond instanceof Expr) {
@@ -97,7 +97,7 @@ CODE_SAMPLE
             $newStmts[] = $if;
         }
         if ($defaultCase instanceof Case_) {
-            $newStmts = \array_merge($newStmts, $defaultCase->stmts);
+            $newStmts = array_merge($newStmts, $defaultCase->stmts);
         }
         if ($newStmts === []) {
             return null;

@@ -14,23 +14,23 @@ abstract class CallLike extends Expr
      *
      * @return array<Arg|VariadicPlaceholder>
      */
-    public abstract function getRawArgs() : array;
+    abstract public function getRawArgs(): array;
     /**
      * Returns whether this call expression is actually a first class callable.
      */
-    public function isFirstClassCallable() : bool
+    public function isFirstClassCallable(): bool
     {
         $rawArgs = $this->getRawArgs();
-        return \count($rawArgs) === 1 && \current($rawArgs) instanceof VariadicPlaceholder;
+        return count($rawArgs) === 1 && current($rawArgs) instanceof VariadicPlaceholder;
     }
     /**
      * Assert that this is not a first-class callable and return only ordinary Args.
      *
      * @return Arg[]
      */
-    public function getArgs() : array
+    public function getArgs(): array
     {
-        \assert(!$this->isFirstClassCallable());
+        assert(!$this->isFirstClassCallable());
         return $this->getRawArgs();
     }
     /**
@@ -40,7 +40,7 @@ abstract class CallLike extends Expr
      * positional (unnamed) argument that exists at the given `$position`,
      * otherwise, returns `null` for first-class callables or if no match is found.
      */
-    public function getArg(string $name, int $position) : ?Arg
+    public function getArg(string $name, int $position): ?Arg
     {
         if ($this->isFirstClassCallable()) {
             return null;

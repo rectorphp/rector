@@ -23,14 +23,14 @@ final class AliasedObjectType extends ObjectType
         $this->fullyQualifiedClass = $fullyQualifiedClass;
         parent::__construct($alias);
     }
-    public function getFullyQualifiedName() : string
+    public function getFullyQualifiedName(): string
     {
         return $this->fullyQualifiedClass;
     }
     /**
      * @param Use_::TYPE_* $useType
      */
-    public function getUseNode(int $useType) : Use_
+    public function getUseNode(int $useType): Use_
     {
         $name = new Name($this->fullyQualifiedClass);
         $useItem = new UseItem($name, $this->getClassName());
@@ -38,18 +38,18 @@ final class AliasedObjectType extends ObjectType
         $use->type = $useType;
         return $use;
     }
-    public function getShortName() : string
+    public function getShortName(): string
     {
         return $this->getClassName();
     }
     /**
      * @param $this|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $comparedObjectType
      */
-    public function areShortNamesEqual($comparedObjectType) : bool
+    public function areShortNamesEqual($comparedObjectType): bool
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }
-    public function equals(Type $type) : bool
+    public function equals(Type $type): bool
     {
         $className = ClassNameFromObjectTypeResolver::resolve($type);
         // compare with FQN classes

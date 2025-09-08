@@ -18,7 +18,7 @@ use RectorPrefix202509\Symfony\Component\Process\Process;
  */
 final class RunProcessMessageHandler
 {
-    public function __invoke(RunProcessMessage $message) : RunProcessContext
+    public function __invoke(RunProcessMessage $message): RunProcessContext
     {
         $process = new Process($message->command, $message->cwd, $message->env, $message->input, $message->timeout);
         try {

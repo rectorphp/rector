@@ -13,7 +13,7 @@ final class ArrayUnionResponseTypeAnalyzer
     /**
      * @param class-string $className
      */
-    public function isArrayUnionResponseType(Type $type, string $className) : bool
+    public function isArrayUnionResponseType(Type $type, string $className): bool
     {
         if (!$type instanceof UnionType) {
             return \false;
@@ -39,7 +39,7 @@ final class ArrayUnionResponseTypeAnalyzer
     /**
      * @param class-string $className
      */
-    private function isTypeOfClassName(Type $type, string $className) : bool
+    private function isTypeOfClassName(Type $type, string $className): bool
     {
         if (!$type instanceof TypeWithClassName) {
             return \false;

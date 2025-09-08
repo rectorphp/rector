@@ -13,7 +13,7 @@ class Double extends Cast
     // "float" syntax
     public const KIND_REAL = 3;
     // "real" syntax
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Cast_Double';
     }

@@ -32,39 +32,39 @@ class ClassConst extends Node\Stmt
         $this->attrGroups = $attrGroups;
         $this->type = $type;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'flags', 'type', 'consts'];
     }
     /**
      * Whether constant is explicitly or implicitly public.
      */
-    public function isPublic() : bool
+    public function isPublic(): bool
     {
         return ($this->flags & Modifiers::PUBLIC) !== 0 || ($this->flags & Modifiers::VISIBILITY_MASK) === 0;
     }
     /**
      * Whether constant is protected.
      */
-    public function isProtected() : bool
+    public function isProtected(): bool
     {
         return (bool) ($this->flags & Modifiers::PROTECTED);
     }
     /**
      * Whether constant is private.
      */
-    public function isPrivate() : bool
+    public function isPrivate(): bool
     {
         return (bool) ($this->flags & Modifiers::PRIVATE);
     }
     /**
      * Whether constant is final.
      */
-    public function isFinal() : bool
+    public function isFinal(): bool
     {
         return (bool) ($this->flags & Modifiers::FINAL);
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_ClassConst';
     }

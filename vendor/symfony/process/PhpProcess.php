@@ -35,12 +35,12 @@ class PhpProcess extends Process
         if (null === $php) {
             $executableFinder = new PhpExecutableFinder();
             $php = $executableFinder->find(\false);
-            $php = \false === $php ? null : \array_merge([$php], $executableFinder->findArguments());
+            $php = \false === $php ? null : array_merge([$php], $executableFinder->findArguments());
         }
         if ('phpdbg' === \PHP_SAPI) {
-            $file = \tempnam(\sys_get_temp_dir(), 'dbg');
-            \file_put_contents($file, $script);
-            \register_shutdown_function('unlink', $file);
+            $file = tempnam(sys_get_temp_dir(), 'dbg');
+            file_put_contents($file, $script);
+            register_shutdown_function('unlink', $file);
             $php[] = $file;
             $script = null;
         }

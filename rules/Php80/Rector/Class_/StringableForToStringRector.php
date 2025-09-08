@@ -58,11 +58,11 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
         $this->classAnalyzer = $classAnalyzer;
         $this->silentVoidResolver = $silentVoidResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STRINGABLE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -87,14 +87,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
@@ -107,7 +107,7 @@ CODE_SAMPLE
         // warning, classes that implements __toString() will return Stringable interface even if they don't implement it
         // reflection cannot be used for real detection
         $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
-        $isAncestorHasStringable = \in_array(self::STRINGABLE, $classLikeAncestorNames, \true);
+        $isAncestorHasStringable = in_array(self::STRINGABLE, $classLikeAncestorNames, \true);
         $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
         if (!$returnType->isString()->yes()) {
             $this->processNotStringType($toStringClassMethod);
@@ -127,7 +127,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processNotStringType(ClassMethod $toStringClassMethod) : void
+    private function processNotStringType(ClassMethod $toStringClassMethod): void
     {
         if ($toStringClassMethod->isAbstract()) {
             return;
@@ -138,7 +138,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
             return;
         }
-        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode) : ?int {
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }

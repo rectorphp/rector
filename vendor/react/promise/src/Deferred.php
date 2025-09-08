@@ -20,7 +20,7 @@ final class Deferred
      */
     public function __construct(?callable $canceller = null)
     {
-        $this->promise = new Promise(function ($resolve, $reject) : void {
+        $this->promise = new Promise(function ($resolve, $reject): void {
             $this->resolveCallback = $resolve;
             $this->rejectCallback = $reject;
         }, $canceller);
@@ -28,18 +28,18 @@ final class Deferred
     /**
      * @return PromiseInterface<T>
      */
-    public function promise() : PromiseInterface
+    public function promise(): PromiseInterface
     {
         return $this->promise;
     }
     /**
      * @param T $value
      */
-    public function resolve($value) : void
+    public function resolve($value): void
     {
         ($this->resolveCallback)($value);
     }
-    public function reject(\Throwable $reason) : void
+    public function reject(\Throwable $reason): void
     {
         ($this->rejectCallback)($reason);
     }

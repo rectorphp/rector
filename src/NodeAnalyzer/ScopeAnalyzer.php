@@ -13,7 +13,7 @@ final class ScopeAnalyzer
      * @var array<class-string<Node>>
      */
     private const NON_REFRESHABLE_NODES = [Name::class, Identifier::class, ComplexType::class];
-    public function isRefreshable(Node $node) : bool
+    public function isRefreshable(Node $node): bool
     {
         foreach (self::NON_REFRESHABLE_NODES as $noScopeNode) {
             if ($node instanceof $noScopeNode) {

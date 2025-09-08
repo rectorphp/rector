@@ -19,7 +19,7 @@ final class TypeNormalizer
      * Generalize false/true type to bool,
      * as mostly default value but accepts both
      */
-    public function generalizeConstantBoolTypes(Type $type) : Type
+    public function generalizeConstantBoolTypes(Type $type): Type
     {
         return TypeTraverser::map($type, static function (Type $type, callable $traverseCallback) {
             if ($type instanceof ConstantBooleanType) {

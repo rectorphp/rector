@@ -42,11 +42,11 @@ final class DowngradeIteratorCountToArrayRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class, FuncCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Ensure pass Traversable instance before use in iterator_count() and iterator_to_array()', [new CodeSample(<<<'CODE_SAMPLE'
 function test(array|Traversable $data) {
@@ -97,7 +97,7 @@ CODE_SAMPLE
         $node->args[0]->value = new Ternary($this->nodeFactory->createFuncCall('is_array', [new Arg($firstValue)]), new New_(new FullyQualified('ArrayIterator'), [new Arg($firstValue)]), $firstValue);
         return $node;
     }
-    private function shouldSkip(Type $type) : bool
+    private function shouldSkip(Type $type): bool
     {
         if ($type->isArray()->yes()) {
             return \false;

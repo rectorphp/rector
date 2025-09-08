@@ -38,7 +38,7 @@ final class DowngradeSetAccessibleReflectionPropertyRector extends AbstractRecto
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add setAccessible() on ReflectionProperty to allow reading private properties in PHP 8.0-', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -117,11 +117,11 @@ CODE_SAMPLE
                 if ($this->isSetAccessibleIfMethodCall($nextStmt)) {
                     continue;
                 }
-                \array_splice($node->stmts, $key + 1, 0, [$this->createSetAccessibleExpression($variable)]);
+                array_splice($node->stmts, $key + 1, 0, [$this->createSetAccessibleExpression($variable)]);
             } else {
                 $previousStmts = [new Expression(new Assign($variable, $new)), $this->createSetAccessibleExpression($variable)];
                 $stmt->expr = $variable;
-                \array_splice($node->stmts, $key - 2, 0, $previousStmts);
+                array_splice($node->stmts, $key - 2, 0, $previousStmts);
             }
             $hasChanged = \true;
         }
@@ -130,13 +130,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createSetAccessibleExpression(Expr $expr) : If_
+    private function createSetAccessibleExpression(Expr $expr): If_
     {
         $args = [$this->nodeFactory->createArg($this->nodeFactory->createTrue())];
         $setAccessibleMethodCall = $this->nodeFactory->createMethodCall($expr, 'setAccessible', $args);
         return new If_(new Smaller(new ConstFetch(new Name('PHP_VERSION_ID')), new Int_(80100)), ['stmts' => [new Expression($setAccessibleMethodCall)]]);
     }
-    private function isSetAccessibleMethodCall(?Stmt $stmt) : bool
+    private function isSetAccessibleMethodCall(?Stmt $stmt): bool
     {
         if (!$stmt instanceof Expression) {
             return \false;
@@ -147,7 +147,7 @@ CODE_SAMPLE
         $methodCall = $stmt->expr;
         return $this->isName($methodCall->name, 'setAccessible');
     }
-    private function isSetAccessibleIfMethodCall(?Stmt $stmt) : bool
+    private function isSetAccessibleIfMethodCall(?Stmt $stmt): bool
     {
         if (!$stmt instanceof If_) {
             return \false;
@@ -161,7 +161,7 @@ CODE_SAMPLE
         if (!$stmt->cond->right instanceof Int_ || $stmt->cond->right->value !== 80100) {
             return \false;
         }
-        if (\count($stmt->stmts) !== 1) {
+        if (count($stmt->stmts) !== 1) {
             return \false;
         }
         return $this->isSetAccessibleMethodCall($stmt->stmts[0]);

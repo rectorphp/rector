@@ -43,7 +43,7 @@ final class RectorNodeTraverser extends NodeTraverser
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function traverse(array $nodes) : array
+    public function traverse(array $nodes): array
     {
         $this->prepareNodeVisitors();
         return parent::traverse($nodes);
@@ -52,7 +52,7 @@ final class RectorNodeTraverser extends NodeTraverser
      * @param RectorInterface[] $rectors
      * @api used in tests to update the active rules
      */
-    public function refreshPhpRectors(array $rectors) : void
+    public function refreshPhpRectors(array $rectors): void
     {
         $this->rectors = $rectors;
         $this->visitors = [];
@@ -65,15 +65,15 @@ final class RectorNodeTraverser extends NodeTraverser
      *
      * @return NodeVisitor[]
      */
-    public function getVisitorsForNode(Node $node) : array
+    public function getVisitorsForNode(Node $node): array
     {
-        $nodeClass = \get_class($node);
+        $nodeClass = get_class($node);
         if (!isset($this->visitorsPerNodeClass[$nodeClass])) {
             $this->visitorsPerNodeClass[$nodeClass] = [];
             foreach ($this->visitors as $visitor) {
-                \assert($visitor instanceof RectorInterface);
+                assert($visitor instanceof RectorInterface);
                 foreach ($visitor->getNodeTypes() as $nodeType) {
-                    if (\is_a($nodeClass, $nodeType, \true)) {
+                    if (is_a($nodeClass, $nodeType, \true)) {
                         $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
                         continue 2;
                     }
@@ -88,7 +88,7 @@ final class RectorNodeTraverser extends NodeTraverser
      *
      * This hack should be removed after https://github.com/rectorphp/rector/issues/5584 is resolved
      */
-    private function prepareNodeVisitors() : void
+    private function prepareNodeVisitors(): void
     {
         if ($this->areNodeVisitorsPrepared) {
             return;

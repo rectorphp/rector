@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AndAssignsToSeparateLinesRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Split 2 assigns with ands to separate line', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -43,7 +43,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
@@ -51,7 +51,7 @@ CODE_SAMPLE
      * @param Expression $node
      * @return Expression[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if (!$node->expr instanceof LogicalAnd) {
             return null;

@@ -27,31 +27,31 @@ final class CustomRuleCommand extends Command
      * @see https://regex101.com/r/2eP4rw/1
      * @var string
      */
-    private const START_WITH_10_REGEX = '#(\\^10\\.|>=10\\.|10\\.)#';
+    private const START_WITH_10_REGEX = '#(\^10\.|>=10\.|10\.)#';
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
         parent::__construct();
     }
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('custom-rule');
         $this->setDescription('Create base of local custom rule with tests');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // ask for rule name
-        $rectorName = $this->symfonyStyle->ask('What is the name of the rule class (e.g. "LegacyCallToDbalMethodCall")?', null, static function (string $answer) : string {
+        $rectorName = $this->symfonyStyle->ask('What is the name of the rule class (e.g. "LegacyCallToDbalMethodCall")?', null, static function (string $answer): string {
             if ($answer === '') {
                 throw new ShouldNotHappenException('Rector name cannot be empty');
             }
             return $answer;
         });
         // suffix with Rector by convention
-        if (\substr_compare((string) $rectorName, 'Rector', -\strlen('Rector')) !== 0) {
+        if (substr_compare((string) $rectorName, 'Rector', -strlen('Rector')) !== 0) {
             $rectorName .= 'Rector';
         }
-        $rectorName = \ucfirst((string) $rectorName);
+        $rectorName = ucfirst((string) $rectorName);
         // find all files in templates directory
         $finder = Finder::create()->files()->in(__DIR__ . '/../../../templates/custom-rule')->notName('__Name__Test.php');
         // 0. resolve if local phpunit is at least PHPUnit 10 (which supports #[DataProvider])
@@ -63,9 +63,9 @@ final class CustomRuleCommand extends Command
             // use @annotations for PHPUnit 9 and bellow
             $finder->append([new SplFileInfo(__DIR__ . '/../../../templates/custom-rules-annotations/utils/rector/tests/Rector/__Name__/__Name__Test.php', 'utils/rector/tests/Rector/__Name__', 'utils/rector/tests/Rector/__Name__/__Name__Test.php')]);
         }
-        $currentDirectory = \getcwd();
+        $currentDirectory = getcwd();
         $generatedFilePaths = [];
-        $fileInfos = \iterator_to_array($finder->getIterator());
+        $fileInfos = iterator_to_array($finder->getIterator());
         foreach ($fileInfos as $fileInfo) {
             // replace __Name__ with $rectorName
             $newContent = $this->replaceNameVariable($rectorName, $fileInfo->getContents());
@@ -75,15 +75,15 @@ final class CustomRuleCommand extends Command
         }
         $this->symfonyStyle->title('Generated files');
         $this->symfonyStyle->listing($generatedFilePaths);
-        $this->symfonyStyle->success(\sprintf('Base for the "%s" rule was created. Now you can fill the missing parts', $rectorName));
+        $this->symfonyStyle->success(sprintf('Base for the "%s" rule was created. Now you can fill the missing parts', $rectorName));
         // 2. update autoload-dev in composer.json
         $composerJsonFilePath = $currentDirectory . '/composer.json';
-        if (\file_exists($composerJsonFilePath)) {
+        if (file_exists($composerJsonFilePath)) {
             $hasChanged = \false;
             $composerJson = JsonFileSystem::readFilePath($composerJsonFilePath);
-            if (!isset($composerJson['autoload-dev']['psr-4']['Utils\\Rector\\'])) {
-                $composerJson['autoload-dev']['psr-4']['Utils\\Rector\\'] = 'utils/rector/src';
-                $composerJson['autoload-dev']['psr-4']['Utils\\Rector\\Tests\\'] = 'utils/rector/tests';
+            if (!isset($composerJson['autoload-dev']['psr-4']['Utils\Rector\\'])) {
+                $composerJson['autoload-dev']['psr-4']['Utils\Rector\\'] = 'utils/rector/src';
+                $composerJson['autoload-dev']['psr-4']['Utils\Rector\Tests\\'] = 'utils/rector/tests';
                 $hasChanged = \true;
             }
             if ($hasChanged) {
@@ -95,14 +95,14 @@ final class CustomRuleCommand extends Command
         $this->setupRectorTestSuite($currentDirectory);
         return Command::SUCCESS;
     }
-    private function setupRectorTestSuite(string $currentDirectory) : void
+    private function setupRectorTestSuite(string $currentDirectory): void
     {
-        if (!\extension_loaded('dom')) {
+        if (!extension_loaded('dom')) {
             $this->symfonyStyle->warning('The "dom" extension is not loaded. Rector could not add the rector test suite to phpunit.xml');
             return;
         }
-        $phpunitXmlExists = \file_exists($currentDirectory . '/phpunit.xml');
-        $phpunitXmlDistExists = \file_exists($currentDirectory . '/phpunit.xml.dist');
+        $phpunitXmlExists = file_exists($currentDirectory . '/phpunit.xml');
+        $phpunitXmlDistExists = file_exists($currentDirectory . '/phpunit.xml.dist');
         if (!$phpunitXmlExists && !$phpunitXmlDistExists) {
             $this->symfonyStyle->warning('No phpunit.xml or phpunit.xml.dist found. Rector could not add the rector test suite to it');
             return;
@@ -126,7 +126,7 @@ final class CustomRuleCommand extends Command
         FileSystem::write($phpunitFilePath, $phpunitXML, null);
         $this->symfonyStyle->success('We also update ' . $phpunitFilePath . ", to add a rector test suite.\n You can run the rector tests by running: phpunit --testsuite rector");
     }
-    private function hasRectorTestSuite(DOMDocument $domDocument) : bool
+    private function hasRectorTestSuite(DOMDocument $domDocument): bool
     {
         foreach ($this->getTestSuiteElements($domDocument) as $testSuiteElement) {
             foreach ($testSuiteElement->getElementsByTagName('directory') as $directoryNode) {
@@ -145,7 +145,7 @@ final class CustomRuleCommand extends Command
         }
         return \false;
     }
-    private function updatePHPUnitXMLFile(DOMDocument $domDocument, DOMElement $testsuitesElement) : string
+    private function updatePHPUnitXMLFile(DOMDocument $domDocument, DOMElement $testsuitesElement): string
     {
         $domElement = $domDocument->createElement('testsuite');
         $domElement->setAttribute('name', 'rector');
@@ -161,7 +161,7 @@ final class CustomRuleCommand extends Command
     /**
      * @return Generator<DOMElement>
      */
-    private function getTestSuiteElements(DOMDocument $domDocument) : Generator
+    private function getTestSuiteElements(DOMDocument $domDocument): Generator
     {
         $domxPath = new DOMXPath($domDocument);
         $testSuiteNodes = $domxPath->query('testsuites/testsuite');
@@ -177,7 +177,7 @@ final class CustomRuleCommand extends Command
         if ($testSuiteNodes->length === 1) {
             $element = $testSuiteNodes->item(0);
             if ($element instanceof DOMElement) {
-                (yield $element);
+                yield $element;
             }
             return;
         }
@@ -185,17 +185,17 @@ final class CustomRuleCommand extends Command
             if (!$testSuiteNode instanceof DOMElement) {
                 continue;
             }
-            (yield $testSuiteNode);
+            yield $testSuiteNode;
         }
     }
-    private function replaceNameVariable(string $rectorName, string $contents) : string
+    private function replaceNameVariable(string $rectorName, string $contents): string
     {
-        return \str_replace('__Name__', $rectorName, $contents);
+        return str_replace('__Name__', $rectorName, $contents);
     }
-    private function detectPHPUnitAttributeSupport() : bool
+    private function detectPHPUnitAttributeSupport(): bool
     {
-        $composerJsonFilePath = \getcwd() . '/composer.json';
-        if (!\file_exists($composerJsonFilePath)) {
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        if (!file_exists($composerJsonFilePath)) {
             // be safe
             return \false;
         }

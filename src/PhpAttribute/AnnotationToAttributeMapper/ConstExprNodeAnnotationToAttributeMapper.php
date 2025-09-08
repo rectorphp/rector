@@ -21,14 +21,14 @@ final class ConstExprNodeAnnotationToAttributeMapper implements AnnotationToAttr
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
         return $value instanceof ConstExprNode;
     }
     /**
      * @param ConstExprNode $value
      */
-    public function map($value) : Expr
+    public function map($value): Expr
     {
         if ($value instanceof ConstExprIntegerNode) {
             return BuilderHelpers::normalizeValue((int) $value->value);

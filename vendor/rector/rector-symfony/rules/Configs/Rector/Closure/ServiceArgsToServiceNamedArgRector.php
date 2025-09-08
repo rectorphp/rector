@@ -44,7 +44,7 @@ final class ServiceArgsToServiceNamedArgRector extends AbstractRector
         $this->reflectionProvider = $reflectionProvider;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Converts order-dependent arguments args() to named arg() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -71,20 +71,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) : ?MethodCall {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$hasChanged): ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveServiceClass(MethodCall $methodCall) : ?string
+    private function resolveServiceClass(MethodCall $methodCall): ?string
     {
         while ($methodCall->var instanceof MethodCall) {
             $methodCall = $methodCall->var;
@@ -132,7 +132,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveConstructorParameterNames(string $serviceClass) : array
+    private function resolveConstructorParameterNames(string $serviceClass): array
     {
         $serviceClassReflection = $this->reflectionProvider->getClass($serviceClass);
         if (!$serviceClassReflection->hasConstructor()) {
@@ -147,14 +147,14 @@ CODE_SAMPLE
         }
         return $constructorParameterNames;
     }
-    private function isServiceArgsMethodCall(MethodCall $methodCall) : bool
+    private function isServiceArgsMethodCall(MethodCall $methodCall): bool
     {
         if (!$this->isName($methodCall->name, 'args')) {
             return \false;
         }
-        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServiceConfigurator'));
+        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator'));
     }
-    private function createArgMethodCall(string $parameterName, Expr $expr, ?MethodCall $argMethodCall, MethodCall $methodCall) : MethodCall
+    private function createArgMethodCall(string $parameterName, Expr $expr, ?MethodCall $argMethodCall, MethodCall $methodCall): MethodCall
     {
         $argArgs = [new Arg(new String_($parameterName)), new Arg($expr)];
         $callerExpr = $argMethodCall instanceof MethodCall ? $argMethodCall : $methodCall->var;
@@ -163,7 +163,7 @@ CODE_SAMPLE
     /**
      * @param string[] $constructorParameterNames
      */
-    private function createMainArgMethodCall(MethodCall $methodCall, array $constructorParameterNames) : ?MethodCall
+    private function createMainArgMethodCall(MethodCall $methodCall, array $constructorParameterNames): ?MethodCall
     {
         if ($constructorParameterNames === []) {
             return null;
@@ -185,7 +185,7 @@ CODE_SAMPLE
         }
         return $argMethodCall;
     }
-    private function resolveParameterPosition(ArrayItem $arrayItem, int $key) : int
+    private function resolveParameterPosition(ArrayItem $arrayItem, int $key): int
     {
         if ($arrayItem->key instanceof Expr) {
             return $this->valueResolver->getValue($arrayItem->key);

@@ -27,7 +27,7 @@ class TemplateTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
         $this->default = $default;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $upperBound = $this->bound !== null ? " of {$this->bound}" : '';
         $lowerBound = $this->lowerBound !== null ? " super {$this->lowerBound}" : '';

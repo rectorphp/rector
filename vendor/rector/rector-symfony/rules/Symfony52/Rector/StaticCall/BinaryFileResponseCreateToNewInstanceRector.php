@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change deprecated BinaryFileResponse::create() to use __construct() instead', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation;
@@ -45,19 +45,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->class instanceof Name) {
             return null;
         }
-        if (!$this->isName($node->class, 'Symfony\\Component\\HttpFoundation\\BinaryFileResponse')) {
+        if (!$this->isName($node->class, 'Symfony\Component\HttpFoundation\BinaryFileResponse')) {
             return null;
         }
         if (!$this->isName($node->name, 'create')) {

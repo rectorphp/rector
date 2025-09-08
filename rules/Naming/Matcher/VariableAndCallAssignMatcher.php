@@ -35,7 +35,7 @@ final class VariableAndCallAssignMatcher
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function match(Assign $assign, $functionLike) : ?VariableAndCallAssign
+    public function match(Assign $assign, $functionLike): ?VariableAndCallAssign
     {
         $call = $this->callMatcher->matchCall($assign);
         if (!$call instanceof Node) {

@@ -28,7 +28,7 @@ final class AssertSameResponseCodeWithDebugContentsRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make assertSame(200, $response->getStatusCode()) in tests comparing response code to include response contents for faster feedback', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -63,14 +63,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -80,7 +80,7 @@ CODE_SAMPLE
         }
         // there cannot be any custom message
         $args = $node->getArgs();
-        if (\count($args) !== 2) {
+        if (count($args) !== 2) {
             return null;
         }
         $firstArg = $args[0];
@@ -104,7 +104,7 @@ CODE_SAMPLE
      *
      * etc.
      */
-    private function matchResponseExpr(Expr $expr) : ?Expr
+    private function matchResponseExpr(Expr $expr): ?Expr
     {
         if (!$expr instanceof MethodCall) {
             return null;

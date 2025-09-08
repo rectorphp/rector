@@ -38,7 +38,7 @@ final class AccessorAnnotationToAttributeRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->genericAnnotationToAttributeConverter = $genericAnnotationToAttributeConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes @Accessor annotation to #[Accessor] attribute with specific "getter" or "setter" keys', [new CodeSample(<<<'CODE_SAMPLE'
 use JMS\Serializer\Annotation\Accessor;
@@ -62,14 +62,14 @@ class User
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Property
+    public function refactor(Node $node): ?\PhpParser\Node\Stmt\Property
     {
         $annotationToAttribute = new AnnotationToAttribute(JMSAnnotation::ACCESSOR);
         $attributeGroup = $this->genericAnnotationToAttributeConverter->convert($node, $annotationToAttribute);
@@ -83,9 +83,9 @@ CODE_SAMPLE
                 continue;
             }
             $value = $this->valueResolver->getValue($attributeArg->value);
-            if (\strncmp((string) $value, 'get', \strlen('get')) === 0) {
+            if (strncmp((string) $value, 'get', strlen('get')) === 0) {
                 $attributeArg->name = new Identifier('getter');
-            } elseif (\strncmp((string) $value, 'set', \strlen('set')) === 0) {
+            } elseif (strncmp((string) $value, 'set', strlen('set')) === 0) {
                 $attributeArg->name = new Identifier('setter');
             } else {
                 // skip, not getter/setter
@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
         // 2. Reprint docblock
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        $node->attrGroups = \array_merge($node->attrGroups, [$attributeGroup]);
+        $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);
         return $node;
     }
 }

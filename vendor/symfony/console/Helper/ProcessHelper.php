@@ -30,9 +30,9 @@ class ProcessHelper extends Helper
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      */
-    public function run(OutputInterface $output, $cmd, ?string $error = null, ?callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE) : Process
+    public function run(OutputInterface $output, $cmd, ?string $error = null, ?callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
-        if (!\class_exists(Process::class)) {
+        if (!class_exists(Process::class)) {
             throw new \LogicException('The ProcessHelper cannot be run as the Process component is not installed. Try running "compose require symfony/process".');
         }
         if ($output instanceof ConsoleOutputInterface) {
@@ -52,7 +52,7 @@ class ProcessHelper extends Helper
             throw new \InvalidArgumentException(\sprintf('Invalid command provided to "%s()": the command should be an array whose first element is either the path to the binary to run or a "Process" object.', __METHOD__));
         }
         if ($verbosity <= $output->getVerbosity()) {
-            $output->write($formatter->start(\spl_object_hash($process), $this->escapeString($process->getCommandLine())));
+            $output->write($formatter->start(spl_object_hash($process), $this->escapeString($process->getCommandLine())));
         }
         if ($output->isDebug()) {
             $callback = $this->wrapCallback($output, $process, $callback);
@@ -60,7 +60,7 @@ class ProcessHelper extends Helper
         $process->run($callback, $cmd);
         if ($verbosity <= $output->getVerbosity()) {
             $message = $process->isSuccessful() ? 'Command ran successfully' : \sprintf('%s Command did not run successfully', $process->getExitCode());
-            $output->write($formatter->stop(\spl_object_hash($process), $message, $process->isSuccessful()));
+            $output->write($formatter->stop(spl_object_hash($process), $message, $process->isSuccessful()));
         }
         if (!$process->isSuccessful() && null !== $error) {
             $output->writeln(\sprintf('<error>%s</error>', $this->escapeString($error)));
@@ -81,7 +81,7 @@ class ProcessHelper extends Helper
      *
      * @see run()
      */
-    public function mustRun(OutputInterface $output, $cmd, ?string $error = null, ?callable $callback = null) : Process
+    public function mustRun(OutputInterface $output, $cmd, ?string $error = null, ?callable $callback = null): Process
     {
         $process = $this->run($output, $cmd, $error, $callback);
         if (!$process->isSuccessful()) {
@@ -92,24 +92,24 @@ class ProcessHelper extends Helper
     /**
      * Wraps a Process callback to add debugging output.
      */
-    public function wrapCallback(OutputInterface $output, Process $process, ?callable $callback = null) : callable
+    public function wrapCallback(OutputInterface $output, Process $process, ?callable $callback = null): callable
     {
         if ($output instanceof ConsoleOutputInterface) {
             $output = $output->getErrorOutput();
         }
         $formatter = $this->getHelperSet()->get('debug_formatter');
-        return function ($type, $buffer) use($output, $process, $callback, $formatter) {
-            $output->write($formatter->progress(\spl_object_hash($process), $this->escapeString($buffer), Process::ERR === $type));
+        return function ($type, $buffer) use ($output, $process, $callback, $formatter) {
+            $output->write($formatter->progress(spl_object_hash($process), $this->escapeString($buffer), Process::ERR === $type));
             if (null !== $callback) {
                 $callback($type, $buffer);
             }
         };
     }
-    private function escapeString(string $str) : string
+    private function escapeString(string $str): string
     {
-        return \str_replace('<', '\\<', $str);
+        return str_replace('<', '\<', $str);
     }
-    public function getName() : string
+    public function getName(): string
     {
         return 'process';
     }

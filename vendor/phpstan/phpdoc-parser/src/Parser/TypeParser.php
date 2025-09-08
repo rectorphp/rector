@@ -23,7 +23,7 @@ class TypeParser
         $this->constExprParser = $constExprParser;
     }
     /** @phpstan-impure */
-    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
+    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\TypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -49,7 +49,7 @@ class TypeParser
         return $this->enrichWithAttributes($tokens, $type, $startLine, $startIndex);
     }
     /** @phpstan-impure */
-    private function enrichTypeOnUnionOrIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : ?Ast\Type\TypeNode
+    private function enrichTypeOnUnionOrIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): ?Ast\Type\TypeNode
     {
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_UNION)) {
             return $this->parseUnion($tokens, $type);
@@ -65,7 +65,7 @@ class TypeParser
      * @param T $type
      * @return T
      */
-    public function enrichWithAttributes(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Node $type, int $startLine, int $startIndex) : Ast\Node
+    public function enrichWithAttributes(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Node $type, int $startLine, int $startIndex): Ast\Node
     {
         if ($this->config->useLinesAttributes) {
             $type->setAttribute(Ast\Attribute::START_LINE, $startLine);
@@ -82,7 +82,7 @@ class TypeParser
         return $type;
     }
     /** @phpstan-impure */
-    private function subParse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
+    private function subParse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\TypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -106,7 +106,7 @@ class TypeParser
         return $this->enrichWithAttributes($tokens, $type, $startLine, $startIndex);
     }
     /** @phpstan-impure */
-    private function parseAtomic(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
+    private function parseAtomic(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\TypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -192,7 +192,7 @@ class TypeParser
         }
     }
     /** @phpstan-impure */
-    private function parseUnion(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\TypeNode
+    private function parseUnion(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): Ast\Type\TypeNode
     {
         $types = [$type];
         while ($tokens->tryConsumeTokenType(Lexer::TOKEN_UNION)) {
@@ -208,7 +208,7 @@ class TypeParser
         return new Ast\Type\UnionTypeNode($types);
     }
     /** @phpstan-impure */
-    private function subParseUnion(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\TypeNode
+    private function subParseUnion(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): Ast\Type\TypeNode
     {
         $types = [$type];
         while ($tokens->tryConsumeTokenType(Lexer::TOKEN_UNION)) {
@@ -219,7 +219,7 @@ class TypeParser
         return new Ast\Type\UnionTypeNode($types);
     }
     /** @phpstan-impure */
-    private function parseIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\TypeNode
+    private function parseIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): Ast\Type\TypeNode
     {
         $types = [$type];
         while ($tokens->tryConsumeTokenType(Lexer::TOKEN_INTERSECTION)) {
@@ -235,7 +235,7 @@ class TypeParser
         return new Ast\Type\IntersectionTypeNode($types);
     }
     /** @phpstan-impure */
-    private function subParseIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\TypeNode
+    private function subParseIntersection(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): Ast\Type\TypeNode
     {
         $types = [$type];
         while ($tokens->tryConsumeTokenType(Lexer::TOKEN_INTERSECTION)) {
@@ -246,7 +246,7 @@ class TypeParser
         return new Ast\Type\IntersectionTypeNode($types);
     }
     /** @phpstan-impure */
-    private function parseConditional(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $subjectType) : Ast\Type\TypeNode
+    private function parseConditional(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $subjectType): Ast\Type\TypeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
         $negated = \false;
@@ -266,7 +266,7 @@ class TypeParser
         return new Ast\Type\ConditionalTypeNode($subjectType, $targetType, $ifType, $elseType, $negated);
     }
     /** @phpstan-impure */
-    private function parseConditionalForParameter(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, string $parameterName) : Ast\Type\TypeNode
+    private function parseConditionalForParameter(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, string $parameterName): Ast\Type\TypeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_VARIABLE);
         $tokens->consumeTokenValue(Lexer::TOKEN_IDENTIFIER, 'is');
@@ -287,14 +287,14 @@ class TypeParser
         return new Ast\Type\ConditionalTypeForParameterNode($parameterName, $targetType, $ifType, $elseType, $negated);
     }
     /** @phpstan-impure */
-    private function parseNullable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
+    private function parseNullable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\TypeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_NULLABLE);
         $type = $this->parseAtomic($tokens);
         return new Ast\Type\NullableTypeNode($type);
     }
     /** @phpstan-impure */
-    public function isHtml(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : bool
+    public function isHtml(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): bool
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_ANGLE_BRACKET);
         if (!$tokens->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
@@ -316,7 +316,7 @@ class TypeParser
         return \false;
     }
     /** @phpstan-impure */
-    public function parseGeneric(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $baseType) : Ast\Type\GenericTypeNode
+    public function parseGeneric(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $baseType): Ast\Type\GenericTypeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_ANGLE_BRACKET);
         $tokens->skipNewLineTokensAndConsumeComments();
@@ -346,7 +346,7 @@ class TypeParser
      * @phpstan-impure
      * @return array{Ast\Type\TypeNode, Ast\Type\GenericTypeNode::VARIANCE_*}
      */
-    public function parseGenericTypeArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : array
+    public function parseGenericTypeArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): array
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -367,7 +367,7 @@ class TypeParser
      * @throws ParserException
      * @param ?callable(TokenIterator): string $parseDescription
      */
-    public function parseTemplateTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, ?callable $parseDescription = null) : TemplateTagValueNode
+    public function parseTemplateTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, ?callable $parseDescription = null): TemplateTagValueNode
     {
         $name = $tokens->currentTokenValue();
         $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
@@ -394,7 +394,7 @@ class TypeParser
         return new Ast\PhpDoc\TemplateTagValueNode($name, $upperBound, $description, $default, $lowerBound);
     }
     /** @phpstan-impure */
-    private function parseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier, bool $hasTemplate) : Ast\Type\TypeNode
+    private function parseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier, bool $hasTemplate): Ast\Type\TypeNode
     {
         $templates = $hasTemplate ? $this->parseCallableTemplates($tokens) : [];
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_PARENTHESES);
@@ -424,7 +424,7 @@ class TypeParser
      *
      * @phpstan-impure
      */
-    private function parseCallableTemplates(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : array
+    private function parseCallableTemplates(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): array
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_ANGLE_BRACKET);
         $templates = [];
@@ -442,14 +442,14 @@ class TypeParser
         $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET);
         return $templates;
     }
-    private function parseCallableTemplateArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\TemplateTagValueNode
+    private function parseCallableTemplateArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\PhpDoc\TemplateTagValueNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
         return $this->enrichWithAttributes($tokens, $this->parseTemplateTagValue($tokens), $startLine, $startIndex);
     }
     /** @phpstan-impure */
-    private function parseCallableParameter(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\CallableTypeParameterNode
+    private function parseCallableParameter(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\CallableTypeParameterNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -466,7 +466,7 @@ class TypeParser
         return $this->enrichWithAttributes($tokens, new Ast\Type\CallableTypeParameterNode($type, $isReference, $isVariadic, $parameterName, $isOptional), $startLine, $startIndex);
     }
     /** @phpstan-impure */
-    private function parseCallableReturnType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
+    private function parseCallableReturnType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\TypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -538,7 +538,7 @@ class TypeParser
         }
     }
     /** @phpstan-impure */
-    private function tryParseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier, bool $hasTemplate) : Ast\Type\TypeNode
+    private function tryParseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier, bool $hasTemplate): Ast\Type\TypeNode
     {
         try {
             $tokens->pushSavePoint();
@@ -551,7 +551,7 @@ class TypeParser
         return $type;
     }
     /** @phpstan-impure */
-    private function tryParseArrayOrOffsetAccess(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\TypeNode
+    private function tryParseArrayOrOffsetAccess(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type): Ast\Type\TypeNode
     {
         $startLine = $type->getAttribute(Ast\Attribute::START_LINE);
         $startIndex = $type->getAttribute(Ast\Attribute::START_INDEX);
@@ -586,7 +586,7 @@ class TypeParser
      * @phpstan-impure
      * @param Ast\Type\ArrayShapeNode::KIND_* $kind
      */
-    private function parseArrayShape(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type, string $kind) : Ast\Type\ArrayShapeNode
+    private function parseArrayShape(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type, string $kind): Ast\Type\ArrayShapeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
         $items = [];
@@ -630,7 +630,7 @@ class TypeParser
         return Ast\Type\ArrayShapeNode::createUnsealed($items, $unsealedType, $kind);
     }
     /** @phpstan-impure */
-    private function parseArrayShapeItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ArrayShapeItemNode
+    private function parseArrayShapeItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\ArrayShapeItemNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -683,7 +683,7 @@ class TypeParser
     /**
      * @phpstan-impure
      */
-    private function parseArrayShapeUnsealedType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ArrayShapeUnsealedTypeNode
+    private function parseArrayShapeUnsealedType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\ArrayShapeUnsealedTypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -704,7 +704,7 @@ class TypeParser
     /**
      * @phpstan-impure
      */
-    private function parseListShapeUnsealedType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ArrayShapeUnsealedTypeNode
+    private function parseListShapeUnsealedType(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\ArrayShapeUnsealedTypeNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -718,7 +718,7 @@ class TypeParser
     /**
      * @phpstan-impure
      */
-    private function parseObjectShape(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ObjectShapeNode
+    private function parseObjectShape(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\ObjectShapeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
         $items = [];
@@ -735,7 +735,7 @@ class TypeParser
         return new Ast\Type\ObjectShapeNode($items);
     }
     /** @phpstan-impure */
-    private function parseObjectShapeItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ObjectShapeItemNode
+    private function parseObjectShapeItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\Type\ObjectShapeItemNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();

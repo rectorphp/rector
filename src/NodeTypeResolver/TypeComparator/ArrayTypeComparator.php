@@ -15,7 +15,7 @@ final class ArrayTypeComparator
      * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $checkedType
      * @param \PHPStan\Type\ArrayType|\PHPStan\Type\Constant\ConstantArrayType $mainType
      */
-    public function isSubtype($checkedType, $mainType) : bool
+    public function isSubtype($checkedType, $mainType): bool
     {
         if (!$checkedType instanceof ConstantArrayType && !$mainType instanceof ConstantArrayType) {
             return $mainType->isSuperTypeOf($checkedType)->yes();

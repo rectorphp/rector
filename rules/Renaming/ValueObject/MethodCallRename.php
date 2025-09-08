@@ -29,19 +29,19 @@ final class MethodCallRename implements MethodCallRenameInterface
         RectorAssert::methodName($oldMethod);
         RectorAssert::methodName($newMethod);
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->class);
     }
-    public function getOldMethod() : string
+    public function getOldMethod(): string
     {
         return $this->oldMethod;
     }
-    public function getNewMethod() : string
+    public function getNewMethod(): string
     {
         return $this->newMethod;
     }

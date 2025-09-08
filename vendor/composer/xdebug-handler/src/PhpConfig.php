@@ -23,7 +23,7 @@ class PhpConfig
      *
      * @return string[] Empty array of PHP cli options
      */
-    public function useOriginal() : array
+    public function useOriginal(): array
     {
         $this->getDataAndReset();
         return [];
@@ -33,7 +33,7 @@ class PhpConfig
      *
      * @return string[] PHP cli options
      */
-    public function useStandard() : array
+    public function useStandard(): array
     {
         $data = $this->getDataAndReset();
         if ($data !== null) {
@@ -46,7 +46,7 @@ class PhpConfig
      *
      * @return string[] Empty array of PHP cli options
      */
-    public function usePersistent() : array
+    public function usePersistent(): array
     {
         $data = $this->getDataAndReset();
         if ($data !== null) {
@@ -60,7 +60,7 @@ class PhpConfig
      *
      * @phpstan-return restartData|null
      */
-    private function getDataAndReset() : ?array
+    private function getDataAndReset(): ?array
     {
         $data = XdebugHandler::getRestartSettings();
         if ($data !== null) {
@@ -75,7 +75,7 @@ class PhpConfig
      * @param string $name
      * @param string|false $value
      */
-    private function updateEnv(string $name, $value) : void
+    private function updateEnv(string $name, $value): void
     {
         Process::setEnv($name, \false !== $value ? $value : null);
     }

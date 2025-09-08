@@ -22,38 +22,38 @@ class Lexer
      *                                        ErrorHandler\Throwing.
      * @return Token[] Tokens
      */
-    public function tokenize(string $code, ?\PhpParser\ErrorHandler $errorHandler = null) : array
+    public function tokenize(string $code, ?\PhpParser\ErrorHandler $errorHandler = null): array
     {
         if (null === $errorHandler) {
             $errorHandler = new \PhpParser\ErrorHandler\Throwing();
         }
-        $scream = \ini_set('xdebug.scream', '0');
+        $scream = ini_set('xdebug.scream', '0');
         $tokens = @\PhpParser\Token::tokenize($code);
         $this->postprocessTokens($tokens, $errorHandler);
         if (\false !== $scream) {
-            \ini_set('xdebug.scream', $scream);
+            ini_set('xdebug.scream', $scream);
         }
         return $tokens;
     }
-    private function handleInvalidCharacter(\PhpParser\Token $token, \PhpParser\ErrorHandler $errorHandler) : void
+    private function handleInvalidCharacter(\PhpParser\Token $token, \PhpParser\ErrorHandler $errorHandler): void
     {
         $chr = $token->text;
         if ($chr === "\x00") {
             // PHP cuts error message after null byte, so need special case
             $errorMsg = 'Unexpected null byte';
         } else {
-            $errorMsg = \sprintf('Unexpected character "%s" (ASCII %d)', $chr, \ord($chr));
+            $errorMsg = sprintf('Unexpected character "%s" (ASCII %d)', $chr, ord($chr));
         }
         $errorHandler->handleError(new \PhpParser\Error($errorMsg, ['startLine' => $token->line, 'endLine' => $token->line, 'startFilePos' => $token->pos, 'endFilePos' => $token->pos]));
     }
-    private function isUnterminatedComment(\PhpParser\Token $token) : bool
+    private function isUnterminatedComment(\PhpParser\Token $token): bool
     {
-        return $token->is([\T_COMMENT, \T_DOC_COMMENT]) && \substr($token->text, 0, 2) === '/*' && \substr($token->text, -2) !== '*/';
+        return $token->is([\T_COMMENT, \T_DOC_COMMENT]) && substr($token->text, 0, 2) === '/*' && substr($token->text, -2) !== '*/';
     }
     /**
      * @param list<Token> $tokens
      */
-    protected function postprocessTokens(array &$tokens, \PhpParser\ErrorHandler $errorHandler) : void
+    protected function postprocessTokens(array &$tokens, \PhpParser\ErrorHandler $errorHandler): void
     {
         // This function reports errors (bad characters and unterminated comments) in the token
         // array, and performs certain canonicalizations:

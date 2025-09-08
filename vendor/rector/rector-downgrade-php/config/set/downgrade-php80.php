@@ -39,7 +39,7 @@ use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
     $rectorConfig->ruleWithConfiguration(RemoveInterfacesRector::class, [
         // @see https://wiki.php.net/rfc/stringable
@@ -47,11 +47,11 @@ return static function (RectorConfig $rectorConfig) : void {
     ]);
     $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [
         // Symfony
-        new DowngradeAttributeToAnnotation('Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
+        new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
         // Nette
-        new DowngradeAttributeToAnnotation('Nette\\DI\\Attributes\\Inject', 'inject'),
+        new DowngradeAttributeToAnnotation('Nette\DI\Attributes\Inject', 'inject'),
         // Jetbrains\PhpStorm\Language under nette/utils
-        new DowngradeAttributeToAnnotation('Jetbrains\\PhpStorm\\Language', 'language'),
+        new DowngradeAttributeToAnnotation('Jetbrains\PhpStorm\Language', 'language'),
     ]);
     $rectorConfig->rules([DowngradeNamedArgumentRector::class, DowngradeDereferenceableOperationRector::class, DowngradeUnionTypeTypedPropertyRector::class, DowngradeUnionTypeDeclarationRector::class, DowngradeMixedTypeDeclarationRector::class, DowngradeStaticTypeDeclarationRector::class, DowngradeAbstractPrivateMethodInTraitRector::class, DowngradePropertyPromotionRector::class, DowngradeNonCapturingCatchesRector::class, DowngradeStrContainsRector::class, DowngradeMatchToSwitchRector::class, DowngradeClassOnObjectToGetClassRector::class, DowngradeArbitraryExpressionsSupportRector::class, DowngradeNullsafeToTernaryOperatorRector::class, DowngradeTrailingCommasInParamUseRector::class, DowngradeStrStartsWithRector::class, DowngradeStrEndsWithRector::class, DowngradePhpTokenRector::class, DowngradeThrowExprRector::class, DowngradePhp80ResourceReturnToObjectRector::class, DowngradeReflectionGetAttributesRector::class, DowngradeRecursiveDirectoryIteratorHasChildrenRector::class, DowngradeReflectionPropertyGetDefaultValueRector::class, DowngradeReflectionClassGetConstantsFilterRector::class, DowngradeArrayFilterNullableCallbackRector::class, DowngradeNumberFormatNoFourthArgRector::class, DowngradeStringReturnTypeOnToStringRector::class, DowngradeMixedTypeTypedPropertyRector::class, RemoveReturnTypeDeclarationFromCloneRector::class, DowngradeEnumToConstantListClassRector::class, DowngradeInstanceofStringableRector::class]);
 };

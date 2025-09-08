@@ -21,7 +21,7 @@ final class UseImportsRemover
      * @param string[] $removedUses
      * @return Stmt[]
      */
-    public function removeImportsFromStmts(array $stmts, array $removedUses) : array
+    public function removeImportsFromStmts(array $stmts, array $removedUses): array
     {
         $hasRemoved = \false;
         foreach ($stmts as $key => $stmt) {
@@ -35,16 +35,16 @@ final class UseImportsRemover
                 $hasRemoved = \true;
             }
         }
-        return $hasRemoved ? \array_values($stmts) : $stmts;
+        return $hasRemoved ? array_values($stmts) : $stmts;
     }
     /**
      * @param string[] $removedUses
      */
-    private function removeUseFromUse(array $removedUses, Use_ $use) : Use_
+    private function removeUseFromUse(array $removedUses, Use_ $use): Use_
     {
         foreach ($use->uses as $usesKey => $useUse) {
             $useName = $useUse->name->toString();
-            if (!\in_array($useName, $removedUses, \true)) {
+            if (!in_array($useName, $removedUses, \true)) {
                 continue;
             }
             if (!$this->renamedNameCollector->has($useName)) {

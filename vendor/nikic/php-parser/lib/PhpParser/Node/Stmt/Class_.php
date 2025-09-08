@@ -58,36 +58,36 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
         $this->stmts = $subNodes['stmts'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'flags', 'name', 'extends', 'implements', 'stmts'];
     }
     /**
      * Whether the class is explicitly abstract.
      */
-    public function isAbstract() : bool
+    public function isAbstract(): bool
     {
         return (bool) ($this->flags & Modifiers::ABSTRACT);
     }
     /**
      * Whether the class is final.
      */
-    public function isFinal() : bool
+    public function isFinal(): bool
     {
         return (bool) ($this->flags & Modifiers::FINAL);
     }
-    public function isReadonly() : bool
+    public function isReadonly(): bool
     {
         return (bool) ($this->flags & Modifiers::READONLY);
     }
     /**
      * Whether the class is anonymous.
      */
-    public function isAnonymous() : bool
+    public function isAnonymous(): bool
     {
         return null === $this->name;
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Class';
     }

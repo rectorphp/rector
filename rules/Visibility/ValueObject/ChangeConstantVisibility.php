@@ -26,15 +26,15 @@ final class ChangeConstantVisibility
         $this->visibility = $visibility;
         RectorAssert::className($class);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->class);
     }
-    public function getConstant() : string
+    public function getConstant(): string
     {
         return $this->constant;
     }
-    public function getVisibility() : int
+    public function getVisibility(): int
     {
         return $this->visibility;
     }

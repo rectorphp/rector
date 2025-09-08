@@ -36,11 +36,11 @@ final class MoneyFormatToNumberFormatRector extends AbstractRector implements Mi
         $this->argsAnalyzer = $argsAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_MONEY_FORMAT;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `money_format()` to equivalent `number_format()`', [new CodeSample(<<<'CODE_SAMPLE'
 $value = money_format('%i', $value);
@@ -53,14 +53,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(Node $node): ?FuncCall
     {
         if (!$this->isName($node, 'money_format')) {
             return null;
@@ -78,7 +78,7 @@ CODE_SAMPLE
         }
         return $this->warpInNumberFormatFuncCall($node, $args[1]->value);
     }
-    private function warpInNumberFormatFuncCall(FuncCall $funcCall, Expr $expr) : FuncCall
+    private function warpInNumberFormatFuncCall(FuncCall $funcCall, Expr $expr): FuncCall
     {
         $roundFuncCall = $this->nodeFactory->createFuncCall('round', [$expr, new Int_(2), new ConstFetch(new Name('PHP_ROUND_HALF_ODD'))]);
         $funcCall->name = new Name('number_format');

@@ -34,16 +34,16 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
      * Returns an iterator over all items.
      * @return \Iterator<array-key, T>
      */
-    public function &getIterator() : \Iterator
+    public function &getIterator(): \Iterator
     {
         foreach ((array) $this as $key => $foo) {
-            (yield $key => $this->{$key});
+            yield $key => $this->{$key};
         }
     }
     /**
      * Returns items count.
      */
-    public function count() : int
+    public function count(): int
     {
         return count((array) $this);
     }
@@ -52,11 +52,11 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
      * @param  array-key  $key
      * @param  T  $value
      */
-    public function offsetSet($key, $value) : void
+    public function offsetSet($key, $value): void
     {
         if (!is_scalar($key)) {
             // prevents null
-            throw new Nette\InvalidArgumentException(sprintf('Key must be either a string or an integer, %s given.', \get_debug_type($key)));
+            throw new Nette\InvalidArgumentException(sprintf('Key must be either a string or an integer, %s given.', get_debug_type($key)));
         }
         $this->{$key} = $value;
     }
@@ -74,7 +74,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
      * Determines whether an item exists.
      * @param  array-key  $key
      */
-    public function offsetExists($key) : bool
+    public function offsetExists($key): bool
     {
         return isset($this->{$key});
     }
@@ -82,7 +82,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
      * Removes the element from this list.
      * @param  array-key  $key
      */
-    public function offsetUnset($key) : void
+    public function offsetUnset($key): void
     {
         unset($this->{$key});
     }

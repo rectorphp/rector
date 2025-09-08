@@ -48,18 +48,18 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
     // To avoid circular dependency
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return ArrayType::class;
     }
     /**
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         // this cannot be handled by PHPStan $type->toPhpDocNode() as requires space removal around "|" in union type
         // then e.g. "int" instead of explicit number, and nice arrays
@@ -80,25 +80,25 @@ final class ArrayTypeMapper implements TypeMapperInterface
     /**
      * @param ArrayType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : Identifier
+    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
     {
         return new Identifier('array');
     }
-    private function createArrayTypeNodeFromUnionType(UnionType $unionType) : SpacingAwareArrayTypeNode
+    private function createArrayTypeNodeFromUnionType(UnionType $unionType): SpacingAwareArrayTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionType->getTypes() as $unionedType) {
             $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
             $unionedArrayType[(string) $typeNode] = $typeNode;
         }
-        if (\count($unionedArrayType) > 1) {
+        if (count($unionedArrayType) > 1) {
             return new SpacingAwareArrayTypeNode(new BracketsAwareUnionTypeNode($unionedArrayType));
         }
         /** @var TypeNode $arrayType */
-        $arrayType = \array_shift($unionedArrayType);
+        $arrayType = array_shift($unionedArrayType);
         return new SpacingAwareArrayTypeNode($arrayType);
     }
-    private function isGenericArrayCandidate(ArrayType $arrayType) : bool
+    private function isGenericArrayCandidate(ArrayType $arrayType): bool
     {
         if ($arrayType->getKeyType() instanceof MixedType) {
             return \false;
@@ -128,7 +128,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         return \false;
     }
-    private function createGenericArrayType(ArrayType $arrayType, bool $withKey = \false) : GenericTypeNode
+    private function createGenericArrayType(ArrayType $arrayType, bool $withKey = \false): GenericTypeNode
     {
         $itemType = $arrayType->getIterableValueType();
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
@@ -155,7 +155,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $identifierTypeNode->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         return new GenericTypeNode($identifierTypeNode, $genericTypes);
     }
-    private function isPairClassTooDetailed(Type $itemType) : bool
+    private function isPairClassTooDetailed(Type $itemType): bool
     {
         if (!$itemType instanceof UnionType) {
             return \false;
@@ -165,14 +165,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         return $this->detailedTypeAnalyzer->isTooDetailed($itemType);
     }
-    private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType) : bool
+    private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType): bool
     {
         if (!$arrayType->getKeyType()->isInteger()->yes()) {
             return \false;
         }
         return !$arrayType->getIterableValueType()->isArray()->yes();
     }
-    private function isClassStringArrayType(ArrayType $arrayType) : bool
+    private function isClassStringArrayType(ArrayType $arrayType): bool
     {
         if ($arrayType->getKeyType() instanceof MixedType) {
             return $arrayType->getIterableValueType() instanceof GenericClassStringType;

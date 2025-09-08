@@ -12,7 +12,7 @@ class ArrayTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $this->type = $type;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->type instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode || $this->type instanceof \PHPStan\PhpDocParser\Ast\Type\ConstTypeNode || $this->type instanceof \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode) {
             return '(' . $this->type . ')[]';

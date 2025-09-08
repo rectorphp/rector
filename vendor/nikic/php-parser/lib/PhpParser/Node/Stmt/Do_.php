@@ -24,11 +24,11 @@ class Do_ extends Node\Stmt implements StmtsAwareInterface
         $this->cond = $cond;
         $this->stmts = $stmts;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['stmts', 'cond'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Do';
     }

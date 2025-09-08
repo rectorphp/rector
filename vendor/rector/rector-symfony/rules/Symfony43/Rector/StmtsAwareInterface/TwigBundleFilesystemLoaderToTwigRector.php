@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TwigBundleFilesystemLoaderToTwigRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change TwigBundle FilesystemLoader to native one', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $filesystemLoaderNew = $this->resolveFileSystemLoaderNew($node);
         if (!$filesystemLoaderNew instanceof New_) {
@@ -68,12 +68,12 @@ CODE_SAMPLE
             $collectedPathExprs[] = $methodCall->getArgs()[0];
             unset($node->stmts[$key]);
         }
-        $filesystemLoaderNew->class = new FullyQualified('Twig\\Loader\\FilesystemLoader');
+        $filesystemLoaderNew->class = new FullyQualified('Twig\Loader\FilesystemLoader');
         $array = $this->nodeFactory->createArray($collectedPathExprs);
         $filesystemLoaderNew->args = [new Arg($array)];
         return $node;
     }
-    private function resolveFileSystemLoaderNew(StmtsAwareInterface $stmtsAware) : ?New_
+    private function resolveFileSystemLoaderNew(StmtsAwareInterface $stmtsAware): ?New_
     {
         foreach ((array) $stmtsAware->stmts as $stmt) {
             if (!$stmt instanceof Expression) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
                 continue;
             }
             $new = $assign->expr;
-            if (!$this->isObjectType($new, new ObjectType('Symfony\\Bundle\\TwigBundle\\Loader\\FilesystemLoader'))) {
+            if (!$this->isObjectType($new, new ObjectType('Symfony\Bundle\TwigBundle\Loader\FilesystemLoader'))) {
                 continue;
             }
             return $new;

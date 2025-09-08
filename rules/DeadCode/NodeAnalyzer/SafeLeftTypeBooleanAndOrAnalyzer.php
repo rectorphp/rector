@@ -46,7 +46,7 @@ final class SafeLeftTypeBooleanAndOrAnalyzer
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanAnd
      */
-    public function isSafe($booleanAnd) : bool
+    public function isSafe($booleanAnd): bool
     {
         $hasNonTypedFromParam = (bool) $this->betterNodeFinder->findFirst($booleanAnd->left, fn(Node $node): bool => $node instanceof Variable && $this->exprAnalyzer->isNonTypedFromParam($node));
         if ($hasNonTypedFromParam) {
@@ -62,7 +62,7 @@ final class SafeLeftTypeBooleanAndOrAnalyzer
         if ($classReflection instanceof ClassReflection && $classReflection->isTrait()) {
             return !$booleanAnd->left instanceof Instanceof_;
         }
-        return !(bool) $this->betterNodeFinder->findFirst($booleanAnd->left, function (Node $node) : bool {
+        return !(bool) $this->betterNodeFinder->findFirst($booleanAnd->left, function (Node $node): bool {
             if (!$node instanceof CallLike) {
                 return \false;
             }

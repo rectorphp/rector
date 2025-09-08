@@ -23,7 +23,7 @@ final class MemoryEfficientLongestCommonSubsequenceCalculator implements Longest
     /**
      * @inheritDoc
      */
-    public function calculate(array $from, array $to) : array
+    public function calculate(array $from, array $to): array
     {
         $cFrom = count($from);
         $cTo = count($to);
@@ -54,7 +54,7 @@ final class MemoryEfficientLongestCommonSubsequenceCalculator implements Longest
         $toEnd = array_slice($to, $jMax);
         return array_merge($this->calculate($fromStart, $toStart), $this->calculate($fromEnd, $toEnd));
     }
-    private function length(array $from, array $to) : array
+    private function length(array $from, array $to): array
     {
         $current = array_fill(0, count($to) + 1, 0);
         $cFrom = count($from);
@@ -64,17 +64,10 @@ final class MemoryEfficientLongestCommonSubsequenceCalculator implements Longest
             for ($j = 0; $j < $cTo; $j++) {
                 if ($from[$i] === $to[$j]) {
                     $current[$j + 1] = $prev[$j] + 1;
+                } else if ($current[$j] > $prev[$j + 1]) {
+                    $current[$j + 1] = $current[$j];
                 } else {
-                    /**
-                     * @noinspection PhpConditionCanBeReplacedWithMinMaxCallInspection
-                     *
-                     * We do not use max() here to avoid the function call overhead
-                     */
-                    if ($current[$j] > $prev[$j + 1]) {
-                        $current[$j + 1] = $current[$j];
-                    } else {
-                        $current[$j + 1] = $prev[$j + 1];
-                    }
+                    $current[$j + 1] = $prev[$j + 1];
                 }
             }
         }

@@ -21,7 +21,7 @@ class ConditionalTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
         $this->else = $else;
         $this->negated = $negated;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return sprintf('(%s %s %s ? %s : %s)', $this->subjectType, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
     }

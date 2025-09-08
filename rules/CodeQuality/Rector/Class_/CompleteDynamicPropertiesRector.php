@@ -54,7 +54,7 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->missingPropertiesResolver = $missingPropertiesResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add missing dynamic properties', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -84,14 +84,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -107,10 +107,10 @@ CODE_SAMPLE
         if ($newProperties === []) {
             return null;
         }
-        $node->stmts = \array_merge($newProperties, $node->stmts);
+        $node->stmts = array_merge($newProperties, $node->stmts);
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \true;
@@ -133,7 +133,7 @@ CODE_SAMPLE
         }
         return $class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
     }
-    private function matchClassReflection(Class_ $class) : ?ClassReflection
+    private function matchClassReflection(Class_ $class): ?ClassReflection
     {
         $className = $this->getName($class);
         if ($className === null) {

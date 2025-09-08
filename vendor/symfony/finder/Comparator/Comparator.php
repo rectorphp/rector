@@ -28,14 +28,14 @@ class Comparator
     /**
      * Gets the target value.
      */
-    public function getTarget() : string
+    public function getTarget(): string
     {
         return $this->target;
     }
     /**
      * Gets the comparison operator.
      */
-    public function getOperator() : string
+    public function getOperator(): string
     {
         return $this->operator;
     }
@@ -43,7 +43,7 @@ class Comparator
      * Tests against the target.
      * @param mixed $test
      */
-    public function test($test) : bool
+    public function test($test): bool
     {
         switch ($this->operator) {
             case '>':

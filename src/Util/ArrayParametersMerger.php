@@ -16,13 +16,13 @@ final class ArrayParametersMerger
      */
     public function merge($left, $right)
     {
-        if (\is_array($left) && \is_array($right)) {
+        if (is_array($left) && is_array($right)) {
             return $this->mergeLeftToRightWithCallable($left, $right, fn($leftValue, $rightValue) => $this->merge($leftValue, $rightValue));
         }
         if ($left !== null) {
             return $left;
         }
-        if (!\is_array($right)) {
+        if (!is_array($right)) {
             return $left;
         }
         return $right;
@@ -32,12 +32,12 @@ final class ArrayParametersMerger
      * @param array<int|string, mixed> $right
      * @return mixed[]
      */
-    private function mergeLeftToRightWithCallable(array $left, array $right, callable $mergeCallback) : array
+    private function mergeLeftToRightWithCallable(array $left, array $right, callable $mergeCallback): array
     {
         foreach ($left as $key => $val) {
-            if (\is_int($key)) {
+            if (is_int($key)) {
                 // prevent duplicated values in unindexed arrays
-                if (!\in_array($val, $right, \true)) {
+                if (!in_array($val, $right, \true)) {
                     $right[] = $val;
                 }
             } else {

@@ -25,15 +25,15 @@ final class ChangeMethodVisibility
         $this->visibility = $visibility;
         RectorAssert::className($class);
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getVisibility() : int
+    public function getVisibility(): int
     {
         return $this->visibility;
     }

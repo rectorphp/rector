@@ -27,7 +27,7 @@ final class ChrArgModuloRector extends AbstractRector implements MinPhpVersionIn
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Wrap chr() argument with % 256 to avoid deprecated out-of-range integers', [new CodeSample(<<<'CODE_SAMPLE'
 echo chr(300);
@@ -37,14 +37,14 @@ echo chr(300 % 256);
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
         $value = $this->valueResolver->getValue($argExpr);
-        if (!\is_int($value)) {
+        if (!is_int($value)) {
             return null;
         }
         if ($value >= 0 && $value <= 255) {
@@ -71,7 +71,7 @@ CODE_SAMPLE
         $node->args = $args;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_OUTSIDE_INTERVEL_VAL_IN_CHR_FUNCTION;
     }

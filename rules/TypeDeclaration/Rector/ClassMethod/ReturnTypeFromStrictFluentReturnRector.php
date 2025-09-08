@@ -48,7 +48,7 @@ final class ReturnTypeFromStrictFluentReturnRector extends AbstractRector implem
         $this->returnTypeInferer = $returnTypeInferer;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type from strict return $this', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -73,18 +73,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::HAS_RETURN_TYPE;
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         // already typed → skip
@@ -111,12 +111,12 @@ CODE_SAMPLE
         }
         return $this->processAddReturnSelfOrStatic($node, $classReflection);
     }
-    private function processAddReturnSelfOrStatic(ClassMethod $classMethod, ClassReflection $classReflection) : ClassMethod
+    private function processAddReturnSelfOrStatic(ClassMethod $classMethod, ClassReflection $classReflection): ClassMethod
     {
         $classMethod->returnType = $this->shouldSelf($classReflection) ? new Name('self') : new Name('static');
         return $classMethod;
     }
-    private function shouldSelf(ClassReflection $classReflection) : bool
+    private function shouldSelf(ClassReflection $classReflection): bool
     {
         if ($classReflection->isAnonymous()) {
             return \true;

@@ -50,7 +50,7 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
         $this->coalescePropertyAssignMatcher = $coalescePropertyAssignMatcher;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace property declaration of new state with direct new', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null || $node->stmts === []) {
             return null;
@@ -126,14 +126,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEW_INITIALIZERS;
     }
     /**
      * @return Param[]
      */
-    private function resolveParams(ClassMethod $classMethod) : array
+    private function resolveParams(ClassMethod $classMethod): array
     {
         $params = $this->matchConstructorParams($classMethod);
         if ($params === []) {
@@ -144,13 +144,13 @@ CODE_SAMPLE
         }
         return $params;
     }
-    private function isOverrideAbstractMethod(ClassMethod $classMethod) : bool
+    private function isOverrideAbstractMethod(ClassMethod $classMethod): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         $methodName = $this->getName($classMethod);
         return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
-    private function processPropertyPromotion(Class_ $class, Param $param, string $paramName) : void
+    private function processPropertyPromotion(Class_ $class, Param $param, string $paramName): void
     {
         foreach ($class->stmts as $key => $stmt) {
             if (!$stmt instanceof Property) {
@@ -161,25 +161,25 @@ CODE_SAMPLE
                 continue;
             }
             $param->flags = $property->flags;
-            $param->attrGroups = \array_merge($property->attrGroups, $param->attrGroups);
+            $param->attrGroups = array_merge($property->attrGroups, $param->attrGroups);
             unset($class->stmts[$key]);
         }
     }
     /**
      * @return Param[]
      */
-    private function matchConstructorParams(ClassMethod $classMethod) : array
+    private function matchConstructorParams(ClassMethod $classMethod): array
     {
         // skip empty constructor assigns, as we need those here
         if ($classMethod->stmts === null || $classMethod->stmts === []) {
             return [];
         }
-        $params = \array_filter($classMethod->params, static fn(Param $param): bool => $param->type instanceof NullableType);
+        $params = array_filter($classMethod->params, static fn(Param $param): bool => $param->type instanceof NullableType);
         if ($params === []) {
             return $params;
         }
-        $totalParams = \count($classMethod->params);
-        foreach (\array_keys($params) as $key) {
+        $totalParams = count($classMethod->params);
+        foreach (array_keys($params) as $key) {
             for ($iteration = $key + 1; $iteration < $totalParams; ++$iteration) {
                 if (isset($classMethod->params[$iteration]) && !$classMethod->params[$iteration]->default instanceof Expr) {
                     return [];

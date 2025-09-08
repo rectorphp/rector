@@ -5,12 +5,12 @@ namespace PHPStan\PhpDocParser\Ast;
 
 interface Node
 {
-    public function __toString() : string;
+    public function __toString(): string;
     /**
      * @param mixed $value
      */
-    public function setAttribute(string $key, $value) : void;
-    public function hasAttribute(string $key) : bool;
+    public function setAttribute(string $key, $value): void;
+    public function hasAttribute(string $key): bool;
     /**
      * @return mixed
      */

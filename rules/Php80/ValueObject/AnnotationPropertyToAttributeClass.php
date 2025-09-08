@@ -36,11 +36,11 @@ final class AnnotationPropertyToAttributeClass
     {
         return $this->annotationProperty;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         return $this->attributeClass;
     }
-    public function doesNeedNewImport() : bool
+    public function doesNeedNewImport(): bool
     {
         return $this->doesNeedNewImport;
     }

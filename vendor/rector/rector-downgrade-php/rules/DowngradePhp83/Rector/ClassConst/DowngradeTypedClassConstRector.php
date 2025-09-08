@@ -27,11 +27,11 @@ final class DowngradeTypedClassConstRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassConst::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove typed class constant', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @param ClassConst $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->type instanceof Node) {
             return null;

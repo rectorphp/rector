@@ -84,11 +84,11 @@ final class CallerParamMatcher
             return new NullableType($callParam->type);
         }
         if ($callParam->type instanceof IntersectionType || $callParam->type instanceof UnionType) {
-            return new UnionType(\array_merge($callParam->type->types, [new Identifier('null')]));
+            return new UnionType(array_merge($callParam->type->types, [new Identifier('null')]));
         }
         return null;
     }
-    public function matchParentParam(StaticCall $parentStaticCall, Param $param, Scope $scope) : ?Param
+    public function matchParentParam(StaticCall $parentStaticCall, Param $param, Scope $scope): ?Param
     {
         $methodName = $this->nodeNameResolver->getName($parentStaticCall->name);
         if ($methodName === null) {
@@ -104,7 +104,7 @@ final class CallerParamMatcher
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    public function matchCallParam($call, Param $param) : ?Param
+    public function matchCallParam($call, Param $param): ?Param
     {
         $callArgPosition = $this->matchCallArgPosition($call, $param);
         if ($callArgPosition === null) {
@@ -119,7 +119,7 @@ final class CallerParamMatcher
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function matchCallArgPosition($call, Param $param) : ?int
+    private function matchCallArgPosition($call, Param $param): ?int
     {
         $paramName = $this->nodeNameResolver->getName($param);
         foreach ($call->args as $argPosition => $arg) {
@@ -136,7 +136,7 @@ final class CallerParamMatcher
         }
         return null;
     }
-    private function resolveParentMethodParam(Scope $scope, string $methodName, int $paramPosition) : ?Param
+    private function resolveParentMethodParam(Scope $scope, string $methodName, int $paramPosition): ?Param
     {
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
@@ -154,7 +154,7 @@ final class CallerParamMatcher
         }
         return null;
     }
-    private function isCallParamMixed(Node $node) : bool
+    private function isCallParamMixed(Node $node): bool
     {
         $callParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
         return $callParamType instanceof MixedType;

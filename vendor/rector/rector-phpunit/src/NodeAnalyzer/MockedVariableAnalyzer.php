@@ -35,10 +35,10 @@ final class MockedVariableAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function containsMockAsUsedVariable(ClassMethod $classMethod) : bool
+    public function containsMockAsUsedVariable(ClassMethod $classMethod): bool
     {
         $doesContainMock = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use(&$doesContainMock) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (&$doesContainMock) {
             if ($this->isMockeryStaticCall($node)) {
                 $doesContainMock = \true;
                 return null;
@@ -53,25 +53,25 @@ final class MockedVariableAnalyzer
             if ($this->isIntersectionTypeWithMockObject($variableType)) {
                 $doesContainMock = \true;
             }
-            if ($variableType->isSuperTypeOf(new ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
+            if ($variableType->isSuperTypeOf(new ObjectType('PHPUnit\Framework\MockObject\MockObject'))->yes()) {
                 $doesContainMock = \true;
             }
             return null;
         });
         return $doesContainMock;
     }
-    private function isIntersectionTypeWithMockObject(Type $variableType) : bool
+    private function isIntersectionTypeWithMockObject(Type $variableType): bool
     {
         if ($variableType instanceof IntersectionType) {
             foreach ($variableType->getTypes() as $variableTypeType) {
-                if ($variableTypeType->isSuperTypeOf(new ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
+                if ($variableTypeType->isSuperTypeOf(new ObjectType('PHPUnit\Framework\MockObject\MockObject'))->yes()) {
                     return \true;
                 }
             }
         }
         return \false;
     }
-    private function isMockeryStaticCall(Node $node) : bool
+    private function isMockeryStaticCall(Node $node): bool
     {
         if (!$node instanceof StaticCall) {
             return \false;

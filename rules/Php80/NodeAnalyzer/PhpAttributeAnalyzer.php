@@ -35,7 +35,7 @@ final class PhpAttributeAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
-    public function hasPhpAttribute($node, string $attributeClass) : bool
+    public function hasPhpAttribute($node, string $attributeClass): bool
     {
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
@@ -50,17 +50,17 @@ final class PhpAttributeAnalyzer
     /**
      * @param AttributeName::* $attributeClass
      */
-    public function hasInheritedPhpAttribute(Class_ $class, string $attributeClass) : bool
+    public function hasInheritedPhpAttribute(Class_ $class, string $attributeClass): bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $nativeReflection = $ancestorClassReflection->getNativeReflection();
-            if ((\method_exists($nativeReflection, 'getAttributes') ? $nativeReflection->getAttributes($attributeClass) : []) !== []) {
+            if ((method_exists($nativeReflection, 'getAttributes') ? $nativeReflection->getAttributes($attributeClass) : []) !== []) {
                 return \true;
             }
         }
@@ -70,7 +70,7 @@ final class PhpAttributeAnalyzer
      * @param string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
-    public function hasPhpAttributes($node, array $attributeClasses) : bool
+    public function hasPhpAttributes($node, array $attributeClasses): bool
     {
         foreach ($attributeClasses as $attributeClass) {
             if ($this->hasPhpAttribute($node, $attributeClass)) {
@@ -82,7 +82,7 @@ final class PhpAttributeAnalyzer
     /**
      * @param AttributeGroup[] $attributeGroups
      */
-    public function hasRemoveArrayState(array $attributeGroups) : bool
+    public function hasRemoveArrayState(array $attributeGroups): bool
     {
         foreach ($attributeGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
@@ -97,7 +97,7 @@ final class PhpAttributeAnalyzer
     /**
      * @param Arg[] $args
      */
-    private function hasArgWithRemoveArrayValue(array $args) : bool
+    private function hasArgWithRemoveArrayValue(array $args): bool
     {
         foreach ($args as $arg) {
             if (!$arg->value instanceof Array_) {

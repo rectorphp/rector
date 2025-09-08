@@ -35,15 +35,15 @@ final class RenameCast
     /**
      * @return class-string<Cast>
      */
-    public function getFromCastExprClass() : string
+    public function getFromCastExprClass(): string
     {
         return $this->fromCastExprClass;
     }
-    public function getFromCastKind() : int
+    public function getFromCastKind(): int
     {
         return $this->fromCastKind;
     }
-    public function getToCastKind() : int
+    public function getToCastKind(): int
     {
         return $this->toCastKind;
     }

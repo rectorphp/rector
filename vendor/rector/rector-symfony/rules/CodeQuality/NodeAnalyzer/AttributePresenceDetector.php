@@ -14,7 +14,7 @@ final class AttributePresenceDetector
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function detect(string $attributeClass) : bool
+    public function detect(string $attributeClass): bool
     {
         // run only if the sensio attribute is available
         if (!$this->reflectionProvider->hasClass($attributeClass)) {

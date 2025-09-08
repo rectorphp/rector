@@ -25,14 +25,14 @@ use RectorPrefix202509\Symfony\Component\VarDumper\Cloner\Data;
  */
 final class CommandDataCollector extends DataCollector
 {
-    public function collect(Request $request, Response $response, ?\Throwable $exception = null) : void
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
         if (!$request instanceof CliRequest) {
             return;
         }
         $command = $request->command;
         $application = $command->getApplication();
-        $this->data = ['command' => $this->cloneVar($command->command), 'exit_code' => $command->exitCode, 'interrupted_by_signal' => $command->interruptedBySignal, 'duration' => $command->duration, 'max_memory_usage' => $command->maxMemoryUsage, 'verbosity_level' => (function () use($command) {
+        $this->data = ['command' => $this->cloneVar($command->command), 'exit_code' => $command->exitCode, 'interrupted_by_signal' => $command->interruptedBySignal, 'duration' => $command->duration, 'max_memory_usage' => $command->maxMemoryUsage, 'verbosity_level' => (function () use ($command) {
             switch ($command->output->getVerbosity()) {
                 case OutputInterface::VERBOSITY_QUIET:
                     return 'quiet';
@@ -45,7 +45,7 @@ final class CommandDataCollector extends DataCollector
                 case OutputInterface::VERBOSITY_DEBUG:
                     return 'debug';
             }
-        })(), 'interactive' => $command->isInteractive, 'validate_input' => !$command->ignoreValidation, 'enabled' => $command->isEnabled(), 'visible' => !$command->isHidden(), 'input' => $this->cloneVar($command->input), 'output' => $this->cloneVar($command->output), 'interactive_inputs' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), $command->interactiveInputs), 'signalable' => $command->getSubscribedSignals(), 'handled_signals' => $command->handledSignals, 'helper_set' => \array_map(\Closure::fromCallable([$this, 'cloneVar']), \iterator_to_array($command->getHelperSet()))];
+        })(), 'interactive' => $command->isInteractive, 'validate_input' => !$command->ignoreValidation, 'enabled' => $command->isEnabled(), 'visible' => !$command->isHidden(), 'input' => $this->cloneVar($command->input), 'output' => $this->cloneVar($command->output), 'interactive_inputs' => array_map(\Closure::fromCallable([$this, 'cloneVar']), $command->interactiveInputs), 'signalable' => $command->getSubscribedSignals(), 'handled_signals' => $command->handledSignals, 'helper_set' => array_map(\Closure::fromCallable([$this, 'cloneVar']), iterator_to_array($command->getHelperSet()))];
         $baseDefinition = $application->getDefinition();
         foreach ($command->arguments as $argName => $argValue) {
             if ($baseDefinition->hasArgument($argName)) {
@@ -62,7 +62,7 @@ final class CommandDataCollector extends DataCollector
             }
         }
     }
-    public function getName() : string
+    public function getName(): string
     {
         return 'command';
     }
@@ -74,7 +74,7 @@ final class CommandDataCollector extends DataCollector
      *     line: int,
      * }
      */
-    public function getCommand() : array
+    public function getCommand(): array
     {
         $class = $this->data['command']->getType();
         $r = new \ReflectionMethod($class, 'execute');
@@ -87,94 +87,94 @@ final class CommandDataCollector extends DataCollector
         $r = new \ReflectionClass($class);
         return ['class' => $class, 'file' => $r->getFileName(), 'line' => $r->getStartLine()];
     }
-    public function getInterruptedBySignal() : ?string
+    public function getInterruptedBySignal(): ?string
     {
         if (isset($this->data['interrupted_by_signal'])) {
             return \sprintf('%s (%d)', SignalMap::getSignalName($this->data['interrupted_by_signal']), $this->data['interrupted_by_signal']);
         }
         return null;
     }
-    public function getDuration() : string
+    public function getDuration(): string
     {
         return $this->data['duration'];
     }
-    public function getMaxMemoryUsage() : string
+    public function getMaxMemoryUsage(): string
     {
         return $this->data['max_memory_usage'];
     }
-    public function getVerbosityLevel() : string
+    public function getVerbosityLevel(): string
     {
         return $this->data['verbosity_level'];
     }
-    public function getInteractive() : bool
+    public function getInteractive(): bool
     {
         return $this->data['interactive'];
     }
-    public function getValidateInput() : bool
+    public function getValidateInput(): bool
     {
         return $this->data['validate_input'];
     }
-    public function getEnabled() : bool
+    public function getEnabled(): bool
     {
         return $this->data['enabled'];
     }
-    public function getVisible() : bool
+    public function getVisible(): bool
     {
         return $this->data['visible'];
     }
-    public function getInput() : Data
+    public function getInput(): Data
     {
         return $this->data['input'];
     }
-    public function getOutput() : Data
+    public function getOutput(): Data
     {
         return $this->data['output'];
     }
     /**
      * @return Data[]
      */
-    public function getArguments() : array
+    public function getArguments(): array
     {
         return $this->data['arguments'] ?? [];
     }
     /**
      * @return Data[]
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->data['options'] ?? [];
     }
     /**
      * @return Data[]
      */
-    public function getApplicationInputs() : array
+    public function getApplicationInputs(): array
     {
         return $this->data['application_inputs'] ?? [];
     }
     /**
      * @return Data[]
      */
-    public function getInteractiveInputs() : array
+    public function getInteractiveInputs(): array
     {
         return $this->data['interactive_inputs'] ?? [];
     }
-    public function getSignalable() : array
+    public function getSignalable(): array
     {
-        return \array_map(static fn(int $signal): string => \sprintf('%s (%d)', SignalMap::getSignalName($signal), $signal), $this->data['signalable']);
+        return array_map(static fn(int $signal): string => \sprintf('%s (%d)', SignalMap::getSignalName($signal), $signal), $this->data['signalable']);
     }
-    public function getHandledSignals() : array
+    public function getHandledSignals(): array
     {
-        $keys = \array_map(static fn(int $signal): string => \sprintf('%s (%d)', SignalMap::getSignalName($signal), $signal), \array_keys($this->data['handled_signals']));
-        return \array_combine($keys, \array_values($this->data['handled_signals']));
+        $keys = array_map(static fn(int $signal): string => \sprintf('%s (%d)', SignalMap::getSignalName($signal), $signal), array_keys($this->data['handled_signals']));
+        return array_combine($keys, array_values($this->data['handled_signals']));
     }
     /**
      * @return Data[]
      */
-    public function getHelperSet() : array
+    public function getHelperSet(): array
     {
         return $this->data['helper_set'] ?? [];
     }
-    public function reset() : void
+    public function reset(): void
     {
         $this->data = [];
     }

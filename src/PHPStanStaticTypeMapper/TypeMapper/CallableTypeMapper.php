@@ -16,14 +16,14 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
  */
 final class CallableTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return CallableType::class;
     }
     /**
      * @param CallableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
@@ -31,7 +31,7 @@ final class CallableTypeMapper implements TypeMapperInterface
      * @param TypeKind::* $typeKind
      * @param CallableType|ClosureType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if ($typeKind === TypeKind::PROPERTY) {
             return null;

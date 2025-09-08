@@ -23,11 +23,11 @@ use function sprintf;
  */
 class InvalidRegexPatternRule implements Rule
 {
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return StaticCall::class;
     }
-    public function processNode(Node $node, Scope $scope) : array
+    public function processNode(Node $node, Scope $scope): array
     {
         $patterns = $this->extractPatterns($node, $scope);
         $errors = [];
@@ -43,7 +43,7 @@ class InvalidRegexPatternRule implements Rule
     /**
      * @return string[]
      */
-    private function extractPatterns(StaticCall $node, Scope $scope) : array
+    private function extractPatterns(StaticCall $node, Scope $scope): array
     {
         if (!$node->class instanceof FullyQualified) {
             return [];
@@ -88,12 +88,12 @@ class InvalidRegexPatternRule implements Rule
         }
         return $patternStrings;
     }
-    private function validatePattern(string $pattern) : ?string
+    private function validatePattern(string $pattern): ?string
     {
         try {
             $msg = null;
-            $prev = \set_error_handler(function (int $severity, string $message, string $file) use(&$msg) : bool {
-                $msg = \preg_replace("#^preg_match(_all)?\\(.*?\\): #", '', $message);
+            $prev = set_error_handler(function (int $severity, string $message, string $file) use (&$msg): bool {
+                $msg = preg_replace("#^preg_match(_all)?\\(.*?\\): #", '', $message);
                 return \true;
             });
             if ($pattern === '') {
@@ -107,9 +107,9 @@ class InvalidRegexPatternRule implements Rule
             if ($e->getCode() === \PREG_INTERNAL_ERROR && $msg !== null) {
                 return $msg;
             }
-            return \preg_replace('{.*? failed executing ".*": }', '', $e->getMessage());
+            return preg_replace('{.*? failed executing ".*": }', '', $e->getMessage());
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
         return null;
     }

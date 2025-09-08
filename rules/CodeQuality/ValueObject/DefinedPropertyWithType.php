@@ -24,15 +24,15 @@ final class DefinedPropertyWithType
         $this->type = $type;
         $this->definedInMethodName = $definedInMethodName;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->propertyName;
     }
-    public function getType() : Type
+    public function getType(): Type
     {
         return $this->type;
     }
-    public function getDefinedInMethodName() : ?string
+    public function getDefinedInMethodName(): ?string
     {
         return $this->definedInMethodName;
     }

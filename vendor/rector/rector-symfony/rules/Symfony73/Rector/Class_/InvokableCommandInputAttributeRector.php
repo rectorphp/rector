@@ -64,7 +64,7 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change Symfony Command with execute() + configure() to __invoke() with attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -120,14 +120,14 @@ final class SomeCommand
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if (!$node->extends instanceof Name) {
             return null;
@@ -165,7 +165,7 @@ CODE_SAMPLE
         } else {
             $invokeParams = [];
         }
-        $executeClassMethod->params = \array_merge($invokeParams, [$executeClassMethod->params[1]]);
+        $executeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
         // 6. remove parent class
         $node->extends = null;
         foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
@@ -187,14 +187,14 @@ CODE_SAMPLE
     /**
      * Skip commands with interact() or initialize() methods as modify the argument/option values
      */
-    private function isComplexCommand(Class_ $class) : bool
+    private function isComplexCommand(Class_ $class): bool
     {
         if ($class->getMethod(CommandMethodName::INTERACT) instanceof ClassMethod) {
             return \true;
         }
         return $class->getMethod(CommandMethodName::INITIALIZE) instanceof ClassMethod;
     }
-    private function removeConfigureClassMethod(Class_ $class) : void
+    private function removeConfigureClassMethod(Class_ $class): void
     {
         foreach ($class->stmts as $key => $stmt) {
             if (!$stmt instanceof ClassMethod) {
@@ -226,9 +226,9 @@ CODE_SAMPLE
             return;
         }
     }
-    private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod) : void
+    private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod): void
     {
-        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node) : ?Variable {
+        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node): ?Variable {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -241,17 +241,17 @@ CODE_SAMPLE
             $firstArgValue = $node->getArgs()[0]->value;
             if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
                 $variableName = $this->valueResolver->getValue($firstArgValue);
-                return new Variable(\str_replace('-', '_', $variableName));
+                return new Variable(str_replace('-', '_', $variableName));
             }
             if (!$firstArgValue instanceof String_) {
                 // unable to resolve argument/option name
                 throw new ShouldNotHappenException();
             }
             $variableName = $firstArgValue->value;
-            return new Variable(\str_replace('-', '_', $variableName));
+            return new Variable(str_replace('-', '_', $variableName));
         });
     }
-    private function isFluentArgumentOptionChain(MethodCall $methodCall) : bool
+    private function isFluentArgumentOptionChain(MethodCall $methodCall): bool
     {
         $current = $methodCall;
         while ($current instanceof MethodCall) {

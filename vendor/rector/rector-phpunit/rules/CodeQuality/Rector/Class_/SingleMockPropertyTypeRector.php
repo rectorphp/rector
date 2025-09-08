@@ -25,7 +25,7 @@ final class SingleMockPropertyTypeRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make properties in tests with intersection mock object either object type or mock type', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -60,14 +60,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -78,7 +78,7 @@ CODE_SAMPLE
                 continue;
             }
             $complexType = $property->type;
-            if (\count($complexType->types) !== 2) {
+            if (count($complexType->types) !== 2) {
                 continue;
             }
             foreach ($complexType->types as $intersectionType) {

@@ -32,7 +32,7 @@ final class ComposerTriggeredSet implements SetInterface
      * @var string
      * @see https://regex101.com/r/ioYomu/1
      */
-    private const PACKAGE_REGEX = '#^[a-z0-9-]+\\/([a-z0-9-_]+|\\*)$#';
+    private const PACKAGE_REGEX = '#^[a-z0-9-]+\/([a-z0-9-_]+|\*)$#';
     public function __construct(string $groupName, string $packageName, string $version, string $setFilePath)
     {
         $this->groupName = $groupName;
@@ -42,18 +42,18 @@ final class ComposerTriggeredSet implements SetInterface
         Assert::regex($this->packageName, self::PACKAGE_REGEX);
         Assert::fileExists($setFilePath);
     }
-    public function getGroupName() : string
+    public function getGroupName(): string
     {
         return $this->groupName;
     }
-    public function getSetFilePath() : string
+    public function getSetFilePath(): string
     {
         return $this->setFilePath;
     }
     /**
      * @param InstalledPackage[] $installedPackages
      */
-    public function matchInstalledPackages(array $installedPackages) : bool
+    public function matchInstalledPackages(array $installedPackages): bool
     {
         foreach ($installedPackages as $installedPackage) {
             if ($installedPackage->getName() !== $this->packageName) {
@@ -63,7 +63,7 @@ final class ComposerTriggeredSet implements SetInterface
         }
         return \false;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->packageName . ' ' . $this->version;
     }

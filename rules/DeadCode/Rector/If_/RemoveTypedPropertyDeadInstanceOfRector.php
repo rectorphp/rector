@@ -47,7 +47,7 @@ final class RemoveTypedPropertyDeadInstanceOfRector extends AbstractRector
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->promotedPropertyResolver = $promotedPropertyResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead instanceof check on type hinted property', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -90,18 +90,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $hasChanged = \false;
         $class = $node;
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use(&$hasChanged, $class) {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use (&$hasChanged, $class) {
             // avoid loop ifs
             if ($node instanceof While_ || $node instanceof Foreach_ || $node instanceof For_ || $node instanceof Do_) {
                 return NodeVisitor::STOP_TRAVERSAL;
@@ -165,7 +165,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
-    private function isSkippedPropertyFetch(Class_ $class, $propertyFetch) : bool
+    private function isSkippedPropertyFetch(Class_ $class, $propertyFetch): bool
     {
         $propertyName = $this->getName($propertyFetch->name);
         if ($propertyName === null) {
@@ -183,7 +183,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
-    private function isInPropertyPromotedParams(Class_ $class, $propertyFetch) : bool
+    private function isInPropertyPromotedParams(Class_ $class, $propertyFetch): bool
     {
         /** @var string $propertyName */
         $propertyName = $this->getName($propertyFetch);

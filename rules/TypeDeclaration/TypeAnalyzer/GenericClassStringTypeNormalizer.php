@@ -7,7 +7,7 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\UnionType;
 final class GenericClassStringTypeNormalizer
 {
-    public function isAllGenericClassStringType(UnionType $unionType) : bool
+    public function isAllGenericClassStringType(UnionType $unionType): bool
     {
         foreach ($unionType->getTypes() as $type) {
             if (!$type instanceof GenericClassStringType) {

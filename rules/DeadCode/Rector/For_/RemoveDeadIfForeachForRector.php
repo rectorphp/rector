@@ -43,7 +43,7 @@ final class RemoveDeadIfForeachForRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if, foreach and for that does not do anything', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node): ?\PhpParser\Node
     {
         if ($node->stmts === null) {
             return null;
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processIf(If_ $if, int $key, StmtsAwareInterface $stmtsAware) : void
+    private function processIf(If_ $if, int $key, StmtsAwareInterface $stmtsAware): void
     {
         if ($if->elseifs !== []) {
             return;
@@ -127,10 +127,10 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_ $for
      */
-    private function processForForeach($for, int $key, StmtsAwareInterface $stmtsAware) : void
+    private function processForForeach($for, int $key, StmtsAwareInterface $stmtsAware): void
     {
         if ($for instanceof For_) {
-            $variables = $this->betterNodeFinder->findInstanceOf(\array_merge($for->init, $for->cond, $for->loop), Variable::class);
+            $variables = $this->betterNodeFinder->findInstanceOf(array_merge($for->init, $for->cond, $for->loop), Variable::class);
             foreach ($variables as $variable) {
                 if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmtsAware, $key + 1, (string) $this->getName($variable))) {
                     return;
@@ -150,7 +150,7 @@ CODE_SAMPLE
         unset($stmtsAware->stmts[$key]);
         $this->hasChanged = \true;
     }
-    private function hasNodeSideEffect(Expr $expr) : bool
+    private function hasNodeSideEffect(Expr $expr): bool
     {
         return $this->betterNodeFinder->hasInstancesOf($expr, [CallLike::class, Assign::class]);
     }

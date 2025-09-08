@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadCatchRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead catches', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [TryCatch::class];
     }
@@ -63,14 +63,14 @@ CODE_SAMPLE
      * @param TryCatch $node
      * @return TryCatch|null
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $catches = $node->catches;
-        if (\count($catches) === 1) {
+        if (count($catches) === 1) {
             return null;
         }
         $hasChanged = \false;
-        $maxIndexCatches = \count($catches) - 1;
+        $maxIndexCatches = count($catches) - 1;
         foreach ($catches as $key => $catchItem) {
             if (!$this->isJustThrownSameVariable($catchItem)) {
                 continue;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $node->catches = $catches;
         return $node;
     }
-    private function isJustThrownSameVariable(Catch_ $catch) : bool
+    private function isJustThrownSameVariable(Catch_ $catch): bool
     {
         if ($this->isEmpty($catch->stmts)) {
             return \false;
@@ -102,7 +102,7 @@ CODE_SAMPLE
             return \false;
         }
         // too complex to check
-        if (\count($catch->types) !== 1) {
+        if (count($catch->types) !== 1) {
             return \false;
         }
         $type = $catch->types[0];
@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * @param Catch_[] $catches
      */
-    private function shouldSkipNextCatchClassParentWithSpecialTreatment(array $catches, FullyQualified $fullyQualified, int $key, int $maxIndexCatches) : bool
+    private function shouldSkipNextCatchClassParentWithSpecialTreatment(array $catches, FullyQualified $fullyQualified, int $key, int $maxIndexCatches): bool
     {
         for ($index = $key + 1; $index <= $maxIndexCatches; ++$index) {
             if (!isset($catches[$index])) {
@@ -119,7 +119,7 @@ CODE_SAMPLE
             }
             $nextCatch = $catches[$index];
             // too complex to check
-            if (\count($nextCatch->types) !== 1) {
+            if (count($nextCatch->types) !== 1) {
                 return \true;
             }
             $nextCatchType = $nextCatch->types[0];
@@ -138,7 +138,7 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function isEmpty(array $stmts) : bool
+    private function isEmpty(array $stmts): bool
     {
         if ($stmts === []) {
             return \true;

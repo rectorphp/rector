@@ -29,7 +29,7 @@ final class BattleshipTernaryAnalyzer
     /**
      * @return BattleshipCompareOrder::*|null
      */
-    public function isGreaterLowerCompareReturnOneAndMinusOne(Ternary $ternary, ComparedExprs $comparedExprs) : ?string
+    public function isGreaterLowerCompareReturnOneAndMinusOne(Ternary $ternary, ComparedExprs $comparedExprs): ?string
     {
         if ($ternary->cond instanceof Greater) {
             return $this->evaluateGreater($ternary->cond, $ternary, $comparedExprs);
@@ -46,7 +46,7 @@ final class BattleshipTernaryAnalyzer
      *
      * @return BattleshipCompareOrder::*|null
      */
-    private function evaluateGreater(Greater $greater, Ternary $ternary, ComparedExprs $comparedExprs) : ?string
+    private function evaluateGreater(Greater $greater, Ternary $ternary, ComparedExprs $comparedExprs): ?string
     {
         if (!$ternary->if instanceof Expr) {
             return null;
@@ -69,7 +69,7 @@ final class BattleshipTernaryAnalyzer
      *
      * @return BattleshipCompareOrder::*|null
      */
-    private function evaluateSmaller(Smaller $smaller, Ternary $ternary, ComparedExprs $comparedExprs) : ?string
+    private function evaluateSmaller(Smaller $smaller, Ternary $ternary, ComparedExprs $comparedExprs): ?string
     {
         if (!$ternary->if instanceof Expr) {
             return null;
@@ -85,7 +85,7 @@ final class BattleshipTernaryAnalyzer
         }
         return $this->evaluateTernaryDesc($ternary);
     }
-    private function isValueOneAndMinusOne(Expr $firstExpr, Expr $secondExpr) : bool
+    private function isValueOneAndMinusOne(Expr $firstExpr, Expr $secondExpr): bool
     {
         if (!$this->valueResolver->isValue($firstExpr, 1)) {
             return \false;
@@ -95,7 +95,7 @@ final class BattleshipTernaryAnalyzer
     /**
      * @return BattleshipCompareOrder::*|null
      */
-    private function evaluateTernaryAsc(Ternary $ternary) : ?string
+    private function evaluateTernaryAsc(Ternary $ternary): ?string
     {
         if (!$ternary->if instanceof Expr) {
             return null;
@@ -111,7 +111,7 @@ final class BattleshipTernaryAnalyzer
     /**
      * @return BattleshipCompareOrder::*|null
      */
-    private function evaluateTernaryDesc(Ternary $ternary) : ?string
+    private function evaluateTernaryDesc(Ternary $ternary): ?string
     {
         if (!$ternary->if instanceof Expr) {
             return null;

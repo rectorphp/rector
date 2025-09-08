@@ -45,11 +45,11 @@ final class ConditionEvaluator
             if ($compareSign === '<' && $this->phpVersionProvider->provide() < $versionCompareCondition->getSecondVersion()) {
                 return null;
             }
-            return \version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion(), $compareSign);
+            return version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion(), $compareSign);
         }
-        return \version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion());
+        return version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion());
     }
-    private function isEvaluatedAsTrue(BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
+    private function isEvaluatedAsTrue(BinaryToVersionCompareCondition $binaryToVersionCompareCondition): bool
     {
         $versionCompareResult = $this->evaluateVersionCompareCondition($binaryToVersionCompareCondition->getVersionCompareCondition());
         if ($binaryToVersionCompareCondition->getBinaryClass() === Identical::class) {

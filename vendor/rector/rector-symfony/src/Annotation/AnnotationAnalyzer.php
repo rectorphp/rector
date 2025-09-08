@@ -16,7 +16,7 @@ final class AnnotationAnalyzer
     {
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function hasClassMethodWithTemplateAnnotation(Class_ $class) : bool
+    public function hasClassMethodWithTemplateAnnotation(Class_ $class): bool
     {
         if ($this->attrinationFinder->hasByOne($class, SymfonyAnnotation::TEMPLATE)) {
             return \true;

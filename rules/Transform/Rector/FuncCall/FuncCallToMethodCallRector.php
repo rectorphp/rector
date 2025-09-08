@@ -30,7 +30,7 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
     {
         $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn defined function calls to local method calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -60,19 +60,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new FuncCallToMethodCall('view', 'Namespaced\\SomeRenderer', 'render')])]);
+, [new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $class = $node;
@@ -83,7 +83,7 @@ CODE_SAMPLE
             if ($classMethod->isAbstract()) {
                 continue;
             }
-            $this->traverseNodesWithCallable($classMethod, function (Node $node) use($class, $classMethod, &$hasChanged) : ?Node {
+            $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($class, $classMethod, &$hasChanged): ?Node {
                 if (!$node instanceof FuncCall) {
                     return null;
                 }
@@ -106,7 +106,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, FuncCallToMethodCall::class);
         $this->funcNameToMethodCallNames = $configuration;

@@ -56,7 +56,7 @@ final class BreakingVariableRenameGuard
      * @var string
      * @see https://regex101.com/r/1pKLgf/1
      */
-    public const AT_NAMING_REGEX = '#[\\w+]At$#';
+    public const AT_NAMING_REGEX = '#[\w+]At$#';
     public function __construct(BetterNodeFinder $betterNodeFinder, ConflictingNameResolver $conflictingNameResolver, NodeTypeResolver $nodeTypeResolver, OverriddenExistingNamesResolver $overriddenExistingNamesResolver, TypeUnwrapper $typeUnwrapper, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -69,11 +69,11 @@ final class BreakingVariableRenameGuard
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, Variable $variable) : bool
+    public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, Variable $variable): bool
     {
         // is the suffix? → also accepted
-        $expectedNameCamelCase = \ucfirst($expectedName);
-        if (\substr_compare($currentName, $expectedNameCamelCase, -\strlen($expectedNameCamelCase)) === 0) {
+        $expectedNameCamelCase = ucfirst($expectedName);
+        if (substr_compare($currentName, $expectedNameCamelCase, -strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
@@ -93,15 +93,15 @@ final class BreakingVariableRenameGuard
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
-    public function shouldSkipParam(string $currentName, string $expectedName, $classMethod, Param $param) : bool
+    public function shouldSkipParam(string $currentName, string $expectedName, $classMethod, Param $param): bool
     {
         // is the suffix? → also accepted
-        $expectedNameCamelCase = \ucfirst($expectedName);
-        if (\substr_compare($currentName, $expectedNameCamelCase, -\strlen($expectedNameCamelCase)) === 0) {
+        $expectedNameCamelCase = ucfirst($expectedName);
+        if (substr_compare($currentName, $expectedNameCamelCase, -strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
         $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNamesForParam($classMethod);
-        if (\in_array($expectedName, $conflictingNames, \true)) {
+        if (in_array($expectedName, $conflictingNames, \true)) {
             return \true;
         }
         if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
@@ -125,14 +125,14 @@ final class BreakingVariableRenameGuard
         if ($this->isDateTimeAtNamingConvention($param)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $node) use($expectedName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $node) use ($expectedName): bool {
             if (!$node instanceof Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, $expectedName);
         });
     }
-    private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName) : bool
+    private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool
     {
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
@@ -147,28 +147,28 @@ final class BreakingVariableRenameGuard
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function hasConflictVariable($functionLike, string $newName) : bool
+    private function hasConflictVariable($functionLike, string $newName): bool
     {
         if ($functionLike instanceof ArrowFunction) {
-            return $this->betterNodeFinder->hasInstanceOfName(\array_merge([$functionLike->expr], $functionLike->params), Variable::class, $newName);
+            return $this->betterNodeFinder->hasInstanceOfName(array_merge([$functionLike->expr], $functionLike->params), Variable::class, $newName);
         }
-        return $this->betterNodeFinder->hasInstanceOfName(\array_merge((array) $functionLike->stmts, $functionLike->params), Variable::class, $newName);
+        return $this->betterNodeFinder->hasInstanceOfName(array_merge((array) $functionLike->stmts, $functionLike->params), Variable::class, $newName);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function isUsedInClosureUsesName(string $expectedName, $functionLike) : bool
+    private function isUsedInClosureUsesName(string $expectedName, $functionLike): bool
     {
         if (!$functionLike instanceof Closure) {
             return \false;
         }
         return $this->betterNodeFinder->hasVariableOfName($functionLike->uses, $expectedName);
     }
-    private function isRamseyUuidInterface(Param $param) : bool
+    private function isRamseyUuidInterface(Param $param): bool
     {
-        return $this->nodeTypeResolver->isObjectType($param, new ObjectType('Ramsey\\Uuid\\UuidInterface'));
+        return $this->nodeTypeResolver->isObjectType($param, new ObjectType('Ramsey\Uuid\UuidInterface'));
     }
-    private function isDateTimeAtNamingConvention(Param $param) : bool
+    private function isDateTimeAtNamingConvention(Param $param): bool
     {
         $type = $this->nodeTypeResolver->getType($param);
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
@@ -176,14 +176,14 @@ final class BreakingVariableRenameGuard
         if ($className === null) {
             return \false;
         }
-        if (!\is_a($className, DateTimeInterface::class, \true)) {
+        if (!is_a($className, DateTimeInterface::class, \true)) {
             return \false;
         }
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
         return StringUtils::isMatch($currentName, self::AT_NAMING_REGEX);
     }
-    private function isGenerator(Param $param) : bool
+    private function isGenerator(Param $param): bool
     {
         if (!$param->type instanceof Node) {
             return \false;
@@ -192,9 +192,9 @@ final class BreakingVariableRenameGuard
         if (!$paramType instanceof ObjectType) {
             return \false;
         }
-        if (\substr_compare($paramType->getClassName(), 'Generator', -\strlen('Generator')) === 0 || \substr_compare($paramType->getClassName(), 'Iterator', -\strlen('Iterator')) === 0) {
+        if (substr_compare($paramType->getClassName(), 'Generator', -strlen('Generator')) === 0 || substr_compare($paramType->getClassName(), 'Iterator', -strlen('Iterator')) === 0) {
             return \true;
         }
-        return $paramType->isInstanceOf('Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator')->yes();
+        return $paramType->isInstanceOf('Symfony\Component\DependencyInjection\Argument\RewindableGenerator')->yes();
     }
 }

@@ -26,7 +26,7 @@ final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends AbstractRec
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array_key_exists() ternary to coalescing', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -51,14 +51,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->cond instanceof FuncCall) {
             return null;
@@ -84,7 +84,7 @@ CODE_SAMPLE
      * =
      * $values[$key]
      */
-    private function areArrayKeysExistsArgsMatchingDimFetch(FuncCall $funcCall, ArrayDimFetch $arrayDimFetch) : bool
+    private function areArrayKeysExistsArgsMatchingDimFetch(FuncCall $funcCall, ArrayDimFetch $arrayDimFetch): bool
     {
         $firstArg = $funcCall->args[0];
         if (!$firstArg instanceof Arg) {

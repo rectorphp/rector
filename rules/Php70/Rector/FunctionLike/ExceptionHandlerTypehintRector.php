@@ -24,7 +24,7 @@ final class ExceptionHandlerTypehintRector extends AbstractRector implements Min
      * @see https://regex101.com/r/VBFXCR/1
      */
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change typehint from `Exception` to `Throwable`', [new CodeSample(<<<'CODE_SAMPLE'
 function handler(Exception $exception) { ... }
@@ -39,17 +39,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class];
     }
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // exception handle has 1 param exactly
-        if (\count($node->params) !== 1) {
+        if (count($node->params) !== 1) {
             return null;
         }
         $paramNode = $node->params[0];
@@ -72,7 +72,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::THROWABLE_TYPE;
     }

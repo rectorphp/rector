@@ -32,7 +32,7 @@ final class SpecificAssertInternalTypeRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change assertInternalType()/assertNotInternalType() method to new specific alternatives', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertInternalType', 'assertNotInternalType'])) {
             return null;
@@ -84,7 +84,7 @@ CODE_SAMPLE
         if (!isset(self::TYPE_TO_METHOD[$type])) {
             return null;
         }
-        \array_shift($node->args);
+        array_shift($node->args);
         $position = $this->isName($node->name, 'assertInternalType') ? 0 : 1;
         $methodName = self::TYPE_TO_METHOD[$type][$position];
         $node->name = new Identifier($methodName);

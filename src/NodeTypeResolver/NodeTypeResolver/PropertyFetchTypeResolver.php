@@ -36,21 +36,21 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface, Node
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         // compensate 3rd party non-analysed property reflection
         $vendorPropertyType = $this->getVendorPropertyFetchType($node);
@@ -63,7 +63,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface, Node
         }
         return $scope->getType($node);
     }
-    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch) : Type
+    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): Type
     {
         // 3rd party code
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);

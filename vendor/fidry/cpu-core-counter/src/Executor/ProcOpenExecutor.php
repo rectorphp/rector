@@ -19,7 +19,7 @@ use function proc_open;
 use function stream_get_contents;
 final class ProcOpenExecutor implements ProcessExecutor
 {
-    public function execute(string $command) : ?array
+    public function execute(string $command): ?array
     {
         if (!function_exists('proc_open')) {
             return null;

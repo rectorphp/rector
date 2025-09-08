@@ -15,12 +15,12 @@ final class CoalesceAnalyzer
      * @var array<class-string<Expr>>
      */
     private const ISSETABLE_EXPR = [Variable::class, ArrayDimFetch::class, PropertyFetch::class, StaticPropertyFetch::class];
-    public function hasIssetableLeft(Coalesce $coalesce) : bool
+    public function hasIssetableLeft(Coalesce $coalesce): bool
     {
         if ($coalesce->left instanceof Coalesce) {
             return \true;
         }
-        $leftClass = \get_class($coalesce->left);
-        return \in_array($leftClass, self::ISSETABLE_EXPR, \true);
+        $leftClass = get_class($coalesce->left);
+        return in_array($leftClass, self::ISSETABLE_EXPR, \true);
     }
 }

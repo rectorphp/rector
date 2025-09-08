@@ -34,7 +34,7 @@ final class StaticCallToMethodCallRector extends AbstractRector implements Confi
     {
         $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static call to service method via constructor injection', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Nette\Utils\FileSystem;
@@ -68,24 +68,24 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallToMethodCall('Nette\\Utils\\FileSystem', 'write', 'App\\Custom\\SmartFileSystem', 'dumpFile')])]);
+, [new StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'App\Custom\SmartFileSystem', 'dumpFile')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $class = $node;
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
-            $this->traverseNodesWithCallable($classMethod, function (Node $node) use($class, $classMethod, &$hasChanged) {
+            $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($class, $classMethod, &$hasChanged) {
                 if (!$node instanceof StaticCall) {
                     return null;
                 }
@@ -112,24 +112,24 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, StaticCallToMethodCall::class);
         $this->staticCallsToMethodCalls = $configuration;
     }
-    private function getMethodName(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall) : string
+    private function getMethodName(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall): string
     {
         if ($staticCallToMethodCall->getMethodName() === '*') {
             $methodName = $this->getName($staticCall->name);
         } else {
             $methodName = $staticCallToMethodCall->getMethodName();
         }
-        if (!\is_string($methodName)) {
+        if (!is_string($methodName)) {
             throw new ShouldNotHappenException();
         }
         return $methodName;
     }
-    private function refactorToInstanceCall(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall) : MethodCall
+    private function refactorToInstanceCall(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall): MethodCall
     {
         $new = new New_(new FullyQualified($staticCallToMethodCall->getClassType()));
         $methodName = $this->getMethodName($staticCall, $staticCallToMethodCall);

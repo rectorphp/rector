@@ -15,14 +15,14 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  */
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return FullyQualified::class;
     }
     /**
      * @param FullyQualified $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         $originalName = (string) $node->getAttribute(AttributeKey::ORIGINAL_NAME);
         $fullyQualifiedName = $node->toString();
@@ -32,7 +32,7 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
         }
         return new FullyQualifiedObjectType($fullyQualifiedName);
     }
-    private function isAliasedName(string $originalName, string $fullyQualifiedName) : bool
+    private function isAliasedName(string $originalName, string $fullyQualifiedName): bool
     {
         if ($originalName === '') {
             return \false;
@@ -40,6 +40,6 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
         if ($originalName === $fullyQualifiedName) {
             return \false;
         }
-        return \substr_compare($fullyQualifiedName, '\\' . $originalName, -\strlen('\\' . $originalName)) !== 0;
+        return substr_compare($fullyQualifiedName, '\\' . $originalName, -strlen('\\' . $originalName)) !== 0;
     }
 }

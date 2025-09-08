@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\String_\RenameStringRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         // @see https://github.com/symfony/symfony/pull/35858
         'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',

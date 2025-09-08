@@ -22,11 +22,11 @@ class Attribute extends NodeAbstract
         $this->name = $name;
         $this->args = $args;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'args'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Attribute';
     }

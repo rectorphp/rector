@@ -47,8 +47,8 @@ class RunProcessMessage
         $this->input = $input;
         $this->timeout = $timeout;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
-        return \implode(' ', $this->command);
+        return implode(' ', $this->command);
     }
 }

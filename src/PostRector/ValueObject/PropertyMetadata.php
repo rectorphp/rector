@@ -25,15 +25,15 @@ final class PropertyMetadata
         $this->type = $type;
         $this->flags = $flags;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function getType() : ?Type
+    public function getType(): ?Type
     {
         return $this->type;
     }
-    public function getFlags() : int
+    public function getFlags(): int
     {
         return $this->flags;
     }

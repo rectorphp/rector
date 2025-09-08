@@ -17,26 +17,26 @@ final class DeprecatedRulesReporter
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function reportDeprecatedRules() : void
+    public function reportDeprecatedRules(): void
     {
         /** @var string[] $registeredRectorRules */
         $registeredRectorRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
         foreach ($registeredRectorRules as $registeredRectorRule) {
-            if (!\is_a($registeredRectorRule, DeprecatedInterface::class, \true)) {
+            if (!is_a($registeredRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
-            $this->symfonyStyle->warning(\sprintf('Registered rule "%s" is deprecated and will be removed. Upgrade your config to use another rule or remove it', $registeredRectorRule));
+            $this->symfonyStyle->warning(sprintf('Registered rule "%s" is deprecated and will be removed. Upgrade your config to use another rule or remove it', $registeredRectorRule));
         }
     }
-    public function reportDeprecatedSkippedRules() : void
+    public function reportDeprecatedSkippedRules(): void
     {
         /** @var string[] $skippedRectorRules */
         $skippedRectorRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
         foreach ($skippedRectorRules as $skippedRectorRule) {
-            if (!\is_a($skippedRectorRule, DeprecatedInterface::class, \true)) {
+            if (!is_a($skippedRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
-            $this->symfonyStyle->warning(\sprintf('Skipped rule "%s" is deprecated', $skippedRectorRule));
+            $this->symfonyStyle->warning(sprintf('Skipped rule "%s" is deprecated', $skippedRectorRule));
         }
     }
 }

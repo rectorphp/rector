@@ -71,7 +71,7 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
         $this->valueResolver = $valueResolver;
         $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move default value for entity property to constructor, the safest place', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
@@ -115,14 +115,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         foreach ($node->getProperties() as $property) {
@@ -133,10 +133,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorProperty(Property $property, Class_ $class) : void
+    private function refactorProperty(Property $property, Class_ $class): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
@@ -177,7 +177,7 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
         $this->refactorClassWithRemovalDefault($class, $property);
     }
-    private function refactorClassWithRemovalDefault(Class_ $class, Property $property) : void
+    private function refactorClassWithRemovalDefault(Class_ $class, Property $property): void
     {
         $this->refactorClass($class, $property);
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
@@ -188,7 +188,7 @@ CODE_SAMPLE
         $this->propertyDefaultNullRemover->remove($property);
         $this->hasChanged = \true;
     }
-    private function refactorClass(Class_ $class, Property $property) : void
+    private function refactorClass(Class_ $class, Property $property): void
     {
         /** @var string $propertyName */
         $propertyName = $this->getName($property);

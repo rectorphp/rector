@@ -66,11 +66,11 @@ final class PhpDocNodeTraverser
      * @var PhpDocNodeVisitorInterface[]
      */
     private array $phpDocNodeVisitors = [];
-    public function addPhpDocNodeVisitor(PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
+    public function addPhpDocNodeVisitor(PhpDocNodeVisitorInterface $phpDocNodeVisitor): void
     {
         $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
     }
-    public function traverse(Node $node) : void
+    public function traverse(Node $node): void
     {
         foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
             $phpDocNodeVisitor->beforeTraverse($node);
@@ -83,7 +83,7 @@ final class PhpDocNodeTraverser
     /**
      * @param callable(Node $node): (int|null|Node) $callable
      */
-    public function traverseWithCallable(Node $node, string $docContent, callable $callable) : void
+    public function traverseWithCallable(Node $node, string $docContent, callable $callable): void
     {
         $callablePhpDocNodeVisitor = new CallablePhpDocNodeVisitor($callable, $docContent);
         $this->addPhpDocNodeVisitor($callablePhpDocNodeVisitor);
@@ -94,10 +94,10 @@ final class PhpDocNodeTraverser
      * @param TNode $node
      * @return TNode
      */
-    private function traverseNode(Node $node) : Node
+    private function traverseNode(Node $node): Node
     {
-        $objectPublicPropertiesToValues = \get_object_vars($node);
-        $subNodeNames = \array_keys($objectPublicPropertiesToValues);
+        $objectPublicPropertiesToValues = get_object_vars($node);
+        $subNodeNames = array_keys($objectPublicPropertiesToValues);
         foreach ($subNodeNames as $subNodeName) {
             $subNode =& $node->{$subNodeName};
             if (\is_array($subNode)) {
@@ -122,7 +122,7 @@ final class PhpDocNodeTraverser
                             unset($subNode);
                             continue 2;
                         } else {
-                            throw new InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
+                            throw new InvalidTraverseException('enterNode() returned invalid value of type ' . gettype($return));
                         }
                     }
                 }
@@ -146,7 +146,7 @@ final class PhpDocNodeTraverser
      * @param array<Node|mixed> $nodes
      * @return array<Node|mixed>
      */
-    private function traverseArray(array $nodes) : array
+    private function traverseArray(array $nodes): array
     {
         foreach ($nodes as $key => &$node) {
             // can be string or something else
@@ -173,7 +173,7 @@ final class PhpDocNodeTraverser
                         unset($nodes[$key]);
                         continue 2;
                     } else {
-                        throw new InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
+                        throw new InvalidTraverseException('enterNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
@@ -199,7 +199,7 @@ final class PhpDocNodeTraverser
                         $this->stopTraversal = \true;
                         break 2;
                     } else {
-                        throw new InvalidTraverseException('leaveNode() returned invalid value of type ' . \gettype($return));
+                        throw new InvalidTraverseException('leaveNode() returned invalid value of type ' . gettype($return));
                     }
                 }
                 if ($breakVisitorIndex === $visitorIndex) {

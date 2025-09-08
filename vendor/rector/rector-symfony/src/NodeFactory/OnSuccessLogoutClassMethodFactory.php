@@ -46,7 +46,7 @@ final class OnSuccessLogoutClassMethodFactory
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
     }
-    public function createFromOnLogoutSuccessClassMethod(ClassMethod $onLogoutSuccessClassMethod) : ClassMethod
+    public function createFromOnLogoutSuccessClassMethod(ClassMethod $onLogoutSuccessClassMethod): ClassMethod
     {
         $classMethod = $this->bareLogoutClassMethodFactory->create();
         $getResponseMethodCall = new MethodCall(new Variable(self::LOGOUT_EVENT), 'getResponse');
@@ -57,12 +57,12 @@ final class OnSuccessLogoutClassMethodFactory
         $this->replaceReturnResponseWithSetResponse($onLogoutSuccessClassMethod);
         $this->replaceRequestWithGetRequest($onLogoutSuccessClassMethod);
         $oldClassStmts = (array) $onLogoutSuccessClassMethod->stmts;
-        $classMethod->stmts = \array_merge([$if], $oldClassStmts);
+        $classMethod->stmts = array_merge([$if], $oldClassStmts);
         return $classMethod;
     }
-    private function replaceReturnResponseWithSetResponse(ClassMethod $classMethod) : void
+    private function replaceReturnResponseWithSetResponse(ClassMethod $classMethod): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) : ?Expression {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node): ?Expression {
             if (!$node instanceof Return_) {
                 return null;
             }
@@ -74,7 +74,7 @@ final class OnSuccessLogoutClassMethodFactory
             return new Expression($methodCall);
         });
     }
-    private function replaceRequestWithGetRequest(ClassMethod $classMethod) : void
+    private function replaceRequestWithGetRequest(ClassMethod $classMethod): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) {
             if ($node instanceof Param) {

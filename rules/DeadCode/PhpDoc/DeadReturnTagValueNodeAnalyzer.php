@@ -66,7 +66,7 @@ final class DeadReturnTagValueNodeAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function isDead(ReturnTagValueNode $returnTagValueNode, $functionLike) : bool
+    public function isDead(ReturnTagValueNode $returnTagValueNode, $functionLike): bool
     {
         $returnType = $functionLike->getReturnType();
         if ($returnType === null) {
@@ -103,18 +103,18 @@ final class DeadReturnTagValueNodeAnalyzer
         }
         return !$this->hasTrueFalsePseudoType($returnTagValueNode->type);
     }
-    private function isVoidReturnType(Node $node) : bool
+    private function isVoidReturnType(Node $node): bool
     {
         return $node instanceof Identifier && $node->toString() === 'void';
     }
-    private function isNeverReturnType(Node $node) : bool
+    private function isNeverReturnType(Node $node): bool
     {
         return $node instanceof Identifier && $node->toString() === 'never';
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function isDeadNotEqual(ReturnTagValueNode $returnTagValueNode, Node $node, $functionLike) : bool
+    private function isDeadNotEqual(ReturnTagValueNode $returnTagValueNode, Node $node, $functionLike): bool
     {
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && (string) $returnTagValueNode->type === 'void') {
             return \true;
@@ -126,15 +126,15 @@ final class DeadReturnTagValueNodeAnalyzer
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $functionLike);
         return $docType instanceof UnionType && $this->typeComparator->areTypesEqual(TypeCombinator::removeNull($docType), $nodeType);
     }
-    private function hasTrueFalsePseudoType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
+    private function hasTrueFalsePseudoType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
     {
         $unionTypes = $bracketsAwareUnionTypeNode->types;
         foreach ($unionTypes as $unionType) {
             if (!$unionType instanceof IdentifierTypeNode) {
                 continue;
             }
-            $name = \strtolower((string) $unionType);
-            if (\in_array($name, ['true', 'false'], \true)) {
+            $name = strtolower((string) $unionType);
+            if (in_array($name, ['true', 'false'], \true)) {
                 return \true;
             }
         }
@@ -144,7 +144,7 @@ final class DeadReturnTagValueNodeAnalyzer
      * exact different between @return and node return type
      * @param mixed $returnType
      */
-    private function hasUsefulPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType) : bool
+    private function hasUsefulPhpdocType(ReturnTagValueNode $returnTagValueNode, $returnType): bool
     {
         if ($returnTagValueNode->type instanceof IdentifierTypeNode && $returnTagValueNode->type->name === 'mixed') {
             return \false;

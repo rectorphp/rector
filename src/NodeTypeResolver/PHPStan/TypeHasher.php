@@ -16,11 +16,11 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class TypeHasher
 {
-    public function areTypesEqual(Type $firstType, Type $secondType) : bool
+    public function areTypesEqual(Type $firstType, Type $secondType): bool
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
-    public function createTypeHash(Type $type) : string
+    public function createTypeHash(Type $type): string
     {
         if ($type instanceof MixedType) {
             return $type->describe(VerbosityLevel::precise()) . $type->isExplicitMixed();
@@ -35,12 +35,12 @@ final class TypeHasher
             return $this->resolveUniqueTypeWithClassNameHash($type);
         }
         if ($type->isConstantValue()->yes()) {
-            return \get_class($type);
+            return get_class($type);
         }
         $type = $this->normalizeObjectType($type);
         return $type->describe(VerbosityLevel::value());
     }
-    private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName) : string
+    private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName): string
     {
         if ($typeWithClassName instanceof ShortenedObjectType) {
             return $typeWithClassName->getFullyQualifiedName();
@@ -50,9 +50,9 @@ final class TypeHasher
         }
         return $typeWithClassName->getClassName();
     }
-    private function normalizeObjectType(Type $type) : Type
+    private function normalizeObjectType(Type $type): Type
     {
-        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) : Type {
+        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback): Type {
             if ($currentType instanceof ShortenedObjectType) {
                 return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
             }

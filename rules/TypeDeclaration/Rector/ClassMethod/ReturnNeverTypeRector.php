@@ -32,7 +32,7 @@ final class ReturnNeverTypeRector extends AbstractRector implements MinPhpVersio
         $this->addNeverReturnType = $addNeverReturnType;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add "never" return-type for methods that never return anything', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -57,14 +57,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->isTestClassMethodWithFilledReturnType($node)) {
             return null;
@@ -72,14 +72,14 @@ CODE_SAMPLE
         $scope = ScopeFetcher::fetch($node);
         return $this->addNeverReturnType->add($node, $scope);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEVER_TYPE;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $callLike
      */
-    private function isTestClassMethodWithFilledReturnType($callLike) : bool
+    private function isTestClassMethodWithFilledReturnType($callLike): bool
     {
         if (!$callLike instanceof ClassMethod) {
             return \false;

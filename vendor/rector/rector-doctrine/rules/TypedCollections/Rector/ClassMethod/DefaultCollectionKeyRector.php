@@ -38,7 +38,7 @@ final class DefaultCollectionKeyRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->collectionTagValueNodeAnalyzer = $collectionTagValueNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add default key to Collection generic type if missing in @param or @return of class method', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -68,14 +68,14 @@ final class ReturnSimpleCollection
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if ($node->isAbstract()) {
             return null;
@@ -100,14 +100,14 @@ CODE_SAMPLE
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
      */
-    private function processTagValueNode($tagValueNode) : bool
+    private function processTagValueNode($tagValueNode): bool
     {
         if (!$this->collectionTagValueNodeAnalyzer->detect($tagValueNode)) {
             return \false;
         }
         /** @var GenericTypeNode $genericTypeNode */
         $genericTypeNode = $tagValueNode->type;
-        if (\count($genericTypeNode->genericTypes) !== 1) {
+        if (count($genericTypeNode->genericTypes) !== 1) {
             return \false;
         }
         $valueGenericType = $genericTypeNode->genericTypes[0];

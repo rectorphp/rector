@@ -21,21 +21,21 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
      * @var array<string, string>
      */
     private array $oldFunctionToNewFunction = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turn defined function call new one', [new ConfiguredCodeSample('view("...", []);', 'Laravel\\Templating\\render("...", []);', ['view' => 'Laravel\\Templating\\render'])]);
+        return new RuleDefinition('Turn defined function call new one', [new ConfiguredCodeSample('view("...", []);', 'Laravel\Templating\render("...", []);', ['view' => 'Laravel\Templating\render'])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $nodeName = $this->getName($node);
         if ($nodeName === null) {
@@ -53,15 +53,15 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        Assert::allString(\array_values($configuration));
+        Assert::allString(array_values($configuration));
         Assert::allString($configuration);
         $this->oldFunctionToNewFunction = $configuration;
     }
-    private function createName(string $newFunction) : Name
+    private function createName(string $newFunction): Name
     {
-        if (\strpos($newFunction, '\\') !== \false) {
+        if (strpos($newFunction, '\\') !== \false) {
             return new FullyQualified($newFunction);
         }
         return new Name($newFunction);

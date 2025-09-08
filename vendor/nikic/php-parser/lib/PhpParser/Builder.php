@@ -10,5 +10,5 @@ interface Builder
      *
      * @return Node The built node
      */
-    public function getNode() : \PhpParser\Node;
+    public function getNode(): \PhpParser\Node;
 }

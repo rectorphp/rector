@@ -41,7 +41,7 @@ final class AddInstanceofAssertForNullableInstanceRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->nullableObjectAssignCollector = $nullableObjectAssignCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add explicit instance assert between nullable object assign and method call on nullable object (spotted by PHPStan)', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -93,19 +93,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Foreach_::class];
     }
     /**
      * @param ClassMethod|Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if ($node->stmts === [] || $node->stmts === null || \count($node->stmts) < 2) {
+        if ($node->stmts === [] || $node->stmts === null || count($node->stmts) < 2) {
             return null;
         }
         $hasChanged = \false;
@@ -119,7 +119,7 @@ CODE_SAMPLE
             }
             // adding type here + popping the variable name out
             $assertInstanceOfExpression = $this->createAssertInstanceOf($matchedNullableVariableNameToType);
-            \array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
+            array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
             // remove variable name from nullable ones
             $hasChanged = \true;
             // from now on, the variable is not nullable, remove to avoid double asserts
@@ -131,7 +131,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function isNullableType(Type $type) : bool
+    private function isNullableType(Type $type): bool
     {
         if (!$type instanceof UnionType) {
             return \false;
@@ -139,18 +139,18 @@ CODE_SAMPLE
         if (!TypeCombinator::containsNull($type)) {
             return \false;
         }
-        return \count($type->getTypes()) === 2;
+        return count($type->getTypes()) === 2;
     }
-    private function createAssertInstanceOf(VariableNameToType $variableNameToType) : Expression
+    private function createAssertInstanceOf(VariableNameToType $variableNameToType): Expression
     {
         $args = [new Arg(new ClassConstFetch(new FullyQualified($variableNameToType->getObjectType()), 'class')), new Arg(new Variable($variableNameToType->getVariableName()))];
         $methodCall = new MethodCall(new Variable('this'), 'assertInstanceOf', $args);
         return new Expression($methodCall);
     }
-    private function matchedNullableVariableNameToType(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection) : ?VariableNameToType
+    private function matchedNullableVariableNameToType(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection): ?VariableNameToType
     {
         $matchedNullableVariableNameToType = null;
-        $this->traverseNodesWithCallable($stmt, function (Node $node) use($variableNameToTypeCollection, &$matchedNullableVariableNameToType) {
+        $this->traverseNodesWithCallable($stmt, function (Node $node) use ($variableNameToTypeCollection, &$matchedNullableVariableNameToType) {
             if (!$node instanceof MethodCall) {
                 return null;
             }

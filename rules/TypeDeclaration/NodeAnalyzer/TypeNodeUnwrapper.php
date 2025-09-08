@@ -24,17 +24,17 @@ final class TypeNodeUnwrapper
      * @param array<UnionType|NullableType|Name|Identifier|IntersectionType> $typeNodes
      * @return array<Name|Identifier>
      */
-    public function unwrapNullableUnionTypes(array $typeNodes) : array
+    public function unwrapNullableUnionTypes(array $typeNodes): array
     {
         $unwrappedTypeNodes = [];
         foreach ($typeNodes as $typeNode) {
             if ($typeNode instanceof UnionType) {
-                $unwrappedTypeNodes = \array_merge($unwrappedTypeNodes, $this->unwrapNullableUnionTypes($typeNode->types));
+                $unwrappedTypeNodes = array_merge($unwrappedTypeNodes, $this->unwrapNullableUnionTypes($typeNode->types));
             } elseif ($typeNode instanceof NullableType) {
                 $unwrappedTypeNodes[] = $typeNode->type;
                 $unwrappedTypeNodes[] = new Identifier('null');
             } elseif ($typeNode instanceof IntersectionType) {
-                $unwrappedTypeNodes = \array_merge($unwrappedTypeNodes, $this->unwrapNullableUnionTypes($typeNode->types));
+                $unwrappedTypeNodes = array_merge($unwrappedTypeNodes, $this->unwrapNullableUnionTypes($typeNode->types));
             } else {
                 $unwrappedTypeNodes[] = $typeNode;
             }
@@ -47,7 +47,7 @@ final class TypeNodeUnwrapper
      * @param TNode[] $nodes
      * @return TNode[]
      */
-    public function uniquateNodes(array $nodes) : array
+    public function uniquateNodes(array $nodes): array
     {
         $uniqueNodes = [];
         foreach ($nodes as $node) {
@@ -55,6 +55,6 @@ final class TypeNodeUnwrapper
             $uniqueNodes[$uniqueHash] = $node;
         }
         // reset keys from 0, for further compatibility
-        return \array_values($uniqueNodes);
+        return array_values($uniqueNodes);
     }
 }

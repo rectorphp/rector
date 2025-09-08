@@ -60,23 +60,23 @@ interface OutputInterface
      *
      * @return self::VERBOSITY_*
      */
-    public function getVerbosity() : int;
+    public function getVerbosity(): int;
     /**
      * Returns whether verbosity is quiet (-q).
      */
-    public function isQuiet() : bool;
+    public function isQuiet(): bool;
     /**
      * Returns whether verbosity is verbose (-v).
      */
-    public function isVerbose() : bool;
+    public function isVerbose(): bool;
     /**
      * Returns whether verbosity is very verbose (-vv).
      */
-    public function isVeryVerbose() : bool;
+    public function isVeryVerbose(): bool;
     /**
      * Returns whether verbosity is debug (-vvv).
      */
-    public function isDebug() : bool;
+    public function isDebug(): bool;
     /**
      * Sets the decorated flag.
      *
@@ -86,7 +86,7 @@ interface OutputInterface
     /**
      * Gets the decorated flag.
      */
-    public function isDecorated() : bool;
+    public function isDecorated(): bool;
     /**
      * @return void
      */
@@ -94,5 +94,5 @@ interface OutputInterface
     /**
      * Returns current output formatter instance.
      */
-    public function getFormatter() : OutputFormatterInterface;
+    public function getFormatter(): OutputFormatterInterface;
 }

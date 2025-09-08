@@ -21,9 +21,9 @@ final class ArrayCallableToMethodCallFactory
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function create(Array_ $array) : ?MethodCall
+    public function create(Array_ $array): ?MethodCall
     {
-        if (\count($array->items) !== 2) {
+        if (count($array->items) !== 2) {
             return null;
         }
         $firstItem = $array->items[0];

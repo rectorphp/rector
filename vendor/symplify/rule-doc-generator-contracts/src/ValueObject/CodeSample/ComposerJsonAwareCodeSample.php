@@ -15,7 +15,7 @@ final class ComposerJsonAwareCodeSample extends AbstractCodeSample
         $this->composerJson = $composerJson;
         parent::__construct($badCode, $goodCode);
     }
-    public function getComposerJson() : string
+    public function getComposerJson(): string
     {
         return $this->composerJson;
     }

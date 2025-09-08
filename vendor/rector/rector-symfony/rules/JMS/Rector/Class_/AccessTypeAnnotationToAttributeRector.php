@@ -35,7 +35,7 @@ final class AccessTypeAnnotationToAttributeRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->genericAnnotationToAttributeConverter = $genericAnnotationToAttributeConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes @AccessType annotation to #[AccessType] attribute with specific key', [new CodeSample(<<<'CODE_SAMPLE'
 use JMS\Serializer\Annotation\AccessType;
@@ -55,7 +55,7 @@ class User
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Property::class];
     }
@@ -71,13 +71,13 @@ CODE_SAMPLE
             return null;
         }
         $attribute = $attributeGroup->attrs[0];
-        if (\count($attribute->args) === 1) {
+        if (count($attribute->args) === 1) {
             $soleArg = $attribute->args[0];
             $soleArg->name = new Identifier('type');
         }
         // 2. Reprint docblock
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        $node->attrGroups = \array_merge($node->attrGroups, [$attributeGroup]);
+        $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);
         return $node;
     }
 }

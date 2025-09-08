@@ -35,16 +35,16 @@ final class AnnotationToAttribute implements AnnotationToAttributeInterface
         $this->classReferenceFields = $classReferenceFields;
         $this->useValueAsAttributeArgument = $useValueAsAttributeArgument;
         RectorAssert::className($tag);
-        if (\is_string($attributeClass)) {
+        if (is_string($attributeClass)) {
             RectorAssert::className($attributeClass);
         }
         Assert::allString($classReferenceFields);
     }
-    public function getTag() : string
+    public function getTag(): string
     {
         return $this->tag;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         if ($this->attributeClass === null) {
             return $this->tag;
@@ -54,11 +54,11 @@ final class AnnotationToAttribute implements AnnotationToAttributeInterface
     /**
      * @return string[]
      */
-    public function getClassReferenceFields() : array
+    public function getClassReferenceFields(): array
     {
         return $this->classReferenceFields;
     }
-    public function getUseValueAsAttributeArgument() : bool
+    public function getUseValueAsAttributeArgument(): bool
     {
         return $this->useValueAsAttributeArgument;
     }

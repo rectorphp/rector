@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrayKeyExistsOnPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_KEY_EXISTS_TO_PROPERTY_EXISTS;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array_key_exists() on property to property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -47,14 +47,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'array_key_exists')) {
             return null;
@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
         $node->name = new Name('property_exists');
-        $node->args = \array_reverse($node->args);
+        $node->args = array_reverse($node->args);
         return $node;
     }
 }

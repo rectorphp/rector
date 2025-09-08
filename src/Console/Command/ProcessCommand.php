@@ -94,7 +94,7 @@ final class ProcessCommand extends Command
         $this->configurationRuleFilter = $configurationRuleFilter;
         parent::__construct();
     }
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('process');
         $this->setDescription('Upgrades or refactors source code with provided Rector rules');
@@ -119,16 +119,16 @@ EOF
         ProcessConfigureDecorator::decorate($this);
         parent::configure();
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // missing config? add it :)
         if (!$this->configInitializer->areSomeRectorsLoaded()) {
-            $this->configInitializer->createConfig(\getcwd());
+            $this->configInitializer->createConfig(getcwd());
             return self::SUCCESS;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
         if ($configuration->isKaizenEnabled()) {
-            $this->symfonyStyle->writeln(\sprintf('<fg=yellow>[EXPERIMENTAL] Running Kaizen mode. Only first %d rule%s will be applied</>', $configuration->getKaizenStepCount(), $configuration->getKaizenStepCount() > 1 ? 's' : ''));
+            $this->symfonyStyle->writeln(sprintf('<fg=yellow>[EXPERIMENTAL] Running Kaizen mode. Only first %d rule%s will be applied</>', $configuration->getKaizenStepCount(), $configuration->getKaizenStepCount() > 1 ? 's' : ''));
             $this->symfonyStyle->newLine(1);
         }
         $this->memoryLimiter->adjust($configuration);
@@ -146,7 +146,7 @@ EOF
         // 1. warn about rules registered in both withRules() and sets to avoid bloated rector.php configs
         $setAndRulesDuplicatedRegistrations = $configuration->getBothSetAndRulesDuplicatedRegistrations();
         if ($setAndRulesDuplicatedRegistrations !== []) {
-            $this->symfonyStyle->warning(\sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", \implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
+            $this->symfonyStyle->warning(sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
         }
         // 2. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
@@ -157,8 +157,8 @@ EOF
                 return ExitCode::FAILURE;
             }
             // read from cli paths arguments, eg: vendor/bin/rector process A B C which A, B, and C not exists
-            $isSingular = \count($paths) === 1;
-            $this->symfonyStyle->error(\sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', "\n\n" . ' - ', \implode("\n" . ' - ', $paths)));
+            $isSingular = count($paths) === 1;
+            $this->symfonyStyle->error(sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', "\n\n" . ' - ', implode("\n" . ' - ', $paths)));
             return ExitCode::FAILURE;
         }
         // autoload paths is register to DynamicSourceLocatorProvider,
@@ -185,7 +185,7 @@ EOF
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         return $this->resolveReturnCode($processResult, $configuration);
     }
-    protected function initialize(InputInterface $input, OutputInterface $output) : void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $application = $this->getApplication();
         if (!$application instanceof Application) {
@@ -204,7 +204,7 @@ EOF
     /**
      * @return ExitCode::*
      */
-    private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration) : int
+    private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration): int
     {
         // some system errors were found → fail
         if ($processResult->getSystemErrors() !== []) {
@@ -219,7 +219,7 @@ EOF
         }
         return ExitCode::SUCCESS;
     }
-    private function reportLoadedComposerBasedSets() : void
+    private function reportLoadedComposerBasedSets(): void
     {
         if (!SimpleParameterProvider::hasParameter(Option::COMPOSER_BASED_SETS)) {
             return;
@@ -231,9 +231,9 @@ EOF
         $this->symfonyStyle->writeln('[info] Sets loaded based on installed packages:');
         $this->symfonyStyle->listing($composerBasedSets);
     }
-    private function reportLevelOverflow(LevelOverflow $levelOverflow) : void
+    private function reportLevelOverflow(LevelOverflow $levelOverflow): void
     {
-        $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? \sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : \sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
-        $this->symfonyStyle->warning(\sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), "\n", $suggestedSetMethod));
+        $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
+        $this->symfonyStyle->warning(sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), "\n", $suggestedSetMethod));
     }
 }

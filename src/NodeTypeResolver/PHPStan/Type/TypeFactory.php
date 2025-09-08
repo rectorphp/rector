@@ -32,7 +32,7 @@ final class TypeFactory
     /**
      * @param Type[] $types
      */
-    public function createMixedPassedOrUnionTypeAndKeepConstant(array $types) : Type
+    public function createMixedPassedOrUnionTypeAndKeepConstant(array $types): Type
     {
         $types = $this->unwrapUnionedTypes($types);
         $types = $this->uniquateTypes($types, \true);
@@ -41,7 +41,7 @@ final class TypeFactory
     /**
      * @param Type[] $types
      */
-    public function createMixedPassedOrUnionType(array $types, bool $keepConstantTypes = \false) : Type
+    public function createMixedPassedOrUnionType(array $types, bool $keepConstantTypes = \false): Type
     {
         $types = $this->unwrapUnionedTypes($types);
         $types = $this->uniquateTypes($types, $keepConstantTypes);
@@ -52,11 +52,11 @@ final class TypeFactory
      * @param array<TType> $types
      * @return array<TType>
      */
-    public function uniquateTypes(array $types, bool $keepConstant = \false) : array
+    public function uniquateTypes(array $types, bool $keepConstant = \false): array
     {
         $constantTypeHashes = [];
         $uniqueTypes = [];
-        $totalTypes = \count($types);
+        $totalTypes = count($types);
         $hasFalse = \false;
         $hasTrue = \false;
         foreach ($types as $type) {
@@ -74,14 +74,14 @@ final class TypeFactory
             $uniqueTypes[$typeHash] = $type;
         }
         foreach ($constantTypeHashes as $constantTypeHash => $removedConstantTypeHash) {
-            if (\array_key_exists($removedConstantTypeHash, $uniqueTypes)) {
+            if (array_key_exists($removedConstantTypeHash, $uniqueTypes)) {
                 unset($uniqueTypes[$constantTypeHash]);
             }
         }
         // re-index
-        return \array_values($uniqueTypes);
+        return array_values($uniqueTypes);
     }
-    private function normalizeObjectType(int $totalTypes, Type $type) : Type
+    private function normalizeObjectType(int $totalTypes, Type $type): Type
     {
         if ($totalTypes > 1 && $type instanceof ObjectWithoutClassTypeWithParentTypes) {
             $parents = $type->getParentTypes();
@@ -89,7 +89,7 @@ final class TypeFactory
         }
         return $type;
     }
-    private function normalizeBooleanType(bool &$hasFalse, bool &$hasTrue, Type $type) : Type
+    private function normalizeBooleanType(bool &$hasFalse, bool &$hasTrue, Type $type): Type
     {
         if ($type->isTrue()->yes()) {
             $hasTrue = \true;
@@ -106,7 +106,7 @@ final class TypeFactory
      * @param Type[] $types
      * @return Type[]
      */
-    private function unwrapUnionedTypes(array $types) : array
+    private function unwrapUnionedTypes(array $types): array
     {
         // unwrap union types
         $unwrappedTypes = [];
@@ -114,7 +114,7 @@ final class TypeFactory
             $flattenTypes = TypeUtils::flattenTypes($type);
             foreach ($flattenTypes as $flattenType) {
                 if ($flattenType instanceof ConstantArrayType) {
-                    $unwrappedTypes = \array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
+                    $unwrappedTypes = array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
                 } else {
                     $unwrappedTypes = $this->resolveNonConstantArrayType($flattenType, $unwrappedTypes);
                 }
@@ -126,7 +126,7 @@ final class TypeFactory
      * @param Type[] $unwrappedTypes
      * @return Type[]
      */
-    private function resolveNonConstantArrayType(Type $type, array $unwrappedTypes) : array
+    private function resolveNonConstantArrayType(Type $type, array $unwrappedTypes): array
     {
         $unwrappedTypes[] = $type;
         return $unwrappedTypes;
@@ -134,17 +134,17 @@ final class TypeFactory
     /**
      * @param Type[] $types
      */
-    private function createUnionOrSingleType(array $types) : Type
+    private function createUnionOrSingleType(array $types): Type
     {
         if ($types === []) {
             return new MixedType();
         }
-        if (\count($types) === 1) {
+        if (count($types) === 1) {
             return $types[0];
         }
         return new UnionType($types);
     }
-    private function removeValueFromConstantType(Type $type) : Type
+    private function removeValueFromConstantType(Type $type): Type
     {
         // remove values from constant types
         if ($type instanceof ConstantFloatType) {
@@ -164,7 +164,7 @@ final class TypeFactory
     /**
      * @return Type[]
      */
-    private function unwrapConstantArrayTypes(ConstantArrayType $constantArrayType) : array
+    private function unwrapConstantArrayTypes(ConstantArrayType $constantArrayType): array
     {
         $unwrappedTypes = [];
         $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getIterableKeyType());

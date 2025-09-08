@@ -29,26 +29,26 @@ final class PropertyPromotionCandidate
         $this->param = $param;
         $this->expression = $expression;
     }
-    public function getProperty() : Property
+    public function getProperty(): Property
     {
         return $this->property;
     }
-    public function getParam() : Param
+    public function getParam(): Param
     {
         return $this->param;
     }
-    public function getParamName() : string
+    public function getParamName(): string
     {
         $paramVar = $this->param->var;
         if (!$paramVar instanceof Variable) {
             throw new ShouldNotHappenException();
         }
-        if (!\is_string($paramVar->name)) {
+        if (!is_string($paramVar->name)) {
             throw new ShouldNotHappenException();
         }
         return $paramVar->name;
     }
-    public function getStmtPosition() : int
+    public function getStmtPosition(): int
     {
         return $this->expression->getAttribute(AttributeKey::STMT_KEY);
     }

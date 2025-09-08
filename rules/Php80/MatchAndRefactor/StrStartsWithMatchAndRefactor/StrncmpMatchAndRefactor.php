@@ -49,7 +49,7 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
-    public function match($binaryOp) : ?StrStartsWith
+    public function match($binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, self::FUNCTION_NAME)) {
@@ -63,7 +63,7 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         }
         return $this->strStartsWithFactory->createFromFuncCall($binaryOp->right, $isPositive);
     }
-    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
         if ($this->isNeedleExprWithStrlen($strStartsWith)) {
             return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
@@ -73,14 +73,14 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         }
         return null;
     }
-    private function isNeedleExprWithStrlen(StrStartsWith $strStartsWith) : bool
+    private function isNeedleExprWithStrlen(StrStartsWith $strStartsWith): bool
     {
         $strncmpFuncCall = $strStartsWith->getFuncCall();
         $needleExpr = $strStartsWith->getNeedleExpr();
         if ($strncmpFuncCall->isFirstClassCallable()) {
             return \false;
         }
-        if (\count($strncmpFuncCall->getArgs()) < 2) {
+        if (count($strncmpFuncCall->getArgs()) < 2) {
             return \false;
         }
         $thirdArg = $strncmpFuncCall->getArgs()[2];
@@ -95,10 +95,10 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         $strlenExpr = $strlenFuncCall->getArgs()[0]->value;
         return $this->nodeComparator->areNodesEqual($needleExpr, $strlenExpr);
     }
-    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith) : bool
+    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith): bool
     {
         $strncmpFuncCall = $strStartsWith->getFuncCall();
-        if (\count($strncmpFuncCall->getArgs()) < 2) {
+        if (count($strncmpFuncCall->getArgs()) < 2) {
             return \false;
         }
         $hardcodedStringNeedle = $strncmpFuncCall->getArgs()[1]->value;
@@ -109,6 +109,6 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         if (!$lNumberLength instanceof Int_) {
             return \false;
         }
-        return $lNumberLength->value === \strlen($hardcodedStringNeedle->value);
+        return $lNumberLength->value === strlen($hardcodedStringNeedle->value);
     }
 }

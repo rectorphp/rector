@@ -20,12 +20,12 @@ final class DoctrineEntityAnalyzer
     /**
      * @var string[]
      */
-    private const DOCTRINE_MAPPING_CLASSES = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbeddedDocument'];
+    private const DOCTRINE_MAPPING_CLASSES = ['Doctrine\ORM\Mapping\Entity', 'Doctrine\ORM\Mapping\Embeddable', 'Doctrine\ODM\MongoDB\Mapping\Annotations\Document', 'Doctrine\ODM\MongoDB\Mapping\Annotations\EmbeddedDocument'];
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function hasClassAnnotation(Class_ $class) : bool
+    public function hasClassAnnotation(Class_ $class): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
         if (!$phpDocInfo instanceof PhpDocInfo) {
@@ -33,17 +33,17 @@ final class DoctrineEntityAnalyzer
         }
         return $phpDocInfo->hasByAnnotationClasses(self::DOCTRINE_MAPPING_CLASSES);
     }
-    public function hasClassReflectionAttribute(ClassReflection $classReflection) : bool
+    public function hasClassReflectionAttribute(ClassReflection $classReflection): bool
     {
         /** @var ReflectionClass $nativeReflectionClass */
         $nativeReflectionClass = $classReflection->getNativeReflection();
         // skip early in case of no attributes at all
-        if ((\method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes() : []) === []) {
+        if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes() : []) === []) {
             return \false;
         }
         foreach (self::DOCTRINE_MAPPING_CLASSES as $doctrineMappingClass) {
             // skip entities
-            if ((\method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes($doctrineMappingClass) : []) !== []) {
+            if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes($doctrineMappingClass) : []) !== []) {
                 return \true;
             }
         }

@@ -17,11 +17,11 @@ class AttributeGroup extends NodeAbstract
         $this->attributes = $attributes;
         $this->attrs = $attrs;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrs'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'AttributeGroup';
     }

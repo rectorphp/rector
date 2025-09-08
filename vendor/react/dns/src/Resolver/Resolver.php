@@ -19,14 +19,14 @@ final class Resolver implements ResolverInterface
     public function resolve($domain)
     {
         return $this->resolveAll($domain, Message::TYPE_A)->then(function (array $ips) {
-            return $ips[\array_rand($ips)];
+            return $ips[array_rand($ips)];
         });
     }
     public function resolveAll($domain, $type)
     {
         $query = new Query($domain, $type, Message::CLASS_IN);
         $that = $this;
-        return $this->executor->query($query)->then(function (Message $response) use($query, $that) {
+        return $this->executor->query($query)->then(function (Message $response) use ($query, $that) {
             return $that->extractValues($query, $response);
         });
     }
@@ -68,10 +68,10 @@ final class Resolver implements ResolverInterface
         $answers = $response->answers;
         $addresses = $this->valuesByNameAndType($answers, $query->name, $query->type);
         // reject if we did not receive a valid answer (domain is valid, but no record for this type could be found)
-        if (0 === \count($addresses)) {
+        if (0 === count($addresses)) {
             throw new RecordNotFoundException('DNS query for ' . $query->describe() . ' did not return a valid answer (NOERROR / NODATA)');
         }
-        return \array_values($addresses);
+        return array_values($addresses);
     }
     /**
      * @param \React\Dns\Model\Record[] $answers
@@ -92,7 +92,7 @@ final class Resolver implements ResolverInterface
         if ($cnameRecords) {
             $cnames = $this->mapRecordData($cnameRecords);
             foreach ($cnames as $cname) {
-                $records = \array_merge($records, $this->valuesByNameAndType($answers, $cname, $type));
+                $records = array_merge($records, $this->valuesByNameAndType($answers, $cname, $type));
             }
         }
         return $records;
@@ -107,14 +107,14 @@ final class Resolver implements ResolverInterface
     }
     private function filterByField(array $answers, $field, $value)
     {
-        $value = \strtolower($value);
-        return \array_filter($answers, function ($answer) use($field, $value) {
-            return $value === \strtolower($answer->{$field});
+        $value = strtolower($value);
+        return array_filter($answers, function ($answer) use ($field, $value) {
+            return $value === strtolower($answer->{$field});
         });
     }
     private function mapRecordData(array $records)
     {
-        return \array_map(function ($record) {
+        return array_map(function ($record) {
             return $record->data;
         }, $records);
     }

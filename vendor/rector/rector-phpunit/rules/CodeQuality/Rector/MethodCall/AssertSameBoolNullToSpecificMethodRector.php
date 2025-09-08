@@ -42,21 +42,21 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->constantWithAssertMethods = [new ConstantWithAssertMethods('null', 'assertNull', 'assertNotNull'), new ConstantWithAssertMethods('true', 'assertTrue', 'assertNotTrue'), new ConstantWithAssertMethods('false', 'assertFalse', 'assertNotFalse')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertSame(null, $anything);', '$this->assertNull($anything);'), new CodeSample('$this->assertNotSame(false, $anything);', '$this->assertNotFalse($anything);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertNotSame'])) {
             return null;
@@ -81,7 +81,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod($node, ConstantWithAssertMethods $constantWithAssertMethods) : void
+    private function renameMethod($node, ConstantWithAssertMethods $constantWithAssertMethods): void
     {
         $this->identifierManipulator->renameNodeWithMap($node, ['assertSame' => $constantWithAssertMethods->getAssetMethodName(), 'assertNotSame' => $constantWithAssertMethods->getNotAssertMethodName()]);
     }

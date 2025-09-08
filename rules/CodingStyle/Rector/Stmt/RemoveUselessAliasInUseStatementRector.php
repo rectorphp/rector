@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUselessAliasInUseStatementRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove useless alias in use statement as same name with last use statement name', [new CodeSample(<<<'CODE_SAMPLE'
 use App\Bar as Bar;
@@ -30,7 +30,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FileWithoutNamespace::class, Namespace_::class];
     }
@@ -45,7 +45,7 @@ CODE_SAMPLE
             if (!$stmt instanceof Use_) {
                 continue;
             }
-            if (\count($stmt->uses) !== 1) {
+            if (count($stmt->uses) !== 1) {
                 continue;
             }
             if (!isset($stmt->uses[0])) {

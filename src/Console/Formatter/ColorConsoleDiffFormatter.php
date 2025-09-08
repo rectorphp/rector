@@ -18,12 +18,12 @@ final class ColorConsoleDiffFormatter
      * @var string
      * @see https://regex101.com/r/ovLMDF/1
      */
-    private const PLUS_START_REGEX = '#^(\\+.*)#';
+    private const PLUS_START_REGEX = '#^(\+.*)#';
     /**
      * @var string
      * @see https://regex101.com/r/xwywpa/1
      */
-    private const MINUS_START_REGEX = '#^(\\-.*)#';
+    private const MINUS_START_REGEX = '#^(\-.*)#';
     /**
      * @var string
      * @see https://regex101.com/r/CMlwa8/1
@@ -35,15 +35,15 @@ final class ColorConsoleDiffFormatter
     private string $template;
     public function __construct()
     {
-        $this->template = \sprintf('<comment>    ---------- begin diff ----------</comment>%s%%s%s<comment>    ----------- end diff -----------</comment>' . \PHP_EOL, \PHP_EOL, \PHP_EOL);
+        $this->template = sprintf('<comment>    ---------- begin diff ----------</comment>%s%%s%s<comment>    ----------- end diff -----------</comment>' . \PHP_EOL, \PHP_EOL, \PHP_EOL);
     }
-    public function format(string $diff) : string
+    public function format(string $diff): string
     {
         return $this->formatWithTemplate($diff, $this->template);
     }
-    private function formatWithTemplate(string $diff, string $template) : string
+    private function formatWithTemplate(string $diff, string $template): string
     {
-        $escapedDiff = OutputFormatter::escape(\rtrim($diff));
+        $escapedDiff = OutputFormatter::escape(rtrim($diff));
         $escapedDiffLines = NewLineSplitter::split($escapedDiff);
         // remove description of added + remove; obvious on diffs
         foreach ($escapedDiffLines as $key => $escapedDiffLine) {
@@ -54,7 +54,7 @@ final class ColorConsoleDiffFormatter
                 unset($escapedDiffLines[$key]);
             }
         }
-        $coloredLines = \array_map(function (string $string) : string {
+        $coloredLines = array_map(function (string $string): string {
             $string = $this->makePlusLinesGreen($string);
             $string = $this->makeMinusLinesRed($string);
             $string = $this->makeAtNoteCyan($string);
@@ -63,17 +63,17 @@ final class ColorConsoleDiffFormatter
             }
             return $string;
         }, $escapedDiffLines);
-        return \sprintf($template, \implode(\PHP_EOL, $coloredLines));
+        return sprintf($template, implode(\PHP_EOL, $coloredLines));
     }
-    private function makePlusLinesGreen(string $string) : string
+    private function makePlusLinesGreen(string $string): string
     {
         return Strings::replace($string, self::PLUS_START_REGEX, '<fg=green>$1</fg=green>');
     }
-    private function makeMinusLinesRed(string $string) : string
+    private function makeMinusLinesRed(string $string): string
     {
         return Strings::replace($string, self::MINUS_START_REGEX, '<fg=red>$1</fg=red>');
     }
-    private function makeAtNoteCyan(string $string) : string
+    private function makeAtNoteCyan(string $string): string
     {
         return Strings::replace($string, self::AT_START_REGEX, '<fg=cyan>$1</fg=cyan>');
     }

@@ -20,21 +20,21 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
     /**
      * Avoid circular reference
      */
-    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper): void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
         return $value instanceof CurlyListNode;
     }
     /**
      * @param CurlyListNode $value
      */
-    public function map($value) : Array_
+    public function map($value): Array_
     {
         $arrayItems = [];
         $arrayItemNodes = $value->getValues();
@@ -46,7 +46,7 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
                 continue;
             }
             Assert::isInstanceOf($valueExpr, ArrayItem::class);
-            if (!\is_numeric($arrayItemNode->key)) {
+            if (!is_numeric($arrayItemNode->key)) {
                 $arrayItems[] = $valueExpr;
                 continue;
             }

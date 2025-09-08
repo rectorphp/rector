@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IfIssetToCoalescingRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `if` with `isset` and `return` to coalesce', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -55,14 +55,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -98,11 +98,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE;
     }
-    private function matchBareIfOnlyStmt(If_ $if) : ?Stmt
+    private function matchBareIfOnlyStmt(If_ $if): ?Stmt
     {
         if ($if->else instanceof Else_) {
             return null;
@@ -110,7 +110,7 @@ CODE_SAMPLE
         if ($if->elseifs !== []) {
             return null;
         }
-        if (\count($if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
         return $if->stmts[0];

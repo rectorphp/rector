@@ -43,7 +43,7 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
         $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused private properties', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -95,13 +95,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipProperty(Property $property) : bool
+    private function shouldSkipProperty(Property $property): bool
     {
         // has some attribute logic
         if ($property->attrGroups !== []) {
             return \true;
         }
-        if (\count($property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return \true;
         }
         if (!$property->isPrivate()) {
@@ -118,7 +118,7 @@ CODE_SAMPLE
         // skip as might contain important metadata
         return $propertyPhpDocInfo->hasByType(DoctrineAnnotationTagValueNode::class);
     }
-    private function shouldRemoveProperty(Class_ $class, Property $property) : bool
+    private function shouldRemoveProperty(Class_ $class, Property $property): bool
     {
         $propertyName = $this->getName($property);
         $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
@@ -127,7 +127,7 @@ CODE_SAMPLE
         }
         return $this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo($propertyFetches);
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         foreach ($class->stmts as $stmt) {
             // unclear what property can be used there
@@ -137,9 +137,9 @@ CODE_SAMPLE
         }
         return $this->propertyWriteonlyAnalyzer->hasClassDynamicPropertyNames($class);
     }
-    private function removePropertyAssigns(Class_ $class, string $propertyName) : void
+    private function removePropertyAssigns(Class_ $class, string $propertyName): void
     {
-        $this->traverseNodesWithCallable($class, function (Node $node) use($class, $propertyName) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use ($class, $propertyName) {
             if (!$node instanceof Expression && !$node instanceof Return_) {
                 if ($node instanceof Arg && $node->value instanceof Assign) {
                     $assign = $node->value;

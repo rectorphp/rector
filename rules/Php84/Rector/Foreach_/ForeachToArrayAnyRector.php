@@ -46,7 +46,7 @@ final class ForeachToArrayAnyRector extends AbstractRector implements MinPhpVers
         $this->foreachKeyUsedInConditionalAnalyzer = $foreachKeyUsedInConditionalAnalyzer;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace foreach with boolean assignment + break OR foreach with early return with array_any', [new CodeSample(<<<'CODE_SAMPLE'
 $found = false;
@@ -76,25 +76,25 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
         }
         return $this->refactorBooleanAssignmentPattern($node) ?? $this->refactorEarlyReturnPattern($node);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_ANY;
     }
-    private function refactorBooleanAssignmentPattern(StmtsAwareInterface $stmtsAware) : ?Node
+    private function refactorBooleanAssignmentPattern(StmtsAwareInterface $stmtsAware): ?Node
     {
         foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
@@ -139,12 +139,12 @@ CODE_SAMPLE
             $newExpression = new Expression($newAssign);
             unset($stmtsAware->stmts[$key - 1]);
             $stmtsAware->stmts[$key] = $newExpression;
-            $stmtsAware->stmts = \array_values($stmtsAware->stmts);
+            $stmtsAware->stmts = array_values($stmtsAware->stmts);
             return $stmtsAware;
         }
         return null;
     }
-    private function refactorEarlyReturnPattern(StmtsAwareInterface $stmtsAware) : ?Node
+    private function refactorEarlyReturnPattern(StmtsAwareInterface $stmtsAware): ?Node
     {
         foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
@@ -178,18 +178,18 @@ CODE_SAMPLE
             $funcCall = $this->nodeFactory->createFuncCall('array_any', [$foreach->expr, $arrowFunction]);
             $stmtsAware->stmts[$key] = new Return_($funcCall);
             unset($stmtsAware->stmts[$key + 1]);
-            $stmtsAware->stmts = \array_values($stmtsAware->stmts);
+            $stmtsAware->stmts = array_values($stmtsAware->stmts);
             return $stmtsAware;
         }
         return null;
     }
-    private function isValidBooleanAssignmentForeachStructure(Foreach_ $foreach, Variable $assignedVariable) : bool
+    private function isValidBooleanAssignmentForeachStructure(Foreach_ $foreach, Variable $assignedVariable): bool
     {
-        if (\count($foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return \false;
         }
         $firstStmt = $foreach->stmts[0];
-        if (!$firstStmt instanceof If_ || \count($firstStmt->stmts) !== 2) {
+        if (!$firstStmt instanceof If_ || count($firstStmt->stmts) !== 2) {
             return \false;
         }
         $assignmentStmt = $firstStmt->stmts[0];
@@ -207,16 +207,16 @@ CODE_SAMPLE
         $type = $this->nodeTypeResolver->getNativeType($foreach->expr);
         return $type->isArray()->yes();
     }
-    private function isValidEarlyReturnForeachStructure(Foreach_ $foreach) : bool
+    private function isValidEarlyReturnForeachStructure(Foreach_ $foreach): bool
     {
-        if (\count($foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return \false;
         }
         if (!$foreach->stmts[0] instanceof If_) {
             return \false;
         }
         $ifStmt = $foreach->stmts[0];
-        if (\count($ifStmt->stmts) !== 1) {
+        if (count($ifStmt->stmts) !== 1) {
             return \false;
         }
         if (!$ifStmt->stmts[0] instanceof Return_) {

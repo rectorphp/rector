@@ -30,7 +30,7 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
      * @var array<string, class-string<BinaryOp>>
      */
     private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -55,14 +55,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'version_compare')) {
             return null;
@@ -70,7 +70,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 3) {
+        if (count($node->getArgs()) !== 3) {
             return null;
         }
         $args = $node->getArgs();
@@ -90,7 +90,7 @@ CODE_SAMPLE
         $comparisonClass = self::OPERATOR_TO_COMPARISON[$operator->value];
         return new $comparisonClass($left, $right);
     }
-    private function isPhpVersionConstant(Expr $expr) : bool
+    private function isPhpVersionConstant(Expr $expr): bool
     {
         if (!$expr instanceof ConstFetch) {
             return \false;
@@ -107,7 +107,7 @@ CODE_SAMPLE
         }
         return $this->getVersionNumberFormVersionString($expr);
     }
-    private function getVersionNumberFormVersionString(Expr $expr) : ?Int_
+    private function getVersionNumberFormVersionString(Expr $expr): ?Int_
     {
         if (!$expr instanceof String_) {
             return null;

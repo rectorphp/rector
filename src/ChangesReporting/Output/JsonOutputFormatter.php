@@ -15,15 +15,15 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     public const NAME = 'json';
-    public function getName() : string
+    public function getName(): string
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
-        $errorsJson = ['totals' => ['changed_files' => \count($processResult->getFileDiffs())]];
+        $errorsJson = ['totals' => ['changed_files' => count($processResult->getFileDiffs())]];
         $fileDiffs = $processResult->getFileDiffs();
-        \ksort($fileDiffs);
+        ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
             $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath();
             $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $filePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses()];
@@ -31,7 +31,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             $errorsJson['changed_files'][] = $filePath;
         }
         $systemErrors = $processResult->getSystemErrors();
-        $errorsJson['totals']['errors'] = \count($systemErrors);
+        $errorsJson['totals']['errors'] = count($systemErrors);
         $errorsData = $this->createErrorsData($systemErrors, $configuration->isReportingWithRealPath());
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
@@ -43,7 +43,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @param SystemError[] $errors
      * @return mixed[]
      */
-    private function createErrorsData(array $errors, bool $absoluteFilePath) : array
+    private function createErrorsData(array $errors, bool $absoluteFilePath): array
     {
         $errorsData = [];
         foreach ($errors as $error) {

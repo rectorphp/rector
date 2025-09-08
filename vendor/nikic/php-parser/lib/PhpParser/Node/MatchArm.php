@@ -19,11 +19,11 @@ class MatchArm extends NodeAbstract
         $this->body = $body;
         $this->attributes = $attributes;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['conds', 'body'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'MatchArm';
     }

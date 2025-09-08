@@ -34,7 +34,7 @@ final class CombineIfRector extends AbstractRector
         $this->commentsMerger = $commentsMerger;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Merge nested if statements', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -65,14 +65,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -98,12 +98,12 @@ CODE_SAMPLE
         $this->commentsMerger->keepComments($node, [$subIf]);
         return $node;
     }
-    private function shouldSkip(If_ $if) : bool
+    private function shouldSkip(If_ $if): bool
     {
         if ($if->else instanceof Else_) {
             return \true;
         }
-        if (\count($if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return \true;
         }
         if ($if->elseifs !== []) {
@@ -117,7 +117,7 @@ CODE_SAMPLE
         }
         return (bool) $if->stmts[0]->elseifs;
     }
-    private function hasVarTag(If_ $if) : bool
+    private function hasVarTag(If_ $if): bool
     {
         $subIfPhpDocInfo = $this->phpDocInfoFactory->createFromNode($if);
         if (!$subIfPhpDocInfo instanceof PhpDocInfo) {

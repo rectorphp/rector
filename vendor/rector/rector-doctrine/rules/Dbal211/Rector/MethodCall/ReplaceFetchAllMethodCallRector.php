@@ -19,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReplaceFetchAllMethodCallRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change Doctrine\\DBAL\\Connection and Doctrine\\DBAL\\Driver\\ResultStatement ->fetchAll() to ->fetchAllAssociative() and other replacements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change Doctrine\DBAL\Connection and Doctrine\DBAL\Driver\ResultStatement ->fetchAll() to ->fetchAllAssociative() and other replacements', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\DBAL\Connection;
 
 class SomeClass
@@ -48,24 +48,24 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node->var, new ObjectType('Doctrine\\DBAL\\Connection'))) {
+        if ($this->isObjectType($node->var, new ObjectType('Doctrine\DBAL\Connection'))) {
             return $this->refactorConnection($node);
         }
-        if ($this->isObjectType($node->var, new ObjectType('Doctrine\\DBAL\\Driver\\ResultStatement'))) {
+        if ($this->isObjectType($node->var, new ObjectType('Doctrine\DBAL\Driver\ResultStatement'))) {
             return $this->refactorResultStatement($node);
         }
         return null;
     }
-    private function refactorConnection(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorConnection(MethodCall $methodCall): ?\PhpParser\Node\Expr\MethodCall
     {
         if ($this->isName($methodCall->name, 'fetchAll')) {
             $methodCall->name = new Identifier('fetchAllAssociative');
@@ -77,7 +77,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorResultStatement(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorResultStatement(MethodCall $methodCall): ?\PhpParser\Node\Expr\MethodCall
     {
         if ($this->isName($methodCall->name, 'fetchColumn')) {
             $methodCall->name = new Identifier('fetchOne');
@@ -91,7 +91,7 @@ CODE_SAMPLE
             }
             $firstArg = $args[0];
             $newMethodName = $this->resolveFirstMethodName($firstArg);
-            if (\is_string($newMethodName)) {
+            if (is_string($newMethodName)) {
                 $methodCall->args = [];
                 $methodCall->name = new Identifier($newMethodName);
                 return $methodCall;
@@ -99,7 +99,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveFirstMethodName(Arg $firstArg) : ?string
+    private function resolveFirstMethodName(Arg $firstArg): ?string
     {
         if (!$firstArg->value instanceof ClassConstFetch) {
             return null;

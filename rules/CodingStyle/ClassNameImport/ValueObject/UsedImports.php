@@ -36,21 +36,21 @@ final class UsedImports
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
-    public function getUseImports() : array
+    public function getUseImports(): array
     {
         return $this->useImports;
     }
     /**
      * @return FullyQualifiedObjectType[]
      */
-    public function getFunctionImports() : array
+    public function getFunctionImports(): array
     {
         return $this->functionImports;
     }
     /**
      * @return FullyQualifiedObjectType[]
      */
-    public function getConstantImports() : array
+    public function getConstantImports(): array
     {
         return $this->constantImports;
     }

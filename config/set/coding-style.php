@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 use Rector\Config\Level\CodingStyleLevel;
 use Rector\Config\RectorConfig;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     foreach (CodingStyleLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
         $rectorConfig->ruleWithConfiguration($rectorClass, $configuration);
     }

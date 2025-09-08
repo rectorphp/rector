@@ -36,46 +36,46 @@ final class WorkerCommandLineFactory
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, InputInterface $input, string $identifier, int $port) : string
+    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, InputInterface $input, string $identifier, int $port): string
     {
-        $commandArguments = \array_slice($_SERVER['argv'], 1);
+        $commandArguments = array_slice($_SERVER['argv'], 1);
         // add implicit "process" command name if missing
-        if ($commandArguments !== [] && ($commandArguments[0] !== 'process' && $commandArguments[0] !== 'p') && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
-            $commandArguments = \array_merge(['process'], $commandArguments);
+        if ($commandArguments !== [] && ($commandArguments[0] !== 'process' && $commandArguments[0] !== 'p') && !defined('PHPUNIT_COMPOSER_INSTALL')) {
+            $commandArguments = array_merge(['process'], $commandArguments);
         }
-        $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
+        $args = array_merge([\PHP_BINARY, $mainScript], $commandArguments);
         $workerCommandArray = [];
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
-            $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
+            $errorMessage = sprintf('The command name for "%s" is missing', get_class($mainCommand));
             throw new ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
         $mainCommandNames = [$mainCommandName, $mainCommandName[0]];
         foreach ($args as $arg) {
             // skip command name
-            if (\in_array($arg, $mainCommandNames, \true)) {
+            if (in_array($arg, $mainCommandNames, \true)) {
                 break;
             }
-            $workerCommandArray[] = \escapeshellarg((string) $arg);
+            $workerCommandArray[] = escapeshellarg((string) $arg);
         }
         $workerCommandArray[] = $workerCommandName;
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
         $workerCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
-        $workerCommandArray = \array_merge($workerCommandArray, $workerCommandOptions);
+        $workerCommandArray = array_merge($workerCommandArray, $workerCommandOptions);
         // for TCP local server
         $workerCommandArray[] = '--port';
         $workerCommandArray[] = $port;
         $workerCommandArray[] = '--identifier';
-        $workerCommandArray[] = \escapeshellarg($identifier);
+        $workerCommandArray[] = escapeshellarg($identifier);
         /** @var string[] $paths */
         $paths = $input->getArgument(Option::SOURCE);
         foreach ($paths as $path) {
-            $workerCommandArray[] = \escapeshellarg($path);
+            $workerCommandArray[] = escapeshellarg($path);
         }
         // set json output
         $workerCommandArray[] = self::OPTION_DASHES . Option::OUTPUT_FORMAT;
-        $workerCommandArray[] = \escapeshellarg(JsonOutputFormatter::NAME);
+        $workerCommandArray[] = escapeshellarg(JsonOutputFormatter::NAME);
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
         $workerCommandArray[] = '--no-ansi';
@@ -99,15 +99,15 @@ final class WorkerCommandLineFactory
              * tested in macOS and Ubuntu (github action)
              */
             $config = (string) $input->getOption(Option::CONFIG);
-            $workerCommandArray[] = \escapeshellarg($this->filePathHelper->relativePath($config));
+            $workerCommandArray[] = escapeshellarg($this->filePathHelper->relativePath($config));
         }
         if ($input->getOption(Option::ONLY) !== null) {
             $workerCommandArray[] = self::OPTION_DASHES . Option::ONLY;
-            $workerCommandArray[] = \escapeshellarg((string) $input->getOption(Option::ONLY));
+            $workerCommandArray[] = escapeshellarg((string) $input->getOption(Option::ONLY));
         }
-        return \implode(' ', $workerCommandArray);
+        return implode(' ', $workerCommandArray);
     }
-    private function shouldSkipOption(InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(InputInterface $input, string $optionName): bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;
@@ -118,7 +118,7 @@ final class WorkerCommandLineFactory
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(Command $command) : array
+    private function getCommandOptionNames(Command $command): array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -133,7 +133,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames): array
     {
         $workerCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
@@ -146,7 +146,7 @@ final class WorkerCommandLineFactory
             if ($optionValue === null) {
                 continue;
             }
-            if (\is_bool($optionValue)) {
+            if (is_bool($optionValue)) {
                 if ($optionValue) {
                     $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
                 }

@@ -21,7 +21,7 @@ final class RemoveTraitUseRector extends AbstractRector implements ConfigurableR
      * @var string[]
      */
     private array $traitsToRemove = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove specific traits from code', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -39,14 +39,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Trait_::class];
     }
     /**
      * @param Class_|Trait_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
@@ -73,7 +73,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allString($configuration);
         $this->traitsToRemove = $configuration;

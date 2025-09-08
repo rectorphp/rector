@@ -19,7 +19,7 @@ final class DataProviderNodes
     {
         $this->nodes = $nodes;
     }
-    public function isEmpty() : bool
+    public function isEmpty(): bool
     {
         return $this->nodes === [];
     }

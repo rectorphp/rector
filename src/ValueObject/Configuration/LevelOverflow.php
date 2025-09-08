@@ -33,23 +33,23 @@ final class LevelOverflow
         $this->suggestedRuleset = $suggestedRuleset;
         $this->suggestedSetListConstant = $suggestedSetListConstant;
     }
-    public function getConfigurationName() : string
+    public function getConfigurationName(): string
     {
         return $this->configurationName;
     }
-    public function getLevel() : int
+    public function getLevel(): int
     {
         return $this->level;
     }
-    public function getRuleCount() : int
+    public function getRuleCount(): int
     {
         return $this->ruleCount;
     }
-    public function getSuggestedRuleset() : string
+    public function getSuggestedRuleset(): string
     {
         return $this->suggestedRuleset;
     }
-    public function getSuggestedSetListConstant() : string
+    public function getSuggestedSetListConstant(): string
     {
         return $this->suggestedSetListConstant;
     }

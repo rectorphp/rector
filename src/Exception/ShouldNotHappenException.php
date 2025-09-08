@@ -17,15 +17,15 @@ final class ShouldNotHappenException extends Exception
         }
         parent::__construct($message, $code, $throwable);
     }
-    private function createDefaultMessageWithLocation() : string
+    private function createDefaultMessageWithLocation(): string
     {
-        $debugBacktrace = \debug_backtrace();
+        $debugBacktrace = debug_backtrace();
         $class = $debugBacktrace[2]['class'] ?? null;
         $function = $debugBacktrace[2]['function'];
         $line = $debugBacktrace[1]['line'] ?? 0;
         $method = $class !== null ? $class . '::' . $function : $function;
         /** @var string $method */
         /** @var int $line */
-        return \sprintf('Look at "%s()" on line %d', $method, $line);
+        return sprintf('Look at "%s()" on line %d', $method, $line);
     }
 }

@@ -29,11 +29,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace ParamConverter attribute with mappings with the MapEntity attribute', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeController
@@ -68,14 +68,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->isPublic()) {
             return null;
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorAttribute(ClassMethod $classMethod, Attribute $attribute, AttributeGroup $attributeGroup) : ?Attribute
+    private function refactorAttribute(ClassMethod $classMethod, Attribute $attribute, AttributeGroup $attributeGroup): ?Attribute
     {
         $firstArg = $attribute->args[0] ?? null;
         if (!$firstArg instanceof Arg) {
@@ -128,7 +128,7 @@ CODE_SAMPLE
         if ($exprIndex) {
             unset($attribute->args[$exprIndex]);
         }
-        $attribute->args = \array_merge($attribute->args, $newArguments);
+        $attribute->args = array_merge($attribute->args, $newArguments);
         $attribute->name = new FullyQualified(SymfonyAnnotation::MAP_ENTITY);
         $this->addMapEntityAttribute($classMethod, $name, $attributeGroup);
         return $attribute;
@@ -136,7 +136,7 @@ CODE_SAMPLE
     /**
      * @return Arg[]
      */
-    private function getNewArguments(?Expr $mapping, ?Expr $exprValue) : array
+    private function getNewArguments(?Expr $mapping, ?Expr $exprValue): array
     {
         $newArguments = [];
         if ($mapping instanceof Array_) {
@@ -145,7 +145,7 @@ CODE_SAMPLE
                 if (!$item instanceof ArrayItem || !$item->key instanceof String_) {
                     continue;
                 }
-                if (\in_array($item->key->value, ['mapping', 'entity_manager'], \true)) {
+                if (in_array($item->key->value, ['mapping', 'entity_manager'], \true)) {
                     $probablyEntity = \true;
                 }
                 $newArguments[] = new Arg($item->value, \false, \false, [], new Identifier($item->key->value));
@@ -159,7 +159,7 @@ CODE_SAMPLE
         }
         return $newArguments;
     }
-    private function addMapEntityAttribute(ClassMethod $classMethod, string $variableName, AttributeGroup $attributeGroup) : void
+    private function addMapEntityAttribute(ClassMethod $classMethod, string $variableName, AttributeGroup $attributeGroup): void
     {
         foreach ($classMethod->params as $param) {
             if (!$param->var instanceof Variable) {
@@ -174,7 +174,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function getIndexForOptionsArg(array $args) : ?int
+    private function getIndexForOptionsArg(array $args): ?int
     {
         foreach ($args as $key => $arg) {
             if ($arg->name instanceof Identifier && $arg->name->name === 'options') {
@@ -186,7 +186,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function getIndexForExprArg(array $args) : ?int
+    private function getIndexForExprArg(array $args): ?int
     {
         foreach ($args as $key => $arg) {
             if ($arg->name instanceof Identifier && $arg->name->name === 'expr') {

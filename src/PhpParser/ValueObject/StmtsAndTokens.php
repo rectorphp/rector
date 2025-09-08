@@ -29,14 +29,14 @@ final class StmtsAndTokens
     /**
      * @return Stmt[]
      */
-    public function getStmts() : array
+    public function getStmts(): array
     {
         return $this->stmts;
     }
     /**
      * @return array<int, Token>
      */
-    public function getTokens() : array
+    public function getTokens(): array
     {
         return $this->tokens;
     }

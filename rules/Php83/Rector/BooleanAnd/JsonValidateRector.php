@@ -41,11 +41,11 @@ final class JsonValidateRector extends AbstractRector implements MinPhpVersionIn
         $this->binaryOpManipulator = $binaryOpManipulator;
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::JSON_VALIDATE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace json_decode($json, true) !== null && json_last_error() === JSON_ERROR_NONE  with json_validate()', [new CodeSample(<<<'CODE_SAMPLE'
 if (json_decode($json, true) !== null && json_last_error() === JSON_ERROR_NONE) {
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanAnd::class];
     }
     /**
      * @param BooleanAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $funcCall = $this->matchJsonValidateArg($node);
         if (!$funcCall instanceof FuncCall) {
@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $funcCall->getArgs();
-        if (\count($args) < 1) {
+        if (count($args) < 1) {
             return null;
         }
         if (!$this->validateArgs($funcCall)) {
@@ -88,11 +88,11 @@ CODE_SAMPLE
         $funcCall->args = $args;
         return $funcCall;
     }
-    public function providePolyfillPackage() : string
+    public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_83;
     }
-    public function matchJsonValidateArg(BooleanAnd $booleanAnd) : ?FuncCall
+    public function matchJsonValidateArg(BooleanAnd $booleanAnd): ?FuncCall
     {
         // match: json_decode(...) !== null   OR   null !== json_decode(...)
         if (!$booleanAnd->left instanceof NotIdentical) {
@@ -117,7 +117,7 @@ CODE_SAMPLE
         }
         return $expr;
     }
-    private function validateArgs(FuncCall $funcCall) : bool
+    private function validateArgs(FuncCall $funcCall): bool
     {
         $depth = $funcCall->getArg('depth', 2);
         $flags = $funcCall->getArg('flags', 3);

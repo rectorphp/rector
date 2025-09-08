@@ -28,13 +28,13 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
     /**
      * @return SymfonyRouteMetadata[]
      */
-    public function provide() : array
+    public function provide(): array
     {
         if ($this->symfonyRouteMetadatas !== []) {
             return $this->symfonyRouteMetadatas;
         }
         $router = $this->containerServiceProvider->provideByName('router');
-        Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
+        Assert::isInstanceOf($router, 'Symfony\Component\Routing\RouterInterface');
         $symfonyRoutesMetadatas = [];
         /** @var RouterInterface $router */
         $routeCollection = $router->getRouteCollection();

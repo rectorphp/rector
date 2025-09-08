@@ -43,7 +43,7 @@ final class TestsNodeAnalyzer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isInTestClass(Node $node) : bool
+    public function isInTestClass(Node $node): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
@@ -56,17 +56,17 @@ final class TestsNodeAnalyzer
         }
         return \false;
     }
-    public function isTestClassMethod(ClassMethod $classMethod) : bool
+    public function isTestClassMethod(ClassMethod $classMethod): bool
     {
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        if (\strncmp($classMethod->name->toString(), 'test', \strlen('test')) === 0) {
+        if (strncmp($classMethod->name->toString(), 'test', strlen('test')) === 0) {
             return \true;
         }
         foreach ($classMethod->getAttrGroups() as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
-                if ($attribute->name->toString() === 'PHPUnit\\Framework\\Attributes\\Test') {
+                if ($attribute->name->toString() === 'PHPUnit\Framework\Attributes\Test') {
                     return \true;
                 }
             }
@@ -74,7 +74,7 @@ final class TestsNodeAnalyzer
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByName('test');
     }
-    public function isAssertMethodCallName(Node $node, string $name) : bool
+    public function isAssertMethodCallName(Node $node, string $name): bool
     {
         if ($node instanceof StaticCall) {
             $callerType = $this->nodeTypeResolver->getType($node->class);
@@ -83,7 +83,7 @@ final class TestsNodeAnalyzer
         } else {
             return \false;
         }
-        $assertObjectType = new ObjectType('PHPUnit\\Framework\\Assert');
+        $assertObjectType = new ObjectType('PHPUnit\Framework\Assert');
         if (!$assertObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;
         }
@@ -93,7 +93,7 @@ final class TestsNodeAnalyzer
     /**
      * @param string[] $names
      */
-    public function isPHPUnitMethodCallNames(Node $node, array $names) : bool
+    public function isPHPUnitMethodCallNames(Node $node, array $names): bool
     {
         if (!$this->isPHPUnitTestCaseCall($node)) {
             return \false;
@@ -101,7 +101,7 @@ final class TestsNodeAnalyzer
         /** @var MethodCall|StaticCall $node */
         return $this->nodeNameResolver->isNames($node->name, $names);
     }
-    public function isPHPUnitTestCaseCall(Node $node) : bool
+    public function isPHPUnitTestCaseCall(Node $node): bool
     {
         if ($node instanceof MethodCall) {
             return $this->isInTestClass($node);

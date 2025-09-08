@@ -51,7 +51,7 @@ final class RenameFunctionLikeParamWithinCallLikeArgRector extends AbstractRecto
         $this->paramRenamer = $paramRenamer;
         $this->paramRenameFactory = $paramRenameFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename param within closures and arrow functions based on use with specified method calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 (new SomeClass)->process(function ($param) {});
@@ -64,14 +64,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param CallLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($this->renameFunctionLikeParamWithinCallLikeArgs as $renameFunctionLikeParamWithinCallLikeArg) {
@@ -128,12 +128,12 @@ CODE_SAMPLE
     /**
      * @param RenameFunctionLikeParamWithinCallLikeArg[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RenameFunctionLikeParamWithinCallLikeArg::class);
         $this->renameFunctionLikeParamWithinCallLikeArgs = $configuration;
     }
-    public function findParameterFromArg(Arg $arg, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg) : ?Param
+    public function findParameterFromArg(Arg $arg, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg): ?Param
     {
         $functionLike = $arg->value;
         if (!$functionLike instanceof FunctionLike) {
@@ -141,14 +141,14 @@ CODE_SAMPLE
         }
         return $functionLike->params[$renameFunctionLikeParamWithinCallLikeArg->getFunctionLikePosition()] ?? null;
     }
-    private function findArgFromMethodCall(RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg, CallLike $callLike) : ?Arg
+    private function findArgFromMethodCall(RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg, CallLike $callLike): ?Arg
     {
-        if (\is_int($renameFunctionLikeParamWithinCallLikeArg->getCallLikePosition())) {
+        if (is_int($renameFunctionLikeParamWithinCallLikeArg->getCallLikePosition())) {
             return $this->processPositionalArg($callLike, $renameFunctionLikeParamWithinCallLikeArg);
         }
         return $this->processNamedArg($callLike, $renameFunctionLikeParamWithinCallLikeArg);
     }
-    private function processPositionalArg(CallLike $callLike, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg) : ?Arg
+    private function processPositionalArg(CallLike $callLike, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg): ?Arg
     {
         if ($callLike->isFirstClassCallable()) {
             return null;
@@ -166,9 +166,9 @@ CODE_SAMPLE
         }
         return $arg;
     }
-    private function processNamedArg(CallLike $callLike, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg) : ?Arg
+    private function processNamedArg(CallLike $callLike, RenameFunctionLikeParamWithinCallLikeArg $renameFunctionLikeParamWithinCallLikeArg): ?Arg
     {
-        $args = \array_filter($callLike->getArgs(), static function (Arg $arg) use($renameFunctionLikeParamWithinCallLikeArg) : bool {
+        $args = array_filter($callLike->getArgs(), static function (Arg $arg) use ($renameFunctionLikeParamWithinCallLikeArg): bool {
             if (!$arg->name instanceof Identifier) {
                 return \false;
             }
@@ -177,6 +177,6 @@ CODE_SAMPLE
         if ($args === []) {
             return null;
         }
-        return \array_values($args)[0];
+        return array_values($args)[0];
     }
 }

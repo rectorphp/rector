@@ -47,30 +47,30 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
                 $this->pruneFilters[] = $directory;
                 continue;
             }
-            $directory = \rtrim($directory, '/');
-            if (!$this->isRecursive || \strpos($directory, '/') !== \false) {
-                $patterns[] = \preg_quote($directory, '#');
+            $directory = rtrim($directory, '/');
+            if (!$this->isRecursive || strpos($directory, '/') !== \false) {
+                $patterns[] = preg_quote($directory, '#');
             } else {
                 $this->excludedDirs[$directory] = \true;
             }
         }
         if ($patterns) {
-            $this->excludedPattern = '#(?:^|/)(?:' . \implode('|', $patterns) . ')(?:/|$)#';
+            $this->excludedPattern = '#(?:^|/)(?:' . implode('|', $patterns) . ')(?:/|$)#';
         }
         parent::__construct($iterator);
     }
     /**
      * Filters the iterator values.
      */
-    public function accept() : bool
+    public function accept(): bool
     {
         if ($this->isRecursive && isset($this->excludedDirs[$this->getFilename()]) && $this->isDir()) {
             return \false;
         }
         if ($this->excludedPattern) {
             $path = $this->isDir() ? $this->current()->getRelativePathname() : $this->current()->getRelativePath();
-            $path = \str_replace('\\', '/', $path);
-            return !\preg_match($this->excludedPattern, $path);
+            $path = str_replace('\\', '/', $path);
+            return !preg_match($this->excludedPattern, $path);
         }
         if ($this->pruneFilters && $this->hasChildren()) {
             foreach ($this->pruneFilters as $pruneFilter) {
@@ -81,11 +81,11 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
         }
         return \true;
     }
-    public function hasChildren() : bool
+    public function hasChildren(): bool
     {
         return $this->isRecursive && $this->iterator->hasChildren();
     }
-    public function getChildren() : self
+    public function getChildren(): self
     {
         $children = new self($this->iterator->getChildren(), []);
         $children->excludedDirs = $this->excludedDirs;

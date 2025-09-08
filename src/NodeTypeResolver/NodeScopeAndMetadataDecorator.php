@@ -33,7 +33,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(string $filePath, array $stmts) : array
+    public function decorateNodesFromFile(string $filePath, array $stmts): array
     {
         $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
         $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath);

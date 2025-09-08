@@ -64,7 +64,7 @@ final class BoolReturnTypeFromBooleanStrictReturnsRector extends AbstractRector 
         $this->returnAnalyzer = $returnAnalyzer;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add bool return type based on strict bool returns type operations', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -89,14 +89,14 @@ CODE_SAMPLE
     /**
      * @funcCall array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
@@ -117,14 +117,14 @@ CODE_SAMPLE
         $node->returnType = new Identifier('bool');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function shouldSkip(Node $node, Scope $scope) : bool
+    private function shouldSkip(Node $node, Scope $scope): bool
     {
         // already has the type, skip
         if ($node->returnType instanceof Node) {
@@ -135,7 +135,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function hasOnlyBoolScalarReturnExprs(array $returns) : bool
+    private function hasOnlyBoolScalarReturnExprs(array $returns): bool
     {
         foreach ($returns as $return) {
             if (!$return->expr instanceof Expr) {
@@ -151,10 +151,10 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isNativeBooleanReturnTypeFuncCall(FuncCall $funcCall) : bool
+    private function isNativeBooleanReturnTypeFuncCall(FuncCall $funcCall): bool
     {
         $functionName = $this->getName($funcCall);
-        if (!\is_string($functionName)) {
+        if (!is_string($functionName)) {
             return \false;
         }
         $name = new Name($functionName);
@@ -175,7 +175,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function hasOnlyBooleanConstExprs(array $returns) : bool
+    private function hasOnlyBooleanConstExprs(array $returns): bool
     {
         foreach ($returns as $return) {
             if (!$return->expr instanceof ConstFetch) {

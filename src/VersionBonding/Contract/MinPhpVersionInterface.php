@@ -14,5 +14,5 @@ interface MinPhpVersionInterface
     /**
      * @return PhpVersion::*
      */
-    public function provideMinPhpVersion() : int;
+    public function provideMinPhpVersion(): int;
 }

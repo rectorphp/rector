@@ -11,24 +11,24 @@ final class RectorConfigValidator
     /**
      * @param string[] $rectorClasses
      */
-    public static function ensureNoDuplicatedClasses(array $rectorClasses) : void
+    public static function ensureNoDuplicatedClasses(array $rectorClasses): void
     {
         $duplicatedRectorClasses = self::resolveDuplicatedValues($rectorClasses);
         if ($duplicatedRectorClasses === []) {
             return;
         }
-        throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
+        throw new ShouldNotHappenException('Following rules are registered twice: ' . implode(', ', $duplicatedRectorClasses));
     }
     /**
      * @param mixed[] $skip
      */
-    public static function ensureRectorRulesExist(array $skip) : void
+    public static function ensureRectorRulesExist(array $skip): void
     {
         $nonExistingRules = [];
         $skippedRectorRules = [];
         foreach ($skip as $key => $value) {
             if (self::isRectorClassValue($key)) {
-                if (\class_exists($key)) {
+                if (class_exists($key)) {
                     $skippedRectorRules[] = $key;
                 } else {
                     $nonExistingRules[] = $key;
@@ -38,7 +38,7 @@ final class RectorConfigValidator
             if (!self::isRectorClassValue($value)) {
                 continue;
             }
-            if (\class_exists($value)) {
+            if (class_exists($value)) {
                 $skippedRectorRules[] = $value;
                 continue;
             }
@@ -57,40 +57,40 @@ final class RectorConfigValidator
     /**
      * @param mixed $value
      */
-    private static function isRectorClassValue($value) : bool
+    private static function isRectorClassValue($value): bool
     {
         // only validate string
-        if (!\is_string($value)) {
+        if (!is_string($value)) {
             return \false;
         }
         // not regex path
-        if (\strpos($value, '*') !== \false) {
+        if (strpos($value, '*') !== \false) {
             return \false;
         }
         // not if no Rector suffix
-        if (\substr_compare($value, 'Rector', -\strlen('Rector')) !== 0) {
+        if (substr_compare($value, 'Rector', -strlen('Rector')) !== 0) {
             return \false;
         }
         // not directory
-        if (\is_dir($value)) {
+        if (is_dir($value)) {
             return \false;
         }
         // not file
-        return !\is_file($value);
+        return !is_file($value);
     }
     /**
      * @param string[] $values
      * @return string[]
      */
-    private static function resolveDuplicatedValues(array $values) : array
+    private static function resolveDuplicatedValues(array $values): array
     {
-        $counted = \array_count_values($values);
+        $counted = array_count_values($values);
         $duplicates = [];
         foreach ($counted as $value => $count) {
             if ($count > 1) {
                 $duplicates[] = $value;
             }
         }
-        return \array_unique($duplicates);
+        return array_unique($duplicates);
     }
 }

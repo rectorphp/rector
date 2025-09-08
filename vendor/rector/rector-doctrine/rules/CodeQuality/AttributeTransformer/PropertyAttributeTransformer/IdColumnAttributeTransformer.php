@@ -14,10 +14,10 @@ final class IdColumnAttributeTransformer implements PropertyAttributeTransformer
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $idMapping = $entityMapping->matchIdPropertyMapping($property);
-        if (!\is_array($idMapping)) {
+        if (!is_array($idMapping)) {
             return \false;
         }
         $args = [];
@@ -28,7 +28,7 @@ final class IdColumnAttributeTransformer implements PropertyAttributeTransformer
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::COLUMN;
     }

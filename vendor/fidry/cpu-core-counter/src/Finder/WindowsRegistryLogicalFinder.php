@@ -22,18 +22,18 @@ use const PHP_EOL;
  */
 final class WindowsRegistryLogicalFinder extends ProcOpenBasedFinder
 {
-    protected function getCommand() : string
+    protected function getCommand(): string
     {
-        return 'reg query HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor';
+        return 'reg query HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor';
     }
-    public function toString() : string
+    public function toString(): string
     {
         return 'WindowsRegistryLogicalFinder';
     }
-    protected function countCpuCores(string $process) : ?int
+    protected function countCpuCores(string $process): ?int
     {
-        $count = count(array_filter(explode(PHP_EOL, $process), static function (string $line) : bool {
-            return '' !== \trim($line);
+        $count = count(array_filter(explode(PHP_EOL, $process), static function (string $line): bool {
+            return '' !== trim($line);
         }));
         return $count > 0 ? $count : null;
     }

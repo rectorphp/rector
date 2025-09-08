@@ -15,7 +15,7 @@ final class ExtraFileCodeSample extends AbstractCodeSample
         $this->extraFile = $extraFile;
         parent::__construct($badCode, $goodCode);
     }
-    public function getExtraFile() : string
+    public function getExtraFile(): string
     {
         return $this->extraFile;
     }

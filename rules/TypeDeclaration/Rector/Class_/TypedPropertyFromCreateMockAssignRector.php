@@ -43,9 +43,9 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
         $this->staticTypeMapper = $staticTypeMapper;
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "PHPUnit\\Framework\\MockObject\\MockObject" typed property from assigned mock to clearly separate from real objects', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "PHPUnit\Framework\MockObject\MockObject" typed property from assigned mock to clearly separate from real objects', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -74,14 +74,14 @@ final class SomeTest extends TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isObjectType($node, new ObjectType(ClassName::TEST_CASE_CLASS))) {
             return null;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $mockObjectType = new ObjectType(ClassName::MOCK_OBJECT);
         foreach ($node->getProperties() as $property) {
-            if (\count($property->props) !== 1) {
+            if (count($property->props) !== 1) {
                 continue;
             }
             // already use PHPUnit\Framework\MockObject\MockObject type
@@ -122,11 +122,11 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function isAlreadyTypedWithMockObject(Property $property, ObjectType $mockObjectType) : bool
+    private function isAlreadyTypedWithMockObject(Property $property, ObjectType $mockObjectType): bool
     {
         if (!$property->type instanceof Node) {
             return \false;

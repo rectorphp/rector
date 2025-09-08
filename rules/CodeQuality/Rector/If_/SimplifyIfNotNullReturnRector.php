@@ -32,7 +32,7 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
         $this->ifManipulator = $ifManipulator;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes redundant null check to instant return', [new CodeSample(<<<'CODE_SAMPLE'
 $newNode = 'something';
@@ -51,14 +51,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         foreach ((array) $node->stmts as $key => $stmt) {
             if (!$stmt instanceof If_) {

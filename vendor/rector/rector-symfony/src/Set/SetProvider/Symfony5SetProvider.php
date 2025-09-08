@@ -12,7 +12,7 @@ final class Symfony5SetProvider implements SetProviderInterface
     /**
      * @return SetInterface[]
      */
-    public function provide() : array
+    public function provide(): array
     {
         return [
             new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/symfony', '5.0', __DIR__ . '/../../../config/sets/symfony/symfony5/symfony50.php'),

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveConcatAutocastRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove (string) casting when it comes to concat, that does this by default', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeConcatenatingClass
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Concat::class];
     }
     /**
      * @param Concat $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->left instanceof String_ && !$node->right instanceof String_) {
             return null;
@@ -56,7 +56,7 @@ CODE_SAMPLE
         $node->right = $this->removeStringCast($node->right);
         return $node;
     }
-    private function removeStringCast(Expr $expr) : Expr
+    private function removeStringCast(Expr $expr): Expr
     {
         return $expr instanceof String_ ? $expr->expr : $expr;
     }

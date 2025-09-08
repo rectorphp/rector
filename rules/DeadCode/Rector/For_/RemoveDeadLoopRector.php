@@ -27,7 +27,7 @@ final class RemoveDeadLoopRector extends AbstractRector
     {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove loop with no body', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Do_::class, For_::class, Foreach_::class, While_::class];
     }
     /**
      * @param Do_|For_|Foreach_|While_ $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node): ?int
     {
         if ($node->stmts !== []) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         if ($node instanceof Do_ || $node instanceof While_) {
             $exprs = [$node->cond];
         } elseif ($node instanceof For_) {
-            $exprs = \array_merge($node->init, $node->cond, $node->loop);
+            $exprs = array_merge($node->init, $node->cond, $node->loop);
         } else {
             $exprs = [$node->expr, $node->valueVar];
         }

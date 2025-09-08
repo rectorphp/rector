@@ -20,10 +20,10 @@ final class ClassMethodAndPropertyAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function hasPropertyFetchReturn(ClassMethod $classMethod, string $propertyName) : bool
+    public function hasPropertyFetchReturn(ClassMethod $classMethod, string $propertyName): bool
     {
         $stmts = (array) $classMethod->stmts;
-        if (\count($stmts) !== 1) {
+        if (count($stmts) !== 1) {
             return \false;
         }
         $onlyClassMethodStmt = $stmts[0] ?? null;
@@ -37,10 +37,10 @@ final class ClassMethodAndPropertyAnalyzer
         }
         return $this->nodeNameResolver->isName($return->expr, $propertyName);
     }
-    public function hasOnlyPropertyAssign(ClassMethod $classMethod, string $propertyName) : bool
+    public function hasOnlyPropertyAssign(ClassMethod $classMethod, string $propertyName): bool
     {
         $stmts = (array) $classMethod->stmts;
-        if (\count($stmts) !== 1) {
+        if (count($stmts) !== 1) {
             return \false;
         }
         $onlyClassMethodStmt = $stmts[0] ?? null;

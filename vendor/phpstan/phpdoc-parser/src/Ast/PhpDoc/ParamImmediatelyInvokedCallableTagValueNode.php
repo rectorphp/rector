@@ -16,7 +16,7 @@ class ParamImmediatelyInvokedCallableTagValueNode implements \PHPStan\PhpDocPars
         $this->parameterName = $parameterName;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->parameterName} {$this->description}");
     }

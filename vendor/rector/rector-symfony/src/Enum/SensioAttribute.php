@@ -8,25 +8,25 @@ final class SensioAttribute
     /**
      * @var string
      */
-    public const PARAM_CONVERTER = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter';
+    public const PARAM_CONVERTER = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter';
     /**
      * @var string
      */
-    public const ENTITY = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Entity';
+    public const ENTITY = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity';
     /**
      * @var string
      */
-    public const METHOD = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method';
+    public const METHOD = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method';
     /**
      * @var string
      */
-    public const TEMPLATE = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
+    public const TEMPLATE = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template';
     /**
      * @var string
      */
-    public const IS_GRANTED = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted';
+    public const IS_GRANTED = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted';
     /**
      * @var string
      */
-    public const SECURITY = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Security';
+    public const SECURITY = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Security';
 }

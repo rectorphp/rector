@@ -25,7 +25,7 @@ interface InputInterface
     /**
      * Returns the first argument from the raw parameters (not parsed).
      */
-    public function getFirstArgument() : ?string;
+    public function getFirstArgument(): ?string;
     /**
      * Returns true if the raw parameters (not parsed) contain a value.
      *
@@ -37,7 +37,7 @@ interface InputInterface
      * @param string|array $values     The values to look for in the raw parameters (can be an array)
      * @param bool         $onlyParams Only check real parameters, skip those following an end of options (--) signal
      */
-    public function hasParameterOption($values, bool $onlyParams = \false) : bool;
+    public function hasParameterOption($values, bool $onlyParams = \false): bool;
     /**
      * Returns the value of a raw option (not parsed).
      *
@@ -74,7 +74,7 @@ interface InputInterface
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getArguments() : array;
+    public function getArguments(): array;
     /**
      * Returns the argument value for a given argument name.
      *
@@ -95,13 +95,13 @@ interface InputInterface
     /**
      * Returns true if an InputArgument object exists by name or position.
      */
-    public function hasArgument(string $name) : bool;
+    public function hasArgument(string $name): bool;
     /**
      * Returns all the given options merged with the default values.
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getOptions() : array;
+    public function getOptions(): array;
     /**
      * Returns the option value for a given option name.
      *
@@ -122,11 +122,11 @@ interface InputInterface
     /**
      * Returns true if an InputOption object exists by name.
      */
-    public function hasOption(string $name) : bool;
+    public function hasOption(string $name): bool;
     /**
      * Is this input means interactive?
      */
-    public function isInteractive() : bool;
+    public function isInteractive(): bool;
     /**
      * Sets the input interactivity.
      *

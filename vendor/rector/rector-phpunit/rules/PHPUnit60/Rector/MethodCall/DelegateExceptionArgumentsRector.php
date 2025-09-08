@@ -36,7 +36,7 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
         $this->assertCallFactory = $assertCallFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -67,14 +67,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null || $node->stmts === []) {
             return null;
@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $oldMethodNames = \array_keys(self::OLD_TO_NEW_METHOD);
+        $oldMethodNames = array_keys(self::OLD_TO_NEW_METHOD);
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
@@ -99,12 +99,12 @@ CODE_SAMPLE
             if (isset($call->args[2])) {
                 $extraCall = $this->assertCallFactory->createCallWithName($call, 'expectExceptionCode');
                 $extraCall->args[] = $call->args[2];
-                \array_splice($node->stmts, $key + 1, 0, [new Expression($extraCall)]);
+                array_splice($node->stmts, $key + 1, 0, [new Expression($extraCall)]);
                 unset($call->args[2]);
             }
             if (isset($call->args[1])) {
                 $extraCall = $this->createFirstArgExtraMethodCall($call);
-                \array_splice($node->stmts, $key + 1, 0, [new Expression($extraCall)]);
+                array_splice($node->stmts, $key + 1, 0, [new Expression($extraCall)]);
                 unset($call->args[1]);
             }
             $hasChanged = \true;

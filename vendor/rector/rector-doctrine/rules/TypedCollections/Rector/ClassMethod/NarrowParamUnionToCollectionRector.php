@@ -38,7 +38,7 @@ final class NarrowParamUnionToCollectionRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->unionCollectionTagValueNodeNarrower = $unionCollectionTagValueNodeNarrower;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow union param docblock type to Collection type in class method', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -68,14 +68,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         $hasChanged = \false;
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -95,13 +95,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isParameterNameNativeCollectionType(ClassMethod $classMethod, string $parameterName) : bool
+    private function isParameterNameNativeCollectionType(ClassMethod $classMethod, string $parameterName): bool
     {
         foreach ($classMethod->getParams() as $param) {
             if (!$param->var instanceof Variable) {
                 continue;
             }
-            if (!$this->isName($param->var, \ltrim($parameterName, '$'))) {
+            if (!$this->isName($param->var, ltrim($parameterName, '$'))) {
                 continue;
             }
             if (!$param->type instanceof Name) {

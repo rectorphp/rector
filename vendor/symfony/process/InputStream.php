@@ -68,21 +68,21 @@ class InputStream implements \IteratorAggregate
     {
         return !$this->open;
     }
-    public function getIterator() : \Traversable
+    public function getIterator(): \Traversable
     {
         $this->open = \true;
         while ($this->open || $this->input) {
             if (!$this->input) {
-                (yield '');
+                yield '';
                 continue;
             }
-            $current = \array_shift($this->input);
+            $current = array_shift($this->input);
             if ($current instanceof \Iterator) {
                 yield from $current;
             } else {
-                (yield $current);
+                yield $current;
             }
-            if (!$this->input && $this->open && null !== ($onEmpty = $this->onEmpty)) {
+            if (!$this->input && $this->open && null !== $onEmpty = $this->onEmpty) {
                 $this->write($onEmpty($this));
             }
         }

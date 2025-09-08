@@ -75,7 +75,7 @@ final class FdServer extends EventEmitter implements ServerInterface
      */
     public function __construct($fd, $loop = null)
     {
-        if (\preg_match('#^php://fd/(\\d+)$#', $fd, $m)) {
+        if (\preg_match('#^php://fd/(\d+)$#', $fd, $m)) {
             $fd = (int) $m[1];
         }
         if (!\is_int($fd) || $fd < 0 || $fd >= \PHP_INT_MAX) {
@@ -83,15 +83,15 @@ final class FdServer extends EventEmitter implements ServerInterface
         }
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->loop = $loop ?: Loop::get();
         $errno = 0;
         $errstr = '';
-        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
             // Match errstr from PHP's warning message.
             // fopen(php://fd/3): Failed to open stream: Error duping file descriptor 3; possibly it doesn't exist: [9]: Bad file descriptor
-            \preg_match('/\\[(\\d+)\\]: (.*)/', $error, $m);
+            \preg_match('/\[(\d+)\]: (.*)/', $error, $m);
             $errno = isset($m[1]) ? (int) $m[1] : 0;
             $errstr = isset($m[2]) ? $m[2] : $error;
         });
@@ -152,7 +152,7 @@ final class FdServer extends EventEmitter implements ServerInterface
             return;
         }
         $that = $this;
-        $this->loop->addReadStream($this->master, function ($master) use($that) {
+        $this->loop->addReadStream($this->master, function ($master) use ($that) {
             try {
                 $newSocket = SocketServer::accept($master);
             } catch (\RuntimeException $e) {

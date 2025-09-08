@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class InlineIsAInstanceOfRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `is_a()` with object and class name check to `instanceof`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -47,14 +47,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'is_a')) {
             return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
         }
         return new Instanceof_($firstArgValue, new FullyQualified($className));
     }
-    private function resolveClassName(Expr $expr) : ?string
+    private function resolveClassName(Expr $expr): ?string
     {
         if (!$expr instanceof ClassConstFetch) {
             return null;
@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
         return ClassNameFromObjectTypeResolver::resolve($type);
     }
-    private function isFirstObjectType(Expr $expr) : bool
+    private function isFirstObjectType(Expr $expr): bool
     {
         $exprType = $this->getType($expr);
         if ($exprType instanceof ObjectWithoutClassType) {

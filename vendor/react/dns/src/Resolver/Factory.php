@@ -39,7 +39,7 @@ final class Factory
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $executor = $this->decorateHostsFileExecutor($this->createExecutor($config, $loop ?: Loop::get()));
         return new Resolver($executor);
@@ -64,11 +64,11 @@ final class Factory
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         if ($cache !== null && !$cache instanceof CacheInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #3 ($cache) expected null|React\\Cache\\CacheInterface');
+            throw new \InvalidArgumentException('Argument #3 ($cache) expected null|React\Cache\CacheInterface');
         }
         // default to keeping maximum of 256 responses in cache unless explicitly given
         if (!$cache instanceof CacheInterface) {
@@ -115,9 +115,9 @@ final class Factory
             }
             // Hard-coded to check up to 3 DNS servers to match default limits in place in most systems (see MAXNS config).
             // Note to future self: Recursion isn't too hard, but how deep do we really want to go?
-            $primary = \reset($nameserver->nameservers);
-            $secondary = \next($nameserver->nameservers);
-            $tertiary = \next($nameserver->nameservers);
+            $primary = reset($nameserver->nameservers);
+            $secondary = next($nameserver->nameservers);
+            $tertiary = next($nameserver->nameservers);
             if ($tertiary !== \false) {
                 // 3 DNS servers given => nest first with fallback for second and third
                 return new CoopExecutor(new RetryExecutor(new FallbackExecutor($this->createSingleExecutor($primary, $loop), new FallbackExecutor($this->createSingleExecutor($secondary, $loop), $this->createSingleExecutor($tertiary, $loop)))));

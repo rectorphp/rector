@@ -61,7 +61,7 @@ final class RenameParamToMatchTypeRector extends AbstractRector
         $this->paramRenamer = $paramRenamer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename param to match ClassType', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -86,14 +86,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         foreach ($node->params as $param) {
@@ -127,7 +127,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClassMethodFromVendor(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethodFromVendor(ClassMethod $classMethod): bool
     {
         if ($classMethod->isPrivate()) {
             return \false;
@@ -136,7 +136,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        $ancestors = \array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
         $methodName = $this->getName($classMethod);
         foreach ($ancestors as $ancestor) {
             // internal
@@ -147,7 +147,7 @@ CODE_SAMPLE
                 continue;
             }
             $path = PathNormalizer::normalize($ancestor->getFileName());
-            if (\strpos($path, '/vendor/') !== \false) {
+            if (strpos($path, '/vendor/') !== \false) {
                 return \true;
             }
         }
@@ -156,7 +156,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
-    private function shouldSkipParam(Param $param, string $expectedName, $classMethod) : bool
+    private function shouldSkipParam(Param $param, string $expectedName, $classMethod): bool
     {
         /** @var string $paramName */
         $paramName = $this->getName($param);

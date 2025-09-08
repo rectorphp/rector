@@ -26,7 +26,7 @@ final class CollectionGetterNativeTypeRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add native return type to a Collection getter', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -63,14 +63,14 @@ final class ReturnPropertyCollectionWithArrayTypeDeclaration
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if ($node->stmts === null) {
             return null;
@@ -78,7 +78,7 @@ CODE_SAMPLE
         if ($node->returnType !== null && $this->isName($node->returnType, DoctrineClass::COLLECTION)) {
             return null;
         }
-        if (\count($node->stmts) !== 1) {
+        if (count($node->stmts) !== 1) {
             return null;
         }
         $soleStmt = $node->stmts[0];

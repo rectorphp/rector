@@ -32,13 +32,13 @@ final class ExplicitPhpErrorApiRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const REPLACEMENTS = ['PHPUnit\\Framework\\TestCase\\Notice' => 'expectNotice', 'PHPUnit\\Framework\\TestCase\\Deprecated' => 'expectDeprecation', 'PHPUnit\\Framework\\TestCase\\Error' => 'expectError', 'PHPUnit\\Framework\\TestCase\\Warning' => 'expectWarning'];
+    private const REPLACEMENTS = ['PHPUnit\Framework\TestCase\Notice' => 'expectNotice', 'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation', 'PHPUnit\Framework\TestCase\Error' => 'expectError', 'PHPUnit\Framework\TestCase\Warning' => 'expectWarning'];
     public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->assertCallFactory = $assertCallFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use explicit API for expecting PHP errors, warnings, and notices', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * Detects "SomeClass::class"
      */
-    private function isClassConstReference(Expr $expr, string $className) : bool
+    private function isClassConstReference(Expr $expr, string $className): bool
     {
         if (!$expr instanceof ClassConstFetch) {
             return \false;

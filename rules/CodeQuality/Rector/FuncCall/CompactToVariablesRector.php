@@ -29,7 +29,7 @@ final class CompactToVariablesRector extends AbstractRector
     {
         $this->compactConverter = $compactConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `compact()` call to own array', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -60,14 +60,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'compact')) {
             return null;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
         return $this->refactorAssignArray($firstValueStaticType);
     }
-    private function refactorAssignArray(ConstantArrayType $constantArrayType) : ?Array_
+    private function refactorAssignArray(ConstantArrayType $constantArrayType): ?Array_
     {
         $arrayItems = [];
         foreach ($constantArrayType->getValueTypes() as $valueType) {

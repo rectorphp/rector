@@ -16,7 +16,7 @@ final class ScopeFactory
     {
         $this->phpStanScopeFactory = $phpStanScopeFactory;
     }
-    public function createFromFile(string $filePath) : MutatingScope
+    public function createFromFile(string $filePath): MutatingScope
     {
         $scopeContext = ScopeContext::create($filePath);
         return $this->phpStanScopeFactory->create($scopeContext);

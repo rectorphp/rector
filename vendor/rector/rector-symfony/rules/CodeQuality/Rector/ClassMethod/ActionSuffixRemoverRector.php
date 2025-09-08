@@ -31,7 +31,7 @@ final class ActionSuffixRemoverRector extends AbstractRector
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes Action suffixes from methods in Symfony Controllers', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeController
@@ -54,14 +54,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->controllerMethodAnalyzer->isAction($node)) {
             return null;
@@ -70,15 +70,15 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod(\rtrim($node->name->toString(), 'Action'))) {
+        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod(rtrim($node->name->toString(), 'Action'))) {
             return null;
         }
         return $this->removeSuffix($node, 'Action');
     }
-    private function removeSuffix(ClassMethod $classMethod, string $suffixToRemove) : ?ClassMethod
+    private function removeSuffix(ClassMethod $classMethod, string $suffixToRemove): ?ClassMethod
     {
         $name = $this->getName($classMethod);
-        $newName = Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
+        $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove), '');
         if ($newName === $name) {
             return null;
         }

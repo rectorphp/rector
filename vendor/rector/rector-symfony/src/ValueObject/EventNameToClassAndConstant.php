@@ -23,15 +23,15 @@ final class EventNameToClassAndConstant
         $this->eventClass = $eventClass;
         $this->eventConstant = $eventConstant;
     }
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return $this->eventName;
     }
-    public function getEventClass() : string
+    public function getEventClass(): string
     {
         return $this->eventClass;
     }
-    public function getEventConstant() : string
+    public function getEventConstant(): string
     {
         return $this->eventConstant;
     }

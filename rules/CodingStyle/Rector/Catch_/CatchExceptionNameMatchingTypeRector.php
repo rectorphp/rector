@@ -42,7 +42,7 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
     {
         $this->propertyNaming = $propertyNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Type and name of catch exception should match', [new CodeSample(<<<'CODE_SAMPLE'
 try {
@@ -63,14 +63,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class, FileWithoutNamespace::class, Namespace_::class];
     }
     /**
      * @param ClassMethod|Function_|Closure|FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -111,23 +111,23 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveNewVariableName(string $typeShortName) : string
+    private function resolveNewVariableName(string $typeShortName): string
     {
-        return Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, static function (array $matches) : string {
-            $output = isset($matches[1]) ? \strtolower((string) $matches[1]) : '';
+        return Strings::replace(lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, static function (array $matches): string {
+            $output = isset($matches[1]) ? strtolower((string) $matches[1]) : '';
             $output .= $matches[2] ?? '';
             return $output . ($matches[3] ?? '');
         });
     }
-    private function shouldSkip(Stmt $stmt) : bool
+    private function shouldSkip(Stmt $stmt): bool
     {
         if (!$stmt instanceof TryCatch) {
             return \true;
         }
-        if (\count($stmt->catches) !== 1) {
+        if (count($stmt->catches) !== 1) {
             return \true;
         }
-        if (\count($stmt->catches[0]->types) !== 1) {
+        if (count($stmt->catches[0]->types) !== 1) {
             return \true;
         }
         $catch = $stmt->catches[0];
@@ -136,9 +136,9 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function renameVariableInStmts(Catch_ $catch, string $oldVariableName, string $newVariableName, int $key, array $stmts, ?Stmt $stmt) : void
+    private function renameVariableInStmts(Catch_ $catch, string $oldVariableName, string $newVariableName, int $key, array $stmts, ?Stmt $stmt): void
     {
-        $this->traverseNodesWithCallable($catch->stmts, function (Node $node) use($oldVariableName, $newVariableName) {
+        $this->traverseNodesWithCallable($catch->stmts, function (Node $node) use ($oldVariableName, $newVariableName) {
             if (!$node instanceof Variable) {
                 return null;
             }
@@ -153,13 +153,13 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function replaceNextUsageVariable(string $oldVariableName, string $newVariableName, int $key, array $stmts, ?Node $nextNode) : void
+    private function replaceNextUsageVariable(string $oldVariableName, string $newVariableName, int $key, array $stmts, ?Node $nextNode): void
     {
         if (!$nextNode instanceof Node) {
             return;
         }
         $nonAssignedVariables = [];
-        $this->traverseNodesWithCallable($nextNode, function (Node $node) use($oldVariableName, &$nonAssignedVariables) : ?int {
+        $this->traverseNodesWithCallable($nextNode, function (Node $node) use ($oldVariableName, &$nonAssignedVariables): ?int {
             if ($node instanceof Assign && $node->var instanceof Variable) {
                 return NodeVisitor::STOP_TRAVERSAL;
             }
@@ -185,7 +185,7 @@ CODE_SAMPLE
         $key += 2;
         $this->replaceNextUsageVariable($oldVariableName, $newVariableName, $key, $stmts, $nextNode);
     }
-    private function resolveVariableName(Name $name) : string
+    private function resolveVariableName(Name $name): string
     {
         $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
         // this allows to respect the name alias, if used

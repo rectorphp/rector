@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NullCoalescingOperatorRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use null coalescing operator `??=`', [new CodeSample(<<<'CODE_SAMPLE'
 $array = [];
@@ -32,14 +32,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?AssignCoalesce
+    public function refactor(Node $node): ?AssignCoalesce
     {
         if (!$node->expr instanceof Coalesce) {
             return null;
@@ -49,7 +49,7 @@ CODE_SAMPLE
         }
         return new AssignCoalesce($node->var, $node->expr->right);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE_ASSIGN;
     }

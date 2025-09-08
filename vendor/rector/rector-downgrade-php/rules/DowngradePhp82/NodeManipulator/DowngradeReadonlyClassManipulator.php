@@ -17,7 +17,7 @@ final class DowngradeReadonlyClassManipulator
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function process(Class_ $class) : ?Class_
+    public function process(Class_ $class): ?Class_
     {
         if (!$this->visibilityManipulator->isReadonly($class)) {
             return null;
@@ -27,7 +27,7 @@ final class DowngradeReadonlyClassManipulator
         $this->makePromotedPropertiesReadonly($class);
         return $class;
     }
-    private function makePropertiesReadonly(Class_ $class) : void
+    private function makePropertiesReadonly(Class_ $class): void
     {
         foreach ($class->getProperties() as $property) {
             if ($property->isReadonly()) {
@@ -50,7 +50,7 @@ final class DowngradeReadonlyClassManipulator
             $this->visibilityManipulator->makeReadonly($property);
         }
     }
-    private function makePromotedPropertiesReadonly(Class_ $class) : void
+    private function makePromotedPropertiesReadonly(Class_ $class): void
     {
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {

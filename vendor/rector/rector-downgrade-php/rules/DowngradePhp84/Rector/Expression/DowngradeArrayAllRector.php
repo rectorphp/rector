@@ -37,11 +37,11 @@ final class DowngradeArrayAllRector extends AbstractRector
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class, Return_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade array_all() to foreach loop', [new CodeSample(<<<'CODE_SAMPLE'
 $found = array_all($animals, fn($animal) => str_starts_with($animal, 'c'));
@@ -61,7 +61,7 @@ CODE_SAMPLE
      * @param Expression|Return_ $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if ($node instanceof Return_ && !$node->expr instanceof FuncCall) {
             return null;
@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $expr->getArgs();
-        if (\count($args) !== 2) {
+        if (count($args) !== 2) {
             return null;
         }
         if (!$args[1]->value instanceof ArrowFunction) {

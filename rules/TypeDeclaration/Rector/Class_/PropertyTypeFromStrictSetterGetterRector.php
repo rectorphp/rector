@@ -63,7 +63,7 @@ final class PropertyTypeFromStrictSetterGetterRector extends AbstractRector impl
         $this->reflectionResolver = $reflectionResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add property type based on strict setter and getter method', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -102,14 +102,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $classReflection = null;
@@ -150,11 +150,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function matchGetterSetterIdenticalType(Property $property, Class_ $class) : ?Type
+    private function matchGetterSetterIdenticalType(Property $property, Class_ $class): ?Type
     {
         $getterBasedStrictType = $this->getterTypeDeclarationPropertyTypeInferer->inferProperty($property, $class);
         if (!$getterBasedStrictType instanceof Type) {
@@ -178,9 +178,9 @@ CODE_SAMPLE
         } else {
             $setterBasedStrictTypes = [$setterBasedStrictType];
         }
-        return new UnionType(\array_merge($setterBasedStrictTypes, $getterBasedStrictTypes));
+        return new UnionType(array_merge($setterBasedStrictTypes, $getterBasedStrictTypes));
     }
-    private function isDefaultExprTypeCompatible(Property $property, Type $getterSetterPropertyType) : bool
+    private function isDefaultExprTypeCompatible(Property $property, Type $getterSetterPropertyType): bool
     {
         $defaultExpr = $property->props[0]->default ?? null;
         // make sure default value is not a conflicting type
@@ -201,7 +201,7 @@ CODE_SAMPLE
         }
         return $defaultExprType->equals($getterSetterPropertyType);
     }
-    private function decorateDefaultExpr(Type $getterSetterPropertyType, Property $property, bool $hasPropertyDefaultNull) : void
+    private function decorateDefaultExpr(Type $getterSetterPropertyType, Property $property, bool $hasPropertyDefaultNull): void
     {
         if (!TypeCombinator::containsNull($getterSetterPropertyType)) {
             if ($getterSetterPropertyType instanceof FloatType) {
@@ -233,7 +233,7 @@ CODE_SAMPLE
         }
         $propertyProperty->default = new ConstFetch(new Name('null'));
     }
-    private function hasPropertyDefaultNull(Property $property) : bool
+    private function hasPropertyDefaultNull(Property $property): bool
     {
         $defaultExpr = $property->props[0]->default ?? null;
         if (!$defaultExpr instanceof ConstFetch) {

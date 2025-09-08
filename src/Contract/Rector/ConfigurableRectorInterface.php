@@ -9,5 +9,5 @@ interface ConfigurableRectorInterface extends \Rector\Contract\Rector\RectorInte
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void;
+    public function configure(array $configuration): void;
 }

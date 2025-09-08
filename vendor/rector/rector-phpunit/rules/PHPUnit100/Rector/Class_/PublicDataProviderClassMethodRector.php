@@ -35,7 +35,7 @@ final class PublicDataProviderClassMethodRector extends AbstractRector
         $this->dataProviderClassMethodFinder = $dataProviderClassMethodFinder;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change data provider methods to public', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function skipMethod(ClassMethod $classMethod) : bool
+    private function skipMethod(ClassMethod $classMethod): bool
     {
         return $classMethod->isPublic();
     }

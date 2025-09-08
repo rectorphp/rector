@@ -41,7 +41,7 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
         $this->classMethodParamTypeCompleter = $classMethodParamTypeCompleter;
         $this->localMethodCallFinder = $localMethodCallFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change private method param type to strict type, based on passed strict types', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isClassMethodPrivate(Class_ $class, ClassMethod $classMethod) : bool
+    private function isClassMethodPrivate(Class_ $class, ClassMethod $classMethod): bool
     {
         if ($classMethod->isPrivate()) {
             return \true;

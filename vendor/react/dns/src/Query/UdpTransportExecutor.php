@@ -107,7 +107,7 @@ final class UdpTransportExecutor implements ExecutorInterface
         }
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->nameserver = 'udp://' . $parts['host'] . ':' . (isset($parts['port']) ? $parts['port'] : 53);
         $this->loop = $loop ?: Loop::get();
@@ -130,12 +130,12 @@ final class UdpTransportExecutor implements ExecutorInterface
         }
         // set socket to non-blocking and immediately try to send (fill write buffer)
         \stream_set_blocking($socket, \false);
-        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
             // Write may potentially fail, but most common errors are already caught by connection check above.
             // Among others, macOS is known to report here when trying to send to broadcast address.
             // This can also be reproduced by writing data exceeding `stream_set_chunk_size()` to a server refusing UDP data.
             // fwrite(): send of 8192 bytes failed with errno=111 Connection refused
-            \preg_match('/errno=(\\d+) (.+)/', $error, $m);
+            \preg_match('/errno=(\d+) (.+)/', $error, $m);
             $errno = isset($m[1]) ? (int) $m[1] : 0;
             $errstr = isset($m[2]) ? $m[2] : $error;
         });
@@ -145,7 +145,7 @@ final class UdpTransportExecutor implements ExecutorInterface
             return \RectorPrefix202509\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to send query to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno));
         }
         $loop = $this->loop;
-        $deferred = new Deferred(function () use($loop, $socket, $query) {
+        $deferred = new Deferred(function () use ($loop, $socket, $query) {
             // cancellation should remove socket from loop and close socket
             $loop->removeReadStream($socket);
             \fclose($socket);
@@ -154,7 +154,7 @@ final class UdpTransportExecutor implements ExecutorInterface
         $max = $this->maxPacketSize;
         $parser = $this->parser;
         $nameserver = $this->nameserver;
-        $loop->addReadStream($socket, function ($socket) use($loop, $deferred, $query, $parser, $request, $max, $nameserver) {
+        $loop->addReadStream($socket, function ($socket) use ($loop, $deferred, $query, $parser, $request, $max, $nameserver) {
             // try to read a single data packet from the DNS server
             // ignoring any errors, this is uses UDP packets and not a stream of data
             $data = @\fread($socket, $max);

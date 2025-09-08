@@ -22,11 +22,11 @@ final class RenameAnnotation implements RenameAnnotationInterface
         $this->oldAnnotation = $oldAnnotation;
         $this->newAnnotation = $newAnnotation;
     }
-    public function getOldAnnotation() : string
+    public function getOldAnnotation(): string
     {
         return $this->oldAnnotation;
     }
-    public function getNewAnnotation() : string
+    public function getNewAnnotation(): string
     {
         return $this->newAnnotation;
     }

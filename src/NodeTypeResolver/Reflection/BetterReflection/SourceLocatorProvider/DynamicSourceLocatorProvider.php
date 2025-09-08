@@ -37,25 +37,25 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
         $this->fileNodesFetcher = $fileNodesFetcher;
         $this->optimizedDirectorySourceLocatorFactory = $optimizedDirectorySourceLocatorFactory;
     }
-    public function setFilePath(string $filePath) : void
+    public function setFilePath(string $filePath): void
     {
         $this->filePaths = [$filePath];
     }
     /**
      * @param string[] $files
      */
-    public function addFiles(array $files) : void
+    public function addFiles(array $files): void
     {
-        $this->filePaths = \array_unique(\array_merge($this->filePaths, $files));
+        $this->filePaths = array_unique(array_merge($this->filePaths, $files));
     }
     /**
      * @param string[] $directories
      */
-    public function addDirectories(array $directories) : void
+    public function addDirectories(array $directories): void
     {
-        $this->directories = \array_unique(\array_merge($this->directories, $directories));
+        $this->directories = array_unique(array_merge($this->directories, $directories));
     }
-    public function provide() : SourceLocator
+    public function provide(): SourceLocator
     {
         // do not cache for PHPUnit, as in test every fixture is different
         $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
@@ -71,14 +71,14 @@ final class DynamicSourceLocatorProvider implements ResetableInterface
         }
         return $this->aggregateSourceLocator = new AggregateSourceLocator($sourceLocators);
     }
-    public function arePathsEmpty() : bool
+    public function arePathsEmpty(): bool
     {
         return $this->filePaths === [] && $this->directories === [];
     }
     /**
      * @api to allow fast single-container tests
      */
-    public function reset() : void
+    public function reset(): void
     {
         $this->filePaths = [];
         $this->directories = [];

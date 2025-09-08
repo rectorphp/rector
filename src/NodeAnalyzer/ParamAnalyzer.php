@@ -56,7 +56,7 @@ final class ParamAnalyzer
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param) : bool
+    public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param): bool
     {
         if ($param->isPromoted()) {
             return \true;
@@ -65,7 +65,7 @@ final class ParamAnalyzer
         if ($param->var instanceof Error) {
             return \false;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use(&$isParamUsed, $param) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use (&$isParamUsed, $param): ?int {
             if ($this->isVariadicFuncCall($node)) {
                 $isParamUsed = \true;
                 return NodeVisitor::STOP_TRAVERSAL;
@@ -97,7 +97,7 @@ final class ParamAnalyzer
     /**
      * @param Param[] $params
      */
-    public function hasPropertyPromotion(array $params) : bool
+    public function hasPropertyPromotion(array $params): bool
     {
         foreach ($params as $param) {
             if ($param->isPromoted()) {
@@ -106,7 +106,7 @@ final class ParamAnalyzer
         }
         return \false;
     }
-    public function isNullable(Param $param) : bool
+    public function isNullable(Param $param): bool
     {
         if ($param->variadic) {
             return \false;
@@ -116,10 +116,10 @@ final class ParamAnalyzer
         }
         return $param->type instanceof NullableType;
     }
-    public function isParamReassign(ClassMethod $classMethod, Param $param) : bool
+    public function isParamReassign(ClassMethod $classMethod, Param $param): bool
     {
         $paramName = (string) $this->nodeNameResolver->getName($param->var);
-        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use($paramName) : bool {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use ($paramName): bool {
             if (!$node instanceof Assign) {
                 return \false;
             }
@@ -129,7 +129,7 @@ final class ParamAnalyzer
             return $this->nodeNameResolver->isName($node->var, $paramName);
         });
     }
-    private function isVariableInClosureUses(Closure $closure, Variable $variable) : bool
+    private function isVariableInClosureUses(Closure $closure, Variable $variable): bool
     {
         foreach ($closure->uses as $use) {
             if ($this->nodeComparator->areNodesEqual($use->var, $variable)) {
@@ -138,7 +138,7 @@ final class ParamAnalyzer
         }
         return \false;
     }
-    private function isUsedAsArg(Node $node, Param $param) : bool
+    private function isUsedAsArg(Node $node, Param $param): bool
     {
         if ($node instanceof New_ || $node instanceof CallLike) {
             if ($node->isFirstClassCallable()) {
@@ -152,7 +152,7 @@ final class ParamAnalyzer
         }
         return \false;
     }
-    private function isParamUsed(Node $node, Param $param) : bool
+    private function isParamUsed(Node $node, Param $param): bool
     {
         if (!$node instanceof FuncCall) {
             return \false;
@@ -163,7 +163,7 @@ final class ParamAnalyzer
         $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$node]);
         return $this->nodeNameResolver->isNames($param, $arguments);
     }
-    private function isVariadicFuncCall(Node $node) : bool
+    private function isVariadicFuncCall(Node $node): bool
     {
         if (!$node instanceof FuncCall) {
             return \false;

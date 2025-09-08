@@ -54,7 +54,7 @@ final class AddCoversClassAttributeRector extends AbstractRector implements Conf
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Adds `#[CoversClass(...)]` attribute to test files guessing source class name.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeService
@@ -85,14 +85,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $className = $this->getName($node);
         if ($className === null) {
@@ -101,12 +101,12 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if ($this->phpAttributeAnalyzer->hasPhpAttributes($node, ['PHPUnit\\Framework\\Attributes\\CoversNothing', 'PHPUnit\\Framework\\Attributes\\CoversClass', 'PHPUnit\\Framework\\Attributes\\CoversFunction'])) {
+        if ($this->phpAttributeAnalyzer->hasPhpAttributes($node, ['PHPUnit\Framework\Attributes\CoversNothing', 'PHPUnit\Framework\Attributes\CoversClass', 'PHPUnit\Framework\Attributes\CoversFunction'])) {
             return null;
         }
         $possibleTestClassNames = $this->resolveSourceClassNames($className);
         $matchingTestClassName = $this->matchExistingClassName($possibleTestClassNames);
-        if (!\is_string($matchingTestClassName)) {
+        if (!is_string($matchingTestClassName)) {
             return null;
         }
         $coversAttributeGroup = $this->createAttributeGroup('\\' . $matchingTestClassName);
@@ -116,7 +116,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::countBetween($configuration, 0, 1);
         if (isset($configuration[0])) {
@@ -127,16 +127,16 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveSourceClassNames(string $className) : array
+    private function resolveSourceClassNames(string $className): array
     {
         $classNameParts = explode('\\', $className);
         $partCount = count($classNameParts);
         // Sort suffixes by length (longest first) to ensure more specific patterns match first
         $sortedSuffixes = $this->testClassSuffixes;
-        \usort($sortedSuffixes, static fn(string $a, string $b): int => \strlen($b) <=> \strlen($a));
+        usort($sortedSuffixes, static fn(string $a, string $b): int => strlen($b) <=> strlen($a));
         $patterns = [];
         foreach ($sortedSuffixes as $sortedSuffix) {
-            $patterns[] = '#' . \preg_quote($sortedSuffix, '#') . '$#';
+            $patterns[] = '#' . preg_quote($sortedSuffix, '#') . '$#';
         }
         $classNameParts[$partCount - 1] = preg_replace($patterns, '', $classNameParts[$partCount - 1]);
         $possibleTestClassNames = [implode('\\', $classNameParts)];
@@ -147,7 +147,7 @@ CODE_SAMPLE
     /**
      * @param string[] $classNames
      */
-    private function matchExistingClassName(array $classNames) : ?string
+    private function matchExistingClassName(array $classNames): ?string
     {
         foreach ($classNames as $className) {
             if (!$this->reflectionProvider->hasClass($className)) {
@@ -167,9 +167,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createAttributeGroup(string $annotationValue) : AttributeGroup
+    private function createAttributeGroup(string $annotationValue): AttributeGroup
     {
-        $attributeClass = 'PHPUnit\\Framework\\Attributes\\CoversClass';
+        $attributeClass = 'PHPUnit\Framework\Attributes\CoversClass';
         $attributeValue = trim($annotationValue) . '::class';
         return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, [$attributeValue]);
     }

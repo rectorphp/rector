@@ -36,7 +36,7 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector
         $this->phpVersionProvider = $phpVersionProvider;
         $this->phpVersion = $this->phpVersionProvider->provide();
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unneeded PHP_VERSION_ID conditional checks', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -65,7 +65,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
@@ -122,7 +122,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorSmallerLeft(Smaller $smaller) : ?int
+    private function refactorSmallerLeft(Smaller $smaller): ?int
     {
         $value = $smaller->right;
         if (!$value instanceof Int_) {
@@ -167,7 +167,7 @@ CODE_SAMPLE
         }
         return $if->stmts;
     }
-    private function refactorGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual) : ?int
+    private function refactorGreaterOrEqualRight(GreaterOrEqual $greaterOrEqual): ?int
     {
         $value = $greaterOrEqual->left;
         if (!$value instanceof Int_) {
@@ -208,7 +208,7 @@ CODE_SAMPLE
         }
         return $if->stmts;
     }
-    private function refactorGreaterRight(Greater $greater) : ?int
+    private function refactorGreaterRight(Greater $greater): ?int
     {
         $value = $greater->left;
         if (!$value instanceof Int_) {

@@ -33,21 +33,21 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible', [new CodeSample('$this->assertTrue(is_readable($readmeFile), "message");', '$this->assertIsReadable($readmeFile, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse'])) {
             return null;
@@ -64,7 +64,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             return null;
         }
         $firstArgumentName = $this->resolveFirstArgument($firstArgumentValue);
-        if ($firstArgumentName === null || !\array_key_exists($firstArgumentName, self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES)) {
+        if ($firstArgumentName === null || !array_key_exists($firstArgumentName, self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES)) {
             return null;
         }
         if ($firstArgumentName === 'is_a') {
@@ -88,25 +88,25 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Empty_ $firstArgumentValue
      */
-    private function resolveFirstArgument($firstArgumentValue) : ?string
+    private function resolveFirstArgument($firstArgumentValue): ?string
     {
         return $firstArgumentValue instanceof Empty_ ? 'empty' : $this->getName($firstArgumentValue);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod($node, FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
+    private function renameMethod($node, FunctionNameWithAssertMethods $functionNameWithAssertMethods): void
     {
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
         $oldMethodName = $identifierNode->toString();
-        if (\in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
+        if (in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
             $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
         if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {
             return;
         }
-        if (!\in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], \true)) {
+        if (!in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], \true)) {
             return;
         }
         $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
@@ -119,7 +119,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
      * - $this->assertArrayHasKey('...', ['...'], 'second argument');
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function moveFunctionArgumentsUp($node) : void
+    private function moveFunctionArgumentsUp($node): void
     {
         $funcCallOrEmptyNode = $node->getArgs()[0]->value;
         if ($funcCallOrEmptyNode instanceof FuncCall) {
@@ -141,17 +141,17 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
      * @param Arg[] $oldArguments
      * @return mixed[]
      */
-    private function buildNewArguments(string $funcCallOrEmptyNodeName, array $funcCallOrEmptyNodeArgs, array $oldArguments) : array
+    private function buildNewArguments(string $funcCallOrEmptyNodeName, array $funcCallOrEmptyNodeArgs, array $oldArguments): array
     {
-        if (\in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], \true) && \count($funcCallOrEmptyNodeArgs) === 3) {
+        if (in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], \true) && count($funcCallOrEmptyNodeArgs) === 3) {
             unset($funcCallOrEmptyNodeArgs[2]);
-            return \array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+            return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
         }
-        if (\in_array($funcCallOrEmptyNodeName, ['is_a', 'str_contains'], \true)) {
+        if (in_array($funcCallOrEmptyNodeName, ['is_a', 'str_contains'], \true)) {
             // flip arguments
             $newArgs = [$funcCallOrEmptyNodeArgs[1], $funcCallOrEmptyNodeArgs[0]];
-            return \array_merge($newArgs, $oldArguments);
+            return array_merge($newArgs, $oldArguments);
         }
-        return \array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+        return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
     }
 }

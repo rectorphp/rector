@@ -27,7 +27,7 @@ final class ClosureToArrowFunctionRector extends AbstractRector implements MinPh
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change closure to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -54,14 +54,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
         if (!$returnExpr instanceof Expr) {
@@ -78,7 +78,7 @@ CODE_SAMPLE
         }
         return $arrowFunction;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARROW_FUNCTION;
     }

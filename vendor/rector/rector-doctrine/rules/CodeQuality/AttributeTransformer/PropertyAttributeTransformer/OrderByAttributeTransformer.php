@@ -24,10 +24,10 @@ final class OrderByAttributeTransformer implements PropertyAttributeTransformerI
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $oneToManyMapping = $entityMapping->matchOneToManyPropertyMapping($property);
-        if (!\is_array($oneToManyMapping)) {
+        if (!is_array($oneToManyMapping)) {
             return \false;
         }
         // we handle OrderBy here only
@@ -39,7 +39,7 @@ final class OrderByAttributeTransformer implements PropertyAttributeTransformerI
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::ORDER_BY;
     }

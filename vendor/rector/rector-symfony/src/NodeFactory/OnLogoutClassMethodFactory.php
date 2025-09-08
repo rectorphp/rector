@@ -36,17 +36,17 @@ final class OnLogoutClassMethodFactory
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function createFromLogoutClassMethod(ClassMethod $logoutClassMethod) : ClassMethod
+    public function createFromLogoutClassMethod(ClassMethod $logoutClassMethod): ClassMethod
     {
         $classMethod = $this->bareLogoutClassMethodFactory->create();
         $assignStmts = $this->createAssignStmtFromOldClassMethod($logoutClassMethod);
-        $classMethod->stmts = \array_merge($assignStmts, (array) $logoutClassMethod->stmts);
+        $classMethod->stmts = array_merge($assignStmts, (array) $logoutClassMethod->stmts);
         return $classMethod;
     }
     /**
      * @return Stmt[]
      */
-    private function createAssignStmtFromOldClassMethod(ClassMethod $onLogoutSuccessClassMethod) : array
+    private function createAssignStmtFromOldClassMethod(ClassMethod $onLogoutSuccessClassMethod): array
     {
         $usedParams = $this->resolveUsedParams($onLogoutSuccessClassMethod);
         return $this->createAssignStmts($usedParams);
@@ -54,7 +54,7 @@ final class OnLogoutClassMethodFactory
     /**
      * @return Param[]
      */
-    private function resolveUsedParams(ClassMethod $logoutClassMethod) : array
+    private function resolveUsedParams(ClassMethod $logoutClassMethod): array
     {
         $usedParams = [];
         foreach ($logoutClassMethod->params as $oldParam) {
@@ -69,7 +69,7 @@ final class OnLogoutClassMethodFactory
      * @param Param[] $params
      * @return Expression[]
      */
-    private function createAssignStmts(array $params) : array
+    private function createAssignStmts(array $params): array
     {
         $logoutEventVariable = new Variable('logoutEvent');
         $assignStmts = [];

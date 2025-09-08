@@ -186,7 +186,7 @@ class Property implements PhpParser\Builder
      *
      * @return Stmt\Property The built property node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
         if ($this->flags & Modifiers::ABSTRACT && !$this->hooks) {
             throw new PhpParser\Error('Only hooked properties may be declared abstract');

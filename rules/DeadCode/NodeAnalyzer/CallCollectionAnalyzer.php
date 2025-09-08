@@ -32,7 +32,7 @@ final class CallCollectionAnalyzer
     /**
      * @param StaticCall[]|MethodCall[]|NullsafeMethodCall[] $calls
      */
-    public function isExists(array $calls, string $classMethodName, string $className) : bool
+    public function isExists(array $calls, string $classMethodName, string $className): bool
     {
         foreach ($calls as $call) {
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
@@ -56,7 +56,7 @@ final class CallCollectionAnalyzer
                         }
                         $cloneCallerRoot = $cloneCallerRoot->var;
                     }
-                    if ($isFluent && \in_array($classMethodName, $methodCallNames, \true)) {
+                    if ($isFluent && in_array($classMethodName, $methodCallNames, \true)) {
                         return \true;
                     }
                 }
@@ -77,14 +77,14 @@ final class CallCollectionAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
      */
-    private function isSelfStatic($call) : bool
+    private function isSelfStatic($call): bool
     {
-        return $call instanceof StaticCall && $call->class instanceof Name && \in_array($call->class->toString(), [ObjectReference::SELF, ObjectReference::STATIC], \true);
+        return $call instanceof StaticCall && $call->class instanceof Name && in_array($call->class->toString(), [ObjectReference::SELF, ObjectReference::STATIC], \true);
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
      */
-    private function shouldSkip($call, string $classMethodName) : bool
+    private function shouldSkip($call, string $classMethodName): bool
     {
         if (!$call->name instanceof Identifier) {
             return \true;

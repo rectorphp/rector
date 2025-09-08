@@ -15,7 +15,7 @@ class Comment
         $this->startLine = $startLine;
         $this->startIndex = $startIndex;
     }
-    public function getReformattedText() : string
+    public function getReformattedText(): string
     {
         return trim($this->text);
     }

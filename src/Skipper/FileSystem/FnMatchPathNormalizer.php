@@ -8,13 +8,13 @@ namespace Rector\Skipper\FileSystem;
  */
 final class FnMatchPathNormalizer
 {
-    public function normalizeForFnmatch(string $path) : string
+    public function normalizeForFnmatch(string $path): string
     {
-        if (\substr_compare($path, '*', -\strlen('*')) === 0 || \strncmp($path, '*', \strlen('*')) === 0) {
-            return '*' . \trim($path, '*') . '*';
+        if (substr_compare($path, '*', -strlen('*')) === 0 || strncmp($path, '*', strlen('*')) === 0) {
+            return '*' . trim($path, '*') . '*';
         }
-        if (\strpos($path, '..') !== \false) {
-            $realPath = \realpath($path);
+        if (strpos($path, '..') !== \false) {
+            $realPath = realpath($path);
             if ($realPath === \false) {
                 return '';
             }

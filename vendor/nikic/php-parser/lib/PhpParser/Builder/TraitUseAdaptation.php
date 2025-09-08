@@ -29,7 +29,7 @@ class TraitUseAdaptation implements Builder
     public function __construct($trait, $method)
     {
         $this->type = self::TYPE_UNDEFINED;
-        $this->trait = \is_null($trait) ? null : BuilderHelpers::normalizeName($trait);
+        $this->trait = is_null($trait) ? null : BuilderHelpers::normalizeName($trait);
         $this->method = BuilderHelpers::normalizeIdentifier($method);
     }
     /**
@@ -90,7 +90,7 @@ class TraitUseAdaptation implements Builder
     public function insteadof(...$traits)
     {
         if ($this->type === self::TYPE_UNDEFINED) {
-            if (\is_null($this->trait)) {
+            if (is_null($this->trait)) {
                 throw new \LogicException('Precedence adaptation must have trait');
             }
             $this->type = self::TYPE_PRECEDENCE;
@@ -103,7 +103,7 @@ class TraitUseAdaptation implements Builder
         }
         return $this;
     }
-    protected function setModifier(int $modifier) : void
+    protected function setModifier(int $modifier): void
     {
         if ($this->type === self::TYPE_UNDEFINED) {
             $this->type = self::TYPE_ALIAS;
@@ -111,7 +111,7 @@ class TraitUseAdaptation implements Builder
         if ($this->type !== self::TYPE_ALIAS) {
             throw new \LogicException('Cannot set access modifier for not alias adaptation buider');
         }
-        if (\is_null($this->modifier)) {
+        if (is_null($this->modifier)) {
             $this->modifier = $modifier;
         } else {
             throw new \LogicException('Multiple access type modifiers are not allowed');
@@ -122,7 +122,7 @@ class TraitUseAdaptation implements Builder
      *
      * @return Node The built node
      */
-    public function getNode() : Node
+    public function getNode(): Node
     {
         switch ($this->type) {
             case self::TYPE_ALIAS:

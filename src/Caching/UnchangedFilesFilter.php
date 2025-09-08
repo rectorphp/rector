@@ -18,10 +18,10 @@ final class UnchangedFilesFilter
      * @param string[] $filePaths
      * @return string[]
      */
-    public function filterFilePaths(array $filePaths) : array
+    public function filterFilePaths(array $filePaths): array
     {
         $changedFileInfos = [];
-        $filePaths = \array_unique($filePaths);
+        $filePaths = array_unique($filePaths);
         foreach ($filePaths as $filePath) {
             if (!$this->changedFilesDetector->hasFileChanged($filePath)) {
                 continue;

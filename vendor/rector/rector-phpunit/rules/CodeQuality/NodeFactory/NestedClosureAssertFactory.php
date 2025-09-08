@@ -24,7 +24,7 @@ final class NestedClosureAssertFactory
     /**
      * @return Stmt[]
      */
-    public function create(MethodCall $assertMethodCall, int $assertKey) : array
+    public function create(MethodCall $assertMethodCall, int $assertKey): array
     {
         $callableFirstArg = $assertMethodCall->getArgs()[0];
         if ($callableFirstArg->value instanceof ArrowFunction) {
@@ -59,7 +59,7 @@ final class NestedClosureAssertFactory
     /**
      * @return Expression[]
      */
-    private function createAssertSameParameters(Expr $comparedExpr, int $assertKey) : array
+    private function createAssertSameParameters(Expr $comparedExpr, int $assertKey): array
     {
         // use assert same directly instead
         $args = [new Arg($comparedExpr), new Arg(new ArrayDimFetch(new Variable('parameters'), new Int_($assertKey)))];
@@ -69,7 +69,7 @@ final class NestedClosureAssertFactory
     /**
      * @return Expression[]
      */
-    private function createAssertNotEmpty(int $assertKey, string $emptyMethodName) : array
+    private function createAssertNotEmpty(int $assertKey, string $emptyMethodName): array
     {
         $arrayDimFetch = new ArrayDimFetch(new Variable(ConsecutiveVariable::PARAMETERS), new Int_($assertKey));
         $assertEmptyMethodCall = new MethodCall(new Variable('this'), new Identifier($emptyMethodName), [new Arg($arrayDimFetch)]);

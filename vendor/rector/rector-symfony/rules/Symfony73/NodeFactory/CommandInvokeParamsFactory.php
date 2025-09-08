@@ -30,22 +30,22 @@ final class CommandInvokeParamsFactory
      * @param CommandOption[] $commandOptions
      * @return Param[]
      */
-    public function createParams(array $commandArguments, array $commandOptions) : array
+    public function createParams(array $commandArguments, array $commandOptions): array
     {
         $argumentParams = $this->createArgumentParams($commandArguments);
         $optionParams = $this->createOptionParams($commandOptions);
-        return \array_merge($argumentParams, $optionParams);
+        return array_merge($argumentParams, $optionParams);
     }
     /**
      * @param CommandArgument[] $commandArguments
      * @return Param[]
      */
-    private function createArgumentParams(array $commandArguments) : array
+    private function createArgumentParams(array $commandArguments): array
     {
         $argumentParams = [];
         foreach ($commandArguments as $commandArgument) {
             $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
-            $variableName = \str_replace('-', '_', $argumentName);
+            $variableName = str_replace('-', '_', $argumentName);
             $argumentParam = new Param(new Variable($variableName));
             $argumentParam->type = new Identifier('string');
             $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
@@ -63,12 +63,12 @@ final class CommandInvokeParamsFactory
      * @param CommandOption[] $commandOptions
      * @return Param[]
      */
-    private function createOptionParams(array $commandOptions) : array
+    private function createOptionParams(array $commandOptions): array
     {
         $optionParams = [];
         foreach ($commandOptions as $commandOption) {
             $optionName = $commandOption->getName();
-            $variableName = \str_replace('-', '_', $optionName);
+            $variableName = str_replace('-', '_', $optionName);
             $optionParam = new Param(new Variable($variableName));
             // @todo fill type or default value
             $optionParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION))]);

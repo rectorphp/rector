@@ -31,7 +31,7 @@ final class CommandArgumentsAndOptionsResolver
     /**
      * @return CommandArgument[]
      */
-    public function collectCommandArguments(ClassMethod $configureClassMethod) : array
+    public function collectCommandArguments(ClassMethod $configureClassMethod): array
     {
         $addArgumentMethodCalls = $this->findMethodCallsByName($configureClassMethod, 'addArgument');
         $commandArguments = [];
@@ -44,12 +44,12 @@ final class CommandArgumentsAndOptionsResolver
                 throw new ShouldNotHappenException('Argument name is required');
             }
             $mode = isset($addArgumentArgs[1]) ? $this->valueResolver->getValue($addArgumentArgs[1]->value) : null;
-            if ($mode !== null && !\is_numeric($mode)) {
+            if ($mode !== null && !is_numeric($mode)) {
                 // we need numeric value or null, otherwise param will not have a name
                 throw new ShouldNotHappenException('Argument mode is required to be null or numeric');
             }
             $description = isset($addArgumentArgs[2]) ? $this->valueResolver->getValue($addArgumentArgs[2]->value) : null;
-            if (!\is_string($description)) {
+            if (!is_string($description)) {
                 // we need string value, otherwise param will not have a name
                 throw new ShouldNotHappenException('Argument description is required');
             }
@@ -60,7 +60,7 @@ final class CommandArgumentsAndOptionsResolver
     /**
      * @return CommandOption[]
      */
-    public function collectCommandOptions(ClassMethod $configureClassMethod) : array
+    public function collectCommandOptions(ClassMethod $configureClassMethod): array
     {
         $addOptionMethodCalls = $this->findMethodCallsByName($configureClassMethod, 'addOption');
         $commandOptionMetadatas = [];
@@ -80,11 +80,11 @@ final class CommandArgumentsAndOptionsResolver
     /**
      * @return MethodCall[]
      */
-    private function findMethodCallsByName(ClassMethod $classMethod, string $desiredMethodName) : array
+    private function findMethodCallsByName(ClassMethod $classMethod, string $desiredMethodName): array
     {
         $calls = [];
         $shouldReverse = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use(&$calls, $desiredMethodName, &$shouldReverse) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (&$calls, $desiredMethodName, &$shouldReverse) {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -99,6 +99,6 @@ final class CommandArgumentsAndOptionsResolver
             }
             return null;
         });
-        return $shouldReverse ? \array_reverse($calls) : $calls;
+        return $shouldReverse ? array_reverse($calls) : $calls;
     }
 }

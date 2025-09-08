@@ -43,7 +43,7 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
         $this->variableRenamer = $variableRenamer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename variable to match new ClassType', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $assignsOfNew = $this->getAssignsOfNew($node);
@@ -116,10 +116,10 @@ CODE_SAMPLE
     /**
      * @return Assign[]
      */
-    private function getAssignsOfNew(ClassMethod $classMethod) : array
+    private function getAssignsOfNew(ClassMethod $classMethod): array
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
-        return \array_filter($assigns, static fn(Assign $assign): bool => $assign->expr instanceof New_);
+        return array_filter($assigns, static fn(Assign $assign): bool => $assign->expr instanceof New_);
     }
 }

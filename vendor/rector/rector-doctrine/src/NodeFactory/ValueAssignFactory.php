@@ -14,7 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 final class ValueAssignFactory
 {
-    public function createDefaultDateTimeWithValueAssign(string $propertyName, Expr $defaultExpr) : Expression
+    public function createDefaultDateTimeWithValueAssign(string $propertyName, Expr $defaultExpr): Expression
     {
         $propertyFetch = $this->createPropertyFetch($propertyName);
         $newDateTime = $this->createNewDateTime();
@@ -22,15 +22,15 @@ final class ValueAssignFactory
         $assign = new Assign($propertyFetch, $newDateTime);
         return new Expression($assign);
     }
-    private function createPropertyFetch(string $propertyName) : PropertyFetch
+    private function createPropertyFetch(string $propertyName): PropertyFetch
     {
         return new PropertyFetch(new Variable('this'), $propertyName);
     }
-    private function createNewDateTime() : New_
+    private function createNewDateTime(): New_
     {
         return new New_(new FullyQualified('DateTime'));
     }
-    private function addDateTimeArgumentIfNotDefault(Expr $defaultExpr, New_ $dateTimeNew) : void
+    private function addDateTimeArgumentIfNotDefault(Expr $defaultExpr, New_ $dateTimeNew): void
     {
         if ($defaultExpr instanceof String_ && ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()')) {
             return;

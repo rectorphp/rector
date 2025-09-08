@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayResultColumnNamesRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add column names argument to ArrayResult object', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\DBAL\Cache\ArrayResult;
@@ -56,14 +56,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?New_
+    public function refactor(Node $node): ?New_
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -71,7 +71,7 @@ CODE_SAMPLE
         if (!$this->isName($node->class, DoctrineClass::ARRAY_RESULT)) {
             return null;
         }
-        if (\count($node->getArgs()) !== 1) {
+        if (count($node->getArgs()) !== 1) {
             return null;
         }
         $itemsExpr = $node->getArgs()[0]->value;

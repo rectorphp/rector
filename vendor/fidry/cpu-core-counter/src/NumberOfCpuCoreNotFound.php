@@ -14,7 +14,7 @@ namespace RectorPrefix202509\Fidry\CpuCoreCounter;
 use RuntimeException;
 final class NumberOfCpuCoreNotFound extends RuntimeException
 {
-    public static function create() : self
+    public static function create(): self
     {
         return new self('Could not find the number of CPU cores available.');
     }

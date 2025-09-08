@@ -39,11 +39,11 @@ final class NestedConfigCallsFactory
      * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\MethodCall $configCaller
      * @param string|int|null $nextKey
      */
-    public function create(array $values, $configCaller, string $mainMethodName, bool $nextKeyArgument, $nextKey = null) : array
+    public function create(array $values, $configCaller, string $mainMethodName, bool $nextKeyArgument, $nextKey = null): array
     {
         $methodCallStmts = [];
         foreach ($values as $key => $value) {
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 // symfony framework cache
                 if ($mainMethodName === 'cache') {
                     $configCaller = new MethodCall($configCaller, 'cache', []);
@@ -76,7 +76,7 @@ final class NestedConfigCallsFactory
                 }
                 $mainMethodName = self::METHOD_RENAMES[$mainMethodName] ?? $mainMethodName;
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
-                if ($key === 0 && $nextKeyArgument && \is_string($nextKey)) {
+                if ($key === 0 && $nextKeyArgument && is_string($nextKey)) {
                     $mainMethodCall->args[] = new Arg(new String_($nextKey));
                 }
                 $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
@@ -88,7 +88,7 @@ final class NestedConfigCallsFactory
     /**
      * @param array<mixed, mixed> $value
      */
-    private function createMainMethodCall(array $value, MethodCall $mainMethodCall) : MethodCall
+    private function createMainMethodCall(array $value, MethodCall $mainMethodCall): MethodCall
     {
         foreach ($value as $methodName => $parameters) {
             Assert::string($methodName);
@@ -117,9 +117,9 @@ final class NestedConfigCallsFactory
                 continue;
             }
             // traverse nested arrays with recursion call
-            $arrayIsListFunction = function (array $array) : bool {
-                if (\function_exists('array_is_list')) {
-                    return \array_is_list($array);
+            $arrayIsListFunction = function (array $array): bool {
+                if (function_exists('array_is_list')) {
+                    return array_is_list($array);
                 }
                 if ($array === []) {
                     return \true;
@@ -134,7 +134,7 @@ final class NestedConfigCallsFactory
                 return \true;
             };
             // traverse nested arrays with recursion call
-            if (\is_array($parameters) && !$arrayIsListFunction($parameters)) {
+            if (is_array($parameters) && !$arrayIsListFunction($parameters)) {
                 $mainMethodCall = new MethodCall($mainMethodCall, $methodName);
                 $mainMethodCall = $this->createMainMethodCall($parameters, $mainMethodCall);
                 continue;

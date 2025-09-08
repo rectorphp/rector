@@ -54,7 +54,7 @@ final class ObjectToResourceReturn
      * @param string[] $collectionObjectToResource
      * @param \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr\Instanceof_ $instanceof
      */
-    public function refactor($instanceof, array $collectionObjectToResource) : ?BooleanOr
+    public function refactor($instanceof, array $collectionObjectToResource): ?BooleanOr
     {
         if ($instanceof instanceof BinaryOp) {
             $this->setIsInstanceofInBinaryOpAttribute($instanceof);
@@ -75,9 +75,9 @@ final class ObjectToResourceReturn
         }
         return null;
     }
-    private function setIsInstanceofInBinaryOpAttribute(BinaryOp $binaryOp) : void
+    private function setIsInstanceofInBinaryOpAttribute(BinaryOp $binaryOp): void
     {
-        $node = $this->betterNodeFinder->findFirst($binaryOp, function (Node $subNode) : bool {
+        $node = $this->betterNodeFinder->findFirst($binaryOp, function (Node $subNode): bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
@@ -99,7 +99,7 @@ final class ObjectToResourceReturn
         /** @var Arg $currentArg */
         $currentArg = $node->getArgs()[0];
         $currentArgValue = $currentArg->value;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($binaryOp, function (Node $subNode) use($currentArgValue) : ?Instanceof_ {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($binaryOp, function (Node $subNode) use ($currentArgValue): ?Instanceof_ {
             if ($subNode instanceof Instanceof_ && $this->nodeComparator->areNodesEqual($currentArgValue, $subNode->expr)) {
                 $subNode->setAttribute(self::IS_INSTANCEOF_IN_BINARYOP, \true);
                 return $subNode;

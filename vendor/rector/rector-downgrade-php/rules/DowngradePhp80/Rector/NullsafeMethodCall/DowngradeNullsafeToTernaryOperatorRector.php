@@ -26,12 +26,12 @@ final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
      * @param Node[] $nodes
      * @return array|Node[]|null
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->counter = 0;
         return parent::beforeTraverse($nodes);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nullsafe operator to ternary operator rector', [new CodeSample(<<<'CODE_SAMPLE'
 $dateAsString = $booking->getStartDate()?->asDateTimeString();
@@ -44,14 +44,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, PropertyFetch::class, NullsafeMethodCall::class, NullsafePropertyFetch::class];
     }
     /**
      * @param MethodCall|NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(Node $node) : ?Ternary
+    public function refactor(Node $node): ?Ternary
     {
         if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
             if ($node->var instanceof NullsafeMethodCall || $node->var instanceof NullsafePropertyFetch) {
@@ -79,7 +79,7 @@ CODE_SAMPLE
         $assign = new Assign($nullsafeVariable, $node->var);
         return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
     }
-    private function createNullsafeVariable() : Variable
+    private function createNullsafeVariable(): Variable
     {
         $nullsafeVariableName = 'nullsafeVariable' . ++$this->counter;
         return new Variable($nullsafeVariableName);

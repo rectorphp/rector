@@ -35,7 +35,7 @@ final class IncreaseDeclareStrictTypesRector extends AbstractRector implements C
     {
         $this->declareStrictTypeFinder = $declareStrictTypeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add declare strict types to a limited amount of classes at a time, to try out in the wild and increase level gradually', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 function someFunction()
@@ -55,7 +55,7 @@ CODE_SAMPLE
      * @param Stmt[] $nodes
      * @return Stmt[]|null
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         parent::beforeTraverse($nodes);
         if ($nodes === []) {
@@ -83,24 +83,24 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // workaround, as Rector now only hooks to specific nodes, not arrays
         return null;
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::keyExists($configuration, self::LIMIT);
         $this->limit = (int) $configuration[self::LIMIT];
     }
-    private function creteStrictTypesDeclare() : Declare_
+    private function creteStrictTypesDeclare(): Declare_
     {
         $declareItem = new DeclareItem(new Identifier('strict_types'), new Int_(1));
         return new Declare_([$declareItem]);

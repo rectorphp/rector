@@ -24,7 +24,7 @@ final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRect
     {
         $this->deprecatedAnnotationToDeprecatedAttributeConverter = $deprecatedAnnotationToDeprecatedAttributeConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change @deprecated annotation to Deprecated attribute', [new CodeSample(<<<'CODE_SAMPLE'
 /**
@@ -38,18 +38,18 @@ const SomeConstant = 'irrelevant';
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Const_::class];
     }
     /**
      * @param Const_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         return $this->deprecatedAnnotationToDeprecatedAttributeConverter->convert($node);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATED_ATTRIBUTE_ON_CONSTANT;
     }

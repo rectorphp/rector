@@ -11,7 +11,7 @@ final class CancellationQueue
     private $started = \false;
     /** @var object[] */
     private $queue = [];
-    public function __invoke() : void
+    public function __invoke(): void
     {
         if ($this->started) {
             return;
@@ -22,7 +22,7 @@ final class CancellationQueue
     /**
      * @param mixed $cancellable
      */
-    public function enqueue($cancellable) : void
+    public function enqueue($cancellable): void
     {
         if (!\is_object($cancellable) || !\method_exists($cancellable, 'then') || !\method_exists($cancellable, 'cancel')) {
             return;
@@ -32,11 +32,11 @@ final class CancellationQueue
             $this->drain();
         }
     }
-    private function drain() : void
+    private function drain(): void
     {
         for ($i = \key($this->queue); isset($this->queue[$i]); $i++) {
             $cancellable = $this->queue[$i];
-            \assert(\method_exists($cancellable, 'cancel'));
+            assert(\method_exists($cancellable, 'cancel'));
             $exception = null;
             try {
                 $cancellable->cancel();

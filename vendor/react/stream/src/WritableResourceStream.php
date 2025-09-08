@@ -45,7 +45,7 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
         }
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->stream = $stream;
         $this->loop = $loop ?: Loop::get();
@@ -102,7 +102,7 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
     public function handleWrite()
     {
         $error = null;
-        \set_error_handler(function ($_, $errstr) use(&$error) {
+        \set_error_handler(function ($_, $errstr) use (&$error) {
             $error = $errstr;
         });
         if ($this->writeChunkSize === -1) {

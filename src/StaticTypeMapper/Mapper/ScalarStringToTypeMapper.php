@@ -31,7 +31,7 @@ final class ScalarStringToTypeMapper
      * @var array<class-string<Type>, string[]>
      */
     private const SCALAR_NAME_BY_TYPE = [StringType::class => ['string'], AccessoryNonEmptyStringType::class => ['non-empty-string'], NonEmptyArrayType::class => ['non-empty-array'], ClassStringType::class => ['class-string'], FloatType::class => ['float', 'real', 'double'], IntegerType::class => ['int', 'integer'], BooleanType::class => ['bool', 'boolean'], NullType::class => ['null'], VoidType::class => ['void'], ResourceType::class => ['resource'], CallableType::class => ['callback', 'callable'], ObjectWithoutClassType::class => ['object'], NeverType::class => ['never', 'never-return', 'never-returns', 'no-return']];
-    public function mapScalarStringToType(string $scalarName) : Type
+    public function mapScalarStringToType(string $scalarName): Type
     {
         $loweredScalarName = Strings::lower($scalarName);
         if ($loweredScalarName === 'false') {
@@ -47,7 +47,7 @@ final class ScalarStringToTypeMapper
             return IntegerRangeType::createAllSmallerThan(0);
         }
         foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $scalarNames) {
-            if (!\in_array($loweredScalarName, $scalarNames, \true)) {
+            if (!in_array($loweredScalarName, $scalarNames, \true)) {
                 continue;
             }
             return new $objectType();

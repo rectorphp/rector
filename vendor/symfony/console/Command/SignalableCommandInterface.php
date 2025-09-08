@@ -20,7 +20,7 @@ interface SignalableCommandInterface
     /**
      * Returns the list of signals to subscribe.
      */
-    public function getSubscribedSignals() : array;
+    public function getSubscribedSignals(): array;
     /**
      * The method will be called when the application is signaled.
      *

@@ -26,11 +26,11 @@ final class DowngradeUnionTypeTypedPropertyRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Property::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes union type property type definition, adding `@var` annotations instead.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,7 +52,7 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->type === null) {
             return null;
@@ -64,7 +64,7 @@ CODE_SAMPLE
         $node->type = null;
         return $node;
     }
-    private function shouldRemoveProperty(Property $property) : bool
+    private function shouldRemoveProperty(Property $property): bool
     {
         if (!$property->type instanceof Node) {
             return \false;

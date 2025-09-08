@@ -31,11 +31,11 @@ final class DowngradePureIntersectionTypeRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrowFunction::class, ClassMethod::class, Closure::class, Function_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove the intersection type params and returns, add @param/@return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
 function someFunction(): Foo&Bar
@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @param ArrowFunction|ClassMethod|Closure|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $paramDecorated = \false;
         foreach ($node->getParams() as $param) {

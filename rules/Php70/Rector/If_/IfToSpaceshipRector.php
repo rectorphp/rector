@@ -40,7 +40,7 @@ final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionI
         $this->battleshipTernaryAnalyzer = $battleshipTernaryAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes if/else to spaceship <=> where useful', [new CodeSample(<<<'CODE_SAMPLE'
 usort($languages, function ($first, $second) {
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class, If_::class];
     }
     /**
      * @param StmtsAwareInterface|If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof If_) {
             return $this->refactorIf($node);
@@ -103,11 +103,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SPACESHIP;
     }
-    private function refactorIf(If_ $if) : ?Return_
+    private function refactorIf(If_ $if): ?Return_
     {
         if ($if->elseifs !== []) {
             return null;
@@ -133,13 +133,13 @@ CODE_SAMPLE
      *      return 0;
      * }
      */
-    private function matchExprComparedExprsReturnZero(If_ $if) : ?ComparedExprs
+    private function matchExprComparedExprsReturnZero(If_ $if): ?ComparedExprs
     {
         if (!$if->cond instanceof Equal && !$if->cond instanceof Identical) {
             return null;
         }
         $binaryOp = $if->cond;
-        if (\count($if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
         $onlyStmt = $if->stmts[0];
@@ -157,7 +157,7 @@ CODE_SAMPLE
     /**
      * @param BattleshipCompareOrder::*|null $battleshipCompareOrder
      */
-    private function createReturnSpaceship(?string $battleshipCompareOrder, ComparedExprs $comparedExprs) : ?Return_
+    private function createReturnSpaceship(?string $battleshipCompareOrder, ComparedExprs $comparedExprs): ?Return_
     {
         if ($battleshipCompareOrder === null) {
             return null;
@@ -169,9 +169,9 @@ CODE_SAMPLE
         }
         return new Return_($spaceship);
     }
-    private function matchElseOnlyStmtTernary(Else_ $else) : ?\PhpParser\Node\Expr\Ternary
+    private function matchElseOnlyStmtTernary(Else_ $else): ?\PhpParser\Node\Expr\Ternary
     {
-        if (\count($else->stmts) !== 1) {
+        if (count($else->stmts) !== 1) {
             return null;
         }
         $onlyElseStmt = $else->stmts[0];

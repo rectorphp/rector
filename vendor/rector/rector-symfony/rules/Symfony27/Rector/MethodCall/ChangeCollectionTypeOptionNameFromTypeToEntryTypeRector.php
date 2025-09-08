@@ -50,7 +50,7 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename `type` option to `entry_type` in CollectionType', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
@@ -91,14 +91,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
@@ -116,7 +116,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorOptionsArray(Array_ $optionsArray) : bool
+    private function refactorOptionsArray(Array_ $optionsArray): bool
     {
         $hasChanged = \false;
         foreach ($optionsArray->items as $arrayItem) {

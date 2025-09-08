@@ -25,7 +25,7 @@ final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements Sco
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof StmtsAwareInterface) {
             return null;
@@ -42,7 +42,7 @@ final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements Sco
             }
             foreach ($stmt->vars as $staticVar) {
                 $staticVariableName = $staticVar->var->name;
-                if (!\is_string($staticVariableName)) {
+                if (!is_string($staticVariableName)) {
                     continue;
                 }
                 $staticVar->var->setAttribute(AttributeKey::IS_STATIC_VAR, \true);
@@ -54,12 +54,12 @@ final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements Sco
     /**
      * @param string[] $staticVariableNames
      */
-    private function setIsStaticVarAttribute(Stmt $stmt, array $staticVariableNames) : void
+    private function setIsStaticVarAttribute(Stmt $stmt, array $staticVariableNames): void
     {
         if ($staticVariableNames === []) {
             return;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $subNode) use($staticVariableNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $subNode) use ($staticVariableNames) {
             if ($subNode instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -69,7 +69,7 @@ final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements Sco
             if ($subNode->name instanceof Expr) {
                 return null;
             }
-            if (!\in_array($subNode->name, $staticVariableNames, \true)) {
+            if (!in_array($subNode->name, $staticVariableNames, \true)) {
                 return null;
             }
             $subNode->setAttribute(AttributeKey::IS_STATIC_VAR, \true);

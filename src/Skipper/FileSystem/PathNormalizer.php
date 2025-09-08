@@ -5,8 +5,8 @@ namespace Rector\Skipper\FileSystem;
 
 final class PathNormalizer
 {
-    public static function normalize(string $path) : string
+    public static function normalize(string $path): string
     {
-        return \str_replace('\\', '/', $path);
+        return str_replace('\\', '/', $path);
     }
 }

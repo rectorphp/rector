@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyForeachToCoalescingRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes foreach that returns set value to ??', [new CodeSample(<<<'CODE_SAMPLE'
 foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
@@ -45,14 +45,14 @@ CODE_SAMPLE
     /**
      * @innerForeachReturn array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE;
     }
@@ -114,7 +114,7 @@ CODE_SAMPLE
      */
     private function matchForeachReturnOrAssign(Foreach_ $foreach)
     {
-        if (\count($foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return null;
         }
         $onlyForeachStmt = $foreach->stmts[0];
@@ -125,7 +125,7 @@ CODE_SAMPLE
         if (!$if->cond instanceof Identical) {
             return null;
         }
-        if (\count($if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
         if ($if->else instanceof Else_ || $if->elseifs !== []) {
@@ -151,7 +151,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $innerForeachReturn, ?Stmt $nextStmt) : ?\PhpParser\Node\Stmt\Return_
+    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $innerForeachReturn, ?Stmt $nextStmt): ?\PhpParser\Node\Stmt\Return_
     {
         if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $innerForeachReturn->expr)) {
             return null;
@@ -170,7 +170,7 @@ CODE_SAMPLE
         $coalesce = new Coalesce(new ArrayDimFetch($foreach->expr, $checkedNode), $nextStmt instanceof Return_ && $nextStmt->expr instanceof Expr ? $nextStmt->expr : $checkedNode);
         return new Return_($coalesce);
     }
-    private function processForeachNodeWithAssignInside(Foreach_ $foreach, Assign $assign) : ?Assign
+    private function processForeachNodeWithAssignInside(Foreach_ $foreach, Assign $assign): ?Assign
     {
         /** @var If_ $ifNode */
         $ifNode = $foreach->stmts[0];

@@ -26,7 +26,7 @@ final class GetFunctionsToAsTwigFunctionAttributeRector extends AbstractRector
     {
         $this->getMethodToAsTwigAttributeTransformer = $getMethodToAsTwigAttributeTransformer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes getFunctions() in TwigExtension to #[AsTwigFunction] marker attribute above local class method', [new CodeSample(<<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
@@ -61,14 +61,14 @@ class SomeClass extends AbstractExtension
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if ($node->isAbstract() || $node->isAnonymous()) {
             return null;

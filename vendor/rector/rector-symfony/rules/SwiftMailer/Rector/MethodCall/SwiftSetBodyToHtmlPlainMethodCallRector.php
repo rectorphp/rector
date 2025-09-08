@@ -27,7 +27,7 @@ final class SwiftSetBodyToHtmlPlainMethodCallRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes setBody() method call on Swift_Message into a html() or plain() based on second argument', [new CodeSample(<<<'CODE_SAMPLE'
 $message = new Swift_Message();
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'setBody')) {
             return null;
@@ -65,7 +65,7 @@ CODE_SAMPLE
         if (!$this->isObjectType($node->var, new ObjectType('Swift_Message'))) {
             return null;
         }
-        if (\count($node->args) === 2) {
+        if (count($node->args) === 2) {
             $firstArg = $node->args[1];
             if (!$firstArg instanceof Arg) {
                 return null;

@@ -39,7 +39,7 @@ final class NodeConnectingVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if (!empty($this->stack)) {
-            $parent = $this->stack[\count($this->stack) - 1];
+            $parent = $this->stack[count($this->stack) - 1];
             if ($this->weakReferences) {
                 $node->setAttribute('weak_parent', \WeakReference::create($parent));
             } else {
@@ -62,6 +62,6 @@ final class NodeConnectingVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         $this->previous = $node;
-        \array_pop($this->stack);
+        array_pop($this->stack);
     }
 }

@@ -37,7 +37,7 @@ class DepthRangeFilterIterator extends \FilterIterator
     /**
      * Filters the iterator values.
      */
-    public function accept() : bool
+    public function accept(): bool
     {
         return $this->getInnerIterator()->getDepth() >= $this->minDepth;
     }

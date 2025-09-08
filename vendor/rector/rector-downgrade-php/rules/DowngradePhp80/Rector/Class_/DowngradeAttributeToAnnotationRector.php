@@ -56,7 +56,7 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor PHP attribute markers to annotations notation', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
@@ -82,19 +82,19 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [new DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')])]);
+, [new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, ClassMethod::class, Property::class, Interface_::class, Param::class, Function_::class];
     }
     /**
      * @param Class_|ClassMethod|Property|Interface_|Param|Function_  $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->attrGroups === []) {
             return null;
@@ -105,7 +105,7 @@ CODE_SAMPLE
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
                 if ($this->shouldSkipAttribute($attribute)) {
-                    if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && \strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
+                    if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
                         // add new line
                         $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
                         $this->isDowngraded = \true;
@@ -120,7 +120,7 @@ CODE_SAMPLE
                 }
                 unset($attrGroup->attrs[$key]);
                 $this->isDowngraded = \true;
-                if (\strpos($attributeToAnnotation->getTag(), '\\') === \false) {
+                if (strpos($attributeToAnnotation->getTag(), '\\') === \false) {
                     $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new GenericTagValueNode('')));
                     $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
                     continue;
@@ -140,7 +140,7 @@ CODE_SAMPLE
     /**
      * @param DowngradeAttributeToAnnotation[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $configuration;
@@ -148,7 +148,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function cleanupEmptyAttrGroups($node) : void
+    private function cleanupEmptyAttrGroups($node): void
     {
         foreach ($node->attrGroups as $key => $attrGroup) {
             if ($attrGroup->attrs !== []) {
@@ -161,7 +161,7 @@ CODE_SAMPLE
     /**
      * @param DowngradeAttributeToAnnotation[] $attributesToAnnotations
      */
-    private function matchAttributeToAnnotation(Attribute $attribute, array $attributesToAnnotations) : ?DowngradeAttributeToAnnotation
+    private function matchAttributeToAnnotation(Attribute $attribute, array $attributesToAnnotations): ?DowngradeAttributeToAnnotation
     {
         foreach ($attributesToAnnotations as $attributeToAnnotation) {
             if (!$this->isName($attribute->name, $attributeToAnnotation->getAttributeClass())) {
@@ -171,9 +171,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipAttribute(Attribute $attribute) : bool
+    private function shouldSkipAttribute(Attribute $attribute): bool
     {
         $attributeName = $attribute->name->toString();
-        return \in_array($attributeName, self::SKIPPED_ATTRIBUTES, \true);
+        return in_array($attributeName, self::SKIPPED_ATTRIBUTES, \true);
     }
 }

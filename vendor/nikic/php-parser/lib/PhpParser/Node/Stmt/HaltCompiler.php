@@ -19,11 +19,11 @@ class HaltCompiler extends Stmt
         $this->attributes = $attributes;
         $this->remaining = $remaining;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['remaining'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_HaltCompiler';
     }

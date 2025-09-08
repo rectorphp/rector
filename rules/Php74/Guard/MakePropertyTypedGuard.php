@@ -16,7 +16,7 @@ final class MakePropertyTypedGuard
     {
         $this->propertyTypeChangeGuard = $propertyTypeChangeGuard;
     }
-    public function isLegal(Property $property, ClassReflection $classReflection, bool $inlinePublic = \true) : bool
+    public function isLegal(Property $property, ClassReflection $classReflection, bool $inlinePublic = \true): bool
     {
         if ($property->type instanceof Node) {
             return \false;

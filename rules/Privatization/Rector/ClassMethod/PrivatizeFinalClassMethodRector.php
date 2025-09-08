@@ -50,7 +50,7 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->laravelModelGuard = $laravelModelGuard;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change protected class method to private if possible', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -73,14 +73,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->isFinal()) {
             return null;
@@ -115,12 +115,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         // edge case in nette framework
         /** @var string $methodName */
         $methodName = $this->getName($classMethod->name);
-        if (\strncmp($methodName, 'createComponent', \strlen('createComponent')) === 0) {
+        if (strncmp($methodName, 'createComponent', strlen('createComponent')) === 0) {
             return \true;
         }
         if (!$classMethod->isProtected()) {
@@ -130,7 +130,7 @@ CODE_SAMPLE
             return \true;
         }
         // if has parent call, its probably overriding parent one → skip it
-        $hasParentCall = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
+        $hasParentCall = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (!$node instanceof StaticCall) {
                 return \false;
             }

@@ -56,7 +56,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class, ClassConst::class, If_::class];
     }
@@ -98,7 +98,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         unset($funcCall->args[3]);
         return $this->handleEmptyStringToNullMatch($funcCall, $variable, $node);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove PREG_UNMATCHED_AS_NULL from preg_match and set null value on empty string matched on each match', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -126,7 +126,7 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function refactorClassConst(ClassConst $classConst) : ?ClassConst
+    private function refactorClassConst(ClassConst $classConst): ?ClassConst
     {
         foreach ($classConst->consts as $key => $singleClassConst) {
             if (!$singleClassConst->value instanceof ConstFetch) {
@@ -164,7 +164,7 @@ CODE_SAMPLE
         }
         return [$stmt, new Expression($replaceEmptyStringToNull)];
     }
-    private function processInIf(If_ $if, FuncCall $funcCall) : ?Stmt
+    private function processInIf(If_ $if, FuncCall $funcCall): ?Stmt
     {
         $cond = $if->cond;
         if ($cond instanceof Identical) {
@@ -175,7 +175,7 @@ CODE_SAMPLE
         }
         return $this->handleNotInIdenticalAndBooleanNot($if, $funcCall);
     }
-    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $funcCall) : Stmt
+    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $funcCall): Stmt
     {
         if ($if->stmts !== []) {
             return $if->stmts[0];
@@ -186,7 +186,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_ $stmt
      */
-    private function matchRegexFuncCall($stmt) : ?FuncCall
+    private function matchRegexFuncCall($stmt): ?FuncCall
     {
         $funcCalls = $this->betterNodeFinder->findInstancesOf($stmt, [FuncCall::class]);
         foreach ($funcCalls as $funcCall) {
@@ -197,7 +197,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createIf(Variable $variable, Assign $assign) : If_
+    private function createIf(Variable $variable, Assign $assign): If_
     {
         $conditionIdentical = new Identical($variable, new String_(''));
         return new If_($conditionIdentical, ['stmts' => [new Expression($assign)]]);

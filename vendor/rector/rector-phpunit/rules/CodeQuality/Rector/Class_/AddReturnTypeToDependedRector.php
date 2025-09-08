@@ -41,7 +41,7 @@ final class AddReturnTypeToDependedRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type declaration to a test method that returns type', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -102,7 +102,7 @@ CODE_SAMPLE
             if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
                 return null;
             }
-            if (\count($returns) !== 1) {
+            if (count($returns) !== 1) {
                 continue;
             }
             $soleReturnExpr = $returns[0]->expr;

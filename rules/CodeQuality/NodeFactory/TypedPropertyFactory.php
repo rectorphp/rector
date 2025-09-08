@@ -25,7 +25,7 @@ final class TypedPropertyFactory
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function createFromPropertyTagValueNode(PropertyTagValueNode $propertyTagValueNode, Class_ $class, string $propertyName) : Property
+    public function createFromPropertyTagValueNode(PropertyTagValueNode $propertyTagValueNode, Class_ $class, string $propertyName): Property
     {
         $propertyItem = new PropertyItem($propertyName);
         $propertyTypeNode = $this->createPropertyTypeNode($propertyTagValueNode, $class);

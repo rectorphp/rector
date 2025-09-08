@@ -32,7 +32,7 @@ final class ConstructorAssignPropertyAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function resolveConstructorAssign(Class_ $class, Property $property) : ?Node
+    public function resolveConstructorAssign(Class_ $class, Property $property): ?Node
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
@@ -40,7 +40,7 @@ final class ConstructorAssignPropertyAnalyzer
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-        return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use($propertyName) : bool {
+        return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use ($propertyName): bool {
             if (!$node instanceof Assign) {
                 return \false;
             }

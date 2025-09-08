@@ -25,11 +25,11 @@ class NullsafePropertyFetch extends Expr
         $this->var = $var;
         $this->name = \is_string($name) ? new Identifier($name) : $name;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['var', 'name'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_NullsafePropertyFetch';
     }

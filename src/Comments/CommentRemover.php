@@ -22,12 +22,12 @@ final class CommentRemover
      * @param Node[]|Node|null $node
      * @return Node[]|null
      */
-    public function removeFromNode($node) : ?array
+    public function removeFromNode($node): ?array
     {
         if ($node === null) {
             return null;
         }
-        $nodes = \is_array($node) ? $node : [$node];
+        $nodes = is_array($node) ? $node : [$node];
         return $this->commentRemovingNodeTraverser->traverse($nodes);
     }
 }

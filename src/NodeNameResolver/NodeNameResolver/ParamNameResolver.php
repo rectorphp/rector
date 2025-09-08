@@ -14,14 +14,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class ParamNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return Param::class;
     }
     /**
      * @param Param $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->var instanceof Error) {
             return null;

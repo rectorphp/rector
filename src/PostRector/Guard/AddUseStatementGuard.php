@@ -24,7 +24,7 @@ final class AddUseStatementGuard
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts, string $filePath) : bool
+    public function shouldTraverse(array $stmts, string $filePath): bool
     {
         if (isset($this->shouldTraverseOnFiles[$filePath])) {
             return $this->shouldTraverseOnFiles[$filePath];

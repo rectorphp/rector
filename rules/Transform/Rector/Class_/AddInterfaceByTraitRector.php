@@ -23,7 +23,7 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
      * @var array<string, string>
      */
     private array $interfaceByTrait = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add interface by used trait', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -42,14 +42,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         $classReflection = $scope->getClassReflection();
@@ -75,9 +75,9 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        Assert::allString(\array_keys($configuration));
+        Assert::allString(array_keys($configuration));
         Assert::allString($configuration);
         $this->interfaceByTrait = $configuration;
     }

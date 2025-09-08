@@ -34,13 +34,13 @@ final class WorkerCommandLineFactory
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, InputInterface $input, string $identifier, int $port) : string
+    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, InputInterface $input, string $identifier, int $port): string
     {
-        $commandArguments = \array_slice($_SERVER['argv'], 1);
-        $args = \array_merge([\PHP_BINARY, $baseScript], $commandArguments);
+        $commandArguments = array_slice($_SERVER['argv'], 1);
+        $args = array_merge([\PHP_BINARY, $baseScript], $commandArguments);
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
-            $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
+            $errorMessage = sprintf('The command name for "%s" is missing', get_class($mainCommand));
             throw new ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
@@ -50,38 +50,38 @@ final class WorkerCommandLineFactory
             if ($arg === $mainCommandName) {
                 break;
             }
-            $processCommandArray[] = \escapeshellarg((string) $arg);
+            $processCommandArray[] = escapeshellarg((string) $arg);
         }
         $processCommandArray[] = $workerCommandName;
         if ($projectConfigFile !== null) {
             $processCommandArray[] = '--config';
-            $processCommandArray[] = \escapeshellarg($projectConfigFile);
+            $processCommandArray[] = escapeshellarg($projectConfigFile);
         }
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
         $processCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
-        $processCommandArray = \array_merge($processCommandArray, $processCommandOptions);
+        $processCommandArray = array_merge($processCommandArray, $processCommandOptions);
         // for TCP local server
         $processCommandArray[] = '--port';
         $processCommandArray[] = $port;
         $processCommandArray[] = '--identifier';
-        $processCommandArray[] = \escapeshellarg($identifier);
+        $processCommandArray[] = escapeshellarg($identifier);
         /** @var string[] $paths */
         $paths = (array) $input->getArgument($pathsOptionName);
         foreach ($paths as $path) {
-            $processCommandArray[] = \escapeshellarg($path);
+            $processCommandArray[] = escapeshellarg($path);
         }
         // set json output
         $processCommandArray[] = '--output-format';
-        $processCommandArray[] = \escapeshellarg('json');
+        $processCommandArray[] = escapeshellarg('json');
         // explicitly disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
         $processCommandArray[] = '--no-ansi';
-        return \implode(' ', $processCommandArray);
+        return implode(' ', $processCommandArray);
     }
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(Command $command) : array
+    private function getCommandOptionNames(Command $command): array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -96,7 +96,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames): array
     {
         $processCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
@@ -109,7 +109,7 @@ final class WorkerCommandLineFactory
             if ($optionValue === null) {
                 continue;
             }
-            if (\is_bool($optionValue)) {
+            if (is_bool($optionValue)) {
                 if ($optionValue) {
                     $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
                 }
@@ -120,16 +120,16 @@ final class WorkerCommandLineFactory
                 $processCommandOptions[] = '--' . $mainCommandOptionName . '=' . $optionValue;
             } else {
                 $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
-                $processCommandOptions[] = \escapeshellarg($optionValue);
+                $processCommandOptions[] = escapeshellarg($optionValue);
             }
         }
         return $processCommandOptions;
     }
-    private function shouldSkipOption(InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(InputInterface $input, string $optionName): bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;
         }
-        return \in_array($optionName, self::EXCLUDED_OPTION_NAMES, \true);
+        return in_array($optionName, self::EXCLUDED_OPTION_NAMES, \true);
     }
 }

@@ -34,9 +34,9 @@ final class PropertyTypeChangeGuard
         $this->propertyManipulator = $propertyManipulator;
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
     }
-    public function isLegal(Property $property, ClassReflection $classReflection, bool $inlinePublic = \true, bool $isConstructorPromotion = \false) : bool
+    public function isLegal(Property $property, ClassReflection $classReflection, bool $inlinePublic = \true, bool $isConstructorPromotion = \false): bool
     {
-        if (\count($property->props) > 1) {
+        if (count($property->props) > 1) {
             return \false;
         }
         /**
@@ -64,7 +64,7 @@ final class PropertyTypeChangeGuard
         }
         return $this->isSafeProtectedProperty($classReflection, $property);
     }
-    private function isSafeProtectedProperty(ClassReflection $classReflection, Property $property) : bool
+    private function isSafeProtectedProperty(ClassReflection $classReflection, Property $property): bool
     {
         if (!$property->isProtected()) {
             return \false;

@@ -8,7 +8,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 final class DoctrineTypeAnalyzer
 {
-    public function isDoctrineCollectionWithIterableUnionType(Type $type) : bool
+    public function isDoctrineCollectionWithIterableUnionType(Type $type): bool
     {
         if (!$type instanceof UnionType) {
             return \false;
@@ -28,11 +28,11 @@ final class DoctrineTypeAnalyzer
         }
         return $isArrayType;
     }
-    public function isInstanceOfCollectionType(Type $type) : bool
+    public function isInstanceOfCollectionType(Type $type): bool
     {
         if (!$type instanceof ObjectType) {
             return \false;
         }
-        return $type->isInstanceOf('Doctrine\\Common\\Collections\\Collection')->yes();
+        return $type->isInstanceOf('Doctrine\Common\Collections\Collection')->yes();
     }
 }

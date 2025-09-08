@@ -34,7 +34,7 @@ final class CountManipulator
         $this->nodeComparator = $nodeComparator;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isCounterHigherThanOne(Expr $firstExpr, Expr $secondExpr) : bool
+    public function isCounterHigherThanOne(Expr $firstExpr, Expr $secondExpr): bool
     {
         // e.g. count($values) > 0
         if ($firstExpr instanceof Greater) {
@@ -54,42 +54,42 @@ final class CountManipulator
         }
         return \false;
     }
-    private function isGreater(Greater $greater, Expr $expr) : bool
+    private function isGreater(Greater $greater, Expr $expr): bool
     {
         if (!$this->isNumber($greater->right, 0)) {
             return \false;
         }
         return $this->isCountWithExpression($greater->left, $expr);
     }
-    private function isGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr) : bool
+    private function isGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr): bool
     {
         if (!$this->isNumber($greaterOrEqual->right, 1)) {
             return \false;
         }
         return $this->isCountWithExpression($greaterOrEqual->left, $expr);
     }
-    private function isSmaller(Smaller $smaller, Expr $expr) : bool
+    private function isSmaller(Smaller $smaller, Expr $expr): bool
     {
         if (!$this->isNumber($smaller->left, 0)) {
             return \false;
         }
         return $this->isCountWithExpression($smaller->right, $expr);
     }
-    private function isSmallerOrEqual(SmallerOrEqual $smallerOrEqual, Expr $expr) : bool
+    private function isSmallerOrEqual(SmallerOrEqual $smallerOrEqual, Expr $expr): bool
     {
         if (!$this->isNumber($smallerOrEqual->left, 1)) {
             return \false;
         }
         return $this->isCountWithExpression($smallerOrEqual->right, $expr);
     }
-    private function isNumber(Expr $expr, int $value) : bool
+    private function isNumber(Expr $expr, int $value): bool
     {
         if (!$expr instanceof Int_) {
             return \false;
         }
         return $expr->value === $value;
     }
-    private function isCountWithExpression(Expr $node, Expr $expr) : bool
+    private function isCountWithExpression(Expr $node, Expr $expr): bool
     {
         if (!$node instanceof FuncCall) {
             return \false;

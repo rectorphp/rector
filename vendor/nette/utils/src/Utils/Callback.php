@@ -21,7 +21,7 @@ final class Callback
      */
     public static function invokeSafe(string $function, array $args, callable $onError)
     {
-        $prev = set_error_handler(function ($severity, $message, $file) use($onError, &$prev, $function) : ?bool {
+        $prev = set_error_handler(function ($severity, $message, $file) use ($onError, &$prev, $function): ?bool {
             if ($file === __FILE__) {
                 $msg = ini_get('html_errors') ? Html::htmlToText($message) : $message;
                 $msg = preg_replace("#^{$function}\\(.*?\\): #", '', $msg);
@@ -55,7 +55,7 @@ final class Callback
      * Converts PHP callback to textual form. Class or method may not exists.
      * @param mixed $callable
      */
-    public static function toString($callable) : string
+    public static function toString($callable): string
     {
         if ($callable instanceof \Closure) {
             $inner = self::unwrap($callable);
@@ -76,7 +76,7 @@ final class Callback
         if ($callable instanceof \Closure) {
             $callable = self::unwrap($callable);
         }
-        if (is_string($callable) && \strpos($callable, '::') !== \false) {
+        if (is_string($callable) && strpos($callable, '::') !== \false) {
             return new ReflectionMethod(...explode('::', $callable, 2));
         } elseif (is_array($callable)) {
             return new ReflectionMethod($callable[0], $callable[1]);
@@ -89,7 +89,7 @@ final class Callback
     /**
      * Checks whether PHP callback is function or static method.
      */
-    public static function isStatic(callable $callable) : bool
+    public static function isStatic(callable $callable): bool
     {
         return is_string(is_array($callable) ? $callable[0] : $callable);
     }
@@ -101,9 +101,9 @@ final class Callback
     {
         $r = new \ReflectionFunction($closure);
         $class = ($nullsafeVariable1 = $r->getClosureScopeClass()) ? $nullsafeVariable1->name : null;
-        if (\substr_compare($r->name, '}', -\strlen('}')) === 0) {
+        if (substr_compare($r->name, '}', -strlen('}')) === 0) {
             return $closure;
-        } elseif (($obj = $r->getClosureThis()) && \get_class($obj) === $class) {
+        } elseif (($obj = $r->getClosureThis()) && get_class($obj) === $class) {
             return [$obj, $r->name];
         } elseif ($class) {
             return [$class, $r->name];

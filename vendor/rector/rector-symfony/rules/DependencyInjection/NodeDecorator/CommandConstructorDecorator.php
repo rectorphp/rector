@@ -21,10 +21,10 @@ final class CommandConstructorDecorator
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function decorate(Class_ $class) : void
+    public function decorate(Class_ $class): void
     {
         // special case for command to keep parent constructor call
-        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
             return;
         }
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);

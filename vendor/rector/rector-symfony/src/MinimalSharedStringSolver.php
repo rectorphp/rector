@@ -8,16 +8,16 @@ namespace Rector\Symfony;
  */
 final class MinimalSharedStringSolver
 {
-    public function solve(string $stringA, string $stringB) : string
+    public function solve(string $stringA, string $stringB): string
     {
-        if (\func_num_args() > 2) {
-            $arguments = \func_get_args();
-            \array_splice($arguments, 0, 2, [$this->solve($stringA, $stringB)]);
+        if (func_num_args() > 2) {
+            $arguments = func_get_args();
+            array_splice($arguments, 0, 2, [$this->solve($stringA, $stringB)]);
             return $this->solve(...$arguments);
         }
-        $charsA = \str_split($stringA);
-        $charsB = \str_split($stringB);
-        $matrix = \array_fill_keys(\array_keys($charsA), \array_fill_keys(\array_keys($charsB), 0));
+        $charsA = str_split($stringA);
+        $charsB = str_split($stringB);
+        $matrix = array_fill_keys(array_keys($charsA), array_fill_keys(array_keys($charsB), 0));
         $longestLength = 0;
         $longestIndexes = [];
         foreach ($charsA as $i => $charA) {
@@ -41,7 +41,7 @@ final class MinimalSharedStringSolver
     /**
      * @param array<int, array<int, int>> $matrix
      */
-    private function newIndex(array $matrix, int $i, int $j) : int
+    private function newIndex(array $matrix, int $i, int $j): int
     {
         return $i - $matrix[$i][$j] + 1;
     }
@@ -50,8 +50,8 @@ final class MinimalSharedStringSolver
      *
      * @return string the extracted part of string or false on failure.
      */
-    private function result(array $longestIndexes, int $longestLength, string $stringA) : string
+    private function result(array $longestIndexes, int $longestLength, string $stringA): string
     {
-        return $longestIndexes === [] ? '' : \substr($stringA, $longestIndexes[0], $longestLength);
+        return $longestIndexes === [] ? '' : substr($stringA, $longestIndexes[0], $longestLength);
     }
 }

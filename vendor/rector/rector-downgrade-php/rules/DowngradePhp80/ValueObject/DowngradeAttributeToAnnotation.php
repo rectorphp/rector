@@ -24,11 +24,11 @@ final class DowngradeAttributeToAnnotation
         $this->attributeClass = $attributeClass;
         $this->tag = $tag;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         return $this->attributeClass;
     }
-    public function getTag() : string
+    public function getTag(): string
     {
         if ($this->tag === null) {
             return $this->attributeClass;

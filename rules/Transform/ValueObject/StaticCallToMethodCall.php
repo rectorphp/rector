@@ -42,19 +42,19 @@ final class StaticCallToMethodCall
             RectorAssert::methodName($methodName);
         }
     }
-    public function getClassObjectType() : ObjectType
+    public function getClassObjectType(): ObjectType
     {
         return new ObjectType($this->classType);
     }
-    public function getClassType() : string
+    public function getClassType(): string
     {
         return $this->classType;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function isStaticCallMatch(StaticCall $staticCall) : bool
+    public function isStaticCallMatch(StaticCall $staticCall): bool
     {
         if (!$staticCall->class instanceof Name) {
             return \false;

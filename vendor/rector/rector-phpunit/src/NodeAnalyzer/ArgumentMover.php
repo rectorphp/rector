@@ -10,13 +10,13 @@ final class ArgumentMover
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    public function removeFirstArg($node) : void
+    public function removeFirstArg($node): void
     {
         if ($node->isFirstClassCallable()) {
             return;
         }
         $methodArguments = $node->getArgs();
-        \array_shift($methodArguments);
+        array_shift($methodArguments);
         $node->args = $methodArguments;
     }
 }

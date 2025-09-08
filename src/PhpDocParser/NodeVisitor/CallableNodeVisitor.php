@@ -37,11 +37,11 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
         /** @var int|Node|null|Node[] $newNode */
         $newNode = $callable($node);
         if ($newNode === NodeVisitor::REMOVE_NODE) {
-            $this->nodeIdToRemove = \spl_object_id($originalNode);
+            $this->nodeIdToRemove = spl_object_id($originalNode);
             return $originalNode;
         }
-        if (\is_array($newNode)) {
-            $nodeId = \spl_object_id($node);
+        if (is_array($newNode)) {
+            $nodeId = spl_object_id($node);
             $this->nodesToReturn[$nodeId] = $newNode;
             return $node;
         }
@@ -55,13 +55,13 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($this->nodeIdToRemove !== null && $this->nodeIdToRemove === \spl_object_id($node)) {
+        if ($this->nodeIdToRemove !== null && $this->nodeIdToRemove === spl_object_id($node)) {
             $this->nodeIdToRemove = null;
             return NodeVisitor::REMOVE_NODE;
         }
         if ($this->nodesToReturn === []) {
             return $node;
         }
-        return $this->nodesToReturn[\spl_object_id($node)] ?? $node;
+        return $this->nodesToReturn[spl_object_id($node)] ?? $node;
     }
 }

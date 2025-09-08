@@ -25,11 +25,11 @@ final class SetStateToStaticRector extends AbstractRector implements MinPhpVersi
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STATIC_VISIBILITY_SET_STATE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add `static` visibility to `__set_state()` methods', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeStatic($node);
         return $node;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (!$this->isName($classMethod, MethodName::SET_STATE)) {
             return \true;

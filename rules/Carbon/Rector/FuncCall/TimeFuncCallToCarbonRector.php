@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TimeFuncCallToCarbonRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert `time()` function call to `Carbon::now()->getTimestamp()`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -42,24 +42,24 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'time')) {
             return null;
         }
         $firstClassCallable = $node->isFirstClassCallable();
-        if (!$firstClassCallable && \count($node->getArgs()) !== 0) {
+        if (!$firstClassCallable && count($node->getArgs()) !== 0) {
             return null;
         }
         // create now and format()
-        $nowStaticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'now');
+        $nowStaticCall = new StaticCall(new FullyQualified('Carbon\Carbon'), 'now');
         $methodCall = new MethodCall($nowStaticCall, 'getTimestamp');
         if ($firstClassCallable) {
             return new ArrowFunction(['static' => \true, 'expr' => $methodCall]);

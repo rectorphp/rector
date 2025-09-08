@@ -13,14 +13,14 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
  */
 final class StringNodeMapper implements PhpParserNodeMapperInterface
 {
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return String_::class;
     }
     /**
      * @param String_ $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         return new StringType();
     }

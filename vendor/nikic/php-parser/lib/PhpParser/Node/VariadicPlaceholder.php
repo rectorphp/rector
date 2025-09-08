@@ -18,11 +18,11 @@ class VariadicPlaceholder extends NodeAbstract
     {
         $this->attributes = $attributes;
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'VariadicPlaceholder';
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return [];
     }

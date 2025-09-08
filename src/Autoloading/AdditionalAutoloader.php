@@ -21,7 +21,7 @@ final class AdditionalAutoloader
     {
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-    public function autoloadInput(InputInterface $input) : void
+    public function autoloadInput(InputInterface $input): void
     {
         if (!$input->hasOption(Option::AUTOLOAD_FILE)) {
             return;
@@ -31,10 +31,10 @@ final class AdditionalAutoloader
         if ($autoloadFile === null) {
             return;
         }
-        Assert::fileExists($autoloadFile, \sprintf('Extra autoload file %s was not found', $autoloadFile));
+        Assert::fileExists($autoloadFile, sprintf('Extra autoload file %s was not found', $autoloadFile));
         require_once $autoloadFile;
     }
-    public function autoloadPaths() : void
+    public function autoloadPaths(): void
     {
         $autoloadPaths = SimpleParameterProvider::provideArrayParameter(Option::AUTOLOAD_PATHS);
         $autoloadPaths = $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);

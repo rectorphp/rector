@@ -44,11 +44,11 @@ final class AddReturnTypeDeclarationBasedOnParentClassMethodRector extends Abstr
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add missing return type declaration based on parent class method', [new CodeSample(<<<'CODE_SAMPLE'
 class A
@@ -83,14 +83,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function getReturnTypeRecursive(ClassMethod $classMethod) : ?Type
+    private function getReturnTypeRecursive(ClassMethod $classMethod): ?Type
     {
         $returnType = $classMethod->getReturnType();
         if ($returnType instanceof Node) {
@@ -135,7 +135,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processClassMethodReturnType(Class_ $class, ClassMethod $classMethod, Type $parentType) : ?ClassMethod
+    private function processClassMethodReturnType(Class_ $class, ClassMethod $classMethod, Type $parentType): ?ClassMethod
     {
         if ($parentType instanceof MixedType) {
             $className = (string) $this->getName($class);

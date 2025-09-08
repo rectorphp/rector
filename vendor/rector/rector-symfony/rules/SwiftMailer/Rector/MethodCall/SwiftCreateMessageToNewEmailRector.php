@@ -19,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SwiftCreateMessageToNewEmailRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes createMessage() into a new Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes createMessage() into a new Symfony\Component\Mime\Email', [new CodeSample(<<<'CODE_SAMPLE'
 $email = $this->swift->createMessage('message');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -32,17 +32,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $subNode) use($node, &$hasChanged) : ?New_ {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $subNode) use ($node, &$hasChanged): ?New_ {
             if (!$subNode instanceof MethodCall) {
                 return null;
             }
@@ -63,14 +63,14 @@ CODE_SAMPLE
                 return null;
             }
             $hasChanged = \true;
-            return new New_(new FullyQualified('Symfony\\Component\\Mime\\Email'));
+            return new New_(new FullyQualified('Symfony\Component\Mime\Email'));
         });
         if ($hasChanged) {
             return $node;
         }
         return null;
     }
-    private function getSwiftMailerProperty(Class_ $class) : ?Property
+    private function getSwiftMailerProperty(Class_ $class): ?Property
     {
         $properties = $class->getProperties();
         foreach ($properties as $property) {

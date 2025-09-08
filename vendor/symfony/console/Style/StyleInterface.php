@@ -96,7 +96,7 @@ interface StyleInterface
     /**
      * Asks for confirmation.
      */
-    public function confirm(string $question, bool $default = \true) : bool;
+    public function confirm(string $question, bool $default = \true): bool;
     /**
      * Asks a choice question.
      * @param mixed $default

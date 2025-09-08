@@ -34,7 +34,7 @@ final class AddParentSetupCallOnSetupRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add missing parent::setUp() call on setUp() method on test class', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -62,14 +62,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -81,7 +81,7 @@ CODE_SAMPLE
         if ($setUpMethod->isAbstract() || $setUpMethod->stmts === null) {
             return null;
         }
-        $isSetupExists = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($setUpMethod, function (Node $subNode) : bool {
+        $isSetupExists = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($setUpMethod, function (Node $subNode): bool {
             if (!$subNode instanceof StaticCall) {
                 return \false;
             }
@@ -93,7 +93,7 @@ CODE_SAMPLE
         if ($isSetupExists) {
             return null;
         }
-        $setUpMethod->stmts = \array_merge([new Expression(new StaticCall(new Name('parent'), new Identifier('setUp')))], $setUpMethod->stmts);
+        $setUpMethod->stmts = array_merge([new Expression(new StaticCall(new Name('parent'), new Identifier('setUp')))], $setUpMethod->stmts);
         return $node;
     }
 }

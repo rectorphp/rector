@@ -58,7 +58,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function inferFunctionLike($functionLike) : Type
+    public function inferFunctionLike($functionLike): Type
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
         if ($functionLike instanceof ClassMethod && (!$classReflection instanceof ClassReflection || $classReflection->isInterface())) {

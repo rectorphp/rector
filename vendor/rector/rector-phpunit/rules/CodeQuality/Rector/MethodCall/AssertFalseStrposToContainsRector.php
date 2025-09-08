@@ -34,23 +34,23 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertFalse(strpos($anything, "foo"), "message");', '$this->assertNotContains("foo", $anything, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        $oldMethodName = \array_keys(self::RENAME_METHODS_MAP);
+        $oldMethodName = array_keys(self::RENAME_METHODS_MAP);
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodName)) {
             return null;
         }
@@ -85,7 +85,7 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         $secondArgument = $strposFuncCallNode->getArgs()[0];
         unset($oldArguments[0]);
         $newArgs = [$firstArgument, $secondArgument];
-        $node->args = \array_merge($newArgs, $oldArguments);
+        $node->args = array_merge($newArgs, $oldArguments);
         return $node;
     }
 }

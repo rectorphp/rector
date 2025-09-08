@@ -28,15 +28,15 @@ final class MethodCallToNew
         $this->methodName = $methodName;
         $this->newClassString = $newClassString;
     }
-    public function getObject() : ObjectType
+    public function getObject(): ObjectType
     {
         return $this->objectType;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function getNewClassString() : string
+    public function getNewClassString(): string
     {
         return $this->newClassString;
     }

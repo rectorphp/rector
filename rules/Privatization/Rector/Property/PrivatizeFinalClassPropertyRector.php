@@ -39,7 +39,7 @@ final class PrivatizeFinalClassPropertyRector extends AbstractRector
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change property to private if possible', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -58,14 +58,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->isFinal()) {
             return null;
@@ -106,9 +106,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipProperty(Property $property) : bool
+    private function shouldSkipProperty(Property $property): bool
     {
-        if (\count($property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return \true;
         }
         return !$property->isProtected();

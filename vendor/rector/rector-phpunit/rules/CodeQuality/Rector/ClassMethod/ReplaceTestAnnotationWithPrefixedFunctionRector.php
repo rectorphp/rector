@@ -41,7 +41,7 @@ final class ReplaceTestAnnotationWithPrefixedFunctionRector extends AbstractRect
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace @test with prefixed function', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
@@ -69,32 +69,32 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (\strncmp($node->name->toString(), 'test', \strlen('test')) === 0) {
+        if (strncmp($node->name->toString(), 'test', strlen('test')) === 0) {
             return null;
         }
         $docComment = $node->getDocComment();
         if (!$docComment instanceof Doc) {
             return null;
         }
-        if (\strpos($docComment->getText(), '@test') === \false) {
+        if (strpos($docComment->getText(), '@test') === \false) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->phpDocTagRemover->removeByName($phpDocInfo, 'test');
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        $node->name->name = 'test' . \ucfirst($node->name->name);
+        $node->name->name = 'test' . ucfirst($node->name->name);
         return $node;
     }
 }

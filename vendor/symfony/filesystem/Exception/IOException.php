@@ -25,7 +25,7 @@ class IOException extends \RuntimeException implements IOExceptionInterface
         $this->path = $path;
         parent::__construct($message, $code, $previous);
     }
-    public function getPath() : ?string
+    public function getPath(): ?string
     {
         return $this->path;
     }

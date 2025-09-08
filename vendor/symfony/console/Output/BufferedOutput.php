@@ -19,7 +19,7 @@ class BufferedOutput extends Output
     /**
      * Empties buffer and returns its content.
      */
-    public function fetch() : string
+    public function fetch(): string
     {
         $content = $this->buffer;
         $this->buffer = '';

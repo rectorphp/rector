@@ -43,7 +43,7 @@ final class NameImporter
     /**
      * @param array<Use_|GroupUse> $currentUses
      */
-    public function importName(FullyQualified $fullyQualified, File $file, array $currentUses) : ?Name
+    public function importName(FullyQualified $fullyQualified, File $file, array $currentUses): ?Name
     {
         if ($this->classNameImportSkipper->shouldSkipName($fullyQualified, $currentUses)) {
             return null;
@@ -57,13 +57,13 @@ final class NameImporter
     /**
      * @param array<Use_|GroupUse> $currentUses
      */
-    private function resolveNameInUse(FullyQualified $fullyQualified, array $currentUses) : ?Name
+    private function resolveNameInUse(FullyQualified $fullyQualified, array $currentUses): ?Name
     {
         $aliasName = $this->aliasNameResolver->resolveByName($fullyQualified, $currentUses);
-        if (\is_string($aliasName)) {
+        if (is_string($aliasName)) {
             return new Name($aliasName);
         }
-        if (\substr_count($fullyQualified->toCodeString(), '\\') === 1) {
+        if (substr_count($fullyQualified->toCodeString(), '\\') === 1) {
             return null;
         }
         $lastName = $fullyQualified->getLast();
@@ -82,7 +82,7 @@ final class NameImporter
     /**
      * @param array<Use_|GroupUse> $currentUses
      */
-    private function importNameAndCollectNewUseStatement(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType, array $currentUses) : ?Name
+    private function importNameAndCollectNewUseStatement(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType, array $currentUses): ?Name
     {
         // make use of existing use import
         $nameInUse = $this->resolveNameInUse($fullyQualified, $currentUses);
@@ -103,7 +103,7 @@ final class NameImporter
         $this->addUseImport($file, $fullyQualified, $fullyQualifiedObjectType);
         return $fullyQualifiedObjectType->getShortNameNode();
     }
-    private function addUseImport(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType) : void
+    private function addUseImport(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         if ($this->useNodesToAddCollector->hasImport($file, $fullyQualified, $fullyQualifiedObjectType)) {
             return;

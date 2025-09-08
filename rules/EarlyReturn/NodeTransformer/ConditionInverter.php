@@ -18,7 +18,7 @@ final class ConditionInverter
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function createInvertedCondition(Expr $expr) : Expr
+    public function createInvertedCondition(Expr $expr): Expr
     {
         // inverse condition
         if ($expr instanceof BinaryOp) {

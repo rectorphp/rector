@@ -22,10 +22,10 @@ final class StringValueQuoteWrapper
      */
     public function wrap($value, ?string $key)
     {
-        if (\is_string($value)) {
+        if (is_string($value)) {
             return new StringNode($value);
         }
-        if (\is_array($value)) {
+        if (is_array($value)) {
             return $this->wrapArray($value, $key);
         }
         return $value;
@@ -33,12 +33,12 @@ final class StringValueQuoteWrapper
     /**
      * @param mixed[] $value
      */
-    private function wrapArray(array $value, ?string $key) : CurlyListNode
+    private function wrapArray(array $value, ?string $key): CurlyListNode
     {
         // include quotes in groups
-        if (\in_array($key, ['groups', 'schemes', 'choices'], \true)) {
+        if (in_array($key, ['groups', 'schemes', 'choices'], \true)) {
             foreach ($value as $nestedKey => $nestedValue) {
-                if (\is_numeric($nestedValue)) {
+                if (is_numeric($nestedValue)) {
                     continue;
                 }
                 $value[$nestedKey] = new StringNode($nestedValue);

@@ -31,7 +31,7 @@ final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade Symfony Command Attribute', [new CodeSample(<<<'CODE_SAMPLE'
 #[AsCommand(name: 'app:create-user', description: 'some description')]
@@ -55,20 +55,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->is('Symfony\\Component\\Console\\Command\\Command')) {
+        if (!$classReflection->is('Symfony\Component\Console\Command\Command')) {
             return null;
         }
         $resolveNameAndDescription = $this->resolveNameAndDescription($node);
@@ -86,7 +86,7 @@ CODE_SAMPLE
             $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setDescription', [new Arg($description)]));
         }
         if ($configureClassMethod instanceof ClassMethod) {
-            $configureClassMethod->stmts = \array_merge((array) $configureClassMethod->stmts, $stmts);
+            $configureClassMethod->stmts = array_merge((array) $configureClassMethod->stmts, $stmts);
         } else {
             $classMethod = new ClassMethod('configure');
             $classMethod->flags = Visibility::PROTECTED;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
         foreach ($node->attrGroups as $keyAttribute => $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attr) {
-                if ($attr->name->toString() === 'Symfony\\Component\\Console\\Attribute\\AsCommand') {
+                if ($attr->name->toString() === 'Symfony\Component\Console\Attribute\AsCommand') {
                     unset($attrGroup->attrs[$key]);
                 }
             }
@@ -108,13 +108,13 @@ CODE_SAMPLE
     /**
      * @return array{name: ?Expr, description: ?Expr}
      */
-    private function resolveNameAndDescription(Class_ $class) : array
+    private function resolveNameAndDescription(Class_ $class): array
     {
         $name = null;
         $description = null;
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name->toString() !== 'Symfony\\Component\\Console\\Attribute\\AsCommand') {
+                if ($attr->name->toString() !== 'Symfony\Component\Console\Attribute\AsCommand') {
                     continue;
                 }
                 foreach ($attr->args as $arg) {

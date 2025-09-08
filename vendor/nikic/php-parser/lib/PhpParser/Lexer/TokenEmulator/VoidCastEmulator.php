@@ -7,17 +7,17 @@ use PhpParser\PhpVersion;
 use PhpParser\Token;
 class VoidCastEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
 {
-    public function getPhpVersion() : PhpVersion
+    public function getPhpVersion(): PhpVersion
     {
         return PhpVersion::fromComponents(8, 5);
     }
-    public function isEmulationNeeded(string $code) : bool
+    public function isEmulationNeeded(string $code): bool
     {
-        return (bool) \preg_match('/\\([ \\t]*void[ \\t]*\\)/i', $code);
+        return (bool) \preg_match('/\([ \t]*void[ \t]*\)/i', $code);
     }
-    public function emulate(string $code, array $tokens) : array
+    public function emulate(string $code, array $tokens): array
     {
-        for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
+        for ($i = 0, $c = count($tokens); $i < $c; ++$i) {
             $token = $tokens[$i];
             if ($token->text !== '(') {
                 continue;
@@ -25,7 +25,7 @@ class VoidCastEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
             $numTokens = 1;
             $text = '(';
             $j = $i + 1;
-            if ($j < $c && $tokens[$j]->id === \T_WHITESPACE && \preg_match('/[ \\t]+/', $tokens[$j]->text)) {
+            if ($j < $c && $tokens[$j]->id === \T_WHITESPACE && preg_match('/[ \t]+/', $tokens[$j]->text)) {
                 $text .= $tokens[$j]->text;
                 $numTokens++;
                 $j++;
@@ -36,7 +36,7 @@ class VoidCastEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
             $text .= $tokens[$j]->text;
             $numTokens++;
             $k = $j + 1;
-            if ($k < $c && $tokens[$k]->id === \T_WHITESPACE && \preg_match('/[ \\t]+/', $tokens[$k]->text)) {
+            if ($k < $c && $tokens[$k]->id === \T_WHITESPACE && preg_match('/[ \t]+/', $tokens[$k]->text)) {
                 $text .= $tokens[$k]->text;
                 $numTokens++;
                 $k++;
@@ -46,19 +46,19 @@ class VoidCastEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
             }
             $text .= ')';
             $numTokens++;
-            \array_splice($tokens, $i, $numTokens, [new Token(\T_VOID_CAST, $text, $token->line, $token->pos)]);
+            array_splice($tokens, $i, $numTokens, [new Token(\T_VOID_CAST, $text, $token->line, $token->pos)]);
             $c -= $numTokens - 1;
         }
         return $tokens;
     }
-    public function reverseEmulate(string $code, array $tokens) : array
+    public function reverseEmulate(string $code, array $tokens): array
     {
-        for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
+        for ($i = 0, $c = count($tokens); $i < $c; ++$i) {
             $token = $tokens[$i];
             if ($token->id !== \T_VOID_CAST) {
                 continue;
             }
-            if (!\preg_match('/^\\(([ \\t]*)(void)([ \\t]*)\\)$/i', $token->text, $match)) {
+            if (!preg_match('/^\(([ \t]*)(void)([ \t]*)\)$/i', $token->text, $match)) {
                 throw new \LogicException('Unexpected T_VOID_CAST contents');
             }
             $newTokens = [];
@@ -76,7 +76,7 @@ class VoidCastEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
                 $pos += \strlen($match[3]);
             }
             $newTokens[] = new Token(\ord(')'), ')', $token->line, $pos);
-            \array_splice($tokens, $i, 1, $newTokens);
+            array_splice($tokens, $i, 1, $newTokens);
             $i += \count($newTokens) - 1;
             $c += \count($newTokens) - 1;
         }

@@ -19,11 +19,11 @@ final class ChangeCompositeExpressionAddMultipleWithWithRector extends AbstractR
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change CompositeExpression ->addMultiple($parts) to ->with(...$parts)', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
@@ -56,12 +56,12 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'addMultiple')) {
             return null;
         }
-        if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Doctrine\\DBAL\\Query\\Expression\\CompositeExpression'))) {
+        if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Doctrine\DBAL\Query\Expression\CompositeExpression'))) {
             return null;
         }
         if ($node->isFirstClassCallable()) {

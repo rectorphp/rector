@@ -40,7 +40,7 @@ final class FileCacheStorage implements CacheStorageInterface
             if (!\is_file($filePath)) {
                 return null;
             }
-            $cacheItem = (require $filePath);
+            $cacheItem = require $filePath;
             if (!$cacheItem instanceof CacheItem) {
                 return null;
             }
@@ -53,7 +53,7 @@ final class FileCacheStorage implements CacheStorageInterface
     /**
      * @param mixed $data
      */
-    public function save(string $key, string $variableKey, $data) : void
+    public function save(string $key, string $variableKey, $data): void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->filesystem->mkdir($cacheFilePaths->getFirstDirectory());
@@ -77,18 +77,18 @@ final class FileCacheStorage implements CacheStorageInterface
             throw new CachingException(\sprintf('Could not write data to cache file %s.', $filePath));
         }
     }
-    public function clean(string $key) : void
+    public function clean(string $key): void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->processRemoveCacheFilePath($cacheFilePaths);
         $this->processRemoveEmptyDirectory($cacheFilePaths->getSecondDirectory());
         $this->processRemoveEmptyDirectory($cacheFilePaths->getFirstDirectory());
     }
-    public function clear() : void
+    public function clear(): void
     {
         FileSystem::delete($this->directory);
     }
-    private function processRemoveCacheFilePath(CacheFilePaths $cacheFilePaths) : void
+    private function processRemoveCacheFilePath(CacheFilePaths $cacheFilePaths): void
     {
         $filePath = $cacheFilePaths->getFilePath();
         if (!$this->filesystem->exists($filePath)) {
@@ -96,7 +96,7 @@ final class FileCacheStorage implements CacheStorageInterface
         }
         FileSystem::delete($filePath);
     }
-    private function processRemoveEmptyDirectory(string $directory) : void
+    private function processRemoveEmptyDirectory(string $directory): void
     {
         if (!$this->filesystem->exists($directory)) {
             return;
@@ -106,18 +106,18 @@ final class FileCacheStorage implements CacheStorageInterface
         }
         FileSystem::delete($directory);
     }
-    private function isNotEmptyDirectory(string $directory) : bool
+    private function isNotEmptyDirectory(string $directory): bool
     {
         // FilesystemIterator will initially point to the first file in the folder - if there are no files in the folder, valid() will return false
         $filesystemIterator = new FilesystemIterator($directory);
         return $filesystemIterator->valid();
     }
-    private function getCacheFilePaths(string $key) : CacheFilePaths
+    private function getCacheFilePaths(string $key): CacheFilePaths
     {
-        $keyHash = \sha1($key);
-        $firstDirectory = \sprintf('%s/%s', $this->directory, \substr($keyHash, 0, 2));
-        $secondDirectory = \sprintf('%s/%s', $firstDirectory, \substr($keyHash, 2, 2));
-        $filePath = \sprintf('%s/%s.php', $secondDirectory, $keyHash);
+        $keyHash = sha1($key);
+        $firstDirectory = sprintf('%s/%s', $this->directory, substr($keyHash, 0, 2));
+        $secondDirectory = sprintf('%s/%s', $firstDirectory, substr($keyHash, 2, 2));
+        $filePath = sprintf('%s/%s.php', $secondDirectory, $keyHash);
         return new CacheFilePaths($firstDirectory, $secondDirectory, $filePath);
     }
 }

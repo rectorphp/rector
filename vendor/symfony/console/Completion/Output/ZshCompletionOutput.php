@@ -17,7 +17,7 @@ use RectorPrefix202509\Symfony\Component\Console\Output\OutputInterface;
  */
 class ZshCompletionOutput implements CompletionOutputInterface
 {
-    public function write(CompletionSuggestions $suggestions, OutputInterface $output) : void
+    public function write(CompletionSuggestions $suggestions, OutputInterface $output): void
     {
         $values = [];
         foreach ($suggestions->getValueSuggestions() as $value) {
@@ -29,6 +29,6 @@ class ZshCompletionOutput implements CompletionOutputInterface
                 $values[] = '--no-' . $option->getName() . ($option->getDescription() ? "\t" . $option->getDescription() : '');
             }
         }
-        $output->write(\implode("\n", $values) . "\n");
+        $output->write(implode("\n", $values) . "\n");
     }
 }

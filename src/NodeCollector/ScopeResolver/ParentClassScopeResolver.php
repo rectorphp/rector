@@ -7,7 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 final class ParentClassScopeResolver
 {
-    public function resolveParentClassName(Scope $scope) : ?string
+    public function resolveParentClassName(Scope $scope): ?string
     {
         $parentClassReflection = $this->resolveParentClassReflection($scope);
         if (!$parentClassReflection instanceof ClassReflection) {
@@ -15,7 +15,7 @@ final class ParentClassScopeResolver
         }
         return $parentClassReflection->getName();
     }
-    public function resolveParentClassReflection(Scope $scope) : ?ClassReflection
+    public function resolveParentClassReflection(Scope $scope): ?ClassReflection
     {
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {

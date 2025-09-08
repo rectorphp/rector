@@ -32,15 +32,15 @@ final class AddTraitGetterReturnTypeBasedOnSetterRequiredRector extends Abstract
     /**
      * @var string
      */
-    private const REQUIRED_ATTRIBUTE = 'Symfony\\Contracts\\Service\\Attribute\\Required';
+    private const REQUIRED_ATTRIBUTE = 'Symfony\Contracts\Service\Attribute\Required';
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add trait getter return type based on setter with @required annotation or #[\\Symfony\\Contracts\\Service\\Attribute\\Required] attribute', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add trait getter return type based on setter with @required annotation or #[\Symfony\Contracts\Service\Attribute\Required] attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use stdClass;
 
 trait SomeTrait
@@ -87,30 +87,30 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Trait_::class];
     }
     /**
      * @param Trait_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $methods = $node->getMethods();
-        if (\count($methods) !== 2) {
+        if (count($methods) !== 2) {
             return null;
         }
         $props = $node->getProperties();
-        if (\count($props) !== 1) {
+        if (count($props) !== 1) {
             return null;
         }
         $getMethod = null;
         foreach ($methods as $method) {
             $methodName = (string) $this->getName($method);
-            if (\strncmp($methodName, 'set', \strlen('set')) !== 0) {
+            if (strncmp($methodName, 'set', strlen('set')) !== 0) {
                 continue;
             }
-            $getterMethod = 'get' . \ltrim($methodName, 'set');
+            $getterMethod = 'get' . ltrim($methodName, 'set');
             $getMethod = $node->getMethod($getterMethod);
             // getter for setter is not exists
             if (!$getMethod instanceof ClassMethod) {
@@ -120,13 +120,13 @@ CODE_SAMPLE
             if ($getMethod->returnType instanceof Node) {
                 return null;
             }
-            if (\count((array) $method->getStmts()) !== 1) {
+            if (count((array) $method->getStmts()) !== 1) {
                 return null;
             }
             if (!$this->shouldProcess($method)) {
                 return null;
             }
-            if (\count($method->params) !== 1) {
+            if (count($method->params) !== 1) {
                 return null;
             }
             if (!$method->params[0]->type instanceof Node) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
                 return null;
             }
             $getterStmts = (array) $getMethod->getStmts();
-            if (\count($getterStmts) !== 1) {
+            if (count($getterStmts) !== 1) {
                 return null;
             }
             if (!$getterStmts[0] instanceof Return_ || !$getterStmts[0]->expr instanceof PropertyFetch) {
@@ -148,7 +148,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldProcess(ClassMethod $classMethod) : bool
+    private function shouldProcess(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByName('required')) {

@@ -30,15 +30,15 @@ class Suggestion
         $this->value = $value;
         $this->description = $description;
     }
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getValue();
     }

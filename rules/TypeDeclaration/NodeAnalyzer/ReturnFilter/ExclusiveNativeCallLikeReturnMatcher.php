@@ -24,7 +24,7 @@ final class ExclusiveNativeCallLikeReturnMatcher
      * @param Return_[] $returns
      * @return array<StaticCall|FuncCall|MethodCall>|null
      */
-    public function match(array $returns) : ?array
+    public function match(array $returns): ?array
     {
         $callLikes = [];
         foreach ($returns as $return) {
@@ -48,7 +48,7 @@ final class ExclusiveNativeCallLikeReturnMatcher
     /**
      * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
-    private function isNativeCallLike($functionLikeReflection) : bool
+    private function isNativeCallLike($functionLikeReflection): bool
     {
         if ($functionLikeReflection instanceof FunctionReflection) {
             return $functionLikeReflection->isBuiltin();

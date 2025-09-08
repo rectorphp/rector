@@ -24,7 +24,7 @@ final class EmbeddedPropertyAttributeTransformer implements PropertyAttributeTra
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $propertyMapping = $entityMapping->matchEmbeddedPropertyMapping($property);
         if ($propertyMapping === null) {
@@ -37,7 +37,7 @@ final class EmbeddedPropertyAttributeTransformer implements PropertyAttributeTra
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, 'class');
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::EMBEDDED;
     }

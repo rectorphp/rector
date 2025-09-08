@@ -19,7 +19,7 @@ final class UnusedParameterResolver
     /**
      * @return array<int, Param>
      */
-    public function resolve(ClassMethod $classMethod) : array
+    public function resolve(ClassMethod $classMethod): array
     {
         /** @var array<int, Param> $unusedParameters */
         $unusedParameters = [];

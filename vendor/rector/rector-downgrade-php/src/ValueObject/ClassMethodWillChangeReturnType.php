@@ -18,11 +18,11 @@ final class ClassMethodWillChangeReturnType
         $this->className = $className;
         $this->methodName = $methodName;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }

@@ -17,7 +17,7 @@ final class NamedVariableFactory
     {
         $this->variableNaming = $variableNaming;
     }
-    public function createVariable(string $variableName, Expression $expression) : Variable
+    public function createVariable(string $variableName, Expression $expression): Variable
     {
         $scope = $expression->getAttribute(AttributeKey::SCOPE);
         $variableName = $this->variableNaming->createCountedValueName($variableName, $scope);

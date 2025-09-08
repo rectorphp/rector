@@ -20,11 +20,11 @@ final class FuncCallAndExpr
         $this->funcCall = $funcCall;
         $this->expr = $expr;
     }
-    public function getFuncCall() : FuncCall
+    public function getFuncCall(): FuncCall
     {
         return $this->funcCall;
     }
-    public function getExpr() : Expr
+    public function getExpr(): Expr
     {
         return $this->expr;
     }

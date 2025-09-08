@@ -29,11 +29,11 @@ class Catch_ extends Node\Stmt implements StmtsAwareInterface
         $this->var = $var;
         $this->stmts = $stmts;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['types', 'var', 'stmts'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Catch';
     }

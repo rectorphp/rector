@@ -28,9 +28,9 @@ final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
     private ObjectType $criteriaObjectType;
     public function __construct()
     {
-        $this->criteriaObjectType = new ObjectType('Doctrine\\Common\\Collections\\Criteria');
+        $this->criteriaObjectType = new ObjectType('Doctrine\Common\Collections\Criteria');
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace ASC/DESC with enum Ordering in Criteria::orderBy method call, and remove usage of Criteria::ASC and Criteria::DESC constants elsewhere', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Criteria;
@@ -59,26 +59,26 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, ClassConstFetch::class];
     }
     /**
      * @param MethodCall|ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassConstFetch) {
             return $this->refactorClassConstFetch($node);
         }
         return $this->refactorMethodCall($node);
     }
-    private function refactorClassConstFetch(ClassConstFetch $classConstFetch) : ?Node
+    private function refactorClassConstFetch(ClassConstFetch $classConstFetch): ?Node
     {
         if (!$classConstFetch->name instanceof Identifier) {
             return null;
         }
-        if (!\in_array($classConstFetch->name->name, ['ASC', 'DESC'])) {
+        if (!in_array($classConstFetch->name->name, ['ASC', 'DESC'])) {
             return null;
         }
         if (!$classConstFetch->class instanceof Name) {
@@ -94,7 +94,7 @@ CODE_SAMPLE
                 return new String_('DESC');
         }
     }
-    private function refactorMethodCall(MethodCall $methodCall) : ?Node
+    private function refactorMethodCall(MethodCall $methodCall): ?Node
     {
         if (!$this->isName($methodCall->name, 'orderBy')) {
             return null;
@@ -106,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $methodCall->getArgs();
-        if (\count($args) < 1) {
+        if (count($args) < 1) {
             return null;
         }
         $arg = $args[0];
@@ -124,10 +124,10 @@ CODE_SAMPLE
                 $newItems[] = $item;
                 continue;
             }
-            if ($item->value instanceof String_ && \in_array($v = \strtoupper($item->value->value), ['ASC', 'DESC'], \true)) {
+            if ($item->value instanceof String_ && in_array($v = strtoupper($item->value->value), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
-            } elseif ($item->value instanceof ClassConstFetch && $item->value->class instanceof Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) && $item->value->name instanceof Identifier && \in_array($v = \strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
+            } elseif ($item->value instanceof ClassConstFetch && $item->value->class instanceof Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) && $item->value->name instanceof Identifier && in_array($v = strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
             } else {
@@ -142,9 +142,9 @@ CODE_SAMPLE
     /**
      * @param 'ASC'|'DESC' $direction
      */
-    private function buildArrayItem(string $direction, ?\PhpParser\Node\Expr $key) : ArrayItem
+    private function buildArrayItem(string $direction, ?\PhpParser\Node\Expr $key): ArrayItem
     {
-        $classConstFetch = $this->nodeFactory->createClassConstFetch('Doctrine\\Common\\Collections\\Order', (function () use($direction) {
+        $classConstFetch = $this->nodeFactory->createClassConstFetch('Doctrine\Common\Collections\Order', (function () use ($direction) {
             switch ($direction) {
                 case 'ASC':
                     return 'Ascending';

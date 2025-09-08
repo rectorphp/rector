@@ -22,7 +22,7 @@ final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeR
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof FunctionLike) {
             return null;

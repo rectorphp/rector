@@ -38,7 +38,7 @@ final class EnumCaseToPascalCaseRector extends AbstractRector
         $this->reflectionProvider = $reflectionProvider;
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert enum cases to PascalCase and update their usages', [new CodeSample(<<<'CODE_SAMPLE'
 enum Status
@@ -60,14 +60,14 @@ enum Status
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Enum_::class, ClassConstFetch::class];
     }
     /**
      * @param Enum_|ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Enum_) {
             return $this->refactorEnum($node);
@@ -77,7 +77,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function refactorEnum(Enum_ $enum) : ?\PhpParser\Node\Stmt\Enum_
+    public function refactorEnum(Enum_ $enum): ?\PhpParser\Node\Stmt\Enum_
     {
         $enumName = $this->getName($enum);
         if ($enumName === null) {
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         return $hasChanged ? $enum : null;
     }
-    private function refactorClassConstFetch(ClassConstFetch $classConstFetch) : ?Node
+    private function refactorClassConstFetch(ClassConstFetch $classConstFetch): ?Node
     {
         if (!$classConstFetch->class instanceof Name) {
             return null;
@@ -137,13 +137,13 @@ CODE_SAMPLE
             return null;
         }
         $autoloadPaths = SimpleParameterProvider::provideArrayParameter(Option::AUTOLOAD_PATHS);
-        $normalizedFileTarget = PathNormalizer::normalize((string) \realpath($fileTarget));
+        $normalizedFileTarget = PathNormalizer::normalize((string) realpath($fileTarget));
         foreach ($autoloadPaths as $autoloadPath) {
             $normalizedAutoloadPath = PathNormalizer::normalize($autoloadPath);
             if ($autoloadPath === $fileTarget) {
                 return null;
             }
-            if (\strncmp($normalizedFileTarget, $normalizedAutoloadPath . '/', \strlen($normalizedAutoloadPath . '/')) === 0) {
+            if (strncmp($normalizedFileTarget, $normalizedAutoloadPath . '/', strlen($normalizedAutoloadPath . '/')) === 0) {
                 return null;
             }
         }
@@ -154,9 +154,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function convertToPascalCase(string $name) : string
+    private function convertToPascalCase(string $name): string
     {
-        $parts = \explode('_', \strtolower($name));
-        return \implode('', \array_map(\Closure::fromCallable('ucfirst'), $parts));
+        $parts = explode('_', strtolower($name));
+        return implode('', array_map(\Closure::fromCallable('ucfirst'), $parts));
     }
 }

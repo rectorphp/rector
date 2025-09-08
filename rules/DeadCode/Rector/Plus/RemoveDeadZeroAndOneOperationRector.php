@@ -34,7 +34,7 @@ final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Plus::class, Minus::class, Mul::class, Div::class, AssignPlus::class, AssignMinus::class, AssignMul::class, AssignDiv::class];
     }
     /**
      * @param Plus|Minus|Mul|Div|AssignPlus|AssignMinus|AssignMul|AssignDiv $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof AssignOp) {
             return $this->processAssignOp($node);
@@ -76,7 +76,7 @@ CODE_SAMPLE
         // -, +
         return $this->processBinaryOp($node);
     }
-    private function processAssignOp(AssignOp $assignOp) : ?Expr
+    private function processAssignOp(AssignOp $assignOp): ?Expr
     {
         // +=, -=
         if ($assignOp instanceof AssignPlus || $assignOp instanceof AssignMinus) {
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processBinaryOp(Node $node) : ?Expr
+    private function processBinaryOp(Node $node): ?Expr
     {
         if ($node instanceof Plus || $node instanceof Minus) {
             return $this->processBinaryPlusAndMinus($node);
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function areNumberType(BinaryOp $binaryOp) : bool
+    private function areNumberType(BinaryOp $binaryOp): bool
     {
         if (!$this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return \false;
@@ -122,7 +122,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
-    private function processBinaryPlusAndMinus($binaryOp) : ?Expr
+    private function processBinaryPlusAndMinus($binaryOp): ?Expr
     {
         if (!$this->areNumberType($binaryOp)) {
             return null;
@@ -141,7 +141,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
-    private function processBinaryMulAndDiv($binaryOp) : ?Expr
+    private function processBinaryMulAndDiv($binaryOp): ?Expr
     {
         if ($binaryOp->left instanceof ClassConstFetch || $binaryOp->right instanceof ClassConstFetch) {
             return null;

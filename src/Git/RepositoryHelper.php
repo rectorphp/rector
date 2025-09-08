@@ -11,8 +11,8 @@ final class RepositoryHelper
      * @var string
      * @see https://regex101.com/r/etcmog/2
      */
-    private const GITHUB_REPOSITORY_REGEX = '#github\\.com[:\\/](?<repository_name>.*?)\\.git#';
-    public static function resolveGithubRepositoryName(string $currentDirectory) : ?string
+    private const GITHUB_REPOSITORY_REGEX = '#github\.com[:\/](?<repository_name>.*?)\.git#';
+    public static function resolveGithubRepositoryName(string $currentDirectory): ?string
     {
         // resolve current repository name
         $process = new Process(['git', 'remote', 'get-url', 'origin'], $currentDirectory, null, null, null);

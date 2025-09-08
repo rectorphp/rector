@@ -38,7 +38,7 @@ final class ArrayKeyExistsNullToEmptyStringRector extends AbstractRector impleme
         $this->reflectionResolver = $reflectionResolver;
         $this->nullToStrictStringConverter = $nullToStrictStringConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace null key in array_key_exists with empty string', [new CodeSample(<<<'CODE_SAMPLE'
 array_key_exists(null, $array);
@@ -48,14 +48,14 @@ array_key_exists('', $array);
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 2) {
+        if (count($args) !== 2) {
             return null;
         }
         $classReflection = $scope->getClassReflection();
@@ -84,14 +84,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_ARRAY_KEY_EXISTS_FUNCTION;
     }
     /**
      * @param Arg[] $args
      */
-    private function resolvePosition(array $args) : int
+    private function resolvePosition(array $args): int
     {
         foreach ($args as $position => $arg) {
             if ($arg->name instanceof Identifier && $arg->name->toString() === 'key') {

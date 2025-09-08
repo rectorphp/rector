@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
 use Rector\Config\RectorConfig;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-config.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-console.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-dependency-injection.php');

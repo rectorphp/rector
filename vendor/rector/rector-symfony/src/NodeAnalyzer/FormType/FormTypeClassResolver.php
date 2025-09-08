@@ -23,7 +23,7 @@ final class FormTypeClassResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveFromExpr(Expr $expr) : ?string
+    public function resolveFromExpr(Expr $expr): ?string
     {
         if ($expr instanceof New_) {
             // we can only process direct name

@@ -41,7 +41,7 @@ final class ReturnCollectionDocblockRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return Collection docblock to method that returns a collection property', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -83,14 +83,14 @@ final class OverrideMix
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if (!$node->isPublic() || $node->isAbstract()) {
             return null;
@@ -103,7 +103,7 @@ CODE_SAMPLE
         if ($classReflection->isInterface()) {
             return null;
         }
-        if ($node->stmts === null || \count($node->stmts) !== 1) {
+        if ($node->stmts === null || count($node->stmts) !== 1) {
             return null;
         }
         $soleStmt = $node->stmts[0] ?? null;

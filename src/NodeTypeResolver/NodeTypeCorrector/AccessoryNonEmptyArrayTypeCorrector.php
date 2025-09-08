@@ -10,7 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 final class AccessoryNonEmptyArrayTypeCorrector
 {
-    public function correct(Type $mainType) : Type
+    public function correct(Type $mainType): Type
     {
         if (!$mainType instanceof IntersectionType) {
             return $mainType;

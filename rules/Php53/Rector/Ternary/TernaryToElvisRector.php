@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TernaryToElvisRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use `?:` instead of `?`, where useful', [new CodeSample(<<<'CODE_SAMPLE'
 function elvis()
@@ -36,14 +36,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->nodeComparator->areNodesEqual($node->cond, $node->if)) {
             return null;
@@ -57,11 +57,11 @@ CODE_SAMPLE
         $node->if = null;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ELVIS_OPERATOR;
     }
-    private function isParenthesized(Expr $ifExpr, Expr $elseExpr) : bool
+    private function isParenthesized(Expr $ifExpr, Expr $elseExpr): bool
     {
         $tokens = $this->file->getOldTokens();
         $ifExprTokenEnd = $ifExpr->getEndTokenPos();

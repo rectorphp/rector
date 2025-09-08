@@ -32,13 +32,13 @@ final class YamlToAttributeTransformer
         $this->classAttributeTransformers = $classAttributeTransformers;
         $this->propertyAttributeTransformers = $propertyAttributeTransformers;
     }
-    public function transform(Class_ $class, EntityMapping $entityMapping) : bool
+    public function transform(Class_ $class, EntityMapping $entityMapping): bool
     {
         $hasTransformedClass = $this->transformClass($class, $entityMapping);
         $hasTransformedProperties = $this->transformProperties($class, $entityMapping);
         return $hasTransformedClass || $hasTransformedProperties;
     }
-    private function transformClass(Class_ $class, EntityMapping $entityMapping) : bool
+    private function transformClass(Class_ $class, EntityMapping $entityMapping): bool
     {
         $hasChanged = \false;
         foreach ($this->classAttributeTransformers as $classAttributeTransformer) {
@@ -52,7 +52,7 @@ final class YamlToAttributeTransformer
         }
         return $hasChanged;
     }
-    private function transformProperties(Class_ $class, EntityMapping $entityMapping) : bool
+    private function transformProperties(Class_ $class, EntityMapping $entityMapping): bool
     {
         $hasChanged = \false;
         foreach ($class->getProperties() as $property) {
@@ -91,7 +91,7 @@ final class YamlToAttributeTransformer
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $stmt
      */
-    private function hasAttribute($stmt, string $attributeClassName) : bool
+    private function hasAttribute($stmt, string $attributeClassName): bool
     {
         foreach ($stmt->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {

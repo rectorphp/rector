@@ -56,7 +56,7 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
         $this->variableRenamer = $variableRenamer;
         $this->foreachMatcher = $foreachMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Renames value variable name in foreach loop to match method type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -87,20 +87,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Closure::class, Function_::class];
     }
     /**
      * @param ClassMethod|Closure|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
         }
         $hasRenamed = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use($node, &$hasRenamed) : ?int {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use ($node, &$hasRenamed): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof Closure || $subNode instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -134,9 +134,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(VariableAndCallForeach $variableAndCallForeach, string $expectedName) : bool
+    private function shouldSkip(VariableAndCallForeach $variableAndCallForeach, string $expectedName): bool
     {
-        if (\in_array($expectedName, self::UNREADABLE_GENERIC_NAMES, \true)) {
+        if (in_array($expectedName, self::UNREADABLE_GENERIC_NAMES, \true)) {
             return \true;
         }
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName($variableAndCallForeach->getCall(), $variableAndCallForeach->getVariableName(), $expectedName)) {

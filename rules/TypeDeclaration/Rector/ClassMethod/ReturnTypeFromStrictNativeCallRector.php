@@ -26,7 +26,7 @@ final class ReturnTypeFromStrictNativeCallRector extends AbstractRector implemen
     {
         $this->addReturnTypeFromStrictNativeCall = $addReturnTypeFromStrictNativeCall;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add strict return type based native function or native method', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -51,19 +51,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         return $this->addReturnTypeFromStrictNativeCall->add($node, $scope);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_70;
     }

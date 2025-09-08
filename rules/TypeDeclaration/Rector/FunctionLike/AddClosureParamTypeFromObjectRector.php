@@ -49,7 +49,7 @@ final class AddClosureParamTypeFromObjectRector extends AbstractRector implement
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add closure param type based on the object of the method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $request = new Request();
@@ -64,14 +64,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->addClosureParamTypeFromObjects as $addClosureParamTypeFromObject) {
             if ($node instanceof MethodCall) {
@@ -95,7 +95,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddClosureParamTypeFromObject::class);
         $this->addClosureParamTypeFromObjects = $configuration;
@@ -134,7 +134,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorParameter(Param $param, ObjectType $objectType) : bool
+    private function refactorParameter(Param $param, ObjectType $objectType): bool
     {
         // already set → no change
         if ($param->type instanceof Node) {
@@ -151,7 +151,7 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Name|\PhpParser\Node\Expr $name
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function isCallMatch($name, AddClosureParamTypeFromObject $addClosureParamTypeFromArg, $call) : bool
+    private function isCallMatch($name, AddClosureParamTypeFromObject $addClosureParamTypeFromArg, $call): bool
     {
         if (!$this->isObjectType($name, $addClosureParamTypeFromArg->getObjectType())) {
             return \false;

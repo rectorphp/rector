@@ -91,7 +91,7 @@ final class TrustedClassMethodPropertyTypeInferer
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->typeComparator = $typeComparator;
     }
-    public function inferProperty(Class_ $class, Property $property, ClassMethod $classMethod) : Type
+    public function inferProperty(Class_ $class, Property $property, ClassMethod $classMethod): Type
     {
         $propertyName = $this->nodeNameResolver->getName($property);
         // 1. direct property = param assign
@@ -109,10 +109,10 @@ final class TrustedClassMethodPropertyTypeInferer
         if ($resolvedTypes === []) {
             return new MixedType();
         }
-        $resolvedType = \count($resolvedTypes) === 1 ? $resolvedTypes[0] : TypeCombinator::union(...$resolvedTypes);
+        $resolvedType = count($resolvedTypes) === 1 ? $resolvedTypes[0] : TypeCombinator::union(...$resolvedTypes);
         return $this->resolveType($property, $propertyName, $class, $resolvedType);
     }
-    private function resolveType(Property $property, string $propertyName, Class_ $class, Type $resolvedType) : Type
+    private function resolveType(Property $property, string $propertyName, Class_ $class, Type $resolvedType): Type
     {
         $exactType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $class);
         if (!$exactType instanceof UnionType) {
@@ -123,7 +123,7 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         return new MixedType();
     }
-    private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName) : Type
+    private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type
     {
         $type = $this->resolveParamTypeToPHPStanType($param);
         if ($type instanceof MixedType) {
@@ -141,7 +141,7 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-    private function resolveParamTypeToPHPStanType(Param $param) : Type
+    private function resolveParamTypeToPHPStanType(Param $param): Type
     {
         if (!$param->type instanceof Node) {
             return new MixedType();
@@ -163,10 +163,10 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
     }
-    private function getResolveParamStaticTypeAsPHPStanType(ClassMethod $classMethod, string $propertyName) : Type
+    private function getResolveParamStaticTypeAsPHPStanType(ClassMethod $classMethod, string $propertyName): Type
     {
         $paramStaticType = new ArrayType(new MixedType(), new MixedType());
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$paramStaticType) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($propertyName, &$paramStaticType): ?int {
             if (!$node instanceof Variable) {
                 return null;
             }
@@ -178,7 +178,7 @@ final class TrustedClassMethodPropertyTypeInferer
         });
         return $paramStaticType;
     }
-    private function isParamNullable(Param $param) : bool
+    private function isParamNullable(Param $param): bool
     {
         if ($this->paramAnalyzer->isNullable($param)) {
             return \true;
@@ -191,13 +191,13 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         return \false;
     }
-    private function resolveFullyQualifiedOrAliasedObjectType(Param $param) : ?Type
+    private function resolveFullyQualifiedOrAliasedObjectType(Param $param): ?Type
     {
         if (!$param->type instanceof Node) {
             return null;
         }
         $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
-        if (!\is_string($fullyQualifiedName)) {
+        if (!is_string($fullyQualifiedName)) {
             return null;
         }
         $originalName = $param->type->getAttribute(AttributeKey::ORIGINAL_NAME);
@@ -205,7 +205,7 @@ final class TrustedClassMethodPropertyTypeInferer
             return null;
         }
         // if the FQN has different ending than the original, it was aliased and we need to return the alias
-        if (\substr_compare($fullyQualifiedName, '\\' . $originalName->toString(), -\strlen('\\' . $originalName->toString())) !== 0) {
+        if (substr_compare($fullyQualifiedName, '\\' . $originalName->toString(), -strlen('\\' . $originalName->toString())) !== 0) {
             $className = $originalName->toString();
             if ($this->reflectionProvider->hasClass($className)) {
                 return new FullyQualifiedObjectType($className);
@@ -215,7 +215,7 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         return null;
     }
-    private function resolveTypeFromParam(Param $param, ClassMethod $classMethod, string $propertyName, Property $property, Class_ $class) : Type
+    private function resolveTypeFromParam(Param $param, ClassMethod $classMethod, string $propertyName, Property $property, Class_ $class): Type
     {
         if (!$param->type instanceof Node) {
             return new MixedType();

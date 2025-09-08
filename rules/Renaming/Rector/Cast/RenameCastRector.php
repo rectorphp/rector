@@ -22,21 +22,21 @@ final class RenameCastRector extends AbstractRector implements ConfigurableRecto
      * @var array<RenameCast>
      */
     private array $renameCasts = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Renames casts', [new ConfiguredCodeSample('$real = (real) $real;', '$real = (float) $real;', [new RenameCast(Double::class, Double::KIND_REAL, Double::KIND_FLOAT)])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Cast::class];
     }
     /**
      * @param Cast $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->renameCasts as $renameCast) {
             $expectedClassName = $renameCast->getFromCastExprClass();
@@ -57,7 +57,7 @@ final class RenameCastRector extends AbstractRector implements ConfigurableRecto
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, RenameCast::class);
         $this->renameCasts = $configuration;

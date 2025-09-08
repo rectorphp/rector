@@ -28,7 +28,7 @@ final class RemoveNewArrayCollectionOutsideConstructorRector extends AbstractRec
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove new ArrayCollection() assigns outside constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
@@ -61,14 +61,14 @@ final class NoAssignOutsideConstructor
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if ($node->isAbstract()) {
             return null;
@@ -81,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
         $methodName = $this->getName($node);
-        if (\strpos($methodName, 'remove') !== \false || \strpos($methodName, 'clear') !== \false) {
+        if (strpos($methodName, 'remove') !== \false || strpos($methodName, 'clear') !== \false) {
             return null;
         }
         foreach ((array) $node->stmts as $key => $stmt) {

@@ -25,7 +25,7 @@ final class InheritanceClassAttributeTransformer implements ClassAttributeTransf
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, Class_ $class) : bool
+    public function transform(EntityMapping $entityMapping, Class_ $class): bool
     {
         $classMapping = $entityMapping->getClassMapping();
         $inheritanceType = $classMapping['inheritanceType'] ?? null;
@@ -41,14 +41,14 @@ final class InheritanceClassAttributeTransformer implements ClassAttributeTransf
         }
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::DISCRIMINATOR_MAP;
     }
     /**
      * @param array<string, mixed> $discriminatorMap
      */
-    private function addDiscriminatorMap(array $discriminatorMap, Class_ $class) : void
+    private function addDiscriminatorMap(array $discriminatorMap, Class_ $class): void
     {
         $args = $this->nodeFactory->createArgs([$discriminatorMap]);
         foreach ($args as $arg) {

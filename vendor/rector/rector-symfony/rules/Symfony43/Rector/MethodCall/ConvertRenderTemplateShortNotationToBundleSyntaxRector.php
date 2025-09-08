@@ -33,7 +33,7 @@ final class ConvertRenderTemplateShortNotationToBundleSyntaxRector extends Abstr
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change Twig template short name to bundle syntax in render calls from controllers', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -62,14 +62,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'render') && !$this->isName($node->name, 'renderView')) {
             return null;
@@ -94,8 +94,8 @@ CODE_SAMPLE
         if ($matches === null) {
             return null;
         }
-        $newValue = '@' . Strings::replace(\substr((string) $tplName, 0, $matches[0][1]), '/Bundle/', '') . Strings::replace(\substr((string) $tplName, $matches[0][1]), '/:/', '/');
-        $newValue = \str_replace('\\', '/', $newValue);
+        $newValue = '@' . Strings::replace(substr((string) $tplName, 0, $matches[0][1]), '/Bundle/', '') . Strings::replace(substr((string) $tplName, $matches[0][1]), '/:/', '/');
+        $newValue = str_replace('\\', '/', $newValue);
         $node->args[0] = new Arg(new String_($newValue));
         return $node;
     }

@@ -33,11 +33,11 @@ class Enum_ extends \PhpParser\Node\Stmt\ClassLike
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
         parent::__construct($attributes);
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'name', 'scalarType', 'implements', 'stmts'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Enum';
     }

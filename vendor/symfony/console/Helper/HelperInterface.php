@@ -26,7 +26,7 @@ interface HelperInterface
     /**
      * Gets the helper set associated with this helper.
      */
-    public function getHelperSet() : ?HelperSet;
+    public function getHelperSet(): ?HelperSet;
     /**
      * Returns the canonical name of this helper.
      *

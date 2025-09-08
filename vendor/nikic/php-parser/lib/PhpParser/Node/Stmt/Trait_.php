@@ -25,11 +25,11 @@ class Trait_ extends \PhpParser\Node\Stmt\ClassLike
         $this->stmts = $subNodes['stmts'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'name', 'stmts'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Trait';
     }

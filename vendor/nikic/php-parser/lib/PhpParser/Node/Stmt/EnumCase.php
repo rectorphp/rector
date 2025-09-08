@@ -26,11 +26,11 @@ class EnumCase extends Node\Stmt
         $this->expr = $expr;
         $this->attrGroups = $attrGroups;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'name', 'expr'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_EnumCase';
     }

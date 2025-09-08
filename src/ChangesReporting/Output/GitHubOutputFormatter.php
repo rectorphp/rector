@@ -24,61 +24,61 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
      */
     public const NAME = 'github';
     private const GROUP_NAME = 'Rector report';
-    public function getName() : string
+    public function getName(): string
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
         $this->startGroup();
         $this->reportSystemErrors($processResult, $configuration);
         $this->reportFileDiffs($processResult, $configuration);
         $this->endGroup();
     }
-    private function startGroup() : void
+    private function startGroup(): void
     {
-        echo \sprintf('::group::%s', self::GROUP_NAME) . \PHP_EOL;
+        echo sprintf('::group::%s', self::GROUP_NAME) . \PHP_EOL;
     }
-    private function endGroup() : void
+    private function endGroup(): void
     {
         echo '::endgroup::' . \PHP_EOL;
     }
-    private function reportSystemErrors(ProcessResult $processResult, Configuration $configuration) : void
+    private function reportSystemErrors(ProcessResult $processResult, Configuration $configuration): void
     {
         foreach ($processResult->getSystemErrors() as $systemError) {
             $filePath = $configuration->isReportingWithRealPath() ? $systemError->getAbsoluteFilePath() : $systemError->getRelativeFilePath();
             $line = $systemError->getLine();
-            $message = \trim($systemError->getRectorShortClass() . \PHP_EOL . $systemError->getMessage());
+            $message = trim($systemError->getRectorShortClass() . \PHP_EOL . $systemError->getMessage());
             $this->reportErrorAnnotation($message, ['file' => $filePath, 'line' => $line]);
         }
     }
-    private function reportFileDiffs(ProcessResult $processResult, Configuration $configuration) : void
+    private function reportFileDiffs(ProcessResult $processResult, Configuration $configuration): void
     {
         $fileDiffs = $processResult->getFileDiffs();
-        \ksort($fileDiffs);
+        ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
             $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() : $fileDiff->getRelativeFilePath();
             $line = $fileDiff->getFirstLineNumber();
             $endLine = $fileDiff->getLastLineNumber();
-            $message = \trim(\implode(' / ', $fileDiff->getRectorShortClasses())) . \PHP_EOL . \PHP_EOL . $fileDiff->getDiff();
+            $message = trim(implode(' / ', $fileDiff->getRectorShortClasses())) . \PHP_EOL . \PHP_EOL . $fileDiff->getDiff();
             $this->reportErrorAnnotation($message, ['file' => $filePath, 'line' => $line, 'endLine' => $endLine]);
         }
     }
     /**
      * @param AnnotationProperties $annotationProperties
      */
-    private function reportErrorAnnotation(string $message, array $annotationProperties) : void
+    private function reportErrorAnnotation(string $message, array $annotationProperties): void
     {
         $properties = $this->sanitizeAnnotationProperties($annotationProperties);
-        $command = \sprintf('::error %s::%s', $properties, $message);
+        $command = sprintf('::error %s::%s', $properties, $message);
         // Sanitize command
-        $command = \str_replace(['%', "\r", "\n"], ['%25', '%0D', '%0A'], $command);
+        $command = str_replace(['%', "\r", "\n"], ['%25', '%0D', '%0A'], $command);
         echo $command . \PHP_EOL;
     }
     /**
      * @param AnnotationProperties $annotationProperties
      */
-    private function sanitizeAnnotationProperties(array $annotationProperties) : string
+    private function sanitizeAnnotationProperties(array $annotationProperties): string
     {
         if (!isset($annotationProperties['line']) || !$annotationProperties['line']) {
             $annotationProperties['line'] = 0;
@@ -86,19 +86,19 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
         // This is a workaround for buggy endLine. See https://github.com/orgs/community/discussions/129899
         // TODO: Should be removed once github will have fixed it issue.
         unset($annotationProperties['endLine']);
-        $nonNullProperties = \array_filter($annotationProperties, static fn($value): bool => $value !== null);
-        $sanitizedProperties = \array_map(fn(string $key, $value): string => \sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), \array_keys($nonNullProperties), $nonNullProperties);
-        return \implode(',', $sanitizedProperties);
+        $nonNullProperties = array_filter($annotationProperties, static fn($value): bool => $value !== null);
+        $sanitizedProperties = array_map(fn(string $key, $value): string => sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), array_keys($nonNullProperties), $nonNullProperties);
+        return implode(',', $sanitizedProperties);
     }
     /**
      * @param string|int|null $value
      */
-    private function sanitizeAnnotationProperty($value) : string
+    private function sanitizeAnnotationProperty($value): string
     {
         if ($value === null || $value === '') {
             return '';
         }
         $value = (string) $value;
-        return \str_replace(['%', "\r", "\n", ':', ','], ['%25', '%0D', '%0A', '%3A', '%2C'], $value);
+        return str_replace(['%', "\r", "\n", ':', ','], ['%25', '%0D', '%0A', '%3A', '%2C'], $value);
     }
 }

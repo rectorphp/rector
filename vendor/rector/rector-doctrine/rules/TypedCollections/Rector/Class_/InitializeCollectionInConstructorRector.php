@@ -60,7 +60,7 @@ final class InitializeCollectionInConstructorRector extends AbstractRector
         $this->propertyDefaultNullRemover = $propertyDefaultNullRemover;
         $this->collectionPropertyDetector = $collectionPropertyDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Initialize Collection property in entity/ODM __construct()', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\OneToMany;
@@ -96,14 +96,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -128,7 +128,7 @@ CODE_SAMPLE
         $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $arrayCollectionAssigns);
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         if (!$this->entityLikeClassDetector->detect($class)) {
             return \true;
@@ -141,7 +141,7 @@ CODE_SAMPLE
     /**
      * @param mixed $property
      */
-    private function isDefaultArrayCollectionPropertyCandidate($property) : bool
+    private function isDefaultArrayCollectionPropertyCandidate($property): bool
     {
         if ($this->entityLikeClassDetector->isToMany($property)) {
             return \true;

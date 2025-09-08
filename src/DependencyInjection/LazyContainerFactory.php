@@ -241,11 +241,11 @@ final class LazyContainerFactory
     /**
      * @api used as next rectorConfig factory
      */
-    public function create() : RectorConfig
+    public function create(): RectorConfig
     {
         $rectorConfig = new RectorConfig();
         $rectorConfig->import(__DIR__ . '/../../config/config.php');
-        $rectorConfig->singleton(Application::class, static function (Container $container) : Application {
+        $rectorConfig->singleton(Application::class, static function (Container $container): Application {
             $consoleApplication = $container->make(ConsoleApplication::class);
             $commandNamesToHide = ['list', 'completion', 'help', 'worker'];
             foreach ($commandNamesToHide as $commandNameToHide) {
@@ -255,7 +255,7 @@ final class LazyContainerFactory
             return $consoleApplication;
         });
         $rectorConfig->when(ConsoleApplication::class)->needs('$commands')->giveTagged(Command::class);
-        $rectorConfig->singleton(Inflector::class, static function () : Inflector {
+        $rectorConfig->singleton(Inflector::class, static function (): Inflector {
             $inflectorFactory = new InflectorFactory();
             return $inflectorFactory->build();
         });
@@ -272,7 +272,7 @@ final class LazyContainerFactory
         $rectorConfig->when(RectorNodeTraverser::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $rectorConfig->when(ClassNameImportSkipper::class)->needs('$classNameImportSkipVoters')->giveTagged(ClassNameImportSkipVoterInterface::class);
-        $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (Container $container) : DynamicSourceLocatorProvider {
+        $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (Container $container): DynamicSourceLocatorProvider {
             $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();
         });
@@ -280,25 +280,25 @@ final class LazyContainerFactory
         $rectorConfig->tag(DynamicSourceLocatorProvider::class, ResetableInterface::class);
         $rectorConfig->tag(RenamedClassesDataCollector::class, ResetableInterface::class);
         // caching
-        $rectorConfig->singleton(Cache::class, static function (Container $container) : Cache {
+        $rectorConfig->singleton(Cache::class, static function (Container $container): Cache {
             /** @var CacheFactory $cacheFactory */
             $cacheFactory = $container->make(CacheFactory::class);
             return $cacheFactory->create();
         });
         // tagged services
         $rectorConfig->when(BetterPhpDocParser::class)->needs('$phpDocNodeDecorators')->giveTagged(PhpDocNodeDecoratorInterface::class);
-        $rectorConfig->afterResolving(ArrayTypeMapper::class, static function (ArrayTypeMapper $arrayTypeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(ArrayTypeMapper::class, static function (ArrayTypeMapper $arrayTypeMapper, Container $container): void {
             $arrayTypeMapper->autowire($container->make(PHPStanStaticTypeMapper::class));
         });
-        $rectorConfig->afterResolving(ConditionalTypeForParameterMapper::class, static function (ConditionalTypeForParameterMapper $conditionalTypeForParameterMapper, Container $container) : void {
+        $rectorConfig->afterResolving(ConditionalTypeForParameterMapper::class, static function (ConditionalTypeForParameterMapper $conditionalTypeForParameterMapper, Container $container): void {
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $conditionalTypeForParameterMapper->autowire($phpStanStaticTypeMapper);
         });
-        $rectorConfig->afterResolving(ConditionalTypeMapper::class, static function (ConditionalTypeMapper $conditionalTypeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(ConditionalTypeMapper::class, static function (ConditionalTypeMapper $conditionalTypeMapper, Container $container): void {
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $conditionalTypeMapper->autowire($phpStanStaticTypeMapper);
         });
-        $rectorConfig->afterResolving(UnionTypeMapper::class, static function (UnionTypeMapper $unionTypeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(UnionTypeMapper::class, static function (UnionTypeMapper $unionTypeMapper, Container $container): void {
             $phpStanStaticTypeMapper = $container->make(PHPStanStaticTypeMapper::class);
             $unionTypeMapper->autowire($phpStanStaticTypeMapper);
         });
@@ -310,7 +310,7 @@ final class LazyContainerFactory
         $rectorConfig->when(NodeNameResolver::class)->needs('$nodeNameResolvers')->giveTagged(NodeNameResolverInterface::class);
         $rectorConfig->when(AttributeGroupNamedArgumentManipulator::class)->needs('$converterAttributeDecorators')->giveTagged(ConverterAttributeDecoratorInterface::class);
         $this->registerTagged($rectorConfig, self::CONVERTER_ATTRIBUTE_DECORATOR_CLASSES, ConverterAttributeDecoratorInterface::class);
-        $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector, Container $container) : void {
+        $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector, Container $container): void {
             $rector->autowire($container->get(NodeNameResolver::class), $container->get(NodeTypeResolver::class), $container->get(SimpleCallableNodeTraverser::class), $container->get(NodeFactory::class), $container->get(Skipper::class), $container->get(NodeComparator::class), $container->get(CurrentFileProvider::class), $container->get(CreatedByRuleDecorator::class), $container->get(ChangedNodeScopeRefresher::class), $container->get(KaizenStepper::class));
         });
         $this->registerTagged($rectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
@@ -326,29 +326,29 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
         $this->registerTagged($rectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
         $rectorConfig->alias(SymfonyStyle::class, RectorStyle::class);
-        $rectorConfig->singleton(SymfonyStyle::class, static function (Container $container) : SymfonyStyle {
+        $rectorConfig->singleton(SymfonyStyle::class, static function (Container $container): SymfonyStyle {
             $symfonyStyleFactory = $container->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();
         });
         $rectorConfig->when(AnnotationToAttributeMapper::class)->needs('$annotationToAttributeMappers')->giveTagged(AnnotationToAttributeMapperInterface::class);
         $rectorConfig->when(OutputFormatterCollector::class)->needs('$outputFormatters')->giveTagged(OutputFormatterInterface::class);
         // required-like setter
-        $rectorConfig->afterResolving(ArrayAnnotationToAttributeMapper::class, static function (ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(ArrayAnnotationToAttributeMapper::class, static function (ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper, Container $container): void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
             $arrayAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
         });
-        $rectorConfig->afterResolving(ArrayItemNodeAnnotationToAttributeMapper::class, static function (ArrayItemNodeAnnotationToAttributeMapper $arrayItemNodeAnnotationToAttributeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(ArrayItemNodeAnnotationToAttributeMapper::class, static function (ArrayItemNodeAnnotationToAttributeMapper $arrayItemNodeAnnotationToAttributeMapper, Container $container): void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
             $arrayItemNodeAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
         });
-        $rectorConfig->afterResolving(PlainValueParser::class, static function (PlainValueParser $plainValueParser, Container $container) : void {
+        $rectorConfig->afterResolving(PlainValueParser::class, static function (PlainValueParser $plainValueParser, Container $container): void {
             $plainValueParser->autowire($container->make(StaticDoctrineAnnotationParser::class), $container->make(ArrayParser::class));
         });
-        $rectorConfig->afterResolving(CurlyListNodeAnnotationToAttributeMapper::class, static function (CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(CurlyListNodeAnnotationToAttributeMapper::class, static function (CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper, Container $container): void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
             $curlyListNodeAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
         });
-        $rectorConfig->afterResolving(DoctrineAnnotationAnnotationToAttributeMapper::class, static function (DoctrineAnnotationAnnotationToAttributeMapper $doctrineAnnotationAnnotationToAttributeMapper, Container $container) : void {
+        $rectorConfig->afterResolving(DoctrineAnnotationAnnotationToAttributeMapper::class, static function (DoctrineAnnotationAnnotationToAttributeMapper $doctrineAnnotationAnnotationToAttributeMapper, Container $container): void {
             $annotationToAttributeMapper = $container->make(AnnotationToAttributeMapper::class);
             $doctrineAnnotationAnnotationToAttributeMapper->autowire($annotationToAttributeMapper);
         });
@@ -364,7 +364,7 @@ final class LazyContainerFactory
      * @param array<class-string> $classes
      * @param class-string $tagInterface
      */
-    private function registerTagged(Container $container, array $classes, string $tagInterface) : void
+    private function registerTagged(Container $container, array $classes, string $tagInterface): void
     {
         foreach ($classes as $class) {
             Assert::isAOf($class, $tagInterface);
@@ -372,7 +372,7 @@ final class LazyContainerFactory
             $container->tag($class, $tagInterface);
         }
     }
-    private function createPHPStanServices(RectorConfig $rectorConfig) : void
+    private function createPHPStanServices(RectorConfig $rectorConfig): void
     {
         $rectorConfig->singleton(Parser::class, static function (Container $container) {
             $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
@@ -383,7 +383,7 @@ final class LazyContainerFactory
             return $phpStanServicesFactory->createEmulativeLexer();
         });
         foreach (self::PUBLIC_PHPSTAN_SERVICE_TYPES as $publicPhpstanServiceType) {
-            $rectorConfig->singleton($publicPhpstanServiceType, static function (Container $container) use($publicPhpstanServiceType) {
+            $rectorConfig->singleton($publicPhpstanServiceType, static function (Container $container) use ($publicPhpstanServiceType) {
                 $phpStanServicesFactory = $container->make(PHPStanServicesFactory::class);
                 return $phpStanServicesFactory->getByType($publicPhpstanServiceType);
             });

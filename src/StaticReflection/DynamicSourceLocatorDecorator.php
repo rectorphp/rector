@@ -34,7 +34,7 @@ final class DynamicSourceLocatorDecorator
      * @param string[] $paths
      * @return string[]
      */
-    public function addPaths(array $paths) : array
+    public function addPaths(array $paths): array
     {
         if ($paths === []) {
             return [];
@@ -44,9 +44,9 @@ final class DynamicSourceLocatorDecorator
         $this->dynamicSourceLocatorProvider->addFiles($files);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($paths);
         $this->dynamicSourceLocatorProvider->addDirectories($directories);
-        return \array_merge($files, $directories);
+        return array_merge($files, $directories);
     }
-    public function arePathsEmpty() : bool
+    public function arePathsEmpty(): bool
     {
         return $this->dynamicSourceLocatorProvider->arePathsEmpty();
     }

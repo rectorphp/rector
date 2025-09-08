@@ -26,7 +26,7 @@ class CallableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
         $this->returnType = $returnType;
         $this->templateTypes = $templateTypes;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $returnType = $this->returnType;
         if ($returnType instanceof self) {

@@ -5,6 +5,6 @@ namespace Symplify\RuleDocGenerator\Contract;
 
 interface CodeSampleInterface
 {
-    public function getGoodCode() : string;
-    public function getBadCode() : string;
+    public function getGoodCode(): string;
+    public function getBadCode(): string;
 }

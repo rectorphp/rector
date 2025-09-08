@@ -32,7 +32,7 @@ final class LiteralGetToRequestClassConstantRector extends AbstractRector
         $this->literalCallLikeConstFetchReplacer = $literalCallLikeConstFetchReplacer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace "GET" string by Symfony Request object class constants', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\FormBuilderInterface;
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof StaticCall) {
             return $this->refactorStaticCall($node);
@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($node, 0, SymfonyClass::REQUEST, SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
-    private function refactorStaticCall(StaticCall $staticCall) : ?\PhpParser\Node\Expr\StaticCall
+    private function refactorStaticCall(StaticCall $staticCall): ?\PhpParser\Node\Expr\StaticCall
     {
         if (!$this->isName($staticCall->name, 'create')) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($staticCall, 1, SymfonyClass::REQUEST, SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
-    private function refactorClientMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorClientMethodCall(MethodCall $methodCall): ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->isName($methodCall->name, 'request')) {
             return null;

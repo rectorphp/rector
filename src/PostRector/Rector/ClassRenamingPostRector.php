@@ -40,7 +40,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes) : array
+    public function beforeTraverse(array $nodes): array
     {
         if (!SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return $nodes;
@@ -58,12 +58,12 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @param Node[] $nodes
      * @return Stmt[]
      */
-    public function afterTraverse(array $nodes) : array
+    public function afterTraverse(array $nodes): array
     {
         $this->renamedNameCollector->reset();
         return $nodes;
     }
-    public function shouldTraverse(array $stmts) : bool
+    public function shouldTraverse(array $stmts): bool
     {
         $this->oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         return $this->oldToNewClasses !== [];

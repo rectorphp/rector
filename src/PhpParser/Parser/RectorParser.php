@@ -29,18 +29,18 @@ final class RectorParser
      *
      * @return Stmt[]
      */
-    public function parseFile(string $filePath) : array
+    public function parseFile(string $filePath): array
     {
         return $this->parser->parseFile($filePath);
     }
     /**
      * @return Stmt[]
      */
-    public function parseString(string $fileContent) : array
+    public function parseString(string $fileContent): array
     {
         return $this->parser->parseString($fileContent);
     }
-    public function parseFileContentToStmtsAndTokens(string $fileContent, bool $forNewestSupportedVersion = \true) : StmtsAndTokens
+    public function parseFileContentToStmtsAndTokens(string $fileContent, bool $forNewestSupportedVersion = \true): StmtsAndTokens
     {
         if (!$forNewestSupportedVersion) {
             // don't directly change PHPStan Parser service
@@ -53,7 +53,7 @@ final class RectorParser
         }
         return $this->resolveStmtsAndTokens($this->parser, $fileContent);
     }
-    private function resolveStmtsAndTokens(Parser $parser, string $fileContent) : StmtsAndTokens
+    private function resolveStmtsAndTokens(Parser $parser, string $fileContent): StmtsAndTokens
     {
         $stmts = $parser->parseString($fileContent);
         $innerParser = $this->privatesAccessor->getPrivateProperty($parser, 'parser');

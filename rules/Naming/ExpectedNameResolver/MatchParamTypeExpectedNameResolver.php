@@ -23,7 +23,7 @@ final class MatchParamTypeExpectedNameResolver
         $this->staticTypeMapper = $staticTypeMapper;
         $this->propertyNaming = $propertyNaming;
     }
-    public function resolve(Param $param) : ?string
+    public function resolve(Param $param): ?string
     {
         // nothing to verify
         if (!$param->type instanceof Node) {

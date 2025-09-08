@@ -64,7 +64,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
         $this->overrideFromAnonymousClassMethodAnalyzer = $overrideFromAnonymousClassMethodAnalyzer;
         $this->sealedClassAnalyzer = $sealedClassAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change param type to match the lowest type in whole family tree', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 interface SomeInterface
@@ -98,14 +98,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassLike::class];
     }
     /**
      * @param ClassLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $method) {
@@ -132,7 +132,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $unsafeTypesToMethods = $configuration;
         foreach ($unsafeTypesToMethods as $key => $value) {
@@ -141,7 +141,7 @@ CODE_SAMPLE
         }
         $this->unsafeTypesToMethods = $unsafeTypesToMethods;
     }
-    private function shouldSkip(ClassReflection $classReflection, ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
         if ($classMethod->params === []) {
             return \true;
@@ -163,7 +163,7 @@ CODE_SAMPLE
         }
         return $this->isSafeType($classReflection, $classMethod);
     }
-    private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod) : ?ClassMethod
+    private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod): ?ClassMethod
     {
         if ($this->shouldSkip($classReflection, $classMethod)) {
             return null;
@@ -172,12 +172,12 @@ CODE_SAMPLE
             return null;
         }
         // Downgrade every scalar parameter, just to be sure
-        foreach (\array_keys($classMethod->params) as $paramPosition) {
+        foreach (array_keys($classMethod->params) as $paramPosition) {
             $this->removeParamTypeFromMethod($classMethod, $paramPosition);
         }
         return $classMethod;
     }
-    private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition) : void
+    private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition): void
     {
         $param = $classMethod->params[$paramPosition] ?? null;
         if (!$param instanceof Param) {
@@ -187,7 +187,7 @@ CODE_SAMPLE
         $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
-    private function hasParamAlreadyNonTyped(ClassMethod $classMethod) : bool
+    private function hasParamAlreadyNonTyped(ClassMethod $classMethod): bool
     {
         foreach ($classMethod->params as $param) {
             if ($param->type !== null) {
@@ -196,7 +196,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod) : bool
+    private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
         if ($this->unsafeTypesToMethods === []) {
             return \false;

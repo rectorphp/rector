@@ -16,7 +16,7 @@ final class SetterGetterFinder
     {
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
     }
-    public function findGetterClassMethod(Class_ $class, string $propertyName) : ?ClassMethod
+    public function findGetterClassMethod(Class_ $class, string $propertyName): ?ClassMethod
     {
         foreach ($class->getMethods() as $classMethod) {
             if (!$this->classMethodAndPropertyAnalyzer->hasPropertyFetchReturn($classMethod, $propertyName)) {
@@ -26,7 +26,7 @@ final class SetterGetterFinder
         }
         return null;
     }
-    public function findSetterClassMethod(Class_ $class, string $propertyName) : ?ClassMethod
+    public function findSetterClassMethod(Class_ $class, string $propertyName): ?ClassMethod
     {
         foreach ($class->getMethods() as $classMethod) {
             if (!$this->classMethodAndPropertyAnalyzer->hasOnlyPropertyAssign($classMethod, $propertyName)) {

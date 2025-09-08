@@ -124,9 +124,9 @@ final class SecureServer extends EventEmitter implements ServerInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
-        if (!\function_exists('stream_socket_enable_crypto')) {
+        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202509\stream_socket_enable_crypto')) {
             throw new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)');
             // @codeCoverageIgnore
         }
@@ -136,10 +136,10 @@ final class SecureServer extends EventEmitter implements ServerInterface
         $this->encryption = new StreamEncryption($loop ?: Loop::get());
         $this->context = $context;
         $that = $this;
-        $this->tcp->on('connection', function ($connection) use($that) {
+        $this->tcp->on('connection', function ($connection) use ($that) {
             $that->handleConnection($connection);
         });
-        $this->tcp->on('error', function ($error) use($that) {
+        $this->tcp->on('error', function ($error) use ($that) {
             $that->emit('error', array($error));
         });
     }
@@ -177,9 +177,9 @@ final class SecureServer extends EventEmitter implements ServerInterface
         // get remote address before starting TLS handshake in case connection closes during handshake
         $remote = $connection->getRemoteAddress();
         $that = $this;
-        $this->encryption->enable($connection)->then(function ($conn) use($that) {
+        $this->encryption->enable($connection)->then(function ($conn) use ($that) {
             $that->emit('connection', array($conn));
-        }, function ($error) use($that, $connection, $remote) {
+        }, function ($error) use ($that, $connection, $remote) {
             $error = new \RuntimeException('Connection from ' . $remote . ' failed during TLS handshake: ' . $error->getMessage(), $error->getCode());
             $that->emit('error', array($error));
             $connection->close();

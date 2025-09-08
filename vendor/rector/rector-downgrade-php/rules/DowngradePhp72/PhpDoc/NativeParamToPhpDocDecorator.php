@@ -45,7 +45,7 @@ final class NativeParamToPhpDocDecorator
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->valueResolver = $valueResolver;
     }
-    public function decorate(ClassMethod $classMethod, Param $param) : void
+    public function decorate(ClassMethod $classMethod, Param $param): void
     {
         if (!$param->type instanceof Node) {
             return;
@@ -56,7 +56,7 @@ final class NativeParamToPhpDocDecorator
         $correctedNullableParamType = $this->correctNullableType($param, $mappedCurrentParamType);
         $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $correctedNullableParamType, $param, $paramName);
     }
-    private function isParamNullable(Param $param) : bool
+    private function isParamNullable(Param $param): bool
     {
         if (!$param->default instanceof Expr) {
             return \false;

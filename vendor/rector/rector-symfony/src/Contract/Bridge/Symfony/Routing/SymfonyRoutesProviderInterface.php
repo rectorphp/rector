@@ -9,5 +9,5 @@ interface SymfonyRoutesProviderInterface
     /**
      * @return SymfonyRouteMetadata[]
      */
-    public function provide() : array;
+    public function provide(): array;
 }

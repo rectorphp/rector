@@ -25,7 +25,7 @@ final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor `call_user_func()` with arrow function to direct call', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -65,7 +65,7 @@ CODE_SAMPLE
         if (!$this->isName($node, 'call_user_func')) {
             return null;
         }
-        if (\count($node->args) !== 1) {
+        if (count($node->args) !== 1) {
             return null;
         }
         // change the node

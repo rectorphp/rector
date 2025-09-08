@@ -49,7 +49,7 @@ final class DowngradeMatchToSwitchRector extends AbstractRector
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade match() to switch()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -89,20 +89,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Echo_::class, Expression::class, Return_::class];
     }
     /**
      * @param Echo_|Expression|Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         /** @var Match_|null $match */
         $match = null;
         $hasChanged = \false;
         $scope = ScopeFetcher::fetch($node);
-        $this->traverseNodesWithCallable($node, function (Node $subNode) use($node, &$match, &$hasChanged, $scope) {
+        $this->traverseNodesWithCallable($node, function (Node $subNode) use ($node, &$match, &$hasChanged, $scope) {
             if (($subNode instanceof ArrayItem || $subNode instanceof Arg) && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
                 $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value, \true);
                 $switch = new Switch_($subNode->value->cond, $switchCases);
@@ -163,7 +163,7 @@ CODE_SAMPLE
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match);
         return new Switch_($match->cond, $switchCases);
     }
-    private function isEqualScope(Match_ $match, ?Scope $containerScope) : bool
+    private function isEqualScope(Match_ $match, ?Scope $containerScope): bool
     {
         $matchScope = $match->getAttribute(AttributeKey::SCOPE);
         if (!$matchScope instanceof Scope) {
@@ -208,11 +208,11 @@ CODE_SAMPLE
      * @return Case_[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchCasesFromMatchArms($node, Match_ $match, bool $isInsideArrayItem = \false) : array
+    private function createSwitchCasesFromMatchArms($node, Match_ $match, bool $isInsideArrayItem = \false): array
     {
         $switchCases = [];
         foreach ($match->arms as $matchArm) {
-            if (\count((array) $matchArm->conds) > 1) {
+            if (count((array) $matchArm->conds) > 1) {
                 $lastCase = null;
                 foreach ((array) $matchArm->conds as $matchArmCond) {
                     $lastCase = new Case_($matchArmCond);
@@ -231,7 +231,7 @@ CODE_SAMPLE
      * @return Stmt[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchStmts($node, MatchArm $matchArm, bool $isInsideArrayItem) : array
+    private function createSwitchStmts($node, MatchArm $matchArm, bool $isInsideArrayItem): array
     {
         $stmts = [];
         if ($isInsideArrayItem) {
@@ -262,11 +262,11 @@ CODE_SAMPLE
         }
         return $stmts;
     }
-    private function replicateBinaryOp(BinaryOp $binaryOp, Expr $expr) : Return_
+    private function replicateBinaryOp(BinaryOp $binaryOp, Expr $expr): Return_
     {
         $newExpr = clone $binaryOp;
         // remove the match statement from the binary operation
-        $this->traverseNodesWithCallable($newExpr, static function (Node $node) use($expr) : ?Expr {
+        $this->traverseNodesWithCallable($newExpr, static function (Node $node) use ($expr): ?Expr {
             if ($node instanceof Match_) {
                 return $expr;
             }

@@ -15,22 +15,22 @@ final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMa
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
-        return \is_string($value);
+        return is_string($value);
     }
     /**
      * @param string $value
      */
-    public function map($value) : Expr
+    public function map($value): Expr
     {
-        if (\strpos($value, "'") !== \false && \strpos($value, "\n") === \false) {
+        if (strpos($value, "'") !== \false && strpos($value, "\n") === \false) {
             $kind = String_::KIND_DOUBLE_QUOTED;
         } else {
             $kind = String_::KIND_SINGLE_QUOTED;
         }
-        if (\strncmp($value, '"', \strlen('"')) === 0 && \substr_compare($value, '"', -\strlen('"')) === 0) {
-            $value = \trim($value, '"');
+        if (strncmp($value, '"', strlen('"')) === 0 && substr_compare($value, '"', -strlen('"')) === 0) {
+            $value = trim($value, '"');
         }
         return new String_($value, [AttributeKey::KIND => $kind]);
     }

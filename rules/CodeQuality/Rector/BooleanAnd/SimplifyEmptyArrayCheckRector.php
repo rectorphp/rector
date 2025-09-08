@@ -28,21 +28,21 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify `is_array` and `empty` functions combination into a simple identical check for an empty array', [new CodeSample('is_array($values) && empty($values)', '$values === []')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanAnd::class];
     }
     /**
      * @param BooleanAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $twoNodeMatch = $this->resolveTwoNodeMatch($node);
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
@@ -61,12 +61,12 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         }
         return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
     }
-    private function resolveTwoNodeMatch(BooleanAnd $booleanAnd) : ?TwoNodeMatch
+    private function resolveTwoNodeMatch(BooleanAnd $booleanAnd): ?TwoNodeMatch
     {
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $booleanAnd,
             // is_array(...)
-            function (Node $node) : bool {
+            function (Node $node): bool {
                 if (!$node instanceof FuncCall) {
                     return \false;
                 }
@@ -82,7 +82,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
                 return \false;
             },
             // empty(...)
-            function (Node $node) : bool {
+            function (Node $node): bool {
                 if (!$node instanceof Empty_) {
                     return \false;
                 }

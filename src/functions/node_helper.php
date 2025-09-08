@@ -13,7 +13,7 @@ if (!\function_exists('print_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function print_node($node) : void
+    function print_node($node): void
     {
         $standard = new Standard();
         $nodes = \is_array($node) ? $node : [$node];
@@ -27,7 +27,7 @@ if (!\function_exists('dump_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function dump_node($node) : void
+    function dump_node($node): void
     {
         $rectorStyle = Container::getInstance()->make(SymfonyStyleFactory::class)->create();
         // we turn up the verbosity so it's visible in tests overriding the

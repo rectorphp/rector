@@ -18,7 +18,7 @@ class BuilderFactory
      * @param string|Name $name Name of the attribute
      * @param array $args Attribute named arguments
      */
-    public function attribute($name, array $args = []) : \PhpParser\Node\Attribute
+    public function attribute($name, array $args = []): \PhpParser\Node\Attribute
     {
         return new \PhpParser\Node\Attribute(\PhpParser\BuilderHelpers::normalizeName($name), $this->args($args));
     }
@@ -29,7 +29,7 @@ class BuilderFactory
      *
      * @return Builder\Namespace_ The created namespace builder
      */
-    public function namespace($name) : \PhpParser\Builder\Namespace_
+    public function namespace($name): \PhpParser\Builder\Namespace_
     {
         return new \PhpParser\Builder\Namespace_($name);
     }
@@ -40,7 +40,7 @@ class BuilderFactory
      *
      * @return Builder\Class_ The created class builder
      */
-    public function class(string $name) : \PhpParser\Builder\Class_
+    public function class(string $name): \PhpParser\Builder\Class_
     {
         return new \PhpParser\Builder\Class_($name);
     }
@@ -51,7 +51,7 @@ class BuilderFactory
      *
      * @return Builder\Interface_ The created interface builder
      */
-    public function interface(string $name) : \PhpParser\Builder\Interface_
+    public function interface(string $name): \PhpParser\Builder\Interface_
     {
         return new \PhpParser\Builder\Interface_($name);
     }
@@ -62,7 +62,7 @@ class BuilderFactory
      *
      * @return Builder\Trait_ The created trait builder
      */
-    public function trait(string $name) : \PhpParser\Builder\Trait_
+    public function trait(string $name): \PhpParser\Builder\Trait_
     {
         return new \PhpParser\Builder\Trait_($name);
     }
@@ -73,7 +73,7 @@ class BuilderFactory
      *
      * @return Builder\Enum_ The created enum builder
      */
-    public function enum(string $name) : \PhpParser\Builder\Enum_
+    public function enum(string $name): \PhpParser\Builder\Enum_
     {
         return new \PhpParser\Builder\Enum_($name);
     }
@@ -84,7 +84,7 @@ class BuilderFactory
      *
      * @return Builder\TraitUse The created trait use builder
      */
-    public function useTrait(...$traits) : \PhpParser\Builder\TraitUse
+    public function useTrait(...$traits): \PhpParser\Builder\TraitUse
     {
         return new \PhpParser\Builder\TraitUse(...$traits);
     }
@@ -96,7 +96,7 @@ class BuilderFactory
      *
      * @return Builder\TraitUseAdaptation The created trait use adaptation builder
      */
-    public function traitUseAdaptation($trait, $method = null) : \PhpParser\Builder\TraitUseAdaptation
+    public function traitUseAdaptation($trait, $method = null): \PhpParser\Builder\TraitUseAdaptation
     {
         if ($method === null) {
             $method = $trait;
@@ -111,7 +111,7 @@ class BuilderFactory
      *
      * @return Builder\Method The created method builder
      */
-    public function method(string $name) : \PhpParser\Builder\Method
+    public function method(string $name): \PhpParser\Builder\Method
     {
         return new \PhpParser\Builder\Method($name);
     }
@@ -122,7 +122,7 @@ class BuilderFactory
      *
      * @return Builder\Param The created parameter builder
      */
-    public function param(string $name) : \PhpParser\Builder\Param
+    public function param(string $name): \PhpParser\Builder\Param
     {
         return new \PhpParser\Builder\Param($name);
     }
@@ -133,7 +133,7 @@ class BuilderFactory
      *
      * @return Builder\Property The created property builder
      */
-    public function property(string $name) : \PhpParser\Builder\Property
+    public function property(string $name): \PhpParser\Builder\Property
     {
         return new \PhpParser\Builder\Property($name);
     }
@@ -144,7 +144,7 @@ class BuilderFactory
      *
      * @return Builder\Function_ The created function builder
      */
-    public function function(string $name) : \PhpParser\Builder\Function_
+    public function function(string $name): \PhpParser\Builder\Function_
     {
         return new \PhpParser\Builder\Function_($name);
     }
@@ -155,7 +155,7 @@ class BuilderFactory
      *
      * @return Builder\Use_ The created use builder
      */
-    public function use($name) : \PhpParser\Builder\Use_
+    public function use($name): \PhpParser\Builder\Use_
     {
         return new \PhpParser\Builder\Use_($name, Use_::TYPE_NORMAL);
     }
@@ -166,7 +166,7 @@ class BuilderFactory
      *
      * @return Builder\Use_ The created use function builder
      */
-    public function useFunction($name) : \PhpParser\Builder\Use_
+    public function useFunction($name): \PhpParser\Builder\Use_
     {
         return new \PhpParser\Builder\Use_($name, Use_::TYPE_FUNCTION);
     }
@@ -177,7 +177,7 @@ class BuilderFactory
      *
      * @return Builder\Use_ The created use const builder
      */
-    public function useConst($name) : \PhpParser\Builder\Use_
+    public function useConst($name): \PhpParser\Builder\Use_
     {
         return new \PhpParser\Builder\Use_($name, Use_::TYPE_CONSTANT);
     }
@@ -189,7 +189,7 @@ class BuilderFactory
      *
      * @return Builder\ClassConst The created use const builder
      */
-    public function classConst($name, $value) : \PhpParser\Builder\ClassConst
+    public function classConst($name, $value): \PhpParser\Builder\ClassConst
     {
         return new \PhpParser\Builder\ClassConst($name, $value);
     }
@@ -200,7 +200,7 @@ class BuilderFactory
      *
      * @return Builder\EnumCase The created use const builder
      */
-    public function enumCase($name) : \PhpParser\Builder\EnumCase
+    public function enumCase($name): \PhpParser\Builder\EnumCase
     {
         return new \PhpParser\Builder\EnumCase($name);
     }
@@ -209,7 +209,7 @@ class BuilderFactory
      *
      * @param Expr|bool|null|int|float|string|array|\UnitEnum $value $value
      */
-    public function val($value) : Expr
+    public function val($value): Expr
     {
         return \PhpParser\BuilderHelpers::normalizeValue($value);
     }
@@ -218,7 +218,7 @@ class BuilderFactory
      *
      * @param string|Expr $name Name
      */
-    public function var($name) : Expr\Variable
+    public function var($name): Expr\Variable
     {
         if (!\is_string($name) && !$name instanceof Expr) {
             throw new \LogicException('Variable name must be string or Expr');
@@ -234,7 +234,7 @@ class BuilderFactory
      *
      * @return list<Arg>
      */
-    public function args(array $args) : array
+    public function args(array $args): array
     {
         $normalizedArgs = [];
         foreach ($args as $key => $arg) {
@@ -254,7 +254,7 @@ class BuilderFactory
      * @param string|Name|Expr $name Function name
      * @param array $args Function arguments
      */
-    public function funcCall($name, array $args = []) : Expr\FuncCall
+    public function funcCall($name, array $args = []): Expr\FuncCall
     {
         return new Expr\FuncCall(\PhpParser\BuilderHelpers::normalizeNameOrExpr($name), $this->args($args));
     }
@@ -265,7 +265,7 @@ class BuilderFactory
      * @param string|Identifier|Expr $name Method name
      * @param array $args Method arguments
      */
-    public function methodCall(Expr $var, $name, array $args = []) : Expr\MethodCall
+    public function methodCall(Expr $var, $name, array $args = []): Expr\MethodCall
     {
         return new Expr\MethodCall($var, \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name), $this->args($args));
     }
@@ -276,7 +276,7 @@ class BuilderFactory
      * @param string|Identifier|Expr $name Method name
      * @param array $args Method arguments
      */
-    public function staticCall($class, $name, array $args = []) : Expr\StaticCall
+    public function staticCall($class, $name, array $args = []): Expr\StaticCall
     {
         return new Expr\StaticCall(\PhpParser\BuilderHelpers::normalizeNameOrExpr($class), \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name), $this->args($args));
     }
@@ -286,7 +286,7 @@ class BuilderFactory
      * @param string|Name|Expr $class Class name
      * @param array $args Constructor arguments
      */
-    public function new($class, array $args = []) : Expr\New_
+    public function new($class, array $args = []): Expr\New_
     {
         return new Expr\New_(\PhpParser\BuilderHelpers::normalizeNameOrExpr($class), $this->args($args));
     }
@@ -295,7 +295,7 @@ class BuilderFactory
      *
      * @param string|Name $name Constant name
      */
-    public function constFetch($name) : Expr\ConstFetch
+    public function constFetch($name): Expr\ConstFetch
     {
         return new Expr\ConstFetch(\PhpParser\BuilderHelpers::normalizeName($name));
     }
@@ -305,7 +305,7 @@ class BuilderFactory
      * @param Expr $var Variable holding object
      * @param string|Identifier|Expr $name Property name
      */
-    public function propertyFetch(Expr $var, $name) : Expr\PropertyFetch
+    public function propertyFetch(Expr $var, $name): Expr\PropertyFetch
     {
         return new Expr\PropertyFetch($var, \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name));
     }
@@ -315,7 +315,7 @@ class BuilderFactory
      * @param string|Name|Expr $class Class name
      * @param string|Identifier|Expr $name Constant name
      */
-    public function classConstFetch($class, $name) : Expr\ClassConstFetch
+    public function classConstFetch($class, $name): Expr\ClassConstFetch
     {
         return new Expr\ClassConstFetch(\PhpParser\BuilderHelpers::normalizeNameOrExpr($class), \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name));
     }
@@ -324,9 +324,9 @@ class BuilderFactory
      *
      * @param Expr|string ...$exprs Expressions or literal strings
      */
-    public function concat(...$exprs) : Concat
+    public function concat(...$exprs): Concat
     {
-        $numExprs = \count($exprs);
+        $numExprs = count($exprs);
         if ($numExprs < 2) {
             throw new \LogicException('Expected at least two expressions');
         }
@@ -339,7 +339,7 @@ class BuilderFactory
     /**
      * @param string|Expr $expr
      */
-    private function normalizeStringExpr($expr) : Expr
+    private function normalizeStringExpr($expr): Expr
     {
         if ($expr instanceof Expr) {
             return $expr;

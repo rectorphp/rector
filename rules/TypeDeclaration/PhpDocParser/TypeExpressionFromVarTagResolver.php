@@ -39,11 +39,11 @@ final class TypeExpressionFromVarTagResolver
     {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
-    public function resolveTypeExpressionFromVarTag(TypeNode $typeNode, Variable $variable) : ?Expr
+    public function resolveTypeExpressionFromVarTag(TypeNode $typeNode, Variable $variable): ?Expr
     {
         if ($typeNode instanceof IdentifierTypeNode) {
             $scalarType = $this->scalarStringToTypeMapper->mapScalarStringToType($typeNode->name);
-            $scalarTypeFunction = $this->getScalarTypeFunction(\get_class($scalarType));
+            $scalarTypeFunction = $this->getScalarTypeFunction(get_class($scalarType));
             if ($scalarTypeFunction !== null) {
                 $arg = new Arg($variable);
                 return new FuncCall(new Name($scalarTypeFunction), [$arg]);
@@ -65,7 +65,7 @@ final class TypeExpressionFromVarTagResolver
             }
             $unionExpressions[] = $nullableTypeExpression;
             $nullExpression = $this->resolveTypeExpressionFromVarTag(new IdentifierTypeNode('null'), $variable);
-            \assert($nullExpression instanceof Expr);
+            assert($nullExpression instanceof Expr);
             $unionExpressions[] = $nullExpression;
             return $this->generateOrExpression($unionExpressions);
         } elseif ($typeNode instanceof BracketsAwareUnionTypeNode) {
@@ -98,10 +98,10 @@ final class TypeExpressionFromVarTagResolver
     private function generateOrExpression(array $unionExpressions)
     {
         $booleanOr = new BooleanOr($unionExpressions[0], $unionExpressions[1]);
-        if (\count($unionExpressions) == 2) {
+        if (count($unionExpressions) == 2) {
             return $booleanOr;
         }
-        \array_splice($unionExpressions, 0, 2, [$booleanOr]);
+        array_splice($unionExpressions, 0, 2, [$booleanOr]);
         return $this->generateOrExpression($unionExpressions);
     }
     /**
@@ -111,16 +111,16 @@ final class TypeExpressionFromVarTagResolver
     private function generateAndExpression(array $intersectionExpressions)
     {
         $booleanAnd = new BooleanAnd($intersectionExpressions[0], $intersectionExpressions[1]);
-        if (\count($intersectionExpressions) == 2) {
+        if (count($intersectionExpressions) == 2) {
             return $booleanAnd;
         }
-        \array_splice($intersectionExpressions, 0, 2, [$booleanAnd]);
+        array_splice($intersectionExpressions, 0, 2, [$booleanAnd]);
         return $this->generateAndExpression($intersectionExpressions);
     }
     /**
      * @param class-string $className
      */
-    private function getScalarTypeFunction(string $className) : ?string
+    private function getScalarTypeFunction(string $className): ?string
     {
         switch ($className) {
             case IntegerType::class:

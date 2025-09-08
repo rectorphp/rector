@@ -14,6 +14,6 @@ interface PostRectorInterface extends NodeVisitor
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts) : bool;
-    public function setFile(File $file) : void;
+    public function shouldTraverse(array $stmts): bool;
+    public function setFile(File $file): void;
 }

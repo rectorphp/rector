@@ -35,13 +35,13 @@ final class Loop
         // This is tested using child processes, so coverage is actually 100%, see BinTest.
         // @codeCoverageIgnoreStart
         $hasRun = \false;
-        $loop->futureTick(function () use(&$hasRun) {
+        $loop->futureTick(function () use (&$hasRun) {
             $hasRun = \true;
         });
         $stopped =& self::$stopped;
-        \register_shutdown_function(function () use($loop, &$hasRun, &$stopped) {
+        register_shutdown_function(function () use ($loop, &$hasRun, &$stopped) {
             // Don't run if we're coming from a fatal error (uncaught exception).
-            $error = \error_get_last();
+            $error = error_get_last();
             if ((isset($error['type']) ? $error['type'] : 0) & (\E_ERROR | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR)) {
                 return;
             }

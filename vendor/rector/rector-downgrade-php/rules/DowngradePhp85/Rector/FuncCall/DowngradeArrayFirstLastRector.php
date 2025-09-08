@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeArrayFirstLastRector extends AbstractRector
 {
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace array_first() and array_last() with $array[array_key_first($array)] and $array[array_key_last($array)]', [new CodeSample(<<<'CODE_SAMPLE'
 echo array_first($array);
@@ -34,7 +34,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isNames($node, ['array_first', 'array_last'])) {
             return null;
@@ -43,7 +43,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 1) {
+        if (count($args) !== 1) {
             return null;
         }
         $functionName = $this->isName($node, 'array_first') ? 'array_key_first' : 'array_key_last';

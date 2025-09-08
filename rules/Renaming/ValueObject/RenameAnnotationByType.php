@@ -27,15 +27,15 @@ final class RenameAnnotationByType implements RenameAnnotationInterface
         $this->newAnnotation = $newAnnotation;
         RectorAssert::className($type);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->type);
     }
-    public function getOldAnnotation() : string
+    public function getOldAnnotation(): string
     {
         return $this->oldAnnotation;
     }
-    public function getNewAnnotation() : string
+    public function getNewAnnotation(): string
     {
         return $this->newAnnotation;
     }

@@ -57,18 +57,18 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return IdentifierTypeNode::class;
     }
     /**
      * @param IdentifierTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         return $this->mapIdentifierTypeNode($typeNode, $node);
     }
-    public function mapIdentifierTypeNode(IdentifierTypeNode $identifierTypeNode, Node $node) : Type
+    public function mapIdentifierTypeNode(IdentifierTypeNode $identifierTypeNode, Node $node): Type
     {
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($identifierTypeNode->name);
         if (!$type instanceof MixedType) {
@@ -77,7 +77,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
         if ($type->isExplicitMixed()) {
             return $type;
         }
-        $loweredName = \strtolower($identifierTypeNode->name);
+        $loweredName = strtolower($identifierTypeNode->name);
         if ($loweredName === ObjectReference::SELF) {
             return $this->mapSelf($node);
         }
@@ -91,7 +91,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
             return new IterableType(new MixedType(), new MixedType());
         }
         $withPreslash = \false;
-        if (\strncmp($identifierTypeNode->name, '\\', \strlen('\\')) === 0) {
+        if (strncmp($identifierTypeNode->name, '\\', strlen('\\')) === 0) {
             $typeWithoutPreslash = Strings::substring($identifierTypeNode->name, 1);
             $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
             $withPreslash = \true;
@@ -101,7 +101,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
                 $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
                 return new UnionType($scalarTypes);
             }
-            $identifierTypeNode->name = \ltrim($identifierTypeNode->name, '@');
+            $identifierTypeNode->name = ltrim($identifierTypeNode->name, '@');
             $objectType = new ObjectType($identifierTypeNode->name);
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
@@ -114,7 +114,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
     {
         // @todo check FQN
         $className = $this->resolveClassName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             // self outside the class, e.g. in a function
             return new MixedType();
         }
@@ -126,7 +126,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
     private function mapParent(Node $node)
     {
         $className = $this->resolveClassName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             // parent outside the class, e.g. in a function
             return new MixedType();
         }
@@ -146,7 +146,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
     private function mapStatic(Node $node)
     {
         $className = $this->resolveClassName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             // static outside the class, e.g. in a function
             return new MixedType();
         }
@@ -156,7 +156,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
         $classReflection = $this->reflectionProvider->getClass($className);
         return new StaticType($classReflection);
     }
-    private function resolveClassName(Node $node) : ?string
+    private function resolveClassName(Node $node): ?string
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {

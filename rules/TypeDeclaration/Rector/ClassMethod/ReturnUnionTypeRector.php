@@ -26,7 +26,7 @@ final class ReturnUnionTypeRector extends AbstractRector implements MinPhpVersio
     {
         $this->addUnionReturnType = $addUnionReturnType;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add union return type', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -67,18 +67,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::UNION_TYPES;
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         return $this->addUnionReturnType->add($node, $scope);

@@ -21,12 +21,12 @@ final class CollectionTypeDetector
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isCollectionNonNullableType(Expr $expr) : bool
+    public function isCollectionNonNullableType(Expr $expr): bool
     {
         $exprType = $this->nodeTypeResolver->getType($expr);
         return $this->isCollectionObjectType($exprType);
     }
-    public function isCollectionType(Expr $expr) : bool
+    public function isCollectionType(Expr $expr): bool
     {
         $exprType = $this->nodeTypeResolver->getType($expr);
         if ($exprType instanceof IntersectionType) {
@@ -42,7 +42,7 @@ final class CollectionTypeDetector
         }
         return $this->isCollectionObjectType($exprType);
     }
-    private function isCollectionObjectType(Type $exprType) : bool
+    private function isCollectionObjectType(Type $exprType): bool
     {
         if ($exprType instanceof IntersectionType) {
             foreach ($exprType->getTypes() as $intersectionedType) {

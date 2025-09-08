@@ -9,7 +9,7 @@ use Rector\ValueObject\Application\File;
 use RectorPrefix202509\Webmozart\Assert\Assert;
 final class AttributeGroupNewLiner
 {
-    public function newLine(File $file, Node $node) : void
+    public function newLine(File $file, Node $node): void
     {
         $attrGroups = $node->attrGroups ?? [];
         if ($attrGroups === []) {
@@ -26,7 +26,7 @@ final class AttributeGroupNewLiner
             return;
         }
         $iteration = 1;
-        $lastKey = \array_key_last($attrGroups);
+        $lastKey = array_key_last($attrGroups);
         if ($lastKey === null) {
             return;
         }
@@ -36,10 +36,10 @@ final class AttributeGroupNewLiner
                 if ($oldTokens[$startTokenPos + $iteration]->text !== ']') {
                     break;
                 }
-                if (\trim($oldTokens[$startTokenPos + $iteration + 1]->text ?? '') === '') {
-                    $space = \ltrim($oldTokens[$startTokenPos + $iteration + 1]->text ?? '', "\r\n");
-                } elseif (\trim($oldTokens[$startTokenPos - 1]->text ?? '') === '') {
-                    $space = \ltrim($oldTokens[$startTokenPos - 1]->text ?? '', "\r\n");
+                if (trim($oldTokens[$startTokenPos + $iteration + 1]->text ?? '') === '') {
+                    $space = ltrim($oldTokens[$startTokenPos + $iteration + 1]->text ?? '', "\r\n");
+                } elseif (trim($oldTokens[$startTokenPos - 1]->text ?? '') === '') {
+                    $space = ltrim($oldTokens[$startTokenPos - 1]->text ?? '', "\r\n");
                 } else {
                     $space = '';
                 }

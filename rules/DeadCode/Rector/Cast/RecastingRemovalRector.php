@@ -58,7 +58,7 @@ final class RecastingRemovalRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove recasting of the same type', [new CodeSample(<<<'CODE_SAMPLE'
 $string = '';
@@ -79,16 +79,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Cast::class];
     }
     /**
      * @param Cast $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        $nodeClass = \get_class($node);
+        $nodeClass = get_class($node);
         if (!isset(self::CAST_CLASS_TO_NODE_TYPE[$nodeClass])) {
             return null;
         }
@@ -117,7 +117,7 @@ CODE_SAMPLE
         }
         return $node->expr;
     }
-    private function shouldSkipCall(Expr $expr) : bool
+    private function shouldSkipCall(Expr $expr): bool
     {
         if (!$expr instanceof MethodCall && !$expr instanceof StaticCall) {
             return \false;
@@ -125,7 +125,7 @@ CODE_SAMPLE
         $type = $this->nodeTypeResolver->getNativeType($expr);
         return $type instanceof MixedType && !$type->isExplicitMixed();
     }
-    private function shouldSkip(Expr $expr) : bool
+    private function shouldSkip(Expr $expr): bool
     {
         $type = $this->getType($expr);
         if ($type instanceof UnionType) {

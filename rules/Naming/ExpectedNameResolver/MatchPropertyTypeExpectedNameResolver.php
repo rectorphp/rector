@@ -52,7 +52,7 @@ final class MatchPropertyTypeExpectedNameResolver
         $this->reflectionResolver = $reflectionResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function resolve(Property $property, ClassLike $classLike) : ?string
+    public function resolve(Property $property, ClassLike $classLike): ?string
     {
         if (!$classLike instanceof Class_) {
             return null;
@@ -70,12 +70,12 @@ final class MatchPropertyTypeExpectedNameResolver
             return null;
         }
         // skip if already has suffix
-        if (\substr_compare($propertyName, $expectedName->getName(), -\strlen($expectedName->getName())) === 0 || \substr_compare($propertyName, \ucfirst($expectedName->getName()), -\strlen(\ucfirst($expectedName->getName()))) === 0) {
+        if (substr_compare($propertyName, $expectedName->getName(), -strlen($expectedName->getName())) === 0 || substr_compare($propertyName, ucfirst($expectedName->getName()), -strlen(ucfirst($expectedName->getName()))) === 0) {
             return null;
         }
         return $expectedName->getName();
     }
-    private function resolveExpectedName(Property $property) : ?ExpectedName
+    private function resolveExpectedName(Property $property): ?ExpectedName
     {
         // property type first
         if ($property->type instanceof Node) {

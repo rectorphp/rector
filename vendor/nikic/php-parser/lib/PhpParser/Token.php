@@ -9,12 +9,12 @@ namespace PhpParser;
 class Token extends \PhpParser\Internal\TokenPolyfill
 {
     /** Get (exclusive) zero-based end position of the token. */
-    public function getEndPos() : int
+    public function getEndPos(): int
     {
         return $this->pos + \strlen($this->text);
     }
     /** Get 1-based end line number of the token. */
-    public function getEndLine() : int
+    public function getEndLine(): int
     {
         return $this->line + \substr_count($this->text, "\n");
     }

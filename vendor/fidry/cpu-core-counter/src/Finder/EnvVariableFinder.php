@@ -23,29 +23,29 @@ final class EnvVariableFinder implements CpuCoreFinder
     {
         $this->environmentVariableName = $environmentVariableName;
     }
-    public function diagnose() : string
+    public function diagnose(): string
     {
         $value = getenv($this->environmentVariableName);
         return sprintf('parse(getenv(%s)=%s)=%s', $this->environmentVariableName, var_export($value, \true), self::isPositiveInteger($value) ? $value : 'null');
     }
-    public function find() : ?int
+    public function find(): ?int
     {
         $value = getenv($this->environmentVariableName);
-        if (\is_string($value) && 1 === preg_match('/^(\\d+)m$/', $value, $matches)) {
+        if (is_string($value) && 1 === preg_match('/^(\d+)m$/', $value, $matches)) {
             $millicores = $matches[1];
-            $value = (string) \floor($millicores / 1000);
+            $value = (string) floor($millicores / 1000);
         }
         return self::isPositiveInteger($value) ? (int) $value : null;
     }
-    public function toString() : string
+    public function toString(): string
     {
         return sprintf('getenv(%s)', $this->environmentVariableName);
     }
     /**
      * @param string|false $value
      */
-    private static function isPositiveInteger($value) : bool
+    private static function isPositiveInteger($value): bool
     {
-        return \false !== $value && 1 === preg_match('/^\\d+$/', $value) && (int) $value > 0;
+        return \false !== $value && 1 === preg_match('/^\d+$/', $value) && (int) $value > 0;
     }
 }

@@ -41,7 +41,7 @@ final class ResponseStatusCodeRector extends AbstractRector
         $this->literalCallLikeConstFetchReplacer = $literalCallLikeConstFetchReplacer;
         $this->responseObjectType = new ObjectType(ResponseClass::BASIC);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns status code numbers to constants', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation\Response;
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BinaryOp::class, MethodCall::class, New_::class];
     }
     /**
      * @param BinaryOp|MethodCall|New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof New_) {
             return $this->processNew($node);
@@ -95,13 +95,13 @@ CODE_SAMPLE
         }
         return $this->processBinaryOp($node);
     }
-    private function processMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\CallLike
+    private function processMethodCall(MethodCall $methodCall): ?\PhpParser\Node\Expr\CallLike
     {
         $methodCallName = $this->getName($methodCall->name);
-        if (!\is_string($methodCallName)) {
+        if (!is_string($methodCallName)) {
             return null;
         }
-        if (\strncmp($methodCallName, 'assert', \strlen('assert')) === 0) {
+        if (strncmp($methodCallName, 'assert', strlen('assert')) === 0) {
             return $this->processAssertMethodCall($methodCall);
         }
         if ($methodCallName === 'redirect') {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, ResponseClass::BASIC, SymfonyResponseConstantMap::CODE_TO_CONST);
     }
-    private function processBinaryOp(BinaryOp $binaryOp) : ?BinaryOp
+    private function processBinaryOp(BinaryOp $binaryOp): ?BinaryOp
     {
         if (!$this->isGetStatusMethod($binaryOp->left) && !$this->isGetStatusMethod($binaryOp->right)) {
             return null;
@@ -130,7 +130,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isGetStatusMethod(Node $node) : bool
+    private function isGetStatusMethod(Node $node): bool
     {
         if (!$node instanceof MethodCall) {
             return \false;
@@ -150,7 +150,7 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createClassConstFetch($this->responseObjectType->getClassName(), SymfonyResponseConstantMap::CODE_TO_CONST[$int->value]);
     }
-    private function processAssertMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function processAssertMethodCall(MethodCall $methodCall): ?\PhpParser\Node\Expr\MethodCall
     {
         $args = $methodCall->getArgs();
         if (!isset($args[1])) {
@@ -162,14 +162,14 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, ResponseClass::BASIC, SymfonyResponseConstantMap::CODE_TO_CONST);
     }
-    private function processRedirectMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function processRedirectMethodCall(MethodCall $methodCall): ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->controllerAnalyzer->isController($methodCall->var)) {
             return null;
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 1, ResponseClass::BASIC, SymfonyResponseConstantMap::CODE_TO_CONST);
     }
-    private function processNew(New_ $new) : ?\PhpParser\Node\Expr\New_
+    private function processNew(New_ $new): ?\PhpParser\Node\Expr\New_
     {
         if (!$this->isObjectType($new->class, $this->responseObjectType)) {
             return null;

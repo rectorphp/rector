@@ -31,7 +31,7 @@ final class InlineConstructorDefaultToPropertyRector extends AbstractRector
     {
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move property default from constructor to property default', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
@@ -89,7 +89,7 @@ CODE_SAMPLE
             }
             $assign = $stmt->expr;
             $propertyName = $this->matchAssignedLocalPropertyName($assign);
-            if (!\is_string($propertyName)) {
+            if (!is_string($propertyName)) {
                 continue;
             }
             $defaultExpr = $assign->expr;
@@ -106,7 +106,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function matchAssignedLocalPropertyName(Assign $assign) : ?string
+    private function matchAssignedLocalPropertyName(Assign $assign): ?string
     {
         if (!$assign->var instanceof PropertyFetch) {
             return null;
@@ -116,12 +116,12 @@ CODE_SAMPLE
             return null;
         }
         $propertyName = $this->getName($propertyFetch->name);
-        if (!\is_string($propertyName)) {
+        if (!is_string($propertyName)) {
             return null;
         }
         return $propertyName;
     }
-    private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key) : bool
+    private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key): bool
     {
         if ($class->isReadonly()) {
             return \false;
@@ -139,7 +139,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $propertyProperty->default = $defaultExpr;
-                $classStmt->setAttribute(AttributeKey::COMMENTS, \array_merge($classStmt->getComments(), isset($constructClassMethod->stmts[$key]) ? $constructClassMethod->stmts[$key]->getComments() : []));
+                $classStmt->setAttribute(AttributeKey::COMMENTS, array_merge($classStmt->getComments(), isset($constructClassMethod->stmts[$key]) ? $constructClassMethod->stmts[$key]->getComments() : []));
                 // remove assign
                 unset($constructClassMethod->stmts[$key]);
                 return \true;

@@ -33,7 +33,7 @@ final class StrictNativeFunctionReturnTypeAnalyzer
      * @return CallLike[]|null
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function matchAlwaysReturnNativeCallLikes($functionLike) : ?array
+    public function matchAlwaysReturnNativeCallLikes($functionLike): ?array
     {
         if ($functionLike->stmts === null) {
             return null;

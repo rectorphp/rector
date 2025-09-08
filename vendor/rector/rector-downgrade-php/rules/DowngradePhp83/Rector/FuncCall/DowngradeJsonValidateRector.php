@@ -43,7 +43,7 @@ final class DowngradeJsonValidateRector extends AbstractRector
         $this->inlineCodeParser = $inlineCodeParser;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace json_validate() function', [new CodeSample(<<<'CODE_SAMPLE'
 json_validate('{"foo": "bar"}');
@@ -78,7 +78,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
     }
@@ -86,9 +86,9 @@ CODE_SAMPLE
      * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
-        $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+        $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
@@ -104,7 +104,7 @@ CODE_SAMPLE
         $expr->name = $variable;
         return [$expression, $node];
     }
-    private function createClosure() : Closure
+    private function createClosure(): Closure
     {
         if ($this->cachedClosure instanceof Closure) {
             return clone $this->cachedClosure;
@@ -119,7 +119,7 @@ CODE_SAMPLE
         $this->cachedClosure = $expr;
         return $expr;
     }
-    private function shouldSkip(CallLike $callLike) : bool
+    private function shouldSkip(CallLike $callLike): bool
     {
         if (!$callLike instanceof FuncCall) {
             return \false;
@@ -135,6 +135,6 @@ CODE_SAMPLE
             return \true;
         }
         $args = $callLike->getArgs();
-        return \count($args) < 1;
+        return count($args) < 1;
     }
 }

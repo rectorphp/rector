@@ -30,7 +30,7 @@ final class ExtUvLoop implements LoopInterface
     private $streamListener;
     public function __construct()
     {
-        if (!\function_exists('uv_loop_new')) {
+        if (!\function_exists('uv_loop_new') && !\function_exists('RectorPrefix202509\uv_loop_new')) {
             throw new \BadMethodCallException('Cannot create LibUvLoop, ext-uv extension missing');
         }
         $this->uv = \uv_loop_new();
@@ -102,7 +102,7 @@ final class ExtUvLoop implements LoopInterface
         $timer = new Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timers;
-        $callback = function () use($timer, $timers, $that) {
+        $callback = function () use ($timer, $timers, $that) {
             \call_user_func($timer->getCallback(), $timer);
             if ($timers->contains($timer)) {
                 $that->cancelTimer($timer);
@@ -119,7 +119,7 @@ final class ExtUvLoop implements LoopInterface
     public function addPeriodicTimer($interval, $callback)
     {
         $timer = new Timer($interval, $callback, \true);
-        $callback = function () use($timer) {
+        $callback = function () use ($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
         $interval = $this->convertFloatSecondsToMilliseconds($interval);
@@ -151,7 +151,7 @@ final class ExtUvLoop implements LoopInterface
         if (!isset($this->signalEvents[$signal])) {
             $signals = $this->signals;
             $this->signalEvents[$signal] = \uv_signal_init($this->uv);
-            \uv_signal_start($this->signalEvents[$signal], function () use($signals, $signal) {
+            \uv_signal_start($this->signalEvents[$signal], function () use ($signals, $signal) {
                 $signals->call($signal);
             }, $signal);
         }

@@ -17,7 +17,7 @@ final class EmptyReturnNodeFinder
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function hasNoOrEmptyReturns(ClassMethod $classMethod) : bool
+    public function hasNoOrEmptyReturns(ClassMethod $classMethod): bool
     {
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);

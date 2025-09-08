@@ -14,21 +14,21 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
  */
 final class ThisTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return ThisType::class;
     }
     /**
      * @param ThisType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
     /**
      * @param ThisType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): Node
     {
         return new Name('self');
     }

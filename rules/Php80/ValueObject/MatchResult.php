@@ -19,11 +19,11 @@ final class MatchResult
         $this->match = $match;
         $this->shouldRemoveNextStmt = $shouldRemoveNextStmt;
     }
-    public function getMatch() : Match_
+    public function getMatch(): Match_
     {
         return $this->match;
     }
-    public function shouldRemoveNextStmt() : bool
+    public function shouldRemoveNextStmt(): bool
     {
         return $this->shouldRemoveNextStmt;
     }

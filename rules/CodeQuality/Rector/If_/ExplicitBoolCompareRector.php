@@ -58,7 +58,7 @@ final class ExplicitBoolCompareRector extends AbstractRector
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make if conditions more explicit', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeController
@@ -87,7 +87,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class, ElseIf_::class, Ternary::class];
     }
@@ -178,7 +178,7 @@ CODE_SAMPLE
     /**
      * @return Identical|NotIdentical|null
      */
-    private function resolveArray(bool $isNegated, Expr $expr) : ?BinaryOp
+    private function resolveArray(bool $isNegated, Expr $expr): ?BinaryOp
     {
         if (!$expr instanceof Variable) {
             return null;
@@ -202,7 +202,7 @@ CODE_SAMPLE
         if ($value === null) {
             return $this->resolveZeroIdenticalString($identical, $isNegated, $expr);
         }
-        $length = \strlen((string) $value);
+        $length = strlen((string) $value);
         if ($length === 1) {
             $zeroString = new String_('0');
             return $this->resolveIdentical($expr, $isNegated, $zeroString);

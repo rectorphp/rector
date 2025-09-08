@@ -29,14 +29,14 @@ final class RemoveUselessIsEmptyAssignRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node): ?int
     {
         if (!$node->cond instanceof MethodCall) {
             return null;
@@ -48,7 +48,7 @@ final class RemoveUselessIsEmptyAssignRector extends AbstractRector
         if (!$this->collectionTypeDetector->isCollectionType($methodCall->var)) {
             return null;
         }
-        if (\count($node->stmts) !== 1) {
+        if (count($node->stmts) !== 1) {
             return null;
         }
         $soleStmts = $node->stmts[0];
@@ -67,7 +67,7 @@ final class RemoveUselessIsEmptyAssignRector extends AbstractRector
         }
         return NodeVisitor::REMOVE_NODE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove useless isEmpty() check on collection with following new ArrayCollection() instance', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -101,7 +101,7 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function isArrayCollectionNewInstance(Expr $expr) : bool
+    private function isArrayCollectionNewInstance(Expr $expr): bool
     {
         if (!$expr instanceof New_) {
             return \true;

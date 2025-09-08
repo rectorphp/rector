@@ -39,21 +39,21 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue($foo instanceof Foo, "message");', '$this->assertInstanceOf("Foo", $foo, "message");'), new CodeSample('$this->assertFalse($foo instanceof Foo, "message");', '$this->assertNotInstanceOf("Foo", $foo, "message");'), new CodeSample('$this->assertNotEquals(SomeInstance::class, get_class($value));', '$this->assertNotInstanceOf(SomeInstance::class, $value);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -61,7 +61,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         if ($this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
             return $this->refactorGetClass($node);
         }
-        $oldMethodNames = \array_keys(self::RENAME_METHODS_MAP);
+        $oldMethodNames = array_keys(self::RENAME_METHODS_MAP);
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodNames)) {
             return null;
         }
@@ -76,7 +76,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function refactorGetClass(Node $node) : ?Node
+    private function refactorGetClass(Node $node): ?Node
     {
         // we need 2 args
         if (!isset($node->args[1])) {
@@ -98,7 +98,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function changeArgumentsOrder($node) : void
+    private function changeArgumentsOrder($node): void
     {
         $oldArguments = $node->getArgs();
         /** @var Instanceof_ $comparison */
@@ -114,6 +114,6 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
             }
             $firstArgument = new Arg($this->nodeFactory->createClassConstReference($className));
         }
-        $node->args = \array_merge([$firstArgument, new Arg($argument)], $oldArguments);
+        $node->args = array_merge([$firstArgument, new Arg($argument)], $oldArguments);
     }
 }

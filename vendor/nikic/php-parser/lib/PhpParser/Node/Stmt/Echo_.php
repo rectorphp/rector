@@ -19,11 +19,11 @@ class Echo_ extends Node\Stmt
         $this->attributes = $attributes;
         $this->exprs = $exprs;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['exprs'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Echo';
     }

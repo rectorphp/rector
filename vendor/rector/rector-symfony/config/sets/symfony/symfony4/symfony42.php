@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 # https://github.com/symfony/symfony/pull/28447
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-framework-bundle.php');

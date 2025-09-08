@@ -20,11 +20,11 @@ final class EventReferenceToMethodName implements EventReferenceToMethodNameInte
         $this->classConstFetch = $classConstFetch;
         $this->methodName = $methodName;
     }
-    public function getClassConstFetch() : ClassConstFetch
+    public function getClassConstFetch(): ClassConstFetch
     {
         return $this->classConstFetch;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }

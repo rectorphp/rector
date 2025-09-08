@@ -31,18 +31,18 @@ final class MemoryCacheStorage implements CacheStorageInterface
     /**
      * @param mixed $data
      */
-    public function save(string $key, string $variableKey, $data) : void
+    public function save(string $key, string $variableKey, $data): void
     {
         $this->storage[$key] = new CacheItem($variableKey, $data);
     }
-    public function clean(string $key) : void
+    public function clean(string $key): void
     {
         if (!isset($this->storage[$key])) {
             return;
         }
         unset($this->storage[$key]);
     }
-    public function clear() : void
+    public function clear(): void
     {
         $this->storage = [];
     }

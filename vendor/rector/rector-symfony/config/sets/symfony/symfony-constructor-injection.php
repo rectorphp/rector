@@ -10,7 +10,7 @@ use Rector\Symfony\DependencyInjection\Rector\Class_\GetBySymfonyStringToConstru
 use Rector\Symfony\DependencyInjection\Rector\Trait_\TraitGetByTypeToInjectRector;
 use Rector\Symfony\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector;
 use Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         // modern step-by-step narrow approach
         ControllerGetByTypeToConstructorInjectionRector::class,

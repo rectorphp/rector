@@ -19,15 +19,15 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/qEkCe9/2
      */
-    private const ESCAPED_CHAR_REGEX = '#\\\\|\\$|\\n|\\t#sim';
+    private const ESCAPED_CHAR_REGEX = '#\\\\|\$|\n|\t#sim';
     /**
      * @var string
      * @see https://alvinalexander.com/php/how-to-remove-non-printable-characters-in-string-regex/
      * @see https://regex101.com/r/lGUhRb/1
      */
-    private const HAS_NON_PRINTABLE_CHARS = '#[\\x00-\\x1F\\x80-\\xFF]#';
+    private const HAS_NON_PRINTABLE_CHARS = '#[\x00-\x1F\x80-\xFF]#';
     private bool $hasChanged = \false;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Prefer quote that are not inside the string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -54,21 +54,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node) : ?String_
+    public function refactor(Node $node): ?String_
     {
         $this->hasChanged = \false;
         if (StringUtils::isMatch($node->value, self::HAS_NON_PRINTABLE_CHARS)) {
             return null;
         }
-        $doubleQuoteCount = \substr_count($node->value, '"');
-        $singleQuoteCount = \substr_count($node->value, "'");
+        $doubleQuoteCount = substr_count($node->value, '"');
+        $singleQuoteCount = substr_count($node->value, "'");
         $kind = $node->getAttribute(AttributeKey::KIND);
         if ($kind === String_::KIND_SINGLE_QUOTED) {
             $this->processSingleQuoted($node, $doubleQuoteCount, $singleQuoteCount);
@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processSingleQuoted(String_ $string, int $doubleQuoteCount, int $singleQuoteCount) : void
+    private function processSingleQuoted(String_ $string, int $doubleQuoteCount, int $singleQuoteCount): void
     {
         if ($doubleQuoteCount === 0 && $singleQuoteCount > 0) {
             // contains chars that will be newly escaped
@@ -95,7 +95,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
         }
     }
-    private function processDoubleQuoted(String_ $string, int $singleQuoteCount, int $doubleQuoteCount) : void
+    private function processDoubleQuoted(String_ $string, int $singleQuoteCount, int $doubleQuoteCount): void
     {
         if ($singleQuoteCount === 0 && $doubleQuoteCount > 0) {
             // contains chars that will be newly escaped
@@ -108,7 +108,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
         }
     }
-    private function isMatchEscapedChars(string $string) : bool
+    private function isMatchEscapedChars(string $string): bool
     {
         return StringUtils::isMatch($string, self::ESCAPED_CHAR_REGEX);
     }

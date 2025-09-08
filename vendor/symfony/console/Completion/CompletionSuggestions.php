@@ -72,14 +72,14 @@ final class CompletionSuggestions
     /**
      * @return InputOption[]
      */
-    public function getOptionSuggestions() : array
+    public function getOptionSuggestions(): array
     {
         return $this->optionSuggestions;
     }
     /**
      * @return Suggestion[]
      */
-    public function getValueSuggestions() : array
+    public function getValueSuggestions(): array
     {
         return $this->valueSuggestions;
     }

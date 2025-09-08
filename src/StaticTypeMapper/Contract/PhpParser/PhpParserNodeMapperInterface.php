@@ -13,9 +13,9 @@ interface PhpParserNodeMapperInterface
     /**
      * @return class-string<TNode>
      */
-    public function getNodeType() : string;
+    public function getNodeType(): string;
     /**
      * @param TNode $node
      */
-    public function mapToPHPStan(Node $node) : Type;
+    public function mapToPHPStan(Node $node): Type;
 }

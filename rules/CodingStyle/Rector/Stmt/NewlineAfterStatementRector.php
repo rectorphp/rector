@@ -37,7 +37,7 @@ final class NewlineAfterStatementRector extends AbstractRector implements HTMLAv
      * @var array<class-string<Node>>
      */
     private const STMTS_TO_HAVE_NEXT_NEWLINE = [ClassMethod::class, Function_::class, Property::class, If_::class, Foreach_::class, Do_::class, While_::class, For_::class, ClassConst::class, TryCatch::class, Class_::class, Trait_::class, Interface_::class, Switch_::class];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add new line after statements to tidify code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class, ClassLike::class];
     }
@@ -88,7 +88,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        $totalKeys = \array_key_last($node->stmts);
+        $totalKeys = array_key_last($node->stmts);
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
             if (!isset($node->stmts[$key], $node->stmts[$key + 1])) {
                 break;
@@ -111,7 +111,7 @@ CODE_SAMPLE
             if ($rangeLine > 1) {
                 continue;
             }
-            \array_splice($node->stmts, $key + 1, 0, [new Nop()]);
+            array_splice($node->stmts, $key + 1, 0, [new Nop()]);
             $hasChanged = \true;
             return $this->processAddNewLine($node, $hasChanged, $key + 2);
         }
@@ -139,12 +139,12 @@ CODE_SAMPLE
     /**
      * @param Comment[]|null $comments
      */
-    private function hasNoComment(?array $comments) : bool
+    private function hasNoComment(?array $comments): bool
     {
         return $comments === null || $comments === [];
     }
-    private function shouldSkip(Stmt $stmt) : bool
+    private function shouldSkip(Stmt $stmt): bool
     {
-        return !\in_array(\get_class($stmt), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true);
+        return !in_array(get_class($stmt), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true);
     }
 }

@@ -32,39 +32,39 @@ final class SkipOnOSFamilyFinder implements CpuCoreFinder
         $this->skippedOSFamilies = (array) $skippedOSFamilyOrFamilies;
         $this->decoratedFinder = $decoratedFinder;
     }
-    public static function forWindows(CpuCoreFinder $decoratedFinder) : self
+    public static function forWindows(CpuCoreFinder $decoratedFinder): self
     {
         return new self('Windows', $decoratedFinder);
     }
-    public static function forBSD(CpuCoreFinder $decoratedFinder) : self
+    public static function forBSD(CpuCoreFinder $decoratedFinder): self
     {
         return new self('BSD', $decoratedFinder);
     }
-    public static function forDarwin(CpuCoreFinder $decoratedFinder) : self
+    public static function forDarwin(CpuCoreFinder $decoratedFinder): self
     {
         return new self('Darwin', $decoratedFinder);
     }
-    public static function forSolaris(CpuCoreFinder $decoratedFinder) : self
+    public static function forSolaris(CpuCoreFinder $decoratedFinder): self
     {
         return new self('Solaris', $decoratedFinder);
     }
-    public static function forLinux(CpuCoreFinder $decoratedFinder) : self
+    public static function forLinux(CpuCoreFinder $decoratedFinder): self
     {
         return new self('Linux', $decoratedFinder);
     }
-    public function diagnose() : string
+    public function diagnose(): string
     {
         return $this->skip() ? sprintf('Skipped platform detected ("%s").', \PHP_OS_FAMILY) : $this->decoratedFinder->diagnose();
     }
-    public function find() : ?int
+    public function find(): ?int
     {
         return $this->skip() ? null : $this->decoratedFinder->find();
     }
-    public function toString() : string
+    public function toString(): string
     {
         return sprintf('SkipOnOSFamilyFinder(skip=(%s),%s)', implode(',', $this->skippedOSFamilies), $this->decoratedFinder->toString());
     }
-    private function skip() : bool
+    private function skip(): bool
     {
         return in_array(\PHP_OS_FAMILY, $this->skippedOSFamilies, \true);
     }

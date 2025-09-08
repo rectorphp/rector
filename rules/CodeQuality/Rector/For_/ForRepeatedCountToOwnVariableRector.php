@@ -26,7 +26,7 @@ final class ForRepeatedCountToOwnVariableRector extends AbstractRector
      * @var string
      */
     private const COUNTER_NAME = 'counter';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change count() in for function to own variable', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -56,7 +56,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [For_::class];
     }
@@ -64,7 +64,7 @@ CODE_SAMPLE
      * @param For_ $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         $scope = ScopeFetcher::fetch($node);
         if ($scope->hasVariableType(self::COUNTER_NAME)->yes()) {

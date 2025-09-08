@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NullableCompareToNullRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes negate of empty comparison of nullable value to explicit === or !== compare', [new CodeSample(<<<'CODE_SAMPLE'
 /** @var stdClass|null $value */
@@ -42,14 +42,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof BooleanNot && $this->isNullableNonScalarType($node->cond->expr)) {
             $node->cond = new Identical($node->cond->expr, $this->nodeFactory->createNull());
@@ -61,7 +61,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isNullableNonScalarType(Expr $expr) : bool
+    private function isNullableNonScalarType(Expr $expr): bool
     {
         $nativeType = $this->nodeTypeResolver->getNativeType($expr);
         // is non-nullable?

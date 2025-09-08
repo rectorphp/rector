@@ -8,10 +8,10 @@ final class OdmMappingClass
     /**
      * @var string
      */
-    public const DOCUMENT = 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document';
+    public const DOCUMENT = 'Doctrine\ODM\MongoDB\Mapping\Annotations\Document';
     /**
      * @var string
      */
-    public const REFERENCE_MANY = 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\ReferenceMany';
-    public const EMBED_MANY = 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbedMany';
+    public const REFERENCE_MANY = 'Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceMany';
+    public const EMBED_MANY = 'Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedMany';
 }

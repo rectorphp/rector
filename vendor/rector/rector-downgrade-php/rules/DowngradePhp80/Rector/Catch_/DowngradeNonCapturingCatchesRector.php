@@ -26,7 +26,7 @@ final class DowngradeNonCapturingCatchesRector extends AbstractRector
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade catch () without variable to one', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Catch_::class];
     }
     /**
      * @param Catch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->var instanceof Variable) {
             return null;

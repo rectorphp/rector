@@ -58,14 +58,14 @@ final class PromotedPropertyCandidateResolver
     /**
      * @return PropertyPromotionCandidate[]
      */
-    public function resolveFromClass(Class_ $class, ClassMethod $constructClassMethod, bool $allowModelBasedClasses) : array
+    public function resolveFromClass(Class_ $class, ClassMethod $constructClassMethod, bool $allowModelBasedClasses): array
     {
         if (!$allowModelBasedClasses && $this->hasModelTypeCheck($class, ClassName::DOCTRINE_ENTITY)) {
             return [];
         }
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
-            $propertyCount = \count($property->props);
+            $propertyCount = count($property->props);
             if ($propertyCount !== 1) {
                 continue;
             }
@@ -83,7 +83,7 @@ final class PromotedPropertyCandidateResolver
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property $node
      */
-    private function hasModelTypeCheck($node, string $modelType) : bool
+    private function hasModelTypeCheck($node, string $modelType): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByAnnotationClass($modelType)) {
@@ -91,7 +91,7 @@ final class PromotedPropertyCandidateResolver
         }
         return $this->phpAttributeAnalyzer->hasPhpAttribute($node, $modelType);
     }
-    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod) : ?PropertyPromotionCandidate
+    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod): ?PropertyPromotionCandidate
     {
         if ($property->flags === 0) {
             return null;
@@ -134,12 +134,12 @@ final class PromotedPropertyCandidateResolver
     /**
      * @return array<string, int>
      */
-    private function resolveFirstParamUses(ClassMethod $classMethod) : array
+    private function resolveFirstParamUses(ClassMethod $classMethod): array
     {
         $paramByFirstUsage = [];
         foreach ($classMethod->params as $param) {
             $paramName = $this->nodeNameResolver->getName($param);
-            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($paramName) : bool {
+            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use ($paramName): bool {
                 if (!$node instanceof Variable) {
                     return \false;
                 }
@@ -152,7 +152,7 @@ final class PromotedPropertyCandidateResolver
         }
         return $paramByFirstUsage;
     }
-    private function matchClassMethodParamByAssignedVariable(ClassMethod $classMethod, Variable $variable) : ?Param
+    private function matchClassMethodParamByAssignedVariable(ClassMethod $classMethod, Variable $variable): ?Param
     {
         foreach ($classMethod->params as $param) {
             if (!$this->nodeComparator->areNodesEqual($variable, $param->var)) {
@@ -165,7 +165,7 @@ final class PromotedPropertyCandidateResolver
     /**
      * @param array<string, int> $firstParamAsVariable
      */
-    private function isParamUsedBeforeAssign(Variable $variable, array $firstParamAsVariable) : bool
+    private function isParamUsedBeforeAssign(Variable $variable, array $firstParamAsVariable): bool
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         $firstVariablePosition = $firstParamAsVariable[$variableName] ?? null;
@@ -177,7 +177,7 @@ final class PromotedPropertyCandidateResolver
     /**
      * @param int[] $firstParamAsVariable
      */
-    private function shouldSkipParam(Param $matchedParam, Variable $assignedVariable, array $firstParamAsVariable) : bool
+    private function shouldSkipParam(Param $matchedParam, Variable $assignedVariable, array $firstParamAsVariable): bool
     {
         // already promoted
         if ($matchedParam->isPromoted()) {

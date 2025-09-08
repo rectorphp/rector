@@ -21,11 +21,11 @@ final class SetServiceClassNameResolver
      * ↓
      * "SomeClassName"
      */
-    public function resolve(MethodCall $methodCall) : ?string
+    public function resolve(MethodCall $methodCall): ?string
     {
         $nodeFinder = new NodeFinder();
         $serviceClassName = null;
-        $nodeFinder->findFirst($methodCall, function (Node $node) use(&$serviceClassName) : ?bool {
+        $nodeFinder->findFirst($methodCall, function (Node $node) use (&$serviceClassName): ?bool {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -43,7 +43,7 @@ final class SetServiceClassNameResolver
                     continue;
                 }
                 $resolvedClassConstantName = $this->matchClassConstantName($arg->value);
-                if (!\is_string($resolvedClassConstantName)) {
+                if (!is_string($resolvedClassConstantName)) {
                     continue;
                 }
                 $serviceClassName = $resolvedClassConstantName;
@@ -53,7 +53,7 @@ final class SetServiceClassNameResolver
         });
         return $serviceClassName;
     }
-    public function matchClassConstantName(ClassConstFetch $classConstFetch) : ?string
+    public function matchClassConstantName(ClassConstFetch $classConstFetch): ?string
     {
         if (!$classConstFetch->name instanceof Identifier) {
             return null;
@@ -69,12 +69,12 @@ final class SetServiceClassNameResolver
     /**
      * Dummy name check, as we don't have types here, only variable names.
      */
-    private function isServicesVariable(Expr $expr) : bool
+    private function isServicesVariable(Expr $expr): bool
     {
         if (!$expr instanceof Variable) {
             return \false;
         }
-        if (!\is_string($expr->name)) {
+        if (!is_string($expr->name)) {
             return \false;
         }
         $servicesName = $expr->name;

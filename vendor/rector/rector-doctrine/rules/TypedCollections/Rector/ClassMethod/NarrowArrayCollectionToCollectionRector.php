@@ -43,7 +43,7 @@ final class NarrowArrayCollectionToCollectionRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow ArrayCollection to Collection in class method and property', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
@@ -73,7 +73,7 @@ final class ArrayCollectionGeneric
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Property::class];
     }
@@ -91,7 +91,7 @@ CODE_SAMPLE
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $tagValueNode
      */
-    private function processTagValueNode($tagValueNode) : bool
+    private function processTagValueNode($tagValueNode): bool
     {
         // 1. generic type
         if ($tagValueNode->type instanceof GenericTypeNode) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
             $unionTypeNode = $tagValueNode->type;
             foreach ($unionTypeNode->types as $key => $unionedType) {
                 if ($unionedType instanceof IdentifierTypeNode) {
-                    if (!\in_array($unionedType->name, ['ArrayCollection', DoctrineClass::ARRAY_COLLECTION], \true)) {
+                    if (!in_array($unionedType->name, ['ArrayCollection', DoctrineClass::ARRAY_COLLECTION], \true)) {
                         continue;
                     }
                     $unionTypeNode->types[$key] = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
@@ -128,7 +128,7 @@ CODE_SAMPLE
         $tagValueNode->type = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
         return \true;
     }
-    private function refactorClassMethodNativeTypes(ClassMethod $classMethod) : bool
+    private function refactorClassMethodNativeTypes(ClassMethod $classMethod): bool
     {
         $hasChanged = \false;
         foreach ($classMethod->params as $param) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
             return $hasChanged;
         }
         $hasReturnCollectionType = $this->hasCollectionName($classMethod);
-        $this->traverseNodesWithCallable($classMethod->returnType, function (Node $node) use($hasReturnCollectionType, &$hasChanged) {
+        $this->traverseNodesWithCallable($classMethod->returnType, function (Node $node) use ($hasReturnCollectionType, &$hasChanged) {
             if ($node instanceof Identifier && $this->isName($node, 'array')) {
                 $hasChanged = \true;
                 if ($hasReturnCollectionType) {
@@ -163,7 +163,7 @@ CODE_SAMPLE
         }
         return $hasChanged;
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
         $hasChanged = $this->refactorClassMethodNativeTypes($classMethod);
         // docblocks
@@ -180,7 +180,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $paramOrProperty
      */
-    private function processNativeType($paramOrProperty) : bool
+    private function processNativeType($paramOrProperty): bool
     {
         if (!$paramOrProperty->type instanceof Node) {
             return \false;
@@ -191,7 +191,7 @@ CODE_SAMPLE
             $paramOrProperty->type = new FullyQualified(DoctrineClass::COLLECTION);
             return \true;
         }
-        $this->traverseNodesWithCallable($paramOrProperty->type, function (Node $node) use($hasCollectionName, &$hasChanged) {
+        $this->traverseNodesWithCallable($paramOrProperty->type, function (Node $node) use ($hasCollectionName, &$hasChanged) {
             if (!$node instanceof Name) {
                 return null;
             }
@@ -210,14 +210,14 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod $stmts
      */
-    private function hasCollectionName($stmts) : bool
+    private function hasCollectionName($stmts): bool
     {
         $typeNode = $stmts instanceof ClassMethod ? $stmts->returnType : $stmts->type;
         if (!$typeNode instanceof Node) {
             return \false;
         }
         $nodeFinder = new NodeFinder();
-        $collectionName = $nodeFinder->findFirst($typeNode, function (Node $node) : bool {
+        $collectionName = $nodeFinder->findFirst($typeNode, function (Node $node): bool {
             if (!$node instanceof Name) {
                 return \false;
             }
@@ -225,7 +225,7 @@ CODE_SAMPLE
         });
         return $collectionName instanceof Name;
     }
-    private function refactorClassMethodDocblock(PhpDocInfo $classMethodPhpDocInfo) : bool
+    private function refactorClassMethodDocblock(PhpDocInfo $classMethodPhpDocInfo): bool
     {
         $hasChanged = \false;
         // return tag
@@ -241,7 +241,7 @@ CODE_SAMPLE
         }
         return $hasChanged;
     }
-    private function refactorProperty(Property $property) : ?\PhpParser\Node\Stmt\Property
+    private function refactorProperty(Property $property): ?\PhpParser\Node\Stmt\Property
     {
         $hasChanged = \false;
         if ($this->processNativeType($property)) {

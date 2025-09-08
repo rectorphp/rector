@@ -37,7 +37,7 @@ final class ExprInTopStmtMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    public function match($stmt, callable $filter) : ?\PhpParser\Node\Expr
+    public function match($stmt, callable $filter): ?\PhpParser\Node\Expr
     {
         if ($stmt instanceof Closure) {
             return null;
@@ -45,12 +45,12 @@ final class ExprInTopStmtMatcher
         $nodes = [];
         if ($stmt instanceof Foreach_) {
             // keyVar can be null, so need to be filtered only Expr
-            $nodes = \array_filter([$stmt->expr, $stmt->keyVar, $stmt->valueVar]);
+            $nodes = array_filter([$stmt->expr, $stmt->keyVar, $stmt->valueVar]);
         }
         if ($stmt instanceof For_) {
             $nodes = $stmt->init;
-            $nodes = \array_merge($nodes, $stmt->cond);
-            $nodes = \array_merge($nodes, $stmt->loop);
+            $nodes = array_merge($nodes, $stmt->cond);
+            $nodes = array_merge($nodes, $stmt->loop);
         }
         if ($stmt instanceof If_ || $stmt instanceof While_ || $stmt instanceof Do_ || $stmt instanceof Switch_) {
             $nodes = [$stmt->cond];
@@ -74,7 +74,7 @@ final class ExprInTopStmtMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function resolveOnReturnOrExpression($stmt, callable $filter) : ?Expr
+    private function resolveOnReturnOrExpression($stmt, callable $filter): ?Expr
     {
         if (!$stmt instanceof Return_ && !$stmt instanceof Expression) {
             return null;
@@ -89,7 +89,7 @@ final class ExprInTopStmtMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function resolveExpr($stmt, $exprs, callable $filter) : ?Expr
+    private function resolveExpr($stmt, $exprs, callable $filter): ?Expr
     {
         $node = $this->betterNodeFinder->findFirst($exprs, $filter);
         if (!$node instanceof Expr) {
@@ -109,7 +109,7 @@ final class ExprInTopStmtMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function resolveFromChildCond($stmt, callable $filter) : ?\PhpParser\Node\Expr
+    private function resolveFromChildCond($stmt, callable $filter): ?\PhpParser\Node\Expr
     {
         if (!$stmt instanceof If_ && !$stmt instanceof Switch_) {
             return null;

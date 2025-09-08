@@ -33,9 +33,9 @@ final class ParentTestClassConstructorRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('PHPUnit\\Framework\\TestCase requires a parent constructor call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('PHPUnit\Framework\TestCase requires a parent constructor call', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeHelper extends TestCase
@@ -58,14 +58,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -80,15 +80,15 @@ CODE_SAMPLE
         $constructorClassMethod = new ClassMethod(MethodName::CONSTRUCT);
         $constructorClassMethod->flags |= Modifiers::PUBLIC;
         $constructorClassMethod->stmts[] = new Expression($this->createParentConstructorCall());
-        $node->stmts = \array_merge([$constructorClassMethod], $node->stmts);
+        $node->stmts = array_merge([$constructorClassMethod], $node->stmts);
         return $node;
     }
-    private function createParentConstructorCall() : StaticCall
+    private function createParentConstructorCall(): StaticCall
     {
         $staticClassConstFetch = new ClassConstFetch(new Name('static'), 'class');
         return new StaticCall(new Name('parent'), MethodName::CONSTRUCT, [new Arg($staticClassConstFetch)]);
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         if ($class->isAbstract()) {
             return \true;
@@ -98,10 +98,10 @@ CODE_SAMPLE
         }
         $className = $this->getName($class);
         // loaded automatically by PHPUnit
-        if (\substr_compare((string) $className, 'Test', -\strlen('Test')) === 0) {
+        if (substr_compare((string) $className, 'Test', -strlen('Test')) === 0) {
             return \true;
         }
-        if (\substr_compare((string) $className, 'TestCase', -\strlen('TestCase')) === 0) {
+        if (substr_compare((string) $className, 'TestCase', -strlen('TestCase')) === 0) {
             return \true;
         }
         return (bool) $class->getAttribute('hasRemovedFinalConstruct');

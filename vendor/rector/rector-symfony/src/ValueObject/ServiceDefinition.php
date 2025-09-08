@@ -43,34 +43,34 @@ final class ServiceDefinition
         $this->alias = $alias;
         $this->tags = $tags;
     }
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
-    public function getClass() : ?string
+    public function getClass(): ?string
     {
         return $this->class;
     }
-    public function isPublic() : bool
+    public function isPublic(): bool
     {
         return $this->isPublic;
     }
-    public function isSynthetic() : bool
+    public function isSynthetic(): bool
     {
         return $this->isSynthetic;
     }
-    public function getAlias() : ?string
+    public function getAlias(): ?string
     {
         return $this->alias;
     }
     /**
      * @return TagInterface[]
      */
-    public function getTags() : array
+    public function getTags(): array
     {
         return $this->tags;
     }
-    public function getTag(string $name) : ?TagInterface
+    public function getTag(string $name): ?TagInterface
     {
         foreach ($this->tags as $tag) {
             if ($tag->getName() !== $name) {

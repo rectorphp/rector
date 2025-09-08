@@ -29,18 +29,18 @@ class Process
      * @param bool $meta Additionally escape cmd.exe meta characters
      * @param bool $module The argument is the module to invoke
      */
-    public static function escape(string $arg, bool $meta = \true, bool $module = \false) : string
+    public static function escape(string $arg, bool $meta = \true, bool $module = \false): string
     {
-        if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
-            return "'" . \str_replace("'", "'\\''", $arg) . "'";
+        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
+            return "'" . str_replace("'", "'\\''", $arg) . "'";
         }
-        $quote = \strpbrk($arg, " \t") !== \false || $arg === '';
-        $arg = Preg::replace('/(\\\\*)"/', '$1$1\\"', $arg, -1, $dquotes);
+        $quote = strpbrk($arg, " \t") !== \false || $arg === '';
+        $arg = Preg::replace('/(\\\\*)"/', '$1$1\"', $arg, -1, $dquotes);
         $dquotes = (bool) $dquotes;
         if ($meta) {
             $meta = $dquotes || Preg::isMatch('/%[^%]+%/', $arg);
             if (!$meta) {
-                $quote = $quote || \strpbrk($arg, '^&|<>()') !== \false;
+                $quote = $quote || strpbrk($arg, '^&|<>()') !== \false;
             } elseif ($module && !$dquotes && $quote) {
                 $meta = \false;
             }
@@ -58,10 +58,10 @@ class Process
      *
      * @param string[] $args Argument list, with the module name first
      */
-    public static function escapeShellCommand(array $args) : string
+    public static function escapeShellCommand(array $args): string
     {
         $command = '';
-        $module = \array_shift($args);
+        $module = array_shift($args);
         if ($module !== null) {
             $command = self::escape($module, \true, \true);
             foreach ($args as $arg) {
@@ -76,10 +76,10 @@ class Process
      * @param string $name
      * @param ?string $value A null value unsets the variable
      */
-    public static function setEnv(string $name, ?string $value = null) : bool
+    public static function setEnv(string $name, ?string $value = null): bool
     {
         $unset = null === $value;
-        if (!\putenv($unset ? $name : $name . '=' . $value)) {
+        if (!putenv($unset ? $name : $name . '=' . $value)) {
             return \false;
         }
         if ($unset) {
@@ -88,7 +88,7 @@ class Process
             $_SERVER[$name] = $value;
         }
         // Update $_ENV if it is being used
-        if (\false !== \stripos((string) \ini_get('variables_order'), 'E')) {
+        if (\false !== stripos((string) ini_get('variables_order'), 'E')) {
             if ($unset) {
                 unset($_ENV[$name]);
             } else {

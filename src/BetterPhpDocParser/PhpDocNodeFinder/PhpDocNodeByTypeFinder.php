@@ -14,11 +14,11 @@ final class PhpDocNodeByTypeFinder
      * @param class-string<TNode> $desiredType
      * @return array<TNode>
      */
-    public function findByType(PhpDocNode $phpDocNode, string $desiredType) : array
+    public function findByType(PhpDocNode $phpDocNode, string $desiredType): array
     {
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $foundNodes = [];
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', static function (Node $node) use(&$foundNodes, $desiredType) : Node {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', static function (Node $node) use (&$foundNodes, $desiredType): Node {
             if (!$node instanceof $desiredType) {
                 return $node;
             }
@@ -32,12 +32,12 @@ final class PhpDocNodeByTypeFinder
      * @param string[] $classes
      * @return DoctrineAnnotationTagValueNode[]
      */
-    public function findDoctrineAnnotationsByClasses(PhpDocNode $phpDocNode, array $classes) : array
+    public function findDoctrineAnnotationsByClasses(PhpDocNode $phpDocNode, array $classes): array
     {
         $doctrineAnnotationTagValueNodes = [];
         foreach ($classes as $class) {
             $justFoundTagValueNodes = $this->findDoctrineAnnotationsByClass($phpDocNode, $class);
-            $doctrineAnnotationTagValueNodes = \array_merge($doctrineAnnotationTagValueNodes, $justFoundTagValueNodes);
+            $doctrineAnnotationTagValueNodes = array_merge($doctrineAnnotationTagValueNodes, $justFoundTagValueNodes);
         }
         return $doctrineAnnotationTagValueNodes;
     }
@@ -45,7 +45,7 @@ final class PhpDocNodeByTypeFinder
      * @param class-string $desiredClass
      * @return DoctrineAnnotationTagValueNode[]
      */
-    public function findDoctrineAnnotationsByClass(PhpDocNode $phpDocNode, string $desiredClass) : array
+    public function findDoctrineAnnotationsByClass(PhpDocNode $phpDocNode, string $desiredClass): array
     {
         $desiredDoctrineTagValueNodes = [];
         /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadTryCatchRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead try/catch', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -48,7 +48,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [TryCatch::class];
     }
@@ -66,7 +66,7 @@ CODE_SAMPLE
         if ($this->isEmpty($node->stmts)) {
             return NodeVisitor::REMOVE_NODE;
         }
-        if (\count($node->catches) !== 1) {
+        if (count($node->catches) !== 1) {
             return null;
         }
         $onlyCatch = $node->catches[0];
@@ -85,12 +85,12 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function isEmpty(array $stmts) : bool
+    private function isEmpty(array $stmts): bool
     {
         if ($stmts === []) {
             return \true;
         }
-        if (\count($stmts) > 1) {
+        if (count($stmts) > 1) {
             return \false;
         }
         return $stmts[0] instanceof Nop;

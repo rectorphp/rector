@@ -28,7 +28,7 @@ final class MethodParametersAndReturnTypesResolver
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveFromReflection(IntersectionType $intersectionType, string $methodName, ClassReflection $currentClassReflection) : ?ParamTypesAndReturnType
+    public function resolveFromReflection(IntersectionType $intersectionType, string $methodName, ClassReflection $currentClassReflection): ?ParamTypesAndReturnType
     {
         foreach ($intersectionType->getTypes() as $intersectionedType) {
             if (!$intersectionedType instanceof ObjectType) {
@@ -55,7 +55,7 @@ final class MethodParametersAndReturnTypesResolver
      * @return null|Type[]
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function resolveCallParameterTypes($call) : ?array
+    public function resolveCallParameterTypes($call): ?array
     {
         if (!$call->name instanceof Identifier) {
             return null;
@@ -82,7 +82,7 @@ final class MethodParametersAndReturnTypesResolver
      * @return string[]
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function resolveCallParameterNames($call) : array
+    public function resolveCallParameterNames($call): array
     {
         if (!$call->name instanceof Identifier) {
             return [];
@@ -105,7 +105,7 @@ final class MethodParametersAndReturnTypesResolver
     /**
      * @return Type[]
      */
-    public function resolveParameterTypes(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection) : array
+    public function resolveParameterTypes(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection): array
     {
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         $parameterTypes = [];
@@ -122,7 +122,7 @@ final class MethodParametersAndReturnTypesResolver
     /**
      * @return string[]
      */
-    private function resolveParameterNames(ExtendedMethodReflection $extendedMethodReflection) : array
+    private function resolveParameterNames(ExtendedMethodReflection $extendedMethodReflection): array
     {
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         $parameterNames = [];
@@ -144,7 +144,7 @@ final class MethodParametersAndReturnTypesResolver
         }
         return $type;
     }
-    private function resolveReturnType(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection) : Type
+    private function resolveReturnType(ExtendedMethodReflection $extendedMethodReflection, ClassReflection $currentClassReflection): Type
     {
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         $returnType = $this->resolveObjectType($extendedParametersAcceptor->getNativeReturnType());

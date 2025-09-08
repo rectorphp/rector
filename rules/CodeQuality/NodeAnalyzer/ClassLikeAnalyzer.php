@@ -9,7 +9,7 @@ final class ClassLikeAnalyzer
     /**
      * @return string[]
      */
-    public function resolvePropertyNames(Class_ $class) : array
+    public function resolvePropertyNames(Class_ $class): array
     {
         $propertyNames = [];
         foreach ($class->getProperties() as $property) {

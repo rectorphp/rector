@@ -34,18 +34,18 @@ final class EncapsedStringsToSprintfRector extends AbstractRector implements Con
     /**
      * @var array<string, array<class-string<Type>>>
      */
-    private const FORMAT_SPECIFIERS = ['%s' => ['PHPStan\\Type\\StringType'], '%d' => ['PHPStan\\Type\\Constant\\ConstantIntegerType', 'PHPStan\\Type\\IntegerRangeType', 'PHPStan\\Type\\IntegerType']];
+    private const FORMAT_SPECIFIERS = ['%s' => ['PHPStan\Type\StringType'], '%d' => ['PHPStan\Type\Constant\ConstantIntegerType', 'PHPStan\Type\IntegerRangeType', 'PHPStan\Type\IntegerType']];
     private bool $always = \false;
     private string $sprintfFormat = '';
     /**
      * @var Expr[]
      */
     private array $argumentVariables = [];
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $this->always = $configuration[self::ALWAYS] ?? \false;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert enscaped {$string} to more readable sprintf or concat, if no mask is used', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 echo "Unsupported format {$format} - use another";
@@ -72,14 +72,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [InterpolatedString::class];
     }
     /**
      * @param InterpolatedString $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
         return $this->createSprintfFuncCallOrConcat($this->sprintfFormat, $this->argumentVariables);
     }
-    private function shouldSkip(InterpolatedString $interpolatedString) : bool
+    private function shouldSkip(InterpolatedString $interpolatedString): bool
     {
         if ($interpolatedString->hasAttribute(AttributeKey::DOC_LABEL)) {
             return \true;
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function collectEncapsedStringPart(InterpolatedStringPart $interpolatedStringPart) : void
+    private function collectEncapsedStringPart(InterpolatedStringPart $interpolatedStringPart): void
     {
         $stringValue = $interpolatedStringPart->value;
         if ($stringValue === "\n") {
@@ -120,12 +120,12 @@ CODE_SAMPLE
         }
         $this->sprintfFormat .= Strings::replace($stringValue, '#%#', '%%');
     }
-    private function collectExpr(Expr $expr) : void
+    private function collectExpr(Expr $expr): void
     {
         $type = $this->nodeTypeResolver->getType($expr);
         $found = \false;
         foreach (self::FORMAT_SPECIFIERS as $key => $types) {
-            if (\in_array(\get_class($type), $types, \true)) {
+            if (in_array(get_class($type), $types, \true)) {
                 $this->sprintfFormat .= $key;
                 $found = \true;
                 break;
@@ -146,9 +146,9 @@ CODE_SAMPLE
      */
     private function createSprintfFuncCallOrConcat(string $mask, array $argumentVariables)
     {
-        $bareMask = \str_repeat('%s', \count($argumentVariables));
+        $bareMask = str_repeat('%s', count($argumentVariables));
         if ($mask === $bareMask) {
-            if (\count($argumentVariables) === 1) {
+            if (count($argumentVariables) === 1) {
                 return $argumentVariables[0];
             }
             return $this->nodeFactory->createConcat($argumentVariables);
@@ -160,7 +160,7 @@ CODE_SAMPLE
             }
         }
         // checks for windows or linux line ending. \n is contained in both.
-        if (\strpos($mask, "\n") !== \false) {
+        if (strpos($mask, "\n") !== \false) {
             return null;
         }
         $string = $this->createString($mask);
@@ -173,32 +173,32 @@ CODE_SAMPLE
     /**
      * @param Expr[] $argumentVariables
      */
-    private function createSingleValueEdgeConcat(array $argumentVariables, string $mask) : ?Concat
+    private function createSingleValueEdgeConcat(array $argumentVariables, string $mask): ?Concat
     {
-        if (\count($argumentVariables) !== 1) {
+        if (count($argumentVariables) !== 1) {
             return null;
         }
-        if (\substr_count($mask, '%s') !== 1 && \substr_count($mask, '%d') !== 1) {
+        if (substr_count($mask, '%s') !== 1 && substr_count($mask, '%d') !== 1) {
             return null;
         }
-        $cleanMask = Strings::replace($mask, '#\\%\\%#', '%');
-        if (\substr_compare($mask, '%s', -\strlen('%s')) === 0 || \substr_compare($mask, '%d', -\strlen('%d')) === 0) {
-            $bareString = new String_(\substr($cleanMask, 0, -2));
+        $cleanMask = Strings::replace($mask, '#\%\%#', '%');
+        if (substr_compare($mask, '%s', -strlen('%s')) === 0 || substr_compare($mask, '%d', -strlen('%d')) === 0) {
+            $bareString = new String_(substr($cleanMask, 0, -2));
             return new Concat($bareString, $argumentVariables[0]);
         }
-        if (\strncmp($mask, '%s', \strlen('%s')) === 0 || \strncmp($mask, '%d', \strlen('%d')) === 0) {
-            $bareString = new String_(\substr($cleanMask, 2));
+        if (strncmp($mask, '%s', strlen('%s')) === 0 || strncmp($mask, '%d', strlen('%d')) === 0) {
+            $bareString = new String_(substr($cleanMask, 2));
             return new Concat($argumentVariables[0], $bareString);
         }
         return null;
     }
-    private function createString(string $value) : String_
+    private function createString(string $value): String_
     {
-        $kind = \strpos($value, "'") !== \false ? String_::KIND_DOUBLE_QUOTED : String_::KIND_SINGLE_QUOTED;
+        $kind = strpos($value, "'") !== \false ? String_::KIND_DOUBLE_QUOTED : String_::KIND_SINGLE_QUOTED;
         return new String_($value, ['kind' => $kind]);
     }
-    private function containsControlASCIIChar(string $content) : bool
+    private function containsControlASCIIChar(string $content): bool
     {
-        return (bool) Strings::match($content, '#[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]#');
+        return (bool) Strings::match($content, '#[\x00-\x08\x0B\x0C\x0E-\x1F]#');
     }
 }

@@ -31,13 +31,13 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
-        if (!\extension_loaded('dom')) {
+        if (!extension_loaded('dom')) {
             $this->symfonyStyle->warning('The "dom" extension is not loaded. The rector could not generate a response in the JUnit format');
             return;
         }
@@ -51,7 +51,7 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
         $this->appendFileDiffs($processResult, $configuration, $domDocument, $xmlTestSuite);
         echo $domDocument->saveXML() . \PHP_EOL;
     }
-    private function appendSystemErrors(ProcessResult $processResult, Configuration $configuration, DOMDocument $domDocument, DOMElement $domElement) : void
+    private function appendSystemErrors(ProcessResult $processResult, Configuration $configuration, DOMDocument $domDocument, DOMElement $domElement): void
     {
         if ($processResult->getSystemErrors() === []) {
             return;
@@ -67,16 +67,16 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
             $domElement->appendChild($xmlTestCase);
         }
     }
-    private function appendFileDiffs(ProcessResult $processResult, Configuration $configuration, DOMDocument $domDocument, DOMElement $domElement) : void
+    private function appendFileDiffs(ProcessResult $processResult, Configuration $configuration, DOMDocument $domDocument, DOMElement $domElement): void
     {
         if ($processResult->getFileDiffs() === []) {
             return;
         }
         $fileDiffs = $processResult->getFileDiffs();
-        \ksort($fileDiffs);
+        ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
             $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath() ?? '';
-            $rectorClasses = \implode(' / ', $fileDiff->getRectorShortClasses());
+            $rectorClasses = implode(' / ', $fileDiff->getRectorShortClasses());
             $xmlError = $domDocument->createElement(self::XML_ELEMENT_ERROR, $fileDiff->getDiff());
             $xmlError->setAttribute(self::XML_ATTRIBUTE_TYPE, $rectorClasses);
             $xmlTestCase = $domDocument->createElement(self::XML_ELEMENT_TESTCASE);

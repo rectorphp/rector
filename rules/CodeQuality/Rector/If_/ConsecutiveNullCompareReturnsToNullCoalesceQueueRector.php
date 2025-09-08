@@ -37,7 +37,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
         $this->ifManipulator = $ifManipulator;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change multiple null compares to ?? queue', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -99,7 +99,7 @@ CODE_SAMPLE
             $ifKeys[] = $key;
         }
         // at least 2 coalescing nodes are needed
-        if (\count($coalescingExprs) < 2) {
+        if (count($coalescingExprs) < 2) {
             return null;
         }
         // remove last return null
@@ -107,7 +107,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $originalStmts = $node->stmts;
         foreach ($node->stmts as $key => $stmt) {
-            if (\in_array($key, $ifKeys, \true)) {
+            if (in_array($key, $ifKeys, \true)) {
                 unset($node->stmts[$key]);
                 $hasChanged = \true;
                 continue;
@@ -134,11 +134,11 @@ CODE_SAMPLE
         $node->stmts[] = $this->createCoalesceReturn($coalescingExprs, $appendExpr);
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE;
     }
-    private function isReturnNull(Stmt $stmt) : bool
+    private function isReturnNull(Stmt $stmt): bool
     {
         if (!$stmt instanceof Return_) {
             return \false;
@@ -151,12 +151,12 @@ CODE_SAMPLE
     /**
      * @param Expr[] $coalescingExprs
      */
-    private function createCoalesceReturn(array $coalescingExprs, ?Expr $appendExpr) : Return_
+    private function createCoalesceReturn(array $coalescingExprs, ?Expr $appendExpr): Return_
     {
         /** @var Expr $leftExpr */
-        $leftExpr = \array_shift($coalescingExprs);
+        $leftExpr = array_shift($coalescingExprs);
         /** @var Expr $rightExpr */
-        $rightExpr = \array_shift($coalescingExprs);
+        $rightExpr = array_shift($coalescingExprs);
         $coalesce = new Coalesce($leftExpr, $rightExpr);
         foreach ($coalescingExprs as $coalescingExpr) {
             $coalesce = new Coalesce($coalesce, $coalescingExpr);

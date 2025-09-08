@@ -41,17 +41,17 @@ final class InlineCodeParser
      * @var string
      * @see https://regex101.com/r/TBlhoR/1
      */
-    private const OPEN_PHP_TAG_REGEX = '#^\\<\\?php\\s+#';
+    private const OPEN_PHP_TAG_REGEX = '#^\<\?php\s+#';
     /**
      * @var string
      * @see https://regex101.com/r/TUWwKw/1/
      */
-    private const ENDING_SEMI_COLON_REGEX = '#;(\\s+)?$#';
+    private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
     /**
      * @var string
      * @see https://regex101.com/r/8fDjnR/1
      */
-    private const VARIABLE_IN_SINGLE_QUOTED_REGEX = '#\'(?<variable>\\$.*)\'#U';
+    private const VARIABLE_IN_SINGLE_QUOTED_REGEX = '#\'(?<variable>\$.*)\'#U';
     /**
      * @var string
      * @see https://regex101.com/r/1lzQZv/1
@@ -61,7 +61,7 @@ final class InlineCodeParser
      * @var string
      * @see https://regex101.com/r/nSO3Eq/1
      */
-    private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\\$\\d+)#';
+    private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\$\d+)#';
     public function __construct(BetterStandardPrinter $betterStandardPrinter, \Rector\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -73,7 +73,7 @@ final class InlineCodeParser
      *
      * @return Stmt[]
      */
-    public function parseFile(string $fileName) : array
+    public function parseFile(string $fileName): array
     {
         $fileContent = FileSystem::read($fileName);
         return $this->parseCode($fileContent);
@@ -81,11 +81,11 @@ final class InlineCodeParser
     /**
      * @return Stmt[]
      */
-    public function parseString(string $fileContent) : array
+    public function parseString(string $fileContent): array
     {
         return $this->parseCode($fileContent);
     }
-    public function stringify(Expr $expr) : string
+    public function stringify(Expr $expr): string
     {
         if ($expr instanceof String_) {
             if (!StringUtils::isMatch($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX)) {
@@ -104,20 +104,20 @@ final class InlineCodeParser
     /**
      * @return Stmt[]
      */
-    private function parseCode(string $code) : array
+    private function parseCode(string $code): array
     {
         // wrap code so php-parser can interpret it
         $code = StringUtils::isMatch($code, self::OPEN_PHP_TAG_REGEX) ? $code : '<?php ' . $code;
         $code = StringUtils::isMatch($code, self::ENDING_SEMI_COLON_REGEX) ? $code : $code . ';';
         return $this->simplePhpParser->parseString($code);
     }
-    private function resolveEncapsedValue(InterpolatedString $interpolatedString) : string
+    private function resolveEncapsedValue(InterpolatedString $interpolatedString): string
     {
         $value = '';
         $isRequirePrint = \false;
         foreach ($interpolatedString->parts as $part) {
             $partValue = (string) $this->valueResolver->getValue($part);
-            if (\substr_compare($partValue, "'", -\strlen("'")) === 0) {
+            if (substr_compare($partValue, "'", -strlen("'")) === 0) {
                 $isRequirePrint = \true;
                 break;
             }
@@ -125,18 +125,18 @@ final class InlineCodeParser
         }
         $printedExpr = $isRequirePrint ? $this->betterStandardPrinter->print($interpolatedString) : $value;
         // remove "
-        $printedExpr = \trim($printedExpr, '""');
+        $printedExpr = trim($printedExpr, '""');
         // use \$ → $
         $printedExpr = Strings::replace($printedExpr, self::PRESLASHED_DOLLAR_REGEX, '$');
         // use \'{$...}\' → $...
         return Strings::replace($printedExpr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
     }
-    private function resolveConcatValue(Concat $concat) : string
+    private function resolveConcatValue(Concat $concat): string
     {
-        if ($concat->left instanceof Concat && $concat->right instanceof String_ && \strncmp($concat->right->value, '$', \strlen('$')) === 0) {
+        if ($concat->left instanceof Concat && $concat->right instanceof String_ && strncmp($concat->right->value, '$', strlen('$')) === 0) {
             $concat->right->value = '.' . $concat->right->value;
         }
-        if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0) {
+        if ($concat->right instanceof String_ && strncmp($concat->right->value, '($', strlen('($')) === 0) {
             $concat->right->value .= '.';
         }
         $string = $this->stringify($concat->left) . $this->stringify($concat->right);

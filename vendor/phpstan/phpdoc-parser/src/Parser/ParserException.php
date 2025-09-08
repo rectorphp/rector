@@ -29,31 +29,31 @@ class ParserException extends Exception
         $this->currentTokenLine = $currentTokenLine;
         parent::__construct(sprintf('Unexpected token %s, expected %s%s at offset %d%s', $this->formatValue($currentTokenValue), Lexer::TOKEN_LABELS[$expectedTokenType], $expectedTokenValue !== null ? sprintf(' (%s)', $this->formatValue($expectedTokenValue)) : '', $currentOffset, $currentTokenLine === null ? '' : sprintf(' on line %d', $currentTokenLine)));
     }
-    public function getCurrentTokenValue() : string
+    public function getCurrentTokenValue(): string
     {
         return $this->currentTokenValue;
     }
-    public function getCurrentTokenType() : int
+    public function getCurrentTokenType(): int
     {
         return $this->currentTokenType;
     }
-    public function getCurrentOffset() : int
+    public function getCurrentOffset(): int
     {
         return $this->currentOffset;
     }
-    public function getExpectedTokenType() : int
+    public function getExpectedTokenType(): int
     {
         return $this->expectedTokenType;
     }
-    public function getExpectedTokenValue() : ?string
+    public function getExpectedTokenValue(): ?string
     {
         return $this->expectedTokenValue;
     }
-    public function getCurrentTokenLine() : ?int
+    public function getCurrentTokenLine(): ?int
     {
         return $this->currentTokenLine;
     }
-    private function formatValue(string $value) : string
+    private function formatValue(string $value): string
     {
         $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
         assert($json !== \false);

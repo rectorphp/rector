@@ -25,7 +25,7 @@ final class WrapReturnRector extends AbstractRector implements ConfigurableRecto
      * @var WrapReturn[]
      */
     private array $typeMethodWraps = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Wrap return value of specific method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($this->typeMethodWraps as $typeMethodWrap) {
@@ -84,14 +84,14 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, WrapReturn::class);
         $this->typeMethodWraps = $configuration;
     }
-    private function wrap(ClassMethod $classMethod) : bool
+    private function wrap(ClassMethod $classMethod): bool
     {
-        if (!\is_iterable($classMethod->stmts)) {
+        if (!is_iterable($classMethod->stmts)) {
             return \false;
         }
         $hasChanged = \false;

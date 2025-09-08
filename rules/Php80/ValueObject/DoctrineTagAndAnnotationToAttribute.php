@@ -19,11 +19,11 @@ final class DoctrineTagAndAnnotationToAttribute
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
         $this->annotationToAttribute = $annotationToAttribute;
     }
-    public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
+    public function getDoctrineAnnotationTagValueNode(): DoctrineAnnotationTagValueNode
     {
         return $this->doctrineAnnotationTagValueNode;
     }
-    public function getAnnotationToAttribute() : \Rector\Php80\ValueObject\AnnotationToAttribute
+    public function getAnnotationToAttribute(): \Rector\Php80\ValueObject\AnnotationToAttribute
     {
         return $this->annotationToAttribute;
     }

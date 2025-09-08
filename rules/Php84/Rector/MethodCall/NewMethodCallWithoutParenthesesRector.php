@@ -19,11 +19,11 @@ final class NewMethodCallWithoutParenthesesRector extends AbstractRector impleme
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove parentheses on new method call with parentheses', [new CodeSample(<<<'CODE_SAMPLE'
 (new Request())->withMethod('GET')->withUri('/hello-world');
@@ -36,7 +36,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->var instanceof New_) {
             return null;
@@ -44,7 +44,7 @@ CODE_SAMPLE
         $oldTokens = $this->file->getOldTokens();
         $loop = 1;
         while (isset($oldTokens[$node->var->getStartTokenPos() + $loop])) {
-            if (\trim((string) $oldTokens[$node->var->getStartTokenPos() + $loop]) === '') {
+            if (trim((string) $oldTokens[$node->var->getStartTokenPos() + $loop]) === '') {
                 ++$loop;
                 continue;
             }
@@ -68,7 +68,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEW_METHOD_CALL_WITHOUT_PARENTHESES;
     }

@@ -29,7 +29,7 @@ final class DowngradeFreadFwriteFalsyToNegationRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes fread() or fwrite() compare to false to negation check', [new CodeSample(<<<'CODE_SAMPLE'
 fread($handle, $length) === false;
@@ -44,14 +44,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class];
     }
     /**
      * @param Identical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $compareExpr = $this->getCompareValue($node);
         if (!$compareExpr instanceof Expr) {
@@ -62,7 +62,7 @@ CODE_SAMPLE
         }
         return new BooleanNot($this->getFunction($node));
     }
-    private function getCompareValue(Identical $identical) : ?Expr
+    private function getCompareValue(Identical $identical): ?Expr
     {
         if ($identical->left instanceof FuncCall && $this->isNames($identical->left, self::FUNC_FREAD_FWRITE)) {
             return $identical->right;
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
         return $identical->left;
     }
-    private function getFunction(Identical $identical) : FuncCall
+    private function getFunction(Identical $identical): FuncCall
     {
         /** @var FuncCall $funcCall */
         $funcCall = $identical->left instanceof FuncCall ? $identical->left : $identical->right;

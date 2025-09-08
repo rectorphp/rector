@@ -30,7 +30,7 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter(): OutputFormatterInterface
     {
         // to comply with the interface we must return a OutputFormatterInterface
         return $this->formatter ??= new NullOutputFormatter();
@@ -42,7 +42,7 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-    public function isDecorated() : bool
+    public function isDecorated(): bool
     {
         return \false;
     }
@@ -53,23 +53,23 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-    public function getVerbosity() : int
+    public function getVerbosity(): int
     {
         return self::VERBOSITY_QUIET;
     }
-    public function isQuiet() : bool
+    public function isQuiet(): bool
     {
         return \true;
     }
-    public function isVerbose() : bool
+    public function isVerbose(): bool
     {
         return \false;
     }
-    public function isVeryVerbose() : bool
+    public function isVeryVerbose(): bool
     {
         return \false;
     }
-    public function isDebug() : bool
+    public function isDebug(): bool
     {
         return \false;
     }

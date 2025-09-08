@@ -33,7 +33,7 @@ final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->callAnalyzer = $callAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change single return of `||` to early returns', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -94,8 +94,8 @@ CODE_SAMPLE
             }
             $this->mirrorComments($ifs[0], $stmt);
             $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
-            $ifsWithLastIf = \array_merge($ifs, [new Return_($lastReturnExpr)]);
-            \array_splice($node->stmts, $key, 1, $ifsWithLastIf);
+            $ifsWithLastIf = array_merge($ifs, [new Return_($lastReturnExpr)]);
+            array_splice($node->stmts, $key, 1, $ifsWithLastIf);
             $hasChanged = \true;
         }
         if ($hasChanged) {
@@ -107,10 +107,10 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(Expr $expr, Return_ $return, array $ifs) : array
+    private function createMultipleIfs(Expr $expr, Return_ $return, array $ifs): array
     {
         while ($expr instanceof BooleanOr) {
-            $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
+            $ifs = array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
             $ifs[] = new If_($expr->right, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
             $expr = $expr->right;
             if ($expr instanceof BooleanAnd) {
@@ -132,7 +132,7 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs): array
     {
         $left = $booleanOr->left;
         if (!$left instanceof BooleanOr) {

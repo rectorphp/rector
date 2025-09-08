@@ -32,21 +32,21 @@ final class RectorWithLineChange implements SerializableInterface
     {
         $this->line = $line;
         if ($rectorClass instanceof RectorInterface) {
-            $rectorClass = \get_class($rectorClass);
+            $rectorClass = get_class($rectorClass);
         }
         $this->rectorClass = $rectorClass;
     }
     /**
      * @return class-string<RectorInterface>
      */
-    public function getRectorClass() : string
+    public function getRectorClass(): string
     {
         return $this->rectorClass;
     }
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode(array $json) : self
+    public static function decode(array $json): self
     {
         /** @var class-string<RectorInterface> $rectorClass */
         $rectorClass = $json[self::KEY_RECTOR_CLASS];
@@ -58,7 +58,7 @@ final class RectorWithLineChange implements SerializableInterface
     /**
      * @return array{rector_class: class-string<RectorInterface>, line: int}
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return [self::KEY_RECTOR_CLASS => $this->rectorClass, self::KEY_LINE => $this->line];
     }

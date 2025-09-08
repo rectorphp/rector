@@ -29,15 +29,15 @@ final class Set implements SetInterface
         $this->setFilePath = $setFilePath;
         Assert::fileExists($setFilePath);
     }
-    public function getGroupName() : string
+    public function getGroupName(): string
     {
         return $this->groupName;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->setName;
     }
-    public function getSetFilePath() : string
+    public function getSetFilePath(): string
     {
         return $this->setFilePath;
     }

@@ -22,7 +22,7 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
      * @var positive-int
      */
     private $count;
-    public function diagnose() : string
+    public function diagnose(): string
     {
         return sprintf('Will return "%d".', $this->count);
     }
@@ -34,11 +34,11 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
         $this->count = $count;
     }
     /** @phpstan-ignore return.unusedType */
-    public function find() : ?int
+    public function find(): ?int
     {
         return $this->count;
     }
-    public function toString() : string
+    public function toString(): string
     {
         return sprintf('DummyCpuCoreFinder(value=%d)', $this->count);
     }

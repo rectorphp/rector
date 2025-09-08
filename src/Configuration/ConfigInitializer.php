@@ -32,16 +32,16 @@ final class ConfigInitializer
         $this->initFilePathsResolver = $initFilePathsResolver;
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function createConfig(string $projectDirectory) : void
+    public function createConfig(string $projectDirectory): void
     {
         $commonRectorConfigPath = $projectDirectory . '/rector.php';
-        if (\file_exists($commonRectorConfigPath)) {
+        if (file_exists($commonRectorConfigPath)) {
             $this->symfonyStyle->warning('Register rules or sets in your "rector.php" config');
             return;
         }
         $response = $this->symfonyStyle->ask('No "rector.php" config found. Should we generate it for you?', 'yes');
         // be tolerant about input
-        if (!\in_array($response, ['yes', 'YES', 'y', 'Y'], \true)) {
+        if (!in_array($response, ['yes', 'YES', 'y', 'Y'], \true)) {
             // okay, nothing we can do
             return;
         }
@@ -50,7 +50,7 @@ final class ConfigInitializer
         FileSystem::write($commonRectorConfigPath, $configContents, null);
         $this->symfonyStyle->success('The config is added now. Re-run command to make Rector do the work!');
     }
-    public function areSomeRectorsLoaded() : bool
+    public function areSomeRectorsLoaded(): bool
     {
         $activeRectors = $this->filterActiveRectors($this->rectors);
         return $activeRectors !== [];
@@ -59,11 +59,11 @@ final class ConfigInitializer
      * @param RectorInterface[] $rectors
      * @return RectorInterface[]
      */
-    private function filterActiveRectors(array $rectors) : array
+    private function filterActiveRectors(array $rectors): array
     {
-        return \array_filter($rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
+        return array_filter($rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
     }
-    private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory) : string
+    private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory): string
     {
         $projectPhpDirectories = $this->initFilePathsResolver->resolve($projectDirectory);
         // fallback to default 'src' in case of empty one
@@ -74,7 +74,7 @@ final class ConfigInitializer
         foreach ($projectPhpDirectories as $projectPhpDirectory) {
             $projectPhpDirectoriesContents .= "        __DIR__ . '/" . $projectPhpDirectory . "'," . \PHP_EOL;
         }
-        $projectPhpDirectoriesContents = \rtrim($projectPhpDirectoriesContents);
-        return \str_replace('__PATHS__', $projectPhpDirectoriesContents, $rectorPhpTemplateContents);
+        $projectPhpDirectoriesContents = rtrim($projectPhpDirectoriesContents);
+        return str_replace('__PATHS__', $projectPhpDirectoriesContents, $rectorPhpTemplateContents);
     }
 }

@@ -55,7 +55,7 @@ final class DowngradePropertyPromotionRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change constructor property promotion to property assign', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -81,14 +81,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Trait_::class];
     }
     /**
      * @param Class_|Trait_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $constructorClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$constructorClassMethod instanceof ClassMethod) {
@@ -109,7 +109,7 @@ CODE_SAMPLE
     /**
      * @return array<string, Comment|null>
      */
-    private function getOldComments(ClassMethod $constructorClassMethod) : array
+    private function getOldComments(ClassMethod $constructorClassMethod): array
     {
         $oldComments = [];
         foreach ($constructorClassMethod->params as $param) {
@@ -120,7 +120,7 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function resolvePromotedParams(ClassMethod $constructorClassMethod) : array
+    private function resolvePromotedParams(ClassMethod $constructorClassMethod): array
     {
         $promotedParams = [];
         foreach ($constructorClassMethod->params as $param) {
@@ -132,14 +132,14 @@ CODE_SAMPLE
         }
         return $promotedParams;
     }
-    private function setParamAttrGroupAsComment(Param $param) : void
+    private function setParamAttrGroupAsComment(Param $param): void
     {
         $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
         $comments = $param->getAttribute(AttributeKey::COMMENTS);
-        if (\is_array($comments)) {
+        if (is_array($comments)) {
             /** @var Comment[] $comments */
             foreach ($comments as $comment) {
-                $attrGroupsPrint = \str_replace($comment->getText(), '', $attrGroupsPrint);
+                $attrGroupsPrint = str_replace($comment->getText(), '', $attrGroupsPrint);
             }
         }
         $comments = $param->attrGroups !== [] ? [new Comment($attrGroupsPrint)] : null;
@@ -151,10 +151,10 @@ CODE_SAMPLE
      * @return Property[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
      */
-    private function resolvePropertiesFromPromotedParams(ClassMethod $classMethod, array $promotedParams, $class) : array
+    private function resolvePropertiesFromPromotedParams(ClassMethod $classMethod, array $promotedParams, $class): array
     {
         $properties = $this->createPropertiesFromParams($classMethod, $promotedParams);
-        $class->stmts = \array_merge($properties, $class->stmts);
+        $class->stmts = array_merge($properties, $class->stmts);
         return $properties;
     }
     /**
@@ -162,7 +162,7 @@ CODE_SAMPLE
      * @param array<string, Comment|null> $oldComments
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
      */
-    private function addPropertyAssignsToConstructorClassMethod(array $properties, $class, array $oldComments) : void
+    private function addPropertyAssignsToConstructorClassMethod(array $properties, $class, array $oldComments): void
     {
         $assigns = [];
         foreach ($properties as $property) {
@@ -174,13 +174,13 @@ CODE_SAMPLE
         }
         /** @var ClassMethod $constructorClassMethod */
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        $constructorClassMethod->stmts = \array_merge($assigns, (array) $constructorClassMethod->stmts);
+        $constructorClassMethod->stmts = array_merge($assigns, (array) $constructorClassMethod->stmts);
     }
     /**
      * @param Param[] $params
      * @return Property[]
      */
-    private function createPropertiesFromParams(ClassMethod $classMethod, array $params) : array
+    private function createPropertiesFromParams(ClassMethod $classMethod, array $params): array
     {
         $properties = [];
         foreach ($params as $param) {
@@ -196,7 +196,7 @@ CODE_SAMPLE
         }
         return $properties;
     }
-    private function decoratePropertyWithParamDocInfo(ClassMethod $constructorClassMethod, Param $param, Property $property) : void
+    private function decoratePropertyWithParamDocInfo(ClassMethod $constructorClassMethod, Param $param, Property $property): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructorClassMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {

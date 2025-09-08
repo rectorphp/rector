@@ -20,7 +20,7 @@ class DoctrineAnnotation implements Node
         $this->name = $name;
         $this->arguments = $arguments;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $arguments = implode(', ', $this->arguments);
         return $this->name . '(' . $arguments . ')';

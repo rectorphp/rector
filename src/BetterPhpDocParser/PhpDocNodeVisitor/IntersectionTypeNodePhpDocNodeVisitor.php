@@ -19,7 +19,7 @@ final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisi
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof IntersectionTypeNode) {
             return null;

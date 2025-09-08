@@ -24,15 +24,15 @@ final class UseAliasMetadata
         $this->useImportName = $useImportName;
         $this->useItem = $useItem;
     }
-    public function getShortAttributeName() : string
+    public function getShortAttributeName(): string
     {
         return $this->shortAttributeName;
     }
-    public function getUseImportName() : string
+    public function getUseImportName(): string
     {
         return $this->useImportName;
     }
-    public function getUseUse() : UseItem
+    public function getUseUse(): UseItem
     {
         return $this->useItem;
     }

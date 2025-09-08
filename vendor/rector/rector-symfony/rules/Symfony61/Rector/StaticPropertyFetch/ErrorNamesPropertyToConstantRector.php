@@ -26,7 +26,7 @@ final class ErrorNamesPropertyToConstantRector extends AbstractRector
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns old Constraint::$errorNames properties to use Constraint::ERROR_NAMES instead', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -51,20 +51,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StaticPropertyFetch::class];
     }
     /**
      * @param StaticPropertyFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->is('Symfony\\Component\\Validator\\Constraint')) {
+        if (!$classReflection->is('Symfony\Component\Validator\Constraint')) {
             return null;
         }
         if (!$this->isName($node->name, 'errorNames')) {

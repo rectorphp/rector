@@ -37,10 +37,10 @@ final class PropertyWriteonlyAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function hasClassDynamicPropertyNames(Class_ $class) : bool
+    public function hasClassDynamicPropertyNames(Class_ $class): bool
     {
         $isImplementsJsonSerializable = $this->nodeTypeResolver->isObjectType($class, new ObjectType('JsonSerializable'));
-        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) use($isImplementsJsonSerializable) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) use ($isImplementsJsonSerializable): bool {
             if ($isImplementsJsonSerializable && $node instanceof FuncCall && $this->nodeNameResolver->isName($node, 'get_object_vars') && !$node->isFirstClassCallable()) {
                 $firstArg = $node->getArgs()[0] ?? null;
                 if ($firstArg instanceof Arg && $firstArg->value instanceof Variable && $firstArg->value->name === 'this') {
@@ -59,7 +59,7 @@ final class PropertyWriteonlyAnalyzer
      *
      * @param array<PropertyFetch|StaticPropertyFetch|NullsafePropertyFetch> $propertyFetches
      */
-    public function arePropertyFetchesExclusivelyBeingAssignedTo(array $propertyFetches) : bool
+    public function arePropertyFetchesExclusivelyBeingAssignedTo(array $propertyFetches): bool
     {
         foreach ($propertyFetches as $propertyFetch) {
             if ((bool) $propertyFetch->getAttribute(AttributeKey::IS_MULTI_ASSIGN, \false)) {

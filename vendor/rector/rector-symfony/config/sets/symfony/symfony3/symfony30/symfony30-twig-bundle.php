@@ -5,6 +5,6 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Symfony\\Bundle\\TwigBundle\\TwigDefaultEscapingStrategy' => 'Twig_FileExtensionEscapingStrategy']);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Symfony\Bundle\TwigBundle\TwigDefaultEscapingStrategy' => 'Twig_FileExtensionEscapingStrategy']);
 };

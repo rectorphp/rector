@@ -124,10 +124,10 @@ final class Message
      */
     private static function generateId()
     {
-        if (\function_exists('random_int')) {
-            return \random_int(0, 0xffff);
+        if (function_exists('random_int')) {
+            return random_int(0, 0xffff);
         }
-        return \mt_rand(0, 0xffff);
+        return mt_rand(0, 0xffff);
     }
     /**
      * The 16 bit message ID

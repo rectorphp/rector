@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnArrayToNewArrayCollectionRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change return [] to return new ArrayCollection([]) in a method, that returns Collection type', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -53,14 +53,14 @@ final class ReturnArrayItems
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if (!$node->returnType instanceof Name) {
             return null;
@@ -70,7 +70,7 @@ CODE_SAMPLE
         }
         // update all return [] to return new ArrayCollection([])
         $hasChanged = \false;
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use(&$hasChanged) : ?Node {
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$hasChanged): ?Node {
             if (!$node instanceof Return_) {
                 return null;
             }

@@ -30,10 +30,10 @@ final class IdentifierManipulator
      * @param array<string, string> $renameMethodMap
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    public function renameNodeWithMap($node, array $renameMethodMap) : bool
+    public function renameNodeWithMap($node, array $renameMethodMap): bool
     {
         $oldNodeMethodName = $this->resolveOldMethodName($node);
-        if (!\is_string($oldNodeMethodName)) {
+        if (!is_string($oldNodeMethodName)) {
             return \false;
         }
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
@@ -42,7 +42,7 @@ final class IdentifierManipulator
     /**
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function resolveOldMethodName($node) : ?string
+    private function resolveOldMethodName($node): ?string
     {
         if ($node instanceof StaticCall || $node instanceof MethodCall) {
             return $this->nodeNameResolver->getName($node->name);

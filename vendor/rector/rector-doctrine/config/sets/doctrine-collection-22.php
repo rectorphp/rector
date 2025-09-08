@@ -5,6 +5,6 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Collection22\Rector\CriteriaOrderingConstantsDeprecationRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([CriteriaOrderingConstantsDeprecationRector::class]);
 };

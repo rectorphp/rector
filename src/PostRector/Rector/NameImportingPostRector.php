@@ -38,12 +38,12 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     /**
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes) : array
+    public function beforeTraverse(array $nodes): array
     {
         $this->currentUses = $this->useImportsResolver->resolve();
         return $nodes;
     }
-    public function enterNode(Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node): ?\PhpParser\Node
     {
         if (!$node instanceof FullyQualified) {
             return null;
@@ -53,7 +53,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts) : bool
+    public function shouldTraverse(array $stmts): bool
     {
         return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
     }

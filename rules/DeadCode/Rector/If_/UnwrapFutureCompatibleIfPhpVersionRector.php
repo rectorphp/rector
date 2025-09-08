@@ -32,7 +32,7 @@ final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
         $this->conditionEvaluator = $conditionEvaluator;
         $this->conditionResolver = $conditionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove php version checks if they are passed', [new CodeSample(<<<'CODE_SAMPLE'
 // current PHP: 7.2
@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
@@ -84,7 +84,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function refactorIsMatch(If_ $if) : ?array
+    private function refactorIsMatch(If_ $if): ?array
     {
         if ($if->elseifs !== []) {
             return null;

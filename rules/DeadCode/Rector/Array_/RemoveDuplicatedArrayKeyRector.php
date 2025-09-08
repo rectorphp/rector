@@ -33,7 +33,7 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove duplicated key in defined arrays', [new CodeSample(<<<'CODE_SAMPLE'
 $item = [
@@ -51,14 +51,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $duplicatedKeysArrayItems = $this->resolveDuplicateKeysArrayItems($node);
         if ($duplicatedKeysArrayItems === []) {
@@ -78,7 +78,7 @@ CODE_SAMPLE
     /**
      * @return ArrayItem[]
      */
-    private function resolveDuplicateKeysArrayItems(Array_ $array) : array
+    private function resolveDuplicateKeysArrayItems(Array_ $array): array
     {
         $arrayItemsByKeys = [];
         foreach ($array->items as $arrayItem) {
@@ -101,14 +101,14 @@ CODE_SAMPLE
      * @param array<mixed, ArrayItem[]> $arrayItemsByKeys
      * @return array<ArrayItem>
      */
-    private function filterItemsWithSameKey(array $arrayItemsByKeys) : array
+    private function filterItemsWithSameKey(array $arrayItemsByKeys): array
     {
         $duplicatedArrayItems = [];
         foreach ($arrayItemsByKeys as $arrayItems) {
-            if (\count($arrayItems) <= 1) {
+            if (count($arrayItems) <= 1) {
                 continue;
             }
-            $currentArrayItem = \current($arrayItems);
+            $currentArrayItem = current($arrayItems);
             /** @var Expr $currentArrayItemKey */
             $currentArrayItemKey = $currentArrayItem->key;
             if ($currentArrayItemKey instanceof PreInc) {
@@ -118,16 +118,16 @@ CODE_SAMPLE
                 continue;
             }
             // keep last one
-            \array_pop($arrayItems);
-            $duplicatedArrayItems = \array_merge($duplicatedArrayItems, $arrayItems);
+            array_pop($arrayItems);
+            $duplicatedArrayItems = array_merge($duplicatedArrayItems, $arrayItems);
         }
         return $duplicatedArrayItems;
     }
     /**
      * @param ArrayItem[] $duplicatedKeysArrayItems
      */
-    private function isArrayItemDuplicated(array $duplicatedKeysArrayItems, ArrayItem $arrayItem) : bool
+    private function isArrayItemDuplicated(array $duplicatedKeysArrayItems, ArrayItem $arrayItem): bool
     {
-        return \in_array($arrayItem, $duplicatedKeysArrayItems, \true);
+        return in_array($arrayItem, $duplicatedKeysArrayItems, \true);
     }
 }

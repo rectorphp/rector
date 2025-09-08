@@ -41,7 +41,7 @@ final class PreparedValueToEarlyReturnRector extends AbstractRector
         $this->ifManipulator = $ifManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Return early prepared value in ifs', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -84,14 +84,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node): ?StmtsAwareInterface
     {
         if ($node->stmts === null) {
             return null;
@@ -128,7 +128,7 @@ CODE_SAMPLE
             if (!$return->expr instanceof Variable) {
                 return null;
             }
-            if (!\is_int($initialAssignPosition)) {
+            if (!is_int($initialAssignPosition)) {
                 return null;
             }
             if (!$initialAssign instanceof Assign) {
@@ -149,7 +149,7 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return BareSingleAssignIf[]
      */
-    private function getMatchingBareSingleAssignIfs(array $ifs, StmtsAwareInterface $stmtsAware) : array
+    private function getMatchingBareSingleAssignIfs(array $ifs, StmtsAwareInterface $stmtsAware): array
     {
         $bareSingleAssignIfs = [];
         foreach ($ifs as $key => $if) {
@@ -164,7 +164,7 @@ CODE_SAMPLE
     /**
      * @param BareSingleAssignIf[] $bareSingleAssignIfs
      */
-    private function isVariableSharedInAssignIfsAndReturn(array $bareSingleAssignIfs, Expr $returnedExpr, Assign $initialAssign) : bool
+    private function isVariableSharedInAssignIfsAndReturn(array $bareSingleAssignIfs, Expr $returnedExpr, Assign $initialAssign): bool
     {
         if (!$this->nodeComparator->areNodesEqual($returnedExpr, $initialAssign->var)) {
             return \false;
@@ -181,13 +181,13 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function matchBareSingleAssignIf(Stmt $stmt, int $key, StmtsAwareInterface $stmtsAware) : ?BareSingleAssignIf
+    private function matchBareSingleAssignIf(Stmt $stmt, int $key, StmtsAwareInterface $stmtsAware): ?BareSingleAssignIf
     {
         if (!$stmt instanceof If_) {
             return null;
         }
         // is exactly single stmt
-        if (\count($stmt->stmts) !== 1) {
+        if (count($stmt->stmts) !== 1) {
             return null;
         }
         $onlyStmt = $stmt->stmts[0];
@@ -215,7 +215,7 @@ CODE_SAMPLE
     /**
      * @param BareSingleAssignIf[] $bareSingleAssignIfs
      */
-    private function refactorToDirectReturns(StmtsAwareInterface $stmtsAware, int $initialAssignPosition, array $bareSingleAssignIfs, Assign $initialAssign, Return_ $return) : StmtsAwareInterface
+    private function refactorToDirectReturns(StmtsAwareInterface $stmtsAware, int $initialAssignPosition, array $bareSingleAssignIfs, Assign $initialAssign, Return_ $return): StmtsAwareInterface
     {
         // 1. remove initial assign
         unset($stmtsAware->stmts[$initialAssignPosition]);

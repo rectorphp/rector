@@ -60,7 +60,7 @@ class CompilingMatcher
             return self::$resultCache[$resultCacheKey];
         }
         if (self::$enabled === null) {
-            self::$enabled = !\in_array('eval', \explode(',', (string) \ini_get('disable_functions')), \true);
+            self::$enabled = !\in_array('eval', explode(',', (string) ini_get('disable_functions')), \true);
         }
         if (!self::$enabled) {
             return self::$resultCache[$resultCacheKey] = $constraint->matches(new Constraint(self::$transOpInt[$operator], $version));
@@ -72,6 +72,6 @@ class CompilingMatcher
         } else {
             $function = self::$compiledCheckerCache[$cacheKey];
         }
-        return self::$resultCache[$resultCacheKey] = $function($version, \strpos($version, 'dev-') === 0);
+        return self::$resultCache[$resultCacheKey] = $function($version, strpos($version, 'dev-') === 0);
     }
 }

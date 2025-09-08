@@ -30,19 +30,19 @@ final class StrStartsWith
         $this->needleExpr = $needleExpr;
         $this->isPositive = $isPositive;
     }
-    public function getFuncCall() : FuncCall
+    public function getFuncCall(): FuncCall
     {
         return $this->funcCall;
     }
-    public function getHaystackExpr() : Expr
+    public function getHaystackExpr(): Expr
     {
         return $this->haystackExpr;
     }
-    public function isPositive() : bool
+    public function isPositive(): bool
     {
         return $this->isPositive;
     }
-    public function getNeedleExpr() : Expr
+    public function getNeedleExpr(): Expr
     {
         return $this->needleExpr;
     }

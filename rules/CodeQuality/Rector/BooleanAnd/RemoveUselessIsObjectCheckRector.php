@@ -15,21 +15,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUselessIsObjectCheckRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove useless is_object() check on combine with instanceof check', [new CodeSample('is_object($obj) && $obj instanceof DateTime', '$obj instanceof DateTime')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanAnd::class];
     }
     /**
      * @param BooleanAnd $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->left instanceof FuncCall && $this->isName($node->left, 'is_object') && $node->right instanceof Instanceof_) {
             return $this->processRemoveUselessIsObject($node->left, $node->right);
@@ -45,7 +45,7 @@ final class RemoveUselessIsObjectCheckRector extends AbstractRector
         }
         return $this->processRemoveUselessIsObject($node->right, $node->left);
     }
-    private function processRemoveUselessIsObject(FuncCall $funcCall, Instanceof_ $instanceof) : ?Instanceof_
+    private function processRemoveUselessIsObject(FuncCall $funcCall, Instanceof_ $instanceof): ?Instanceof_
     {
         if ($funcCall->isFirstClassCallable()) {
             return null;

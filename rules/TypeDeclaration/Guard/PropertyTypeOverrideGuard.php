@@ -22,7 +22,7 @@ final class PropertyTypeOverrideGuard
         $this->nodeNameResolver = $nodeNameResolver;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
     }
-    public function isLegal(Property $property, ClassReflection $classReflection) : bool
+    public function isLegal(Property $property, ClassReflection $classReflection): bool
     {
         if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection)) {
             return \false;

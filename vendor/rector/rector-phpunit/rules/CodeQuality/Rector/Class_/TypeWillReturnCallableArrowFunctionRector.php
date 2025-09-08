@@ -67,7 +67,7 @@ final class TypeWillReturnCallableArrowFunctionRector extends AbstractRector
         $this->methodParametersAndReturnTypesResolver = $methodParametersAndReturnTypesResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Decorate callbacks and arrow functions in willReturnCallback() with known param/return types based on reflection method', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -122,14 +122,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -140,7 +140,7 @@ CODE_SAMPLE
             return null;
         }
         $propertyNameToMockedTypes = $this->setUpAssignedMockTypesResolver->resolveFromClass($node);
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use(&$hasChanged, $propertyNameToMockedTypes, $currentClassReflection) {
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use (&$hasChanged, $propertyNameToMockedTypes, $currentClassReflection) {
             if (!$node instanceof MethodCall || $node->isFirstClassCallable()) {
                 return null;
             }

@@ -39,7 +39,7 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('When throwing into a catch block, checks that the previous exception is passed to the new throw clause', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -72,21 +72,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Catch_::class];
     }
     /**
      * @param Catch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $caughtThrowableVariable = $node->var;
         if (!$caughtThrowableVariable instanceof Variable) {
             return null;
         }
         $isChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($caughtThrowableVariable, &$isChanged) : ?int {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($caughtThrowableVariable, &$isChanged): ?int {
             if (!$node instanceof Throw_) {
                 return null;
             }
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorThrow(Throw_ $throw, Variable $caughtThrowableVariable) : ?int
+    private function refactorThrow(Throw_ $throw, Variable $caughtThrowableVariable): ?int
     {
         if (!$throw->expr instanceof New_) {
             return null;
@@ -146,11 +146,11 @@ CODE_SAMPLE
         // nothing more to add
         return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
     }
-    private function resolveExceptionArgumentPosition(Name $exceptionName) : ?int
+    private function resolveExceptionArgumentPosition(Name $exceptionName): ?int
     {
         $className = $this->getName($exceptionName);
         // is native exception?
-        if (\strpos($className, '\\') === \false) {
+        if (strpos($className, '\\') === \false) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
         if (!$this->reflectionProvider->hasClass($className)) {

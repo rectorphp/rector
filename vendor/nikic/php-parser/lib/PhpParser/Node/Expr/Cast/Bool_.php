@@ -11,7 +11,7 @@ class Bool_ extends Cast
     // "bool" syntax
     public const KIND_BOOLEAN = 2;
     // "boolean" syntax
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Cast_Bool';
     }

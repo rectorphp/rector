@@ -5,6 +5,6 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony73\Rector\Class_\AddVoteArgumentToVoteOnAttributeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([AddVoteArgumentToVoteOnAttributeRector::class]);
 };

@@ -31,7 +31,7 @@ final class CoalescePropertyAssignMatcher
      *
      * $this->value = $param ?? 'default';
      */
-    public function matchCoalesceAssignsToLocalPropertyNamed(Stmt $stmt, string $propertyName) : ?Coalesce
+    public function matchCoalesceAssignsToLocalPropertyNamed(Stmt $stmt, string $propertyName): ?Coalesce
     {
         if (!$stmt instanceof Expression) {
             return null;
@@ -55,7 +55,7 @@ final class CoalescePropertyAssignMatcher
         }
         return $assign->expr;
     }
-    private function isLocalPropertyFetchNamed(Expr $expr, string $propertyName) : bool
+    private function isLocalPropertyFetchNamed(Expr $expr, string $propertyName): bool
     {
         if (!$expr instanceof PropertyFetch) {
             return \false;

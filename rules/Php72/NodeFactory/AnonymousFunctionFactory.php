@@ -58,7 +58,7 @@ final class AnonymousFunctionFactory
      * @var string
      * @see https://regex101.com/r/jkLLlM/2
      */
-    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
+    private const DIM_FETCH_REGEX = '#(\$|\\\\|\x0)(?<number>\d+)#';
     public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, InlineCodeParser $inlineCodeParser, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -74,7 +74,7 @@ final class AnonymousFunctionFactory
      * @param Stmt[] $stmts
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
      */
-    public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : Closure
+    public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false): Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
         $anonymousFunctionClosure = new Closure();
@@ -91,7 +91,7 @@ final class AnonymousFunctionFactory
         $anonymousFunctionClosure->stmts = $stmts;
         return $anonymousFunctionClosure;
     }
-    public function createAnonymousFunctionFromExpr(Expr $expr) : ?Closure
+    public function createAnonymousFunctionFromExpr(Expr $expr): ?Closure
     {
         $stringValue = $this->inlineCodeParser->stringify($expr);
         $phpCode = '<?php ' . $stringValue . ';';
@@ -102,7 +102,7 @@ final class AnonymousFunctionFactory
             return null;
         }
         $stmt = $firstNode->expr;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $node) : Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $node): Node {
             if (!$node instanceof String_) {
                 return $node;
             }
@@ -116,14 +116,14 @@ final class AnonymousFunctionFactory
         $anonymousFunction->stmts[] = new Return_($stmt);
         $anonymousFunction->params[] = new Param(new Variable('matches'));
         $variables = $expr instanceof Variable ? [] : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
-        $anonymousFunction->uses = \array_map(static fn(Variable $variable): ClosureUse => new ClosureUse($variable), $variables);
+        $anonymousFunction->uses = array_map(static fn(Variable $variable): ClosureUse => new ClosureUse($variable), $variables);
         return $anonymousFunction;
     }
     /**
      * @param Param[] $params
      * @return string[]
      */
-    private function collectParamNames(array $params) : array
+    private function collectParamNames(array $params): array
     {
         $paramNames = [];
         foreach ($params as $param) {
@@ -136,7 +136,7 @@ final class AnonymousFunctionFactory
      * @param Param[] $params
      * @return array<string, Variable>
      */
-    private function createUseVariablesFromParams(array $nodes, array $params) : array
+    private function createUseVariablesFromParams(array $nodes, array $params): array
     {
         $paramNames = $this->collectParamNames($params);
         /** @var Variable[] $variables */
@@ -153,7 +153,7 @@ final class AnonymousFunctionFactory
             if ($variableName === null) {
                 continue;
             }
-            if (\in_array($variableName, $paramNames, \true)) {
+            if (in_array($variableName, $paramNames, \true)) {
                 continue;
             }
             // Superglobal variables cannot be in a use statement

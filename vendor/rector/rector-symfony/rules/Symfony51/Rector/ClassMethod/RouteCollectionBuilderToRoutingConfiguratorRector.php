@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RouteCollectionBuilderToRoutingConfiguratorRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change RouteCollectionBuilder to RoutingConfiguratorRector', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -61,16 +61,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\HttpKernel\\Kernel'))) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\Component\HttpKernel\Kernel'))) {
             return null;
         }
         $configureRoutesClassMethod = $node->getMethod('configureRoutes');
@@ -81,13 +81,13 @@ CODE_SAMPLE
         if ($firstParam->type === null) {
             return null;
         }
-        if (!$this->isName($firstParam->type, 'Symfony\\Component\\Routing\\RouteCollectionBuilder')) {
+        if (!$this->isName($firstParam->type, 'Symfony\Component\Routing\RouteCollectionBuilder')) {
             return null;
         }
-        $firstParam->type = new FullyQualified('Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator');
+        $firstParam->type = new FullyQualified('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator');
         $configureRoutesClassMethod->name = new Identifier('configureRouting');
         $configureRoutesClassMethod->returnType = new Identifier('void');
-        $this->traverseNodesWithCallable((array) $configureRoutesClassMethod->stmts, function (Node $node) : ?MethodCall {
+        $this->traverseNodesWithCallable((array) $configureRoutesClassMethod->stmts, function (Node $node): ?MethodCall {
             if (!$node instanceof MethodCall) {
                 return null;
             }

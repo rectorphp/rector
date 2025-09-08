@@ -5,5 +5,5 @@ namespace Rector\Testing\Contract;
 
 interface RectorTestInterface
 {
-    public function provideConfigFilePath() : string;
+    public function provideConfigFilePath(): string;
 }

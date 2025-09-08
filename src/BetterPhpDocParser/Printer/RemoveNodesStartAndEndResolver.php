@@ -14,11 +14,11 @@ final class RemoveNodesStartAndEndResolver
      * @param mixed[] $tokens
      * @return StartAndEnd[]
      */
-    public function resolve(PhpDocNode $originalPhpDocNode, PhpDocNode $currentPhpDocNode, array $tokens) : array
+    public function resolve(PhpDocNode $originalPhpDocNode, PhpDocNode $currentPhpDocNode, array $tokens): array
     {
         $removedNodePositions = [];
         /** @var PhpDocChildNode[] $removedChildNodes */
-        $removedChildNodes = \array_diff($originalPhpDocNode->children, $currentPhpDocNode->children);
+        $removedChildNodes = array_diff($originalPhpDocNode->children, $currentPhpDocNode->children);
         $lastEndPosition = null;
         foreach ($removedChildNodes as $removedChildNode) {
             /** @var StartAndEnd|null $removedPhpDocNodeInfo */
@@ -40,7 +40,7 @@ final class RemoveNodesStartAndEndResolver
                 --$seekPosition;
             }
             $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
-            $removedNodePositions[] = new StartAndEnd(\max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
+            $removedNodePositions[] = new StartAndEnd(max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
         }
         return $removedNodePositions;
     }

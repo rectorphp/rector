@@ -6,19 +6,19 @@ namespace PhpParser\Lexer\TokenEmulator;
 use PhpParser\PhpVersion;
 final class ReadonlyTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulator
 {
-    public function getPhpVersion() : PhpVersion
+    public function getPhpVersion(): PhpVersion
     {
         return PhpVersion::fromComponents(8, 1);
     }
-    public function getKeywordString() : string
+    public function getKeywordString(): string
     {
         return 'readonly';
     }
-    public function getKeywordToken() : int
+    public function getKeywordToken(): int
     {
         return \T_READONLY;
     }
-    protected function isKeywordContext(array $tokens, int $pos) : bool
+    protected function isKeywordContext(array $tokens, int $pos): bool
     {
         if (!parent::isKeywordContext($tokens, $pos)) {
             return \false;

@@ -19,11 +19,11 @@ class Global_ extends Node\Stmt
         $this->attributes = $attributes;
         $this->vars = $vars;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['vars'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Global';
     }

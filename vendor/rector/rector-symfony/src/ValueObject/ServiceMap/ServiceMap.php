@@ -23,11 +23,11 @@ final class ServiceMap
     /**
      * @api
      */
-    public function hasService(string $id) : bool
+    public function hasService(string $id): bool
     {
         return isset($this->services[$id]);
     }
-    public function getServiceType(string $id) : ?Type
+    public function getServiceType(string $id): ?Type
     {
         $serviceDefinition = $this->getService($id);
         if (!$serviceDefinition instanceof ServiceDefinition) {
@@ -42,7 +42,7 @@ final class ServiceMap
     /**
      * @return ServiceDefinition[]
      */
-    public function getServicesByTag(string $tagName) : array
+    public function getServicesByTag(string $tagName): array
     {
         $servicesWithTag = [];
         foreach ($this->services as $service) {
@@ -59,11 +59,11 @@ final class ServiceMap
     /**
      * @return ServiceDefinition[]
      */
-    public function getServices() : array
+    public function getServices(): array
     {
         return $this->services;
     }
-    private function getService(string $id) : ?ServiceDefinition
+    private function getService(string $id): ?ServiceDefinition
     {
         return $this->services[$id] ?? null;
     }

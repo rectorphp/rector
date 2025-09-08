@@ -34,14 +34,14 @@ final class ParamTypeAddGuard
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isLegal(Param $param, ClassMethod $classMethod) : bool
+    public function isLegal(Param $param, ClassMethod $classMethod): bool
     {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
             return \false;
         }
         $isLegal = \true;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $subNode) use(&$isLegal, $paramName) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $subNode) use (&$isLegal, $paramName): ?int {
             if ($subNode instanceof Assign && $subNode->var instanceof Variable && $this->nodeNameResolver->isName($subNode->var, $paramName)) {
                 $isLegal = \false;
                 return NodeVisitor::STOP_TRAVERSAL;

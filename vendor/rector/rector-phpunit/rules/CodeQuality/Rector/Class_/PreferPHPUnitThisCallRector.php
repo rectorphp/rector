@@ -34,7 +34,7 @@ final class PreferPHPUnitThisCallRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertMethodAnalyzer = $assertMethodAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes PHPUnit calls from self::assert*() to $this->assert*()', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -63,20 +63,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged) {
             $isInsideStaticFunctionLike = $node instanceof ClassMethod && $node->isStatic() || ($node instanceof Closure || $node instanceof ArrowFunction) && $node->static;
             if ($isInsideStaticFunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

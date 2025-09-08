@@ -29,11 +29,11 @@ final class DowngradeMixedTypeDeclarationRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class, Closure::class, ArrowFunction::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove the "mixed" param and return type, add a @param and @return tag instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -60,7 +60,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $mixedType = new MixedType();
         $hasChanged = \false;

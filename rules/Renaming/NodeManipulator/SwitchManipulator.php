@@ -12,7 +12,7 @@ final class SwitchManipulator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function removeBreakNodes(array $stmts) : array
+    public function removeBreakNodes(array $stmts): array
     {
         foreach ($stmts as $key => $node) {
             if (!$node instanceof Break_) {

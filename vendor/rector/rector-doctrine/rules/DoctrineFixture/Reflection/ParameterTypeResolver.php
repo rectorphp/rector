@@ -31,7 +31,7 @@ final class ParameterTypeResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveCallerFirstParameterObjectType(MethodCall $methodCall) : ?ObjectType
+    public function resolveCallerFirstParameterObjectType(MethodCall $methodCall): ?ObjectType
     {
         $callerType = $this->nodeTypeResolver->getType($methodCall->var);
         if (!$callerType instanceof ObjectType) {
@@ -42,7 +42,7 @@ final class ParameterTypeResolver
         }
         $callerClassReflection = $this->reflectionProvider->getClass($callerType->getClassName());
         $callerMethodName = $this->nodeNameResolver->getName($methodCall->name);
-        if (!\is_string($callerMethodName)) {
+        if (!is_string($callerMethodName)) {
             return null;
         }
         $scope = ScopeFetcher::fetch($methodCall);

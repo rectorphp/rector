@@ -59,7 +59,7 @@ final class AddClosureParamTypeFromArgRector extends AbstractRector implements C
         $this->staticTypeMapper = $staticTypeMapper;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add closure param type based on known passed service/string types of method calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $app = new Container();
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->addClosureParamTypeFromArgs as $addClosureParamTypeFromArg) {
             if ($node instanceof MethodCall) {
@@ -101,7 +101,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddClosureParamTypeFromArg::class);
         $this->addClosureParamTypeFromArgs = $configuration;
@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorParameter(Param $param, Arg $arg) : bool
+    private function refactorParameter(Param $param, Arg $arg): bool
     {
         $closureType = $this->resolveClosureType($arg->value);
         if (!$closureType instanceof Type) {
@@ -161,14 +161,14 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Name|\PhpParser\Node\Expr $caller
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function isCallMatch($caller, AddClosureParamTypeFromArg $addClosureParamTypeFromArg, $call) : bool
+    private function isCallMatch($caller, AddClosureParamTypeFromArg $addClosureParamTypeFromArg, $call): bool
     {
         if (!$this->isObjectType($caller, $addClosureParamTypeFromArg->getObjectType())) {
             return \false;
         }
         return $this->isName($call->name, $addClosureParamTypeFromArg->getMethodName());
     }
-    private function resolveClosureType(Expr $expr) : ?Type
+    private function resolveClosureType(Expr $expr): ?Type
     {
         $exprType = $this->nodeTypeResolver->getType($expr);
         if ($exprType instanceof GenericClassStringType) {

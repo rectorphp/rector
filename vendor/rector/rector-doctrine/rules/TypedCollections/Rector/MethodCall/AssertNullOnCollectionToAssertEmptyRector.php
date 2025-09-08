@@ -29,7 +29,7 @@ final class AssertNullOnCollectionToAssertEmptyRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $this->assertNull() on Collection object to $this->assertEmpty() in tests', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -59,14 +59,14 @@ final class SomeClass extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\MethodCall
     {
         if ($node->isFirstClassCallable()) {
             return null;

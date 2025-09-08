@@ -33,7 +33,7 @@ class CommentAnnotatingVisitor extends NodeVisitorAbstract
     }
     public function enterNode(Node $node)
     {
-        $nextCommentPos = \current($this->commentPositions);
+        $nextCommentPos = current($this->commentPositions);
         if ($nextCommentPos === \false) {
             // No more comments.
             return self::STOP_TRAVERSAL;
@@ -57,10 +57,10 @@ class CommentAnnotatingVisitor extends NodeVisitorAbstract
                 }
             }
             if (!empty($comments)) {
-                $node->setAttribute('comments', \array_reverse($comments));
+                $node->setAttribute('comments', array_reverse($comments));
             }
             do {
-                $nextCommentPos = \next($this->commentPositions);
+                $nextCommentPos = next($this->commentPositions);
             } while ($nextCommentPos !== \false && $nextCommentPos < $this->pos);
         }
         $endPos = $node->getEndTokenPos();

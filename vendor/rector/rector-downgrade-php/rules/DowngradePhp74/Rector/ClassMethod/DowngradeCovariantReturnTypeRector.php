@@ -81,7 +81,7 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make method return same type as parent', [new CodeSample(<<<'CODE_SAMPLE'
 class ParentType {}
@@ -127,14 +127,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->returnType === null) {
             return null;
@@ -169,7 +169,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $returnTypeNode
      */
-    private function resolveDifferentAncestorReturnType(ClassMethod $classMethod, $returnTypeNode) : Type
+    private function resolveDifferentAncestorReturnType(ClassMethod $classMethod, $returnTypeNode): Type
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
@@ -182,10 +182,10 @@ CODE_SAMPLE
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($bareReturnType);
         $methodName = $this->getName($classMethod);
         /** @var ClassReflection[] $parentClassesAndInterfaces */
-        $parentClassesAndInterfaces = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $parentClassesAndInterfaces = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         return $this->resolveMatchingReturnType($parentClassesAndInterfaces, $methodName, $classMethod, $returnType);
     }
-    private function addDocBlockReturn(ClassMethod $classMethod) : void
+    private function addDocBlockReturn(ClassMethod $classMethod): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         // keep return type if already set one
@@ -202,7 +202,7 @@ CODE_SAMPLE
     /**
      * @param ClassReflection[] $parentClassesAndInterfaces
      */
-    private function resolveMatchingReturnType(array $parentClassesAndInterfaces, string $methodName, ClassMethod $classMethod, Type $returnType) : Type
+    private function resolveMatchingReturnType(array $parentClassesAndInterfaces, string $methodName, ClassMethod $classMethod, Type $returnType): Type
     {
         foreach ($parentClassesAndInterfaces as $parentClassAndInterface) {
             $parentClassAndInterfaceHasMethod = $parentClassAndInterface->hasMethod($methodName);
@@ -235,7 +235,7 @@ CODE_SAMPLE
         }
         return new MixedType();
     }
-    private function isNullable(Type $parentReturnType, Type $returnType) : bool
+    private function isNullable(Type $parentReturnType, Type $returnType): bool
     {
         if (!$parentReturnType instanceof \PHPStan\Type\UnionType) {
             return \false;

@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommonNotEqualRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use common != instead of less known <> with same meaning', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -39,14 +39,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [NotEqual::class];
     }
     /**
      * @param NotEqual $node
      */
-    public function refactor(Node $node) : ?NotEqual
+    public function refactor(Node $node): ?NotEqual
     {
         if (!$this->doesNotEqualContainsShipCompareToken($node)) {
             return null;
@@ -55,7 +55,7 @@ CODE_SAMPLE
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
-    private function doesNotEqualContainsShipCompareToken(NotEqual $notEqual) : bool
+    private function doesNotEqualContainsShipCompareToken(NotEqual $notEqual): bool
     {
         $tokenStartPos = $notEqual->getStartTokenPos();
         $tokenEndPos = $notEqual->getEndTokenPos();

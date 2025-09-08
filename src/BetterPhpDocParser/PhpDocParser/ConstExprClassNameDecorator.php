@@ -30,13 +30,13 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
-    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode) : void
+    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode): void
     {
         // iterating all phpdocs has big overhead. peek into the phpdoc to exit early
-        if (\strpos($phpDocNode->__toString(), '::') === \false) {
+        if (strpos($phpDocNode->__toString(), '::') === \false) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use($phpNode) : ?\PHPStan\PhpDocParser\Ast\Node {
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
             if (!$node instanceof ConstFetchNode) {
                 return null;
             }
@@ -45,7 +45,7 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(ConstFetchNode $constFetchNode, PhpNode $phpNode) : string
+    private function resolveFullyQualifiedClass(ConstFetchNode $constFetchNode, PhpNode $phpNode): string
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);
         return $nameScope->resolveStringName($constFetchNode->className);

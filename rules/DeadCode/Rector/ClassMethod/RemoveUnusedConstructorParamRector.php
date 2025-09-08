@@ -31,7 +31,7 @@ final class RemoveUnusedConstructorParamRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->classMethodParamRemover = $classMethodParamRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused parameter in constructor', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -60,14 +60,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $constructorClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$constructorClassMethod instanceof ClassMethod) {

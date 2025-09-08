@@ -59,11 +59,11 @@ final class AddParamBasedOnParentClassMethodRector extends AbstractRector implem
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add missing parameter based on parent class method', [new CodeSample(<<<'CODE_SAMPLE'
 class A
@@ -98,14 +98,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
@@ -130,8 +130,8 @@ CODE_SAMPLE
         }
         $currentClassMethodParams = $node->getParams();
         $parentClassMethodParams = $parentClassMethod->getParams();
-        $countCurrentClassMethodParams = \count($currentClassMethodParams);
-        $countParentClassMethodParams = \count($parentClassMethodParams);
+        $countCurrentClassMethodParams = count($currentClassMethodParams);
+        $countParentClassMethodParams = count($parentClassMethodParams);
         if ($countCurrentClassMethodParams === $countParentClassMethodParams) {
             return null;
         }
@@ -144,7 +144,7 @@ CODE_SAMPLE
      * @param Param[] $currentClassMethodParams
      * @param Param[] $parentClassMethodParams
      */
-    private function processAddNullDefaultParam(ClassMethod $classMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?ClassMethod
+    private function processAddNullDefaultParam(ClassMethod $classMethod, array $currentClassMethodParams, array $parentClassMethodParams): ?ClassMethod
     {
         $hasChanged = \false;
         foreach ($currentClassMethodParams as $key => $currentClassMethodParam) {
@@ -169,20 +169,20 @@ CODE_SAMPLE
      * @param array<int, Param> $currentClassMethodParams
      * @param array<int, Param> $parentClassMethodParams
      */
-    private function processReplaceClassMethodParams(ClassMethod $node, ClassMethod $parentClassMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?ClassMethod
+    private function processReplaceClassMethodParams(ClassMethod $node, ClassMethod $parentClassMethod, array $currentClassMethodParams, array $parentClassMethodParams): ?ClassMethod
     {
         $originalParams = $node->params;
         foreach ($parentClassMethodParams as $key => $parentClassMethodParam) {
             if (isset($currentClassMethodParams[$key])) {
                 $currentParamName = $this->getName($currentClassMethodParams[$key]);
                 $collectParamNamesNextKey = $this->collectParamNamesNextKey($parentClassMethod, $key);
-                if (\in_array($currentParamName, $collectParamNamesNextKey, \true)) {
+                if (in_array($currentParamName, $collectParamNamesNextKey, \true)) {
                     $node->params = $originalParams;
                     return null;
                 }
                 continue;
             }
-            $isUsedInStmts = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (Node $subNode) use($parentClassMethodParam) : bool {
+            $isUsedInStmts = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (Node $subNode) use ($parentClassMethodParam): bool {
                 if (!$subNode instanceof Variable) {
                     return \false;
                 }
@@ -219,7 +219,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function collectParamNamesNextKey(ClassMethod $classMethod, int $key) : array
+    private function collectParamNamesNextKey(ClassMethod $classMethod, int $key): array
     {
         $paramNames = [];
         foreach ($classMethod->params as $paramKey => $param) {

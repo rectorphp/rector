@@ -46,7 +46,7 @@ final class AutowireAttributeRector extends AbstractRector implements Configurab
     {
         $this->configServiceArgumentsResolver = $configServiceArgumentsResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change explicit configuration parameter pass into #[Autowire] attributes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -74,14 +74,14 @@ final class SomeClass
 CODE_SAMPLE
 , [self::CONFIGS_DIRECTORY => __DIR__ . '/config'])]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if ($node->isAnonymous()) {
             return null;
@@ -100,7 +100,7 @@ CODE_SAMPLE
             return null;
         }
         $className = $this->getName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             return null;
         }
         $hasChanged = \false;
@@ -113,7 +113,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $constructorParameterName = $constructorParam->var->name;
-                if (!\is_string($constructorParameterName)) {
+                if (!is_string($constructorParameterName)) {
                     continue;
                 }
                 $currentEnv = $serviceArgument->getEnvs()[$constructorParameterName] ?? $serviceArgument->getEnvs()[$position] ?? null;
@@ -136,7 +136,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         if (!$configuration[self::CONFIGS_DIRECTORY]) {
             return;
@@ -149,20 +149,20 @@ CODE_SAMPLE
     /**
      * @return SplFileInfo[]
      */
-    private function findPhpConfigs(string $configsDirectory) : array
+    private function findPhpConfigs(string $configsDirectory): array
     {
         $phpConfigsFinder = Finder::create()->files()->in($configsDirectory)->name('*.php')->sortByName();
         if ($phpConfigsFinder->count() === 0) {
-            throw new ShouldNotHappenException(\sprintf('Could not find any PHP configs in "%s"', $this->configsDirectory));
+            throw new ShouldNotHappenException(sprintf('Could not find any PHP configs in "%s"', $this->configsDirectory));
         }
-        return \iterator_to_array($phpConfigsFinder->getIterator());
+        return iterator_to_array($phpConfigsFinder->getIterator());
     }
     /**
      * @param string|\PhpParser\Node\Expr $value
      */
-    private function createAutowireAttribute($value, string $argName) : Attribute
+    private function createAutowireAttribute($value, string $argName): Attribute
     {
-        if (\is_string($value)) {
+        if (is_string($value)) {
             $value = new String_($value);
         }
         $args = [new Arg($value, \false, \false, [], new Identifier($argName))];

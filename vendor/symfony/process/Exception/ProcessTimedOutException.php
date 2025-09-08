@@ -49,7 +49,7 @@ class ProcessTimedOutException extends RuntimeException
     {
         return self::TYPE_IDLE === $this->timeoutType;
     }
-    public function getExceededTimeout() : ?float
+    public function getExceededTimeout(): ?float
     {
         switch ($this->timeoutType) {
             case self::TYPE_GENERAL:

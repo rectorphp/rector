@@ -8,21 +8,21 @@ final class ResponseClass
     /**
      * @var string
      */
-    public const REDIRECT = 'Symfony\\Component\\HttpFoundation\\RedirectResponse';
+    public const REDIRECT = 'Symfony\Component\HttpFoundation\RedirectResponse';
     /**
      * @var string
      */
-    public const BINARY_FILE = 'Symfony\\Component\\HttpFoundation\\BinaryFileResponse';
+    public const BINARY_FILE = 'Symfony\Component\HttpFoundation\BinaryFileResponse';
     /**
      * @var string
      */
-    public const JSON = 'Symfony\\Component\\HttpFoundation\\JsonResponse';
+    public const JSON = 'Symfony\Component\HttpFoundation\JsonResponse';
     /**
      * @var string
      */
-    public const STREAMED = 'Symfony\\Component\\HttpFoundation\\StreamedResponse';
+    public const STREAMED = 'Symfony\Component\HttpFoundation\StreamedResponse';
     /**
      * @var string
      */
-    public const BASIC = 'Symfony\\Component\\HttpFoundation\\Response';
+    public const BASIC = 'Symfony\Component\HttpFoundation\Response';
 }

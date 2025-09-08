@@ -25,20 +25,20 @@ use RectorPrefix202509\Symfony\Contracts\Service\Attribute\SubscribedService;
 trait ServiceMethodsSubscriberTrait
 {
     protected ContainerInterface $container;
-    public static function getSubscribedServices() : array
+    public static function getSubscribedServices(): array
     {
-        $services = \method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
+        $services = method_exists(get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
         foreach ((new \ReflectionClass(self::class))->getMethods() as $method) {
             if (self::class !== $method->getDeclaringClass()->name) {
                 continue;
             }
-            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(SubscribedService::class) : [])[0] ?? null)) {
+            if (!$attribute = (method_exists($method, 'getAttributes') ? $method->getAttributes(SubscribedService::class) : [])[0] ?? null) {
                 continue;
             }
             if ($method->isStatic() || $method->isAbstract() || $method->isGenerator() || $method->isInternal() || $method->getNumberOfRequiredParameters()) {
                 throw new \LogicException(\sprintf('Cannot use "%s" on method "%s::%s()" (can only be used on non-static, non-abstract methods with no parameters).', SubscribedService::class, self::class, $method->name));
             }
-            if (!($returnType = $method->getReturnType())) {
+            if (!$returnType = $method->getReturnType()) {
                 throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', SubscribedService::class, $method->name, self::class));
             }
             /* @var SubscribedService $attribute */
@@ -57,10 +57,10 @@ trait ServiceMethodsSubscriberTrait
     /**
      * @required
      */
-    public function setContainer(ContainerInterface $container) : ?ContainerInterface
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $ret = null;
-        if (\method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__)) {
+        if (method_exists(get_parent_class(self::class) ?: '', __FUNCTION__)) {
             $ret = parent::setContainer($container);
         }
         $this->container = $container;

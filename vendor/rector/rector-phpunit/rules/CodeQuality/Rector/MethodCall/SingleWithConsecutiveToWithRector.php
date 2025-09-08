@@ -31,7 +31,7 @@ final class SingleWithConsecutiveToWithRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change single-value withConsecutive() to with() call, willReturnOnConsecutiveCalls() to willReturn() call', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -66,14 +66,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<MethodCall>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -84,7 +84,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 1) {
+        if (count($node->getArgs()) !== 1) {
             return null;
         }
         $firstArg = $node->getArgs()[0];
@@ -99,14 +99,14 @@ CODE_SAMPLE
             $node->name = new Identifier('willReturn');
         }
         // has assert inside?
-        $hasAssertInside = (bool) $this->betterNodeFinder->findFirst($firstArg->value, function (Node $node) : bool {
+        $hasAssertInside = (bool) $this->betterNodeFinder->findFirst($firstArg->value, function (Node $node): bool {
             if (!$node instanceof MethodCall) {
                 return \false;
             }
             return $this->isNames($node->name, ['equalTo', 'instanceOf']);
         });
         // replace $this->equalsTo() with direct value
-        $this->traverseNodesWithCallable($firstArg->value, function (Node $node) : ?Node {
+        $this->traverseNodesWithCallable($firstArg->value, function (Node $node): ?Node {
             if (!$node instanceof MethodCall) {
                 return null;
             }

@@ -61,18 +61,18 @@ final class AssertCallAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resetNesting() : void
+    public function resetNesting(): void
     {
         $this->classMethodNestingLevel = 0;
     }
-    public function containsAssertCall(ClassMethod $classMethod) : bool
+    public function containsAssertCall(ClassMethod $classMethod): bool
     {
         ++$this->classMethodNestingLevel;
         // probably no assert method in the end
         if ($this->classMethodNestingLevel > self::MAX_NESTED_METHOD_CALL_LEVEL) {
             return \false;
         }
-        $cacheHash = \md5($this->betterStandardPrinter->prettyPrint([$classMethod]));
+        $cacheHash = md5($this->betterStandardPrinter->prettyPrint([$classMethod]));
         if (isset($this->containsAssertCallByClassMethod[$cacheHash])) {
             return $this->containsAssertCallByClassMethod[$cacheHash];
         }
@@ -87,16 +87,16 @@ final class AssertCallAnalyzer
         $this->containsAssertCallByClassMethod[$cacheHash] = $hasNestedAssertOrMockCall;
         return $hasNestedAssertOrMockCall;
     }
-    private function hasDirectAssertOrMockCall(ClassMethod $classMethod) : bool
+    private function hasDirectAssertOrMockCall(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if ($node instanceof MethodCall) {
                 // probably a mock
                 if ($this->nodeNameResolver->isName($node->name, 'expects')) {
                     return \true;
                 }
                 $type = $this->nodeTypeResolver->getType($node->var);
-                if ($type instanceof FullyQualifiedObjectType && \in_array($type->getClassName(), ['PHPUnit\\Framework\\MockObject\\MockBuilder', 'Prophecy\\Prophet'], \true)) {
+                if ($type instanceof FullyQualifiedObjectType && in_array($type->getClassName(), ['PHPUnit\Framework\MockObject\MockBuilder', 'Prophecy\Prophet'], \true)) {
                     return \true;
                 }
                 return $this->isAssertMethodName($node);
@@ -107,11 +107,11 @@ final class AssertCallAnalyzer
             return \false;
         });
     }
-    private function hasNestedAssertCall(ClassMethod $classMethod) : bool
+    private function hasNestedAssertCall(ClassMethod $classMethod): bool
     {
         $currentClassMethod = $classMethod;
         // over and over the same method :/
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($currentClassMethod) : bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use ($currentClassMethod): bool {
             if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
                 return \false;
             }
@@ -133,7 +133,7 @@ final class AssertCallAnalyzer
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function resolveClassMethodFromCall($call) : ?ClassMethod
+    private function resolveClassMethodFromCall($call): ?ClassMethod
     {
         if ($call instanceof MethodCall) {
             $objectType = $this->nodeTypeResolver->getType($call->var);
@@ -153,17 +153,17 @@ final class AssertCallAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function isAssertMethodName($call) : bool
+    private function isAssertMethodName($call): bool
     {
         if (!$call->name instanceof Identifier) {
             return \false;
         }
         $callName = $this->nodeNameResolver->getName($call->name);
-        if (!\is_string($callName)) {
+        if (!is_string($callName)) {
             return \false;
         }
         foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
-            if (\strncmp($callName, $assertMethodNamePrefix, \strlen($assertMethodNamePrefix)) === 0) {
+            if (strncmp($callName, $assertMethodNamePrefix, strlen($assertMethodNamePrefix)) === 0) {
                 return \true;
             }
         }

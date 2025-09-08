@@ -16,12 +16,12 @@ final class TokenIteratorFactory
     {
         $this->lexer = $lexer;
     }
-    public function create(string $content) : BetterTokenIterator
+    public function create(string $content): BetterTokenIterator
     {
         $tokens = $this->lexer->tokenize($content);
         return new BetterTokenIterator($tokens);
     }
-    public function createFromTokenIterator(TokenIterator $tokenIterator) : BetterTokenIterator
+    public function createFromTokenIterator(TokenIterator $tokenIterator): BetterTokenIterator
     {
         if ($tokenIterator instanceof BetterTokenIterator) {
             return $tokenIterator;

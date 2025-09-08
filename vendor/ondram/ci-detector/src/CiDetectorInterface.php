@@ -13,11 +13,11 @@ interface CiDetectorInterface
     /**
      * Is current environment an recognized CI server?
      */
-    public function isCiDetected() : bool;
+    public function isCiDetected(): bool;
     /**
      * Detect current CI server and return instance of its settings
      *
      * @throws CiNotDetectedException
      */
-    public function detect() : CiInterface;
+    public function detect(): CiInterface;
 }

@@ -17,7 +17,7 @@ class DoctrineTagValueNode implements PhpDocTagValueNode
         $this->annotation = $annotation;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->annotation} {$this->description}");
     }

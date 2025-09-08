@@ -42,11 +42,11 @@ class SymfonyQuestionHelper extends QuestionHelper
                 break;
             case $question instanceof ChoiceQuestion && $question->isMultiselect():
                 $choices = $question->getChoices();
-                $default = \explode(',', $default);
+                $default = explode(',', $default);
                 foreach ($default as $key => $value) {
-                    $default[$key] = $choices[\trim($value)];
+                    $default[$key] = $choices[trim($value)];
                 }
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, OutputFormatter::escape(\implode(', ', $default)));
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, OutputFormatter::escape(implode(', ', $default)));
                 break;
             case $question instanceof ChoiceQuestion:
                 $choices = $question->getChoices();
@@ -75,7 +75,7 @@ class SymfonyQuestionHelper extends QuestionHelper
         }
         parent::writeError($output, $error);
     }
-    private function getEofShortcut() : string
+    private function getEofShortcut(): string
     {
         if ('Windows' === \PHP_OS_FAMILY) {
             return '<comment>Ctrl+Z</comment> then <comment>Enter</comment>';

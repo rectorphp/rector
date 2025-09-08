@@ -28,7 +28,7 @@ final class SetManager
     /**
      * @return ComposerTriggeredSet[]
      */
-    public function matchComposerTriggered(string $groupName) : array
+    public function matchComposerTriggered(string $groupName): array
     {
         $matchedSets = [];
         foreach ($this->setProviderCollector->provideComposerTriggeredSets() as $composerTriggeredSet) {
@@ -42,7 +42,7 @@ final class SetManager
      * @param SetGroup::*[] $setGroups
      * @return string[]
      */
-    public function matchBySetGroups(array $setGroups) : array
+    public function matchBySetGroups(array $setGroups): array
     {
         $installedComposerPackages = $this->installedPackageResolver->resolve();
         $groupLoadedSets = [];
@@ -51,7 +51,7 @@ final class SetManager
             foreach ($composerTriggeredSets as $composerTriggeredSet) {
                 if ($composerTriggeredSet->matchInstalledPackages($installedComposerPackages)) {
                     // it matched composer package + version requirements → load set
-                    $groupLoadedSets[] = \realpath($composerTriggeredSet->getSetFilePath());
+                    $groupLoadedSets[] = realpath($composerTriggeredSet->getSetFilePath());
                 }
             }
         }

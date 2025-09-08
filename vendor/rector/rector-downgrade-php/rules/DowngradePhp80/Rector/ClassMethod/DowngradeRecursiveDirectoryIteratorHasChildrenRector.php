@@ -25,11 +25,11 @@ final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends Abstrac
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLinks parameter', [new CodeSample(<<<'CODE_SAMPLE'
 class RecursiveDirectoryIteratorChild extends \RecursiveDirectoryIterator
@@ -54,7 +54,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($node->getMethods() as $classMethod) {
             if (!isset($classMethod->params[0])) {
@@ -67,7 +67,7 @@ CODE_SAMPLE
                 continue;
             }
             $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
-            if (!\in_array('RecursiveDirectoryIterator', $ancestorClassNames, \true)) {
+            if (!in_array('RecursiveDirectoryIterator', $ancestorClassNames, \true)) {
                 continue;
             }
             $classMethod->params[0]->type = null;

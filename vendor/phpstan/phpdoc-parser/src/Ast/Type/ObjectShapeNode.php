@@ -17,7 +17,7 @@ class ObjectShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $this->items = $items;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $items = $this->items;
         return 'object{' . implode(', ', $items) . '}';

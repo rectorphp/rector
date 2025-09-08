@@ -64,7 +64,7 @@ final class AddParamTypeFromPropertyTypeRector extends AbstractRector implements
         $this->paramTypeAddGuard = $paramTypeAddGuard;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(self::ERROR_MESSAGE, [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -93,14 +93,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         $hasChanged = \false;
         foreach ($node->params as $param) {
@@ -132,17 +132,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @return Type[]
      */
-    private function resolvePropertyStaticTypesByParamName(ClassMethod $classMethod, string $paramName) : array
+    private function resolvePropertyStaticTypesByParamName(ClassMethod $classMethod, string $paramName): array
     {
         $propertyStaticTypes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use($paramName, &$propertyStaticTypes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use ($paramName, &$propertyStaticTypes): ?int {
             if ($node instanceof Class_ || $node instanceof Function_) {
                 // skip anonymous classes and inner function
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

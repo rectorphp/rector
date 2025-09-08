@@ -36,7 +36,7 @@ final class ClassNameImportSkipper
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function shouldSkipNameForFullyQualifiedObjectType(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    public function shouldSkipNameForFullyQualifiedObjectType(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
             if ($classNameImportSkipVoter->shouldSkip($file, $fullyQualifiedObjectType, $node)) {
@@ -48,9 +48,9 @@ final class ClassNameImportSkipper
     /**
      * @param array<Use_|GroupUse> $uses
      */
-    public function shouldSkipName(FullyQualified $fullyQualified, array $uses) : bool
+    public function shouldSkipName(FullyQualified $fullyQualified, array $uses): bool
     {
-        if (\substr_count($fullyQualified->toCodeString(), '\\') === 1) {
+        if (substr_count($fullyQualified->toCodeString(), '\\') === 1) {
             return $this->shouldSkipShortName($fullyQualified);
         }
         // verify long name, as short name verify may conflict
@@ -62,12 +62,12 @@ final class ClassNameImportSkipper
         }
         $stringName = $fullyQualified->toString();
         $lastUseName = $fullyQualified->getLast();
-        $nameLastName = \strtolower($lastUseName);
+        $nameLastName = strtolower($lastUseName);
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
             $useName = $prefix . $stringName;
             foreach ($use->uses as $useUse) {
-                $useUseLastName = \strtolower($useUse->name->getLast());
+                $useUseLastName = strtolower($useUse->name->getLast());
                 if ($useUseLastName !== $nameLastName) {
                     continue;
                 }
@@ -79,7 +79,7 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
-    private function shouldSkipShortName(FullyQualified $fullyQualified) : bool
+    private function shouldSkipShortName(FullyQualified $fullyQualified): bool
     {
         if ($this->isFunctionOrConstantImport($fullyQualified)) {
             return \true;
@@ -87,14 +87,14 @@ final class ClassNameImportSkipper
         // Importing root namespace classes (like \DateTime) is optional
         return !SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
     }
-    private function isFunctionOrConstantImport(FullyQualified $fullyQualified) : bool
+    private function isFunctionOrConstantImport(FullyQualified $fullyQualified): bool
     {
         if ($fullyQualified->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
             return \true;
         }
         return $fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true;
     }
-    private function isConflictedShortNameInUse(UseItem $useItem, string $useName, string $lastUseName, string $stringName) : bool
+    private function isConflictedShortNameInUse(UseItem $useItem, string $useName, string $lastUseName, string $stringName): bool
     {
         if (!$useItem->alias instanceof Identifier && $useName !== $stringName && $lastUseName === $stringName) {
             return \true;

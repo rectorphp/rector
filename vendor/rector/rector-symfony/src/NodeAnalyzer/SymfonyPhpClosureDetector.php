@@ -32,9 +32,9 @@ final class SymfonyPhpClosureDetector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function detect(Closure $closure) : bool
+    public function detect(Closure $closure): bool
     {
-        if (\count($closure->params) !== 1) {
+        if (count($closure->params) !== 1) {
             return \false;
         }
         $firstParam = $closure->params[0];
@@ -43,11 +43,11 @@ final class SymfonyPhpClosureDetector
         }
         return $this->nodeNameResolver->isName($firstParam->type, SymfonyClass::CONTAINER_CONFIGURATOR);
     }
-    public function hasDefaultsAutoconfigure(Closure $closure) : bool
+    public function hasDefaultsAutoconfigure(Closure $closure): bool
     {
         $hasDefaultsAutoconfigure = \false;
         // has defaults autoconfigure?
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use(&$hasDefaultsAutoconfigure) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use (&$hasDefaultsAutoconfigure): ?int {
             if (!$node instanceof MethodCall) {
                 return null;
             }

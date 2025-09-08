@@ -45,7 +45,7 @@ final class NumericReturnTypeFromStrictReturnsRector extends AbstractRector impl
         $this->betterNodeFinder = $betterNodeFinder;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add int/float return type based on strict typed returns', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
@@ -115,14 +115,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function shouldSkip($functionLike, Scope $scope) : bool
+    private function shouldSkip($functionLike, Scope $scope): bool
     {
         // type is already known, skip
         if ($functionLike->returnType instanceof Node) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function isAlwaysNumeric(array $returns) : bool
+    private function isAlwaysNumeric(array $returns): bool
     {
         $isAlwaysFloat = \true;
         $isAlwaysInt = \true;

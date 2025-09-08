@@ -8,5 +8,5 @@ final class SilentKeyMap
     /**
      * @var array<string, string>
      */
-    public const CLASS_NAMES_TO_SILENT_KEYS = ['Symfony\\Component\\Routing\\Annotation\\Route' => 'path'];
+    public const CLASS_NAMES_TO_SILENT_KEYS = ['Symfony\Component\Routing\Annotation\Route' => 'path'];
 }

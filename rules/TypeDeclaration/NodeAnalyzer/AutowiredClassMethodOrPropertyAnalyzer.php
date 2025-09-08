@@ -24,7 +24,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function matchAutowiredMethodInClass(Class_ $class) : ?ClassMethod
+    public function matchAutowiredMethodInClass(Class_ $class): ?ClassMethod
     {
         foreach ($class->getMethods() as $classMethod) {
             if (!$classMethod->isPublic()) {
@@ -43,12 +43,12 @@ final class AutowiredClassMethodOrPropertyAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
-    public function detect($node) : bool
+    public function detect($node): bool
     {
         $nodePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, ['Symfony\\Contracts\\Service\\Attribute\\Required', 'Nette\\DI\\Attributes\\Inject']);
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, ['Symfony\Contracts\Service\Attribute\Required', 'Nette\DI\Attributes\Inject']);
     }
 }

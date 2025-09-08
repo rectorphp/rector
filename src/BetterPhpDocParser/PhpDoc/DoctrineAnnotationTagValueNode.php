@@ -19,11 +19,11 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
         $this->identifierTypeNode = $identifierTypeNode;
         $this->hasChanged = \true;
         parent::__construct($values, $originalContent, $silentKey);
-        if (!\in_array($comment, ['', null], \true)) {
+        if (!in_array($comment, ['', null], \true)) {
             $this->setAttribute(AttributeKey::ATTRIBUTE_COMMENT, $comment);
         }
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if (!$this->hasChanged) {
             if ($this->originalContent === null) {
@@ -41,9 +41,9 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
         $itemContents = $this->printValuesContent($this->values);
         return \sprintf('(%s)', $itemContents);
     }
-    public function hasClassName(string $className) : bool
+    public function hasClassName(string $className): bool
     {
-        $annotationName = \trim($this->identifierTypeNode->name, '@');
+        $annotationName = trim($this->identifierTypeNode->name, '@');
         if ($annotationName === $className) {
             return \true;
         }

@@ -13,9 +13,9 @@ interface NodeTypeResolverInterface
     /**
      * @return array<class-string<TNode>>
      */
-    public function getNodeClasses() : array;
+    public function getNodeClasses(): array;
     /**
      * @param TNode $node
      */
-    public function resolve(Node $node) : Type;
+    public function resolve(Node $node): Type;
 }

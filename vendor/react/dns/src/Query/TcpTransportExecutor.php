@@ -136,7 +136,7 @@ class TcpTransportExecutor implements ExecutorInterface
         }
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->nameserver = 'tcp://' . $parts['host'] . ':' . (isset($parts['port']) ? $parts['port'] : 53);
         $this->loop = $loop ?: Loop::get();
@@ -183,7 +183,7 @@ class TcpTransportExecutor implements ExecutorInterface
         }
         $names =& $this->names;
         $that = $this;
-        $deferred = new Deferred(function () use($that, &$names, $request) {
+        $deferred = new Deferred(function () use ($that, &$names, $request) {
             // remove from list of pending names, but remember pending query
             $name = $names[$request->id];
             unset($names[$request->id]);
@@ -221,10 +221,10 @@ class TcpTransportExecutor implements ExecutorInterface
         }
         $errno = 0;
         $errstr = '';
-        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
             // Match errstr from PHP's warning message.
             // fwrite(): Send of 327712 bytes failed with errno=32 Broken pipe
-            \preg_match('/errno=(\\d+) (.+)/', $error, $m);
+            \preg_match('/errno=(\d+) (.+)/', $error, $m);
             $errno = isset($m[1]) ? (int) $m[1] : 0;
             $errstr = isset($m[2]) ? $m[2] : $error;
         });
@@ -264,7 +264,7 @@ class TcpTransportExecutor implements ExecutorInterface
                 return;
             }
             $data = \substr($this->readBuffer, 2, $length);
-            $this->readBuffer = (string) \substr($this->readBuffer, $length + 2);
+            $this->readBuffer = (string) substr($this->readBuffer, $length + 2);
             try {
                 $response = $this->parser->parseMessage($data);
             } catch (\Exception $e) {
@@ -318,7 +318,7 @@ class TcpTransportExecutor implements ExecutorInterface
     {
         if ($this->idleTimer === null && !$this->names) {
             $that = $this;
-            $this->idleTimer = $this->loop->addTimer($this->idlePeriod, function () use($that) {
+            $this->idleTimer = $this->loop->addTimer($this->idlePeriod, function () use ($that) {
                 $that->closeError('Idle timeout');
             });
         }

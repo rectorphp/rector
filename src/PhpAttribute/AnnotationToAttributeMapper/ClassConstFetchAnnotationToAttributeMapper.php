@@ -18,25 +18,25 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
-        if (!\is_string($value)) {
+        if (!is_string($value)) {
             return \false;
         }
-        if (\strpos($value, '::') === \false) {
+        if (strpos($value, '::') === \false) {
             return \false;
         }
         // is quoted? skip it
-        return \strncmp($value, '"', \strlen('"')) !== 0;
+        return strncmp($value, '"', strlen('"')) !== 0;
     }
     /**
      * @param string $value
      * @return String_|ClassConstFetch
      */
-    public function map($value) : Node
+    public function map($value): Node
     {
-        $values = \explode('::', $value);
-        if (\count($values) !== 2) {
+        $values = explode('::', $value);
+        if (count($values) !== 2) {
             return new String_($value);
         }
         [$class, $constant] = $values;
@@ -44,7 +44,7 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
             return new String_($value);
         }
         try {
-            RectorAssert::className(\ltrim($class, '\\'));
+            RectorAssert::className(ltrim($class, '\\'));
             RectorAssert::constantName($constant);
         } catch (InvalidArgumentException $exception) {
             return new String_($value);

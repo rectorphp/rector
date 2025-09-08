@@ -72,7 +72,7 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractRector implements
         $this->betterNodeFinder = $betterNodeFinder;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add strict return array type based on created empty array and returned', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -101,14 +101,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
@@ -131,7 +131,7 @@ CODE_SAMPLE
         if ($variables === []) {
             return null;
         }
-        if (\count($returns) > 1) {
+        if (count($returns) > 1) {
             $returnType = $this->returnTypeInferer->inferFunctionLike($node);
             return $this->processAddArrayReturnType($node, $returnType);
         }
@@ -145,7 +145,7 @@ CODE_SAMPLE
         $returnType = $this->nodeTypeResolver->getNativeType($onlyReturn->expr);
         return $this->processAddArrayReturnType($node, $returnType);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_70;
     }
@@ -169,7 +169,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function shouldSkip($node, Scope $scope) : bool
+    private function shouldSkip($node, Scope $scope): bool
     {
         if ($node->returnType instanceof Node) {
             return \true;
@@ -179,7 +179,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function changeReturnType($node, Type $arrayType) : void
+    private function changeReturnType($node, Type $arrayType): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // skip already filled type, on purpose
@@ -187,7 +187,7 @@ CODE_SAMPLE
             return;
         }
         // can handle only exactly 1-type array
-        if ($arrayType instanceof ConstantArrayType && \count($arrayType->getValueTypes()) !== 1) {
+        if ($arrayType instanceof ConstantArrayType && count($arrayType->getValueTypes()) !== 1) {
             return;
         }
         $itemType = $arrayType->getIterableValueType();
@@ -206,7 +206,7 @@ CODE_SAMPLE
      * @return Variable[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function matchVariableNotOverriddenByNonArray($functionLike, array $variables) : array
+    private function matchVariableNotOverriddenByNonArray($functionLike, array $variables): array
     {
         // is variable overridden?
         /** @var Assign[] $assigns */
@@ -234,7 +234,7 @@ CODE_SAMPLE
      * @param Stmt[] $stmts
      * @return Variable[]
      */
-    private function matchArrayAssignedVariable(array $stmts) : array
+    private function matchArrayAssignedVariable(array $stmts): array
     {
         $variables = [];
         foreach ($stmts as $stmt) {
@@ -255,7 +255,7 @@ CODE_SAMPLE
         }
         return $variables;
     }
-    private function shouldAddReturnArrayDocType(Type $arrayType) : bool
+    private function shouldAddReturnArrayDocType(Type $arrayType): bool
     {
         if ($arrayType instanceof ConstantArrayType) {
             if ($arrayType->getIterableValueType() instanceof NeverType) {

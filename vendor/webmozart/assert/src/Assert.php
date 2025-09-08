@@ -378,7 +378,7 @@ class Assert
     {
         static::string($class, 'Expected class as a string. Got: %s');
         if (!\is_a($value, $class, \is_string($value))) {
-            static::reportInvalidArgument(\sprintf($message ?: 'Expected an instance of this class or to this class among its parents "%2$s". Got: %s', static::valueToString($value), $class));
+            static::reportInvalidArgument(sprintf($message ?: 'Expected an instance of this class or to this class among its parents "%2$s". Got: %s', static::valueToString($value), $class));
         }
     }
     /**
@@ -398,7 +398,7 @@ class Assert
     {
         static::string($class, 'Expected class as a string. Got: %s');
         if (\is_a($value, $class, \is_string($value))) {
-            static::reportInvalidArgument(\sprintf($message ?: 'Expected an instance of this class or to this class among its parents other than "%2$s". Got: %s', static::valueToString($value), $class));
+            static::reportInvalidArgument(sprintf($message ?: 'Expected an instance of this class or to this class among its parents other than "%2$s". Got: %s', static::valueToString($value), $class));
         }
     }
     /**
@@ -419,7 +419,7 @@ class Assert
                 return;
             }
         }
-        static::reportInvalidArgument(\sprintf($message ?: 'Expected an instance of any of this classes or any of those classes among their parents "%2$s". Got: %s', static::valueToString($value), \implode(', ', $classes)));
+        static::reportInvalidArgument(sprintf($message ?: 'Expected an instance of any of this classes or any of those classes among their parents "%2$s". Got: %s', static::valueToString($value), \implode(', ', $classes)));
     }
     /**
      * @psalm-pure
@@ -797,7 +797,7 @@ class Assert
      */
     public static function notWhitespaceOnly($value, $message = '')
     {
-        if (\preg_match('/^\\s*$/', $value)) {
+        if (\preg_match('/^\s*$/', $value)) {
             static::reportInvalidArgument(\sprintf($message ?: 'Expected a non-whitespace string. Got: %s', static::valueToString($value)));
         }
     }
@@ -924,7 +924,7 @@ class Assert
     public static function unicodeLetters($value, $message = '')
     {
         static::string($value);
-        if (!\preg_match('/^\\p{L}+$/u', $value)) {
+        if (!\preg_match('/^\p{L}+$/u', $value)) {
             static::reportInvalidArgument(\sprintf($message ?: 'Expected a value to contain only Unicode letters. Got: %s', static::valueToString($value)));
         }
     }
@@ -1440,7 +1440,7 @@ class Assert
      */
     public static function isMap($array, $message = '')
     {
-        if (!\is_array($array) || \array_keys($array) !== \array_filter(\array_keys($array), '\\is_string')) {
+        if (!\is_array($array) || \array_keys($array) !== \array_filter(\array_keys($array), '\is_string')) {
             static::reportInvalidArgument($message ?: 'Expected map - associative array with string keys.');
         }
     }
@@ -1580,10 +1580,10 @@ class Assert
     }
     protected static function strlen($value)
     {
-        if (!\function_exists('mb_detect_encoding')) {
+        if (!\function_exists('mb_detect_encoding') && !\function_exists('RectorPrefix202509\mb_detect_encoding')) {
             return \strlen($value);
         }
-        if (\false === ($encoding = \mb_detect_encoding($value))) {
+        if (\false === $encoding = \mb_detect_encoding($value)) {
             return \strlen($value);
         }
         return \mb_strlen($value, $encoding);

@@ -30,14 +30,14 @@ class ArrayItem extends NodeAbstract
         $this->byRef = $byRef;
         $this->unpack = $unpack;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['key', 'value', 'byRef', 'unpack'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'ArrayItem';
     }
 }
 // @deprecated compatibility alias
-\class_alias(\PhpParser\Node\ArrayItem::class, \PhpParser\Node\Expr\ArrayItem::class);
+class_alias(\PhpParser\Node\ArrayItem::class, \PhpParser\Node\Expr\ArrayItem::class);

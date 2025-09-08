@@ -45,32 +45,32 @@ final class Diff implements IteratorAggregate
     /**
      * @return non-empty-string
      */
-    public function from() : string
+    public function from(): string
     {
         return $this->from;
     }
     /**
      * @return non-empty-string
      */
-    public function to() : string
+    public function to(): string
     {
         return $this->to;
     }
     /**
      * @return list<Chunk>
      */
-    public function chunks() : array
+    public function chunks(): array
     {
         return $this->chunks;
     }
     /**
      * @param list<Chunk> $chunks
      */
-    public function setChunks(array $chunks) : void
+    public function setChunks(array $chunks): void
     {
         $this->chunks = $chunks;
     }
-    public function getIterator() : Traversable
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->chunks);
     }

@@ -24,7 +24,7 @@ final class ConsistentImplodeRector extends AbstractRector
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes various implode forms to consistent one', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -51,14 +51,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isNames($node, ['implode', 'join'])) {
             return null;
@@ -66,7 +66,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) === 1) {
+        if (count($node->getArgs()) === 1) {
             // complete default value ''
             $node->args[1] = $node->getArgs()[0];
             $node->args[0] = new Arg(new String_(''));
@@ -78,12 +78,12 @@ CODE_SAMPLE
         if ($firstArgumentType->isString()->yes()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 2) {
+        if (count($node->getArgs()) !== 2) {
             return null;
         }
         $secondArg = $node->getArgs()[1];
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($secondArg->value)) {
-            $node->args = \array_reverse($node->getArgs());
+            $node->args = array_reverse($node->getArgs());
             return $node;
         }
         return null;

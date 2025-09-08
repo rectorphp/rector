@@ -44,9 +44,9 @@ final class RemoveTypedPropertyNonMockDocblockRector extends AbstractRector impl
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove @var annotation for PHPUnit\\Framework\\MockObject\\MockObject combined with native object type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove @var annotation for PHPUnit\Framework\MockObject\MockObject combined with native object type', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -69,14 +69,14 @@ final class SomeTest extends TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isObjectType($node, new ObjectType(ClassName::TEST_CASE_CLASS))) {
             return null;
@@ -87,7 +87,7 @@ CODE_SAMPLE
             if (!$property->type instanceof Node) {
                 continue;
             }
-            if (\count($property->props) !== 1) {
+            if (count($property->props) !== 1) {
                 continue;
             }
             if (!$property->type instanceof FullyQualified) {
@@ -110,11 +110,11 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function isVarTagUnionTypeMockObject(PhpDocInfo $phpDocInfo, Property $property) : bool
+    private function isVarTagUnionTypeMockObject(PhpDocInfo $phpDocInfo, Property $property): bool
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         if (!$varTagValueNode instanceof VarTagValueNode) {

@@ -5,6 +5,6 @@ namespace Rector\Renaming\Contract;
 
 interface RenameAnnotationInterface
 {
-    public function getOldAnnotation() : string;
-    public function getNewAnnotation() : string;
+    public function getOldAnnotation(): string;
+    public function getNewAnnotation(): string;
 }

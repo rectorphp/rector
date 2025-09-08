@@ -31,20 +31,20 @@ final class IntlBundleClassToNewClass
         RectorAssert::className($oldClass);
         RectorAssert::className($newClass);
         Assert::allString($oldToNewMethods);
-        Assert::allString(\array_keys($oldToNewMethods));
+        Assert::allString(array_keys($oldToNewMethods));
     }
-    public function getOldClass() : string
+    public function getOldClass(): string
     {
         return $this->oldClass;
     }
-    public function getNewClass() : string
+    public function getNewClass(): string
     {
         return $this->newClass;
     }
     /**
      * @return array<string, string>
      */
-    public function getOldToNewMethods() : array
+    public function getOldToNewMethods(): array
     {
         return $this->oldToNewMethods;
     }

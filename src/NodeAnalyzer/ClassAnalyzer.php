@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
 final class ClassAnalyzer
 {
-    public function isAnonymousClass(Node $node) : bool
+    public function isAnonymousClass(Node $node): bool
     {
         if ($node instanceof New_) {
             return $this->isAnonymousClass($node->class);

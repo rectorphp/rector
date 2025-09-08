@@ -68,7 +68,7 @@ CODE_SAMPLE;
     private CreatedByRuleDecorator $createdByRuleDecorator;
     private ?int $toBeRemovedNodeId = null;
     private KaizenStepper $kaizenStepper;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, KaizenStepper $kaizenStepper) : void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, KaizenStepper $kaizenStepper): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -84,7 +84,7 @@ CODE_SAMPLE;
     /**
      * @return Node[]|null
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         // workaround for file around refactor()
         $file = $this->currentFileProvider->getFile();
@@ -97,12 +97,12 @@ CODE_SAMPLE;
     /**
      * @return int|\PhpParser\Node|null
      */
-    public final function enterNode(Node $node)
+    final public function enterNode(Node $node)
     {
         if (!$this->isMatchingNodeType($node)) {
             return null;
         }
-        if (\is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
+        if (is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
             return null;
         }
         // should keep improving?
@@ -122,17 +122,17 @@ CODE_SAMPLE;
             return null;
         }
         if ($refactoredNode === []) {
-            $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
+            $errorMessage = sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        $isIntRefactoredNode = \is_int($refactoredNode);
+        $isIntRefactoredNode = is_int($refactoredNode);
         /**
          * If below node and/or its children not traversed on current rule
          * early return null with decorate current and children node with skipped by "only" current rule
          */
         if ($isIntRefactoredNode) {
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
-            if (\in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
+            if (in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
                 $this->decorateCurrentAndChildren($node);
                 return null;
             }
@@ -145,7 +145,7 @@ CODE_SAMPLE;
             // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
             if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
                 // log here, so we can remove the node in leaveNode() method
-                $this->toBeRemovedNodeId = \spl_object_id($originalNode);
+                $this->toBeRemovedNodeId = spl_object_id($originalNode);
             }
             // notify this rule changing code
             $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
@@ -159,26 +159,26 @@ CODE_SAMPLE;
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
      * @return mixed[]|int|\PhpParser\Node|null
      */
-    public final function leaveNode(Node $node)
+    final public function leaveNode(Node $node)
     {
         if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
             return null;
         }
-        $objectId = \spl_object_id($node);
+        $objectId = spl_object_id($node);
         if ($this->toBeRemovedNodeId === $objectId) {
             $this->toBeRemovedNodeId = null;
             return NodeVisitor::REMOVE_NODE;
         }
         return $this->nodesToReturn[$objectId] ?? $node;
     }
-    protected function isName(Node $node, string $name) : bool
+    protected function isName(Node $node, string $name): bool
     {
         return $this->nodeNameResolver->isName($node, $name);
     }
     /**
      * @param string[] $names
      */
-    protected function isNames(Node $node, array $names) : bool
+    protected function isNames(Node $node, array $names): bool
     {
         return $this->nodeNameResolver->isNames($node, $names);
     }
@@ -197,18 +197,18 @@ CODE_SAMPLE;
      *  ($node is Name ? string :
      *      string|null )))))))))
      */
-    protected function getName(Node $node) : ?string
+    protected function getName(Node $node): ?string
     {
         return $this->nodeNameResolver->getName($node);
     }
-    protected function isObjectType(Node $node, ObjectType $objectType) : bool
+    protected function isObjectType(Node $node, ObjectType $objectType): bool
     {
         return $this->nodeTypeResolver->isObjectType($node, $objectType);
     }
     /**
      * Use this method for getting expr|node type
      */
-    protected function getType(Node $node) : Type
+    protected function getType(Node $node): Type
     {
         return $this->nodeTypeResolver->getType($node);
     }
@@ -216,11 +216,11 @@ CODE_SAMPLE;
      * @param Node|Node[] $nodes
      * @param callable(Node): (int|Node|null|Node[]) $callable
      */
-    protected function traverseNodesWithCallable($nodes, callable $callable) : void
+    protected function traverseNodesWithCallable($nodes, callable $callable): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
     }
-    protected function mirrorComments(Node $newNode, Node $oldNode) : void
+    protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
         if ($this->nodeComparator->areSameNode($newNode, $oldNode)) {
             return;
@@ -243,18 +243,18 @@ CODE_SAMPLE;
             $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
         }
     }
-    private function decorateCurrentAndChildren(Node $node) : void
+    private function decorateCurrentAndChildren(Node $node): void
     {
         // filter only types that
         //    1. registered in getNodesTypes() method
         //    2. different with current node type, as already decorated above
         //
-        $otherTypes = \array_filter($this->getNodeTypes(), static fn(string $nodeType): bool => $nodeType !== \get_class($node));
+        $otherTypes = array_filter($this->getNodeTypes(), static fn(string $nodeType): bool => $nodeType !== get_class($node));
         if ($otherTypes === []) {
             return;
         }
-        $this->traverseNodesWithCallable($node, static function (Node $subNode) use($otherTypes) {
-            if (\in_array(\get_class($subNode), $otherTypes, \true)) {
+        $this->traverseNodesWithCallable($node, static function (Node $subNode) use ($otherTypes) {
+            if (in_array(get_class($subNode), $otherTypes, \true)) {
                 $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
             }
             return null;
@@ -263,7 +263,7 @@ CODE_SAMPLE;
     /**
      * @param Node|Node[] $refactoredNode
      */
-    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode, string $filePath) : Node
+    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode, string $filePath): Node
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
@@ -271,14 +271,14 @@ CODE_SAMPLE;
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (\is_array($refactoredNode)) {
-            $firstNode = \current($refactoredNode);
+        if (is_array($refactoredNode)) {
+            $firstNode = current($refactoredNode);
             if ($firstNode->getAttribute(AttributeKey::HAS_MERGED_COMMENTS, \false) === \false) {
                 $this->mirrorComments($firstNode, $originalNode);
             }
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-            $originalNodeId = \spl_object_id($originalNode);
+            $originalNodeId = spl_object_id($originalNode);
             // will be replaced in leaveNode() the original node must be passed
             $this->nodesToReturn[$originalNodeId] = $refactoredNode;
             return $originalNode;
@@ -289,18 +289,18 @@ CODE_SAMPLE;
     /**
      * @param Node[]|Node $node
      */
-    private function refreshScopeNodes($node, string $filePath, ?MutatingScope $mutatingScope) : void
+    private function refreshScopeNodes($node, string $filePath, ?MutatingScope $mutatingScope): void
     {
         $nodes = $node instanceof Node ? [$node] : $node;
         foreach ($nodes as $node) {
             $this->changedNodeScopeRefresher->refresh($node, $filePath, $mutatingScope);
         }
     }
-    private function isMatchingNodeType(Node $node) : bool
+    private function isMatchingNodeType(Node $node): bool
     {
-        $nodeClass = \get_class($node);
+        $nodeClass = get_class($node);
         foreach ($this->getNodeTypes() as $nodeType) {
-            if (\is_a($nodeClass, $nodeType, \true)) {
+            if (is_a($nodeClass, $nodeType, \true)) {
                 return \true;
             }
         }

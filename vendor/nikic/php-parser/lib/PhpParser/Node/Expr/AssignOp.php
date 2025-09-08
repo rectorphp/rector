@@ -23,7 +23,7 @@ abstract class AssignOp extends Expr
         $this->var = $var;
         $this->expr = $expr;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['var', 'expr'];
     }

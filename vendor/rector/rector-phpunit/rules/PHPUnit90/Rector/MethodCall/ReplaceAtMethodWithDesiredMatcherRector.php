@@ -26,7 +26,7 @@ final class ReplaceAtMethodWithDesiredMatcherRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace at() method call with desired matcher', [new CodeSample(<<<'CODE_SAMPLE'
 $mock->expects($this->at(0))
@@ -43,20 +43,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param  MethodCall  $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\MethodCall
     {
         $this->hasChanged = \false;
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if ($node->var instanceof MethodCall && ($arg = $this->findAtMethodCall($node->var))) {
+        if ($node->var instanceof MethodCall && $arg = $this->findAtMethodCall($node->var)) {
             $this->replaceWithDesiredMatcher($arg);
         }
         if ($this->hasChanged) {
@@ -64,7 +64,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function findAtMethodCall(MethodCall $methodCall) : ?Arg
+    private function findAtMethodCall(MethodCall $methodCall): ?Arg
     {
         foreach ($methodCall->getArgs() as $arg) {
             if ($arg->value instanceof MethodCall && $arg->value->name instanceof Identifier && $arg->value->name->toString() === 'at') {
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function replaceWithDesiredMatcher(Arg $arg) : void
+    private function replaceWithDesiredMatcher(Arg $arg): void
     {
         if (!$arg->value instanceof MethodCall) {
             return;

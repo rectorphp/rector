@@ -25,14 +25,14 @@ final class RemoveReflectionSetAccessibleCallsRector extends AbstractRector impl
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node): ?int
     {
         if ($node->expr instanceof MethodCall === \false) {
             return null;
@@ -46,7 +46,7 @@ final class RemoveReflectionSetAccessibleCallsRector extends AbstractRector impl
         }
         return null;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove Reflection::setAccessible() calls', [new CodeSample(<<<'CODE_SAMPLE'
 $reflectionProperty = new ReflectionProperty($object, 'property');
@@ -66,7 +66,7 @@ $reflectionMethod->invoke($object);
 CODE_SAMPLE
 )]);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_81;
     }

@@ -19,7 +19,7 @@ interface InflectorInterface
      *
      * @return string[]
      */
-    public function singularize(string $plural) : array;
+    public function singularize(string $plural): array;
     /**
      * Returns the plural forms of a string.
      *
@@ -27,5 +27,5 @@ interface InflectorInterface
      *
      * @return string[]
      */
-    public function pluralize(string $singular) : array;
+    public function pluralize(string $singular): array;
 }

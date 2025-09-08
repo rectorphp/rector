@@ -30,49 +30,49 @@ final class RuleDefinition
         }
         $this->codeSamples = $codeSamples;
     }
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
-    public function setRuleClass(string $ruleClass) : void
+    public function setRuleClass(string $ruleClass): void
     {
         $this->ruleClass = $ruleClass;
     }
-    public function getRuleClass() : string
+    public function getRuleClass(): string
     {
         if ($this->ruleClass === null) {
             throw new ShouldNotHappenException();
         }
         return $this->ruleClass;
     }
-    public function setRuleFilePath(string $ruleFilePath) : void
+    public function setRuleFilePath(string $ruleFilePath): void
     {
         // fir relative file path for GitHub
-        $this->ruleFilePath = \ltrim($ruleFilePath, '/');
+        $this->ruleFilePath = ltrim($ruleFilePath, '/');
     }
-    public function getRuleFilePath() : string
+    public function getRuleFilePath(): string
     {
         if ($this->ruleFilePath === null) {
             throw new ShouldNotHappenException();
         }
         return $this->ruleFilePath;
     }
-    public function getRuleShortClass() : string
+    public function getRuleShortClass(): string
     {
         if ($this->ruleClass === null) {
             throw new ShouldNotHappenException();
         }
         // get short class name
-        return \basename(\str_replace('\\', '/', $this->ruleClass));
+        return basename(str_replace('\\', '/', $this->ruleClass));
     }
     /**
      * @return CodeSampleInterface[]
      */
-    public function getCodeSamples() : array
+    public function getCodeSamples(): array
     {
         return $this->codeSamples;
     }
-    public function isConfigurable() : bool
+    public function isConfigurable(): bool
     {
         foreach ($this->codeSamples as $codeSample) {
             if ($codeSample instanceof ConfiguredCodeSample) {

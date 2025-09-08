@@ -19,12 +19,12 @@ class Name extends NodeAbstract
      * @param string|string[]|self $name Name as string, part array or Name instance (copy ctor)
      * @param array<string, mixed> $attributes Additional attributes
      */
-    public final function __construct($name, array $attributes = [])
+    final public function __construct($name, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->name = self::prepareName($name);
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name'];
     }
@@ -34,7 +34,7 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-list<string>
      * @return string[] Parts of name
      */
-    public function getParts() : array
+    public function getParts(): array
     {
         return \explode('\\', $this->name);
     }
@@ -43,9 +43,9 @@ class Name extends NodeAbstract
      *
      * @return string First part of the name
      */
-    public function getFirst() : string
+    public function getFirst(): string
     {
-        if (\false !== ($pos = \strpos($this->name, '\\'))) {
+        if (\false !== $pos = \strpos($this->name, '\\')) {
             return \substr($this->name, 0, $pos);
         }
         return $this->name;
@@ -55,9 +55,9 @@ class Name extends NodeAbstract
      *
      * @return string Last part of the name
      */
-    public function getLast() : string
+    public function getLast(): string
     {
-        if (\false !== ($pos = \strrpos($this->name, '\\'))) {
+        if (\false !== $pos = \strrpos($this->name, '\\')) {
             return \substr($this->name, $pos + 1);
         }
         return $this->name;
@@ -67,7 +67,7 @@ class Name extends NodeAbstract
      *
      * @return bool Whether the name is unqualified
      */
-    public function isUnqualified() : bool
+    public function isUnqualified(): bool
     {
         return \false === \strpos($this->name, '\\');
     }
@@ -76,7 +76,7 @@ class Name extends NodeAbstract
      *
      * @return bool Whether the name is qualified
      */
-    public function isQualified() : bool
+    public function isQualified(): bool
     {
         return \false !== \strpos($this->name, '\\');
     }
@@ -85,7 +85,7 @@ class Name extends NodeAbstract
      *
      * @return bool Whether the name is fully qualified
      */
-    public function isFullyQualified() : bool
+    public function isFullyQualified(): bool
     {
         return \false;
     }
@@ -94,7 +94,7 @@ class Name extends NodeAbstract
      *
      * @return bool Whether the name is relative
      */
-    public function isRelative() : bool
+    public function isRelative(): bool
     {
         return \false;
     }
@@ -105,7 +105,7 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-string
      * @return string String representation
      */
-    public function toString() : string
+    public function toString(): string
     {
         return $this->name;
     }
@@ -116,7 +116,7 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-string
      * @return string String representation
      */
-    public function toCodeString() : string
+    public function toCodeString(): string
     {
         return $this->toString();
     }
@@ -127,18 +127,18 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-string&lowercase-string
      * @return string Lowercased string representation
      */
-    public function toLowerString() : string
+    public function toLowerString(): string
     {
-        return \strtolower($this->name);
+        return strtolower($this->name);
     }
     /**
      * Checks whether the identifier is a special class name (self, parent or static).
      *
      * @return bool Whether identifier is a special class name
      */
-    public function isSpecialClassName() : bool
+    public function isSpecialClassName(): bool
     {
-        return isset(self::$specialClassNames[\strtolower($this->name)]);
+        return isset(self::$specialClassNames[strtolower($this->name)]);
     }
     /**
      * Returns a string representation of the name by imploding the namespace parts with the
@@ -147,7 +147,7 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-string
      * @return string String representation
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -171,7 +171,7 @@ class Name extends NodeAbstract
     {
         if ($offset === 1 && $length === null) {
             // Short-circuit the common case.
-            if (\false !== ($pos = \strpos($this->name, '\\'))) {
+            if (\false !== $pos = \strpos($this->name, '\\')) {
                 return new static(\substr($this->name, $pos + 1));
             }
             return null;
@@ -180,21 +180,21 @@ class Name extends NodeAbstract
         $numParts = \count($parts);
         $realOffset = $offset < 0 ? $offset + $numParts : $offset;
         if ($realOffset < 0 || $realOffset > $numParts) {
-            throw new \OutOfBoundsException(\sprintf('Offset %d is out of bounds', $offset));
+            throw new \OutOfBoundsException(sprintf('Offset %d is out of bounds', $offset));
         }
         if (null === $length) {
             $realLength = $numParts - $realOffset;
         } else {
             $realLength = $length < 0 ? $length + $numParts - $realOffset : $length;
             if ($realLength < 0 || $realLength > $numParts - $realOffset) {
-                throw new \OutOfBoundsException(\sprintf('Length %d is out of bounds', $length));
+                throw new \OutOfBoundsException(sprintf('Length %d is out of bounds', $length));
             }
         }
         if ($realLength === 0) {
             // Empty slice is represented as null
             return null;
         }
-        return new static(\array_slice($parts, $realOffset, $realLength), $this->attributes);
+        return new static(array_slice($parts, $realOffset, $realLength), $this->attributes);
     }
     /**
      * Concatenate two names, yielding a new Name instance.
@@ -236,7 +236,7 @@ class Name extends NodeAbstract
      * @psalm-return non-empty-string
      * @return string Prepared name
      */
-    private static function prepareName($name) : string
+    private static function prepareName($name): string
     {
         if (\is_string($name)) {
             if ('' === $name) {
@@ -248,14 +248,14 @@ class Name extends NodeAbstract
             if (empty($name)) {
                 throw new \InvalidArgumentException('Name cannot be empty');
             }
-            return \implode('\\', $name);
+            return implode('\\', $name);
         }
         if ($name instanceof self) {
             return $name->name;
         }
         throw new \InvalidArgumentException('Expected string, array of parts or Name instance');
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Name';
     }

@@ -44,7 +44,7 @@ final class AddClosureParamTypeForArrayReduceRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(<<<'CODE_SAMPLE'
 array_reduce($strings, function ($carry, $value, $key): string {
@@ -58,14 +58,14 @@ array_reduce($strings, function (string $carry, string $value): string {
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function updateClosureWithTypes(Closure $closure, ?Type $valueType, ?Type $carryType) : bool
+    private function updateClosureWithTypes(Closure $closure, ?Type $valueType, ?Type $carryType): bool
     {
         $changes = \false;
         $carryParam = $closure->params[0] ?? null;
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
         return $changes;
     }
-    private function refactorParameter(Param $param, Type $type) : bool
+    private function refactorParameter(Param $param, Type $type): bool
     {
         if ($type instanceof MixedType) {
             return \false;
@@ -128,12 +128,12 @@ CODE_SAMPLE
     /**
      * @param Type[] $types
      */
-    private function combineTypes(array $types) : ?Type
+    private function combineTypes(array $types): ?Type
     {
         if ($types === []) {
             return null;
         }
-        $types = \array_reduce($types, function (array $types, Type $type) : array {
+        $types = array_reduce($types, function (array $types, Type $type): array {
             foreach ($types as $previousType) {
                 if ($this->typeComparator->areTypesEqual($type, $previousType)) {
                     return $types;
@@ -142,7 +142,7 @@ CODE_SAMPLE
             $types[] = $type;
             return $types;
         }, []);
-        if (\count($types) === 1) {
+        if (count($types) === 1) {
             return $types[0];
         }
         foreach ($types as $type) {

@@ -21,7 +21,7 @@ final class RenameConstantRector extends AbstractRector implements ConfigurableR
      * @var array<string, string>
      */
     private array $oldToNewConstants = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace constant by new ones', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -46,14 +46,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
             if (!$this->isName($node->name, $oldConstant)) {
@@ -67,9 +67,9 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        Assert::allString(\array_keys($configuration));
+        Assert::allString(array_keys($configuration));
         Assert::allString($configuration);
         foreach ($configuration as $oldConstant => $newConstant) {
             RectorAssert::constantName($oldConstant);

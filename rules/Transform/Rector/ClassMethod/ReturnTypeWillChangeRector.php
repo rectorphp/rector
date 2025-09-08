@@ -46,9 +46,9 @@ final class ReturnTypeWillChangeRector extends AbstractRector implements MinPhpV
         $this->reflectionResolver = $reflectionResolver;
         $this->returnTypeChangedClassMethodReferences = [new ClassMethodReference('ArrayAccess', 'getIterator'), new ClassMethodReference('ArrayAccess', 'offsetGet')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add #[\\ReturnTypeWillChange] attribute to configured instanceof class with methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add #[\ReturnTypeWillChange] attribute to configured instanceof class with methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass implements ArrayAccess
 {
     public function offsetGet($offset)
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($node);
@@ -109,12 +109,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, ClassMethodReference::class);
-        $this->returnTypeChangedClassMethodReferences = \array_merge($this->returnTypeChangedClassMethodReferences, $configuration);
+        $this->returnTypeChangedClassMethodReferences = array_merge($this->returnTypeChangedClassMethodReferences, $configuration);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE;
     }

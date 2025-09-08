@@ -29,11 +29,11 @@ final class FileProcessResult
     /**
      * @return SystemError[]
      */
-    public function getSystemErrors() : array
+    public function getSystemErrors(): array
     {
         return $this->systemErrors;
     }
-    public function getFileDiff() : ?FileDiff
+    public function getFileDiff(): ?FileDiff
     {
         return $this->fileDiff;
     }

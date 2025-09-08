@@ -21,7 +21,7 @@ final class GetMockBuilderGetMockToCreateMockRector extends AbstractRector
      * @var string[]
      */
     private const USELESS_METHOD_NAMES = ['disableOriginalConstructor', 'disableOriginalClone', 'disableArgumentCloning', 'disallowMockingUnknownTypes'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove getMockBuilder() to createMock()', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'getMock')) {
             return null;
@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
         // must be be test case class
-        if (!$this->isObjectType($currentMethodCall->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
+        if (!$this->isObjectType($currentMethodCall->var, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return null;
         }
         if (!$this->isName($currentMethodCall->name, 'getMockBuilder')) {
@@ -90,7 +90,7 @@ CODE_SAMPLE
         $thisVariable = $currentMethodCall->var;
         return new MethodCall($thisVariable, 'createMock', $args);
     }
-    private function isLocalScopeCaller(MethodCall $currentMethodCall) : bool
+    private function isLocalScopeCaller(MethodCall $currentMethodCall): bool
     {
         if (!$currentMethodCall->var instanceof Variable) {
             return \false;

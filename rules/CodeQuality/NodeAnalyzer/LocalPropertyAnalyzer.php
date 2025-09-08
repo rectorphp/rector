@@ -53,7 +53,7 @@ final class LocalPropertyAnalyzer
     /**
      * @var string
      */
-    private const LARAVEL_COLLECTION_CLASS = 'Illuminate\\Support\\Collection';
+    private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
     public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver, NodeTypeResolver $nodeTypeResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, TypeFactory $typeFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -66,12 +66,12 @@ final class LocalPropertyAnalyzer
     /**
      * @return DefinedPropertyWithType[]
      */
-    public function resolveFetchedPropertiesToTypesFromClass(Class_ $class) : array
+    public function resolveFetchedPropertiesToTypesFromClass(Class_ $class): array
     {
         $definedPropertiesWithTypes = [];
         foreach ($class->getMethods() as $classMethod) {
             $methodName = $this->nodeNameResolver->getName($classMethod);
-            $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->getStmts(), function (Node $node) use(&$definedPropertiesWithTypes, $methodName) : ?int {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->getStmts(), function (Node $node) use (&$definedPropertiesWithTypes, $methodName): ?int {
                 if ($this->shouldSkip($node)) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
@@ -100,7 +100,7 @@ final class LocalPropertyAnalyzer
         }
         return $this->normalizeToSingleType($definedPropertiesWithTypes);
     }
-    private function shouldSkip(Node $node) : bool
+    private function shouldSkip(Node $node): bool
     {
         // skip anonymous classes and inner function
         if ($node instanceof Class_ || $node instanceof Function_) {
@@ -115,7 +115,7 @@ final class LocalPropertyAnalyzer
         }
         return \false;
     }
-    private function resolvePropertyName(Node $node) : ?string
+    private function resolvePropertyName(Node $node): ?string
     {
         if (!$node instanceof PropertyFetch) {
             return null;
@@ -128,7 +128,7 @@ final class LocalPropertyAnalyzer
         }
         return $this->nodeNameResolver->getName($node->name);
     }
-    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch) : bool
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
     {
         if ($this->isPartOfClosureBind($propertyFetch)) {
             return \true;
@@ -139,7 +139,7 @@ final class LocalPropertyAnalyzer
      * @param DefinedPropertyWithType[] $definedPropertiesWithTypes
      * @return DefinedPropertyWithType[]
      */
-    private function normalizeToSingleType(array $definedPropertiesWithTypes) : array
+    private function normalizeToSingleType(array $definedPropertiesWithTypes): array
     {
         $definedPropertiesWithTypesByPropertyName = [];
         foreach ($definedPropertiesWithTypes as $definedPropertyWithType) {
@@ -147,7 +147,7 @@ final class LocalPropertyAnalyzer
         }
         $normalizedDefinedPropertiesWithTypes = [];
         foreach ($definedPropertiesWithTypesByPropertyName as $propertyName => $definedPropertiesWithTypes) {
-            if (\count($definedPropertiesWithTypes) === 1) {
+            if (count($definedPropertiesWithTypes) === 1) {
                 $normalizedDefinedPropertiesWithTypes[] = $definedPropertiesWithTypes[0];
                 continue;
             }
@@ -170,7 +170,7 @@ final class LocalPropertyAnalyzer
      * Local property is actually not local one, but belongs to passed object
      * See https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/
      */
-    private function isPartOfClosureBind(PropertyFetch $propertyFetch) : bool
+    private function isPartOfClosureBind(PropertyFetch $propertyFetch): bool
     {
         $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {

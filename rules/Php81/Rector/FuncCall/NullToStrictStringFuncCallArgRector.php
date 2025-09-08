@@ -45,7 +45,7 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
         $this->argsAnalyzer = $argsAnalyzer;
         $this->nullToStrictStringConverter = $nullToStrictStringConverter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change null to strict string defined function call args', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -111,7 +111,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_STRING_FUNCTION;
     }
@@ -119,7 +119,7 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @return int[]|string[]
      */
-    private function resolveNamedPositions(FuncCall $funcCall, array $args) : array
+    private function resolveNamedPositions(FuncCall $funcCall, array $args): array
     {
         $functionName = $this->getName($funcCall);
         $argNames = NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES[$functionName];
@@ -138,7 +138,7 @@ CODE_SAMPLE
     /**
      * @return int[]|string[]
      */
-    private function resolveOriginalPositions(FuncCall $funcCall, Scope $scope) : array
+    private function resolveOriginalPositions(FuncCall $funcCall, Scope $scope): array
     {
         $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($funcCall);
         if (!$functionReflection instanceof NativeFunctionReflection) {
@@ -149,15 +149,15 @@ CODE_SAMPLE
         $argNames = NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES[$functionName];
         $positions = [];
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
-            if (\in_array($parameterReflection->getName(), $argNames, \true)) {
+            if (in_array($parameterReflection->getName(), $argNames, \true)) {
                 $positions[] = $position;
             }
         }
         return $positions;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall): bool
     {
-        $functionNames = \array_keys(NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES);
+        $functionNames = array_keys(NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES);
         if (!$this->isNames($funcCall, $functionNames)) {
             return \true;
         }

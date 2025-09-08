@@ -23,7 +23,7 @@ final class PureFunctionDetector
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function detect(FuncCall $funcCall) : bool
+    public function detect(FuncCall $funcCall): bool
     {
         $funcCallName = $this->nodeNameResolver->getName($funcCall);
         if ($funcCallName === null) {

@@ -52,7 +52,7 @@ final class AddClosureParamTypeFromIterableMethodCallRector extends AbstractRect
         $this->methodReflectionResolver = $methodReflectionResolver;
         $this->typeUnwrapper = $typeUnwrapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Applies type hints to closures on Iterable method calls where key/value types are documented', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -84,14 +84,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -132,7 +132,7 @@ CODE_SAMPLE
             if (!$arg->value instanceof Closure) {
                 continue;
             }
-            $parameter = \is_string($index) ? $parameters[$nameIndex[$index]] : $parameters[$index];
+            $parameter = is_string($index) ? $parameters[$nameIndex[$index]] : $parameters[$index];
             if ($this->updateClosureWithTypes($className, $parameter, $arg->value, $keyType, $valueType)) {
                 $changesMade = \true;
             }
@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function updateClosureWithTypes(string $className, ParameterReflection $parameter, Closure $closure, Type $keyType, Type $valueType) : bool
+    private function updateClosureWithTypes(string $className, ParameterReflection $parameter, Closure $closure, Type $keyType, Type $valueType): bool
     {
         // get the ClosureType from the ParameterReflection
         $callableType = $this->typeUnwrapper->unwrapFirstCallableTypeFromUnionType($parameter->getType());
@@ -167,7 +167,7 @@ CODE_SAMPLE
         }
         return $changesMade;
     }
-    private function refactorParameter(Param $param, Type $type) : bool
+    private function refactorParameter(Param $param, Type $type): bool
     {
         // already set → no change
         if ($param->type instanceof Node) {
@@ -187,7 +187,7 @@ CODE_SAMPLE
      * @param class-string $className
      * @param ParameterReflection[] $parameters
      */
-    private function methodSignatureUsesCallableWithIteratorTypes(string $className, array $parameters) : bool
+    private function methodSignatureUsesCallableWithIteratorTypes(string $className, array $parameters): bool
     {
         foreach ($parameters as $parameter) {
             $callableType = $this->typeUnwrapper->unwrapFirstCallableTypeFromUnionType($parameter->getType());
@@ -205,7 +205,7 @@ CODE_SAMPLE
     /**
      * @param array<Arg|VariadicPlaceholder> $args
      */
-    private function callUsesClosures(array $args) : bool
+    private function callUsesClosures(array $args): bool
     {
         foreach ($args as $arg) {
             if ($arg instanceof Arg && $arg->value instanceof Closure) {

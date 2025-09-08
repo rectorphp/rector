@@ -78,7 +78,7 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
         $this->commonLineThreshold = $options['commonLineThreshold'];
         $this->contextLines = $options['contextLines'];
     }
-    public function getDiff(array $diff) : string
+    public function getDiff(array $diff): string
     {
         if (0 === count($diff)) {
             return '';
@@ -98,7 +98,7 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
         $last = substr($diff, -1);
         return "\n" !== $last && "\r" !== $last ? $diff . "\n" : $diff;
     }
-    private function writeDiffHunks($output, array $diff) : void
+    private function writeDiffHunks($output, array $diff): void
     {
         // detect "No newline at end of file" and insert into `$diff` if needed
         $upperLimit = count($diff);
@@ -192,7 +192,7 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
         $toRange -= $sameCount;
         $this->writeHunk($diff, $hunkCapture - $contextStartOffset, $i - $sameCount + $contextEndOffset + 1, $fromStart - $contextStartOffset, $fromRange + $contextStartOffset + $contextEndOffset, $toStart - $contextStartOffset, $toRange + $contextStartOffset + $contextEndOffset, $output);
     }
-    private function writeHunk(array $diff, int $diffStartIndex, int $diffEndIndex, int $fromStart, int $fromRange, int $toStart, int $toRange, $output) : void
+    private function writeHunk(array $diff, int $diffStartIndex, int $diffEndIndex, int $fromStart, int $fromRange, int $toStart, int $toRange, $output): void
     {
         fwrite($output, '@@ -' . $fromStart);
         if (!$this->collapseRanges || 1 !== $fromRange) {
@@ -223,13 +223,13 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
             // }
         }
     }
-    private function assertString(array $options, string $option) : void
+    private function assertString(array $options, string $option): void
     {
         if (!is_string($options[$option])) {
             throw new ConfigurationException($option, 'a string', $options[$option]);
         }
     }
-    private function assertStringOrNull(array $options, string $option) : void
+    private function assertStringOrNull(array $options, string $option): void
     {
         if (null !== $options[$option] && !is_string($options[$option])) {
             throw new ConfigurationException($option, 'a string or <null>', $options[$option]);

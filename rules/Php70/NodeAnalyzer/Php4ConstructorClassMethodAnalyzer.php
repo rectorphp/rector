@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(ClassMethod $classMethod, Scope $scope) : bool
+    public function detect(ClassMethod $classMethod, Scope $scope): bool
     {
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {

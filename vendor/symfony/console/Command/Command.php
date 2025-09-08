@@ -62,10 +62,10 @@ class Command
     private array $synopsis = [];
     private array $usages = [];
     private ?HelperSet $helperSet = null;
-    public static function getDefaultName() : ?string
+    public static function getDefaultName(): ?string
     {
         $class = static::class;
-        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
+        if ($attribute = method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
@@ -78,10 +78,10 @@ class Command
         trigger_deprecation('symfony/console', '6.1', 'Relying on the static property "$defaultName" for setting a command name is deprecated. Add the "%s" attribute to the "%s" class instead.', AsCommand::class, static::class);
         return static::$defaultName;
     }
-    public static function getDefaultDescription() : ?string
+    public static function getDefaultDescription(): ?string
     {
         $class = static::class;
-        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
+        if ($attribute = method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');
@@ -102,11 +102,11 @@ class Command
     public function __construct(?string $name = null)
     {
         $this->definition = new InputDefinition();
-        if (null === $name && null !== ($name = static::getDefaultName())) {
-            $aliases = \explode('|', $name);
-            if ('' === ($name = \array_shift($aliases))) {
+        if (null === $name && null !== $name = static::getDefaultName()) {
+            $aliases = explode('|', $name);
+            if ('' === $name = array_shift($aliases)) {
                 $this->setHidden(\true);
-                $name = \array_shift($aliases);
+                $name = array_shift($aliases);
             }
             $this->setAliases($aliases);
         }
@@ -155,14 +155,14 @@ class Command
     /**
      * Gets the helper set.
      */
-    public function getHelperSet() : ?HelperSet
+    public function getHelperSet(): ?HelperSet
     {
         return $this->helperSet;
     }
     /**
      * Gets the application instance for this command.
      */
-    public function getApplication() : ?Application
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
@@ -245,7 +245,7 @@ class Command
      * @see setCode()
      * @see execute()
      */
-    public function run(InputInterface $input, OutputInterface $output) : int
+    public function run(InputInterface $input, OutputInterface $output): int
     {
         // add the application arguments and options
         $this->mergeApplicationDefinition();
@@ -260,15 +260,15 @@ class Command
         $this->initialize($input, $output);
         if (null !== $this->processTitle) {
             if (\function_exists('cli_set_process_title')) {
-                if (!@\cli_set_process_title($this->processTitle)) {
+                if (!@cli_set_process_title($this->processTitle)) {
                     if ('Darwin' === \PHP_OS) {
                         $output->writeln('<comment>Running "cli_set_process_title" as an unprivileged user is not supported on MacOS.</comment>', OutputInterface::VERBOSITY_VERY_VERBOSE);
                     } else {
-                        \cli_set_process_title($this->processTitle);
+                        cli_set_process_title($this->processTitle);
                     }
                 }
             } elseif (\function_exists('setproctitle')) {
-                \setproctitle($this->processTitle);
+                setproctitle($this->processTitle);
             } elseif (OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');
             }
@@ -288,15 +288,15 @@ class Command
         } else {
             $statusCode = $this->execute($input, $output);
             if (!\is_int($statusCode)) {
-                throw new \TypeError(\sprintf('Return value of "%s::execute()" must be of the type int, "%s" returned.', static::class, \get_debug_type($statusCode)));
+                throw new \TypeError(\sprintf('Return value of "%s::execute()" must be of the type int, "%s" returned.', static::class, get_debug_type($statusCode)));
             }
         }
-        return \is_numeric($statusCode) ? (int) $statusCode : 0;
+        return is_numeric($statusCode) ? (int) $statusCode : 0;
     }
     /**
      * Adds suggestions to $suggestions for the current completion input (e.g. option or argument).
      */
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         $definition = $this->getDefinition();
         if (CompletionInput::TYPE_OPTION_VALUE === $input->getCompletionType() && $definition->hasOption($input->getCompletionName())) {
@@ -324,14 +324,14 @@ class Command
         if ($code instanceof \Closure) {
             $r = new \ReflectionFunction($code);
             if (null === $r->getClosureThis()) {
-                \set_error_handler(static function () {
+                set_error_handler(static function () {
                 });
                 try {
                     if ($c = \Closure::bind($code, $this)) {
                         $code = $c;
                     }
                 } finally {
-                    \restore_error_handler();
+                    restore_error_handler();
                 }
             }
         } else {
@@ -349,7 +349,7 @@ class Command
      *
      * @internal
      */
-    public function mergeApplicationDefinition(bool $mergeArgs = \true) : void
+    public function mergeApplicationDefinition(bool $mergeArgs = \true): void
     {
         if (null === $this->application) {
             return;
@@ -383,7 +383,7 @@ class Command
     /**
      * Gets the InputDefinition attached to this Command.
      */
-    public function getDefinition() : InputDefinition
+    public function getDefinition(): InputDefinition
     {
         return $this->fullDefinition ?? $this->getNativeDefinition();
     }
@@ -395,7 +395,7 @@ class Command
      *
      * This method is not part of public API and should not be used directly.
      */
-    public function getNativeDefinition() : InputDefinition
+    public function getNativeDefinition(): InputDefinition
     {
         if (!isset($this->definition)) {
             throw new LogicException(\sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', static::class));
@@ -416,9 +416,9 @@ class Command
      */
     public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null)
     {
-        $suggestedValues = 5 <= \func_num_args() ? \func_get_arg(4) : [];
+        $suggestedValues = 5 <= \func_num_args() ? func_get_arg(4) : [];
         if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
-            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
+            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \Closure, "%s" given.', __METHOD__, get_debug_type($suggestedValues)));
         }
         $this->definition->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues));
         ($nullsafeVariable1 = $this->fullDefinition) ? $nullsafeVariable1->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
@@ -440,9 +440,9 @@ class Command
      */
     public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null)
     {
-        $suggestedValues = 6 <= \func_num_args() ? \func_get_arg(5) : [];
+        $suggestedValues = 6 <= \func_num_args() ? func_get_arg(5) : [];
         if (!\is_array($suggestedValues) && !$suggestedValues instanceof \Closure) {
-            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
+            throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \Closure, "%s" given.', __METHOD__, get_debug_type($suggestedValues)));
         }
         $this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
         ($nullsafeVariable2 = $this->fullDefinition) ? $nullsafeVariable2->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
@@ -482,7 +482,7 @@ class Command
     /**
      * Returns the command name.
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -499,7 +499,7 @@ class Command
     /**
      * @return bool whether the command should be publicly shown or not
      */
-    public function isHidden() : bool
+    public function isHidden(): bool
     {
         return $this->hidden;
     }
@@ -516,7 +516,7 @@ class Command
     /**
      * Returns the description for the command.
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -533,7 +533,7 @@ class Command
     /**
      * Returns the help for the command.
      */
-    public function getHelp() : string
+    public function getHelp(): string
     {
         return $this->help;
     }
@@ -541,13 +541,13 @@ class Command
      * Returns the processed help for the command replacing the %command.name% and
      * %command.full_name% patterns with the real values dynamically.
      */
-    public function getProcessedHelp() : string
+    public function getProcessedHelp(): string
     {
         $name = $this->name;
         $isSingleCommand = ($nullsafeVariable3 = $this->application) ? $nullsafeVariable3->isSingleCommand() : null;
         $placeholders = ['%command.name%', '%command.full_name%'];
         $replacements = [$name, $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'] . ' ' . $name];
-        return \str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
+        return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
     }
     /**
      * Sets the aliases for the command.
@@ -571,7 +571,7 @@ class Command
     /**
      * Returns the aliases for the command.
      */
-    public function getAliases() : array
+    public function getAliases(): array
     {
         return $this->aliases;
     }
@@ -580,11 +580,11 @@ class Command
      *
      * @param bool $short Whether to show the short version of the synopsis (with options folded) or not
      */
-    public function getSynopsis(bool $short = \false) : string
+    public function getSynopsis(bool $short = \false): string
     {
         $key = $short ? 'short' : 'long';
         if (!isset($this->synopsis[$key])) {
-            $this->synopsis[$key] = \trim(\sprintf('%s %s', $this->name, $this->definition->getSynopsis($short)));
+            $this->synopsis[$key] = trim(\sprintf('%s %s', $this->name, $this->definition->getSynopsis($short)));
         }
         return $this->synopsis[$key];
     }
@@ -595,7 +595,7 @@ class Command
      */
     public function addUsage(string $usage)
     {
-        if (\strncmp($usage, $this->name, \strlen($this->name)) !== 0) {
+        if (strncmp($usage, $this->name, strlen($this->name)) !== 0) {
             $usage = \sprintf('%s %s', $this->name, $usage);
         }
         $this->usages[] = $usage;
@@ -604,7 +604,7 @@ class Command
     /**
      * Returns alternative usages of the command.
      */
-    public function getUsages() : array
+    public function getUsages(): array
     {
         return $this->usages;
     }
@@ -630,9 +630,9 @@ class Command
      *
      * @throws InvalidArgumentException When the name is invalid
      */
-    private function validateName(string $name) : void
+    private function validateName(string $name): void
     {
-        if (!\preg_match('/^[^\\:]++(\\:[^\\:]++)*$/', $name)) {
+        if (!preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
             throw new InvalidArgumentException(\sprintf('Command name "%s" is invalid.', $name));
         }
     }

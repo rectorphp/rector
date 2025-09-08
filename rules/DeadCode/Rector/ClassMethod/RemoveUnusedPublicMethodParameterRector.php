@@ -37,7 +37,7 @@ final class RemoveUnusedPublicMethodParameterRector extends AbstractRector
         $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused parameter in public method on final class without extends and interface', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -62,14 +62,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // may have child, or override parent that needs to follow the signature
         if (!$node->isFinal() && FeatureFlags::treatClassesAsFinal($node) === \false) {
@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod, Class_ $class) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod, Class_ $class): bool
     {
         // private method is handled by different rule
         if (!$classMethod->isPublic()) {
@@ -104,7 +104,7 @@ CODE_SAMPLE
             return \true;
         }
         // parameter is required for contract coupling
-        if ($this->isName($classMethod->name, '__invoke') && $this->phpAttributeAnalyzer->hasPhpAttribute($class, 'Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler')) {
+        if ($this->isName($classMethod->name, '__invoke') && $this->phpAttributeAnalyzer->hasPhpAttribute($class, 'Symfony\Component\Messenger\Attribute\AsMessageHandler')) {
             return \true;
         }
         return $this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod);

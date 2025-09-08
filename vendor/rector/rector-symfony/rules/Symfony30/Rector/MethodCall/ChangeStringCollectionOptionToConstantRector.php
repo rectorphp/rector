@@ -54,7 +54,7 @@ final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change type in CollectionType from alias string to class reference', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
@@ -99,14 +99,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
         return $this->processChangeToConstant($optionsArray, $node);
     }
-    private function processChangeToConstant(Array_ $optionsArray, MethodCall $methodCall) : ?Node
+    private function processChangeToConstant(Array_ $optionsArray, MethodCall $methodCall): ?Node
     {
         foreach ($optionsArray->items as $optionsArrayItem) {
             if (!$optionsArrayItem instanceof ArrayItem) {

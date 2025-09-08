@@ -43,7 +43,7 @@ final class SetTypeToCastRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `settype()` to `(type)` where possible', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -72,7 +72,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class, Expression::class, Assign::class, ArrayItem::class, Arg::class];
     }
@@ -121,10 +121,10 @@ CODE_SAMPLE
             return null;
         }
         $typeValue = $this->valueResolver->getValue($funcCall->getArgs()[1]->value);
-        if (!\is_string($typeValue)) {
+        if (!is_string($typeValue)) {
             return null;
         }
-        $typeValue = \strtolower($typeValue);
+        $typeValue = strtolower($typeValue);
         $variable = $funcCall->getArgs()[0]->value;
         if (isset(self::TYPE_TO_CAST[$typeValue])) {
             $castClass = self::TYPE_TO_CAST[$typeValue];
@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isSetTypeFuncCall(Expr $expr) : bool
+    private function isSetTypeFuncCall(Expr $expr): bool
     {
         // skip assign of settype() calls
         if (!$expr instanceof FuncCall) {

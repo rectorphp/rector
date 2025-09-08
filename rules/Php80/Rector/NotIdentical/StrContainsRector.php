@@ -39,11 +39,11 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     {
         $this->strFalseComparisonResolver = $strFalseComparisonResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STR_CONTAINS;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -68,14 +68,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class, NotIdentical::class, Equal::class, NotEqual::class];
     }
     /**
      * @param Identical|NotIdentical|Equal|NotEqual $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $funcCall = $this->strFalseComparisonResolver->resolve($node, self::OLD_STR_NAMES);
         if (!$funcCall instanceof FuncCall) {
@@ -97,11 +97,11 @@ CODE_SAMPLE
         }
         return $funcCall;
     }
-    public function providePolyfillPackage() : string
+    public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_80;
     }
-    private function isIntegerZero(Expr $expr) : bool
+    private function isIntegerZero(Expr $expr): bool
     {
         if (!$expr instanceof Int_) {
             return \false;

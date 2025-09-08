@@ -14,14 +14,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class ClassConstFetchNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return ClassConstFetch::class;
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->class instanceof Expr) {
             return null;

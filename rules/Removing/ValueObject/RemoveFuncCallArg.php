@@ -20,11 +20,11 @@ final class RemoveFuncCallArg
         $this->argumentPosition = $argumentPosition;
         RectorAssert::functionName($function);
     }
-    public function getFunction() : string
+    public function getFunction(): string
     {
         return $this->function;
     }
-    public function getArgumentPosition() : int
+    public function getArgumentPosition(): int
     {
         return $this->argumentPosition;
     }

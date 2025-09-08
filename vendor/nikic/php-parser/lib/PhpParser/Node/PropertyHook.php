@@ -51,11 +51,11 @@ class PropertyHook extends NodeAbstract implements \PhpParser\Node\FunctionLike
         $this->params = $subNodes['params'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
-    public function returnsByRef() : bool
+    public function returnsByRef(): bool
     {
         return $this->byRef;
     }
-    public function getParams() : array
+    public function getParams(): array
     {
         return $this->params;
     }
@@ -66,11 +66,11 @@ class PropertyHook extends NodeAbstract implements \PhpParser\Node\FunctionLike
     /**
      * Whether the property hook is final.
      */
-    public function isFinal() : bool
+    public function isFinal(): bool
     {
         return (bool) ($this->flags & Modifiers::FINAL);
     }
-    public function getStmts() : ?array
+    public function getStmts(): ?array
     {
         if ($this->body instanceof \PhpParser\Node\Expr) {
             $name = $this->name->toLowerString();
@@ -89,15 +89,15 @@ class PropertyHook extends NodeAbstract implements \PhpParser\Node\FunctionLike
         }
         return $this->body;
     }
-    public function getAttrGroups() : array
+    public function getAttrGroups(): array
     {
         return $this->attrGroups;
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'PropertyHook';
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'flags', 'byRef', 'name', 'params', 'body'];
     }

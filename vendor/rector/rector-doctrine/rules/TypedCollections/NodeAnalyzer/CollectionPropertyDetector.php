@@ -19,7 +19,7 @@ final class CollectionPropertyDetector
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function detect(Property $property) : bool
+    public function detect(Property $property): bool
     {
         if (!$property->type instanceof Node) {
             return \false;

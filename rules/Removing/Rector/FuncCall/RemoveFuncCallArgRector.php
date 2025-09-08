@@ -21,7 +21,7 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
      * @var RemoveFuncCallArg[]
      */
     private array $removedFunctionArguments = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove argument by position by function name', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 remove_last_arg(1, 2);
@@ -34,14 +34,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->name instanceof Expr) {
             return null;
@@ -51,7 +51,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
             }
-            foreach (\array_keys($node->args) as $position) {
+            foreach (array_keys($node->args) as $position) {
                 if ($removedFunctionArgument->getArgumentPosition() !== $position) {
                     continue;
                 }
@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RemoveFuncCallArg::class);
         $this->removedFunctionArguments = $configuration;

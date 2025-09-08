@@ -6,6 +6,6 @@ namespace RectorPrefix202509;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([GetFiltersToAsTwigFilterAttributeRector::class, GetFunctionsToAsTwigFunctionAttributeRector::class]);
 };

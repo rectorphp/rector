@@ -5,7 +5,7 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony41/symfony41-console.php');
     $rectorConfig->import(__DIR__ . '/symfony41/symfony41-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony41/symfony41-workflow.php');

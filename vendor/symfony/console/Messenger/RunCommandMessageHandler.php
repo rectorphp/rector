@@ -30,7 +30,7 @@ final class RunCommandMessageHandler
     {
         $this->application = $application;
     }
-    public function __invoke(RunCommandMessage $message) : RunCommandContext
+    public function __invoke(RunCommandMessage $message): RunCommandContext
     {
         $input = new StringInput($message->input);
         $output = new BufferedOutput();

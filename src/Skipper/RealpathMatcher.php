@@ -6,13 +6,13 @@ namespace Rector\Skipper;
 use Rector\Skipper\FileSystem\PathNormalizer;
 final class RealpathMatcher
 {
-    public function match(string $matchingPath, string $filePath) : bool
+    public function match(string $matchingPath, string $filePath): bool
     {
-        $realPathMatchingPath = \realpath($matchingPath);
+        $realPathMatchingPath = realpath($matchingPath);
         if ($realPathMatchingPath === \false) {
             return \false;
         }
-        $realpathFilePath = \realpath($filePath);
+        $realpathFilePath = realpath($filePath);
         if ($realpathFilePath === \false) {
             return \false;
         }
@@ -23,7 +23,7 @@ final class RealpathMatcher
             return \true;
         }
         // ensure add / suffix to ensure no same prefix directory
-        $suffixedMatchingPath = \rtrim($normalizedMatchingPath, '/') . '/';
-        return \strncmp($normalizedFilePath, $suffixedMatchingPath, \strlen($suffixedMatchingPath)) === 0;
+        $suffixedMatchingPath = rtrim($normalizedMatchingPath, '/') . '/';
+        return strncmp($normalizedFilePath, $suffixedMatchingPath, strlen($suffixedMatchingPath)) === 0;
     }
 }

@@ -25,14 +25,14 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [Name::class, FullyQualified::class];
     }
     /**
      * @param Name $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         // not instanceof FullyQualified means it is a Name
         if (!$node instanceof FullyQualified && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
@@ -47,7 +47,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified $node
      */
-    private function resolveClassReflection($node) : ?ClassReflection
+    private function resolveClassReflection($node): ?ClassReflection
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
@@ -74,15 +74,15 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         if ($parentClassObjectTypes === []) {
             return new MixedType();
         }
-        if (\count($parentClassObjectTypes) === 1) {
+        if (count($parentClassObjectTypes) === 1) {
             return $parentClassObjectTypes[0];
         }
         return new UnionType($parentClassObjectTypes);
     }
-    private function resolveFullyQualifiedName(Name $name) : string
+    private function resolveFullyQualifiedName(Name $name): string
     {
         $nameValue = $name->toString();
-        if (\in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
+        if (in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
             $classReflection = $this->resolveClassReflection($name);
             if (!$classReflection instanceof ClassReflection || $classReflection->isAnonymous()) {
                 return $name->toString();

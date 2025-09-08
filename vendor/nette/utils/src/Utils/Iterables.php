@@ -19,7 +19,7 @@ final class Iterables
      * Tests for the presence of value.
      * @param mixed $value
      */
-    public static function contains(iterable $iterable, $value) : bool
+    public static function contains(iterable $iterable, $value): bool
     {
         foreach ($iterable as $v) {
             if ($v === $value) {
@@ -32,7 +32,7 @@ final class Iterables
      * Tests for the presence of key.
      * @param mixed $key
      */
-    public static function containsKey(iterable $iterable, $key) : bool
+    public static function containsKey(iterable $iterable, $key): bool
     {
         foreach ($iterable as $k => $v) {
             if ($k === $key) {
@@ -82,7 +82,7 @@ final class Iterables
      * @param  iterable<K, V>  $iterable
      * @param  callable(V, K, iterable<K, V>): bool  $predicate
      */
-    public static function some(iterable $iterable, callable $predicate) : bool
+    public static function some(iterable $iterable, callable $predicate): bool
     {
         foreach ($iterable as $k => $v) {
             if ($predicate($v, $k, $iterable)) {
@@ -98,7 +98,7 @@ final class Iterables
      * @param  iterable<K, V>  $iterable
      * @param  callable(V, K, iterable<K, V>): bool  $predicate
      */
-    public static function every(iterable $iterable, callable $predicate) : bool
+    public static function every(iterable $iterable, callable $predicate): bool
     {
         foreach ($iterable as $k => $v) {
             if (!$predicate($v, $k, $iterable)) {
@@ -115,11 +115,11 @@ final class Iterables
      * @param  callable(V, K, iterable<K, V>): bool  $predicate
      * @return \Generator<K, V>
      */
-    public static function filter(iterable $iterable, callable $predicate) : \Generator
+    public static function filter(iterable $iterable, callable $predicate): \Generator
     {
         foreach ($iterable as $k => $v) {
             if ($predicate($v, $k, $iterable)) {
-                (yield $k => $v);
+                yield $k => $v;
             }
         }
     }
@@ -132,10 +132,10 @@ final class Iterables
      * @param  callable(V, K, iterable<K, V>): R  $transformer
      * @return \Generator<K, R>
      */
-    public static function map(iterable $iterable, callable $transformer) : \Generator
+    public static function map(iterable $iterable, callable $transformer): \Generator
     {
         foreach ($iterable as $k => $v) {
-            (yield $k => $transformer($v, $k, $iterable));
+            yield $k => $transformer($v, $k, $iterable);
         }
     }
     /**
@@ -148,12 +148,12 @@ final class Iterables
      * @param  callable(V, K, iterable<K, V>): ?array{ResV, ResK}  $transformer
      * @return \Generator<ResV, ResK>
      */
-    public static function mapWithKeys(iterable $iterable, callable $transformer) : \Generator
+    public static function mapWithKeys(iterable $iterable, callable $transformer): \Generator
     {
         foreach ($iterable as $k => $v) {
             $pair = $transformer($v, $k, $iterable);
             if ($pair) {
-                (yield $pair[0] => $pair[1]);
+                yield $pair[0] => $pair[1];
             }
         }
     }
@@ -165,7 +165,7 @@ final class Iterables
      * @param  iterable<K, V>  $iterable
      * @return \IteratorAggregate<K, V>
      */
-    public static function memoize(iterable $iterable) : iterable
+    public static function memoize(iterable $iterable): iterable
     {
         return new class(self::toIterator($iterable)) implements \IteratorAggregate
         {
@@ -176,7 +176,7 @@ final class Iterables
                 $this->iterator = $iterator;
                 $this->cache = $cache;
             }
-            public function getIterator() : \Generator
+            public function getIterator(): \Generator
             {
                 if (!$this->cache) {
                     $this->iterator->rewind();
@@ -193,7 +193,7 @@ final class Iterables
                     } else {
                         break;
                     }
-                    (yield $k => $v);
+                    yield $k => $v;
                     $i++;
                 }
             }
@@ -206,7 +206,7 @@ final class Iterables
      * @param  iterable<K, V>  $iterable
      * @return \Iterator<K, V>
      */
-    public static function toIterator(iterable $iterable) : \Iterator
+    public static function toIterator(iterable $iterable): \Iterator
     {
         switch (\true) {
             case $iterable instanceof \Iterator:

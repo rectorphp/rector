@@ -10,7 +10,7 @@ final class ArgsAnalyzer
     /**
      * @param Arg[] $args
      */
-    public function hasNamedArg(array $args) : bool
+    public function hasNamedArg(array $args): bool
     {
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {

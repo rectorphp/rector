@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveAlwaysElseRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Split if statement, when if condition always break execution flow', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
@@ -61,7 +61,7 @@ CODE_SAMPLE
      * @param If_ $node
      * @return Node[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         if ($this->doesLastStatementBreakFlow($node)) {
             return null;
@@ -72,14 +72,14 @@ CODE_SAMPLE
         if ($node->else instanceof Else_) {
             $stmts = $node->else->stmts;
             $node->else = null;
-            return \array_merge([$node], $stmts);
+            return array_merge([$node], $stmts);
         }
         return null;
     }
     /**
      * @return Node[]
      */
-    private function handleElseIfs(If_ $if) : array
+    private function handleElseIfs(If_ $if): array
     {
         $nodesToReturn = [];
         $originalIf = clone $if;
@@ -87,11 +87,11 @@ CODE_SAMPLE
         $nodesToReturn[] = $firstIf;
         while ($if->elseifs !== []) {
             /** @var ElseIf_ $currentElseIf */
-            $currentElseIf = \array_shift($if->elseifs);
+            $currentElseIf = array_shift($if->elseifs);
             // If the last statement in the `elseif` breaks flow, merge it into the original `if` and stop processing
             if ($this->doesLastStatementBreakFlow($currentElseIf)) {
                 $this->updateIfWithElseIf($if, $currentElseIf);
-                $nodesToReturn = \array_merge($nodesToReturn, [$if], $this->getStatementsElseIfs($if));
+                $nodesToReturn = array_merge($nodesToReturn, [$if], $this->getStatementsElseIfs($if));
                 break;
             }
             $isLastElseIf = $if->elseifs === [];
@@ -112,7 +112,7 @@ CODE_SAMPLE
     /**
      * @return ElseIf_[]
      */
-    private function getStatementsElseIfs(If_ $if) : array
+    private function getStatementsElseIfs(If_ $if): array
     {
         $statements = [];
         foreach ($if->elseifs as $key => $elseif) {
@@ -127,9 +127,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $node
      */
-    private function doesLastStatementBreakFlow($node) : bool
+    private function doesLastStatementBreakFlow($node): bool
     {
-        $lastStmt = \end($node->stmts);
+        $lastStmt = end($node->stmts);
         if ($lastStmt instanceof If_ && $lastStmt->else instanceof Else_) {
             if ($this->doesLastStatementBreakFlow($lastStmt) || $this->doesLastStatementBreakFlow($lastStmt->else)) {
                 return \true;
@@ -146,14 +146,14 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
-    private function createIfFromNode($node) : If_
+    private function createIfFromNode($node): If_
     {
         $if = new If_($node->cond);
         $if->stmts = $node->stmts;
         $this->mirrorComments($if, $node);
         return $if;
     }
-    private function updateIfWithElseIf(If_ $if, ElseIf_ $elseIf) : void
+    private function updateIfWithElseIf(If_ $if, ElseIf_ $elseIf): void
     {
         $if->cond = $elseIf->cond;
         $if->stmts = $elseIf->stmts;

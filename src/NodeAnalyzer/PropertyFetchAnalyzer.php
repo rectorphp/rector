@@ -67,7 +67,7 @@ final class PropertyFetchAnalyzer
         $this->reflectionResolver = $reflectionResolver;
         $this->contextAnalyzer = $contextAnalyzer;
     }
-    public function isLocalPropertyFetch(Node $node) : bool
+    public function isLocalPropertyFetch(Node $node): bool
     {
         if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch && !$node instanceof NullsafePropertyFetch) {
             return \false;
@@ -85,7 +85,7 @@ final class PropertyFetchAnalyzer
         }
         return \true;
     }
-    public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName) : bool
+    public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName): bool
     {
         if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch && !$node instanceof NullsafePropertyFetch) {
             return \false;
@@ -95,19 +95,19 @@ final class PropertyFetchAnalyzer
         }
         return $this->isLocalPropertyFetch($node);
     }
-    public function containsLocalPropertyFetchName(Trait_ $trait, string $propertyName) : bool
+    public function containsLocalPropertyFetchName(Trait_ $trait, string $propertyName): bool
     {
         if ($trait->getProperty($propertyName) instanceof Property) {
             return \true;
         }
         return (bool) $this->betterNodeFinder->findFirst($trait, fn(Node $node): bool => $this->isLocalPropertyFetchName($node, $propertyName));
     }
-    public function containsWrittenPropertyFetchName(Trait_ $trait, string $propertyName) : bool
+    public function containsWrittenPropertyFetchName(Trait_ $trait, string $propertyName): bool
     {
         if ($trait->getProperty($propertyName) instanceof Property) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirst($trait, function (Node $node) use($propertyName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($trait, function (Node $node) use ($propertyName): bool {
             if (!$this->isLocalPropertyFetchName($node, $propertyName)) {
                 return \false;
             }
@@ -123,7 +123,7 @@ final class PropertyFetchAnalyzer
     /**
      * @phpstan-assert-if-true PropertyFetch|StaticPropertyFetch $node
      */
-    public function isPropertyFetch(Node $node) : bool
+    public function isPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
             return \true;
@@ -134,7 +134,7 @@ final class PropertyFetchAnalyzer
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    public function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName) : bool
+    public function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName): bool
     {
         if (!$assign->expr instanceof Variable) {
             return \false;
@@ -144,7 +144,7 @@ final class PropertyFetchAnalyzer
         }
         return $this->isLocalPropertyFetch($assign->var);
     }
-    public function isFilledViaMethodCallInConstructStmts(ClassLike $classLike, string $propertyName) : bool
+    public function isFilledViaMethodCallInConstructStmts(ClassLike $classLike, string $propertyName): bool
     {
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {
@@ -178,7 +178,7 @@ final class PropertyFetchAnalyzer
         }
         return \false;
     }
-    private function isTraitLocalPropertyFetch(Node $node) : bool
+    private function isTraitLocalPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
             if (!$node->var instanceof Variable) {
@@ -194,7 +194,7 @@ final class PropertyFetchAnalyzer
         }
         return \false;
     }
-    private function isPropertyAssignFoundInClassMethod(ClassLike $classLike, string $className, string $callerClassName, ClassMethod $classMethod, string $propertyName) : bool
+    private function isPropertyAssignFoundInClassMethod(ClassLike $classLike, string $className, string $callerClassName, ClassMethod $classMethod, string $propertyName): bool
     {
         if ($className !== $callerClassName && !$classLike instanceof Trait_) {
             $objectType = new ObjectType($className);

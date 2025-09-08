@@ -25,7 +25,7 @@ final class ReturnTypeInferer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function inferFunctionLike($functionLike) : Type
+    public function inferFunctionLike($functionLike): Type
     {
         $originalType = $this->returnedNodesReturnTypeInfererTypeInferer->inferFunctionLike($functionLike);
         if ($originalType instanceof MixedType) {

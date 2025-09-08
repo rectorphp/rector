@@ -30,7 +30,7 @@ abstract class Helper implements HelperInterface
         }
         $this->helperSet = $helperSet;
     }
-    public function getHelperSet() : ?HelperSet
+    public function getHelperSet(): ?HelperSet
     {
         return $this->helperSet;
     }
@@ -38,46 +38,46 @@ abstract class Helper implements HelperInterface
      * Returns the width of a string, using mb_strwidth if it is available.
      * The width is how many characters positions the string will use.
      */
-    public static function width(?string $string) : int
+    public static function width(?string $string): int
     {
         $string ??= '';
-        if (\preg_match('//u', $string)) {
-            $string = \preg_replace('/[\\p{Cc}\\x7F]++/u', '', $string, -1, $count);
+        if (preg_match('//u', $string)) {
+            $string = preg_replace('/[\p{Cc}\x7F]++/u', '', $string, -1, $count);
             return (new UnicodeString($string))->width(\false) + $count;
         }
-        if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
+        if (\false === $encoding = mb_detect_encoding($string, null, \true)) {
             return \strlen($string);
         }
-        return \mb_strwidth($string, $encoding);
+        return mb_strwidth($string, $encoding);
     }
     /**
      * Returns the length of a string, using mb_strlen if it is available.
      * The length is related to how many bytes the string will use.
      */
-    public static function length(?string $string) : int
+    public static function length(?string $string): int
     {
         $string ??= '';
-        if (\preg_match('//u', $string)) {
+        if (preg_match('//u', $string)) {
             return (new UnicodeString($string))->length();
         }
-        if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
+        if (\false === $encoding = mb_detect_encoding($string, null, \true)) {
             return \strlen($string);
         }
-        return \mb_strlen($string, $encoding);
+        return mb_strlen($string, $encoding);
     }
     /**
      * Returns the subset of a string, using mb_substr if it is available.
      */
-    public static function substr(?string $string, int $from, ?int $length = null) : string
+    public static function substr(?string $string, int $from, ?int $length = null): string
     {
         $string ??= '';
-        if (\preg_match('//u', $string)) {
+        if (preg_match('//u', $string)) {
             return (new UnicodeString($string))->slice($from, $length);
         }
-        if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
-            return \substr($string, $from, $length);
+        if (\false === $encoding = mb_detect_encoding($string, null, \true)) {
+            return substr($string, $from, $length);
         }
-        return \mb_substr($string, $from, $length, $encoding);
+        return mb_substr($string, $from, $length, $encoding);
     }
     /**
      * @return string
@@ -85,7 +85,7 @@ abstract class Helper implements HelperInterface
      */
     public static function formatTime($secs, int $precision = 1)
     {
-        $secs = (int) \floor($secs);
+        $secs = (int) floor($secs);
         if (0 === $secs) {
             return '< 1 sec';
         }
@@ -106,7 +106,7 @@ abstract class Helper implements HelperInterface
             }
             $secs -= $seconds;
         }
-        return \implode(', ', \array_reverse($times));
+        return implode(', ', array_reverse($times));
     }
     /**
      * @return string
@@ -134,9 +134,9 @@ abstract class Helper implements HelperInterface
         // remove <...> formatting
         $string = $formatter->format($string ?? '');
         // remove already formatted characters
-        $string = \preg_replace("/\x1b\\[[^m]*m/", '', $string ?? '');
+        $string = preg_replace("/\x1b\\[[^m]*m/", '', $string ?? '');
         // remove terminal hyperlinks
-        $string = \preg_replace('/\\033]8;[^;]*;[^\\033]*\\033\\\\/', '', $string ?? '');
+        $string = preg_replace('/\033]8;[^;]*;[^\033]*\033\\\\/', '', $string ?? '');
         $formatter->setDecorated($isDecorated);
         return $string;
     }

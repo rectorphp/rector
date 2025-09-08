@@ -26,7 +26,7 @@ final class ArrayOffsetSetToSetCollectionCallRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change dim assign on a Collection to clear ->set() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -62,14 +62,14 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         if (!$node->var instanceof ArrayDimFetch) {
             return null;

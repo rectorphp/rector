@@ -44,7 +44,7 @@ final class ForeachToInArrayRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->nodeFinder = $nodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify `foreach` loops into `in_array` when possible', [new CodeSample(<<<'CODE_SAMPLE'
 foreach ($items as $item) {
@@ -63,14 +63,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -136,12 +136,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipForeach(Foreach_ $foreach) : bool
+    private function shouldSkipForeach(Foreach_ $foreach): bool
     {
         if ($foreach->keyVar instanceof Expr) {
             return \true;
         }
-        if (\count($foreach->stmts) > 1) {
+        if (count($foreach->stmts) > 1) {
             return \true;
         }
         if (!$foreach->stmts[0] instanceof If_) {
@@ -149,7 +149,7 @@ CODE_SAMPLE
         }
         return !$this->nodeTypeResolver->getNativeType($foreach->expr)->isArray()->yes();
     }
-    private function shouldSkipIf(If_ $if) : bool
+    private function shouldSkipIf(If_ $if): bool
     {
         $ifCondition = $if->cond;
         if ($ifCondition instanceof Identical) {
@@ -160,11 +160,11 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\Identical $binaryOp
      */
-    private function matchNodes($binaryOp, Expr $expr) : ?TwoNodeMatch
+    private function matchNodes($binaryOp, Expr $expr): ?TwoNodeMatch
     {
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode($binaryOp, Variable::class, fn(Node $node, Node $otherNode): bool => $this->nodeComparator->areNodesEqual($otherNode, $expr));
     }
-    private function isIfBodyABoolReturnNode(If_ $if) : bool
+    private function isIfBodyABoolReturnNode(If_ $if): bool
     {
         $ifStatement = $if->stmts[0];
         if (!$ifStatement instanceof Return_) {
@@ -178,7 +178,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $binaryOp
      */
-    private function createInArrayFunction(Expr $expr, $binaryOp, Foreach_ $foreach) : FuncCall
+    private function createInArrayFunction(Expr $expr, $binaryOp, Foreach_ $foreach): FuncCall
     {
         $arguments = $this->nodeFactory->createArgs([$expr, $foreach->expr]);
         if ($binaryOp instanceof Identical) {
@@ -186,7 +186,7 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createFuncCall('in_array', $arguments);
     }
-    private function createReturn(Expr $expr, FuncCall $funcCall) : Return_
+    private function createReturn(Expr $expr, FuncCall $funcCall): Return_
     {
         $expr = $this->valueResolver->isFalse($expr) ? new BooleanNot($funcCall) : $funcCall;
         return new Return_($expr);

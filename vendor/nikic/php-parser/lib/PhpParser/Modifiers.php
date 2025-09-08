@@ -22,14 +22,14 @@ final class Modifiers
     public const VISIBILITY_MASK = self::PUBLIC | self::PROTECTED | self::PRIVATE;
     public const VISIBILITY_SET_MASK = self::PUBLIC_SET | self::PROTECTED_SET | self::PRIVATE_SET;
     private const TO_STRING_MAP = [self::PUBLIC => 'public', self::PROTECTED => 'protected', self::PRIVATE => 'private', self::STATIC => 'static', self::ABSTRACT => 'abstract', self::FINAL => 'final', self::READONLY => 'readonly', self::PUBLIC_SET => 'public(set)', self::PROTECTED_SET => 'protected(set)', self::PRIVATE_SET => 'private(set)'];
-    public static function toString(int $modifier) : string
+    public static function toString(int $modifier): string
     {
         if (!isset(self::TO_STRING_MAP[$modifier])) {
             throw new \InvalidArgumentException("Unknown modifier {$modifier}");
         }
         return self::TO_STRING_MAP[$modifier];
     }
-    private static function isValidModifier(int $modifier) : bool
+    private static function isValidModifier(int $modifier): bool
     {
         $isPow2 = ($modifier & $modifier - 1) == 0 && $modifier != 0;
         return $isPow2 && $modifier <= self::PRIVATE_SET;
@@ -37,9 +37,9 @@ final class Modifiers
     /**
      * @internal
      */
-    public static function verifyClassModifier(int $a, int $b) : void
+    public static function verifyClassModifier(int $a, int $b): void
     {
-        \assert(self::isValidModifier($b));
+        assert(self::isValidModifier($b));
         if (($a & $b) != 0) {
             throw new \PhpParser\Error('Multiple ' . self::toString($b) . ' modifiers are not allowed');
         }
@@ -50,9 +50,9 @@ final class Modifiers
     /**
      * @internal
      */
-    public static function verifyModifier(int $a, int $b) : void
+    public static function verifyModifier(int $a, int $b): void
     {
-        \assert(self::isValidModifier($b));
+        assert(self::isValidModifier($b));
         if ($a & \PhpParser\Modifiers::VISIBILITY_MASK && $b & \PhpParser\Modifiers::VISIBILITY_MASK || $a & \PhpParser\Modifiers::VISIBILITY_SET_MASK && $b & \PhpParser\Modifiers::VISIBILITY_SET_MASK) {
             throw new \PhpParser\Error('Multiple access type modifiers are not allowed');
         }

@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\ValueObject\Application\File;
 final class ParenthesizedNestedTernaryAnalyzer
 {
-    public function isParenthesized(File $file, Ternary $ternary) : bool
+    public function isParenthesized(File $file, Ternary $ternary): bool
     {
         $oldTokens = $file->getOldTokens();
         $startTokenPos = $ternary->getStartTokenPos();

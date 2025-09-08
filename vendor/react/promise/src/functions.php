@@ -20,7 +20,7 @@ use RectorPrefix202509\React\Promise\Internal\RejectedPromise;
  * @param PromiseInterface<T>|T $promiseOrValue
  * @return PromiseInterface<T>
  */
-function resolve($promiseOrValue) : PromiseInterface
+function resolve($promiseOrValue): PromiseInterface
 {
     if ($promiseOrValue instanceof PromiseInterface) {
         return $promiseOrValue;
@@ -29,10 +29,10 @@ function resolve($promiseOrValue) : PromiseInterface
         $canceller = null;
         if (\method_exists($promiseOrValue, 'cancel')) {
             $canceller = [$promiseOrValue, 'cancel'];
-            \assert(\is_callable($canceller));
+            assert(\is_callable($canceller));
         }
         /** @var Promise<T> */
-        return new Promise(function (callable $resolve, callable $reject) use($promiseOrValue) : void {
+        return new Promise(function (callable $resolve, callable $reject) use ($promiseOrValue): void {
             $promiseOrValue->then($resolve, $reject);
         }, $canceller);
     }
@@ -53,7 +53,7 @@ function resolve($promiseOrValue) : PromiseInterface
  *
  * @return PromiseInterface<never>
  */
-function reject(\Throwable $reason) : PromiseInterface
+function reject(\Throwable $reason): PromiseInterface
 {
     return new RejectedPromise($reason);
 }
@@ -67,11 +67,11 @@ function reject(\Throwable $reason) : PromiseInterface
  * @param iterable<PromiseInterface<T>|T> $promisesOrValues
  * @return PromiseInterface<array<T>>
  */
-function all(iterable $promisesOrValues) : PromiseInterface
+function all(iterable $promisesOrValues): PromiseInterface
 {
     $cancellationQueue = new Internal\CancellationQueue();
     /** @var Promise<array<T>> */
-    return new Promise(function (callable $resolve, callable $reject) use($promisesOrValues, $cancellationQueue) : void {
+    return new Promise(function (callable $resolve, callable $reject) use ($promisesOrValues, $cancellationQueue): void {
         $toResolve = 0;
         /** @var bool */
         $continue = \true;
@@ -80,12 +80,12 @@ function all(iterable $promisesOrValues) : PromiseInterface
             $cancellationQueue->enqueue($promiseOrValue);
             $values[$i] = null;
             ++$toResolve;
-            resolve($promiseOrValue)->then(function ($value) use($i, &$values, &$toResolve, &$continue, $resolve) : void {
+            resolve($promiseOrValue)->then(function ($value) use ($i, &$values, &$toResolve, &$continue, $resolve): void {
                 $values[$i] = $value;
                 if (0 === --$toResolve && !$continue) {
                     $resolve($values);
                 }
-            }, function (\Throwable $reason) use(&$continue, $reject) : void {
+            }, function (\Throwable $reason) use (&$continue, $reject): void {
                 $continue = \false;
                 $reject($reason);
             });
@@ -110,15 +110,15 @@ function all(iterable $promisesOrValues) : PromiseInterface
  * @param iterable<PromiseInterface<T>|T> $promisesOrValues
  * @return PromiseInterface<T>
  */
-function race(iterable $promisesOrValues) : PromiseInterface
+function race(iterable $promisesOrValues): PromiseInterface
 {
     $cancellationQueue = new Internal\CancellationQueue();
     /** @var Promise<T> */
-    return new Promise(function (callable $resolve, callable $reject) use($promisesOrValues, $cancellationQueue) : void {
+    return new Promise(function (callable $resolve, callable $reject) use ($promisesOrValues, $cancellationQueue): void {
         $continue = \true;
         foreach ($promisesOrValues as $promiseOrValue) {
             $cancellationQueue->enqueue($promiseOrValue);
-            resolve($promiseOrValue)->then($resolve, $reject)->finally(function () use(&$continue) : void {
+            resolve($promiseOrValue)->then($resolve, $reject)->finally(function () use (&$continue): void {
                 $continue = \false;
             });
             if (!$continue && !\is_array($promisesOrValues)) {
@@ -142,21 +142,21 @@ function race(iterable $promisesOrValues) : PromiseInterface
  * @param iterable<PromiseInterface<T>|T> $promisesOrValues
  * @return PromiseInterface<T>
  */
-function any(iterable $promisesOrValues) : PromiseInterface
+function any(iterable $promisesOrValues): PromiseInterface
 {
     $cancellationQueue = new Internal\CancellationQueue();
     /** @var Promise<T> */
-    return new Promise(function (callable $resolve, callable $reject) use($promisesOrValues, $cancellationQueue) : void {
+    return new Promise(function (callable $resolve, callable $reject) use ($promisesOrValues, $cancellationQueue): void {
         $toReject = 0;
         $continue = \true;
         $reasons = [];
         foreach ($promisesOrValues as $i => $promiseOrValue) {
             $cancellationQueue->enqueue($promiseOrValue);
             ++$toReject;
-            resolve($promiseOrValue)->then(function ($value) use($resolve, &$continue) : void {
+            resolve($promiseOrValue)->then(function ($value) use ($resolve, &$continue): void {
                 $continue = \false;
                 $resolve($value);
-            }, function (\Throwable $reason) use($i, &$reasons, &$toReject, $reject, &$continue) : void {
+            }, function (\Throwable $reason) use ($i, &$reasons, &$toReject, $reject, &$continue): void {
                 $reasons[$i] = $reason;
                 if (0 === --$toReject && !$continue) {
                     $reject(new CompositeException($reasons, 'All promises rejected.'));
@@ -212,7 +212,7 @@ function any(iterable $promisesOrValues) : PromiseInterface
  * @param callable(\Throwable):void|null $callback
  * @return callable(\Throwable):void|null
  */
-function set_rejection_handler(?callable $callback) : ?callable
+function set_rejection_handler(?callable $callback): ?callable
 {
     static $current = null;
     $previous = $current;
@@ -222,7 +222,7 @@ function set_rejection_handler(?callable $callback) : ?callable
 /**
  * @internal
  */
-function _checkTypehint(callable $callback, \Throwable $reason) : bool
+function _checkTypehint(callable $callback, \Throwable $reason): bool
 {
     if (\is_array($callback)) {
         $callbackReflection = new \ReflectionMethod($callback[0], $callback[1]);
@@ -235,7 +235,7 @@ function _checkTypehint(callable $callback, \Throwable $reason) : bool
             $callbackReflection->setAccessible(\true);
         }
     } else {
-        \assert($callback instanceof \Closure || \is_string($callback));
+        assert($callback instanceof \Closure || \is_string($callback));
         $callbackReflection = new \ReflectionFunction($callback);
     }
     $parameters = $callbackReflection->getParameters();
@@ -268,15 +268,15 @@ function _checkTypehint(callable $callback, \Throwable $reason) : bool
     foreach ($types as $type) {
         if ($type instanceof \ReflectionIntersectionType) {
             foreach ($type->getTypes() as $typeToMatch) {
-                \assert($typeToMatch instanceof \ReflectionNamedType);
+                assert($typeToMatch instanceof \ReflectionNamedType);
                 $name = $typeToMatch->getName();
-                if (!($matches = !$typeToMatch->isBuiltin() && $reason instanceof $name)) {
+                if (!$matches = !$typeToMatch->isBuiltin() && $reason instanceof $name) {
                     break;
                 }
             }
-            \assert(isset($matches));
+            assert(isset($matches));
         } else {
-            \assert($type instanceof \ReflectionNamedType);
+            assert($type instanceof \ReflectionNamedType);
             $name = $type->getName();
             $matches = !$type->isBuiltin() && $reason instanceof $name;
         }
@@ -286,10 +286,8 @@ function _checkTypehint(callable $callback, \Throwable $reason) : bool
             if ($isTypeUnion) {
                 return \true;
             }
-        } else {
-            if (!$isTypeUnion) {
-                return \false;
-            }
+        } else if (!$isTypeUnion) {
+            return \false;
         }
     }
     // If we look for a single match (union) and did not return early, we matched no type and are false

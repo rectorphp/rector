@@ -7,7 +7,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 final class EmptyPhpDocDetector
 {
-    public function isPhpDocNodeEmpty(PhpDocNode $phpDocNode) : bool
+    public function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
     {
         if ($phpDocNode->children === []) {
             return \true;

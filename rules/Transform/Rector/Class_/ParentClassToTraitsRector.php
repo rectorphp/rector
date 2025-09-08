@@ -36,7 +36,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     {
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace parent class to specific traits', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
@@ -49,19 +49,19 @@ class SomeClass
     use Nette\SmartObject;
 }
 CODE_SAMPLE
-, [new ParentClassToTraits('Nette\\Object', ['Nette\\SmartObject'])])]);
+, [new ParentClassToTraits('Nette\Object', ['Nette\SmartObject'])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $parentExtends = $node->extends;
         if (!$parentExtends instanceof Name) {
@@ -83,18 +83,18 @@ CODE_SAMPLE
         if ($traitUses === []) {
             return null;
         }
-        $node->stmts = \array_merge($traitUses, $node->stmts);
+        $node->stmts = array_merge($traitUses, $node->stmts);
         return $node;
     }
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ParentClassToTraits::class);
         $this->parentClassToTraits = $configuration;
     }
-    private function removeParentClass(Class_ $class) : void
+    private function removeParentClass(Class_ $class): void
     {
         $class->extends = null;
     }

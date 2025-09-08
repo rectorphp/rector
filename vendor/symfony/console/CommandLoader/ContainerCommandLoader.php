@@ -30,19 +30,19 @@ class ContainerCommandLoader implements CommandLoaderInterface
         $this->container = $container;
         $this->commandMap = $commandMap;
     }
-    public function get(string $name) : Command
+    public function get(string $name): Command
     {
         if (!$this->has($name)) {
             throw new CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
         }
         return $this->container->get($this->commandMap[$name]);
     }
-    public function has(string $name) : bool
+    public function has(string $name): bool
     {
         return isset($this->commandMap[$name]) && $this->container->has($this->commandMap[$name]);
     }
-    public function getNames() : array
+    public function getNames(): array
     {
-        return \array_keys($this->commandMap);
+        return array_keys($this->commandMap);
     }
 }

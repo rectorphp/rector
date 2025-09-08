@@ -55,7 +55,7 @@ final class ParentPropertyLookupGuard
     /**
      * @param \PhpParser\Node\Stmt\Property|string $property
      */
-    public function isLegal($property, ?ClassReflection $classReflection) : bool
+    public function isLegal($property, ?ClassReflection $classReflection): bool
     {
         if (!$classReflection instanceof ClassReflection) {
             return \false;
@@ -79,7 +79,7 @@ final class ParentPropertyLookupGuard
         }
         return $this->isGuardedByParents($parentClassReflections, $propertyName, $className);
     }
-    private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName, string $className) : bool
+    private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName, string $className): bool
     {
         $classLike = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
         if (!$classLike instanceof Class_) {
@@ -97,9 +97,9 @@ final class ParentPropertyLookupGuard
     /**
      * @param Stmt[] $stmts
      */
-    private function isFoundInMethodStmts(array $stmts, string $propertyName, string $className) : bool
+    private function isFoundInMethodStmts(array $stmts, string $propertyName, string $className): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $subNode) use($propertyName, $className) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $subNode) use ($propertyName, $className): bool {
             if (!$this->propertyFetchAnalyzer->isPropertyFetch($subNode)) {
                 return \false;
             }
@@ -121,7 +121,7 @@ final class ParentPropertyLookupGuard
     /**
      * @param ClassReflection[] $parentClassReflections
      */
-    private function isGuardedByParents(array $parentClassReflections, string $propertyName, string $className) : bool
+    private function isGuardedByParents(array $parentClassReflections, string $propertyName, string $className): bool
     {
         foreach ($parentClassReflections as $parentClassReflection) {
             if ($parentClassReflection->hasProperty($propertyName)) {

@@ -79,7 +79,7 @@ class ExtEvLoop implements LoopInterface
      */
     private function getStreamListenerClosure($stream, $listener)
     {
-        return function () use($stream, $listener) {
+        return function () use ($stream, $listener) {
             \call_user_func($listener, $stream);
         };
     }
@@ -116,7 +116,7 @@ class ExtEvLoop implements LoopInterface
         $timer = new Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timers;
-        $callback = function () use($timer, $timers, $that) {
+        $callback = function () use ($timer, $timers, $that) {
             \call_user_func($timer->getCallback(), $timer);
             if ($timers->contains($timer)) {
                 $that->cancelTimer($timer);
@@ -129,7 +129,7 @@ class ExtEvLoop implements LoopInterface
     public function addPeriodicTimer($interval, $callback)
     {
         $timer = new Timer($interval, $callback, \true);
-        $callback = function () use($timer) {
+        $callback = function () use ($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
         $event = $this->loop->timer($timer->getInterval(), $timer->getInterval(), $callback);
@@ -187,7 +187,7 @@ class ExtEvLoop implements LoopInterface
     {
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
-            $this->signalEvents[$signal] = $this->loop->signal($signal, function () use($signal) {
+            $this->signalEvents[$signal] = $this->loop->signal($signal, function () use ($signal) {
                 $this->signals->call($signal);
             });
         }

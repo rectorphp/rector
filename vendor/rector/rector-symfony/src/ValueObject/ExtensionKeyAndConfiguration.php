@@ -19,11 +19,11 @@ final class ExtensionKeyAndConfiguration
         $this->key = $key;
         $this->array = $array;
     }
-    public function getKey() : string
+    public function getKey(): string
     {
         return $this->key;
     }
-    public function getArray() : Array_
+    public function getArray(): Array_
     {
         return $this->array;
     }

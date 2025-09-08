@@ -10,11 +10,11 @@ final class CommentsMerger
     /**
      * @param Node[] $mergedNodes
      */
-    public function keepComments(Node $newNode, array $mergedNodes) : void
+    public function keepComments(Node $newNode, array $mergedNodes): void
     {
         $comments = $newNode->getComments();
         foreach ($mergedNodes as $mergedNode) {
-            $comments = \array_merge($comments, $mergedNode->getComments());
+            $comments = array_merge($comments, $mergedNode->getComments());
         }
         if ($comments === []) {
             return;

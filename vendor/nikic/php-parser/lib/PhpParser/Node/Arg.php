@@ -31,11 +31,11 @@ class Arg extends NodeAbstract
         $this->byRef = $byRef;
         $this->unpack = $unpack;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'value', 'byRef', 'unpack'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Arg';
     }

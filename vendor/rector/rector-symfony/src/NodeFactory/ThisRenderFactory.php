@@ -62,7 +62,7 @@ final class ThisRenderFactory
     /**
      * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute $templateTagValueNodeOrAttribute
      */
-    public function create(?Return_ $return, $templateTagValueNodeOrAttribute, ClassMethod $classMethod) : MethodCall
+    public function create(?Return_ $return, $templateTagValueNodeOrAttribute, ClassMethod $classMethod): MethodCall
     {
         $renderArguments = $this->resolveRenderArguments($return, $templateTagValueNodeOrAttribute, $classMethod);
         return $this->nodeFactory->createMethodCall('this', 'render', $renderArguments);
@@ -71,7 +71,7 @@ final class ThisRenderFactory
      * @return Arg[]
      * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute $templateTagValueNodeOrAttribute
      */
-    private function resolveRenderArguments(?Return_ $return, $templateTagValueNodeOrAttribute, ClassMethod $classMethod) : array
+    private function resolveRenderArguments(?Return_ $return, $templateTagValueNodeOrAttribute, ClassMethod $classMethod): array
     {
         $templateNameString = $this->resolveTemplateName($classMethod, $templateTagValueNodeOrAttribute);
         $arguments = [$templateNameString];
@@ -84,10 +84,10 @@ final class ThisRenderFactory
     /**
      * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute $templateTagValueNodeOrAttribute
      */
-    private function resolveTemplateName(ClassMethod $classMethod, $templateTagValueNodeOrAttribute) : string
+    private function resolveTemplateName(ClassMethod $classMethod, $templateTagValueNodeOrAttribute): string
     {
         $template = $this->annotationOrAttributeValueResolver->resolve($templateTagValueNodeOrAttribute, 'template');
-        if (\is_string($template)) {
+        if (is_string($template)) {
             return $template;
         }
         return $this->templateGuesser->resolveFromClassMethod($classMethod);
@@ -95,7 +95,7 @@ final class ThisRenderFactory
     /**
      * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute $templateTagValueNodeOrAttribute
      */
-    private function resolveParametersExpr(?Return_ $return, $templateTagValueNodeOrAttribute) : ?Expr
+    private function resolveParametersExpr(?Return_ $return, $templateTagValueNodeOrAttribute): ?Expr
     {
         $vars = [];
         if ($templateTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
@@ -144,7 +144,7 @@ final class ThisRenderFactory
     /**
      * @param ArrayItemNode[] $arrayItemNodes
      */
-    private function createArrayFromArrayItemNodes(array $arrayItemNodes) : Array_
+    private function createArrayFromArrayItemNodes(array $arrayItemNodes): Array_
     {
         $arrayItems = [];
         foreach ($arrayItemNodes as $arrayItemNode) {
@@ -156,7 +156,7 @@ final class ThisRenderFactory
         }
         return new Array_($arrayItems);
     }
-    private function resolveMethodCall(MethodCall $methodCall) : ?Expr
+    private function resolveMethodCall(MethodCall $methodCall): ?Expr
     {
         $returnStaticType = $this->nodeTypeResolver->getType($methodCall);
         if ($returnStaticType instanceof ArrayType) {

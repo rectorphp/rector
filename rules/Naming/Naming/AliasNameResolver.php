@@ -20,7 +20,7 @@ final class AliasNameResolver
     /**
      * @param array<Use_|GroupUse> $uses
      */
-    public function resolveByName(FullyQualified $fullyQualified, array $uses) : ?string
+    public function resolveByName(FullyQualified $fullyQualified, array $uses): ?string
     {
         $nameString = $fullyQualified->toString();
         foreach ($uses as $use) {

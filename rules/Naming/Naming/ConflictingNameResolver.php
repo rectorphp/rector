@@ -50,7 +50,7 @@ final class ConflictingNameResolver
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
-    public function resolveConflictingVariableNamesForParam($classMethod) : array
+    public function resolveConflictingVariableNamesForParam($classMethod): array
     {
         $expectedNames = [];
         foreach ($classMethod->params as $param) {
@@ -65,26 +65,26 @@ final class ConflictingNameResolver
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function hasNameIsInFunctionLike(string $variableName, $functionLike) : bool
+    public function hasNameIsInFunctionLike(string $variableName, $functionLike): bool
     {
         $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
-        return \in_array($variableName, $conflictingVariableNames, \true);
+        return in_array($variableName, $conflictingVariableNames, \true);
     }
     /**
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function resolveConflictingVariableNamesForNew($functionLike) : array
+    private function resolveConflictingVariableNamesForNew($functionLike): array
     {
         // cache it!
-        $classMethodId = \spl_object_id($functionLike);
+        $classMethodId = spl_object_id($functionLike);
         if (isset($this->conflictingVariableNamesByClassMethod[$classMethodId])) {
             return $this->conflictingVariableNamesByClassMethod[$classMethodId];
         }
         $paramNames = $this->functionLikeManipulator->resolveParamNames($functionLike);
         $newAssignNames = $this->resolveForNewAssigns($functionLike);
         $nonNewAssignNames = $this->resolveForNonNewAssigns($functionLike);
-        $protectedNames = \array_merge($paramNames, $newAssignNames, $nonNewAssignNames);
+        $protectedNames = array_merge($paramNames, $newAssignNames, $nonNewAssignNames);
         $protectedNames = $this->arrayFilter->filterWithAtLeastTwoOccurrences($protectedNames);
         $this->conflictingVariableNamesByClassMethod[$classMethodId] = $protectedNames;
         return $protectedNames;
@@ -93,7 +93,7 @@ final class ConflictingNameResolver
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function resolveForNewAssigns($functionLike) : array
+    private function resolveForNewAssigns($functionLike): array
     {
         $names = [];
         /** @var Assign[] $assigns */
@@ -111,7 +111,7 @@ final class ConflictingNameResolver
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function resolveForNonNewAssigns($functionLike) : array
+    private function resolveForNonNewAssigns($functionLike): array
     {
         $names = [];
         /** @var Assign[] $assigns */

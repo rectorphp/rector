@@ -74,7 +74,7 @@ final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector
         $this->astResolver = $astResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add override attribute to overridden methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class ParentClass
@@ -116,21 +116,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $this->allowOverrideEmptyMethod = $configuration[self::ALLOW_OVERRIDE_EMPTY_METHOD] ?? \false;
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         if ($this->classAnalyzer->isAnonymousClass($node)) {
@@ -143,7 +143,7 @@ CODE_SAMPLE
         $classReflection = $this->reflectionProvider->getClass($className);
         $parentClassReflections = $classReflection->getParents();
         if ($this->allowOverrideEmptyMethod) {
-            $parentClassReflections = \array_merge(
+            $parentClassReflections = array_merge(
                 $parentClassReflections,
                 $classReflection->getInterfaces(),
                 // place on last to ensure verify method exists on parent early
@@ -162,14 +162,14 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::OVERRIDE_ATTRIBUTE;
     }
     /**
      * @param ClassReflection[] $parentClassReflections
      */
-    private function processAddOverrideAttribute(ClassMethod $classMethod, array $parentClassReflections) : void
+    private function processAddOverrideAttribute(ClassMethod $classMethod, array $parentClassReflections): void
     {
         if ($this->shouldSkipClassMethod($classMethod)) {
             return;
@@ -204,7 +204,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
         }
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($this->isName($classMethod->name, MethodName::CONSTRUCT)) {
             return \true;
@@ -215,7 +215,7 @@ CODE_SAMPLE
         // ignore if it already uses the attribute
         return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::OVERRIDE_CLASS);
     }
-    private function shouldSkipParentClassMethod(ClassReflection $parentClassReflection, ClassMethod $classMethod) : bool
+    private function shouldSkipParentClassMethod(ClassReflection $parentClassReflection, ClassMethod $classMethod): bool
     {
         if ($this->allowOverrideEmptyMethod && $parentClassReflection->isBuiltIn()) {
             return \false;
@@ -241,7 +241,7 @@ CODE_SAMPLE
         if ($parentClassMethod->stmts === null || $parentClassMethod->stmts === []) {
             return \true;
         }
-        if (\count($parentClassMethod->stmts) === 1) {
+        if (count($parentClassMethod->stmts) === 1) {
             /** @var Stmt $soleStmt */
             $soleStmt = $parentClassMethod->stmts[0];
             // most likely, return null; is interface to be designed to override

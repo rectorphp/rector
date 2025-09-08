@@ -25,11 +25,11 @@ class Array_ extends Expr
         $this->attributes = $attributes;
         $this->items = $items;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['items'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Array';
     }

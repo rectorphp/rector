@@ -40,10 +40,10 @@ final class NullTypeAssignDetector
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function detect(ClassLike $classLike, string $propertyName) : bool
+    public function detect(ClassLike $classLike, string $propertyName): bool
     {
         $needsNullType = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use($propertyName, &$needsNullType) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use ($propertyName, &$needsNullType): ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
             if (!$expr instanceof Expr) {
                 return null;
@@ -58,7 +58,7 @@ final class NullTypeAssignDetector
         });
         return $needsNullType;
     }
-    private function matchAssignExprToPropertyName(Node $node, string $propertyName) : ?Expr
+    private function matchAssignExprToPropertyName(Node $node, string $propertyName): ?Expr
     {
         if (!$node instanceof Assign) {
             return null;

@@ -39,7 +39,7 @@ final class UnusedForeachValueToArrayKeysRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change foreach with unused $value but only $key, to array_keys()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -129,11 +129,11 @@ CODE_SAMPLE
     /**
      * @param int[] $removedKeys
      */
-    private function isArrayItemsRemovalWithoutChangingOrder(List_ $list, array $removedKeys) : bool
+    private function isArrayItemsRemovalWithoutChangingOrder(List_ $list, array $removedKeys): bool
     {
         $hasRemovingStarted = \false;
-        foreach (\array_keys($list->items) as $key) {
-            if (\in_array($key, $removedKeys, \true)) {
+        foreach (array_keys($list->items) as $key) {
+            if (in_array($key, $removedKeys, \true)) {
                 $hasRemovingStarted = \true;
             } elseif ($hasRemovingStarted) {
                 // we cannot remove the previous item, and not remove the next one, because that would change the order
@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function refactorArrayForeachValue(List_ $list, Foreach_ $foreach) : ?List_
+    private function refactorArrayForeachValue(List_ $list, Foreach_ $foreach): ?List_
     {
         // only last items can be removed, without changing the order
         $removedKeys = [];
@@ -170,11 +170,11 @@ CODE_SAMPLE
         }
         return $list;
     }
-    private function isVariableUsedInForeach(Variable $variable, Foreach_ $foreach) : bool
+    private function isVariableUsedInForeach(Variable $variable, Foreach_ $foreach): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, fn(Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $variable));
     }
-    private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach, Expr $keyVarExpr) : void
+    private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach, Expr $keyVarExpr): void
     {
         // remove key value
         $foreach->valueVar = $keyVarExpr;

@@ -31,21 +31,21 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes rand, srand, and getrandmax to newer alternatives', [new CodeSample('rand();', 'random_int();')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\FuncCall
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -59,10 +59,10 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
                     if ($args === []) {
                         $node->args[0] = new Arg(new Int_(0));
                         $node->args[1] = new Arg($this->nodeFactory->createFuncCall('mt_getrandmax'));
-                    } elseif (\count($args) === 2) {
+                    } elseif (count($args) === 2) {
                         $minValue = $this->valueResolver->getValue($args[0]->value);
                         $maxValue = $this->valueResolver->getValue($args[1]->value);
-                        if (\is_int($minValue) && \is_int($maxValue) && $minValue > $maxValue) {
+                        if (is_int($minValue) && is_int($maxValue) && $minValue > $maxValue) {
                             $temp = $node->args[0];
                             $node->args[0] = $node->args[1];
                             $node->args[1] = $temp;
@@ -74,7 +74,7 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::CSPRNG_FUNCTIONS;
     }

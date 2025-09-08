@@ -24,15 +24,15 @@ class FuncCall extends \PhpParser\Node\Expr\CallLike
         $this->name = $name;
         $this->args = $args;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'args'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_FuncCall';
     }
-    public function getRawArgs() : array
+    public function getRawArgs(): array
     {
         return $this->args;
     }

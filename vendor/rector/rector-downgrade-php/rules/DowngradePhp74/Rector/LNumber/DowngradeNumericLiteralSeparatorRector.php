@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNumericLiteralSeparatorRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove "_" as thousands separator in numbers', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -44,23 +44,23 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Int_::class, Float_::class];
     }
     /**
      * @param Int_|Float_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
         if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
-        if (\strpos((string) $rawValue, '+') !== \false) {
+        if (strpos((string) $rawValue, '+') !== \false) {
             return null;
         }
-        $rawValueWithoutUnderscores = \str_replace('_', '', (string) $rawValue);
+        $rawValueWithoutUnderscores = str_replace('_', '', (string) $rawValue);
         $node->setAttribute(AttributeKey::RAW_VALUE, $rawValueWithoutUnderscores);
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
@@ -69,9 +69,9 @@ CODE_SAMPLE
      * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $node
      * @param mixed $rawValue
      */
-    private function shouldSkip($node, $rawValue) : bool
+    private function shouldSkip($node, $rawValue): bool
     {
-        if (!\is_string($rawValue)) {
+        if (!is_string($rawValue)) {
             return \true;
         }
         // "_" notation can be applied to decimal numbers only
@@ -81,6 +81,6 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        return \strpos($rawValue, '_') === \false;
+        return strpos($rawValue, '_') === \false;
     }
 }

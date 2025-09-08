@@ -20,24 +20,24 @@ final class ComposerJsonPhpVersionResolver
     /**
      * @return PhpVersion::*
      */
-    public static function resolveFromCwdOrFail() : int
+    public static function resolveFromCwdOrFail(): int
     {
         // use composer.json PHP version
-        $projectComposerJsonFilePath = \getcwd() . '/composer.json';
-        if (\file_exists($projectComposerJsonFilePath)) {
+        $projectComposerJsonFilePath = getcwd() . '/composer.json';
+        if (file_exists($projectComposerJsonFilePath)) {
             $projectPhpVersion = self::resolve($projectComposerJsonFilePath);
-            if (\is_int($projectPhpVersion)) {
+            if (is_int($projectPhpVersion)) {
                 return $projectPhpVersion;
             }
         }
-        throw new InvalidConfigurationException(\sprintf('We could not find local "composer.json" to determine your PHP version.%sPlease, fill the PHP version set in withPhpSets() manually.', \PHP_EOL));
+        throw new InvalidConfigurationException(sprintf('We could not find local "composer.json" to determine your PHP version.%sPlease, fill the PHP version set in withPhpSets() manually.', \PHP_EOL));
     }
     /**
      * @return PhpVersion::*|null
      */
-    public static function resolve(string $composerJson) : ?int
+    public static function resolve(string $composerJson): ?int
     {
-        if (\array_key_exists($composerJson, self::$cachedPhpVersions)) {
+        if (array_key_exists($composerJson, self::$cachedPhpVersions)) {
             return self::$cachedPhpVersions[$composerJson];
         }
         $projectComposerJson = JsonFileSystem::readFilePath($composerJson);
@@ -58,7 +58,7 @@ final class ComposerJsonPhpVersionResolver
     /**
      * @return PhpVersion::*
      */
-    private static function createIntVersionFromComposerVersion(string $projectPhpVersion) : int
+    private static function createIntVersionFromComposerVersion(string $projectPhpVersion): int
     {
         $versionParser = new VersionParser();
         $constraint = $versionParser->parseConstraints($projectPhpVersion);

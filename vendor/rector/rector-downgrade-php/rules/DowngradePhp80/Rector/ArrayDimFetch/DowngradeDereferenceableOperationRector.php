@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeDereferenceableOperationRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add parentheses around non-dereferenceable expressions.', [new CodeSample(<<<'CODE_SAMPLE'
 function getFirstChar(string $str, string $suffix = '')
@@ -38,14 +38,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrayDimFetch::class];
     }
     /**
      * @param ArrayDimFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -53,7 +53,7 @@ CODE_SAMPLE
         $node->var->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         return $node;
     }
-    private function shouldSkip(ArrayDimFetch $arrayDimFetch) : bool
+    private function shouldSkip(ArrayDimFetch $arrayDimFetch): bool
     {
         if (!$arrayDimFetch->dim instanceof Expr) {
             return \true;
@@ -66,13 +66,13 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function hasParentheses(ArrayDimFetch $arrayDimFetch) : bool
+    private function hasParentheses(ArrayDimFetch $arrayDimFetch): bool
     {
         $wrappedInParentheses = $arrayDimFetch->var->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES);
         if ($wrappedInParentheses === \true) {
             return \true;
         }
-        \assert($arrayDimFetch->dim instanceof Expr);
+        assert($arrayDimFetch->dim instanceof Expr);
         // already checked in shouldSkip()
         $oldTokens = $this->file->getOldTokens();
         $varEndTokenPos = $arrayDimFetch->var->getEndTokenPos();

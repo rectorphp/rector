@@ -15,7 +15,7 @@ final class SkippedClassResolver
     /**
      * @return array<string, string[]|null>
      */
-    public function resolve() : array
+    public function resolve(): array
     {
         // disable cache in tests
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
@@ -29,15 +29,15 @@ final class SkippedClassResolver
         $this->skippedClasses = [];
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
-            if (\is_int($key)) {
+            if (is_int($key)) {
                 $key = $value;
                 $value = null;
             }
-            if (!\is_string($key)) {
+            if (!is_string($key)) {
                 continue;
             }
             // this only checks for Rector rules, that are always autoloaded
-            if (!\class_exists($key) && !\interface_exists($key)) {
+            if (!class_exists($key) && !interface_exists($key)) {
                 continue;
             }
             $this->skippedClasses[$key] = $value;

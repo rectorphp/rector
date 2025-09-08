@@ -13,9 +13,9 @@ final class ReservedClassNameImportSkipVoter implements ClassNameImportSkipVoter
      * @var string[]
      */
     private const RESERVED_CLASS_NAMES = ['bool', 'false', 'float', 'int', 'null', 'parent', 'self', 'static', 'string', 'true', 'void', 'never', 'iterable', 'object', 'mixed', 'array', 'callable'];
-    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
+    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
         $shortName = $fullyQualifiedObjectType->getShortNameLowered();
-        return \in_array($shortName, self::RESERVED_CLASS_NAMES, \true);
+        return in_array($shortName, self::RESERVED_CLASS_NAMES, \true);
     }
 }

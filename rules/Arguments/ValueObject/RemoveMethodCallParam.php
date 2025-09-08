@@ -27,15 +27,15 @@ final class RemoveMethodCallParam
         RectorAssert::className($class);
         RectorAssert::methodName($methodName);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->class);
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function getParamPosition() : int
+    public function getParamPosition(): int
     {
         return $this->paramPosition;
     }

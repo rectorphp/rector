@@ -27,7 +27,7 @@ final class RequestIsMainRector extends AbstractRector
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns status code numbers to constants', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation\Request;
@@ -58,14 +58,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BinaryOp::class];
     }
     /**
      * @param BinaryOp $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->left instanceof MethodCall) {
             return null;
@@ -81,14 +81,14 @@ CODE_SAMPLE
         $methodName = $requestClassReflection->hasMethod('isMainRequest') ? 'isMainRequest' : 'isMasterRequest';
         return new MethodCall($methodCall->var, $methodName);
     }
-    private function isRequestGetRequestType(MethodCall $methodCall) : bool
+    private function isRequestGetRequestType(MethodCall $methodCall): bool
     {
         if (!$this->isName($methodCall->name, 'getRequestType')) {
             return \false;
         }
         return $this->isObjectType($methodCall->var, new ObjectType(SymfonyClass::REQUEST));
     }
-    private function isHttpKernelMainRequestClassConstFetch(Expr $expr) : bool
+    private function isHttpKernelMainRequestClassConstFetch(Expr $expr): bool
     {
         if (!$expr instanceof ClassConstFetch) {
             return \false;

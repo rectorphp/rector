@@ -42,7 +42,7 @@ class CustomFilterIterator extends \FilterIterator
     /**
      * Filters the iterator values.
      */
-    public function accept() : bool
+    public function accept(): bool
     {
         $fileinfo = $this->current();
         foreach ($this->filters as $filter) {

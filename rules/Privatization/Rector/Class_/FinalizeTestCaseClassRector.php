@@ -34,7 +34,7 @@ final class FinalizeTestCaseClassRector extends AbstractRector
         $this->visibilityManipulator = $visibilityManipulator;
         $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make PHPUnit test case final', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -55,31 +55,31 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // skip obvious cases
         if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal()) {
             return null;
         }
         $className = $this->getName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             return null;
         }
-        if (\substr_compare($className, 'TestCase', -\strlen('TestCase')) === 0) {
+        if (substr_compare($className, 'TestCase', -strlen('TestCase')) === 0) {
             return null;
         }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if (!$classReflection->is('PHPUnit\\Framework\\TestCase')) {
+        if (!$classReflection->is('PHPUnit\Framework\TestCase')) {
             return null;
         }
         if ($node->attrGroups !== []) {

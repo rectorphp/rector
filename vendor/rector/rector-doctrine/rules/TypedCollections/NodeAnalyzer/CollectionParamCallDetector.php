@@ -40,7 +40,7 @@ final class CollectionParamCallDetector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
      */
-    public function detect($callLike, int $position) : bool
+    public function detect($callLike, int $position): bool
     {
         if ($callLike instanceof StaticCall) {
             $callerType = $this->nodeTypeResolver->getType($callLike->class);

@@ -20,7 +20,7 @@ final class PhpLevelSetResolver
      * @param PhpVersion::* $phpVersion
      * @return string[]
      */
-    public static function resolveFromPhpVersion(int $phpVersion) : array
+    public static function resolveFromPhpVersion(int $phpVersion): array
     {
         $configFilePaths = [];
         foreach (self::VERSION_LOWER_BOUND_CONFIGS as $versionLowerBound => $phpSetFilePath) {

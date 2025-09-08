@@ -17,7 +17,7 @@ final class FunctionLikeReturnTypeResolver
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function resolveFunctionLikeReturnTypeToPHPStanType(ClassMethod $classMethod) : Type
+    public function resolveFunctionLikeReturnTypeToPHPStanType(ClassMethod $classMethod): Type
     {
         $functionReturnType = $classMethod->getReturnType();
         if ($functionReturnType === null) {

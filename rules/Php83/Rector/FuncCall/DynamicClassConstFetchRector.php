@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DynamicClassConstFetchRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('constant(Example::class . \'::\' . $constName) to dynamic class const fetch Example::{$constName}', [new CodeSample(<<<'CODE_SAMPLE'
 constant(Example::class . '::' . $constName);
@@ -29,14 +29,14 @@ Example::{$constName};
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?ClassConstFetch
+    public function refactor(Node $node): ?ClassConstFetch
     {
         if (!$this->isName($node, 'constant')) {
             return null;
@@ -45,7 +45,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 1) {
+        if (count($args) !== 1) {
             return null;
         }
         $value = $args[0]->value;
@@ -66,7 +66,7 @@ CODE_SAMPLE
         }
         return new ClassConstFetch($value->left->left->class, $value->right);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DYNAMIC_CLASS_CONST_FETCH;
     }

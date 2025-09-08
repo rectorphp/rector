@@ -46,7 +46,7 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn defined annotations above properties and methods to their new values', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -74,19 +74,19 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, [new RenameAnnotationByType('PHPUnit\\Framework\\TestCase', 'test', 'scenario')])]);
+, [new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Expression::class];
     }
     /**
      * @param Class_|Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Expression) {
             return $this->refactorExpression($node);
@@ -119,12 +119,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RenameAnnotationInterface::class);
         $this->renameAnnotations = $configuration;
     }
-    private function refactorExpression(Expression $expression) : ?Expression
+    private function refactorExpression(Expression $expression): ?Expression
     {
         $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);

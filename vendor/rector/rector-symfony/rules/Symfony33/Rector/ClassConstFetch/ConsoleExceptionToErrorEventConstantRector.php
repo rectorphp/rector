@@ -25,23 +25,23 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     private ObjectType $consoleEventsObjectType;
     public function __construct()
     {
-        $this->consoleEventsObjectType = new ObjectType('Symfony\\Component\\Console\\ConsoleEvents');
+        $this->consoleEventsObjectType = new ObjectType('Symfony\Component\Console\ConsoleEvents');
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [new CodeSample('"console.exception"', 'Symfony\\Component\\Console\\ConsoleEvents::ERROR'), new CodeSample('Symfony\\Component\\Console\\ConsoleEvents::EXCEPTION', 'Symfony\\Component\\Console\\ConsoleEvents::ERROR')]);
+        return new RuleDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [new CodeSample('"console.exception"', 'Symfony\Component\Console\ConsoleEvents::ERROR'), new CodeSample('Symfony\Component\Console\ConsoleEvents::EXCEPTION', 'Symfony\Component\Console\ConsoleEvents::ERROR')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassConstFetch::class, String_::class];
     }
     /**
      * @param ClassConstFetch|String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassConstFetch && ($this->isObjectType($node->class, $this->consoleEventsObjectType) && $this->isName($node->name, 'EXCEPTION'))) {
             return $this->nodeFactory->createClassConstFetch($this->consoleEventsObjectType->getClassName(), 'ERROR');

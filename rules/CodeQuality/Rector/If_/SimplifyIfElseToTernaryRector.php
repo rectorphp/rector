@@ -40,7 +40,7 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes if/else for same value as assign to ternary', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -69,14 +69,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->else instanceof Else_) {
             return null;
@@ -123,9 +123,9 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function resolveOnlyStmtAssignVar(array $stmts) : ?Expr
+    private function resolveOnlyStmtAssignVar(array $stmts): ?Expr
     {
-        if (\count($stmts) !== 1) {
+        if (count($stmts) !== 1) {
             return null;
         }
         $stmt = $stmts[0];
@@ -141,9 +141,9 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function resolveOnlyStmtAssignExpr(array $stmts) : ?Expr
+    private function resolveOnlyStmtAssignExpr(array $stmts): ?Expr
     {
-        if (\count($stmts) !== 1) {
+        if (count($stmts) !== 1) {
             return null;
         }
         $stmt = $stmts[0];
@@ -162,7 +162,7 @@ CODE_SAMPLE
     /**
      * @param Node[] $nodes
      */
-    private function haveNestedTernary(array $nodes) : bool
+    private function haveNestedTernary(array $nodes): bool
     {
         foreach ($nodes as $node) {
             $ternary = $this->betterNodeFinder->findFirstInstanceOf($node, Ternary::class);
@@ -172,9 +172,9 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isNodeTooLong(Assign $assign) : bool
+    private function isNodeTooLong(Assign $assign): bool
     {
         $assignContent = $this->betterStandardPrinter->print($assign);
-        return \strlen($assignContent) > self::LINE_LENGTH_LIMIT;
+        return strlen($assignContent) > self::LINE_LENGTH_LIMIT;
     }
 }

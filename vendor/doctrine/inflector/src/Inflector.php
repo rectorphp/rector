@@ -33,9 +33,9 @@ class Inflector
     /**
      * Converts a word into the format for a Doctrine table name. Converts 'ModelName' to 'model_name'.
      */
-    public function tableize(string $word) : string
+    public function tableize(string $word): string
     {
-        $tableized = preg_replace('~(?<=\\w)([A-Z])~u', '_$1', $word);
+        $tableized = preg_replace('~(?<=\w)([A-Z])~u', '_$1', $word);
         if ($tableized === null) {
             throw new RuntimeException(sprintf('preg_replace returned null for value "%s"', $word));
         }
@@ -44,14 +44,14 @@ class Inflector
     /**
      * Converts a word into the format for a Doctrine class name. Converts 'table_name' to 'TableName'.
      */
-    public function classify(string $word) : string
+    public function classify(string $word): string
     {
         return str_replace([' ', '_', '-'], '', ucwords($word, ' _-'));
     }
     /**
      * Camelizes a word. This uses the classify() method and turns the first character to lowercase.
      */
-    public function camelize(string $word) : string
+    public function camelize(string $word): string
     {
         return lcfirst($this->classify($word));
     }
@@ -80,7 +80,7 @@ class Inflector
      *
      * @return string The string with all delimiter-separated words capitalized.
      */
-    public function capitalize(string $string, string $delimiters = " \n\t\r\x00\v-") : string
+    public function capitalize(string $string, string $delimiters = " \n\t\r\x00\v-"): string
     {
         return ucwords($string, $delimiters);
     }
@@ -89,7 +89,7 @@ class Inflector
      *
      * @param string $string The string to check for utf8 characters in.
      */
-    public function seemsUtf8(string $string) : bool
+    public function seemsUtf8(string $string): bool
     {
         for ($i = 0; $i < strlen($string); $i++) {
             if (ord($string[$i]) < 0x80) {
@@ -131,9 +131,9 @@ class Inflector
      *
      * @return string Unaccented string
      */
-    public function unaccent(string $string) : string
+    public function unaccent(string $string): string
     {
-        if (preg_match('/[\\x80-\\xff]/', $string) === \false) {
+        if (preg_match('/[\x80-\xff]/', $string) === \false) {
             return $string;
         }
         if ($this->seemsUtf8($string)) {
@@ -159,7 +159,7 @@ class Inflector
      *
      * @return string Urlized string.
      */
-    public function urlize(string $string) : string
+    public function urlize(string $string): string
     {
         // Remove all non url friendly characters with the unaccent function
         $unaccented = $this->unaccent($string);
@@ -168,7 +168,7 @@ class Inflector
         } else {
             $lowered = strtolower($unaccented);
         }
-        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => '\\1_\\2', '/([a-z\\d])([A-Z])/' => '\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
+        $replacements = ['/\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => '\1_\2', '/([a-z\d])([A-Z])/' => '\1_\2', '/[^A-Z^a-z^0-9^\/]+/' => '-'];
         $urlized = $lowered;
         foreach ($replacements as $pattern => $replacement) {
             $replaced = preg_replace($pattern, $replacement, $urlized);
@@ -186,7 +186,7 @@ class Inflector
      *
      * @return string The word in singular form.
      */
-    public function singularize(string $word) : string
+    public function singularize(string $word): string
     {
         return $this->singularizer->inflect($word);
     }
@@ -197,7 +197,7 @@ class Inflector
      *
      * @return string The word in plural form.
      */
-    public function pluralize(string $word) : string
+    public function pluralize(string $word): string
     {
         return $this->pluralizer->inflect($word);
     }

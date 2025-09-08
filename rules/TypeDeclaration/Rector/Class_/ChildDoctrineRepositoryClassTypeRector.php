@@ -45,9 +45,9 @@ final class ChildDoctrineRepositoryClassTypeRector extends AbstractRector
         $this->nodeFinder = $nodeFinder;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type to classes that extend Doctrine\\ORM\\EntityRepository based on return Doctrine method names', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type to classes that extend Doctrine\ORM\EntityRepository based on return Doctrine method names', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -84,16 +84,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
+        if (!$this->isObjectType($node, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }
         $entityClassName = $this->resolveEntityClassnameFromPhpDoc($node);
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveEntityClassnameFromPhpDoc(Class_ $class) : ?string
+    private function resolveEntityClassnameFromPhpDoc(Class_ $class): ?string
     {
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
         // we need a way to resolve entity type... 1st idea is from @extends docblock
@@ -150,14 +150,14 @@ CODE_SAMPLE
             return null;
         }
         // skip if value is used in generics
-        if (\in_array($entityGenericType->name, $classPhpDocInfo->getTemplateNames(), \true)) {
+        if (in_array($entityGenericType->name, $classPhpDocInfo->getTemplateNames(), \true)) {
             return null;
         }
         return $entityGenericType->name;
     }
-    private function containsMethodCallNamed(ClassMethod $classMethod, string $desiredMethodName) : bool
+    private function containsMethodCallNamed(ClassMethod $classMethod, string $desiredMethodName): bool
     {
-        return (bool) $this->nodeFinder->findFirst((array) $classMethod->stmts, static function (Node $node) use($desiredMethodName) : bool {
+        return (bool) $this->nodeFinder->findFirst((array) $classMethod->stmts, static function (Node $node) use ($desiredMethodName): bool {
             if (!$node instanceof MethodCall) {
                 return \false;
             }
@@ -168,7 +168,7 @@ CODE_SAMPLE
             return $currentMethodCallName === $desiredMethodName;
         });
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if (!$classMethod->isPublic()) {
             return \true;
@@ -178,7 +178,7 @@ CODE_SAMPLE
         }
         return $classMethod->returnType instanceof Node;
     }
-    private function createNullableType(string $entityClassName) : NullableType
+    private function createNullableType(string $entityClassName): NullableType
     {
         $name = new Name($entityClassName);
         return new NullableType($name);

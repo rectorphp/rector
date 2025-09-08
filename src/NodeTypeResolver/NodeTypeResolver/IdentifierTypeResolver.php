@@ -25,7 +25,7 @@ final class IdentifierTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [Identifier::class];
     }
@@ -33,7 +33,7 @@ final class IdentifierTypeResolver implements NodeTypeResolverInterface
      * @param Identifier $node
      * @return StringType|BooleanType|ConstantBooleanType|NullType|ObjectWithoutClassType|ArrayType|IterableType|IntegerType|FloatType|MixedType
      */
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         $lowerString = $node->toLowerString();
         if ($lowerString === 'string') {

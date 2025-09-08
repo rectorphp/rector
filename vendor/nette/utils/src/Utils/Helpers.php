@@ -16,7 +16,7 @@ class Helpers
     /**
      * Executes a callback and returns the captured output as a string.
      */
-    public static function capture(callable $func) : string
+    public static function capture(callable $func): string
     {
         ob_start(fn() => '');
         try {
@@ -31,11 +31,11 @@ class Helpers
      * Returns the last occurred PHP error or an empty string if no error occurred. Unlike error_get_last(),
      * it is nit affected by the PHP directive html_errors and always returns text, not HTML.
      */
-    public static function getLastError() : string
+    public static function getLastError(): string
     {
-        $message = \error_get_last()['message'] ?? '';
+        $message = error_get_last()['message'] ?? '';
         $message = ini_get('html_errors') ? Html::htmlToText($message) : $message;
-        $message = preg_replace('#^\\w+\\(.*?\\): #', '', $message);
+        $message = preg_replace('#^\w+\(.*?\): #', '', $message);
         return $message;
     }
     /**
@@ -65,7 +65,7 @@ class Helpers
      * Looks for a string from possibilities that is most similar to value, but not the same (for 8-bit encoding).
      * @param  string[]  $possibilities
      */
-    public static function getSuggestion(array $possibilities, string $value) : ?string
+    public static function getSuggestion(array $possibilities, string $value): ?string
     {
         $best = null;
         $min = (strlen($value) / 4 + 1) * 10 + 0.1;
@@ -82,7 +82,7 @@ class Helpers
      * @param mixed $left
      * @param mixed $right
      */
-    public static function compare($left, string $operator, $right) : bool
+    public static function compare($left, string $operator, $right): bool
     {
         switch ($operator) {
             case '>':

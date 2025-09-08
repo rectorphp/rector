@@ -18,7 +18,7 @@ use Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterf
 use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_73);
     $rectorConfig->rules([DowngradeTypedPropertyRector::class, ArrowFunctionToAnonymousFunctionRector::class, DowngradeCovariantReturnTypeRector::class, DowngradeContravariantArgumentTypeRector::class, DowngradeNullCoalescingOperatorRector::class, DowngradeNumericLiteralSeparatorRector::class, DowngradeStripTagsCallWithArrayRector::class, DowngradeArraySpreadRector::class, DowngradeArrayMergeCallWithoutArgumentsRector::class, DowngradeFreadFwriteFalsyToNegationRector::class, DowngradePreviouslyImplementedInterfaceRector::class, DowngradeReflectionGetTypeRector::class, DowngradeProcOpenArrayCommandArgRector::class]);
 };

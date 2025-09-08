@@ -57,11 +57,11 @@ final class SimplifyUselessVariableRector extends AbstractRector implements Conf
         $this->callAnalyzer = $callAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $this->onlyDirectAssign = $configuration[self::ONLY_DIRECT_ASSIGN] ?? \false;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove useless variable assigns', [new ConfiguredCodeSample(
             <<<'CODE_SAMPLE'
@@ -99,14 +99,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $stmts = $node->stmts;
         if ($stmts === null) {
@@ -139,7 +139,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
-    private function processSimplifyUselessVariable(StmtsAwareInterface $stmtsAware, Return_ $return, $assign, int $key) : ?StmtsAwareInterface
+    private function processSimplifyUselessVariable(StmtsAwareInterface $stmtsAware, Return_ $return, $assign, int $key): ?StmtsAwareInterface
     {
         if (!$assign instanceof Assign) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
@@ -153,7 +153,7 @@ CODE_SAMPLE
         unset($stmtsAware->stmts[$key - 1]);
         return $stmtsAware;
     }
-    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt) : bool
+    private function shouldSkipStmt(Return_ $return, Stmt $previousStmt): bool
     {
         if (!$return->expr instanceof Variable) {
             return \true;
@@ -190,14 +190,14 @@ CODE_SAMPLE
         }
         return $this->variableAnalyzer->isUsedByReference($variable);
     }
-    private function hasSomeComment(Stmt $stmt) : bool
+    private function hasSomeComment(Stmt $stmt): bool
     {
         if ($stmt->getComments() !== []) {
             return \true;
         }
         return $stmt->getDocComment() instanceof Doc;
     }
-    private function isReturnWithVarAnnotation(Return_ $return) : bool
+    private function isReturnWithVarAnnotation(Return_ $return): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($return);
         return !$phpDocInfo->getVarType() instanceof MixedType;

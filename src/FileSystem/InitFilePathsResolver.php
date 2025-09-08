@@ -18,11 +18,11 @@ final class InitFilePathsResolver
     /**
      * @return string[]
      */
-    public function resolve(string $projectDirectory) : array
+    public function resolve(string $projectDirectory): array
     {
         $rootDirectoryFinder = Finder::create()->directories()->depth(0)->notPath(self::DO_NOT_INCLUDE_PATHS_REGEX)->in($projectDirectory)->sortByName();
         /** @var SplFileInfo[] $rootDirectoryFileInfos */
-        $rootDirectoryFileInfos = \iterator_to_array($rootDirectoryFinder);
+        $rootDirectoryFileInfos = iterator_to_array($rootDirectoryFinder);
         $projectDirectories = [];
         foreach ($rootDirectoryFileInfos as $rootDirectoryFileInfo) {
             if (!$this->hasDirectoryFileInfoPhpFiles($rootDirectoryFileInfo)) {
@@ -32,7 +32,7 @@ final class InitFilePathsResolver
         }
         return $projectDirectories;
     }
-    private function hasDirectoryFileInfoPhpFiles(SplFileInfo $rootDirectoryFileInfo) : bool
+    private function hasDirectoryFileInfoPhpFiles(SplFileInfo $rootDirectoryFileInfo): bool
     {
         // is directory with PHP files?
         return Finder::create()->files()->in($rootDirectoryFileInfo->getPathname())->name('*.php')->hasResults();

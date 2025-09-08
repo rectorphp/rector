@@ -9,10 +9,10 @@ final class ArrayFilter
      * @param mixed[] $values
      * @return string[]
      */
-    public function filterWithAtLeastTwoOccurrences(array $values) : array
+    public function filterWithAtLeastTwoOccurrences(array $values): array
     {
         /** @var array<string, int> $valueToCount */
-        $valueToCount = \array_count_values($values);
+        $valueToCount = array_count_values($values);
         $duplicatedValues = [];
         foreach ($valueToCount as $value => $count) {
             /** @var int $count */

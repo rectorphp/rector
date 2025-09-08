@@ -79,7 +79,7 @@ final class FileProcessor
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
-    public function processFile(File $file, Configuration $configuration) : FileProcessResult
+    public function processFile(File $file, Configuration $configuration): FileProcessResult
     {
         // 1. parse files to nodes
         $parsingSystemError = $this->parseFileAndDecorateNodes($file);
@@ -121,7 +121,7 @@ final class FileProcessor
         }
         return new FileProcessResult([], $file->getFileDiff());
     }
-    private function parseFileAndDecorateNodes(File $file) : ?SystemError
+    private function parseFileAndDecorateNodes(File $file): ?SystemError
     {
         try {
             try {
@@ -149,7 +149,7 @@ final class FileProcessor
         }
         return null;
     }
-    private function printFile(File $file, Configuration $configuration, string $filePath) : void
+    private function printFile(File $file, Configuration $configuration, string $filePath): void
     {
         // only save to string first, no need to print to file when not needed
         $newContent = $this->betterStandardPrinter->printFormatPreserving($file->getNewStmts(), $file->getOldStmts(), $file->getOldTokens());
@@ -163,7 +163,7 @@ final class FileProcessor
         }
         FileSystem::write($filePath, $newContent, null);
     }
-    private function parseFileNodes(File $file, bool $forNewestSupportedVersion = \true) : void
+    private function parseFileNodes(File $file, bool $forNewestSupportedVersion = \true): void
     {
         // store tokens by original file content, so we don't have to print them right now
         $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent(), $forNewestSupportedVersion);

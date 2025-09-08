@@ -36,11 +36,11 @@ class Use_ extends Stmt
         $this->type = $type;
         $this->uses = $uses;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['type', 'uses'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Use';
     }

@@ -19,7 +19,7 @@ final class BitwiseFlagCleaner
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function cleanFuncCall(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag, ?Expr $expr = null) : void
+    public function cleanFuncCall(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag, ?Expr $expr = null): void
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -42,7 +42,7 @@ final class BitwiseFlagCleaner
         }
         $this->assignThirdArgsValue($funcCall, $bitwiseOr, $flag);
     }
-    private function assignThirdArgsValue(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag) : void
+    private function assignThirdArgsValue(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag): void
     {
         if ($bitwiseOr->right instanceof ConstFetch && $this->nodeNameResolver->isName($bitwiseOr->right, $flag)) {
             $bitwiseOr = $bitwiseOr->left;

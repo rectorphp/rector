@@ -23,7 +23,7 @@ class InvalidTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
         $this->value = $value;
         $this->exceptionArgs = [$exception->getCurrentTokenValue(), $exception->getCurrentTokenType(), $exception->getCurrentOffset(), $exception->getExpectedTokenType(), $exception->getExpectedTokenValue(), $exception->getCurrentTokenLine()];
     }
-    public function __get(string $name) : ?ParserException
+    public function __get(string $name): ?ParserException
     {
         if ($name !== 'exception') {
             trigger_error(sprintf('Undefined property: %s::$%s', self::class, $name), E_USER_WARNING);
@@ -31,7 +31,7 @@ class InvalidTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
         }
         return new ParserException(...$this->exceptionArgs);
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->value;
     }

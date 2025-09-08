@@ -14,7 +14,7 @@ abstract class AbstractCi implements CiInterface
     {
         $this->env = $env;
     }
-    public function describe() : array
+    public function describe(): array
     {
         return ['ci-name' => $this->getCiName(), 'build-number' => $this->getBuildNumber(), 'build-url' => $this->getBuildUrl(), 'commit' => $this->getCommit(), 'branch' => $this->getBranch(), 'target-branch' => $this->getTargetBranch(), 'repository-name' => $this->getRepositoryName(), 'repository-url' => $this->getRepositoryUrl(), 'is-pull-request' => $this->isPullRequest()->describe()];
     }

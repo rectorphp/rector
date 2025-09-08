@@ -27,11 +27,11 @@ class Include_ extends Expr
         $this->expr = $expr;
         $this->type = $type;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['expr', 'type'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Include';
     }

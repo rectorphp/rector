@@ -27,9 +27,9 @@ final class BooleanInBooleanNotRuleFixerRector extends AbstractFalsyScalarRuleFi
     {
         $this->exactCompareFactory = $exactCompareFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\BooleansInConditions\\BooleanInBooleanNotRule');
+        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\BooleansInConditions\BooleanInBooleanNotRule');
         return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [BooleanNot::class];
     }
     /**
      * @param BooleanNot $node
      */
-    public function refactor(Node $node) : ?Expr
+    public function refactor(Node $node): ?Expr
     {
         $scope = ScopeFetcher::fetch($node);
         $exprType = $scope->getNativeType($node->expr);

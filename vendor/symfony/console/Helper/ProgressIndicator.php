@@ -41,14 +41,14 @@ class ProgressIndicator
         $this->output = $output;
         $format ??= $this->determineBestFormat();
         $indicatorValues ??= ['-', '\\', '|', '/'];
-        $indicatorValues = \array_values($indicatorValues);
+        $indicatorValues = array_values($indicatorValues);
         if (2 > \count($indicatorValues)) {
             throw new InvalidArgumentException('Must have at least 2 indicator value characters.');
         }
         $this->format = self::getFormatDefinition($format);
         $this->indicatorChangeInterval = $indicatorChangeInterval;
         $this->indicatorValues = $indicatorValues;
-        $this->startTime = \time();
+        $this->startTime = time();
     }
     /**
      * Sets the current indicator message.
@@ -72,7 +72,7 @@ class ProgressIndicator
         }
         $this->message = $message;
         $this->started = \true;
-        $this->startTime = \time();
+        $this->startTime = time();
         $this->indicatorUpdateTime = $this->getCurrentTimeInMilliseconds() + $this->indicatorChangeInterval;
         $this->indicatorCurrent = 0;
         $this->display();
@@ -116,7 +116,7 @@ class ProgressIndicator
     /**
      * Gets the format for a given name.
      */
-    public static function getFormatDefinition(string $name) : ?string
+    public static function getFormatDefinition(string $name): ?string
     {
         return self::FORMATS[$name] ?? null;
     }
@@ -135,24 +135,24 @@ class ProgressIndicator
     /**
      * Gets the placeholder formatter for a given name (including the delimiter char like %).
      */
-    public static function getPlaceholderFormatterDefinition(string $name) : ?callable
+    public static function getPlaceholderFormatterDefinition(string $name): ?callable
     {
         self::$formatters ??= self::initPlaceholderFormatters();
         return self::$formatters[$name] ?? null;
     }
-    private function display() : void
+    private function display(): void
     {
         if (OutputInterface::VERBOSITY_QUIET === $this->output->getVerbosity()) {
             return;
         }
-        $this->overwrite(\preg_replace_callback("{%([a-z\\-_]+)(?:\\:([^%]+))?%}i", function ($matches) {
+        $this->overwrite(preg_replace_callback("{%([a-z\\-_]+)(?:\\:([^%]+))?%}i", function ($matches) {
             if ($formatter = self::getPlaceholderFormatterDefinition($matches[1])) {
                 return $formatter($this);
             }
             return $matches[0];
         }, $this->format ?? ''));
     }
-    private function determineBestFormat() : string
+    private function determineBestFormat(): string
     {
         switch ($this->output->getVerbosity()) {
             case OutputInterface::VERBOSITY_VERBOSE:
@@ -167,7 +167,7 @@ class ProgressIndicator
     /**
      * Overwrites a previous message to the output.
      */
-    private function overwrite(string $message) : void
+    private function overwrite(string $message): void
     {
         if ($this->output->isDecorated()) {
             $this->output->write("\r\x1b[2K");
@@ -176,15 +176,15 @@ class ProgressIndicator
             $this->output->writeln($message);
         }
     }
-    private function getCurrentTimeInMilliseconds() : float
+    private function getCurrentTimeInMilliseconds(): float
     {
-        return \round(\microtime(\true) * 1000);
+        return round(microtime(\true) * 1000);
     }
     /**
      * @return array<string, \Closure>
      */
-    private static function initPlaceholderFormatters() : array
+    private static function initPlaceholderFormatters(): array
     {
-        return ['indicator' => fn(self $indicator) => $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)], 'message' => fn(self $indicator) => $indicator->message, 'elapsed' => fn(self $indicator) => Helper::formatTime(\time() - $indicator->startTime, 2), 'memory' => fn() => Helper::formatMemory(\memory_get_usage(\true))];
+        return ['indicator' => fn(self $indicator) => $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)], 'message' => fn(self $indicator) => $indicator->message, 'elapsed' => fn(self $indicator) => Helper::formatTime(time() - $indicator->startTime, 2), 'memory' => fn() => Helper::formatMemory(memory_get_usage(\true))];
     }
 }

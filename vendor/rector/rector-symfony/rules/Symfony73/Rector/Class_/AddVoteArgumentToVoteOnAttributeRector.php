@@ -19,10 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddVoteArgumentToVoteOnAttributeRector extends AbstractRector
 {
-    private const VOTE_INTERFACE = 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface';
-    private const VOTER_CLASS = 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter';
-    private const VOTE_CLASS = 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Vote';
-    public function getRuleDefinition() : RuleDefinition
+    private const VOTE_INTERFACE = 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface';
+    private const VOTER_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Voter';
+    private const VOTE_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Vote';
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Adds a new `$voter` argument in protected function `voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool`', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -63,14 +63,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classMethod = null;
         if ($node->extends !== null && $this->isName($node->extends, self::VOTER_CLASS)) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
         if ($classMethod === null) {
             return null;
         }
-        if (\count($classMethod->params) !== 3) {
+        if (count($classMethod->params) !== 3) {
             return null;
         }
         $classMethod->params[] = new Param(new Variable('vote'), new ConstFetch(new Name('null')), new NullableType(new FullyQualified(self::VOTE_CLASS)));

@@ -23,26 +23,26 @@ final class KaizenRulesDetector
         $this->cache = $cache;
         $this->fileHasher = $fileHasher;
     }
-    public function addRule(string $rectorClass) : void
+    public function addRule(string $rectorClass): void
     {
         $cachedValue = $this->loadRules();
-        $appliedRectorClasses = \array_unique(\array_merge($cachedValue, [$rectorClass]));
+        $appliedRectorClasses = array_unique(array_merge($cachedValue, [$rectorClass]));
         $this->cache->save($this->getCacheKey(), CacheKey::KAIZEN_RULES, $appliedRectorClasses);
     }
     /**
      * @return array<class-string<RectorInterface>>
      */
-    public function loadRules() : array
+    public function loadRules(): array
     {
         $key = $this->getCacheKey();
         $rules = $this->cache->load($key, CacheKey::KAIZEN_RULES) ?? [];
-        if (!\is_array($rules)) {
+        if (!is_array($rules)) {
             throw new ShouldNotHappenException();
         }
-        return \array_unique($rules);
+        return array_unique($rules);
     }
-    private function getCacheKey() : string
+    private function getCacheKey(): string
     {
-        return CacheKey::KAIZEN_RULES . '_' . $this->fileHasher->hash(\getcwd());
+        return CacheKey::KAIZEN_RULES . '_' . $this->fileHasher->hash(getcwd());
     }
 }

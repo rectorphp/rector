@@ -14,7 +14,7 @@ final class NewLineSplitter
     /**
      * @return string[]
      */
-    public static function split(string $content) : array
+    public static function split(string $content): array
     {
         return Strings::split($content, self::NEWLINES_REGEX);
     }

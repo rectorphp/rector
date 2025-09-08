@@ -13,21 +13,21 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
  */
 final class HasOffsetTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return HasOffsetType::class;
     }
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : Identifier
+    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
     {
         return new Identifier('array');
     }

@@ -16,7 +16,7 @@ trait LoggerTrait
      * System is unusable.
      * @param string|\Stringable $message
      */
-    public function emergency($message, array $context = []) : void
+    public function emergency($message, array $context = []): void
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -27,7 +27,7 @@ trait LoggerTrait
      * trigger the SMS alerts and wake you up.
      * @param string|\Stringable $message
      */
-    public function alert($message, array $context = []) : void
+    public function alert($message, array $context = []): void
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -37,7 +37,7 @@ trait LoggerTrait
      * Example: Application component unavailable, unexpected exception.
      * @param string|\Stringable $message
      */
-    public function critical($message, array $context = []) : void
+    public function critical($message, array $context = []): void
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -46,7 +46,7 @@ trait LoggerTrait
      * be logged and monitored.
      * @param string|\Stringable $message
      */
-    public function error($message, array $context = []) : void
+    public function error($message, array $context = []): void
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -57,7 +57,7 @@ trait LoggerTrait
      * that are not necessarily wrong.
      * @param string|\Stringable $message
      */
-    public function warning($message, array $context = []) : void
+    public function warning($message, array $context = []): void
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -65,7 +65,7 @@ trait LoggerTrait
      * Normal but significant events.
      * @param string|\Stringable $message
      */
-    public function notice($message, array $context = []) : void
+    public function notice($message, array $context = []): void
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -75,7 +75,7 @@ trait LoggerTrait
      * Example: User logs in, SQL logs.
      * @param string|\Stringable $message
      */
-    public function info($message, array $context = []) : void
+    public function info($message, array $context = []): void
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
@@ -83,7 +83,7 @@ trait LoggerTrait
      * Detailed debug information.
      * @param string|\Stringable $message
      */
-    public function debug($message, array $context = []) : void
+    public function debug($message, array $context = []): void
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
@@ -95,5 +95,5 @@ trait LoggerTrait
      * @throws \Psr\Log\InvalidArgumentException
      * @param string|\Stringable $message
      */
-    public abstract function log($level, $message, array $context = []) : void;
+    abstract public function log($level, $message, array $context = []): void;
 }

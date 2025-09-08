@@ -29,7 +29,7 @@ final class StrFalseComparisonResolver
      * @param string[] $oldStrFuncNames
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $expr
      */
-    public function resolve($expr, array $oldStrFuncNames) : ?FuncCall
+    public function resolve($expr, array $oldStrFuncNames): ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
             if (!$expr->right instanceof FuncCall) {

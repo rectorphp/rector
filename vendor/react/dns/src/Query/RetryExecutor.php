@@ -19,17 +19,17 @@ final class RetryExecutor implements ExecutorInterface
     }
     public function tryQuery(Query $query, $retries)
     {
-        $deferred = new Deferred(function () use(&$promise) {
+        $deferred = new Deferred(function () use (&$promise) {
             if ($promise instanceof PromiseInterface && \method_exists($promise, 'cancel')) {
                 $promise->cancel();
             }
         });
-        $success = function ($value) use($deferred, &$errorback) {
+        $success = function ($value) use ($deferred, &$errorback) {
             $errorback = null;
             $deferred->resolve($value);
         };
         $executor = $this->executor;
-        $errorback = function ($e) use($deferred, &$promise, $query, $success, &$errorback, &$retries, $executor) {
+        $errorback = function ($e) use ($deferred, &$promise, $query, $success, &$errorback, &$retries, $executor) {
             if (!$e instanceof TimeoutException) {
                 $errorback = null;
                 $deferred->reject($e);

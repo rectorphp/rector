@@ -29,11 +29,11 @@ final class DowngradeUnionTypeDeclarationRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class, Closure::class, ArrowFunction::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove the union type params and returns, add @param/@return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -62,7 +62,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Closure|Function_|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $paramDecorated = \false;
         foreach ($node->getParams() as $param) {

@@ -32,7 +32,7 @@ final class ClassMethodParamTypeCompleter
     /**
      * @param array<int, Type> $classParameterTypes
      */
-    public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes) : ?ClassMethod
+    public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes): ?ClassMethod
     {
         $hasChanged = \false;
         foreach ($classParameterTypes as $position => $argumentStaticType) {
@@ -62,7 +62,7 @@ final class ClassMethodParamTypeCompleter
         }
         return null;
     }
-    private function shouldSkipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, int $position, int $maxUnionTypes) : bool
+    private function shouldSkipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, int $position, int $maxUnionTypes): bool
     {
         if ($argumentStaticType instanceof MixedType) {
             return \true;
@@ -100,21 +100,21 @@ final class ClassMethodParamTypeCompleter
         // already completed → skip
         return $currentParameterStaticType->equals($argumentStaticType);
     }
-    private function isClosureAndCallableType(Type $parameterStaticType, Type $argumentStaticType) : bool
+    private function isClosureAndCallableType(Type $parameterStaticType, Type $argumentStaticType): bool
     {
         if ($parameterStaticType->isCallable()->yes() && $this->isClosureObjectType($argumentStaticType)) {
             return \true;
         }
         return $argumentStaticType->isCallable()->yes() && $this->isClosureObjectType($parameterStaticType);
     }
-    private function isClosureObjectType(Type $type) : bool
+    private function isClosureObjectType(Type $type): bool
     {
         if (!$type instanceof ObjectType) {
             return \false;
         }
         return $type->getClassName() === 'Closure';
     }
-    private function isTooDetailedUnionType(Type $currentType, Type $newType, int $maxUnionTypes) : bool
+    private function isTooDetailedUnionType(Type $currentType, Type $newType, int $maxUnionTypes): bool
     {
         if ($currentType instanceof MixedType) {
             return \false;
@@ -122,9 +122,9 @@ final class ClassMethodParamTypeCompleter
         if (!$newType instanceof UnionType) {
             return \false;
         }
-        return \count($newType->getTypes()) > $maxUnionTypes;
+        return count($newType->getTypes()) > $maxUnionTypes;
     }
-    private function isAcceptedByDefault(Param $param, Type $argumentStaticType) : bool
+    private function isAcceptedByDefault(Param $param, Type $argumentStaticType): bool
     {
         if (!$param->default instanceof Expr) {
             return \true;

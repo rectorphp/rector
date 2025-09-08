@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveFilterVarOnExactTypeRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes filter_var() calls with exact type', [new CodeSample(<<<'CODE_SAMPLE'
 function (int $value) {
@@ -28,14 +28,14 @@ function (int $value) {
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -44,7 +44,7 @@ CODE_SAMPLE
             return null;
         }
         // we need exact 2nd arg to assess value type
-        if (\count($node->getArgs()) !== 2) {
+        if (count($node->getArgs()) !== 2) {
             return null;
         }
         $firstArgValue = $node->getArgs()[0]->value;
@@ -60,7 +60,7 @@ CODE_SAMPLE
         if ($constantFilterName === 'FILTER_VALIDATE_FLOAT' && $valueType->isFloat()->yes()) {
             return $firstArgValue;
         }
-        if (\in_array($constantFilterName, ['FILTER_VALIDATE_BOOLEAN', 'FILTER_VALIDATE_BOOL']) && $valueType->isBoolean()->yes()) {
+        if (in_array($constantFilterName, ['FILTER_VALIDATE_BOOLEAN', 'FILTER_VALIDATE_BOOL']) && $valueType->isBoolean()->yes()) {
             return $firstArgValue;
         }
         return null;

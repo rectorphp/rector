@@ -43,7 +43,7 @@ final class CollectionSetterParamNativeTypeRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->collectionTagValueNodeAnalyzer = $collectionTagValueNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add native param type to a Collection setter', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -79,14 +79,14 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if ($node->isAbstract()) {
             return null;

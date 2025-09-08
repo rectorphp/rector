@@ -44,7 +44,7 @@ final class ServiceTagsToDefaultsAutoconfigureRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $services->set(..., ...)->tag(...) to $services->defaults()->autodiscovery() where meaningful', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -74,34 +74,34 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
         $hasDefaultsAutoconfigure = $this->symfonyPhpClosureDetector->hasDefaultsAutoconfigure($node);
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) : ?Expr {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$hasChanged): ?Expr {
             if (!$node instanceof MethodCall) {
                 return null;
             }
             if (!$this->isName($node->name, 'tag')) {
                 return null;
             }
-            if (\count($node->getArgs()) > 1) {
+            if (count($node->getArgs()) > 1) {
                 return null;
             }
             // is autoconfigureable tag?
             $firstArg = $node->getArgs()[0];
             $tagValue = $this->valueResolver->getValue($firstArg->value);
-            if (!\in_array($tagValue, self::AUTOCONFIGUREABLE_TAGS, \true)) {
+            if (!in_array($tagValue, self::AUTOCONFIGUREABLE_TAGS, \true)) {
                 return null;
             }
             // remove tag() method by returning nested method call
@@ -116,13 +116,13 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function createDefaultsAutoconfigureExpression() : Expression
+    private function createDefaultsAutoconfigureExpression(): Expression
     {
         $defaultsMethodCall = new MethodCall(new Variable('services'), 'defaults');
         $autoconfigureMethodCall = new MethodCall($defaultsMethodCall, 'autoconfigure');
         return new Expression($autoconfigureMethodCall);
     }
-    private function addDefaultAutoconfigure(Closure $closure) : void
+    private function addDefaultAutoconfigure(Closure $closure): void
     {
         foreach ($closure->stmts as $key => $nodeStmt) {
             if (!$nodeStmt instanceof Expression) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
             }
             // add defaults here, right after assign :)
             $autoconfigureExpression = $this->createDefaultsAutoconfigureExpression();
-            \array_splice($closure->stmts, $key + 1, 0, [$autoconfigureExpression]);
+            array_splice($closure->stmts, $key + 1, 0, [$autoconfigureExpression]);
             break;
         }
     }

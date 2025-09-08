@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddEscapeArgumentRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add escape argument on CSV function calls', [new CodeSample(<<<'CODE_SAMPLE'
 str_getcsv($string, separator: ',', enclosure: '"');
@@ -30,7 +30,7 @@ str_getcsv($string, separator: ',', enclosure: '"', escape: '\\');
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class, MethodCall::class];
     }
@@ -51,42 +51,42 @@ CODE_SAMPLE
                 return null;
             }
             $name = $this->getName($node);
-            if (\in_array($name, ['fputcsv', 'fgetcsv'], \true) && isset($node->getArgs()[4])) {
+            if (in_array($name, ['fputcsv', 'fgetcsv'], \true) && isset($node->getArgs()[4])) {
                 return null;
             }
             if ($name === 'str_getcsv' && isset($node->getArgs()[3])) {
                 return null;
             }
-            $node->args[\count($node->getArgs())] = new Arg(new String_('\\'), \false, \false, [], new Identifier('escape'));
+            $node->args[count($node->getArgs())] = new Arg(new String_('\\'), \false, \false, [], new Identifier('escape'));
             return $node;
         }
         if (!$this->isObjectType($node->var, new ObjectType('SplFileObject'))) {
             return null;
         }
         $name = $this->getName($node->name);
-        if (!\in_array($name, ['setCsvControl', 'fputcsv', 'fgetcsv'], \true)) {
+        if (!in_array($name, ['setCsvControl', 'fputcsv', 'fgetcsv'], \true)) {
             return null;
         }
         if ($this->shouldSkipNamedArg($node)) {
             return null;
         }
-        if (\in_array($name, ['setCsvControl', 'fgetcsv'], \true) && isset($node->getArgs()[2])) {
+        if (in_array($name, ['setCsvControl', 'fgetcsv'], \true) && isset($node->getArgs()[2])) {
             return null;
         }
         if ($name === 'fputcsv' && isset($node->getArgs()[3])) {
             return null;
         }
-        $node->args[\count($node->getArgs())] = new Arg(new String_('\\'), \false, \false, [], new Identifier('escape'));
+        $node->args[count($node->getArgs())] = new Arg(new String_('\\'), \false, \false, [], new Identifier('escape'));
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::REQUIRED_ESCAPE_PARAMETER;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function shouldSkipNamedArg($node) : bool
+    private function shouldSkipNamedArg($node): bool
     {
         foreach ($node->getArgs() as $arg) {
             // already defined in named arg

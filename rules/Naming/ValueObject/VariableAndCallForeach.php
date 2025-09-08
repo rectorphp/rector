@@ -41,7 +41,7 @@ final class VariableAndCallForeach
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
     }
-    public function getVariable() : Variable
+    public function getVariable(): Variable
     {
         return $this->variable;
     }
@@ -52,7 +52,7 @@ final class VariableAndCallForeach
     {
         return $this->expr;
     }
-    public function getVariableName() : string
+    public function getVariableName(): string
     {
         return $this->variableName;
     }

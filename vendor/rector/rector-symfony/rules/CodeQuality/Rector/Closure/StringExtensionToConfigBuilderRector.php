@@ -63,20 +63,20 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
      * @var array<string, string>
      */
     private const EXTENSION_KEY_TO_CLASS_MAP = [
-        'security' => 'Symfony\\Config\\SecurityConfig',
-        'framework' => 'Symfony\\Config\\FrameworkConfig',
-        'monolog' => 'Symfony\\Config\\MonologConfig',
-        'twig' => 'Symfony\\Config\\TwigConfig',
-        'doctrine' => 'Symfony\\Config\\DoctrineConfig',
-        'doctrine_migrations' => 'Symfony\\Config\\DoctrineMigrationsConfig',
-        'sentry' => 'Symfony\\Config\\SentryConfig',
-        'web_profiler' => 'Symfony\\Config\\WebProfilerConfig',
-        'debug' => 'Symfony\\Config\\DebugConfig',
-        'maker' => 'Symfony\\Config\\MakerConfig',
-        'nelmio_cors' => 'Symfony\\Config\\NelmioCorsConfig',
-        'api_platform' => 'Symfony\\Config\\ApiPlatformConfig',
+        'security' => 'Symfony\Config\SecurityConfig',
+        'framework' => 'Symfony\Config\FrameworkConfig',
+        'monolog' => 'Symfony\Config\MonologConfig',
+        'twig' => 'Symfony\Config\TwigConfig',
+        'doctrine' => 'Symfony\Config\DoctrineConfig',
+        'doctrine_migrations' => 'Symfony\Config\DoctrineMigrationsConfig',
+        'sentry' => 'Symfony\Config\SentryConfig',
+        'web_profiler' => 'Symfony\Config\WebProfilerConfig',
+        'debug' => 'Symfony\Config\DebugConfig',
+        'maker' => 'Symfony\Config\MakerConfig',
+        'nelmio_cors' => 'Symfony\Config\NelmioCorsConfig',
+        'api_platform' => 'Symfony\Config\ApiPlatformConfig',
         // @see https://github.com/thephpleague/flysystem-bundle/blob/3.x/src/DependencyInjection/Configuration.php
-        'flysystem' => 'Symfony\\Config\\FlysystemConfig',
+        'flysystem' => 'Symfony\Config\FlysystemConfig',
     ];
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher, PropertyNaming $propertyNaming, ValueResolver $valueResolver, NestedConfigCallsFactory $nestedConfigCallsFactory, SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler, SymfonyClosureFactory $symfonyClosureFactory)
     {
@@ -89,9 +89,9 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         $this->symfonyClosureFactory = $symfonyClosureFactory;
         // make sure to avoid duplicates
         Assert::uniqueValues(self::EXTENSION_KEY_TO_CLASS_MAP);
-        Assert::uniqueValues(\array_keys(self::EXTENSION_KEY_TO_CLASS_MAP));
+        Assert::uniqueValues(array_keys(self::EXTENSION_KEY_TO_CLASS_MAP));
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert PHP fluent configs to Symfony 5.3 builder classes with method API', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -121,14 +121,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
@@ -152,7 +152,7 @@ CODE_SAMPLE
     /**
      * @return array<Expression<MethodCall>>
      */
-    private function createMethodCallStmts(Array_ $configurationArray, Variable $configVariable) : ?array
+    private function createMethodCallStmts(Array_ $configurationArray, Variable $configVariable): ?array
     {
         $methodCallStmts = [];
         $configurationValues = $this->valueResolver->getValue($configurationArray);
@@ -160,7 +160,7 @@ CODE_SAMPLE
             $splitMany = \false;
             $nested = \false;
             $nextKeyArgument = \false;
-            if (\in_array($key, [DoctrineConfigKey::DBAL, DoctrineConfigKey::ORM], \true)) {
+            if (in_array($key, [DoctrineConfigKey::DBAL, DoctrineConfigKey::ORM], \true)) {
                 // doctrine
                 $methodCallName = $key;
                 $splitMany = \true;
@@ -184,24 +184,24 @@ CODE_SAMPLE
                 $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
             // security
-            if (\in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], \true)) {
+            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], \true)) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
                 $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle($configurationArray, $configVariable, $mainMethodName);
                 if ($accessDecisionManagerMethodCalls !== []) {
-                    $methodCallStmts = \array_merge($methodCallStmts, $accessDecisionManagerMethodCalls);
+                    $methodCallStmts = array_merge($methodCallStmts, $accessDecisionManagerMethodCalls);
                     continue;
                 }
             }
             if ($splitMany) {
                 $currentConfigCaller = $nested ? new MethodCall($configVariable, $methodCallName) : $configVariable;
-                if (!\is_array($value)) {
+                if (!is_array($value)) {
                     return null;
                 }
                 foreach ($value as $itemName => $itemConfiguration) {
-                    if ($nested && \is_array($itemConfiguration)) {
+                    if ($nested && is_array($itemConfiguration)) {
                         $methodCallName = $itemName;
                     }
-                    if (!\is_array($itemConfiguration)) {
+                    if (!is_array($itemConfiguration)) {
                         // simple call
                         $args = $this->nodeFactory->createArgs([$itemConfiguration]);
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
@@ -214,12 +214,12 @@ CODE_SAMPLE
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
                     }
-                    if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'orm') && \in_array($itemName, ['query_cache_driver', 'result_cache_driver'], \true)) {
+                    if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'orm') && in_array($itemName, ['query_cache_driver', 'result_cache_driver'], \true)) {
                         // implicit entityManagerDefault(...)
                         $currentConfigCaller = new MethodCall($currentConfigCaller, 'entityManager', $this->nodeFactory->createArgs(['default']));
                     }
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create([$itemConfiguration], $currentConfigCaller, $methodCallName, $nextKeyArgument, $itemName);
-                    $methodCallStmts = \array_merge($methodCallStmts, $nextMethodCallExpressions);
+                    $methodCallStmts = array_merge($methodCallStmts, $nextMethodCallExpressions);
                 }
             } else {
                 // skip empty values
@@ -227,9 +227,9 @@ CODE_SAMPLE
                     continue;
                 }
                 $simpleMethodName = StringUtils::underscoreToCamelCase($key);
-                if (\is_array($value)) {
+                if (is_array($value)) {
                     $simpleMethodCallStmts = $this->nestedConfigCallsFactory->create([$value], $configVariable, $simpleMethodName, \false);
-                    $methodCallStmts = \array_merge($methodCallStmts, $simpleMethodCallStmts);
+                    $methodCallStmts = array_merge($methodCallStmts, $simpleMethodCallStmts);
                 } else {
                     $args = $this->nodeFactory->createArgs([$value]);
                     $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
@@ -239,7 +239,7 @@ CODE_SAMPLE
         }
         return $methodCallStmts;
     }
-    private function createConfigVariable(string $configClass) : Variable
+    private function createConfigVariable(string $configClass): Variable
     {
         $variableName = $this->propertyNaming->fqnToVariableName($configClass);
         return new Variable($variableName);

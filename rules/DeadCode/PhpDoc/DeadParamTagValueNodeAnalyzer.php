@@ -70,7 +70,7 @@ final class DeadParamTagValueNodeAnalyzer
         $this->staticTypeMapper = $staticTypeMapper;
         $this->templateTypeRemovalGuard = $templateTypeRemovalGuard;
     }
-    public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike) : bool
+    public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike): bool
     {
         $param = $this->paramAnalyzer->getParamByName($paramTagValueNode->parameterName, $functionLike);
         if (!$param instanceof Param) {
@@ -103,7 +103,7 @@ final class DeadParamTagValueNodeAnalyzer
         }
         return $this->isAllowedBracketAwareUnion($paramTagValueNode->type);
     }
-    private function isAllowedBracketAwareUnion(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
+    private function isAllowedBracketAwareUnion(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
     {
         if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($bracketsAwareUnionTypeNode)) {
             return \false;

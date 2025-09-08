@@ -38,7 +38,7 @@ final class CreateMockToAnonymousClassRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $this->createMock() with methods to direct anonymous class', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -75,14 +75,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -159,7 +159,7 @@ CODE_SAMPLE
         $node->stmts[$anonymousClassPosition] = new Expression($newAnonymousClassAssign);
         return $node;
     }
-    private function createAnonymousClass(Arg $firstArg) : Class_
+    private function createAnonymousClass(Arg $firstArg): Class_
     {
         if ($firstArg->value instanceof ClassConstFetch) {
             $className = $firstArg->value->class;
@@ -169,7 +169,7 @@ CODE_SAMPLE
         // must respect PHPStan anonymous internal naming \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver::ANONYMOUS_CLASS_START_REGEX
         return new Class_('AnonymousClass1234', ['extends' => $className], ['startLine' => $firstArg->getStartLine(), 'endLine' => $firstArg->getEndLine()]);
     }
-    private function matchCreateMockAssign(Stmt $stmt) : ?Assign
+    private function matchCreateMockAssign(Stmt $stmt): ?Assign
     {
         if (!$stmt instanceof Expression) {
             return null;
@@ -187,7 +187,7 @@ CODE_SAMPLE
         }
         return $assign;
     }
-    private function createMockedClassMethod(MethodCall $rootMethodCall, MethodCall $methodCall) : ClassMethod
+    private function createMockedClassMethod(MethodCall $rootMethodCall, MethodCall $methodCall): ClassMethod
     {
         $rootMethodCallFirstArg = $rootMethodCall->getArgs()[0];
         $methodNameExpr = $rootMethodCallFirstArg->value;

@@ -16,7 +16,7 @@ final class AttributeFactory
     /**
      * @param mixed $expr
      */
-    public static function createNamedArg($expr, string $name) : Arg
+    public static function createNamedArg($expr, string $name): Arg
     {
         if (!$expr instanceof Expr) {
             $expr = BuilderHelpers::normalizeValue($expr);
@@ -26,7 +26,7 @@ final class AttributeFactory
     /**
      * @param array<mixed|Arg> $values
      */
-    public static function createGroup(string $className, array $values = []) : AttributeGroup
+    public static function createGroup(string $className, array $values = []): AttributeGroup
     {
         $builderFactory = new BuilderFactory();
         $args = $builderFactory->args($values);

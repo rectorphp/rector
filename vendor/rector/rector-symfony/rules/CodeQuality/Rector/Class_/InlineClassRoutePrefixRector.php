@@ -62,7 +62,7 @@ final class InlineClassRoutePrefixRector extends AbstractRector
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Inline class route prefix to all method routes, to make single explicit source for route paths', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
@@ -95,14 +95,14 @@ class SomeController
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -142,7 +142,7 @@ CODE_SAMPLE
                     $newMethodPath = $classRoutePath . $methodPrefix->value;
                     $routePathArrayItemNode->value = new StringNode($newMethodPath);
                     foreach ($methodRouteAnnotationOrAttribute->values as $value) {
-                        if ($value->key === 'name' && $value->value instanceof StringNode && \is_string($classRouteName)) {
+                        if ($value->key === 'name' && $value->value instanceof StringNode && is_string($classRouteName)) {
                             $value->value->value = $classRouteName . $value->value->value;
                         }
                     }
@@ -155,7 +155,7 @@ CODE_SAMPLE
                                 continue;
                             }
                             $methodRouteString = $methodRouteArg->value;
-                            $methodRouteArg->value = new String_(\sprintf('%s%s', $classRoutePath, $methodRouteString->value));
+                            $methodRouteArg->value = new String_(sprintf('%s%s', $classRoutePath, $methodRouteString->value));
                             $hasChanged = \true;
                             continue;
                         }
@@ -164,7 +164,7 @@ CODE_SAMPLE
                                 continue;
                             }
                             $methodRouteString = $methodRouteArg->value;
-                            $methodRouteArg->value = new String_(\sprintf('%s%s', $classRouteName, $methodRouteString->value));
+                            $methodRouteArg->value = new String_(sprintf('%s%s', $classRouteName, $methodRouteString->value));
                             $hasChanged = \true;
                         }
                     }
@@ -189,7 +189,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         if (!$this->controllerAnalyzer->isController($class)) {
             return \true;
@@ -205,7 +205,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function resolveRoutePath(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?string
+    private function resolveRoutePath(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): ?string
     {
         $classRoutePathNode = $doctrineAnnotationTagValueNode->getSilentValue() ?: $doctrineAnnotationTagValueNode->getValue(self::PATH);
         if (!$classRoutePathNode instanceof ArrayItemNode) {
@@ -216,7 +216,7 @@ CODE_SAMPLE
         }
         return $classRoutePathNode->value->value;
     }
-    private function resolveRouteName(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?string
+    private function resolveRouteName(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): ?string
     {
         $classRouteNameNode = $doctrineAnnotationTagValueNode->getValue('name');
         if (!$classRouteNameNode instanceof ArrayItemNode) {
@@ -227,7 +227,7 @@ CODE_SAMPLE
         }
         return $classRouteNameNode->value->value;
     }
-    private function resolveRoutePathFromAttribute(Attribute $attribute) : ?string
+    private function resolveRoutePathFromAttribute(Attribute $attribute): ?string
     {
         foreach ($attribute->args as $arg) {
             // silent or "path"
@@ -240,7 +240,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveRouteNameFromAttribute(Attribute $attribute) : ?string
+    private function resolveRouteNameFromAttribute(Attribute $attribute): ?string
     {
         foreach ($attribute->args as $arg) {
             if ($arg->name === null) {

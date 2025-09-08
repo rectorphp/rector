@@ -16,14 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class EmptyOnCollectionToIsEmptyCallRector extends AbstractRector
 {
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Empty_::class];
     }
     /**
      * @param Empty_ $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         $emptyExprType = $this->getType($node->expr);
         if (!$emptyExprType instanceof ObjectType) {
@@ -34,7 +34,7 @@ final class EmptyOnCollectionToIsEmptyCallRector extends AbstractRector
         }
         return new MethodCall($node->expr, 'isEmpty');
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert empty() on a Collection to ->isEmpty() call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass

@@ -256,7 +256,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
             $el->setText($attrs);
         }
         if (isset($parts[1])) {
-            foreach (Strings::matchAll($parts[1] . ' ', '#([a-z0-9:-]+)(?:=(["\'])?(.*?)(?(2)\\2|\\s))?#i') as $m) {
+            foreach (Strings::matchAll($parts[1] . ' ', '#([a-z0-9:-]+)(?:=(["\'])?(.*?)(?(2)\2|\s))?#i') as $m) {
                 $el->attrs[$m[1]] = $m[3] ?? \true;
             }
         }
@@ -281,21 +281,21 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     /**
      * Converts to HTML.
      */
-    public final function toHtml() : string
+    final public function toHtml(): string
     {
         return $this->render();
     }
     /**
      * Converts to plain text.
      */
-    public final function toText() : string
+    final public function toText(): string
     {
         return $this->getText();
     }
     /**
      * Converts given HTML code to plain text.
      */
-    public static function htmlToText(string $html) : string
+    public static function htmlToText(string $html): string
     {
         return html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
@@ -303,7 +303,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Changes element's name.
      * @return static
      */
-    public final function setName(string $name, ?bool $isEmpty = null)
+    final public function setName(string $name, ?bool $isEmpty = null)
     {
         $this->name = $name;
         $this->isEmpty = $isEmpty ?? isset(static::$emptyElements[$name]);
@@ -312,14 +312,14 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     /**
      * Returns element's name.
      */
-    public final function getName() : string
+    final public function getName(): string
     {
         return $this->name;
     }
     /**
      * Is element empty?
      */
-    public final function isEmpty() : bool
+    final public function isEmpty(): bool
     {
         return $this->isEmpty;
     }
@@ -396,7 +396,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Overloaded setter for element's attribute.
      * @param mixed $value
      */
-    public final function __set(string $name, $value) : void
+    final public function __set(string $name, $value): void
     {
         $this->attrs[$name] = $value;
     }
@@ -404,21 +404,21 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Overloaded getter for element's attribute.
      * @return mixed
      */
-    public final function &__get(string $name)
+    final public function &__get(string $name)
     {
         return $this->attrs[$name];
     }
     /**
      * Overloaded tester for element's attribute.
      */
-    public final function __isset(string $name) : bool
+    final public function __isset(string $name): bool
     {
         return isset($this->attrs[$name]);
     }
     /**
      * Overloaded unsetter for element's attribute.
      */
-    public final function __unset(string $name) : void
+    final public function __unset(string $name): void
     {
         unset($this->attrs[$name]);
     }
@@ -426,7 +426,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Overloaded setter for element's attribute.
      * @return mixed
      */
-    public final function __call(string $m, array $args)
+    final public function __call(string $m, array $args)
     {
         $p = substr($m, 0, 3);
         if ($p === 'get' || $p === 'set' || $p === 'add') {
@@ -453,7 +453,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Special setter for element's attribute.
      * @return static
      */
-    public final function href(string $path, array $query = [])
+    final public function href(string $path, array $query = [])
     {
         if ($query) {
             $query = http_build_query($query, '', '&');
@@ -483,7 +483,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @param mixed $html
      * @return static
      */
-    public final function setHtml($html)
+    final public function setHtml($html)
     {
         $this->children = [(string) $html];
         return $this;
@@ -491,7 +491,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     /**
      * Returns element's HTML content.
      */
-    public final function getHtml() : string
+    final public function getHtml(): string
     {
         return implode('', $this->children);
     }
@@ -500,7 +500,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @param mixed $text
      * @return static
      */
-    public final function setText($text)
+    final public function setText($text)
     {
         if (!$text instanceof HtmlStringable) {
             $text = htmlspecialchars((string) $text, ENT_NOQUOTES, 'UTF-8');
@@ -511,7 +511,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     /**
      * Returns element's textual content.
      */
-    public final function getText() : string
+    final public function getText(): string
     {
         return self::htmlToText($this->getHtml());
     }
@@ -520,7 +520,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @param mixed $child
      * @return static
      */
-    public final function addHtml($child)
+    final public function addHtml($child)
     {
         return $this->insert(null, $child);
     }
@@ -541,7 +541,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @param mixed[]|string|null $attrs
      * @return static
      */
-    public final function create(string $name, $attrs = null)
+    final public function create(string $name, $attrs = null)
     {
         $this->insert(null, $child = static::el($name, $attrs));
         return $child;
@@ -568,7 +568,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @param  int|null  $index  position or null for appending
      * @param  Html|string  $child  Html node or raw HTML string
      */
-    public final function offsetSet($index, $child) : void
+    final public function offsetSet($index, $child): void
     {
         $this->insert($index, $child, \true);
     }
@@ -578,7 +578,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * @return \Nette\HtmlStringable|string
      */
     #[\ReturnTypeWillChange]
-    public final function offsetGet($index)
+    final public function offsetGet($index)
     {
         return $this->children[$index];
     }
@@ -586,7 +586,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Exists child node? (\ArrayAccess implementation).
      * @param  int  $index
      */
-    public final function offsetExists($index) : bool
+    final public function offsetExists($index): bool
     {
         return isset($this->children[$index]);
     }
@@ -594,7 +594,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Removes child node (\ArrayAccess implementation).
      * @param  int  $index
      */
-    public function offsetUnset($index) : void
+    public function offsetUnset($index): void
     {
         if (isset($this->children[$index])) {
             array_splice($this->children, $index, 1);
@@ -603,14 +603,14 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     /**
      * Returns children count.
      */
-    public final function count() : int
+    final public function count(): int
     {
         return count($this->children);
     }
     /**
      * Removes all children.
      */
-    public function removeChildren() : void
+    public function removeChildren(): void
     {
         $this->children = [];
     }
@@ -618,21 +618,21 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Iterates over elements.
      * @return \ArrayIterator<int, HtmlStringable|string>
      */
-    public final function getIterator() : \ArrayIterator
+    final public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->children);
     }
     /**
      * Returns all children.
      */
-    public final function getChildren() : array
+    final public function getChildren(): array
     {
         return $this->children;
     }
     /**
      * Renders element's start tag, content and end tag.
      */
-    public final function render(?int $indent = null) : string
+    final public function render(?int $indent = null): string
     {
         $s = $this->startTag();
         if (!$this->isEmpty) {
@@ -655,21 +655,21 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         }
         return $s;
     }
-    public final function __toString() : string
+    final public function __toString(): string
     {
         return $this->render();
     }
     /**
      * Returns element's start tag.
      */
-    public final function startTag() : string
+    final public function startTag(): string
     {
         return $this->name ? '<' . $this->name . $this->attributes() . '>' : '';
     }
     /**
      * Returns element's end tag.
      */
-    public final function endTag() : string
+    final public function endTag(): string
     {
         return $this->name && !$this->isEmpty ? '</' . $this->name . '>' : '';
     }
@@ -677,7 +677,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      * Returns element's attributes.
      * @internal
      */
-    public final function attributes() : string
+    final public function attributes(): string
     {
         if (!is_array($this->attrs)) {
             return '';
@@ -712,8 +712,8 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
             } else {
                 $value = (string) $value;
             }
-            $q = \strpos($value, '"') !== \false ? "'" : '"';
-            $s .= ' ' . $key . '=' . $q . str_replace(['&', $q, '<'], ['&amp;', $q === '"' ? '&quot;' : '&#39;', '<'], $value) . (\strpos($value, '`') !== \false && strpbrk($value, ' <>"\'') === \false ? ' ' : '') . $q;
+            $q = strpos($value, '"') !== \false ? "'" : '"';
+            $s .= ' ' . $key . '=' . $q . str_replace(['&', $q, '<'], ['&amp;', $q === '"' ? '&quot;' : '&#39;', '<'], $value) . (strpos($value, '`') !== \false && strpbrk($value, ' <>"\'') === \false ? ' ' : '') . $q;
         }
         $s = str_replace('@', '&#64;', $s);
         return $s;

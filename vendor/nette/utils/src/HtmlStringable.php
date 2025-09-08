@@ -12,6 +12,6 @@ interface HtmlStringable
     /**
      * Returns string in HTML format
      */
-    function __toString() : string;
+    function __toString(): string;
 }
-\interface_exists(Utils\IHtmlString::class);
+interface_exists(Utils\IHtmlString::class);

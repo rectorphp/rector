@@ -23,7 +23,7 @@ final class ConsoleDiffer
         $unifiedDiffOutputBuilder = new UnifiedDiffOutputBuilder();
         $this->differ = new Differ($unifiedDiffOutputBuilder);
     }
-    public function diff(string $old, string $new) : string
+    public function diff(string $old, string $new): string
     {
         $diff = $this->differ->diff($old, $new);
         return $this->colorConsoleDiffFormatter->format($diff);

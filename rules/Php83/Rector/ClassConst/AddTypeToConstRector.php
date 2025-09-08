@@ -46,7 +46,7 @@ final class AddTypeToConstRector extends AbstractRector implements MinPhpVersion
         $this->reflectionProvider = $reflectionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add type to constants based on their value', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -62,17 +62,17 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $className = $this->getName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             return null;
         }
         if ($node->isAbstract()) {
@@ -102,14 +102,14 @@ CODE_SAMPLE
             if ($valueTypes === []) {
                 continue;
             }
-            if (\count($valueTypes) > 1) {
-                $valueTypes = \array_unique($valueTypes, \SORT_REGULAR);
+            if (count($valueTypes) > 1) {
+                $valueTypes = array_unique($valueTypes, \SORT_REGULAR);
             }
             // once more verify after uniquate
-            if (\count($valueTypes) > 1) {
+            if (count($valueTypes) > 1) {
                 continue;
             }
-            $valueType = \current($valueTypes);
+            $valueType = current($valueTypes);
             if (!$valueType instanceof Identifier) {
                 continue;
             }
@@ -121,14 +121,14 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_CLASS_CONSTANTS;
     }
     /**
      * @param ClassReflection[] $parentClassReflections
      */
-    public function isConstGuardedByParents(Const_ $const, array $parentClassReflections) : bool
+    public function isConstGuardedByParents(Const_ $const, array $parentClassReflections): bool
     {
         $constantName = $this->getName($const);
         foreach ($parentClassReflections as $parentClassReflection) {
@@ -138,7 +138,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function findValueType(Expr $expr) : ?Identifier
+    private function findValueType(Expr $expr): ?Identifier
     {
         if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
             return $this->findValueType($expr->expr);
@@ -174,15 +174,15 @@ CODE_SAMPLE
     /**
      * @return ClassReflection[]
      */
-    private function getParentReflections(string $className) : array
+    private function getParentReflections(string $className): array
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return [];
         }
         $currentClassReflection = $this->reflectionProvider->getClass($className);
-        return \array_filter($currentClassReflection->getAncestors(), static fn(ClassReflection $classReflection): bool => $currentClassReflection !== $classReflection);
+        return array_filter($currentClassReflection->getAncestors(), static fn(ClassReflection $classReflection): bool => $currentClassReflection !== $classReflection);
     }
-    private function canBeInherited(ClassConst $classConst, Class_ $class) : bool
+    private function canBeInherited(ClassConst $classConst, Class_ $class): bool
     {
         if (FeatureFlags::treatClassesAsFinal($class)) {
             return \false;

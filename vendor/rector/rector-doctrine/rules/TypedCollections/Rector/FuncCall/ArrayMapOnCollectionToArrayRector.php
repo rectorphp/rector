@@ -23,7 +23,7 @@ final class ArrayMapOnCollectionToArrayRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array_map() and array_filter() on Collection typed property to ->toArray() call, to always provide an array', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -63,14 +63,14 @@ final class ArrayMapOnAssignedVariable
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(Node $node): ?FuncCall
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -83,7 +83,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorArrayMap(FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function refactorArrayMap(FuncCall $funcCall): ?\PhpParser\Node\Expr\FuncCall
     {
         $secondArg = $funcCall->getArgs()[1];
         if (!$this->collectionTypeDetector->isCollectionType($secondArg->value)) {
@@ -92,7 +92,7 @@ CODE_SAMPLE
         $secondArg->value = new MethodCall($secondArg->value, 'toArray');
         return $funcCall;
     }
-    private function refactorArrayFilter(FuncCall $funcCall) : ?FuncCall
+    private function refactorArrayFilter(FuncCall $funcCall): ?FuncCall
     {
         $firstArg = $funcCall->getArgs()[0];
         if (!$this->collectionTypeDetector->isCollectionType($firstArg->value)) {

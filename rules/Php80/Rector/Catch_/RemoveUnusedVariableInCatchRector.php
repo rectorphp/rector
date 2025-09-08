@@ -39,7 +39,7 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector implements 
         $this->betterNodeFinder = $betterNodeFinder;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused variable in `catch()`', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -68,14 +68,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -92,7 +92,7 @@ CODE_SAMPLE
                 }
                 /** @var string $variableName */
                 $variableName = $this->getName($caughtVar);
-                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst(\array_merge($catch->stmts, $stmt->finally instanceof Finally_ ? $stmt->finally->stmts : []), fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar));
+                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst(array_merge($catch->stmts, $stmt->finally instanceof Finally_ ? $stmt->finally->stmts : []), fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar));
                 if ($isFoundInCatchStmts) {
                     continue;
                 }
@@ -108,7 +108,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NON_CAPTURING_CATCH;
     }

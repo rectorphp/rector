@@ -37,7 +37,7 @@ final class ExtLibevLoop implements LoopInterface
     private $signalEvents = array();
     public function __construct()
     {
-        if (!\class_exists('RectorPrefix202509\\libev\\EventLoop', \false)) {
+        if (!\class_exists('RectorPrefix202509\libev\EventLoop', \false)) {
             throw new BadMethodCallException('Cannot create ExtLibevLoop, ext-libev extension missing');
         }
         $this->loop = new EventLoop();
@@ -50,7 +50,7 @@ final class ExtLibevLoop implements LoopInterface
         if (isset($this->readEvents[(int) $stream])) {
             return;
         }
-        $callback = function () use($stream, $listener) {
+        $callback = function () use ($stream, $listener) {
             \call_user_func($listener, $stream);
         };
         $event = new IOEvent($callback, $stream, IOEvent::READ);
@@ -62,7 +62,7 @@ final class ExtLibevLoop implements LoopInterface
         if (isset($this->writeEvents[(int) $stream])) {
             return;
         }
-        $callback = function () use($stream, $listener) {
+        $callback = function () use ($stream, $listener) {
             \call_user_func($listener, $stream);
         };
         $event = new IOEvent($callback, $stream, IOEvent::WRITE);
@@ -92,7 +92,7 @@ final class ExtLibevLoop implements LoopInterface
         $timer = new Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timerEvents;
-        $callback = function () use($timer, $timers, $that) {
+        $callback = function () use ($timer, $timers, $that) {
             \call_user_func($timer->getCallback(), $timer);
             if ($timers->contains($timer)) {
                 $that->cancelTimer($timer);
@@ -106,7 +106,7 @@ final class ExtLibevLoop implements LoopInterface
     public function addPeriodicTimer($interval, $callback)
     {
         $timer = new Timer($interval, $callback, \true);
-        $callback = function () use($timer) {
+        $callback = function () use ($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
         $event = new TimerEvent($callback, $timer->getInterval(), $timer->getInterval());
@@ -130,7 +130,7 @@ final class ExtLibevLoop implements LoopInterface
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
             $signals = $this->signals;
-            $this->signalEvents[$signal] = new SignalEvent(function () use($signals, $signal) {
+            $this->signalEvents[$signal] = new SignalEvent(function () use ($signals, $signal) {
                 $signals->call($signal);
             }, $signal);
             $this->loop->add($this->signalEvents[$signal]);

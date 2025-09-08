@@ -20,7 +20,7 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCo
     /**
      * @inheritDoc
      */
-    public function calculate(array $from, array $to) : array
+    public function calculate(array $from, array $to): array
     {
         $common = [];
         $fromLength = count($from);
@@ -44,12 +44,10 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCo
                     } else {
                         $matrix[$o] = $matrix[$o - 1];
                     }
+                } else if ($firstOrLast > $matrix[$o - $width]) {
+                    $matrix[$o] = $firstOrLast;
                 } else {
-                    if ($firstOrLast > $matrix[$o - $width]) {
-                        $matrix[$o] = $firstOrLast;
-                    } else {
-                        $matrix[$o] = $matrix[$o - $width];
-                    }
+                    $matrix[$o] = $matrix[$o - $width];
                 }
             }
         }

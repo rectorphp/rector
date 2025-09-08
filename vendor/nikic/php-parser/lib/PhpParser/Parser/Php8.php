@@ -185,7 +185,7 @@ class Php8 extends \PhpParser\ParserAbstract
     protected array $gotoDefault = array(-32768, 533, 768, 7, 769, 964, 844, 853, 597, 551, 729, 356, 648, 439, 1367, 940, 1180, 617, 872, 1310, 1316, 475, 875, 336, 755, 952, 923, 924, 415, 402, 888, 413, 672, 649, 514, 908, 471, 900, 506, 903, 470, 912, 167, 435, 530, 916, 6, 919, 579, 950, 1004, 403, 927, 404, 700, 929, 601, 931, 932, 410, 416, 417, 1185, 609, 645, 944, 261, 603, 945, 401, 946, 954, 406, 408, 710, 486, 525, 519, 428, 1146, 604, 632, 669, 464, 493, 643, 655, 642, 500, 451, 434, 335, 988, 996, 507, 484, 1010, 358, 1018, 763, 1193, 663, 509, 1026, 664, 1033, 1036, 552, 553, 498, 1048, 270, 1051, 510, 1061, 26, 690, 1066, 1067, 691, 665, 1089, 666, 692, 667, 1091, 483, 599, 1194, 482, 1106, 1112, 472, 1115, 1356, 473, 1119, 269, 1122, 286, 362, 385, 452, 1129, 1130, 12, 1136, 720, 721, 25, 280, 529, 1164, 711, 1170, 279, 1173, 469, 1192, 468, 1265, 1267, 580, 511, 1285, 321, 1288, 703, 526, 1293, 465, 1358, 466, 554, 494, 343, 555, 1401, 314, 365, 340, 571, 322, 366, 556, 495, 1364, 1372, 337, 34, 1391, 1402, 614, 637);
     protected array $ruleToNonTerminal = array(0, 1, 3, 3, 2, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 9, 10, 11, 11, 11, 12, 12, 13, 13, 14, 15, 15, 16, 16, 17, 17, 18, 18, 21, 21, 22, 23, 23, 24, 24, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 29, 29, 30, 30, 32, 34, 34, 28, 36, 36, 33, 38, 38, 35, 35, 37, 37, 39, 39, 31, 40, 40, 41, 43, 44, 44, 45, 45, 46, 46, 48, 47, 47, 47, 47, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 25, 25, 50, 69, 69, 72, 72, 71, 70, 70, 63, 75, 75, 76, 76, 77, 77, 78, 78, 79, 79, 80, 80, 80, 80, 26, 26, 27, 27, 27, 27, 27, 88, 88, 90, 90, 83, 83, 91, 91, 92, 92, 92, 84, 84, 87, 87, 85, 85, 93, 94, 94, 57, 57, 65, 65, 68, 68, 68, 67, 95, 95, 96, 58, 58, 58, 58, 97, 97, 98, 98, 99, 99, 100, 101, 101, 102, 102, 103, 103, 55, 55, 51, 51, 105, 53, 53, 106, 52, 52, 54, 54, 64, 64, 64, 64, 81, 81, 109, 109, 111, 111, 112, 112, 112, 112, 112, 112, 112, 112, 110, 110, 110, 115, 115, 115, 115, 89, 89, 118, 118, 118, 119, 119, 116, 116, 120, 120, 122, 122, 123, 123, 117, 124, 124, 121, 125, 125, 125, 125, 113, 113, 82, 82, 82, 20, 20, 20, 128, 128, 128, 128, 129, 129, 129, 127, 126, 126, 131, 131, 131, 130, 130, 60, 132, 132, 133, 61, 135, 135, 136, 136, 137, 137, 86, 138, 138, 138, 138, 138, 138, 138, 138, 144, 144, 145, 145, 146, 146, 146, 146, 146, 147, 148, 148, 143, 143, 139, 139, 142, 142, 150, 150, 149, 149, 149, 149, 149, 149, 149, 149, 149, 149, 140, 151, 151, 153, 152, 152, 141, 141, 114, 114, 154, 154, 156, 156, 156, 155, 155, 62, 104, 157, 157, 56, 56, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 164, 165, 165, 166, 158, 158, 163, 163, 167, 168, 168, 169, 170, 171, 171, 171, 171, 19, 19, 73, 73, 73, 73, 159, 159, 159, 159, 173, 173, 162, 162, 162, 160, 160, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 180, 180, 180, 108, 182, 182, 182, 182, 161, 161, 161, 161, 161, 161, 161, 161, 59, 59, 176, 176, 176, 176, 176, 183, 183, 172, 172, 172, 172, 184, 184, 184, 184, 184, 74, 74, 66, 66, 66, 66, 134, 134, 134, 134, 187, 186, 175, 175, 175, 175, 175, 175, 174, 174, 174, 185, 185, 185, 185, 107, 181, 189, 189, 188, 188, 190, 190, 190, 190, 190, 190, 190, 190, 178, 178, 178, 178, 177, 192, 191, 191, 191, 191, 191, 191, 191, 191, 193, 193, 193, 193);
     protected array $ruleToLength = array(1, 1, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 2, 1, 3, 4, 1, 2, 0, 1, 1, 1, 1, 4, 3, 5, 4, 3, 4, 1, 3, 4, 1, 1, 8, 7, 2, 3, 1, 2, 3, 1, 2, 3, 1, 1, 3, 1, 3, 1, 2, 2, 3, 1, 3, 2, 3, 1, 3, 3, 2, 0, 1, 1, 1, 1, 1, 3, 7, 10, 5, 7, 9, 5, 3, 3, 3, 3, 3, 3, 1, 2, 5, 7, 9, 6, 5, 6, 3, 2, 1, 1, 1, 1, 0, 2, 1, 3, 8, 0, 4, 2, 1, 3, 0, 1, 0, 1, 0, 1, 3, 1, 1, 1, 1, 1, 8, 9, 7, 8, 7, 6, 8, 0, 2, 0, 2, 1, 2, 1, 2, 1, 1, 1, 0, 2, 0, 2, 0, 2, 2, 1, 3, 1, 4, 1, 4, 1, 1, 4, 2, 1, 3, 3, 3, 4, 4, 5, 0, 2, 4, 3, 1, 1, 7, 0, 2, 1, 3, 3, 4, 1, 4, 0, 2, 5, 0, 2, 6, 0, 2, 0, 3, 1, 2, 1, 1, 2, 0, 1, 3, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 7, 9, 6, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 1, 1, 2, 1, 1, 0, 1, 0, 2, 2, 2, 4, 3, 2, 4, 4, 3, 3, 1, 3, 1, 1, 3, 2, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 3, 2, 0, 1, 5, 7, 5, 6, 10, 3, 5, 1, 1, 3, 0, 2, 4, 5, 4, 4, 4, 3, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 3, 0, 2, 0, 3, 5, 8, 1, 3, 3, 0, 2, 2, 2, 3, 1, 0, 1, 1, 3, 3, 3, 4, 4, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 4, 3, 4, 4, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3, 2, 1, 2, 4, 2, 2, 8, 9, 8, 9, 9, 10, 9, 10, 8, 3, 2, 2, 1, 1, 0, 4, 2, 1, 3, 2, 1, 2, 2, 2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 5, 3, 3, 4, 1, 1, 3, 1, 1, 1, 1, 1, 3, 2, 3, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 4, 1, 4, 4, 0, 1, 1, 1, 3, 3, 1, 4, 2, 2, 1, 3, 1, 4, 3, 3, 3, 3, 1, 3, 1, 1, 3, 1, 1, 4, 1, 1, 1, 3, 1, 1, 2, 1, 3, 4, 3, 2, 0, 2, 2, 1, 2, 1, 1, 1, 4, 3, 3, 3, 3, 6, 3, 1, 1, 2, 1);
-    protected function initReduceCallbacks() : void
+    protected function initReduceCallbacks(): void
     {
         $this->reduceCallbacks = [0 => null, 1 => static function ($self, $stackPos) {
             $self->semValue = $self->handleNamespaces($self->semStack[$stackPos - (1 - 1)]);
@@ -226,9 +226,9 @@ class Php8 extends \PhpParser\ParserAbstract
         }, 93 => static function ($self, $stackPos) {
             $self->semValue = new Name($self->semStack[$stackPos - (1 - 1)], $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 94 => null, 95 => static function ($self, $stackPos) {
-            $self->semValue = new Name(\substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 96 => static function ($self, $stackPos) {
-            $self->semValue = new Expr\Variable(\substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Expr\Variable(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 97 => static function ($self, $stackPos) {
             /* nothing */
         }, 98 => static function ($self, $stackPos) {
@@ -406,12 +406,10 @@ class Php8 extends \PhpParser\ParserAbstract
         }, 185 => static function ($self, $stackPos) {
             if ($self->semStack[$stackPos - (1 - 1)] instanceof Stmt\Block) {
                 $self->semValue = $self->semStack[$stackPos - (1 - 1)]->stmts;
+            } else if ($self->semStack[$stackPos - (1 - 1)] === null) {
+                $self->semValue = [];
             } else {
-                if ($self->semStack[$stackPos - (1 - 1)] === null) {
-                    $self->semValue = [];
-                } else {
-                    $self->semValue = [$self->semStack[$stackPos - (1 - 1)]];
-                }
+                $self->semValue = [$self->semStack[$stackPos - (1 - 1)]];
             }
         }, 186 => static function ($self, $stackPos) {
             $self->semValue = array();
@@ -517,12 +515,10 @@ class Php8 extends \PhpParser\ParserAbstract
         }, 239 => static function ($self, $stackPos) {
             if ($self->semStack[$stackPos - (1 - 1)] instanceof Stmt\Block) {
                 $self->semValue = $self->semStack[$stackPos - (1 - 1)]->stmts;
+            } else if ($self->semStack[$stackPos - (1 - 1)] === null) {
+                $self->semValue = [];
             } else {
-                if ($self->semStack[$stackPos - (1 - 1)] === null) {
-                    $self->semValue = [];
-                } else {
-                    $self->semValue = [$self->semStack[$stackPos - (1 - 1)]];
-                }
+                $self->semValue = [$self->semStack[$stackPos - (1 - 1)]];
             }
         }, 240 => static function ($self, $stackPos) {
             $self->semValue = null;
@@ -839,7 +835,7 @@ class Php8 extends \PhpParser\ParserAbstract
             $self->semStack[$stackPos - (3 - 1)][] = $self->semStack[$stackPos - (3 - 3)];
             $self->semValue = $self->semStack[$stackPos - (3 - 1)];
         }, 399 => static function ($self, $stackPos) {
-            $self->semValue = new Node\VarLikeIdentifier(\substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Node\VarLikeIdentifier(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 400 => static function ($self, $stackPos) {
             $self->semValue = new Node\PropertyItem($self->semStack[$stackPos - (1 - 1)], null, $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 401 => static function ($self, $stackPos) {
@@ -1113,9 +1109,9 @@ class Php8 extends \PhpParser\ParserAbstract
         }, 536 => static function ($self, $stackPos) {
             $self->semValue = new Name($self->semStack[$stackPos - (1 - 1)], $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 537 => static function ($self, $stackPos) {
-            $self->semValue = new Name\FullyQualified(\substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name\FullyQualified(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 538 => static function ($self, $stackPos) {
-            $self->semValue = new Name\Relative(\substr($self->semStack[$stackPos - (1 - 1)], 10), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name\Relative(substr($self->semStack[$stackPos - (1 - 1)], 10), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 539 => null, 540 => null, 541 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (3 - 2)];
         }, 542 => static function ($self, $stackPos) {
@@ -1252,9 +1248,9 @@ class Php8 extends \PhpParser\ParserAbstract
             $self->postprocessList($self->semValue);
         }, 620 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (1 - 1)];
-            $end = \count($self->semValue) - 1;
+            $end = count($self->semValue) - 1;
             if ($self->semValue[$end]->value instanceof Expr\Error) {
-                \array_pop($self->semValue);
+                array_pop($self->semValue);
             }
         }, 621 => null, 622 => static function ($self, $stackPos) {
             /* do nothing -- prevent default action of $$=$self->semStack[$1]. See $551. */

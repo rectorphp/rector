@@ -25,7 +25,7 @@ final class RectorBetterReflectionSourceLocatorFactory
         $this->betterReflectionSourceLocatorFactory = $betterReflectionSourceLocatorFactory;
         $this->intermediateSourceLocator = $intermediateSourceLocator;
     }
-    public function create() : MemoizingSourceLocator
+    public function create(): MemoizingSourceLocator
     {
         $phpStanSourceLocator = $this->betterReflectionSourceLocatorFactory->create();
         // make PHPStan first source locator, so we avoid parsing every single file - huge performance hit!

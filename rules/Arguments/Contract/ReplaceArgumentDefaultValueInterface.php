@@ -5,7 +5,7 @@ namespace Rector\Arguments\Contract;
 
 interface ReplaceArgumentDefaultValueInterface
 {
-    public function getPosition() : int;
+    public function getPosition(): int;
     /**
      * @return mixed
      */

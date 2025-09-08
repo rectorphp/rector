@@ -8,7 +8,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 final class MixedArrayTypeNodeAnalyzer
 {
-    public function hasMixedArrayType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
+    public function hasMixedArrayType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
     {
         $types = $bracketsAwareUnionTypeNode->types;
         foreach ($types as $type) {

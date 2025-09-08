@@ -23,18 +23,18 @@ final class GedmoTimestampableAttributeTransformer implements PropertyAttributeT
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $fieldPropertyMapping = $entityMapping->matchFieldPropertyMapping($property);
         $timestampableMapping = $fieldPropertyMapping['gedmo']['timestampable'] ?? null;
-        if (!\is_array($timestampableMapping)) {
+        if (!is_array($timestampableMapping)) {
             return \false;
         }
         $args = $this->nodeFactory->createArgs($timestampableMapping);
         $property->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::GEDMO_TIMESTAMPABLE;
     }

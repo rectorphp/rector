@@ -40,7 +40,7 @@ final class AddParamTypeFromDependsRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add param type declaration based on @depends test method return type', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -83,14 +83,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -100,7 +100,7 @@ CODE_SAMPLE
             if (!$classMethod->isPublic()) {
                 continue;
             }
-            if (\count($classMethod->params) !== 1) {
+            if (count($classMethod->params) !== 1) {
                 continue;
             }
             $soleParam = $classMethod->getParams()[0];
@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function resolveReturnTypeOfDependsMethod(ClassMethod $classMethod, Class_ $class) : ?Node
+    private function resolveReturnTypeOfDependsMethod(ClassMethod $classMethod, Class_ $class): ?Node
     {
         $dependsMethodName = $this->resolveDependsAnnotationOrAttributeMethod($classMethod);
         if ($dependsMethodName === null || $dependsMethodName === '') {
@@ -133,14 +133,14 @@ CODE_SAMPLE
         // resolve return type here
         return $dependsClassMethod->returnType;
     }
-    private function resolveDependsAnnotationOrAttributeMethod(ClassMethod $classMethod) : ?string
+    private function resolveDependsAnnotationOrAttributeMethod(ClassMethod $classMethod): ?string
     {
         $dependsAttribute = $this->attrinationFinder->getByOne($classMethod, Depends::class);
         if ($dependsAttribute instanceof Attribute) {
             $firstArg = $dependsAttribute->args[0];
             if ($firstArg->value instanceof String_) {
                 $dependsMethodName = $firstArg->value->value;
-                return \trim($dependsMethodName, '()');
+                return trim($dependsMethodName, '()');
             }
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
@@ -152,6 +152,6 @@ CODE_SAMPLE
             return null;
         }
         $dependsMethodName = (string) $dependsTagValueNode->value;
-        return \trim($dependsMethodName, '()');
+        return trim($dependsMethodName, '()');
     }
 }

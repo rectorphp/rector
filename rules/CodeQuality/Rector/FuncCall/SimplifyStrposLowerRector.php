@@ -21,21 +21,21 @@ final class SimplifyStrposLowerRector extends AbstractRector
      * @see https://regex101.com/r/Jokjt8/1
      */
     private const UPPERCASE_REGEX = '#[A-Z]#';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify strpos(strtolower(), "...") calls', [new CodeSample('strpos(strtolower($var), "...")', 'stripos($var, "...")')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'strpos')) {
             return null;

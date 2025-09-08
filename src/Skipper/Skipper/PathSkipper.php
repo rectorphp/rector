@@ -20,7 +20,7 @@ final class PathSkipper
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->skippedPathsResolver = $skippedPathsResolver;
     }
-    public function shouldSkip(string $filePath) : bool
+    public function shouldSkip(string $filePath): bool
     {
         $skippedPaths = $this->skippedPathsResolver->resolve();
         return $this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedPaths);

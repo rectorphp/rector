@@ -71,18 +71,18 @@ final class SymfonyRouteMetadata
         $this->options = $options;
         $this->controllerReference = $defaults['_controller'] ?? null;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function getPath() : string
+    public function getPath(): string
     {
         return $this->path;
     }
     /**
      * @return array<string, mixed>
      */
-    public function getDefaultsWithoutController() : array
+    public function getDefaultsWithoutController(): array
     {
         $defaults = $this->defaults;
         unset($defaults['_controller']);
@@ -99,40 +99,40 @@ final class SymfonyRouteMetadata
     /**
      * @return array<string, mixed>
      */
-    public function getRequirements() : array
+    public function getRequirements(): array
     {
         return $this->requirements;
     }
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->host;
     }
     /**
      * @return string[]
      */
-    public function getSchemes() : array
+    public function getSchemes(): array
     {
         return $this->schemes;
     }
     /**
      * @return string[]
      */
-    public function getMethods() : array
+    public function getMethods(): array
     {
         return $this->methods;
     }
-    public function getCondition() : string
+    public function getCondition(): string
     {
         return $this->condition;
     }
     /**
      * @return array<string, mixed>
      */
-    public function getOptionsWithoutDefaultCompilerClass() : array
+    public function getOptionsWithoutDefaultCompilerClass(): array
     {
         $options = $this->options;
         $compilerClass = $options['compiler_class'] ?? null;
-        if ($compilerClass === 'Symfony\\Component\\Routing\\RouteCompiler') {
+        if ($compilerClass === 'Symfony\Component\Routing\RouteCompiler') {
             unset($options['compiler_class']);
         }
         return $options;
@@ -140,7 +140,7 @@ final class SymfonyRouteMetadata
     /**
      * Format <class>::<method>
      */
-    public function getControllerReference() : ?string
+    public function getControllerReference(): ?string
     {
         return $this->controllerReference;
     }

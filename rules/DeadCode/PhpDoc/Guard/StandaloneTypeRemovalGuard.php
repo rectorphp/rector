@@ -13,7 +13,7 @@ final class StandaloneTypeRemovalGuard
      * @var string[]
      */
     private const ALLOWED_TYPES = ['false', 'true'];
-    public function isLegal(TypeNode $typeNode, Node $node) : bool
+    public function isLegal(TypeNode $typeNode, Node $node): bool
     {
         if (!$typeNode instanceof IdentifierTypeNode) {
             return \true;
@@ -24,6 +24,6 @@ final class StandaloneTypeRemovalGuard
         if ($node->toString() !== 'bool') {
             return \true;
         }
-        return !\in_array($typeNode->name, self::ALLOWED_TYPES, \true);
+        return !in_array($typeNode->name, self::ALLOWED_TYPES, \true);
     }
 }

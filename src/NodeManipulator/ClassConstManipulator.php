@@ -39,7 +39,7 @@ final class ClassConstManipulator
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function hasClassConstFetch(ClassConst $classConst, ClassReflection $classReflection) : bool
+    public function hasClassConstFetch(ClassConst $classConst, ClassReflection $classReflection): bool
     {
         if (!$classReflection->isClass() && !$classReflection->isEnum()) {
             return \true;
@@ -52,7 +52,7 @@ final class ClassConstManipulator
                 continue;
             }
             // has in class?
-            $isClassConstFetchFound = (bool) $this->betterNodeFinder->findFirst($ancestorClass, function (Node $node) use($classConst, $className, $objectType) : bool {
+            $isClassConstFetchFound = (bool) $this->betterNodeFinder->findFirst($ancestorClass, function (Node $node) use ($classConst, $className, $objectType): bool {
                 // property + static fetch
                 if (!$node instanceof ClassConstFetch) {
                     return \false;
@@ -65,7 +65,7 @@ final class ClassConstManipulator
         }
         return \false;
     }
-    private function isNameMatch(ClassConstFetch $classConstFetch, ClassConst $classConst, string $className, ObjectType $objectType) : bool
+    private function isNameMatch(ClassConstFetch $classConstFetch, ClassConst $classConst, string $className, ObjectType $objectType): bool
     {
         $classConstName = (string) $this->nodeNameResolver->getName($classConst);
         $selfConstantName = 'self::' . $classConstName;

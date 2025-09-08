@@ -23,7 +23,7 @@ final class NeverFuncCallAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function hasNeverFuncCall($functionLike) : bool
+    public function hasNeverFuncCall($functionLike): bool
     {
         foreach ((array) $functionLike->stmts as $stmt) {
             if ($this->isWithNeverTypeExpr($stmt)) {
@@ -32,7 +32,7 @@ final class NeverFuncCallAnalyzer
         }
         return \false;
     }
-    public function isWithNeverTypeExpr(Stmt $stmt, bool $withNativeNeverType = \true) : bool
+    public function isWithNeverTypeExpr(Stmt $stmt, bool $withNativeNeverType = \true): bool
     {
         if ($stmt instanceof Expression) {
             $stmt = $stmt->expr;

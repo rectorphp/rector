@@ -42,14 +42,14 @@ final class DependencyInjectionMethodCallAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyManipulator = $propertyManipulator;
     }
-    public function replaceMethodCallWithPropertyFetchAndDependency(Class_ $class, MethodCall $methodCall) : ?PropertyMetadata
+    public function replaceMethodCallWithPropertyFetchAndDependency(Class_ $class, MethodCall $methodCall): ?PropertyMetadata
     {
         $serviceType = $this->serviceTypeMethodCallResolver->resolve($methodCall);
         if (!$serviceType instanceof ObjectType) {
             return null;
         }
         $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType($class, $serviceType);
-        if (\is_string($resolvedPropertyNameByType)) {
+        if (is_string($resolvedPropertyNameByType)) {
             $propertyName = $resolvedPropertyNameByType;
         } else {
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
@@ -57,10 +57,10 @@ final class DependencyInjectionMethodCallAnalyzer
         }
         return new PropertyMetadata($propertyName, $serviceType);
     }
-    private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1) : string
+    private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1): string
     {
-        $lastCount = \substr($propertyName, \strlen($originalPropertyName));
-        if (\is_numeric($lastCount)) {
+        $lastCount = substr($propertyName, strlen($originalPropertyName));
+        if (is_numeric($lastCount)) {
             $count = (int) $lastCount;
         }
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
@@ -77,7 +77,7 @@ final class DependencyInjectionMethodCallAnalyzer
         $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
         return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
     }
-    private function resolveIncrementPropertyName(string $originalPropertyName, int $count) : string
+    private function resolveIncrementPropertyName(string $originalPropertyName, int $count): string
     {
         ++$count;
         return $originalPropertyName . $count;

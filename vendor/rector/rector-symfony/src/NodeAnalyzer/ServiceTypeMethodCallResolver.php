@@ -27,7 +27,7 @@ final class ServiceTypeMethodCallResolver
         $this->serviceMapProvider = $serviceMapProvider;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(MethodCall $methodCall) : ?Type
+    public function resolve(MethodCall $methodCall): ?Type
     {
         if (!isset($methodCall->args[0])) {
             return new MixedType();

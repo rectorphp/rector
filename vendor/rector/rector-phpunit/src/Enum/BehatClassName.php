@@ -8,5 +8,5 @@ final class BehatClassName
     /**
      * @var string
      */
-    public const CONTEXT = 'Behat\\Behat\\Context\\Context';
+    public const CONTEXT = 'Behat\Behat\Context\Context';
 }

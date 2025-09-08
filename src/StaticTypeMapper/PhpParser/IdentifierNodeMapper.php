@@ -21,14 +21,14 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
     {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return Identifier::class;
     }
     /**
      * @param Identifier $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         return $this->scalarStringToTypeMapper->mapScalarStringToType($node->name);
     }

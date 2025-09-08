@@ -25,15 +25,15 @@ final class EventReferenceToMethodNameWithPriority implements EventReferenceToMe
         $this->methodName = $methodName;
         $this->priority = $priority;
     }
-    public function getClassConstFetch() : ClassConstFetch
+    public function getClassConstFetch(): ClassConstFetch
     {
         return $this->classConstFetch;
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return $this->priority;
     }

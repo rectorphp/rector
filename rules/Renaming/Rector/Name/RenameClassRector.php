@@ -46,7 +46,7 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
         $this->classRenamer = $classRenamer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace defined classes by new ones', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 namespace App;
@@ -72,12 +72,12 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
     }
 }
 CODE_SAMPLE
-, ['App\\SomeOldClass' => 'App\\SomeNewClass'])]);
+, ['App\SomeOldClass' => 'App\SomeNewClass'])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [
             ClassConstFetch::class,
@@ -111,16 +111,16 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allString($configuration);
-        Assert::allString(\array_keys($configuration));
+        Assert::allString(array_keys($configuration));
         $this->renamedClassesDataCollector->addOldToNewClasses($configuration);
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processClassConstFetch(ClassConstFetch $classConstFetch, array $oldToNewClasses) : ?int
+    private function processClassConstFetch(ClassConstFetch $classConstFetch, array $oldToNewClasses): ?int
     {
         if (!$classConstFetch->class instanceof FullyQualified || !$classConstFetch->name instanceof Identifier || !$this->reflectionProvider->hasClass($classConstFetch->class->toString())) {
             return null;

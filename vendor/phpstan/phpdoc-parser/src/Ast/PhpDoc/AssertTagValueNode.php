@@ -23,7 +23,7 @@ class AssertTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagVa
         $this->isEquality = $isEquality;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $isNegated = $this->isNegated ? '!' : '';
         $isEquality = $this->isEquality ? '=' : '';

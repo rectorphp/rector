@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 final class WillReturnIfNodeDecorator
 {
-    public function decorate(Closure $callbackClosure, ?MethodCall $willReturnOnConsecutiveMethodCall) : void
+    public function decorate(Closure $callbackClosure, ?MethodCall $willReturnOnConsecutiveMethodCall): void
     {
         if (!$willReturnOnConsecutiveMethodCall instanceof MethodCall) {
             return;

@@ -11,7 +11,7 @@ final class StatementDepthAttributeDecorator
     /**
      * @param ClassMethod[] $classMethods
      */
-    public static function decorateClassMethods(array $classMethods) : void
+    public static function decorateClassMethods(array $classMethods): void
     {
         foreach ($classMethods as $classMethod) {
             foreach ((array) $classMethod->stmts as $methodStmt) {

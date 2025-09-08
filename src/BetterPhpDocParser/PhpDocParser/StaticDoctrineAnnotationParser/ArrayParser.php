@@ -28,7 +28,7 @@ final class ArrayParser
      *
      * @return ArrayItemNode[]
      */
-    public function parseCurlyArray(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
+    public function parseCurlyArray(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         $values = [];
         // nothing
@@ -69,12 +69,12 @@ final class ArrayParser
      * @param mixed[] $values
      * @return ArrayItemNode[]
      */
-    public function createArrayFromValues(array $values) : array
+    public function createArrayFromValues(array $values): array
     {
         $arrayItemNodes = [];
         $naturalKey = 0;
         foreach ($values as $key => $value) {
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 [$nestedKey, $nestedValue] = $value;
                 if ($nestedKey instanceof ConstExprIntegerNode) {
                     $nestedKey = $nestedKey->value;
@@ -92,7 +92,7 @@ final class ArrayParser
      * Mimics https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1354-L1385
      * @return array<null|mixed, mixed>
      */
-    private function resolveArrayItem(BetterTokenIterator $tokenIterator, Node $currentPhpNode) : array
+    private function resolveArrayItem(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         // skip newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
@@ -133,7 +133,7 @@ final class ArrayParser
      * @return String_::KIND_SINGLE_QUOTED|String_::KIND_DOUBLE_QUOTED|null
      * @param mixed $val
      */
-    private function resolveQuoteKind($val) : ?int
+    private function resolveQuoteKind($val): ?int
     {
         if ($this->isQuotedWith($val, '"')) {
             return String_::KIND_DOUBLE_QUOTED;
@@ -147,14 +147,14 @@ final class ArrayParser
      * @param mixed $rawKey
      * @param mixed $rawValue
      */
-    private function createArrayItemFromKeyAndValue($rawKey, $rawValue) : ArrayItemNode
+    private function createArrayItemFromKeyAndValue($rawKey, $rawValue): ArrayItemNode
     {
         $valueQuoteKind = $this->resolveQuoteKind($rawValue);
-        if (\is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        if (is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $value = new StringNode(\substr($rawValue, 1, \strlen($rawValue) - 2));
-        } elseif ($valueQuoteKind === null && \is_string($rawValue)) {
-            $lowerRawValue = \strtolower($rawValue);
+            $value = new StringNode(substr($rawValue, 1, strlen($rawValue) - 2));
+        } elseif ($valueQuoteKind === null && is_string($rawValue)) {
+            $lowerRawValue = strtolower($rawValue);
             switch ($lowerRawValue) {
                 case 'null':
                     $value = null;
@@ -173,14 +173,14 @@ final class ArrayParser
             $value = $rawValue;
         }
         $keyQuoteKind = $this->resolveQuoteKind($rawKey);
-        if (\is_string($rawKey) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        if (is_string($rawKey) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $key = new StringNode(\substr($rawKey, 1, \strlen($rawKey) - 2));
+            $key = new StringNode(substr($rawKey, 1, strlen($rawKey) - 2));
         } else {
             $key = $rawKey;
         }
-        if (\is_string($value) && $valueQuoteKind === String_::KIND_SINGLE_QUOTED) {
-            $value = \trim($value, "'");
+        if (is_string($value) && $valueQuoteKind === String_::KIND_SINGLE_QUOTED) {
+            $value = trim($value, "'");
         }
         if ($key !== null) {
             return new ArrayItemNode($value, $key);
@@ -190,14 +190,14 @@ final class ArrayParser
     /**
      * @param mixed $value
      */
-    private function isQuotedWith($value, string $quotes) : bool
+    private function isQuotedWith($value, string $quotes): bool
     {
-        if (!\is_string($value)) {
+        if (!is_string($value)) {
             return \false;
         }
-        if (\strncmp($value, $quotes, \strlen($quotes)) !== 0) {
+        if (strncmp($value, $quotes, strlen($quotes)) !== 0) {
             return \false;
         }
-        return \substr_compare($value, $quotes, -\strlen($quotes)) === 0;
+        return substr_compare($value, $quotes, -strlen($quotes)) === 0;
     }
 }

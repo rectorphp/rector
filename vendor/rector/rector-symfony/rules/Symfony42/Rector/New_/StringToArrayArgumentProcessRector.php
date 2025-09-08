@@ -39,7 +39,7 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     {
         $this->nodeTransformer = $nodeTransformer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Process string argument to an array', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Process\Process;
@@ -54,20 +54,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class, MethodCall::class];
     }
     /**
      * @param New_|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
-        if ($this->isObjectType($expr, new ObjectType('Symfony\\Component\\Process\\Process'))) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\Component\Process\Process'))) {
             return $this->processArgumentPosition($node, 0);
         }
-        if ($this->isObjectType($expr, new ObjectType('Symfony\\Component\\Console\\Helper\\ProcessHelper'))) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\Component\Console\Helper\ProcessHelper'))) {
             return $this->processArgumentPosition($node, 1);
         }
         return null;
@@ -75,7 +75,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function processArgumentPosition($node, int $argumentPosition) : ?Node
+    private function processArgumentPosition($node, int $argumentPosition): ?Node
     {
         if (!isset($node->args[$argumentPosition])) {
             return null;
@@ -102,15 +102,15 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipProcessMethodCall(MethodCall $methodCall) : bool
+    private function shouldSkipProcessMethodCall(MethodCall $methodCall): bool
     {
         $methodName = (string) $this->getName($methodCall->name);
-        return \in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, \true);
+        return in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, \true);
     }
     /**
      * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $expr
      */
-    private function processStringType($expr, int $argumentPosition, Expr $firstArgumentExpr) : bool
+    private function processStringType($expr, int $argumentPosition, Expr $firstArgumentExpr): bool
     {
         if ($firstArgumentExpr instanceof Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
@@ -135,7 +135,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function splitProcessCommandToItems(string $process) : array
+    private function splitProcessCommandToItems(string $process): array
     {
         $privatesAccessor = new PrivatesAccessor();
         return $privatesAccessor->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);

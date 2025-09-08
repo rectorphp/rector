@@ -57,26 +57,26 @@ final class AssertEqualsToSameRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase', [new CodeSample('$this->assertEquals(2, $result);', '$this->assertSame(2, $result);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $methodNames = \array_keys(self::RENAME_METHODS_MAP);
+        $methodNames = array_keys(self::RENAME_METHODS_MAP);
         if (!$this->isNames($node->name, $methodNames)) {
             return null;
         }
@@ -103,7 +103,7 @@ final class AssertEqualsToSameRector extends AbstractRector
     /**
      * @param Arg[] $args
      */
-    private function shouldSkipLooseComparison(array $args) : bool
+    private function shouldSkipLooseComparison(array $args): bool
     {
         $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
         $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
@@ -125,9 +125,9 @@ final class AssertEqualsToSameRector extends AbstractRector
         if ($secondArgType instanceof NeverType) {
             return \true;
         }
-        return $args[0]->value instanceof String_ && \is_numeric($args[0]->value->value);
+        return $args[0]->value instanceof String_ && is_numeric($args[0]->value->value);
     }
-    private function shouldSkipConstantArrayType(Expr $expr) : bool
+    private function shouldSkipConstantArrayType(Expr $expr): bool
     {
         $type = $this->nodeTypeResolver->getNativeType($expr);
         if (!$type instanceof ConstantArrayType) {
@@ -135,7 +135,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
         return $this->hasNonScalarType($type);
     }
-    private function hasNonScalarType(ConstantArrayType $constantArrayType) : bool
+    private function hasNonScalarType(ConstantArrayType $constantArrayType): bool
     {
         $valueTypes = $constantArrayType->getValueTypes();
         // empty array
@@ -153,7 +153,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
         return \false;
     }
-    private function isScalarType(Type $valueNodeType) : bool
+    private function isScalarType(Type $valueNodeType): bool
     {
         foreach (self::SCALAR_TYPES as $scalarType) {
             if ($valueNodeType instanceof $scalarType) {
@@ -165,7 +165,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
         return $valueNodeType instanceof BooleanType;
     }
-    private function isScalarOrEnumValue(Expr $expr) : bool
+    private function isScalarOrEnumValue(Expr $expr): bool
     {
         if ($expr instanceof ClassConstFetch) {
             return \true;

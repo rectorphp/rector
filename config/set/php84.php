@@ -13,6 +13,6 @@ use Rector\Php84\Rector\FuncCall\AddEscapeArgumentRector;
 use Rector\Php84\Rector\FuncCall\RoundingModeEnumRector;
 use Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([ExplicitNullableParamTypeRector::class, RoundingModeEnumRector::class, AddEscapeArgumentRector::class, NewMethodCallWithoutParenthesesRector::class, DeprecatedAnnotationToDeprecatedAttributeRector::class, ForeachToArrayFindRector::class, ForeachToArrayFindKeyRector::class, ForeachToArrayAllRector::class, ForeachToArrayAnyRector::class]);
 };

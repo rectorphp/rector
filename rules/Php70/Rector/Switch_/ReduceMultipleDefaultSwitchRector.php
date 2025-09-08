@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReduceMultipleDefaultSwitchRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_MULTIPLE_DEFAULT_SWITCH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($expr) {
@@ -44,14 +44,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $defaultCases = [];
         foreach ($node->cases as $key => $case) {
@@ -60,7 +60,7 @@ CODE_SAMPLE
             }
             $defaultCases[$key] = $case;
         }
-        $defaultCaseCount = \count($defaultCases);
+        $defaultCaseCount = count($defaultCases);
         if ($defaultCaseCount < 2) {
             return null;
         }

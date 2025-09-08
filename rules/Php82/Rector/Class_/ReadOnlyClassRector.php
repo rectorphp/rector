@@ -24,7 +24,7 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
     {
         $this->readonlyClassManipulator = $readonlyClassManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Decorate read-only class with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -49,21 +49,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isAnonymous()) {
             return null;
         }
         return $this->readonlyClassManipulator->process($node, $this->file);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::READONLY_CLASS;
     }

@@ -12,7 +12,7 @@ final class CreatedByRuleDecorator
      * @param array<Node>|Node $node
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function decorate($node, Node $originalNode, string $rectorClass) : void
+    public function decorate($node, Node $originalNode, string $rectorClass): void
     {
         if ($node instanceof Node && $node === $originalNode) {
             $this->createByRule($node, $rectorClass);
@@ -22,7 +22,7 @@ final class CreatedByRuleDecorator
             $node = [$node];
         }
         foreach ($node as $singleNode) {
-            if (\get_class($singleNode) === \get_class($originalNode)) {
+            if (get_class($singleNode) === get_class($originalNode)) {
                 $this->createByRule($singleNode, $rectorClass);
             }
         }
@@ -31,7 +31,7 @@ final class CreatedByRuleDecorator
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    private function createByRule(Node $node, string $rectorClass) : void
+    private function createByRule(Node $node, string $rectorClass): void
     {
         /** @var class-string<RectorInterface>[] $createdByRule */
         $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
@@ -41,11 +41,11 @@ final class CreatedByRuleDecorator
             return;
         }
         // consecutive, no need to refill
-        if (\end($createdByRule) === $rectorClass) {
+        if (end($createdByRule) === $rectorClass) {
             return;
         }
         // filter out when exists, then append
-        $createdByRule = \array_filter($createdByRule, static fn(string $rectorRule): bool => $rectorRule !== $rectorClass);
-        $node->setAttribute(AttributeKey::CREATED_BY_RULE, \array_merge($createdByRule, [$rectorClass]));
+        $createdByRule = array_filter($createdByRule, static fn(string $rectorRule): bool => $rectorRule !== $rectorClass);
+        $node->setAttribute(AttributeKey::CREATED_BY_RULE, array_merge($createdByRule, [$rectorClass]));
     }
 }

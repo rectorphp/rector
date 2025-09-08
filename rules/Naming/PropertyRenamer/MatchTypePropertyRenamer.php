@@ -28,7 +28,7 @@ final class MatchTypePropertyRenamer
         $this->propertyRenameGuard = $propertyRenameGuard;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
-    public function rename(PropertyRename $propertyRename) : ?Property
+    public function rename(PropertyRename $propertyRename): ?Property
     {
         if ($this->matchPropertyTypeConflictingNameGuard->isConflicting($propertyRename)) {
             return null;
@@ -44,7 +44,7 @@ final class MatchTypePropertyRenamer
         $this->renamePropertyFetchesInClass($propertyRename);
         return $propertyRename->getProperty();
     }
-    private function renamePropertyFetchesInClass(PropertyRename $propertyRename) : void
+    private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         $this->propertyFetchRenamer->renamePropertyFetchesInClass($propertyRename->getClassLike(), $propertyRename->getCurrentName(), $propertyRename->getExpectedName());
     }

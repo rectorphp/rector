@@ -10,7 +10,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
-return static function (RectorConfig $rectorConfig) : void {
-    $routeCollectionType = new ObjectType('Symfony\\Component\\Routing\\RouteCollection');
-    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Symfony\\Component\\Routing\\Loader\\AnnotationClassLoader', 'getDefaultRouteName', new StringType()), new AddReturnTypeDeclaration('Symfony\\Component\\Routing\\Router', 'getRouteCollection', $routeCollectionType), new AddReturnTypeDeclaration('Symfony\\Component\\Routing\\RouterInterface', 'getRouteCollection', $routeCollectionType)]);
+return static function (RectorConfig $rectorConfig): void {
+    $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
+    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Symfony\Component\Routing\Loader\AnnotationClassLoader', 'getDefaultRouteName', new StringType()), new AddReturnTypeDeclaration('Symfony\Component\Routing\Router', 'getRouteCollection', $routeCollectionType), new AddReturnTypeDeclaration('Symfony\Component\Routing\RouterInterface', 'getRouteCollection', $routeCollectionType)]);
 };

@@ -17,7 +17,7 @@ class ConstExprArrayNode implements \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExp
     {
         $this->items = $items;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return '[' . implode(', ', $this->items) . ']';
     }

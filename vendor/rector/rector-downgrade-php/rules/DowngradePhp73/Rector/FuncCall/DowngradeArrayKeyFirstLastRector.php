@@ -51,7 +51,7 @@ final class DowngradeArrayKeyFirstLastRector extends AbstractRector
         $this->variableNaming = $variableNaming;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade array_key_first() and array_key_last() functions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -77,7 +77,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
     }
@@ -85,9 +85,9 @@ CODE_SAMPLE
      * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
-        $exprArrayKeyFirst = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+        $exprArrayKeyFirst = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
@@ -96,7 +96,7 @@ CODE_SAMPLE
         if ($exprArrayKeyFirst instanceof FuncCall) {
             return $this->refactorArrayKeyFirst($exprArrayKeyFirst, $node);
         }
-        $exprArrayKeyLast = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+        $exprArrayKeyLast = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
@@ -107,7 +107,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveVariableFromCallLikeScope(CallLike $callLike, ?Scope $scope) : Variable
+    private function resolveVariableFromCallLikeScope(CallLike $callLike, ?Scope $scope): Variable
     {
         /** @var MethodCall|FuncCall|StaticCall|New_|NullsafeMethodCall $callLike */
         if ($callLike instanceof New_) {
@@ -124,7 +124,7 @@ CODE_SAMPLE
      * @return Node[]|null
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt) : ?array
+    private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt): ?array
     {
         $args = $funcCall->getArgs();
         if (!isset($args[0])) {
@@ -154,7 +154,7 @@ CODE_SAMPLE
      * @return Node[]|null
      * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function refactorArrayKeyLast(FuncCall $funcCall, $stmt) : ?array
+    private function refactorArrayKeyLast(FuncCall $funcCall, $stmt): ?array
     {
         $args = $funcCall->getArgs();
         $firstArg = $args[0] ?? null;
@@ -180,7 +180,7 @@ CODE_SAMPLE
         $newStmts[] = $stmt;
         $resetExpression = new Expression($this->nodeFactory->createFuncCall('reset', [$array]));
         if ($stmt instanceof StmtsAwareInterface) {
-            $stmt->stmts = \array_merge([$resetExpression], $stmt->stmts);
+            $stmt->stmts = array_merge([$resetExpression], $stmt->stmts);
         } elseif (!$stmt instanceof Return_) {
             $newStmts[] = $resetExpression;
         }

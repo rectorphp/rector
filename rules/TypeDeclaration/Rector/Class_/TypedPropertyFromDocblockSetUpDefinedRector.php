@@ -61,7 +61,7 @@ final class TypedPropertyFromDocblockSetUpDefinedRector extends AbstractRector i
         $this->docBlockUpdater = $docBlockUpdater;
         $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add property type in PHPUnit test from docblock, if defined in setUp() method', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -97,14 +97,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -128,7 +128,7 @@ CODE_SAMPLE
                 continue;
             }
             // exactly one property
-            if (\count($property->props) !== 1) {
+            if (count($property->props) !== 1) {
                 continue;
             }
             $propertyName = $property->props[0]->name->toString();
@@ -157,11 +157,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function removeVarTag(PhpDocInfo $propertyPhpDocInfo, Property $property) : void
+    private function removeVarTag(PhpDocInfo $propertyPhpDocInfo, Property $property): void
     {
         $varTagValueNode = $propertyPhpDocInfo->getVarTagValueNode();
         if (!$varTagValueNode instanceof VarTagValueNode) {

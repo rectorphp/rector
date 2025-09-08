@@ -29,7 +29,7 @@ final class ServiceSetStringNameToClassNameRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->serviceNameToTypeUniqueProvider = $serviceNameToTypeUniqueProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $service->set() string names to class-type-based names, to allow $container->get() by types in Symfony 2.8. Provide XML config via $rectorConfig->symfonyContainerXml(...);', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -54,21 +54,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
         $serviceNamesToType = $this->serviceNameToTypeUniqueProvider->provide();
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($serviceNamesToType, &$hasChanged) : ?String_ {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($serviceNamesToType, &$hasChanged): ?String_ {
             if (!$node instanceof String_) {
                 return null;
             }
@@ -86,9 +86,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createTypedServiceName(string $serviceType) : String_
+    private function createTypedServiceName(string $serviceType): String_
     {
-        $typedServiceName = \strtolower($serviceType);
+        $typedServiceName = strtolower($serviceType);
         return String_::fromString("'" . $typedServiceName . "'");
     }
 }

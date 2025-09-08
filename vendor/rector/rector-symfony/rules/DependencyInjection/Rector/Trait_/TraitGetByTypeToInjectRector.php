@@ -43,7 +43,7 @@ final class TraitGetByTypeToInjectRector extends AbstractRector
         $this->thisGetTypeMatcher = $thisGetTypeMatcher;
         $this->autowireClassMethodFactory = $autowireClassMethodFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('From `$this->get(SomeType::class)` in traits, to autowired method with @required', [new CodeSample(<<<'CODE_SAMPLE'
 // must be used in old Controller class
@@ -79,22 +79,22 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Trait_::class];
     }
     /**
      * @param Trait_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $propertyMetadatas = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$propertyMetadatas) : ?Node {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas): ?Node {
             if (!$node instanceof MethodCall) {
                 return null;
             }
             $className = $this->thisGetTypeMatcher->match($node);
-            if (!\is_string($className)) {
+            if (!is_string($className)) {
                 return null;
             }
             $propertyName = $this->propertyNaming->fqnToVariableName($className);
@@ -108,14 +108,14 @@ CODE_SAMPLE
         // create local properties
         $autowiredProperties = $this->createAutowiredProperties($propertyMetadatas);
         $autowireClassMethod = $this->autowireClassMethodFactory->create($node, $propertyMetadatas);
-        $node->stmts = \array_merge($autowiredProperties, [$autowireClassMethod], $node->stmts);
+        $node->stmts = array_merge($autowiredProperties, [$autowireClassMethod], $node->stmts);
         return $node;
     }
     /**
      * @param PropertyMetadata[] $propertyMetadatas
      * @return Property[]
      */
-    private function createAutowiredProperties(array $propertyMetadatas) : array
+    private function createAutowiredProperties(array $propertyMetadatas): array
     {
         $autowiredProperties = [];
         foreach ($propertyMetadatas as $propertyMetadata) {

@@ -29,7 +29,7 @@ final class BinaryOpManipulator
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $firstCondition
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $secondCondition
      */
-    public function matchFirstAndSecondConditionNode(BinaryOp $binaryOp, $firstCondition, $secondCondition) : ?TwoNodeMatch
+    public function matchFirstAndSecondConditionNode(BinaryOp $binaryOp, $firstCondition, $secondCondition): ?TwoNodeMatch
     {
         $this->validateCondition($firstCondition);
         $this->validateCondition($secondCondition);
@@ -46,7 +46,7 @@ final class BinaryOpManipulator
         }
         return new TwoNodeMatch($binaryOp->right, $binaryOp->left);
     }
-    public function inverseBooleanOr(BooleanOr $booleanOr) : ?BinaryOp
+    public function inverseBooleanOr(BooleanOr $booleanOr): ?BinaryOp
     {
         // no nesting
         if ($booleanOr->left instanceof BooleanOr) {
@@ -63,7 +63,7 @@ final class BinaryOpManipulator
         $secondInversedExpr = $this->inverseNode($booleanOr->right);
         return new $inversedNodeClass($firstInversedExpr, $secondInversedExpr);
     }
-    public function invertCondition(BinaryOp $binaryOp) : ?BinaryOp
+    public function invertCondition(BinaryOp $binaryOp): ?BinaryOp
     {
         // no nesting
         if ($binaryOp->left instanceof BooleanOr) {
@@ -97,12 +97,12 @@ final class BinaryOpManipulator
     /**
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $firstCondition
      */
-    private function validateCondition($firstCondition) : void
+    private function validateCondition($firstCondition): void
     {
-        if (\is_callable($firstCondition)) {
+        if (is_callable($firstCondition)) {
             return;
         }
-        if (\is_a($firstCondition, Node::class, \true)) {
+        if (is_a($firstCondition, Node::class, \true)) {
             return;
         }
         throw new ShouldNotHappenException();
@@ -111,9 +111,9 @@ final class BinaryOpManipulator
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $condition
      * @return callable(Node $firstNode, Node $secondNode): bool
      */
-    private function normalizeCondition($condition) : callable
+    private function normalizeCondition($condition): callable
     {
-        if (\is_callable($condition)) {
+        if (is_callable($condition)) {
             return $condition;
         }
         return static fn(Node $node): bool => $node instanceof $condition;
@@ -121,7 +121,7 @@ final class BinaryOpManipulator
     /**
      * @return class-string<BinaryOp>|null
      */
-    private function resolveInversedNodeClass(BinaryOp $binaryOp) : ?string
+    private function resolveInversedNodeClass(BinaryOp $binaryOp): ?string
     {
         $inversedNodeClass = $this->assignAndBinaryMap->getInversed($binaryOp);
         if ($inversedNodeClass !== null) {

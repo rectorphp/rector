@@ -26,11 +26,11 @@ final class IterateToToIterableRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, ClassMethod::class, Foreach_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change iterate() => toIterable()', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
@@ -80,7 +80,7 @@ CODE_SAMPLE
         if (!$varType instanceof ObjectType) {
             return null;
         }
-        if (!$varType->isInstanceOf('Doctrine\\ORM\\AbstractQuery')->yes()) {
+        if (!$varType->isInstanceOf('Doctrine\ORM\AbstractQuery')->yes()) {
             return null;
         }
         // Change iterate() method calls to toIterable()
@@ -90,31 +90,31 @@ CODE_SAMPLE
         $node->name = new Identifier('toIterable');
         return $node;
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
         if (!$classMethod->returnType instanceof Node) {
             return null;
         }
-        if (!$this->isName($classMethod->returnType, 'Doctrine\\ORM\\Internal\\Hydration\\IterableResult')) {
+        if (!$this->isName($classMethod->returnType, 'Doctrine\ORM\Internal\Hydration\IterableResult')) {
             return null;
         }
         $classMethod->returnType = new Name('iterable');
         return $classMethod;
     }
-    private function refactorForeach(Foreach_ $foreach) : ?Foreach_
+    private function refactorForeach(Foreach_ $foreach): ?Foreach_
     {
         $foreachedExprType = $this->getType($foreach->expr);
         if (!$foreachedExprType instanceof ObjectType) {
             return null;
         }
-        if (!$foreachedExprType->isInstanceOf('Doctrine\\ORM\\Internal\\Hydration\\IterableResult')->yes()) {
+        if (!$foreachedExprType->isInstanceOf('Doctrine\ORM\Internal\Hydration\IterableResult')->yes()) {
             return null;
         }
         $itemName = $this->getName($foreach->valueVar);
-        if (!\is_string($itemName)) {
+        if (!is_string($itemName)) {
             return null;
         }
-        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use($itemName) : ?Expr {
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use ($itemName): ?Expr {
             // update dim fetched reference to direct ones
             if (!$node instanceof ArrayDimFetch) {
                 return null;

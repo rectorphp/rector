@@ -56,11 +56,11 @@ use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprAnalyzer
 {
-    public function isBoolExpr(Expr $expr) : bool
+    public function isBoolExpr(Expr $expr): bool
     {
         return $expr instanceof BooleanNot || $expr instanceof Empty_ || $expr instanceof Isset_ || $expr instanceof Instanceof_ || $expr instanceof Bool_ || $expr instanceof Equal || $expr instanceof NotEqual || $expr instanceof Identical || $expr instanceof NotIdentical || $expr instanceof Greater || $expr instanceof GreaterOrEqual || $expr instanceof Smaller || $expr instanceof SmallerOrEqual || $expr instanceof BooleanAnd || $expr instanceof BooleanOr || $expr instanceof LogicalAnd || $expr instanceof LogicalOr || $expr instanceof LogicalXor;
     }
-    public function isCallLikeReturnNativeBool(Expr $expr) : bool
+    public function isCallLikeReturnNativeBool(Expr $expr): bool
     {
         if (!$expr instanceof CallLike) {
             return \false;
@@ -75,7 +75,7 @@ final class ExprAnalyzer
     /**
      * Verify that Expr has ->expr property that can be wrapped by parentheses
      */
-    public function isExprWithExprPropertyWrappable(Node $node) : bool
+    public function isExprWithExprPropertyWrappable(Node $node): bool
     {
         if (!$node instanceof Expr) {
             return \false;
@@ -89,7 +89,7 @@ final class ExprAnalyzer
         }
         return \false;
     }
-    public function isNonTypedFromParam(Expr $expr) : bool
+    public function isNonTypedFromParam(Expr $expr): bool
     {
         if (!$expr instanceof Variable) {
             return \false;
@@ -112,7 +112,7 @@ final class ExprAnalyzer
         }
         return !$nativeType->isSuperTypeOf($type)->yes();
     }
-    public function isDynamicExpr(Expr $expr) : bool
+    public function isDynamicExpr(Expr $expr): bool
     {
         // Unwrap UnaryPlus and UnaryMinus
         if ($expr instanceof UnaryPlus || $expr instanceof UnaryMinus) {
@@ -127,7 +127,7 @@ final class ExprAnalyzer
         }
         return !$this->isAllowedConstFetchOrClassConstFetch($expr);
     }
-    public function isDynamicArray(Array_ $array) : bool
+    public function isDynamicArray(Array_ $array): bool
     {
         foreach ($array->items as $item) {
             if (!$item instanceof ArrayItem) {
@@ -142,7 +142,7 @@ final class ExprAnalyzer
         }
         return \false;
     }
-    private function isAllowedConstFetchOrClassConstFetch(Expr $expr) : bool
+    private function isAllowedConstFetchOrClassConstFetch(Expr $expr): bool
     {
         if ($expr instanceof ConstFetch) {
             return \true;
@@ -159,7 +159,7 @@ final class ExprAnalyzer
         }
         return \false;
     }
-    private function isAllowedArrayKey(?Expr $expr) : bool
+    private function isAllowedArrayKey(?Expr $expr): bool
     {
         if (!$expr instanceof Expr) {
             return \true;
@@ -169,7 +169,7 @@ final class ExprAnalyzer
         }
         return $expr instanceof Int_;
     }
-    private function isAllowedArrayValue(Expr $expr) : bool
+    private function isAllowedArrayValue(Expr $expr): bool
     {
         if ($expr instanceof Array_) {
             return !$this->isDynamicArray($expr);

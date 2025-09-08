@@ -56,15 +56,15 @@ class Closure extends Expr implements FunctionLike, StmtsAwareInterface
         $this->stmts = $subNodes['stmts'] ?? [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'static', 'byRef', 'params', 'uses', 'returnType', 'stmts'];
     }
-    public function returnsByRef() : bool
+    public function returnsByRef(): bool
     {
         return $this->byRef;
     }
-    public function getParams() : array
+    public function getParams(): array
     {
         return $this->params;
     }
@@ -73,15 +73,15 @@ class Closure extends Expr implements FunctionLike, StmtsAwareInterface
         return $this->returnType;
     }
     /** @return Node\Stmt[] */
-    public function getStmts() : array
+    public function getStmts(): array
     {
         return $this->stmts;
     }
-    public function getAttrGroups() : array
+    public function getAttrGroups(): array
     {
         return $this->attrGroups;
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Closure';
     }

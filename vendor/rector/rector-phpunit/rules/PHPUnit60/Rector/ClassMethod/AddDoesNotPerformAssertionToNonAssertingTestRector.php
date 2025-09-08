@@ -57,7 +57,7 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -89,14 +89,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClassMethod($node)) {
             return null;
@@ -106,7 +106,7 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($classMethod)) {
             return \true;
@@ -126,12 +126,12 @@ CODE_SAMPLE
         }
         return $this->mockedVariableAnalyzer->containsMockAsUsedVariable($classMethod);
     }
-    private function hasAssertingAnnotationOrAttribute(ClassMethod $classMethod) : bool
+    private function hasAssertingAnnotationOrAttribute(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo->hasByNames(['doesNotPerformAssertions', 'expectedException'])) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\\Framework\\Attributes\\DoesNotPerformAssertions');
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\Framework\Attributes\DoesNotPerformAssertions');
     }
 }

@@ -46,7 +46,7 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
         $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
         $this->propertyPromotionRenamer = $propertyPromotionRenamer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename property and method param to match its type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -81,14 +81,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         $this->refactorClassProperties($node);
@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorClassProperties(Class_ $class) : void
+    private function refactorClassProperties(Class_ $class): void
     {
         foreach ($class->getProperties() as $property) {
             // skip public properties, as they can be used in external code
@@ -133,7 +133,7 @@ CODE_SAMPLE
      * Such properties can have "xMock" names that are not compatible with "MockObject" suffix
      * They should be kept and handled by another naming rule that deals with mocks
      */
-    private function skipDateTimeOrMockObjectPropertyType(Property $property) : bool
+    private function skipDateTimeOrMockObjectPropertyType(Property $property): bool
     {
         if (!$property->type instanceof Name) {
             return \false;

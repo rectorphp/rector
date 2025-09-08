@@ -30,7 +30,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
     {
         $this->executor = $executor ?? new ProcOpenExecutor();
     }
-    public function diagnose() : string
+    public function diagnose(): string
     {
         if (!function_exists('proc_open')) {
             return 'The function "proc_open" is not available.';
@@ -47,7 +47,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
     /**
      * @return positive-int|null
      */
-    public function find() : ?int
+    public function find(): ?int
     {
         $output = $this->executor->execute($this->getCommand());
         if (null === $output) {
@@ -62,10 +62,10 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
      *
      * @return positive-int|null
      */
-    protected function countCpuCores(string $process) : ?int
+    protected function countCpuCores(string $process): ?int
     {
         $cpuCount = filter_var($process, FILTER_VALIDATE_INT);
         return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
     }
-    protected abstract function getCommand() : string;
+    abstract protected function getCommand(): string;
 }

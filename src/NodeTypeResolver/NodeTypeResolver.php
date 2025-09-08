@@ -125,7 +125,7 @@ final class NodeTypeResolver
      * @api doctrine symfony
      * @param ObjectType[] $requiredTypes
      */
-    public function isObjectTypes(Node $node, array $requiredTypes) : bool
+    public function isObjectTypes(Node $node, array $requiredTypes): bool
     {
         foreach ($requiredTypes as $requiredType) {
             if ($this->isObjectType($node, $requiredType)) {
@@ -134,14 +134,14 @@ final class NodeTypeResolver
         }
         return \false;
     }
-    public function isObjectType(Node $node, ObjectType $requiredObjectType) : bool
+    public function isObjectType(Node $node, ObjectType $requiredObjectType): bool
     {
         if ($node instanceof ClassConstFetch) {
             return \false;
         }
         // warn about invalid use of this method
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
-            throw new ShouldNotHappenException(\sprintf(self::ERROR_MESSAGE, \get_class($node), ClassLike::class));
+            throw new ShouldNotHappenException(sprintf(self::ERROR_MESSAGE, get_class($node), ClassLike::class));
         }
         $resolvedType = $this->getType($node);
         // cover call $this on trait
@@ -177,7 +177,7 @@ final class NodeTypeResolver
         }
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
-    public function getType(Node $node) : Type
+    public function getType(Node $node): Type
     {
         if ($node instanceof NullableType) {
             $type = $this->getType($node->type);
@@ -234,12 +234,12 @@ final class NodeTypeResolver
     /**
      * e.g. string|null, ObjectNull|null
      */
-    public function isNullableType(Node $node) : bool
+    public function isNullableType(Node $node): bool
     {
         $nodeType = $this->getType($node);
         return TypeCombinator::containsNull($nodeType);
     }
-    public function getNativeType(Expr $expr) : Type
+    public function getNativeType(Expr $expr): Type
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
@@ -264,7 +264,7 @@ final class NodeTypeResolver
         }
         return $this->resolveNativeUnionType($type);
     }
-    public function isNumberType(Expr $expr) : bool
+    public function isNumberType(Expr $expr): bool
     {
         $nodeType = $this->getNativeType($expr);
         if ($nodeType->isInteger()->yes()) {
@@ -278,7 +278,7 @@ final class NodeTypeResolver
      * @param class-string<TType> $desiredType
      * @return TType|null
      */
-    public function matchNullableTypeOfSpecificType(Expr $expr, string $desiredType) : ?Type
+    public function matchNullableTypeOfSpecificType(Expr $expr, string $desiredType): ?Type
     {
         $nodeType = $this->getType($expr);
         if (!$nodeType instanceof UnionType) {
@@ -290,7 +290,7 @@ final class NodeTypeResolver
         }
         return $bareType;
     }
-    public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName) : string
+    public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName): string
     {
         if ($typeWithClassName instanceof ShortenedObjectType) {
             return $typeWithClassName->getFullyQualifiedName();
@@ -300,7 +300,7 @@ final class NodeTypeResolver
         }
         return $typeWithClassName->getClassName();
     }
-    public function isMethodStaticCallOrClassMethodObjectType(Node $node, ObjectType $objectType) : bool
+    public function isMethodStaticCallOrClassMethodObjectType(Node $node, ObjectType $objectType): bool
     {
         if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall) {
             if ($this->isEnumTypeMatch($node, $objectType)) {
@@ -328,7 +328,7 @@ final class NodeTypeResolver
         }
         return $classReflection->hasTraitUse($objectType->getClassName());
     }
-    private function correctType(Type $type) : Type
+    private function correctType(Type $type): Type
     {
         $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
         $type = $this->genericClassStringTypeCorrector->correct($type);
@@ -350,7 +350,7 @@ final class NodeTypeResolver
      *  $parts = ['host' => 'foo'];
      *  if (!empty($parts['host'])) { }
      */
-    private function resolveArrayDimFetchType(ArrayDimFetch $arrayDimFetch, Scope $scope, Type $originalNativeType) : Type
+    private function resolveArrayDimFetchType(ArrayDimFetch $arrayDimFetch, Scope $scope, Type $originalNativeType): Type
     {
         $nativeVariableType = $scope->getNativeType($arrayDimFetch->var);
         if ($nativeVariableType instanceof MixedType || $nativeVariableType instanceof ArrayType && $nativeVariableType->getIterableValueType() instanceof MixedType) {
@@ -372,14 +372,14 @@ final class NodeTypeResolver
             if ($keyType->getValue() !== $arrayDimFetch->dim->value) {
                 continue;
             }
-            if (!\in_array($key, $optionalKeys, \true)) {
+            if (!in_array($key, $optionalKeys, \true)) {
                 continue;
             }
             return $originalNativeType;
         }
         return $type;
     }
-    private function resolveNativeUnionType(UnionType $unionType) : Type
+    private function resolveNativeUnionType(UnionType $unionType): Type
     {
         $hasChanged = \false;
         $types = $unionType->getTypes();
@@ -394,7 +394,7 @@ final class NodeTypeResolver
         }
         return $unionType;
     }
-    private function isMatchObjectWithoutClassType(ObjectWithoutClassType $objectWithoutClassType, ObjectType $requiredObjectType) : bool
+    private function isMatchObjectWithoutClassType(ObjectWithoutClassType $objectWithoutClassType, ObjectType $requiredObjectType): bool
     {
         if ($objectWithoutClassType instanceof ObjectWithoutClassTypeWithParentTypes) {
             foreach ($objectWithoutClassType->getParentTypes() as $typeWithClassName) {
@@ -405,7 +405,7 @@ final class NodeTypeResolver
         }
         return \false;
     }
-    private function isAnonymousObjectType(Type $type) : bool
+    private function isAnonymousObjectType(Type $type): bool
     {
         if (!$type instanceof ObjectType) {
             return \false;
@@ -416,11 +416,11 @@ final class NodeTypeResolver
         }
         return $classReflection->isAnonymous();
     }
-    private function isUnionTypeable(Type $first, Type $second) : bool
+    private function isUnionTypeable(Type $first, Type $second): bool
     {
         return !$first instanceof UnionType && !$second instanceof UnionType && !$second->isNull()->yes();
     }
-    private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType) : bool
+    private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
     {
         $type = TypeCombinator::removeNull($resolvedType);
         if ($type instanceof NeverType) {
@@ -433,7 +433,7 @@ final class NodeTypeResolver
         }
         return $requiredObjectType->isSuperTypeOf($type)->yes();
     }
-    private function resolveByNodeTypeResolvers(Node $node) : ?Type
+    private function resolveByNodeTypeResolvers(Node $node): ?Type
     {
         foreach ($this->nodeTypeResolvers as $nodeClass => $nodeTypeResolver) {
             if (!$node instanceof $nodeClass) {
@@ -443,7 +443,7 @@ final class NodeTypeResolver
         }
         return null;
     }
-    private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType) : bool
+    private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
     {
         $requiredClassName = $requiredObjectType->getClassName();
         $resolvedClassName = $resolvedObjectType->getClassName();
@@ -470,7 +470,7 @@ final class NodeTypeResolver
         }
         return \false;
     }
-    private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType) : bool
+    private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
     {
         $renamedObjectType = $this->renamedClassesDataCollector->matchClassName($resolvedObjectType);
         if (!$renamedObjectType instanceof ObjectType) {
@@ -507,7 +507,7 @@ final class NodeTypeResolver
      * Method calls on native PHP classes report mixed,
      * even on strict known type; this fallbacks to getType() that provides correct type
      */
-    private function resolveNativeTypeWithBuiltinMethodCallFallback(Expr $expr, Scope $scope) : Type
+    private function resolveNativeTypeWithBuiltinMethodCallFallback(Expr $expr, Scope $scope): Type
     {
         if ($expr instanceof MethodCall) {
             $callerType = $scope->getType($expr->var);
@@ -534,7 +534,7 @@ final class NodeTypeResolver
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
      */
-    private function isEnumTypeMatch($call, ObjectType $objectType) : bool
+    private function isEnumTypeMatch($call, ObjectType $objectType): bool
     {
         if (!$call->var instanceof ClassConstFetch) {
             return \false;

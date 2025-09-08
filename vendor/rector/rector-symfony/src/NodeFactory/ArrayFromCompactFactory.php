@@ -19,7 +19,7 @@ final class ArrayFromCompactFactory
     {
         $this->funcCallManipulator = $funcCallManipulator;
     }
-    public function createArrayFromCompactFuncCall(FuncCall $compactFuncCall) : Array_
+    public function createArrayFromCompactFuncCall(FuncCall $compactFuncCall): Array_
     {
         $compactVariableNames = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$compactFuncCall]);
         $array = new Array_();

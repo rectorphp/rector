@@ -62,7 +62,7 @@ final class GetRepositoryServiceLocatorToRepositoryServiceInjectionRector extend
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns $this->entityManager->getRepository(...) on entity that supports service repository, to constructor injection', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
@@ -105,20 +105,20 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if ($this->shouldSkipClass($node)) {
             return null;
         }
         $repositoryPropertyMetadatas = [];
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$repositoryPropertyMetadatas) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$repositoryPropertyMetadatas) {
             if ($node instanceof Class_ || $node instanceof Function_) {
                 // avoid nested anonymous class or function
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -132,7 +132,7 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            if (\count($node->getArgs()) !== 1) {
+            if (count($node->getArgs()) !== 1) {
                 return null;
             }
             $fetchedEntityValue = $node->getArgs()[0]->value;
@@ -144,7 +144,7 @@ CODE_SAMPLE
             $repositoryVariableName = $this->propertyNaming->fqnToVariableName($entityClassName) . 'Repository';
             $repositoryClass = $this->repositoryClassResolver->resolveFromEntityClass($entityClassName);
             // unable to resolve
-            if (!\is_string($repositoryClass)) {
+            if (!is_string($repositoryClass)) {
                 return null;
             }
             $repositoryClassReflection = $this->reflectionProvider->getClass($repositoryClass);
@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         // keep it safe
         if (!$class->isFinal() || $class->isAnonymous()) {

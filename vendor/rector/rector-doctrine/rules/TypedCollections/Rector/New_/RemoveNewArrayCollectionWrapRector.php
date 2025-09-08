@@ -24,7 +24,7 @@ final class RemoveNewArrayCollectionWrapRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove new ArrayCollection wrap on collection typed property, as it is always assigned in the constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,14 +55,14 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Expr
+    public function refactor(Node $node): ?Expr
     {
         if ($node->isFirstClassCallable()) {
             return null;

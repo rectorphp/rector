@@ -32,7 +32,7 @@ final class DeclareStrictTypesRector extends AbstractRector implements HTMLAvers
     {
         $this->declareStrictTypeFinder = $declareStrictTypeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add `declare(strict_types=1)` if missing', [new CodeSample(<<<'CODE_SAMPLE'
 function someFunction()
@@ -52,7 +52,7 @@ CODE_SAMPLE
      * @param Stmt[] $nodes
      * @return Stmt[]|null
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         parent::beforeTraverse($nodes);
         $filePath = $this->file->getFilePath();
@@ -65,10 +65,10 @@ CODE_SAMPLE
         if ($nodes === []) {
             return null;
         }
-        $rootStmt = \current($nodes);
+        $rootStmt = current($nodes);
         $stmt = $rootStmt;
         if ($rootStmt instanceof FileWithoutNamespace) {
-            $currentStmt = \current($rootStmt->stmts);
+            $currentStmt = current($rootStmt->stmts);
             if (!$currentStmt instanceof Stmt) {
                 return null;
             }
@@ -86,28 +86,28 @@ CODE_SAMPLE
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         if ($rootStmt instanceof FileWithoutNamespace) {
             /** @var Stmt[] $nodes */
-            $rootStmt->stmts = \array_merge([$strictTypesDeclare, new Nop()], $nodes);
+            $rootStmt->stmts = array_merge([$strictTypesDeclare, new Nop()], $nodes);
             return [$rootStmt];
         }
-        return \array_merge([$strictTypesDeclare, new Nop()], $nodes);
+        return array_merge([$strictTypesDeclare, new Nop()], $nodes);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // workaround, as Rector now only hooks to specific nodes, not arrays
         return null;
     }
-    private function startsWithShebang(File $file) : bool
+    private function startsWithShebang(File $file): bool
     {
-        return \strncmp($file->getFileContent(), '#!', \strlen('#!')) === 0;
+        return strncmp($file->getFileContent(), '#!', strlen('#!')) === 0;
     }
 }

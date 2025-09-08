@@ -7,7 +7,7 @@ use RectorPrefix202509\OndraM\CiDetector\CiDetector;
 use Rector\Bootstrap\ExtensionConfigResolver;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Config\RectorConfig;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([]);
     $rectorConfig->skip([]);
     $rectorConfig->autoloadPaths([]);

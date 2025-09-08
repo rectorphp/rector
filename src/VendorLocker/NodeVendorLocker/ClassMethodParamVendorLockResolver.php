@@ -28,7 +28,7 @@ final class ClassMethodParamVendorLockResolver
         $this->reflectionResolver = $reflectionResolver;
         $this->filePathHelper = $filePathHelper;
     }
-    public function isVendorLocked(ClassMethod $classMethod) : bool
+    public function isVendorLocked(ClassMethod $classMethod): bool
     {
         if ($classMethod->isMagic()) {
             return \true;
@@ -53,7 +53,7 @@ final class ClassMethodParamVendorLockResolver
      * Better skip it, as PHPStan has access only to just analyzed classes.
      * This might change type, that works for current class, but breaks another implementer.
      */
-    private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName) : bool
+    private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName): bool
     {
         foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
             if ($interfaceClassReflection->hasMethod($methodName)) {
@@ -62,9 +62,9 @@ final class ClassMethodParamVendorLockResolver
         }
         return \false;
     }
-    private function hasClassMethodLockMatchingFileName(ClassReflection $classReflection, string $methodName, string $filePathPartName) : bool
+    private function hasClassMethodLockMatchingFileName(ClassReflection $classReflection, string $methodName, string $filePathPartName): bool
     {
-        $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             // parent type
             if (!$ancestorClassReflection->hasNativeMethod($methodName)) {
@@ -81,7 +81,7 @@ final class ClassMethodParamVendorLockResolver
                 return \true;
             }
             $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
-            if (\strpos($normalizedFileName, $filePathPartName) !== \false) {
+            if (strpos($normalizedFileName, $filePathPartName) !== \false) {
                 return \true;
             }
         }

@@ -18,14 +18,14 @@ final class SkipSkipper
      * @param array<string, string[]|null> $skippedClasses
      * @param object|string $checker
      */
-    public function doesMatchSkip($checker, string $filePath, array $skippedClasses) : bool
+    public function doesMatchSkip($checker, string $filePath, array $skippedClasses): bool
     {
         foreach ($skippedClasses as $skippedClass => $skippedFiles) {
-            if (!\is_a($checker, $skippedClass, \true)) {
+            if (!is_a($checker, $skippedClass, \true)) {
                 continue;
             }
             // skip everywhere
-            if (!\is_array($skippedFiles)) {
+            if (!is_array($skippedFiles)) {
                 return \true;
             }
             if ($this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedFiles)) {

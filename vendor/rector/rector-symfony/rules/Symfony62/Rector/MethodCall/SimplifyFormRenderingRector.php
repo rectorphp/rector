@@ -26,7 +26,7 @@ final class SimplifyFormRenderingRector extends AbstractRector
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Symplify form rendering by not calling `->createView()` on `render` function', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->controllerAnalyzer->isController($node->var)) {
             return null;
@@ -97,7 +97,7 @@ CODE_SAMPLE
      *
      * @return array<(ArrayItem)>|null
      */
-    private function processRemoveCreateView(array $arrayItems) : ?array
+    private function processRemoveCreateView(array $arrayItems): ?array
     {
         $replaced = \false;
         foreach ($arrayItems as $arrayItem) {
@@ -107,7 +107,7 @@ CODE_SAMPLE
             if (!$this->isName($arrayItem->value->name, 'createView')) {
                 continue;
             }
-            if (!$this->isObjectType($arrayItem->value->var, new ObjectType('Symfony\\Component\\Form\\FormInterface'))) {
+            if (!$this->isObjectType($arrayItem->value->var, new ObjectType('Symfony\Component\Form\FormInterface'))) {
                 continue;
             }
             $replaced = \true;

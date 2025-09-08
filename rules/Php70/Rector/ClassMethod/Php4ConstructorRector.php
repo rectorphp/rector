@@ -44,11 +44,11 @@ final class Php4ConstructorRector extends AbstractRector implements MinPhpVersio
         $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_PHP4_CONSTRUCTOR;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change PHP 4 style constructor to `__construct`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -71,20 +71,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Class_
+    public function refactor(Node $node): ?\PhpParser\Node\Stmt\Class_
     {
         $className = $this->getName($node);
-        if (!\is_string($className)) {
+        if (!is_string($className)) {
             return null;
         }
-        $psr4ConstructorMethod = $node->getMethod(\lcfirst($className)) ?? $node->getMethod($className);
+        $psr4ConstructorMethod = $node->getMethod(lcfirst($className)) ?? $node->getMethod($className);
         if (!$psr4ConstructorMethod instanceof ClassMethod) {
             return null;
         }
@@ -123,9 +123,9 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod, Scope $scope) : void
+    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod, Scope $scope): void
     {
-        if (!\is_iterable($classMethod->stmts)) {
+        if (!is_iterable($classMethod->stmts)) {
             return;
         }
         foreach ($classMethod->stmts as $methodStmt) {
@@ -139,7 +139,7 @@ CODE_SAMPLE
             $this->processParentPhp4ConstructCall($methodStmt, $scope);
         }
     }
-    private function processParentPhp4ConstructCall(StaticCall $staticCall, Scope $scope) : void
+    private function processParentPhp4ConstructCall(StaticCall $staticCall, Scope $scope): void
     {
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         // no parent class
@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
         $staticCall->name = new Identifier(MethodName::CONSTRUCT);
     }
-    private function isLocalMethodCallNamed(Expr $expr, string $name) : bool
+    private function isLocalMethodCallNamed(Expr $expr, string $name): bool
     {
         if (!$expr instanceof MethodCall) {
             return \false;

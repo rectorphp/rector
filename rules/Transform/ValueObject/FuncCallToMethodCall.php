@@ -28,15 +28,15 @@ final class FuncCallToMethodCall
         RectorAssert::className($newClassName);
         RectorAssert::methodName($newMethodName);
     }
-    public function getOldFuncName() : string
+    public function getOldFuncName(): string
     {
         return $this->oldFuncName;
     }
-    public function getNewObjectType() : ObjectType
+    public function getNewObjectType(): ObjectType
     {
         return new ObjectType($this->newClassName);
     }
-    public function getNewMethodName() : string
+    public function getNewMethodName(): string
     {
         return $this->newMethodName;
     }

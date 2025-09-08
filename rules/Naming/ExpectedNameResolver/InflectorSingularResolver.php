@@ -23,7 +23,7 @@ final class InflectorSingularResolver
      * @var string
      * @see https://regex101.com/r/lbQaGC/3
      */
-    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z\\d]+|[A-Z\\d]{1,}[a-z\\d]+|_))#';
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z\d]+|[A-Z\d]{1,}[a-z\d]+|_))#';
     /**
      * @var string
      * @see https://regex101.com/r/2aGdkZ/2
@@ -37,34 +37,34 @@ final class InflectorSingularResolver
     {
         $this->inflector = $inflector;
     }
-    public function resolve(string $currentName) : string
+    public function resolve(string $currentName): string
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy !== null) {
-            return Strings::substring($currentName, 0, -\strlen((string) $matchBy['by']));
+            return Strings::substring($currentName, 0, -strlen((string) $matchBy['by']));
         }
         $resolvedValue = $this->resolveSingularizeMap($currentName);
         if ($resolvedValue !== null) {
             return $resolvedValue;
         }
         $singularValueVarName = $this->singularizeCamelParts($currentName);
-        if (\in_array($singularValueVarName, ['', '_'], \true)) {
+        if (in_array($singularValueVarName, ['', '_'], \true)) {
             return $currentName;
         }
-        $length = \strlen($singularValueVarName);
+        $length = strlen($singularValueVarName);
         if ($length < 40) {
             return $singularValueVarName;
         }
         return $currentName;
     }
-    private function resolveSingularizeMap(string $currentName) : ?string
+    private function resolveSingularizeMap(string $currentName): ?string
     {
         foreach (self::SINGULARIZE_MAP as $plural => $singular) {
             if ($currentName === $plural) {
                 return $singular;
             }
-            if (StringUtils::isMatch($currentName, '#' . \ucfirst($plural) . '#')) {
-                $resolvedValue = Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
+            if (StringUtils::isMatch($currentName, '#' . ucfirst($plural) . '#')) {
+                $resolvedValue = Strings::replace($currentName, '#' . ucfirst($plural) . '#', ucfirst($singular));
                 return $this->singularizeCamelParts($resolvedValue);
             }
             if (StringUtils::isMatch($currentName, '#' . $plural . '#')) {
@@ -74,12 +74,12 @@ final class InflectorSingularResolver
         }
         return null;
     }
-    private function singularizeCamelParts(string $currentName) : string
+    private function singularizeCamelParts(string $currentName): string
     {
         $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
-            if (\in_array($camelCase[self::CAMELCASE], ['is', 'has', 'cms', 'this'], \true)) {
+            if (in_array($camelCase[self::CAMELCASE], ['is', 'has', 'cms', 'this'], \true)) {
                 $value = $camelCase[self::CAMELCASE];
             } else {
                 $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);

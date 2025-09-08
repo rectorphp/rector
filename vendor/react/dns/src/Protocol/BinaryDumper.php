@@ -28,7 +28,7 @@ final class BinaryDumper
     private function headerToBinary(Message $message)
     {
         $data = '';
-        $data .= \pack('n', $message->id);
+        $data .= pack('n', $message->id);
         $flags = 0x0;
         $flags = $flags << 1 | ($message->qr ? 1 : 0);
         $flags = $flags << 4 | $message->opcode;
@@ -39,11 +39,11 @@ final class BinaryDumper
         $flags = $flags << 3 | 0;
         // skip unused zero bit
         $flags = $flags << 4 | $message->rcode;
-        $data .= \pack('n', $flags);
-        $data .= \pack('n', \count($message->questions));
-        $data .= \pack('n', \count($message->answers));
-        $data .= \pack('n', \count($message->authority));
-        $data .= \pack('n', \count($message->additional));
+        $data .= pack('n', $flags);
+        $data .= pack('n', count($message->questions));
+        $data .= pack('n', count($message->answers));
+        $data .= pack('n', count($message->authority));
+        $data .= pack('n', count($message->additional));
         return $data;
     }
     /**
@@ -55,7 +55,7 @@ final class BinaryDumper
         $data = '';
         foreach ($questions as $question) {
             $data .= $this->domainNameToBinary($question->name);
-            $data .= \pack('n*', $question->type, $question->class);
+            $data .= pack('n*', $question->type, $question->class);
         }
         return $data;
     }
@@ -107,7 +107,7 @@ final class BinaryDumper
                     $binary = '';
                     foreach ($record->data as $opt => $value) {
                         if ($opt === Message::OPT_TCP_KEEPALIVE && $value !== null) {
-                            $value = \pack('n', \round($value * 10));
+                            $value = \pack('n', round($value * 10));
                         }
                         $binary .= \pack('n*', $opt, \strlen((string) $value)) . $value;
                     }
@@ -144,6 +144,6 @@ final class BinaryDumper
             return "\x00";
         }
         // break up domain name at each dot that is not preceeded by a backslash (escaped notation)
-        return $this->textsToBinary(\array_map('stripcslashes', \preg_split('/(?<!\\\\)\\./', $host . '.')));
+        return $this->textsToBinary(\array_map('stripcslashes', \preg_split('/(?<!\\\\)\./', $host . '.')));
     }
 }

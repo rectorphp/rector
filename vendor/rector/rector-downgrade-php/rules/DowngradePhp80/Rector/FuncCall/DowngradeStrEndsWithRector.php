@@ -23,21 +23,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStrEndsWithRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Downgrade str_ends_with() to strncmp() version', [new CodeSample('str_ends_with($haystack, $needle);', '"" === $needle || ("" !== $haystack && 0 === substr_compare($haystack, $needle, -\\strlen($needle)));')]);
+        return new RuleDefinition('Downgrade str_ends_with() to strncmp() version', [new CodeSample('str_ends_with($haystack, $needle);', '"" === $needle || ("" !== $haystack && 0 === substr_compare($haystack, $needle, -\strlen($needle)));')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class, BooleanNot::class];
     }
     /**
      * @param FuncCall|BooleanNot $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof FuncCall && $this->isName($node->name, 'str_ends_with')) {
             return new Identical($this->createSubstrCompareFuncCall($node), new Int_(0));
@@ -50,14 +50,14 @@ final class DowngradeStrEndsWithRector extends AbstractRector
         }
         return null;
     }
-    private function createSubstrCompareFuncCall(FuncCall $funcCall) : FuncCall
+    private function createSubstrCompareFuncCall(FuncCall $funcCall): FuncCall
     {
         $args = $funcCall->getArgs();
         $strlenFuncCall = $this->createStrlenFuncCall($args[1]->value);
         $args[] = new Arg(new UnaryMinus($strlenFuncCall));
         return new FuncCall(new Name('substr_compare'), $args);
     }
-    private function createStrlenFuncCall(Expr $expr) : FuncCall
+    private function createStrlenFuncCall(Expr $expr): FuncCall
     {
         return new FuncCall(new Name('strlen'), [new Arg($expr)]);
     }

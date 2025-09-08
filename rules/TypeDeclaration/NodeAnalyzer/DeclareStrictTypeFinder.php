@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 final class DeclareStrictTypeFinder
 {
-    public function hasDeclareStrictTypes(Stmt $stmt) : bool
+    public function hasDeclareStrictTypes(Stmt $stmt): bool
     {
         // when first stmt is Declare_, verify if there is strict_types definition already,
         // as multiple declare is allowed, with declare(strict_types=1) only allowed on very first stmt

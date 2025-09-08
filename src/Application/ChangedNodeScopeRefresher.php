@@ -54,14 +54,14 @@ final class ChangedNodeScopeRefresher
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function refresh(Node $node, string $filePath, ?MutatingScope $mutatingScope) : void
+    public function refresh(Node $node, string $filePath, ?MutatingScope $mutatingScope): void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->isRefreshable($node)) {
             return;
         }
         if (!$mutatingScope instanceof MutatingScope) {
-            $errorMessage = \sprintf('Node "%s" with is missing scope required for scope refresh', \get_class($node));
+            $errorMessage = sprintf('Node "%s" with is missing scope required for scope refresh', get_class($node));
             throw new ShouldNotHappenException($errorMessage);
         }
         // reindex stmt_key already covered on StmtKeyNodeVisitor on next processNodes()
@@ -73,7 +73,7 @@ final class ChangedNodeScopeRefresher
     /**
      * @return Stmt[]
      */
-    private function resolveStmts(Node $node) : array
+    private function resolveStmts(Node $node): array
     {
         if ($node instanceof Stmt) {
             return [$node];
@@ -124,15 +124,15 @@ final class ChangedNodeScopeRefresher
             $new = new New_($class, [$node]);
             return [new Expression($new)];
         }
-        $errorMessage = \sprintf('Complete parent node of "%s" be a stmt.', \get_class($node));
+        $errorMessage = sprintf('Complete parent node of "%s" be a stmt.', get_class($node));
         throw new ShouldNotHappenException($errorMessage);
     }
     /**
      * @param \PhpParser\Node\Attribute|\PhpParser\Node\AttributeGroup $node
      */
-    private function setLineAttributesOnClass(Class_ $class, $node) : void
+    private function setLineAttributesOnClass(Class_ $class, $node): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$class], function (Node $subNode) use($node) : Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$class], function (Node $subNode) use ($node): Node {
             if ($subNode->getStartLine() >= 0 && $subNode->getEndLine() >= 0) {
                 return $subNode;
             }

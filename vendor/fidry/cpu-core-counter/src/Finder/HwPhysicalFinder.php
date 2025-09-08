@@ -19,11 +19,11 @@ namespace RectorPrefix202509\Fidry\CpuCoreCounter\Finder;
  */
 final class HwPhysicalFinder extends ProcOpenBasedFinder
 {
-    protected function getCommand() : string
+    protected function getCommand(): string
     {
         return 'sysctl -n hw.physicalcpu';
     }
-    public function toString() : string
+    public function toString(): string
     {
         return 'HwPhysicalFinder';
     }

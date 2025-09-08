@@ -12,14 +12,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class UseNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return Use_::class;
     }
     /**
      * @param Use_ $node
      */
-    public function resolve(Node $node, ?Scope $scope) : ?string
+    public function resolve(Node $node, ?Scope $scope): ?string
     {
         if ($node->uses === []) {
             return null;

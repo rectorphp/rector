@@ -21,7 +21,7 @@ final class ReturnTagRemover
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, $functionLike) : bool
+    public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, $functionLike): bool
     {
         // remove existing type
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();

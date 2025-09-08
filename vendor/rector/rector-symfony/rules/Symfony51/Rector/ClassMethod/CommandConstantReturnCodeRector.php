@@ -35,7 +35,7 @@ final class CommandConstantReturnCodeRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes int return from execute to use Symfony Command constants.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeCommand extends Command
@@ -62,20 +62,20 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->is('Symfony\\Component\\Console\\Command\\Command')) {
+        if (!$classReflection->is('Symfony\Component\Console\Command\Command')) {
             return null;
         }
         if (!$this->isName($node, 'execute')) {
@@ -100,11 +100,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function convertNumberToConstant(Int_ $int) : ?ClassConstFetch
+    private function convertNumberToConstant(Int_ $int): ?ClassConstFetch
     {
         if (!isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value])) {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch('Symfony\\Component\\Console\\Command\\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value]);
+        return $this->nodeFactory->createClassConstFetch('Symfony\Component\Console\Command\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value]);
     }
 }

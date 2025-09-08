@@ -23,7 +23,7 @@ abstract class BinaryOp extends Expr
         $this->left = $left;
         $this->right = $right;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['left', 'right'];
     }
@@ -33,5 +33,5 @@ abstract class BinaryOp extends Expr
      * In the case there are multiple possible sigils for an operator, this method does not
      * necessarily return the one used in the parsed code.
      */
-    public abstract function getOperatorSigil() : string;
+    abstract public function getOperatorSigil(): string;
 }

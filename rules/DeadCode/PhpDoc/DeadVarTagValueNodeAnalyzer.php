@@ -38,7 +38,7 @@ final class DeadVarTagValueNodeAnalyzer
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
      */
-    public function isDead(VarTagValueNode $varTagValueNode, $property) : bool
+    public function isDead(VarTagValueNode $varTagValueNode, $property): bool
     {
         if (!$property->type instanceof Node) {
             return \false;

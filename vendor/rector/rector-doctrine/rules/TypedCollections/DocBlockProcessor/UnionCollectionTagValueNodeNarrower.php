@@ -21,7 +21,7 @@ final class UnionCollectionTagValueNodeNarrower
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
-    public function narrow($tagValueNode, bool $hasNativeCollectionType = \false) : bool
+    public function narrow($tagValueNode, bool $hasNativeCollectionType = \false): bool
     {
         if ($tagValueNode->type instanceof GenericTypeNode && $hasNativeCollectionType) {
             $identifierTypeNode = $tagValueNode->type->type;
@@ -39,21 +39,21 @@ final class UnionCollectionTagValueNodeNarrower
     /**
      * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $collectionType
      */
-    private function addIntKeyIfMissing($collectionType) : void
+    private function addIntKeyIfMissing($collectionType): void
     {
         if (!$collectionType instanceof GenericTypeNode) {
             return;
         }
-        if (\count($collectionType->genericTypes) !== 1) {
+        if (count($collectionType->genericTypes) !== 1) {
             return;
         }
         // add default key type
-        $collectionType->genericTypes = \array_merge([new IdentifierTypeNode('int')], $collectionType->genericTypes);
+        $collectionType->genericTypes = array_merge([new IdentifierTypeNode('int')], $collectionType->genericTypes);
     }
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
      */
-    private function processIterableAndUnionTypeNode($tagValueNode, bool $hasNativeCollectionType) : bool
+    private function processIterableAndUnionTypeNode($tagValueNode, bool $hasNativeCollectionType): bool
     {
         if (!$tagValueNode->type instanceof UnionTypeNode && !$tagValueNode->type instanceof IntersectionTypeNode) {
             return \false;
@@ -71,10 +71,10 @@ final class UnionCollectionTagValueNodeNarrower
             if ($unionedTypeNode instanceof GenericTypeNode && $unionedTypeNode->type->name === 'array') {
                 $hasArrayType = \true;
                 // both key and value are known
-                if (\count($unionedTypeNode->genericTypes) === 2) {
+                if (count($unionedTypeNode->genericTypes) === 2) {
                     $arrayTypeNode = $unionedTypeNode->genericTypes[1];
                     $arrayKeyTypeNode = $unionedTypeNode->genericTypes[0];
-                } elseif (\count($unionedTypeNode->genericTypes) === 1) {
+                } elseif (count($unionedTypeNode->genericTypes) === 1) {
                     $arrayTypeNode = $unionedTypeNode->genericTypes[0];
                 }
                 continue;
@@ -97,7 +97,7 @@ final class UnionCollectionTagValueNodeNarrower
                 }
             }
             // narrow array collection to more generic collection
-            if ($unionedTypeNode instanceof GenericTypeNode && \in_array($unionedTypeNode->type->name, ['ArrayCollection', 'iterable'], \true)) {
+            if ($unionedTypeNode instanceof GenericTypeNode && in_array($unionedTypeNode->type->name, ['ArrayCollection', 'iterable'], \true)) {
                 $unionedTypeNode->type = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
                 $hasChanged = \true;
                 $hasGenericIterableType = \true;
@@ -133,10 +133,10 @@ final class UnionCollectionTagValueNodeNarrower
                 unset($tagValueNode->type->types[$key]);
             }
         }
-        if ($tagValueNode->type instanceof UnionTypeNode && \count($tagValueNode->type->types) === 1) {
+        if ($tagValueNode->type instanceof UnionTypeNode && count($tagValueNode->type->types) === 1) {
             // sole type
             $unionTypeNode = $tagValueNode->type;
-            $tagValueNode->type = \array_pop($unionTypeNode->types);
+            $tagValueNode->type = array_pop($unionTypeNode->types);
             // refresh reprint
             $tagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
         }
@@ -145,7 +145,7 @@ final class UnionCollectionTagValueNodeNarrower
     /**
      * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $complexTypeNode
      */
-    private function hasCollectionDocblockType($complexTypeNode) : bool
+    private function hasCollectionDocblockType($complexTypeNode): bool
     {
         foreach ($complexTypeNode->types as $singleType) {
             if ($this->isCollectionIdentifierTypeNode($singleType)) {
@@ -157,7 +157,7 @@ final class UnionCollectionTagValueNodeNarrower
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
      */
-    private function processNullableTypeNode(bool $hasNativeCollectionType, $tagValueNode) : bool
+    private function processNullableTypeNode(bool $hasNativeCollectionType, $tagValueNode): bool
     {
         if ($hasNativeCollectionType === \false) {
             return \false;
@@ -168,16 +168,16 @@ final class UnionCollectionTagValueNodeNarrower
         $tagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
         $collectionType = $tagValueNode->type;
         $this->addIntKeyIfMissing($collectionType);
-        if ($collectionType->type instanceof IdentifierTypeNode && \substr_compare($collectionType->type->name, 'Collection', -\strlen('Collection')) !== 0) {
+        if ($collectionType->type instanceof IdentifierTypeNode && substr_compare($collectionType->type->name, 'Collection', -strlen('Collection')) !== 0) {
             $collectionType->type = new FullyQualifiedIdentifierTypeNode(DoctrineClass::COLLECTION);
         }
         return \true;
     }
-    private function isCollectionIdentifierTypeNode(TypeNode $typeNode) : bool
+    private function isCollectionIdentifierTypeNode(TypeNode $typeNode): bool
     {
         if (!$typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        return \in_array($typeNode->name, [DoctrineClass::COLLECTION, DoctrineClass::ARRAY_COLLECTION, 'Collection', 'ArrayCollection']);
+        return in_array($typeNode->name, [DoctrineClass::COLLECTION, DoctrineClass::ARRAY_COLLECTION, 'Collection', 'ArrayCollection']);
     }
 }

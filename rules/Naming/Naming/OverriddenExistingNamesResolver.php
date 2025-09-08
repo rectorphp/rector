@@ -39,15 +39,15 @@ final class OverriddenExistingNamesResolver
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function hasNameInClassMethodForNew(string $variableName, $functionLike) : bool
+    public function hasNameInClassMethodForNew(string $variableName, $functionLike): bool
     {
         $overriddenVariableNames = $this->resolveOverriddenNamesForNew($functionLike);
-        return \in_array($variableName, $overriddenVariableNames, \true);
+        return in_array($variableName, $overriddenVariableNames, \true);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
-    public function hasNameInFunctionLikeForParam(string $expectedName, $classMethod) : bool
+    public function hasNameInFunctionLikeForParam(string $expectedName, $classMethod): bool
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->getStmts(), Assign::class);
@@ -62,15 +62,15 @@ final class OverriddenExistingNamesResolver
             }
             $usedVariableNames[] = $variableName;
         }
-        return \in_array($expectedName, $usedVariableNames, \true);
+        return in_array($expectedName, $usedVariableNames, \true);
     }
     /**
      * @return string[]
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function resolveOverriddenNamesForNew($functionLike) : array
+    private function resolveOverriddenNamesForNew($functionLike): array
     {
-        $classMethodId = \spl_object_id($functionLike);
+        $classMethodId = spl_object_id($functionLike);
         if (isset($this->overriddenExistingVariableNamesByClassMethod[$classMethodId])) {
             return $this->overriddenExistingVariableNamesByClassMethod[$classMethodId];
         }

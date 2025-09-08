@@ -18,7 +18,7 @@ final class ClassManipulator
     /**
      * @param string[] $interfaceFQNS
      */
-    public function removeImplements(Class_ $class, array $interfaceFQNS) : void
+    public function removeImplements(Class_ $class, array $interfaceFQNS): void
     {
         foreach ($class->implements as $key => $implement) {
             if (!$this->nodeNameResolver->isNames($implement, $interfaceFQNS)) {

@@ -21,11 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetDebugTypeRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::GET_DEBUG_TYPE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change ternary type resolve to get_debug_type()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -70,11 +70,11 @@ CODE_SAMPLE
         $firstExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->getArgs()[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
         return $this->nodeFactory->createFuncCall('get_debug_type', [$firstExpr]);
     }
-    public function providePolyfillPackage() : string
+    public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_80;
     }
-    private function shouldSkip(Ternary $ternary) : bool
+    private function shouldSkip(Ternary $ternary): bool
     {
         if (!$ternary->cond instanceof FuncCall) {
             return \true;
@@ -105,14 +105,14 @@ CODE_SAMPLE
         }
         return !$this->isName($ternary->else, 'gettype');
     }
-    private function shouldSkipClassConstFetch(ClassConstFetch $classConstFetch) : bool
+    private function shouldSkipClassConstFetch(ClassConstFetch $classConstFetch): bool
     {
         if (!$classConstFetch->name instanceof Identifier) {
             return \true;
         }
         return $classConstFetch->name->toString() !== 'class';
     }
-    private function areValuesIdentical(Ternary $ternary) : bool
+    private function areValuesIdentical(Ternary $ternary): bool
     {
         /** @var FuncCall $isObjectFuncCall */
         $isObjectFuncCall = $ternary->cond;

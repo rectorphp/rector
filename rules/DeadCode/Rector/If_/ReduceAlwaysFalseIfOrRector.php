@@ -23,7 +23,7 @@ final class ReduceAlwaysFalseIfOrRector extends AbstractRector
     {
         $this->safeLeftTypeBooleanAndOrAnalyzer = $safeLeftTypeBooleanAndOrAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Reduce always false in a `if (a || b)` condition', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -56,14 +56,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->cond instanceof BooleanOr) {
             return null;

@@ -51,7 +51,7 @@ final class StmtsManipulator
         if ($stmts === []) {
             return null;
         }
-        $lastStmtKey = \array_key_last($stmts);
+        $lastStmtKey = array_key_last($stmts);
         $lastStmt = $stmts[$lastStmtKey];
         if ($lastStmt instanceof Expression) {
             $lastStmt->expr->setAttribute(AttributeKey::COMMENTS, $lastStmt->getAttribute(AttributeKey::COMMENTS));
@@ -63,9 +63,9 @@ final class StmtsManipulator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function filterOutExistingStmts(ClassMethod $classMethod, array $stmts) : array
+    public function filterOutExistingStmts(ClassMethod $classMethod, array $stmts): array
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$stmts) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$stmts) {
             foreach ($stmts as $key => $assign) {
                 if (!$this->nodeComparator->areNodesEqual($node, $assign)) {
                     continue;
@@ -76,12 +76,12 @@ final class StmtsManipulator
         });
         return $stmts;
     }
-    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName) : bool
+    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName): bool
     {
         if ($stmtsAware->stmts === null) {
             return \false;
         }
-        $lastKey = \array_key_last($stmtsAware->stmts);
+        $lastKey = array_key_last($stmtsAware->stmts);
         $stmts = [];
         for ($key = $jumpToKey; $key <= $lastKey; ++$key) {
             if (!isset($stmtsAware->stmts[$key])) {
@@ -91,9 +91,9 @@ final class StmtsManipulator
             $stmts[] = $stmtsAware->stmts[$key];
         }
         if ($stmtsAware instanceof TryCatch) {
-            $stmts = \array_merge($stmts, $stmtsAware->catches);
+            $stmts = array_merge($stmts, $stmtsAware->catches);
             if ($stmtsAware->finally instanceof Finally_) {
-                $stmts = \array_merge($stmts, $stmtsAware->finally->stmts);
+                $stmts = array_merge($stmts, $stmtsAware->finally->stmts);
             }
         }
         $variable = new Variable($variableName);

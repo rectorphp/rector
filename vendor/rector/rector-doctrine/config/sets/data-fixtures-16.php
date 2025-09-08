@@ -5,6 +5,6 @@ namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\DoctrineFixture\Rector\MethodCall\AddGetReferenceTypeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([AddGetReferenceTypeRector::class]);
 };

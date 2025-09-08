@@ -24,7 +24,7 @@ final class ClassInsertManipulator
      * @api
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $addedStmt
      */
-    public function addAsFirstMethod(Class_ $class, $addedStmt) : void
+    public function addAsFirstMethod(Class_ $class, $addedStmt): void
     {
         $scope = $class->getAttribute(AttributeKey::SCOPE);
         $addedStmt->setAttribute(AttributeKey::SCOPE, $scope);
@@ -62,12 +62,12 @@ final class ClassInsertManipulator
             return;
         }
         // keep added at least as first stmt
-        $class->stmts = \array_merge([$addedStmt], $class->stmts);
+        $class->stmts = array_merge([$addedStmt], $class->stmts);
     }
     /**
      * @internal Use PropertyAdder service instead
      */
-    public function addPropertyToClass(Class_ $class, string $name, ?Type $type) : void
+    public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
     {
         $existingProperty = $class->getProperty($name);
         if ($existingProperty instanceof Property) {

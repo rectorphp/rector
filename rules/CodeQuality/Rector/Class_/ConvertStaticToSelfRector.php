@@ -40,7 +40,7 @@ final class ConvertStaticToSelfRector extends AbstractRector
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `static::*` to `self::*` on final class or private static members', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -69,14 +69,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         $hasChanged = \false;
         $isFinal = $node->isFinal() || FeatureFlags::treatClassesAsFinal($node);
@@ -85,7 +85,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use(&$hasChanged, $classReflection, $isFinal, $scope) : ?Node {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use (&$hasChanged, $classReflection, $isFinal, $scope): ?Node {
             if (!$subNode instanceof StaticPropertyFetch && !$subNode instanceof StaticCall && !$subNode instanceof ClassConstFetch) {
                 return null;
             }
@@ -101,7 +101,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\ClassConstFetch $node
      */
-    private function shouldSkip($node, ClassReflection $classReflection, bool $isFinal, Scope $scope) : bool
+    private function shouldSkip($node, ClassReflection $classReflection, bool $isFinal, Scope $scope): bool
     {
         if (!$node->class instanceof Name) {
             return \true;

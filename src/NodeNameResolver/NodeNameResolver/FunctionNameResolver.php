@@ -12,14 +12,14 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
  */
 final class FunctionNameResolver implements NodeNameResolverInterface
 {
-    public function getNode() : string
+    public function getNode(): string
     {
         return Function_::class;
     }
     /**
      * @param Function_ $node
      */
-    public function resolve(Node $node, ?Scope $scope) : string
+    public function resolve(Node $node, ?Scope $scope): string
     {
         $bareName = (string) $node->name;
         if (!$scope instanceof Scope) {

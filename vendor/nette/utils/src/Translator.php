@@ -20,4 +20,4 @@ interface Translator
      */
     function translate($message, ...$parameters);
 }
-\interface_exists(ITranslator::class);
+interface_exists(ITranslator::class);

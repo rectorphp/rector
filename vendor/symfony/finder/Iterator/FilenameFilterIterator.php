@@ -23,7 +23,7 @@ class FilenameFilterIterator extends MultiplePcreFilterIterator
     /**
      * Filters the iterator values.
      */
-    public function accept() : bool
+    public function accept(): bool
     {
         return $this->isAccepted($this->current()->getFilename());
     }
@@ -35,7 +35,7 @@ class FilenameFilterIterator extends MultiplePcreFilterIterator
      *
      * @param string $str Pattern: glob or regexp
      */
-    protected function toRegex(string $str) : string
+    protected function toRegex(string $str): string
     {
         return $this->isRegex($str) ? $str : Glob::toRegex($str);
     }

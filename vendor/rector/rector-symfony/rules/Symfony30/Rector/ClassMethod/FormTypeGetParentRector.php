@@ -27,7 +27,7 @@ final class FormTypeGetParentRector extends AbstractRector
     {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
@@ -78,21 +78,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if (!$this->isClassAndMethodMatch($node, $classMethod)) {
                 continue;
             }
-            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$hasChanged) : ?Node {
+            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$hasChanged): ?Node {
                 if (!$node instanceof Return_) {
                     return null;
                 }
@@ -111,17 +111,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod) : bool
+    private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod): bool
     {
         if ($this->isName($classMethod->name, 'getParent')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractType'));
+            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'));
         }
         if ($this->isName($classMethod->name, 'getExtendedType')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'));
+            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'));
         }
         return \false;
     }
-    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return, bool &$hasChanged) : void
+    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return, bool &$hasChanged): void
     {
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
         if ($formClass === null) {

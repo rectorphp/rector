@@ -15,12 +15,12 @@ class NodeFinder
      *
      * @return Node[] Found nodes satisfying the filter callback
      */
-    public function find($nodes, callable $filter) : array
+    public function find($nodes, callable $filter): array
     {
         if ($nodes === []) {
             return [];
         }
-        if (!\is_array($nodes)) {
+        if (!is_array($nodes)) {
             $nodes = [$nodes];
         }
         $visitor = new FindingVisitor($filter);
@@ -37,9 +37,9 @@ class NodeFinder
      *
      * @return TNode[] Found nodes (all instances of $class)
      */
-    public function findInstanceOf($nodes, string $class) : array
+    public function findInstanceOf($nodes, string $class): array
     {
-        return $this->find($nodes, function ($node) use($class) {
+        return $this->find($nodes, function ($node) use ($class) {
             return $node instanceof $class;
         });
     }
@@ -51,12 +51,12 @@ class NodeFinder
      *
      * @return null|Node Found node (or null if none found)
      */
-    public function findFirst($nodes, callable $filter) : ?\PhpParser\Node
+    public function findFirst($nodes, callable $filter): ?\PhpParser\Node
     {
         if ($nodes === []) {
             return null;
         }
-        if (!\is_array($nodes)) {
+        if (!is_array($nodes)) {
             $nodes = [$nodes];
         }
         $visitor = new FirstFindingVisitor($filter);
@@ -74,9 +74,9 @@ class NodeFinder
      *
      * @return null|TNode Found node, which is an instance of $class (or null if none found)
      */
-    public function findFirstInstanceOf($nodes, string $class) : ?\PhpParser\Node
+    public function findFirstInstanceOf($nodes, string $class): ?\PhpParser\Node
     {
-        return $this->findFirst($nodes, function ($node) use($class) {
+        return $this->findFirst($nodes, function ($node) use ($class) {
             return $node instanceof $class;
         });
     }

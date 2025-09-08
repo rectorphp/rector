@@ -52,7 +52,7 @@ final class AddParamTypeForFunctionLikeWithinCallLikeArgDeclarationRector extend
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add param types where needed', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 (new SomeClass)->process(function ($parameter) {});
@@ -65,14 +65,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param CallLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
         foreach ($this->addParamTypeForFunctionLikeParamDeclarations as $addParamTypeForFunctionLikeParamDeclaration) {
@@ -109,17 +109,17 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration::class);
         $this->addParamTypeForFunctionLikeParamDeclarations = $configuration;
     }
-    private function processFunctionLike(CallLike $callLike, AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration) : void
+    private function processFunctionLike(CallLike $callLike, AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration): void
     {
         if ($callLike->isFirstClassCallable()) {
             return;
         }
-        if (\is_int($addParamTypeForFunctionLikeWithinCallLikeArgDeclaration->getCallLikePosition())) {
+        if (is_int($addParamTypeForFunctionLikeWithinCallLikeArgDeclaration->getCallLikePosition())) {
             if ($callLike->getArgs() === []) {
                 return;
             }
@@ -132,7 +132,7 @@ CODE_SAMPLE
                 return;
             }
         } else {
-            $args = \array_filter($callLike->getArgs(), static function (Arg $arg) use($addParamTypeForFunctionLikeWithinCallLikeArgDeclaration) : bool {
+            $args = array_filter($callLike->getArgs(), static function (Arg $arg) use ($addParamTypeForFunctionLikeWithinCallLikeArgDeclaration): bool {
                 if (!$arg->name instanceof Identifier) {
                     return \false;
                 }
@@ -141,7 +141,7 @@ CODE_SAMPLE
             if ($args === []) {
                 return;
             }
-            $arg = \array_values($args)[0];
+            $arg = array_values($args)[0];
         }
         $functionLike = $arg->value;
         if (!$functionLike instanceof FunctionLike) {
@@ -152,7 +152,7 @@ CODE_SAMPLE
         }
         $this->refactorParameter($functionLike->params[$addParamTypeForFunctionLikeWithinCallLikeArgDeclaration->getFunctionLikePosition()], $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration);
     }
-    private function refactorParameter(Param $param, AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration) : void
+    private function refactorParameter(Param $param, AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration): void
     {
         $newParameterType = $addParamTypeForFunctionLikeWithinCallLikeArgDeclaration->getParamType();
         // already set → no change

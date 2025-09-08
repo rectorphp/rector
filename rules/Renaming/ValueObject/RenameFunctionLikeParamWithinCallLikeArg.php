@@ -42,11 +42,11 @@ final class RenameFunctionLikeParamWithinCallLikeArg
         $this->newParamName = $newParamName;
         RectorAssert::className($className);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->className);
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
@@ -60,11 +60,11 @@ final class RenameFunctionLikeParamWithinCallLikeArg
     /**
      * @return int<0, max>
      */
-    public function getFunctionLikePosition() : int
+    public function getFunctionLikePosition(): int
     {
         return $this->functionLikePosition;
     }
-    public function getNewParamName() : string
+    public function getNewParamName(): string
     {
         return $this->newParamName;
     }

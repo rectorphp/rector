@@ -18,11 +18,11 @@ final class InstalledPackage
         $this->name = $name;
         $this->version = $version;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function getVersion() : string
+    public function getVersion(): string
     {
         return $this->version;
     }

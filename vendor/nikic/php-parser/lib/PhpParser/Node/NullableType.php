@@ -19,11 +19,11 @@ class NullableType extends \PhpParser\Node\ComplexType
         $this->attributes = $attributes;
         $this->type = $type;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['type'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'NullableType';
     }

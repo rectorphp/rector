@@ -36,19 +36,19 @@ final class AddParamTypeDeclaration
         $this->paramType = $paramType;
         RectorAssert::className($className);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->className);
     }
-    public function getMethodName() : string
+    public function getMethodName(): string
     {
         return $this->methodName;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function getParamType() : Type
+    public function getParamType(): Type
     {
         return $this->paramType;
     }

@@ -34,11 +34,11 @@ final class AddGetReferenceTypeRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $this->getReference() in data fixtures to fill reference class directly', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\DataFixtures\AbstractDataFixture;
@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->isInAbstractFixture($node)) {
             return null;
@@ -75,7 +75,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 1) {
+        if (count($node->getArgs()) !== 1) {
             return null;
         }
         $soleArg = $node->getArgs()[0];
@@ -87,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
         // already filled type
-        if (\count($nestedMethodCall->getArgs()) === 2) {
+        if (count($nestedMethodCall->getArgs()) === 2) {
             return null;
         }
         $callerParameterObjetType = $this->parameterTypeResolver->resolveCallerFirstParameterObjectType($node);
@@ -97,7 +97,7 @@ CODE_SAMPLE
         $nestedMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($callerParameterObjetType->getClassName()), 'class'));
         return $node;
     }
-    private function isInAbstractFixture(MethodCall $methodCall) : bool
+    private function isInAbstractFixture(MethodCall $methodCall): bool
     {
         $scope = ScopeFetcher::fetch($methodCall);
         $classReflection = $scope->getClassReflection();

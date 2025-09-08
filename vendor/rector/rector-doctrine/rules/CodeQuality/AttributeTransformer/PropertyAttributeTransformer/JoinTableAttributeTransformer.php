@@ -25,10 +25,10 @@ final class JoinTableAttributeTransformer implements PropertyAttributeTransforme
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    public function transform(EntityMapping $entityMapping, $property) : bool
+    public function transform(EntityMapping $entityMapping, $property): bool
     {
         $joinTableMapping = $entityMapping->matchManyToManyPropertyMapping($property)['joinTable'] ?? null;
-        if (!\is_array($joinTableMapping)) {
+        if (!is_array($joinTableMapping)) {
             return \false;
         }
         // handled by another mapper
@@ -38,7 +38,7 @@ final class JoinTableAttributeTransformer implements PropertyAttributeTransforme
         NodeValueNormalizer::ensureKeyIsClassConstFetch($args, EntityMappingKey::TARGET_ENTITY);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::JOIN_TABLE;
     }

@@ -15,14 +15,14 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
  */
 final class ExprNodeMapper implements PhpParserNodeMapperInterface
 {
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return Expr::class;
     }
     /**
      * @param Expr $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {

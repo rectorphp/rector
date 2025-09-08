@@ -62,7 +62,7 @@ final class ReturnTypeFromStrictTypedPropertyRector extends AbstractRector imple
         $this->staticTypeMapper = $staticTypeMapper;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return method return type based on strict typed property', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -91,14 +91,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->returnType instanceof Node) {
             return null;
@@ -123,14 +123,14 @@ CODE_SAMPLE
         $node->returnType = $propertyTypeNode;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @return Type[]
      */
-    private function resolveReturnPropertyType(ClassMethod $classMethod) : array
+    private function resolveReturnPropertyType(ClassMethod $classMethod): array
     {
         $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
         $propertyTypes = [];

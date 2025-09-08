@@ -19,7 +19,7 @@ class PropertyTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
         $this->propertyName = $propertyName;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->type} {$this->propertyName} {$this->description}");
     }

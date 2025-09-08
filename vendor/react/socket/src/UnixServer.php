@@ -52,7 +52,7 @@ final class UnixServer extends EventEmitter implements ServerInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->loop = $loop ?: Loop::get();
         if (\strpos($path, '://') === \false) {
@@ -62,11 +62,11 @@ final class UnixServer extends EventEmitter implements ServerInterface
         }
         $errno = 0;
         $errstr = '';
-        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
             // PHP does not seem to report errno/errstr for Unix domain sockets (UDS) right now.
             // This only applies to UDS server sockets, see also https://3v4l.org/NAhpr.
             // Parse PHP warning message containing unknown error, HHVM reports proper info at least.
-            if (\preg_match('/\\(([^\\)]+)\\)|\\[(\\d+)\\]: (.*)/', $error, $match)) {
+            if (\preg_match('/\(([^\)]+)\)|\[(\d+)\]: (.*)/', $error, $match)) {
                 $errstr = isset($match[3]) ? $match['3'] : $match[1];
                 $errno = isset($match[2]) ? (int) $match[2] : 0;
             }
@@ -96,11 +96,11 @@ final class UnixServer extends EventEmitter implements ServerInterface
     }
     public function resume()
     {
-        if ($this->listening || !\is_resource($this->master)) {
+        if ($this->listening || !is_resource($this->master)) {
             return;
         }
         $that = $this;
-        $this->loop->addReadStream($this->master, function ($master) use($that) {
+        $this->loop->addReadStream($this->master, function ($master) use ($that) {
             try {
                 $newSocket = SocketServer::accept($master);
             } catch (\RuntimeException $e) {

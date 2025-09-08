@@ -20,7 +20,7 @@ final class FuncCallManipulator
      * @param FuncCall[] $compactFuncCalls
      * @return string[]
      */
-    public function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls) : array
+    public function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
     {
         $arguments = [];
         foreach ($compactFuncCalls as $compactFuncCall) {

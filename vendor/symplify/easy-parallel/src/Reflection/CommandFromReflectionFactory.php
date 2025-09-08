@@ -15,7 +15,7 @@ final class CommandFromReflectionFactory
     /**
      * @param class-string<Command> $className
      */
-    public function create(string $className) : Command
+    public function create(string $className): Command
     {
         $commandReflectionClass = new ReflectionClass($className);
         $command = $commandReflectionClass->newInstanceWithoutConstructor();

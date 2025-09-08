@@ -41,7 +41,7 @@ final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
         $this->namedVariableFactory = $namedVariableFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace arbitrary expressions used with new or instanceof', [new CodeSample(<<<'CODE_SAMPLE'
 function getObjectClassName() {
@@ -63,7 +63,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
@@ -71,7 +71,7 @@ CODE_SAMPLE
      * @param Expression $node
      * @return Expression[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(Node $node): ?array
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstancesOf($node, [Assign::class]);
@@ -85,15 +85,15 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isAllowed(Expr $expr) : bool
+    private function isAllowed(Expr $expr): bool
     {
         return $expr instanceof Variable || $expr instanceof ArrayDimFetch || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
     }
-    private function isAssign(Expr $expr) : bool
+    private function isAssign(Expr $expr): bool
     {
         return $expr instanceof Assign || $expr instanceof AssignRef || $expr instanceof AssignOp;
     }
-    private function isBetweenParentheses(Node $node) : bool
+    private function isBetweenParentheses(Node $node): bool
     {
         $oldTokens = $this->file->getOldTokens();
         $previousTokenPos = $node->getStartTokenPos() - 1;
@@ -103,7 +103,7 @@ CODE_SAMPLE
             if ((string) $token === '(') {
                 return \true;
             }
-            if (!\in_array((string) $token, [\T_COMMENT, \T_WHITESPACE], \true)) {
+            if (!in_array((string) $token, [\T_COMMENT, \T_WHITESPACE], \true)) {
                 continue;
             }
         }
@@ -113,7 +113,7 @@ CODE_SAMPLE
      * @param Assign[] $assigns
      * @return Expression[]|null
      */
-    private function refactorAssign(array $assigns, Expression $expression) : ?array
+    private function refactorAssign(array $assigns, Expression $expression): ?array
     {
         foreach ($assigns as $assign) {
             if (!$assign->expr instanceof New_ && !$assign->expr instanceof Instanceof_) {
@@ -148,7 +148,7 @@ CODE_SAMPLE
     /**
      * @return Expression[]|null
      */
-    private function refactorInstanceof(Instanceof_ $instanceof, Expression $expression) : ?array
+    private function refactorInstanceof(Instanceof_ $instanceof, Expression $expression): ?array
     {
         if (!$instanceof->class instanceof Expr) {
             return null;

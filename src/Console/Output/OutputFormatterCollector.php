@@ -20,17 +20,17 @@ final class OutputFormatterCollector
             $this->outputFormatters[$outputFormatter->getName()] = $outputFormatter;
         }
     }
-    public function getByName(string $name) : OutputFormatterInterface
+    public function getByName(string $name): OutputFormatterInterface
     {
         $this->ensureOutputFormatExists($name);
         return $this->outputFormatters[$name];
     }
-    private function ensureOutputFormatExists(string $name) : void
+    private function ensureOutputFormatExists(string $name): void
     {
         if (isset($this->outputFormatters[$name])) {
             return;
         }
-        $outputFormatterNames = \array_keys($this->outputFormatters);
-        throw new InvalidConfigurationException(\sprintf('Output formatter "%s" was not found. Pick one of "%s".', $name, \implode('", "', $outputFormatterNames)));
+        $outputFormatterNames = array_keys($this->outputFormatters);
+        throw new InvalidConfigurationException(sprintf('Output formatter "%s" was not found. Pick one of "%s".', $name, implode('", "', $outputFormatterNames)));
     }
 }

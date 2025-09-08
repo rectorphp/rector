@@ -32,7 +32,7 @@ final class ArrayDimFetchToMethodCallRector extends AbstractRector implements Co
      * @var ArrayDimFetchToMethodCall[]
      */
     private array $arrayDimFetchToMethodCalls;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array dim fetch to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $object['key'];
@@ -48,7 +48,7 @@ $object->unset('key');
 CODE_SAMPLE
 , [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'get', 'set', 'has', 'unset')])]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [AssignOp::class, Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
     }
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return $this->getMethodCall($node, 'get');
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, ArrayDimFetchToMethodCall::class);
         $this->arrayDimFetchToMethodCalls = $configuration;
@@ -103,9 +103,9 @@ CODE_SAMPLE
         }
         if ($issets !== []) {
             $isset->vars = $issets;
-            \array_unshift($exprs, $isset);
+            array_unshift($exprs, $isset);
         }
-        return \array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr, null);
+        return array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr, null);
     }
     /**
      * @return Stmt[]|int
@@ -129,14 +129,14 @@ CODE_SAMPLE
         }
         if ($unsets !== []) {
             $unset->vars = $unsets;
-            \array_unshift($stmts, $unset);
+            array_unshift($stmts, $unset);
         }
         return $stmts;
     }
     /**
      * @param 'get'|'set'|'exists'|'unset' $action
      */
-    private function getMethodCall(ArrayDimFetch $arrayDimFetch, string $action, ?Expr $expr = null) : ?MethodCall
+    private function getMethodCall(ArrayDimFetch $arrayDimFetch, string $action, ?Expr $expr = null): ?MethodCall
     {
         if (!$arrayDimFetch->dim instanceof Node) {
             return null;

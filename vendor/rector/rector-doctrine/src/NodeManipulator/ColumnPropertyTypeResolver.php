@@ -92,7 +92,7 @@ final class ColumnPropertyTypeResolver
         $this->attributeFinder = $attributeFinder;
         $this->doctrineTypeToScalarType = $doctrineTypeToScalarType;
     }
-    public function resolve(Property $property, bool $isNullable) : ?Type
+    public function resolve(Property $property, bool $isNullable): ?Type
     {
         $expr = $this->attributeFinder->findAttributeByClassArgByName($property, MappingClass::COLUMN, 'type');
         if ($expr instanceof String_) {
@@ -101,7 +101,7 @@ final class ColumnPropertyTypeResolver
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $this->resolveFromPhpDocInfo($phpDocInfo, $isNullable);
     }
-    private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable) : ?\PHPStan\Type\Type
+    private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable): ?\PHPStan\Type\Type
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(MappingClass::COLUMN);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
@@ -115,12 +115,12 @@ final class ColumnPropertyTypeResolver
         if ($typeValue instanceof StringNode) {
             $typeValue = $typeValue->value;
         }
-        if (!\is_string($typeValue)) {
+        if (!is_string($typeValue)) {
             return null;
         }
         return $this->createPHPStanTypeFromDoctrineStringType($typeValue, $isNullable);
     }
-    private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable) : Type
+    private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable): Type
     {
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
         if (!$scalarType instanceof Type) {

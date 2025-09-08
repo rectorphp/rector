@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RoundingModeEnumRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace rounding mode constant to RoundMode enum in `round()`', [new CodeSample(<<<'CODE_SAMPLE'
 round(1.5, 0, PHP_ROUND_HALF_UP);
@@ -28,14 +28,14 @@ round(1.5, 0, RoundingMode::HalfAwayFromZero);
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(Node $node): ?FuncCall
     {
         if (!$this->isName($node, 'round')) {
             return null;
@@ -44,7 +44,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 3) {
+        if (count($args) !== 3) {
             return null;
         }
         if (!isset($args[2])) {
@@ -81,7 +81,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ROUNDING_MODES;
     }

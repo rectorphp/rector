@@ -40,7 +40,7 @@ final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Return int or false from SignalableCommandInterface::handleSignal() instead of void', [new CodeSample(<<<'CODE_SAMPLE'
     public function handleSignal(int $signal): void
@@ -56,16 +56,16 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->classAnalyzer->hasImplements($node, 'Symfony\\Component\\Console\\Command\\SignalableCommandInterface')) {
+        if (!$this->classAnalyzer->hasImplements($node, 'Symfony\Component\Console\Command\SignalableCommandInterface')) {
             return null;
         }
         $classMethod = $node->getMethod('handleSignal');

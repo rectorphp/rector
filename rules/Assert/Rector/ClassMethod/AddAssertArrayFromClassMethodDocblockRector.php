@@ -52,7 +52,7 @@ final class AddAssertArrayFromClassMethodDocblockRector extends AbstractRector i
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->existingAssertStaticCallResolver = $existingAssertStaticCallResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add key and value assert based on docblock @param type declarations (pick from "webmozart" or "beberlei" asserts)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
@@ -91,14 +91,14 @@ class SomeClass
 CODE_SAMPLE
 , [AssertClassName::WEBMOZART])]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         $scope = ScopeFetcher::fetch($node);
         if (!$scope->isInClass()) {
@@ -128,7 +128,7 @@ CODE_SAMPLE
                 continue;
             }
             $paramName = $param->var->name;
-            if (!\is_string($paramName)) {
+            if (!is_string($paramName)) {
                 continue;
             }
             $paramDocType = $methodPhpDocInfo->getParamType($paramName);
@@ -136,11 +136,11 @@ CODE_SAMPLE
                 continue;
             }
             $valueAssertMethod = $this->matchTypeToAssertMethod($paramDocType->getItemType());
-            if (\is_string($valueAssertMethod)) {
+            if (is_string($valueAssertMethod)) {
                 $assertStaticCallStmts[] = $this->createAssertExpression($param->var, $valueAssertMethod);
             }
             $keyAssertMethod = $this->matchTypeToAssertMethod($paramDocType->getKeyType());
-            if (\is_string($keyAssertMethod)) {
+            if (is_string($keyAssertMethod)) {
                 $arrayKeys = new FuncCall(new Name('array_keys'), [new Arg($param->var)]);
                 $assertStaticCallStmts[] = $this->createAssertExpression($arrayKeys, $keyAssertMethod);
             }
@@ -154,13 +154,13 @@ CODE_SAMPLE
         if ($assertStaticCallStmts === []) {
             return null;
         }
-        $node->stmts = \array_merge($assertStaticCallStmts, $node->stmts);
+        $node->stmts = array_merge($assertStaticCallStmts, $node->stmts);
         return $node;
     }
     /**
      * @param array<string> $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         if ($configuration === []) {
             // default
@@ -170,7 +170,7 @@ CODE_SAMPLE
         Assert::inArray($configuration[0], [AssertClassName::BEBERLEI, AssertClassName::WEBMOZART]);
         $this->assertClass = $configuration[0];
     }
-    private function createAssertExpression(Expr $expr, string $methodName) : Expression
+    private function createAssertExpression(Expr $expr, string $methodName): Expression
     {
         $assertFullyQualified = new FullyQualified($this->assertClass);
         $staticCall = new StaticCall($assertFullyQualified, $methodName, [new Arg($expr)]);
@@ -181,15 +181,15 @@ CODE_SAMPLE
      * @param string[] $existingAssertCallHashes
      * @return Expression[]
      */
-    private function filterOutExistingStaticCall(array $assertStaticCallStmts, array $existingAssertCallHashes) : array
+    private function filterOutExistingStaticCall(array $assertStaticCallStmts, array $existingAssertCallHashes): array
     {
         $standard = new Standard();
-        return \array_filter($assertStaticCallStmts, function (Expression $assertStaticCallExpression) use($standard, $existingAssertCallHashes) : bool {
+        return array_filter($assertStaticCallStmts, function (Expression $assertStaticCallExpression) use ($standard, $existingAssertCallHashes): bool {
             $currentStaticCallHash = $standard->prettyPrintExpr($assertStaticCallExpression->expr);
-            return !\in_array($currentStaticCallHash, $existingAssertCallHashes, \true);
+            return !in_array($currentStaticCallHash, $existingAssertCallHashes, \true);
         });
     }
-    private function matchTypeToAssertMethod(Type $type) : ?string
+    private function matchTypeToAssertMethod(Type $type): ?string
     {
         if ($type instanceof IntegerType) {
             return 'allInteger';

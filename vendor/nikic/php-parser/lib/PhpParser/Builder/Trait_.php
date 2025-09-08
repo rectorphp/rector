@@ -48,7 +48,7 @@ class Trait_ extends \PhpParser\Builder\Declaration
         } elseif ($stmt instanceof Stmt\ClassConst) {
             $this->constants[] = $stmt;
         } else {
-            throw new \LogicException(\sprintf('Unexpected node of type "%s"', $stmt->getType()));
+            throw new \LogicException(sprintf('Unexpected node of type "%s"', $stmt->getType()));
         }
         return $this;
     }
@@ -69,8 +69,8 @@ class Trait_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Trait_ The built interface node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
-        return new Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->constants, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new Stmt\Trait_($this->name, ['stmts' => array_merge($this->uses, $this->constants, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

@@ -68,8 +68,8 @@ class InputOption
      */
     public function __construct(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null, $suggestedValues = [])
     {
-        if (\strncmp($name, '--', \strlen('--')) === 0) {
-            $name = \substr($name, 2);
+        if (strncmp($name, '--', strlen('--')) === 0) {
+            $name = substr($name, 2);
         }
         if (empty($name)) {
             throw new InvalidArgumentException('An option name cannot be empty.');
@@ -79,11 +79,11 @@ class InputOption
         }
         if (null !== $shortcut) {
             if (\is_array($shortcut)) {
-                $shortcut = \implode('|', $shortcut);
+                $shortcut = implode('|', $shortcut);
             }
-            $shortcuts = \preg_split('{(\\|)-?}', \ltrim($shortcut, '-'));
-            $shortcuts = \array_filter($shortcuts, 'strlen');
-            $shortcut = \implode('|', $shortcuts);
+            $shortcuts = preg_split('{(\|)-?}', ltrim($shortcut, '-'));
+            $shortcuts = array_filter($shortcuts, 'strlen');
+            $shortcut = implode('|', $shortcuts);
             if ('' === $shortcut) {
                 throw new InvalidArgumentException('An option shortcut cannot be empty.');
             }
@@ -112,14 +112,14 @@ class InputOption
     /**
      * Returns the option shortcut.
      */
-    public function getShortcut() : ?string
+    public function getShortcut(): ?string
     {
         return $this->shortcut;
     }
     /**
      * Returns the option name.
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -128,7 +128,7 @@ class InputOption
      *
      * @return bool true if value mode is not self::VALUE_NONE, false otherwise
      */
-    public function acceptValue() : bool
+    public function acceptValue(): bool
     {
         return $this->isValueRequired() || $this->isValueOptional();
     }
@@ -137,7 +137,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_REQUIRED, false otherwise
      */
-    public function isValueRequired() : bool
+    public function isValueRequired(): bool
     {
         return self::VALUE_REQUIRED === (self::VALUE_REQUIRED & $this->mode);
     }
@@ -146,7 +146,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_OPTIONAL, false otherwise
      */
-    public function isValueOptional() : bool
+    public function isValueOptional(): bool
     {
         return self::VALUE_OPTIONAL === (self::VALUE_OPTIONAL & $this->mode);
     }
@@ -155,11 +155,11 @@ class InputOption
      *
      * @return bool true if mode is self::VALUE_IS_ARRAY, false otherwise
      */
-    public function isArray() : bool
+    public function isArray(): bool
     {
         return self::VALUE_IS_ARRAY === (self::VALUE_IS_ARRAY & $this->mode);
     }
-    public function isNegatable() : bool
+    public function isNegatable(): bool
     {
         return self::VALUE_NEGATABLE === (self::VALUE_NEGATABLE & $this->mode);
     }
@@ -195,11 +195,11 @@ class InputOption
     /**
      * Returns the description text.
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
-    public function hasCompletion() : bool
+    public function hasCompletion(): bool
     {
         return [] !== $this->suggestedValues;
     }
@@ -208,11 +208,11 @@ class InputOption
      *
      * @see Command::complete()
      */
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         $values = $this->suggestedValues;
         if ($values instanceof \Closure && !\is_array($values = $values($input))) {
-            throw new LogicException(\sprintf('Closure for option "%s" must return an array. Got "%s".', $this->name, \get_debug_type($values)));
+            throw new LogicException(\sprintf('Closure for option "%s" must return an array. Got "%s".', $this->name, get_debug_type($values)));
         }
         if ($values) {
             $suggestions->suggestValues($values);
@@ -221,7 +221,7 @@ class InputOption
     /**
      * Checks whether the given option equals this one.
      */
-    public function equals(self $option) : bool
+    public function equals(self $option): bool
     {
         return $option->getName() === $this->getName() && $option->getShortcut() === $this->getShortcut() && $option->getDefault() === $this->getDefault() && $option->isNegatable() === $this->isNegatable() && $option->isArray() === $this->isArray() && $option->isValueRequired() === $this->isValueRequired() && $option->isValueOptional() === $this->isValueOptional();
     }

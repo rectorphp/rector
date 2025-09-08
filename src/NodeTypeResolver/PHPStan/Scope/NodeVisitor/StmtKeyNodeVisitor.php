@@ -9,7 +9,7 @@ use Rector\Application\NodeAttributeReIndexer;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
 {
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         return NodeAttributeReIndexer::reIndexStmtKeyNodeAttributes($node);
     }

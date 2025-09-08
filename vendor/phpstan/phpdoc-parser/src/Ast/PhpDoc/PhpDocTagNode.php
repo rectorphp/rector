@@ -16,7 +16,7 @@ class PhpDocTagNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
         $this->name = $name;
         $this->value = $value;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->value instanceof DoctrineTagValueNode) {
             return (string) $this->value;

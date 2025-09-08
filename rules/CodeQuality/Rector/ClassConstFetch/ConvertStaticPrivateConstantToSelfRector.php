@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConvertStaticPrivateConstantToSelfRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces static::* constant access with self::* for private constants and in final classes.', [new CodeSample(<<<'CODE_SAMPLE'
 class Foo
@@ -48,15 +48,15 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
-        throw new ShouldNotHappenException(\sprintf('The %s rule is deprecated. Use %s instead', self::class, ConvertStaticToSelfRector::class));
+        throw new ShouldNotHappenException(sprintf('The %s rule is deprecated. Use %s instead', self::class, ConvertStaticToSelfRector::class));
     }
 }

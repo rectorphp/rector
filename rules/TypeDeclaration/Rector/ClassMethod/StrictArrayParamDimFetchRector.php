@@ -57,7 +57,7 @@ final class StrictArrayParamDimFetchRector extends AbstractRector
         $this->typeComparator = $typeComparator;
         $this->typeFactory = $typeFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add array type based on array dim fetch use', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -82,14 +82,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
@@ -119,14 +119,14 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function isParamAccessedArrayDimFetch(Param $param, $functionLike) : bool
+    private function isParamAccessedArrayDimFetch(Param $param, $functionLike): bool
     {
         if ($functionLike->stmts === null) {
             return \false;
         }
         $paramName = $this->getName($param);
         $isParamAccessedArrayDimFetch = \false;
-        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use($param, $paramName, &$isParamAccessedArrayDimFetch) : ?int {
+        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use ($param, $paramName, &$isParamAccessedArrayDimFetch): ?int {
             if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -173,7 +173,7 @@ CODE_SAMPLE
         });
         return $isParamAccessedArrayDimFetch;
     }
-    private function isEchoed(Node $node, string $paramName) : bool
+    private function isEchoed(Node $node, string $paramName): bool
     {
         if (!$node instanceof Echo_) {
             return \false;
@@ -185,7 +185,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldStop(Node $node, Param $param, string $paramName) : bool
+    private function shouldStop(Node $node, Param $param, string $paramName): bool
     {
         $nodeToCheck = null;
         if (!$param->default instanceof Expr) {
@@ -224,7 +224,7 @@ CODE_SAMPLE
         }
         return $this->isReassignAndUseAsArg($node, $paramName);
     }
-    private function isReassignAndUseAsArg(Node $node, string $paramName) : bool
+    private function isReassignAndUseAsArg(Node $node, string $paramName): bool
     {
         if (!$node instanceof Assign) {
             return \false;
@@ -248,7 +248,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isEmptyOrEchoedOrCasted(Node $node, string $paramName) : bool
+    private function isEmptyOrEchoedOrCasted(Node $node, string $paramName): bool
     {
         if ($node instanceof Empty_ && $node->expr instanceof Variable && $this->isName($node->expr, $paramName)) {
             return \true;
@@ -258,7 +258,7 @@ CODE_SAMPLE
         }
         return $node instanceof Array_ && $node->expr instanceof Variable && $this->isName($node->expr, $paramName);
     }
-    private function isMethodCallOrArrayDimFetch(string $paramName, ?Node $node) : bool
+    private function isMethodCallOrArrayDimFetch(string $paramName, ?Node $node): bool
     {
         if ($node instanceof MethodCall) {
             return $node->var instanceof Variable && $this->isName($node->var, $paramName);

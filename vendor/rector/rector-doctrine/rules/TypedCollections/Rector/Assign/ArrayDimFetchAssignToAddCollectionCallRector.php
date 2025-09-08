@@ -26,7 +26,7 @@ final class ArrayDimFetchAssignToAddCollectionCallRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change add dim assign on collection to an->add() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -62,14 +62,14 @@ final class SetFirstParameterArray
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         if (!$node->var instanceof ArrayDimFetch) {
             return null;

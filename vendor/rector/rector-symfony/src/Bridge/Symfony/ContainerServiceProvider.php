@@ -11,24 +11,24 @@ use RectorPrefix202509\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     private ?object $container = null;
-    public function provideByName(string $serviceName) : object
+    public function provideByName(string $serviceName): object
     {
         /** @var Container $symfonyContainer */
         $symfonyContainer = $this->getSymfonyContainer();
         if (!$symfonyContainer->has($serviceName)) {
-            $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
+            $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
             throw new ShouldNotHappenException($errorMessage);
         }
         return $symfonyContainer->get($serviceName);
     }
-    private function getSymfonyContainer() : object
+    private function getSymfonyContainer(): object
     {
         if ($this->container === null) {
             $symfonyContainerPhp = SimpleParameterProvider::provideStringParameter(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
             Assert::fileExists($symfonyContainerPhp);
-            $container = (require $symfonyContainerPhp);
+            $container = require $symfonyContainerPhp;
             // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-            Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
+            Assert::isInstanceOf($container, 'Symfony\Component\DependencyInjection\Container');
             $this->container = $container;
         }
         return $this->container;

@@ -29,7 +29,7 @@ class ArrayInput extends Input
         $this->parameters = $parameters;
         parent::__construct($definition);
     }
-    public function getFirstArgument() : ?string
+    public function getFirstArgument(): ?string
     {
         foreach ($this->parameters as $param => $value) {
             if ($param && \is_string($param) && '-' === $param[0]) {
@@ -42,7 +42,7 @@ class ArrayInput extends Input
     /**
      * @param string|mixed[] $values
      */
-    public function hasParameterOption($values, bool $onlyParams = \false) : bool
+    public function hasParameterOption($values, bool $onlyParams = \false): bool
     {
         $values = (array) $values;
         foreach ($this->parameters as $k => $v) {
@@ -83,7 +83,7 @@ class ArrayInput extends Input
     /**
      * Returns a stringified representation of the args passed to the command.
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         $params = [];
         foreach ($this->parameters as $param => $val) {
@@ -97,10 +97,10 @@ class ArrayInput extends Input
                     $params[] = $param . ('' != $val ? $glue . $this->escapeToken($val) : '');
                 }
             } else {
-                $params[] = \is_array($val) ? \implode(' ', \array_map(\Closure::fromCallable([$this, 'escapeToken']), $val)) : $this->escapeToken($val);
+                $params[] = \is_array($val) ? implode(' ', array_map(\Closure::fromCallable([$this, 'escapeToken']), $val)) : $this->escapeToken($val);
             }
         }
-        return \implode(' ', $params);
+        return implode(' ', $params);
     }
     /**
      * @return void
@@ -111,10 +111,10 @@ class ArrayInput extends Input
             if ('--' === $key) {
                 return;
             }
-            if (\strncmp($key, '--', \strlen('--')) === 0) {
-                $this->addLongOption(\substr($key, 2), $value);
-            } elseif (\strncmp($key, '-', \strlen('-')) === 0) {
-                $this->addShortOption(\substr($key, 1), $value);
+            if (strncmp($key, '--', strlen('--')) === 0) {
+                $this->addLongOption(substr($key, 2), $value);
+            } elseif (strncmp($key, '-', strlen('-')) === 0) {
+                $this->addShortOption(substr($key, 1), $value);
             } else {
                 $this->addArgument($key, $value);
             }
@@ -126,7 +126,7 @@ class ArrayInput extends Input
      * @throws InvalidOptionException When option given doesn't exist
      * @param mixed $value
      */
-    private function addShortOption(string $shortcut, $value) : void
+    private function addShortOption(string $shortcut, $value): void
     {
         if (!$this->definition->hasShortcut($shortcut)) {
             throw new InvalidOptionException(\sprintf('The "-%s" option does not exist.', $shortcut));
@@ -140,7 +140,7 @@ class ArrayInput extends Input
      * @throws InvalidOptionException When a required value is missing
      * @param mixed $value
      */
-    private function addLongOption(string $name, $value) : void
+    private function addLongOption(string $name, $value): void
     {
         if (!$this->definition->hasOption($name)) {
             if (!$this->definition->hasNegation($name)) {
@@ -168,7 +168,7 @@ class ArrayInput extends Input
      * @param string|int $name
      * @param mixed $value
      */
-    private function addArgument($name, $value) : void
+    private function addArgument($name, $value): void
     {
         if (!$this->definition->hasArgument($name)) {
             throw new InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));

@@ -26,11 +26,11 @@ class FindingVisitor extends NodeVisitorAbstract
      *
      * @return list<Node> Found nodes
      */
-    public function getFoundNodes() : array
+    public function getFoundNodes(): array
     {
         return $this->foundNodes;
     }
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->foundNodes = [];
         return null;

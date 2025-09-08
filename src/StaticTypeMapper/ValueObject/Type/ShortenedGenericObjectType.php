@@ -24,12 +24,12 @@ final class ShortenedGenericObjectType extends GenericObjectType
         $this->fullyQualifiedName = $fullyQualifiedName;
         parent::__construct($shortName, $types);
     }
-    public function isSuperTypeOf(Type $type) : IsSuperTypeOfResult
+    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
     {
         $genericObjectType = new GenericObjectType($this->fullyQualifiedName, $this->getTypes());
         return $genericObjectType->isSuperTypeOf($type);
     }
-    public function getShortName() : string
+    public function getShortName(): string
     {
         return $this->getClassName();
     }

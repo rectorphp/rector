@@ -18,7 +18,7 @@ final class FunctionLikeManipulator
     /**
      * @return string[]
      */
-    public function resolveParamNames(FunctionLike $functionLike) : array
+    public function resolveParamNames(FunctionLike $functionLike): array
     {
         $paramNames = [];
         foreach ($functionLike->getParams() as $param) {

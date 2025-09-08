@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CollectionParamTypeSetterToCollectionPropertyRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add property collection type based on param type setter', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -59,19 +59,19 @@ final class SetFirstParameterArray
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         if ($node->isAbstract()) {
             return null;
         }
-        if (\count($node->getParams()) !== 1) {
+        if (count($node->getParams()) !== 1) {
             return null;
         }
         // has first stmts assign to a property?
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function isAssignToPropertyFetchCollection(Assign $assign) : bool
+    private function isAssignToPropertyFetchCollection(Assign $assign): bool
     {
         if (!$assign->var instanceof PropertyFetch) {
             return \false;

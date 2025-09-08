@@ -125,7 +125,7 @@ class ClassConst implements PhpParser\Builder
      *
      * @return Stmt\ClassConst The built constant node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
         return new Stmt\ClassConst($this->constants, $this->flags, $this->attributes, $this->attributeGroups, $this->type);
     }

@@ -22,7 +22,7 @@ final class AttrGroupsFactory
      * @param Use_[] $uses
      * @return AttributeGroup[]
      */
-    public function create(array $doctrineTagAndAnnotationToAttributes, array $uses) : array
+    public function create(array $doctrineTagAndAnnotationToAttributes, array $uses): array
     {
         $attributeGroups = [];
         foreach ($doctrineTagAndAnnotationToAttributes as $doctrineTagAndAnnotationToAttribute) {

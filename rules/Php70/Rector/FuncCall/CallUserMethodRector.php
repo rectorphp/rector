@@ -21,27 +21,27 @@ final class CallUserMethodRector extends AbstractRector implements MinPhpVersion
      * @var array<string, string>
      */
     private const OLD_TO_NEW_FUNCTIONS = ['call_user_method' => 'call_user_func', 'call_user_method_array' => 'call_user_func_array'];
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_CALL_USER_METHOD;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()', [new CodeSample('call_user_method($method, $obj, "arg1", "arg2");', 'call_user_func(array(&$obj, "method"), "arg1", "arg2");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        $oldFunctionNames = \array_keys(self::OLD_TO_NEW_FUNCTIONS);
+        $oldFunctionNames = array_keys(self::OLD_TO_NEW_FUNCTIONS);
         if (!$this->isNames($node, $oldFunctionNames)) {
             return null;
         }
@@ -56,7 +56,7 @@ final class CallUserMethodRector extends AbstractRector implements MinPhpVersion
         $newArgs = [$this->nodeFactory->createArg([$oldArgs[1]->value, $oldArgs[0]->value])];
         unset($oldArgs[0]);
         unset($oldArgs[1]);
-        $node->args = \array_merge($newArgs, $oldArgs);
+        $node->args = array_merge($newArgs, $oldArgs);
         return $node;
     }
 }

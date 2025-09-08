@@ -36,14 +36,14 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         $this->reflectionResolver = $reflectionResolver;
         $this->fullyQualifiedNodeMapper = $fullyQualifiedNodeMapper;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return Name::class;
     }
     /**
      * @param Name $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(Node $node): Type
     {
         $name = $node->toString();
         if ($node->isSpecialClassName()) {
@@ -55,9 +55,9 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
         return new MixedType();
     }
-    private function expandedNamespacedName(Name $name) : ?FullyQualified
+    private function expandedNamespacedName(Name $name): ?FullyQualified
     {
-        if (\get_class($name) !== Name::class) {
+        if (get_class($name) !== Name::class) {
             return null;
         }
         if (!$name->hasAttribute(AttributeKey::NAMESPACED_NAME)) {

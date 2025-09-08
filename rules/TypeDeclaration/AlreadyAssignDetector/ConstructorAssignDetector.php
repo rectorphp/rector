@@ -62,11 +62,11 @@ final class ConstructorAssignDetector
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeComparator = $nodeComparator;
     }
-    public function isPropertyAssignedConditionally(Class_ $class, string $propertyName) : bool
+    public function isPropertyAssignedConditionally(Class_ $class, string $propertyName): bool
     {
         return $this->isPropertyAssigned($class, $propertyName, \true);
     }
-    public function isPropertyAssigned(ClassLike $classLike, string $propertyName, bool $allowConditional = \false) : bool
+    public function isPropertyAssigned(ClassLike $classLike, string $propertyName, bool $allowConditional = \false): bool
     {
         $initializeClassMethods = $this->matchInitializeClassMethod($classLike);
         if ($initializeClassMethods === []) {
@@ -75,7 +75,7 @@ final class ConstructorAssignDetector
         $isAssignedInConstructor = \false;
         StatementDepthAttributeDecorator::decorateClassMethods($initializeClassMethods);
         foreach ($initializeClassMethods as $initializeClassMethod) {
-            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor, $allowConditional) : ?int {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use ($propertyName, &$isAssignedInConstructor, $allowConditional): ?int {
                 if ($this->isIfElseAssign($node, $propertyName)) {
                     $isAssignedInConstructor = \true;
                     return NodeVisitor::STOP_TRAVERSAL;
@@ -112,7 +112,7 @@ final class ConstructorAssignDetector
     /**
      * @param Stmt[] $stmts
      */
-    private function isAssignedInStmts(array $stmts, string $propertyName) : bool
+    private function isAssignedInStmts(array $stmts, string $propertyName): bool
     {
         $isAssigned = \false;
         foreach ($stmts as $stmt) {
@@ -127,14 +127,14 @@ final class ConstructorAssignDetector
         }
         return $isAssigned;
     }
-    private function isIfElseAssign(Node $node, string $propertyName) : bool
+    private function isIfElseAssign(Node $node, string $propertyName): bool
     {
         if (!$node instanceof If_ || $node->elseifs !== [] || !$node->else instanceof Else_) {
             return \false;
         }
         return $this->isAssignedInStmts($node->stmts, $propertyName) && $this->isAssignedInStmts($node->else->stmts, $propertyName);
     }
-    private function matchAssignExprToPropertyName(Node $node, string $propertyName) : ?Expr
+    private function matchAssignExprToPropertyName(Node $node, string $propertyName): ?Expr
     {
         if (!$node instanceof Assign) {
             return null;
@@ -144,14 +144,14 @@ final class ConstructorAssignDetector
     /**
      * @return ClassMethod[]
      */
-    private function matchInitializeClassMethod(ClassLike $classLike) : array
+    private function matchInitializeClassMethod(ClassLike $classLike): array
     {
         $initializingClassMethods = [];
         $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod instanceof ClassMethod) {
             $initializingClassMethods[] = $constructClassMethod;
         }
-        $testCaseObjectType = new ObjectType('PHPUnit\\Framework\\TestCase');
+        $testCaseObjectType = new ObjectType('PHPUnit\Framework\TestCase');
         if ($this->nodeTypeResolver->isObjectType($classLike, $testCaseObjectType)) {
             $setUpClassMethod = $classLike->getMethod(MethodName::SET_UP);
             if ($setUpClassMethod instanceof ClassMethod) {
@@ -170,11 +170,11 @@ final class ConstructorAssignDetector
         }
         return $initializingClassMethods;
     }
-    private function isPropertyUsedInAssign(Assign $assign, string $propertyName) : bool
+    private function isPropertyUsedInAssign(Assign $assign, string $propertyName): bool
     {
         $nodeFinder = new NodeFinder();
         $var = $assign->var;
-        return (bool) $nodeFinder->findFirst($assign->expr, function (Node $node) use($propertyName, $var) : ?bool {
+        return (bool) $nodeFinder->findFirst($assign->expr, function (Node $node) use ($propertyName, $var): ?bool {
             if (!$node instanceof PropertyFetch) {
                 return null;
             }

@@ -26,13 +26,13 @@ final class ParamAndEnvAttributeRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/7vwGbH/1
      */
-    private const PARAMETER_REGEX = '#%(?<param>[\\w\\.]+)%$#';
+    private const PARAMETER_REGEX = '#%(?<param>[\w\.]+)%$#';
     /**
      * @var string
      * @see https://regex101.com/r/7xpVRP/1
      */
-    private const ENV_REGEX = '#%env\\((?<env>\\w+)\\)%$#';
-    public function getRuleDefinition() : RuleDefinition
+    private const ENV_REGEX = '#%env\((?<env>\w+)\)%$#';
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make param/env use in #[Attribute] more precise', [new CodeSample(<<<'CODE_SAMPLE'
 namespace App\Service;
@@ -70,14 +70,14 @@ class MessageGenerator
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $classMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {
@@ -123,11 +123,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isAlreadyEnvParamNamed(Arg $arg) : bool
+    private function isAlreadyEnvParamNamed(Arg $arg): bool
     {
         if (!$arg->name instanceof Identifier) {
             return \false;
         }
-        return \in_array($arg->name->toString(), ['env', 'param'], \true);
+        return in_array($arg->name->toString(), ['env', 'param'], \true);
     }
 }

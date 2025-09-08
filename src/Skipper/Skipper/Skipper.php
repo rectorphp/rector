@@ -34,18 +34,18 @@ final class Skipper
     /**
      * @param string|object $element
      */
-    public function shouldSkipElement($element) : bool
+    public function shouldSkipElement($element): bool
     {
         return $this->shouldSkipElementAndFilePath($element, __FILE__);
     }
-    public function shouldSkipFilePath(string $filePath) : bool
+    public function shouldSkipFilePath(string $filePath): bool
     {
         return $this->pathSkipper->shouldSkip($filePath);
     }
     /**
      * @param string|object $element
      */
-    public function shouldSkipElementAndFilePath($element, string $filePath) : bool
+    public function shouldSkipElementAndFilePath($element, string $filePath): bool
     {
         if (!$this->classSkipVoter->match($element)) {
             return \false;
@@ -56,7 +56,7 @@ final class Skipper
      * @param class-string<RectorInterface> $rectorClass
      * @param string|object $element
      */
-    public function shouldSkipCurrentNode($element, string $filePath, string $rectorClass, Node $node) : bool
+    public function shouldSkipCurrentNode($element, string $filePath, string $rectorClass, Node $node): bool
     {
         if ($this->shouldSkipElementAndFilePath($element, $filePath)) {
             return \true;

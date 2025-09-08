@@ -22,9 +22,9 @@ abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector impleme
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        $treatAsNonEmpty = $configuration[self::TREAT_AS_NON_EMPTY] ?? (bool) \current($configuration);
+        $treatAsNonEmpty = $configuration[self::TREAT_AS_NON_EMPTY] ?? (bool) current($configuration);
         Assert::boolean($treatAsNonEmpty);
         $this->treatAsNonEmpty = $treatAsNonEmpty;
     }

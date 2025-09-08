@@ -61,7 +61,7 @@ final class TestWithToDataProviderRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace testWith annotation to data provider.', [new CodeSample(<<<'CODE_SAMPLE'
 /**
@@ -96,14 +96,14 @@ public function test(int $a, int $b, int $expected)
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod) : void
+    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
         $arrayItemsSingleLine = [];
         $arrayMultiLine = null;
@@ -128,7 +128,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return;
         }
-        $testWithPhpDocTagNodes = \array_merge($phpDocInfo->getTagsByName('testWith'), $phpDocInfo->getTagsByName('testwith'));
+        $testWithPhpDocTagNodes = array_merge($phpDocInfo->getTagsByName('testWith'), $phpDocInfo->getTagsByName('testwith'));
         if ($testWithPhpDocTagNodes === []) {
             return;
         }
@@ -137,10 +137,10 @@ CODE_SAMPLE
                 continue;
             }
             $values = $this->extractTestWithData($testWithPhpDocTagNode->value);
-            if (\count($values) > 1) {
+            if (count($values) > 1) {
                 $arrayMultiLine = $this->createArrayItem($values);
             }
-            if (\count($values) === 1) {
+            if (count($values) === 1) {
                 $arrayItemsSingleLine[] = new ArrayItem($this->createArrayItem($values[0]));
             }
             //cleanup
@@ -167,24 +167,24 @@ CODE_SAMPLE
     /**
      * @return array<array<int, mixed>>
      */
-    private function extractTestWithData(GenericTagValueNode $genericTagValueNode) : array
+    private function extractTestWithData(GenericTagValueNode $genericTagValueNode): array
     {
-        $testWithItems = \explode("\n", \trim($genericTagValueNode->value));
+        $testWithItems = explode("\n", trim($genericTagValueNode->value));
         $jsonArray = [];
         foreach ($testWithItems as $testWithItem) {
-            $jsonArray[] = Json::decode(\trim($testWithItem), \true);
+            $jsonArray[] = Json::decode(trim($testWithItem), \true);
         }
         return $jsonArray;
     }
     /**
      * @param array<int|string, mixed> $data
      */
-    private function createArrayItem(array $data) : Array_
+    private function createArrayItem(array $data): Array_
     {
         $values = [];
         foreach ($data as $index => $item) {
             $key = null;
-            if (\is_string($index)) {
+            if (is_string($index)) {
                 $key = new String_($index);
             }
             $values[] = new ArrayItem($this->parseArrayItemValue($item), $key);
@@ -194,18 +194,18 @@ CODE_SAMPLE
     /**
      * @param mixed $value
      */
-    private function parseArrayItemValue($value) : Expr
+    private function parseArrayItemValue($value): Expr
     {
-        if (\is_array($value)) {
+        if (is_array($value)) {
             return $this->createArrayItem($value);
         }
         $name = new Name(Json::encode($value));
         return new ConstFetch($name);
     }
-    private function generateDataProviderName(ClassMethod $classMethod) : string
+    private function generateDataProviderName(ClassMethod $classMethod): string
     {
         $methodName = Strings::replace($classMethod->name->name, '/^test/', '');
-        $upperCaseFirstLatter = \ucfirst($methodName);
-        return \sprintf('%s%s', 'dataProvider', $upperCaseFirstLatter);
+        $upperCaseFirstLatter = ucfirst($methodName);
+        return sprintf('%s%s', 'dataProvider', $upperCaseFirstLatter);
     }
 }

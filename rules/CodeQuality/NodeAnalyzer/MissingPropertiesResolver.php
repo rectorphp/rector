@@ -26,13 +26,13 @@ final class MissingPropertiesResolver
      * @param DefinedPropertyWithType[] $definedPropertiesWithTypes
      * @return DefinedPropertyWithType[]
      */
-    public function resolve(Class_ $class, ClassReflection $classReflection, array $definedPropertiesWithTypes) : array
+    public function resolve(Class_ $class, ClassReflection $classReflection, array $definedPropertiesWithTypes): array
     {
         $existingPropertyNames = $this->classLikeAnalyzer->resolvePropertyNames($class);
         $missingPropertiesWithTypes = [];
         foreach ($definedPropertiesWithTypes as $definedPropertyWithType) {
             // 1. property already exists, skip it
-            if (\in_array($definedPropertyWithType->getName(), $existingPropertyNames, \true)) {
+            if (in_array($definedPropertyWithType->getName(), $existingPropertyNames, \true)) {
                 continue;
             }
             // 2. is part of class docblock or another magic, skip it

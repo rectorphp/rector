@@ -17,7 +17,7 @@ use RectorPrefix202509\Symfony\Component\Console\Output\OutputInterface;
  */
 class FishCompletionOutput implements CompletionOutputInterface
 {
-    public function write(CompletionSuggestions $suggestions, OutputInterface $output) : void
+    public function write(CompletionSuggestions $suggestions, OutputInterface $output): void
     {
         $values = $suggestions->getValueSuggestions();
         foreach ($suggestions->getOptionSuggestions() as $option) {
@@ -26,6 +26,6 @@ class FishCompletionOutput implements CompletionOutputInterface
                 $values[] = '--no-' . $option->getName();
             }
         }
-        $output->write(\implode("\n", $values));
+        $output->write(implode("\n", $values));
     }
 }

@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CountArrayToEmptyArrayComparisonRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change count array comparison to empty array comparison to improve performance', [new CodeSample(<<<'CODE_SAMPLE'
 count($array) === 0;
@@ -40,14 +40,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class, NotIdentical::class, BooleanNot::class, Greater::class, Smaller::class, If_::class, ElseIf_::class];
     }
     /**
      * @param Identical|NotIdentical|BooleanNot|Greater|Smaller|If_|ElseIf_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof BooleanNot) {
             return $this->refactorBooleanNot($node);
@@ -74,7 +74,7 @@ CODE_SAMPLE
         }
         return $this->refactorIfElseIf($node);
     }
-    private function refactorBooleanNot(BooleanNot $booleanNot) : ?Identical
+    private function refactorBooleanNot(BooleanNot $booleanNot): ?Identical
     {
         $expr = $this->matchCountFuncCallArgExpr($booleanNot->expr);
         if (!$expr instanceof Expr) {
@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
         return new Identical($expr, new Array_([]));
     }
-    private function isArray(Expr $expr) : bool
+    private function isArray(Expr $expr): bool
     {
         return $this->nodeTypeResolver->getNativeType($expr)->isArray()->yes();
     }
@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Greater|\PhpParser\Node\Expr\BinaryOp\Smaller $binaryOp
      */
-    private function refactorGreaterOrSmaller($binaryOp) : ?\PhpParser\Node\Expr\BinaryOp\NotIdentical
+    private function refactorGreaterOrSmaller($binaryOp): ?\PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
         if ($binaryOp instanceof Greater) {
             $leftExpr = $this->matchCountFuncCallArgExpr($binaryOp->left);
@@ -145,7 +145,7 @@ CODE_SAMPLE
         $ifElseIf->cond = new NotIdentical($expr, new Array_([]));
         return $ifElseIf;
     }
-    private function matchCountFuncCallArgExpr(Expr $expr) : ?Expr
+    private function matchCountFuncCallArgExpr(Expr $expr): ?Expr
     {
         if (!$expr instanceof FuncCall) {
             return null;
@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
         return $firstArg->value;
     }
-    private function isZeroLNumber(Expr $expr) : bool
+    private function isZeroLNumber(Expr $expr): bool
     {
         if (!$expr instanceof Int_) {
             return \false;

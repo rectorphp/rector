@@ -41,11 +41,11 @@ final class ContinueToBreakInSwitchRector extends AbstractRector implements MinP
     {
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::CONTINUE_TO_BREAK;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use `break` instead of `continue` in switch statements', [new CodeSample(<<<'CODE_SAMPLE'
 function some_run($value)
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Switch_
+    public function refactor(Node $node): ?Switch_
     {
         $this->hasChanged = \false;
         foreach ($node->cases as $case) {
@@ -99,7 +99,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt|\Rector\Contract\PhpParser\Node\StmtsAwareInterface $stmt
      */
-    private function processContinueStatement($stmt) : void
+    private function processContinueStatement($stmt): void
     {
         $this->traverseNodesWithCallable($stmt, function (Node $subNode) {
             if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {

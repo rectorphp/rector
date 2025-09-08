@@ -8,7 +8,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 final class TemplateTypeRemovalGuard
 {
-    public function isLegal(Type $docType) : bool
+    public function isLegal(Type $docType): bool
     {
         // cover direct \PHPStan\Type\Generic\TemplateUnionType
         if ($docType instanceof TemplateType) {

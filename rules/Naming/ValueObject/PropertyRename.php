@@ -45,35 +45,35 @@ final class PropertyRename
         RectorAssert::propertyName($currentName);
         RectorAssert::propertyName($expectedName);
     }
-    public function getProperty() : Property
+    public function getProperty(): Property
     {
         return $this->property;
     }
-    public function isPrivateProperty() : bool
+    public function isPrivateProperty(): bool
     {
         return $this->property->isPrivate();
     }
-    public function getExpectedName() : string
+    public function getExpectedName(): string
     {
         return $this->expectedName;
     }
-    public function getCurrentName() : string
+    public function getCurrentName(): string
     {
         return $this->currentName;
     }
-    public function isAlreadyExpectedName() : bool
+    public function isAlreadyExpectedName(): bool
     {
         return $this->currentName === $this->expectedName;
     }
-    public function getClassLike() : ClassLike
+    public function getClassLike(): ClassLike
     {
         return $this->classLike;
     }
-    public function getClassLikeName() : string
+    public function getClassLikeName(): string
     {
         return $this->classLikeName;
     }
-    public function getPropertyProperty() : PropertyItem
+    public function getPropertyProperty(): PropertyItem
     {
         return $this->propertyItem;
     }

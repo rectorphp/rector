@@ -33,10 +33,10 @@ class DateRangeFilterIterator extends \FilterIterator
     /**
      * Filters the iterator values.
      */
-    public function accept() : bool
+    public function accept(): bool
     {
         $fileinfo = $this->current();
-        if (!\file_exists($fileinfo->getPathname())) {
+        if (!file_exists($fileinfo->getPathname())) {
             return \false;
         }
         $filedate = $fileinfo->getMTime();

@@ -20,11 +20,11 @@ final class ListAndEach
         $this->list = $list;
         $this->eachFuncCall = $eachFuncCall;
     }
-    public function getList() : List_
+    public function getList(): List_
     {
         return $this->list;
     }
-    public function getEachFuncCall() : FuncCall
+    public function getEachFuncCall(): FuncCall
     {
         return $this->eachFuncCall;
     }

@@ -31,11 +31,11 @@ final class UnsafeStrictGroupsCallRule implements Rule
     {
         $this->regexShapeMatcher = $regexShapeMatcher;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return StaticCall::class;
     }
-    public function processNode(Node $node, Scope $scope) : array
+    public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->class instanceof FullyQualified) {
             return [];
@@ -45,7 +45,7 @@ final class UnsafeStrictGroupsCallRule implements Rule
         if (!$isRegex && !$isPreg) {
             return [];
         }
-        if (!$node->name instanceof Node\Identifier || !\in_array($node->name->name, ['matchStrictGroups', 'isMatchStrictGroups', 'matchAllStrictGroups', 'isMatchAllStrictGroups'], \true)) {
+        if (!$node->name instanceof Node\Identifier || !in_array($node->name->name, ['matchStrictGroups', 'isMatchStrictGroups', 'matchAllStrictGroups', 'isMatchAllStrictGroups'], \true)) {
             return [];
         }
         $args = $node->getArgs();
@@ -73,7 +73,7 @@ final class UnsafeStrictGroupsCallRule implements Rule
         if ($matchedType === null) {
             return [RuleErrorBuilder::message(sprintf('The %s call is potentially unsafe as $matches\' type could not be inferred.', $node->name->name))->identifier('composerPcre.maybeUnsafeStrictGroups')->build()];
         }
-        if (\count($matchedType->getConstantArrays()) === 1) {
+        if (count($matchedType->getConstantArrays()) === 1) {
             $matchedType = $matchedType->getConstantArrays()[0];
             $nullableGroups = [];
             foreach ($matchedType->getValueTypes() as $index => $type) {
@@ -82,7 +82,7 @@ final class UnsafeStrictGroupsCallRule implements Rule
                 }
             }
             if (\count($nullableGroups) > 0) {
-                return [RuleErrorBuilder::message(sprintf('The %s call is unsafe as match group%s "%s" %s optional and may be null.', $node->name->name, \count($nullableGroups) > 1 ? 's' : '', \implode('", "', $nullableGroups), \count($nullableGroups) > 1 ? 'are' : 'is'))->identifier('composerPcre.unsafeStrictGroups')->build()];
+                return [RuleErrorBuilder::message(sprintf('The %s call is unsafe as match group%s "%s" %s optional and may be null.', $node->name->name, \count($nullableGroups) > 1 ? 's' : '', implode('", "', $nullableGroups), \count($nullableGroups) > 1 ? 'are' : 'is'))->identifier('composerPcre.unsafeStrictGroups')->build()];
             }
         }
         return [];

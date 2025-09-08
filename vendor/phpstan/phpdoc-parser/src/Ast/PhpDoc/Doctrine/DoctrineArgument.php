@@ -24,7 +24,7 @@ class DoctrineArgument implements Node
         $this->key = $key;
         $this->value = $value;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->key === null) {
             return (string) $this->value;

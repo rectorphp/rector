@@ -56,9 +56,9 @@ final class CoopExecutor implements ExecutorInterface
             $this->counts[$key] = 1;
             $pending =& $this->pending;
             $counts =& $this->counts;
-            $promise->then(function () use($key, &$pending, &$counts) {
+            $promise->then(function () use ($key, &$pending, &$counts) {
                 unset($pending[$key], $counts[$key]);
-            }, function () use($key, &$pending, &$counts) {
+            }, function () use ($key, &$pending, &$counts) {
                 unset($pending[$key], $counts[$key]);
             });
         }
@@ -67,9 +67,9 @@ final class CoopExecutor implements ExecutorInterface
         // when no other child promise is awaiting the same query.
         $pending =& $this->pending;
         $counts =& $this->counts;
-        return new Promise(function ($resolve, $reject) use($promise) {
+        return new Promise(function ($resolve, $reject) use ($promise) {
             $promise->then($resolve, $reject);
-        }, function () use(&$promise, $key, $query, &$pending, &$counts) {
+        }, function () use (&$promise, $key, $query, &$pending, &$counts) {
             if (--$counts[$key] < 1) {
                 unset($pending[$key], $counts[$key]);
                 $promise->cancel();
@@ -80,6 +80,6 @@ final class CoopExecutor implements ExecutorInterface
     }
     private function serializeQueryToIdentity(Query $query)
     {
-        return \sprintf('%s:%s:%s', $query->name, $query->type, $query->class);
+        return sprintf('%s:%s:%s', $query->name, $query->type, $query->class);
     }
 }

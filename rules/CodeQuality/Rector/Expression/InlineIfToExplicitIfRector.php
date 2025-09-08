@@ -28,7 +28,7 @@ final class InlineIfToExplicitIfRector extends AbstractRector
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change inline if to explicit if', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->expr instanceof BooleanAnd) {
             return $this->processExplicitIf($node);
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processExplicitIf(Expression $expression) : ?Node
+    private function processExplicitIf(Expression $expression): ?Node
     {
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;

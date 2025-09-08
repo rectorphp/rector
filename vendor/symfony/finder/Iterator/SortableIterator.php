@@ -47,21 +47,21 @@ class SortableIterator implements \IteratorAggregate
         $this->iterator = $iterator;
         $order = $reverseOrder ? -1 : 1;
         if (self::SORT_BY_NAME === $sort) {
-            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * \strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
         } elseif (self::SORT_BY_NAME_NATURAL === $sort) {
-            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * \strnatcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * strnatcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
         } elseif (self::SORT_BY_NAME_CASE_INSENSITIVE === $sort) {
-            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * \strcasecmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * strcasecmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
         } elseif (self::SORT_BY_NAME_NATURAL_CASE_INSENSITIVE === $sort) {
-            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * \strnatcasecmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * strnatcasecmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
         } elseif (self::SORT_BY_TYPE === $sort) {
-            $this->sort = static function (\SplFileInfo $a, \SplFileInfo $b) use($order) {
+            $this->sort = static function (\SplFileInfo $a, \SplFileInfo $b) use ($order) {
                 if ($a->isDir() && $b->isFile()) {
                     return -$order;
                 } elseif ($a->isFile() && $b->isDir()) {
                     return $order;
                 }
-                return $order * \strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+                return $order * strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
             };
         } elseif (self::SORT_BY_ACCESSED_TIME === $sort) {
             $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * ($a->getATime() - $b->getATime());
@@ -70,7 +70,7 @@ class SortableIterator implements \IteratorAggregate
         } elseif (self::SORT_BY_MODIFIED_TIME === $sort) {
             $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * ($a->getMTime() - $b->getMTime());
         } elseif (self::SORT_BY_EXTENSION === $sort) {
-            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * \strnatcmp($a->getExtension(), $b->getExtension());
+            $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * strnatcmp($a->getExtension(), $b->getExtension());
         } elseif (self::SORT_BY_SIZE === $sort) {
             $this->sort = static fn(\SplFileInfo $a, \SplFileInfo $b) => $order * ($a->getSize() - $b->getSize());
         } elseif (self::SORT_BY_NONE === $sort) {
@@ -81,16 +81,16 @@ class SortableIterator implements \IteratorAggregate
             throw new \InvalidArgumentException('The SortableIterator takes a PHP callable or a valid built-in sort algorithm as an argument.');
         }
     }
-    public function getIterator() : \Traversable
+    public function getIterator(): \Traversable
     {
         if (1 === $this->sort) {
             return $this->iterator;
         }
-        $array = \iterator_to_array($this->iterator, \true);
+        $array = iterator_to_array($this->iterator, \true);
         if (-1 === $this->sort) {
-            $array = \array_reverse($array);
+            $array = array_reverse($array);
         } else {
-            \uasort($array, $this->sort);
+            uasort($array, $this->sort);
         }
         return new \ArrayIterator($array);
     }

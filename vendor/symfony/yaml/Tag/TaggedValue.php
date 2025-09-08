@@ -29,7 +29,7 @@ final class TaggedValue
         $this->tag = $tag;
         $this->value = $value;
     }
-    public function getTag() : string
+    public function getTag(): string
     {
         return $this->tag;
     }

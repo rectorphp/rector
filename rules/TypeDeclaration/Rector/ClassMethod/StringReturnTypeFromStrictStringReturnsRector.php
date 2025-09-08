@@ -44,7 +44,7 @@ final class StringReturnTypeFromStrictStringReturnsRector extends AbstractRector
         $this->betterNodeFinder = $betterNodeFinder;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add string return type based on returned strict string values', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -77,14 +77,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // already added → skip
         if ($node->returnType instanceof Node) {
@@ -109,14 +109,14 @@ CODE_SAMPLE
         $node->returnType = new Identifier('string');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_70;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function shouldSkipClassMethodForOverride($functionLike, Scope $scope) : bool
+    private function shouldSkipClassMethodForOverride($functionLike, Scope $scope): bool
     {
         if (!$functionLike instanceof ClassMethod) {
             return \false;
@@ -126,7 +126,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function hasAlwaysStringScalarReturn(array $returns) : bool
+    private function hasAlwaysStringScalarReturn(array $returns): bool
     {
         foreach ($returns as $return) {
             // we need exact string "value" return
@@ -139,7 +139,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returns
      */
-    private function isAlwaysStringStrictType(array $returns) : bool
+    private function isAlwaysStringStrictType(array $returns): bool
     {
         foreach ($returns as $return) {
             // void return

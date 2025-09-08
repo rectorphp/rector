@@ -57,7 +57,7 @@ final class ToManyRelationPropertyTypeResolver
         $this->collectionTypeFactory = $collectionTypeFactory;
         $this->collectionTypeResolver = $collectionTypeResolver;
     }
-    public function resolve(Property $property) : ?Type
+    public function resolve(Property $property): ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(CollectionMapping::TO_MANY_CLASSES);
@@ -70,7 +70,7 @@ final class ToManyRelationPropertyTypeResolver
         }
         return $this->resolveTypeFromTargetEntity($expr, $property);
     }
-    private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?\PHPStan\Type\Type
+    private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): ?\PHPStan\Type\Type
     {
         $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue(EntityMappingKey::TARGET_ENTITY) ?: $doctrineAnnotationTagValueNode->getValue(OdmMappingKey::TARGET_DOCUMENT);
         if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
@@ -81,7 +81,7 @@ final class ToManyRelationPropertyTypeResolver
         if ($targetEntityClass instanceof StringNode) {
             $targetEntityClass = $targetEntityClass->value;
         }
-        if (!\is_string($targetEntityClass)) {
+        if (!is_string($targetEntityClass)) {
             return null;
         }
         return $this->resolveTypeFromTargetEntity($targetEntityClass, $property);
@@ -90,12 +90,12 @@ final class ToManyRelationPropertyTypeResolver
      * @param \PhpParser\Node\Expr|string $targetEntity
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
      */
-    private function resolveTypeFromTargetEntity($targetEntity, $property) : Type
+    private function resolveTypeFromTargetEntity($targetEntity, $property): Type
     {
         if ($targetEntity instanceof Expr) {
             $targetEntity = $this->valueResolver->getValue($targetEntity);
         }
-        if (!\is_string($targetEntity)) {
+        if (!is_string($targetEntity)) {
             return new FullyQualifiedObjectType(DoctrineClass::COLLECTION);
         }
         $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);

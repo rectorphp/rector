@@ -13,7 +13,7 @@ interface PrettyPrinter
      *
      * @return string Pretty printed statements
      */
-    public function prettyPrint(array $stmts) : string;
+    public function prettyPrint(array $stmts): string;
     /**
      * Pretty prints an expression.
      *
@@ -21,7 +21,7 @@ interface PrettyPrinter
      *
      * @return string Pretty printed node
      */
-    public function prettyPrintExpr(Expr $node) : string;
+    public function prettyPrintExpr(Expr $node): string;
     /**
      * Pretty prints a file of statements (includes the opening <?php tag if it is required).
      *
@@ -29,7 +29,7 @@ interface PrettyPrinter
      *
      * @return string Pretty printed statements
      */
-    public function prettyPrintFile(array $stmts) : string;
+    public function prettyPrintFile(array $stmts): string;
     /**
      * Perform a format-preserving pretty print of an AST.
      *
@@ -45,5 +45,5 @@ interface PrettyPrinter
      * @param Node[] $origStmts Original AST with token offset information
      * @param Token[] $origTokens Tokens of the original code
      */
-    public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens) : string;
+    public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string;
 }

@@ -21,7 +21,7 @@ final class StaticTypeAnalyzer
     {
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
-    public function isAlwaysTruableType(Type $type) : bool
+    public function isAlwaysTruableType(Type $type): bool
     {
         if ($type instanceof MixedType) {
             return \false;
@@ -47,7 +47,7 @@ final class StaticTypeAnalyzer
         }
         return $this->isAlwaysTruableUnionType($type);
     }
-    private function isAlwaysTruableUnionType(Type $type) : bool
+    private function isAlwaysTruableUnionType(Type $type): bool
     {
         if (!$type instanceof UnionType) {
             return \false;
@@ -59,7 +59,7 @@ final class StaticTypeAnalyzer
         }
         return \true;
     }
-    private function isAlwaysTruableArrayType(ArrayType $arrayType) : bool
+    private function isAlwaysTruableArrayType(ArrayType $arrayType): bool
     {
         $itemType = $arrayType->getIterableValueType();
         if (!$itemType instanceof ConstantScalarType) {

@@ -35,7 +35,7 @@ final class DowngradeJsonDecodeNullAssociativeArgRector extends AbstractRector
         $this->argsAnalyzer = $argsAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade json_decode() with null associative argument function', [new CodeSample(<<<'CODE_SAMPLE'
 function exactlyNull(string $json)
@@ -64,14 +64,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'json_decode')) {
             return null;

@@ -48,7 +48,7 @@ final class GetMethodToAsTwigAttributeTransformer
         $this->reflectionProvider = $reflectionProvider;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function transformClassGetMethodToAttributeMarker(Class_ $class, string $methodName, string $attributeClass, ObjectType $objectType) : bool
+    public function transformClassGetMethodToAttributeMarker(Class_ $class, string $methodName, string $attributeClass, ObjectType $objectType): bool
     {
         // check if attribute even exists
         if (!$this->reflectionProvider->hasClass($attributeClass)) {
@@ -76,7 +76,7 @@ final class GetMethodToAsTwigAttributeTransformer
                     continue;
                 }
                 $new = $arrayItem->value;
-                if (\count($new->getArgs()) !== 2) {
+                if (count($new->getArgs()) !== 2) {
                     continue;
                 }
                 $nameArg = $new->getArgs()[0];
@@ -86,7 +86,7 @@ final class GetMethodToAsTwigAttributeTransformer
                 $secondArg = $new->getArgs()[1];
                 if ($this->isLocalCallable($secondArg->value)) {
                     $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
-                    if (!\is_string($localMethodName)) {
+                    if (!is_string($localMethodName)) {
                         continue;
                     }
                     $localMethod = $class->getMethod($localMethodName);
@@ -104,15 +104,15 @@ final class GetMethodToAsTwigAttributeTransformer
         }
         return $hasChanged;
     }
-    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $arg) : void
+    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $arg): void
     {
         $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), [$arg])]);
     }
-    private function isLocalCallable(Expr $expr) : bool
+    private function isLocalCallable(Expr $expr): bool
     {
         if ($expr instanceof MethodCall && $expr->isFirstClassCallable()) {
             return \true;
         }
-        return $expr instanceof Array_ && \count($expr->items) === 2;
+        return $expr instanceof Array_ && count($expr->items) === 2;
     }
 }

@@ -31,7 +31,7 @@ final class PropertyPresenceChecker
     /**
      * Includes parent classes and traits
      */
-    public function hasClassContextProperty(Class_ $class, DefinedPropertyWithType $definedPropertyWithType) : bool
+    public function hasClassContextProperty(Class_ $class, DefinedPropertyWithType $definedPropertyWithType): bool
     {
         $propertyOrParam = $this->getClassContextProperty($class, $definedPropertyWithType);
         return $propertyOrParam !== null;

@@ -17,7 +17,7 @@ class SelfOutTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
         $this->type = $type;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim($this->type . ' ' . $this->description);
     }

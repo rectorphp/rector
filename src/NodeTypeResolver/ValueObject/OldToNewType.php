@@ -19,11 +19,11 @@ final class OldToNewType
         $this->oldType = $oldType;
         $this->newType = $newType;
     }
-    public function getOldType() : Type
+    public function getOldType(): Type
     {
         return $this->oldType;
     }
-    public function getNewType() : Type
+    public function getNewType(): Type
     {
         return $this->newType;
     }

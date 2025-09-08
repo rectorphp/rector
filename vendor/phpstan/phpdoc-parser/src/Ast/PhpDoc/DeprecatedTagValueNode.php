@@ -14,7 +14,7 @@ class DeprecatedTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocT
     {
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim($this->description);
     }

@@ -52,7 +52,7 @@ final class DependsAnnotationWithValueToAttributeRector extends AbstractRector i
     /**
      * @var string
      */
-    private const DEPENDS_ATTRIBUTE = 'PHPUnit\\Framework\\Attributes\\Depends';
+    private const DEPENDS_ATTRIBUTE = 'PHPUnit\Framework\Attributes\Depends';
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -62,7 +62,7 @@ final class DependsAnnotationWithValueToAttributeRector extends AbstractRector i
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change depends annotations with value to attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -97,18 +97,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -146,7 +146,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveAttributeNameAndValue(PhpDocTagNode $phpDocTagNode, Class_ $class, string $currentMethodName) : array
+    private function resolveAttributeNameAndValue(PhpDocTagNode $phpDocTagNode, Class_ $class, string $currentMethodName): array
     {
         if (!$phpDocTagNode->value instanceof GenericTagValueNode) {
             return [];
@@ -161,35 +161,35 @@ CODE_SAMPLE
     /**
      * @return string[]|null
      */
-    private function resolveAttributeValueAndAttributeName(Class_ $currentClass, string $currentMethodName, string $originalAttributeValue) : ?array
+    private function resolveAttributeValueAndAttributeName(Class_ $currentClass, string $currentMethodName, string $originalAttributeValue): ?array
     {
         // process depends other ClassMethod
         $attributeValue = $this->resolveDependsClassMethod($currentClass, $currentMethodName, $originalAttributeValue);
         $attributeName = self::DEPENDS_ATTRIBUTE;
-        if (!\is_string($attributeValue)) {
+        if (!is_string($attributeValue)) {
             // other: depends other Class_
             $attributeValue = $this->resolveDependsClass($originalAttributeValue);
-            $attributeName = 'PHPUnit\\Framework\\Attributes\\DependsOnClass';
+            $attributeName = 'PHPUnit\Framework\Attributes\DependsOnClass';
         }
-        if (!\is_string($attributeValue)) {
+        if (!is_string($attributeValue)) {
             // other: depends clone ClassMethod
             $attributeValue = $this->resolveDependsCloneClassMethod($currentClass, $currentMethodName, $originalAttributeValue);
-            $attributeName = 'PHPUnit\\Framework\\Attributes\\DependsUsingDeepClone';
+            $attributeName = 'PHPUnit\Framework\Attributes\DependsUsingDeepClone';
         }
-        if (!\is_string($attributeValue)) {
+        if (!is_string($attributeValue)) {
             return null;
         }
         return [$attributeName, $attributeValue];
     }
-    private function resolveDependsClass(string $attributeValue) : ?string
+    private function resolveDependsClass(string $attributeValue): ?string
     {
-        if (\substr_compare($attributeValue, '::class', -\strlen('::class')) !== 0) {
+        if (substr_compare($attributeValue, '::class', -strlen('::class')) !== 0) {
             return null;
         }
-        $className = \substr($attributeValue, 0, -7);
+        $className = substr($attributeValue, 0, -7);
         return $className . '::class';
     }
-    private function resolveDependsClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue) : ?string
+    private function resolveDependsClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue): ?string
     {
         if ($currentMethodName === $attributeValue) {
             return null;
@@ -200,12 +200,12 @@ CODE_SAMPLE
         }
         return $attributeValue;
     }
-    private function resolveDependsCloneClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue) : ?string
+    private function resolveDependsCloneClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue): ?string
     {
-        if (\strncmp($attributeValue, 'clone ', \strlen('clone ')) !== 0) {
+        if (strncmp($attributeValue, 'clone ', strlen('clone ')) !== 0) {
             return null;
         }
-        [, $attributeValue] = \explode('clone ', $attributeValue);
+        [, $attributeValue] = explode('clone ', $attributeValue);
         if ($currentMethodName === $attributeValue) {
             return null;
         }

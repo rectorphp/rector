@@ -68,7 +68,7 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes non-existing @var annotations above the code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -94,14 +94,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -111,11 +111,11 @@ CODE_SAMPLE
         foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression && $stmt->expr instanceof FuncCall && $this->isName($stmt->expr, 'extract') && !$stmt->expr->isFirstClassCallable()) {
                 $appendExtractValues = $this->valueResolver->getValue($stmt->expr->getArgs()[0]->value);
-                if (!\is_array($appendExtractValues)) {
+                if (!is_array($appendExtractValues)) {
                     // nothing can do as value is dynamic
                     break;
                 }
-                $extractValues = \array_merge($extractValues, \array_keys($appendExtractValues));
+                $extractValues = array_merge($extractValues, array_keys($appendExtractValues));
                 continue;
             }
             if ($this->shouldSkip($node, $key, $stmt, $extractValues)) {
@@ -129,7 +129,7 @@ CODE_SAMPLE
             if ($this->isObjectShapePseudoType($varTagValueNode)) {
                 continue;
             }
-            $variableName = \ltrim($varTagValueNode->variableName, '$');
+            $variableName = ltrim($varTagValueNode->variableName, '$');
             if ($variableName === '' && $this->isAllowedEmptyVariableName($stmt)) {
                 continue;
             }
@@ -156,12 +156,12 @@ CODE_SAMPLE
     /**
      * @param string[] $extractValues
      */
-    private function shouldSkip(StmtsAwareInterface $stmtsAware, int $key, Stmt $stmt, array $extractValues) : bool
+    private function shouldSkip(StmtsAwareInterface $stmtsAware, int $key, Stmt $stmt, array $extractValues): bool
     {
-        if (!\in_array(\get_class($stmt), self::NODE_TYPES, \true)) {
+        if (!in_array(get_class($stmt), self::NODE_TYPES, \true)) {
             return \true;
         }
-        if (\count($stmt->getComments()) !== 1) {
+        if (count($stmt->getComments()) !== 1) {
             return \true;
         }
         foreach ($extractValues as $extractValue) {
@@ -171,9 +171,9 @@ CODE_SAMPLE
         }
         return isset($stmtsAware->stmts[$key + 1]) && $stmtsAware->stmts[$key + 1] instanceof InlineHTML;
     }
-    private function hasVariableName(Stmt $stmt, string $variableName) : bool
+    private function hasVariableName(Stmt $stmt, string $variableName): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($stmt, function (Node $node) use($variableName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmt, function (Node $node) use ($variableName): bool {
             if (!$node instanceof Variable) {
                 return \false;
             }
@@ -184,7 +184,7 @@ CODE_SAMPLE
      * This is a hack,
      * that waits on phpdoc-parser to get merged - https://github.com/phpstan/phpdoc-parser/pull/145
      */
-    private function isObjectShapePseudoType(VarTagValueNode $varTagValueNode) : bool
+    private function isObjectShapePseudoType(VarTagValueNode $varTagValueNode): bool
     {
         if (!$varTagValueNode->type instanceof IdentifierTypeNode) {
             return \false;
@@ -192,12 +192,12 @@ CODE_SAMPLE
         if ($varTagValueNode->type->name !== 'object') {
             return \false;
         }
-        if (\strncmp($varTagValueNode->description, '{', \strlen('{')) !== 0) {
+        if (strncmp($varTagValueNode->description, '{', strlen('{')) !== 0) {
             return \false;
         }
-        return \strpos($varTagValueNode->description, '}') !== \false;
+        return strpos($varTagValueNode->description, '}') !== \false;
     }
-    private function isAllowedEmptyVariableName(Stmt $stmt) : bool
+    private function isAllowedEmptyVariableName(Stmt $stmt): bool
     {
         if ($stmt instanceof Return_ && $stmt->expr instanceof CallLike && !$stmt->expr instanceof New_) {
             return \true;

@@ -18,7 +18,7 @@ class DoctrineArray implements Node
     {
         $this->items = $items;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $items = implode(', ', $this->items);
         return '{' . $items . '}';

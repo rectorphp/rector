@@ -24,7 +24,7 @@ final class StringCastDebugResponseRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Cast responses in PHPUnit assert message to string, as required by PHPUnit ', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
         }
         // there cannot be any custom message
         $args = $node->getArgs();
-        if (\count($args) !== 3) {
+        if (count($args) !== 3) {
             return null;
         }
         $thirdArg = $args[2];

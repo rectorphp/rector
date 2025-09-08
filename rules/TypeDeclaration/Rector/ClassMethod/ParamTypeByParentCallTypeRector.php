@@ -40,7 +40,7 @@ final class ParamTypeByParentCallTypeRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change param type based on parent param type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeControl
@@ -79,14 +79,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -124,7 +124,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function findParentStaticCall(ClassMethod $classMethod) : ?StaticCall
+    private function findParentStaticCall(ClassMethod $classMethod): ?StaticCall
     {
         $classMethodName = $this->getName($classMethod);
         /** @var StaticCall[] $staticCalls */
@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         if ($classMethod->params === []) {
             return \true;

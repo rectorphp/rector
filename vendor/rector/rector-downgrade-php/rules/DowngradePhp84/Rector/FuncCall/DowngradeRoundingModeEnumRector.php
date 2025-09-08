@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeRoundingModeEnumRector extends AbstractRector
 {
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace RoundingMode enum to rounding mode constant in round()', [new CodeSample(<<<'CODE_SAMPLE'
 round(1.5, 0, RoundingMode::HalfAwayFromZero);
@@ -37,7 +37,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'round')) {
             return null;
@@ -46,7 +46,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 3) {
+        if (count($args) !== 3) {
             return null;
         }
         if (!isset($args[2])) {

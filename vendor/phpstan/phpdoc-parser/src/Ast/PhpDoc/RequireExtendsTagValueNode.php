@@ -17,7 +17,7 @@ class RequireExtendsTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\Php
         $this->type = $type;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return trim("{$this->type} {$this->description}");
     }

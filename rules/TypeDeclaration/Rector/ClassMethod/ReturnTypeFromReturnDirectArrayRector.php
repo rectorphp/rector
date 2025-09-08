@@ -35,7 +35,7 @@ final class ReturnTypeFromReturnDirectArrayRector extends AbstractRector impleme
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnTypeInferer = $returnTypeInferer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type from return direct array', [new CodeSample(<<<'CODE_SAMPLE'
 final class AddReturnArray
@@ -60,14 +60,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         // already has return type, skip
@@ -87,17 +87,17 @@ CODE_SAMPLE
         $node->returnType = new Identifier('array');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function hasReturnArray($functionLike) : bool
+    private function hasReturnArray($functionLike): bool
     {
         $stmts = $functionLike->stmts;
-        if (!\is_array($stmts)) {
+        if (!is_array($stmts)) {
             return \false;
         }
         foreach ($stmts as $stmt) {

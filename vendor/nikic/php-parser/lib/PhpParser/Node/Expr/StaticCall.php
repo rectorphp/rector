@@ -31,15 +31,15 @@ class StaticCall extends \PhpParser\Node\Expr\CallLike
         $this->name = \is_string($name) ? new Identifier($name) : $name;
         $this->args = $args;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['class', 'name', 'args'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_StaticCall';
     }
-    public function getRawArgs() : array
+    public function getRawArgs(): array
     {
         return $this->args;
     }

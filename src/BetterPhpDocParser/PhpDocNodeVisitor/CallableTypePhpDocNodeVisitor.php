@@ -19,7 +19,7 @@ final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor impl
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof CallableTypeNode) {
             return null;

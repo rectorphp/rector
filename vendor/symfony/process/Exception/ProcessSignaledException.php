@@ -24,11 +24,11 @@ final class ProcessSignaledException extends RuntimeException
         $this->process = $process;
         parent::__construct(\sprintf('The process has been signaled with signal "%s".', $process->getTermSignal()));
     }
-    public function getProcess() : Process
+    public function getProcess(): Process
     {
         return $this->process;
     }
-    public function getSignal() : int
+    public function getSignal(): int
     {
         return $this->getProcess()->getTermSignal();
     }

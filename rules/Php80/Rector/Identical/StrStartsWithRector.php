@@ -33,11 +33,11 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
     {
         $this->strStartWithMatchAndRefactors = [$strncmpMatchAndRefactor, $substrMatchAndRefactor, $strposMatchAndRefactor];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STR_STARTS_WITH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change helper functions to str_starts_with()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -66,14 +66,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Identical::class, NotIdentical::class, Equal::class, NotEqual::class];
     }
     /**
      * @param Identical|NotIdentical|Equal|NotEqual $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->strStartWithMatchAndRefactors as $strStartWithMatchAndRefactor) {
             $strStartsWithValueObject = $strStartWithMatchAndRefactor->match($node);
@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function providePolyfillPackage() : string
+    public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_80;
     }

@@ -23,7 +23,7 @@ class ObjectShapeItemNode implements Node
         $this->optional = $optional;
         $this->valueType = $valueType;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         if ($this->keyName !== null) {
             return sprintf('%s%s: %s', (string) $this->keyName, $this->optional ? '?' : '', (string) $this->valueType);

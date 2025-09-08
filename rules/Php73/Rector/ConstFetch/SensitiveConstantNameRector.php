@@ -31,11 +31,11 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change case insensitive constants to sensitive ones', [new CodeSample(<<<'CODE_SAMPLE'
 define('FOO', 42, true);
@@ -52,22 +52,22 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $constantName = $this->getName($node);
         if ($constantName === null) {
             return null;
         }
-        $uppercasedConstantName = \strtoupper($constantName);
+        $uppercasedConstantName = strtoupper($constantName);
         // is system constant?
-        if (\in_array($uppercasedConstantName, self::PHP_RESERVED_CONSTANTS, \true)) {
+        if (in_array($uppercasedConstantName, self::PHP_RESERVED_CONSTANTS, \true)) {
             return null;
         }
         // constant is defined in current lower/upper case
@@ -78,7 +78,7 @@ CODE_SAMPLE
         if ($constantName === $uppercasedConstantName) {
             return null;
         }
-        if (\strpos($uppercasedConstantName, '\\') !== \false || \strpos($uppercasedConstantName, '(') !== \false || \strpos($uppercasedConstantName, "'") !== \false) {
+        if (strpos($uppercasedConstantName, '\\') !== \false || strpos($uppercasedConstantName, '(') !== \false || strpos($uppercasedConstantName, "'") !== \false) {
             return null;
         }
         $node->name = new FullyQualified($uppercasedConstantName);

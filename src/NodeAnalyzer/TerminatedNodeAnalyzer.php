@@ -40,15 +40,15 @@ final class TerminatedNodeAnalyzer
      * @var array<class-string<Node>>
      */
     private const ALLOWED_CONTINUE_CURRENT_STMTS = [InlineHTML::class, Nop::class];
-    public function isAlwaysTerminated(StmtsAwareInterface $stmtsAware, Stmt $node, Stmt $currentStmt) : bool
+    public function isAlwaysTerminated(StmtsAwareInterface $stmtsAware, Stmt $node, Stmt $currentStmt): bool
     {
-        if (\in_array(\get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
+        if (in_array(get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
             return \false;
         }
         if (($stmtsAware instanceof FileWithoutNamespace || $stmtsAware instanceof Namespace_) && ($currentStmt instanceof ClassLike || $currentStmt instanceof Function_)) {
             return \false;
         }
-        if (!\in_array(\get_class($node), self::TERMINABLE_NODES_BY_ITS_STMTS, \true)) {
+        if (!in_array(get_class($node), self::TERMINABLE_NODES_BY_ITS_STMTS, \true)) {
             return $this->isTerminatedNode($node, $currentStmt);
         }
         if ($node instanceof TryCatch) {
@@ -60,9 +60,9 @@ final class TerminatedNodeAnalyzer
         /** @var Switch_ $node */
         return $this->isTerminatedInLastStmtsSwitch($node, $currentStmt);
     }
-    private function isTerminatedNode(Node $previousNode, Node $currentStmt) : bool
+    private function isTerminatedNode(Node $previousNode, Node $currentStmt): bool
     {
-        if (\in_array(\get_class($previousNode), self::TERMINABLE_NODES, \true)) {
+        if (in_array(get_class($previousNode), self::TERMINABLE_NODES, \true)) {
             return \true;
         }
         if ($previousNode instanceof Expression && ($previousNode->expr instanceof Exit_ || $previousNode->expr instanceof Throw_)) {
@@ -73,7 +73,7 @@ final class TerminatedNodeAnalyzer
         }
         return \false;
     }
-    private function isTerminatedInLastStmtsSwitch(Switch_ $switch, Stmt $stmt) : bool
+    private function isTerminatedInLastStmtsSwitch(Switch_ $switch, Stmt $stmt): bool
     {
         if ($switch->cases === []) {
             return \false;
@@ -92,7 +92,7 @@ final class TerminatedNodeAnalyzer
         }
         return $hasDefault;
     }
-    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch, Stmt $stmt) : bool
+    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch, Stmt $stmt): bool
     {
         if ($tryCatch->finally instanceof Finally_ && $this->isTerminatedInLastStmts($tryCatch->finally->stmts, $stmt)) {
             return \true;
@@ -104,7 +104,7 @@ final class TerminatedNodeAnalyzer
         }
         return $this->isTerminatedInLastStmts($tryCatch->stmts, $stmt);
     }
-    private function isTerminatedInLastStmtsIf(If_ $if, Stmt $stmt) : bool
+    private function isTerminatedInLastStmtsIf(If_ $if, Stmt $stmt): bool
     {
         // Without ElseIf_[] and Else_, after If_ is possibly executable
         if ($if->elseifs === [] && !$if->else instanceof Else_) {
@@ -126,12 +126,12 @@ final class TerminatedNodeAnalyzer
     /**
      * @param Stmt[] $stmts
      */
-    private function isTerminatedInLastStmts(array $stmts, Node $node) : bool
+    private function isTerminatedInLastStmts(array $stmts, Node $node): bool
     {
         if ($stmts === []) {
             return \false;
         }
-        $lastKey = \array_key_last($stmts);
+        $lastKey = array_key_last($stmts);
         $lastNode = $stmts[$lastKey];
         if (isset($stmts[$lastKey - 1]) && !$this->isTerminatedNode($stmts[$lastKey - 1], $node)) {
             return \false;

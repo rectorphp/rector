@@ -34,7 +34,7 @@ final class ReplaceArgumentDefaultValueRector extends AbstractRector implements 
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace defined map of arguments in defined methods and their calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeClass;
@@ -49,7 +49,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class, ClassMethod::class, New_::class];
     }
@@ -86,12 +86,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ReplaceArgumentDefaultValue::class);
         $this->replaceArgumentDefaultValues = $configuration;
     }
-    private function refactorNew(New_ $new) : ?New_
+    private function refactorNew(New_ $new): ?New_
     {
         $hasChanged = \false;
         $currentNode = $new;

@@ -23,15 +23,15 @@ final class RegisteredService
         $this->alias = $alias;
         $this->tag = $tag;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }
-    public function getAlias() : ?string
+    public function getAlias(): ?string
     {
         return $this->alias;
     }
-    public function getTag() : ?string
+    public function getTag(): ?string
     {
         return $this->tag;
     }

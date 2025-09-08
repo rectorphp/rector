@@ -78,7 +78,7 @@ final class NarrowTooWideReturnTypeRector extends AbstractRector implements MinP
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow too wide return type declarations if possible', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -108,21 +108,21 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULLABLE_TYPE;
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipNode($node)) {
             return null;
@@ -164,7 +164,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
      */
-    private function shouldSkipByDocblock($node) : bool
+    private function shouldSkipByDocblock($node): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof PhpDocInfo) {
@@ -184,7 +184,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
      */
-    private function shouldSkipNode($node) : bool
+    private function shouldSkipNode($node): bool
     {
         $returnType = $node->returnType;
         if (!$returnType instanceof UnionType && !$returnType instanceof NullableType) {
@@ -217,7 +217,7 @@ CODE_SAMPLE
     /**
      * @param Return_[] $returnStatements
      */
-    private function hasImplicitNullReturn(array $returnStatements) : bool
+    private function hasImplicitNullReturn(array $returnStatements): bool
     {
         foreach ($returnStatements as $returnStatement) {
             if ($returnStatement->expr === null) {
@@ -230,7 +230,7 @@ CODE_SAMPLE
      * @param Return_[] $returnStatements
      * @return Type[]
      */
-    private function collectActualReturnTypes(array $returnStatements) : array
+    private function collectActualReturnTypes(array $returnStatements): array
     {
         $returnTypes = [];
         foreach ($returnStatements as $returnStatement) {
@@ -245,7 +245,7 @@ CODE_SAMPLE
      * @param Type[] $actualReturnTypes
      * @return Type[]
      */
-    private function getUnusedType(Type $returnType, array $actualReturnTypes) : array
+    private function getUnusedType(Type $returnType, array $actualReturnTypes): array
     {
         $types = $returnType instanceof PHPStanUnionType ? $returnType->getTypes() : [$returnType];
         $unusedTypes = [];
@@ -262,7 +262,7 @@ CODE_SAMPLE
     /**
      * @param Type[] $unusedTypes
      */
-    private function changePhpDocReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, array $unusedTypes) : void
+    private function changePhpDocReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, array $unusedTypes): void
     {
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (!$returnTagValueNode instanceof ReturnTagValueNode) {

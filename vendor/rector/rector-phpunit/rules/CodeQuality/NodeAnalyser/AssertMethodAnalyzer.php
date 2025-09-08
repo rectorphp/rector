@@ -36,14 +36,14 @@ final class AssertMethodAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function detectTestCaseCall($call) : bool
+    public function detectTestCaseCall($call): bool
     {
         $objectCaller = $call instanceof MethodCall ? $call->var : $call->class;
-        if (!$this->nodeTypeResolver->isObjectType($objectCaller, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
+        if (!$this->nodeTypeResolver->isObjectType($objectCaller, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($call->name);
-        if (\strncmp((string) $methodName, 'assert', \strlen('assert')) !== 0 && !\in_array($methodName, NonAssertNonStaticMethods::ALL, \true)) {
+        if (strncmp((string) $methodName, 'assert', strlen('assert')) !== 0 && !in_array($methodName, NonAssertNonStaticMethods::ALL, \true)) {
             return \false;
         }
         if ($call instanceof StaticCall && !$this->nodeNameResolver->isNames($call->class, ['static', 'self'])) {
@@ -55,9 +55,9 @@ final class AssertMethodAnalyzer
         }
         // only handle methods in TestCase or Assert class classes
         $declaringClassName = $extendedMethodReflection->getDeclaringClass()->getName();
-        return \in_array($declaringClassName, [PHPUnitClassName::TEST_CASE, PHPUnitClassName::ASSERT]);
+        return in_array($declaringClassName, [PHPUnitClassName::TEST_CASE, PHPUnitClassName::ASSERT]);
     }
-    public function detectTestCaseCallForStatic(MethodCall $methodCall) : bool
+    public function detectTestCaseCallForStatic(MethodCall $methodCall): bool
     {
         if (!$this->detectTestCaseCall($methodCall)) {
             return \false;
@@ -68,7 +68,7 @@ final class AssertMethodAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function resolveMethodReflection($call) : ?ExtendedMethodReflection
+    private function resolveMethodReflection($call): ?ExtendedMethodReflection
     {
         $methodName = $this->nodeNameResolver->getName($call->name);
         $classReflection = $this->reflectionResolver->resolveClassReflection($call);

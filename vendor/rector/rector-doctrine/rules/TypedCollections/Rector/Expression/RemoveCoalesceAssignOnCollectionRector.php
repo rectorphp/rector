@@ -24,7 +24,7 @@ final class RemoveCoalesceAssignOnCollectionRector extends AbstractRector
     {
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove coalesce assign on collection typed property, as it is always assigned in the constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
@@ -61,14 +61,14 @@ class SomeEntity
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Expression::class];
     }
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node): ?int
     {
         if (!$node->expr instanceof Coalesce) {
             return null;

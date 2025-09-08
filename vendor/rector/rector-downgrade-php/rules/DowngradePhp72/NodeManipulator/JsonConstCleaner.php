@@ -25,7 +25,7 @@ final class JsonConstCleaner
      * @param array<JsonConstant::*> $constants
      * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
      */
-    public function clean($node, array $constants) : ?\PhpParser\Node\Expr
+    public function clean($node, array $constants): ?\PhpParser\Node\Expr
     {
         if ($node instanceof BitwiseOr) {
             return $this->cleanByBitwiseOr($node, $constants);
@@ -35,7 +35,7 @@ final class JsonConstCleaner
     /**
      * @param array<JsonConstant::*> $constants
      */
-    private function cleanByConstFetch(ConstFetch $constFetch, array $constants) : ?Int_
+    private function cleanByConstFetch(ConstFetch $constFetch, array $constants): ?Int_
     {
         if (!$this->nodeNameResolver->isNames($constFetch, $constants)) {
             return null;
@@ -64,7 +64,7 @@ final class JsonConstCleaner
     /**
      * @param string[] $constants
      */
-    private function isTransformed(Expr $expr, array $constants) : bool
+    private function isTransformed(Expr $expr, array $constants): bool
     {
         if ($expr instanceof ConstFetch && $this->nodeNameResolver->isNames($expr, $constants)) {
             return \true;

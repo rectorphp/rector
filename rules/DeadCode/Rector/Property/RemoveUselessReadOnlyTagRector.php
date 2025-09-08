@@ -40,7 +40,7 @@ final class RemoveUselessReadOnlyTagRector extends AbstractRector implements Min
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove useless `@readonly` annotation on native readonly type', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -72,14 +72,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Property::class, Param::class];
     }
     /**
      * @param Class_|Property|Param $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // for param, only on property promotion
         if ($node instanceof Param && !$node->isPromoted()) {
@@ -103,7 +103,7 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::READONLY_PROPERTY;
     }

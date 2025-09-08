@@ -26,11 +26,11 @@ final class ScalarTypeResolver implements NodeTypeResolverInterface
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses() : array
+    public function getNodeClasses(): array
     {
         return [Scalar::class];
     }
-    public function resolve(Node $node) : Type
+    public function resolve(Node $node): Type
     {
         if ($node instanceof Float_) {
             return new ConstantFloatType($node->value);

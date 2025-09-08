@@ -16,7 +16,7 @@ final class MagicClassMethodAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isUnsafeOverridden(ClassMethod $classMethod) : bool
+    public function isUnsafeOverridden(ClassMethod $classMethod): bool
     {
         if ($this->nodeNameResolver->isName($classMethod, MethodName::INVOKE)) {
             return \false;

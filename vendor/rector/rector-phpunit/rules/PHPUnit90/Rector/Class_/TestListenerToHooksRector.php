@@ -26,20 +26,20 @@ final class TestListenerToHooksRector extends AbstractRector
      * @var array<string, array<class-string|string>>
      */
     private const LISTENER_METHOD_TO_HOOK_INTERFACES = [
-        'addIncompleteTest' => ['PHPUnit\\Runner\\AfterIncompleteTestHook', 'executeAfterIncompleteTest'],
-        'addRiskyTest' => ['PHPUnit\\Runner\\AfterRiskyTestHook', 'executeAfterRiskyTest'],
-        'addSkippedTest' => ['PHPUnit\\Runner\\AfterSkippedTestHook', 'executeAfterSkippedTest'],
-        'addError' => ['PHPUnit\\Runner\\AfterTestErrorHook', 'executeAfterTestError'],
-        'addFailure' => ['PHPUnit\\Runner\\AfterTestFailureHook', 'executeAfterTestFailure'],
-        'addWarning' => ['PHPUnit\\Runner\\AfterTestWarningHook', 'executeAfterTestWarning'],
+        'addIncompleteTest' => ['PHPUnit\Runner\AfterIncompleteTestHook', 'executeAfterIncompleteTest'],
+        'addRiskyTest' => ['PHPUnit\Runner\AfterRiskyTestHook', 'executeAfterRiskyTest'],
+        'addSkippedTest' => ['PHPUnit\Runner\AfterSkippedTestHook', 'executeAfterSkippedTest'],
+        'addError' => ['PHPUnit\Runner\AfterTestErrorHook', 'executeAfterTestError'],
+        'addFailure' => ['PHPUnit\Runner\AfterTestFailureHook', 'executeAfterTestFailure'],
+        'addWarning' => ['PHPUnit\Runner\AfterTestWarningHook', 'executeAfterTestWarning'],
         # test
-        'startTest' => ['PHPUnit\\Runner\\BeforeTestHook', 'executeBeforeTest'],
-        'endTest' => ['PHPUnit\\Runner\\AfterTestHook', 'executeAfterTest'],
+        'startTest' => ['PHPUnit\Runner\BeforeTestHook', 'executeBeforeTest'],
+        'endTest' => ['PHPUnit\Runner\AfterTestHook', 'executeAfterTest'],
         # suite
-        'startTestSuite' => ['PHPUnit\\Runner\\BeforeFirstTestHook', 'executeBeforeFirstTest'],
-        'endTestSuite' => ['PHPUnit\\Runner\\AfterLastTestHook', 'executeAfterLastTest'],
+        'startTestSuite' => ['PHPUnit\Runner\BeforeFirstTestHook', 'executeBeforeFirstTest'],
+        'endTestSuite' => ['PHPUnit\Runner\AfterLastTestHook', 'executeAfterLastTest'],
     ];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor "*TestListener.php" to particular "*Hook.php" files', [new CodeSample(<<<'CODE_SAMPLE'
 namespace App\Tests;
@@ -114,7 +114,7 @@ CODE_SAMPLE
      *
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
@@ -123,13 +123,13 @@ CODE_SAMPLE
      *
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('PHPUnit\\Framework\\TestListener'))) {
+        if (!$this->isObjectType($node, new ObjectType('PHPUnit\Framework\TestListener'))) {
             return null;
         }
         foreach ($node->implements as $key => $implement) {
-            if (!$this->isName($implement, 'PHPUnit\\Framework\\TestListener')) {
+            if (!$this->isName($implement, 'PHPUnit\Framework\TestListener')) {
                 continue;
             }
             unset($node->implements[$key]);
@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processClassMethod(Class_ $class, ClassMethod $classMethod) : void
+    private function processClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
         foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $hookClassAndMethod) {
             /** @var string $methodName */

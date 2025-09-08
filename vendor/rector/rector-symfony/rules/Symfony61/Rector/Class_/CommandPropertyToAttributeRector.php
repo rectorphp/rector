@@ -48,13 +48,13 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
         $this->reflectionProvider = $reflectionProvider;
         $this->attributeFinder = $attributeFinder;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add Symfony\\Component\\Console\\Attribute\\AsCommand to Symfony Commands and remove the deprecated properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add Symfony\Component\Console\Attribute\AsCommand to Symfony Commands and remove the deprecated properties', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command;
 
 final class SunshineCommand extends Command
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isObjectType($node, new ObjectType(SymfonyClass::COMMAND))) {
             return null;
@@ -103,7 +103,7 @@ CODE_SAMPLE
         $attributeArgs = $this->createAttributeArgs($defaultNameExpr, $defaultDescriptionExpr);
         // already has attribute, only add "name" and optionally "description"
         if ($existingAsCommandAttribute instanceof Attribute) {
-            $existingAsCommandAttribute->args = \array_merge($attributeArgs, $existingAsCommandAttribute->args);
+            $existingAsCommandAttribute->args = array_merge($attributeArgs, $existingAsCommandAttribute->args);
             return $node;
         }
         $node->attrGroups[] = $this->createAttributeGroupAsCommand($attributeArgs);
@@ -112,14 +112,14 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function createAttributeGroupAsCommand(array $args) : AttributeGroup
+    private function createAttributeGroupAsCommand(array $args): AttributeGroup
     {
         Assert::allIsInstanceOf($args, Arg::class);
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
         $attributeGroup->attrs[0]->args = $args;
         return $attributeGroup;
     }
-    private function resolvePropertyExpr(Class_ $class, string $propertyName) : ?Expr
+    private function resolvePropertyExpr(Class_ $class, string $propertyName): ?Expr
     {
         foreach ($class->stmts as $key => $stmt) {
             if (!$stmt instanceof Property) {
@@ -137,14 +137,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createNamedArg(string $name, Expr $expr) : Arg
+    private function createNamedArg(string $name, Expr $expr): Arg
     {
         return new Arg($expr, \false, \false, [], new Identifier($name));
     }
     /**
      * @return Arg[]
      */
-    private function createAttributeArgs(Expr $defaultNameExpr, ?Expr $defaultDescriptionExpr) : array
+    private function createAttributeArgs(Expr $defaultNameExpr, ?Expr $defaultDescriptionExpr): array
     {
         // already has the attribute, add description and name to the front
         $attributeArgs = [];

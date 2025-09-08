@@ -17,7 +17,7 @@ final class ParamPhpDocNodeFactory
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function create(TypeNode $typeNode, Param $param) : ParamTagValueNode
+    public function create(TypeNode $typeNode, Param $param): ParamTagValueNode
     {
         return new ParamTagValueNode($typeNode, $param->variadic, '$' . $this->nodeNameResolver->getName($param), '', \false);
     }

@@ -67,7 +67,7 @@ class EnumCase implements PhpParser\Builder
      *
      * @return Stmt\EnumCase The built constant node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode(): PhpParser\Node
     {
         return new Stmt\EnumCase($this->name, $this->value, $this->attributeGroups, $this->attributes);
     }

@@ -26,11 +26,11 @@ final class ClassMethodAndAnnotation
     /**
      * @return string[]
      */
-    public function getPossibleMethodNames() : array
+    public function getPossibleMethodNames(): array
     {
         return $this->possibleMethodNames;
     }
-    public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
+    public function getDoctrineAnnotationTagValueNode(): DoctrineAnnotationTagValueNode
     {
         return $this->doctrineAnnotationTagValueNode;
     }

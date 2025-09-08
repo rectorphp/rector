@@ -45,7 +45,7 @@ final class AddClosureParamTypeForArrayMapRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(<<<'CODE_SAMPLE'
 array_map(function ($value, $key): string {
@@ -59,14 +59,14 @@ array_map(function (string $value, int $key): bool {
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var ArrayType[] $types */
-        $types = \array_filter(\array_map(function ($arg) : ?ArrayType {
+        $types = array_filter(array_map(function ($arg): ?ArrayType {
             if (!$arg instanceof Arg) {
                 return null;
             }
@@ -92,7 +92,7 @@ CODE_SAMPLE
                 return $type;
             }
             return null;
-        }, \array_slice($node->args, 1)));
+        }, array_slice($node->args, 1)));
         $values = [];
         $keys = [];
         foreach ($types as $type) {
@@ -104,7 +104,7 @@ CODE_SAMPLE
                 $values = [];
                 break;
             } elseif ($value instanceof UnionType) {
-                $values = \array_merge($values, $value->getTypes());
+                $values = array_merge($values, $value->getTypes());
             }
         }
         foreach ($keys as $key) {
@@ -112,12 +112,12 @@ CODE_SAMPLE
                 $keys = [];
                 break;
             } elseif ($key instanceof UnionType) {
-                $keys = \array_merge($keys, $key->getTypes());
+                $keys = array_merge($keys, $key->getTypes());
             }
         }
         $filter = fn(Type $type): bool => !$type instanceof UnionType;
-        $valueType = $this->combineTypes(\array_filter($values, $filter));
-        $keyType = $this->combineTypes(\array_filter($keys, $filter));
+        $valueType = $this->combineTypes(array_filter($values, $filter));
+        $keyType = $this->combineTypes(array_filter($keys, $filter));
         if (!$keyType instanceof Type && !$valueType instanceof Type) {
             return null;
         }
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function updateClosureWithTypes(Closure $closure, ?Type $keyType, ?Type $valueType) : bool
+    private function updateClosureWithTypes(Closure $closure, ?Type $keyType, ?Type $valueType): bool
     {
         $changes = \false;
         $valueParam = $closure->params[0] ?? null;
@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
         return $changes;
     }
-    private function refactorParameter(Param $param, Type $type) : bool
+    private function refactorParameter(Param $param, Type $type): bool
     {
         // already set → no change
         if ($param->type instanceof Node) {
@@ -155,12 +155,12 @@ CODE_SAMPLE
     /**
      * @param Type[] $types
      */
-    private function combineTypes(array $types) : ?Type
+    private function combineTypes(array $types): ?Type
     {
         if ($types === []) {
             return null;
         }
-        $types = \array_reduce($types, function (array $types, Type $type) : array {
+        $types = array_reduce($types, function (array $types, Type $type): array {
             foreach ($types as $previousType) {
                 if ($this->typeComparator->areTypesEqual($type, $previousType)) {
                     return $types;
@@ -169,7 +169,7 @@ CODE_SAMPLE
             $types[] = $type;
             return $types;
         }, []);
-        if (\count($types) === 1) {
+        if (count($types) === 1) {
             return $types[0];
         }
         return new UnionType(UnionTypeHelper::sortTypes($types));

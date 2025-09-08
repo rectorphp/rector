@@ -10,7 +10,7 @@ use Rector\PhpDocParser\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
  */
 abstract class AbstractPhpDocNodeVisitor implements PhpDocNodeVisitorInterface
 {
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(Node $node): void
     {
     }
     /**
@@ -27,7 +27,7 @@ abstract class AbstractPhpDocNodeVisitor implements PhpDocNodeVisitorInterface
     {
         return null;
     }
-    public function afterTraverse(Node $node) : void
+    public function afterTraverse(Node $node): void
     {
     }
 }

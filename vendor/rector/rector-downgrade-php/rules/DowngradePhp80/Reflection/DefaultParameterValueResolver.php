@@ -18,7 +18,7 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\Exception\ShouldNotHappenException;
 final class DefaultParameterValueResolver
 {
-    public function resolveFromParameterReflection(ParameterReflection $parameterReflection) : ?\PhpParser\Node\Expr
+    public function resolveFromParameterReflection(ParameterReflection $parameterReflection): ?\PhpParser\Node\Expr
     {
         $defaultValueType = $parameterReflection->getDefaultValue();
         if (!$defaultValueType instanceof Type) {
@@ -50,7 +50,7 @@ final class DefaultParameterValueResolver
         /** @var ConstantStringType|ConstantIntegerType|NullType $constantType */
         return BuilderHelpers::normalizeValue($constantType->getValue());
     }
-    private function resolveConstantBooleanType(ConstantBooleanType $constantBooleanType) : ConstFetch
+    private function resolveConstantBooleanType(ConstantBooleanType $constantBooleanType): ConstFetch
     {
         $value = $constantBooleanType->describe(VerbosityLevel::value());
         return new ConstFetch(new Name($value));

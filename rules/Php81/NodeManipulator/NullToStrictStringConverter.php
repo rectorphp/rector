@@ -45,7 +45,7 @@ final class NullToStrictStringConverter
     /**
      * @param Arg[] $args
      */
-    public function convertIfNull(FuncCall $funcCall, array $args, int $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor) : ?FuncCall
+    public function convertIfNull(FuncCall $funcCall, array $args, int $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor): ?FuncCall
     {
         if (!isset($args[$position])) {
             return null;
@@ -80,7 +80,7 @@ final class NullToStrictStringConverter
         $funcCall->args = $args;
         return $funcCall;
     }
-    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait) : bool
+    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait): bool
     {
         $type = $this->nodeTypeResolver->getType($expr);
         if ($type->isString()->yes()) {
@@ -101,7 +101,7 @@ final class NullToStrictStringConverter
         }
         return $this->shouldSkipTrait($expr, $type, $isTrait);
     }
-    private function isValidUnionType(Type $type) : bool
+    private function isValidUnionType(Type $type): bool
     {
         if (!$type instanceof UnionType) {
             return \false;
@@ -120,11 +120,11 @@ final class NullToStrictStringConverter
         }
         return \true;
     }
-    private function shouldSkipType(Type $type) : bool
+    private function shouldSkipType(Type $type): bool
     {
         return !$type instanceof MixedType && !$type->isNull()->yes() && !$this->isValidUnionType($type);
     }
-    private function shouldSkipTrait(Expr $expr, Type $type, bool $isTrait) : bool
+    private function shouldSkipTrait(Expr $expr, Type $type, bool $isTrait): bool
     {
         if (!$type instanceof MixedType) {
             return \false;
@@ -140,7 +140,7 @@ final class NullToStrictStringConverter
         }
         return \true;
     }
-    private function isAnErrorType(Expr $expr, Type $type, Scope $scope) : bool
+    private function isAnErrorType(Expr $expr, Type $type, Scope $scope): bool
     {
         if ($type instanceof ErrorType) {
             return \true;

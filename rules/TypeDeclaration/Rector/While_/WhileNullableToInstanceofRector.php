@@ -36,7 +36,7 @@ final class WhileNullableToInstanceofRector extends AbstractRector
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change while null compare to strict instanceof check', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -65,14 +65,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [While_::class, Do_::class];
     }
     /**
      * @param While_|Do_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof Assign) {
             return null;
@@ -87,7 +87,7 @@ CODE_SAMPLE
         $node->cond = $this->createInstanceof($node->cond, $condNullableObjectType);
         return $node;
     }
-    private function createInstanceof(Expr $expr, ObjectType $objectType) : Instanceof_
+    private function createInstanceof(Expr $expr, ObjectType $objectType): Instanceof_
     {
         $fullyQualified = new FullyQualified($objectType->getClassName());
         return new Instanceof_($expr, $fullyQualified);

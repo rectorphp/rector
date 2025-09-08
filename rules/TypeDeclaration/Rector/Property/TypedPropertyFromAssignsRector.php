@@ -99,11 +99,11 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
+        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) current($configuration);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add typed property from assigned types', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -132,18 +132,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $classReflection = null;
@@ -193,7 +193,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function decorateTypeWithNullableIfDefaultPropertyNull(Property $property, Type $inferredType) : Type
+    private function decorateTypeWithNullableIfDefaultPropertyNull(Property $property, Type $inferredType): Type
     {
         $defaultExpr = $property->props[0]->default;
         if (!$defaultExpr instanceof Expr) {
@@ -210,9 +210,9 @@ CODE_SAMPLE
     /**
      * Doctrine properties are handled in doctrine rules
      */
-    private function isDoctrineMappedProperty(Property $property) : bool
+    private function isDoctrineMappedProperty(Property $property): bool
     {
-        $mappingClasses = \array_merge(CollectionMapping::TO_MANY_CLASSES, CollectionMapping::TO_ONE_CLASSES, [MappingClass::COLUMN]);
+        $mappingClasses = array_merge(CollectionMapping::TO_MANY_CLASSES, CollectionMapping::TO_ONE_CLASSES, [MappingClass::COLUMN]);
         return $this->attrinationFinder->hasByMany($property, $mappingClasses);
     }
 }

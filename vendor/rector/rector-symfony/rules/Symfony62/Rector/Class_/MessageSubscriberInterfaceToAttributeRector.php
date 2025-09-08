@@ -54,11 +54,11 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
         $this->classAnalyzer = $classAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace MessageSubscriberInterface with AsMessageHandler attribute(s)', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
@@ -112,14 +112,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE)) {
             return null;
@@ -143,7 +143,7 @@ CODE_SAMPLE
     /**
      * @param array<int, Node\Stmt> $expressions
      */
-    private function handleYields(array $expressions) : void
+    private function handleYields(array $expressions): void
     {
         foreach ($expressions as $expression) {
             if (!$expression instanceof Expression || !$expression->expr instanceof Yield_) {
@@ -165,14 +165,14 @@ CODE_SAMPLE
                 continue;
             }
             $classParts = $value->class->getParts();
-            $this->newInvokeMethodName = 'handle' . \end($classParts);
+            $this->newInvokeMethodName = 'handle' . end($classParts);
             $this->addAttribute($method, $arguments);
         }
     }
     /**
      * @return array<string, mixed>
      */
-    private function parseArguments(Array_ $array, string &$method) : array
+    private function parseArguments(Array_ $array, string &$method): array
     {
         foreach ($array->items as $item) {
             if (!$item->value instanceof Expr) {
@@ -191,7 +191,7 @@ CODE_SAMPLE
     /**
      * @param array<string, mixed> $arguments
      */
-    private function addAttribute(string $classMethodName, array $arguments) : void
+    private function addAttribute(string $classMethodName, array $arguments): void
     {
         $classMethod = $this->subscriberClass->getMethod($classMethodName);
         if (!$classMethod instanceof ClassMethod) {
@@ -202,7 +202,7 @@ CODE_SAMPLE
         }
         $this->messengerHelper->addAttribute($classMethod, $arguments);
     }
-    private function renameInvoke(ClassMethod $classMethod) : void
+    private function renameInvoke(ClassMethod $classMethod): void
     {
         $classMethod->name = new Identifier($this->newInvokeMethodName);
     }

@@ -26,7 +26,7 @@ final class InitializedArrayCollectionPropertyResolver
     /**
      * @return string[]
      */
-    public function resolve(Class_ $class) : array
+    public function resolve(Class_ $class): array
     {
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructorClassMethod instanceof ClassMethod) {
@@ -52,7 +52,7 @@ final class InitializedArrayCollectionPropertyResolver
         }
         return $initializedPropertyNames;
     }
-    private function isNewArrayCollection(Expr $expr) : bool
+    private function isNewArrayCollection(Expr $expr): bool
     {
         if (!$expr instanceof New_) {
             return \false;

@@ -58,7 +58,7 @@ final class ReturnStrictTypeAnalyzer
      * @param Return_[] $returns
      * @return array<Identifier|Name|NullableType>
      */
-    public function collectStrictReturnTypes(array $returns, Scope $scope) : array
+    public function collectStrictReturnTypes(array $returns, Scope $scope): array
     {
         $containsStrictCall = \false;
         $returnedStrictTypeNodes = [];
@@ -93,7 +93,7 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    public function resolveMethodCallReturnNode($call) : ?Node
+    public function resolveMethodCallReturnNode($call): ?Node
     {
         $returnType = $this->resolveMethodCallReturnType($call);
         if (!$returnType instanceof Type) {
@@ -104,7 +104,7 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    public function resolveMethodCallReturnType($call) : ?Type
+    public function resolveMethodCallReturnType($call): ?Type
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
@@ -134,11 +134,11 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function normalizeStaticType($call, Type $type) : Type
+    private function normalizeStaticType($call, Type $type): Type
     {
         $reflectionClass = $this->reflectionResolver->resolveClassReflection($call);
         $currentClassName = $reflectionClass instanceof ClassReflection ? $reflectionClass->getName() : null;
-        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) use($currentClassName) : Type {
+        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) use ($currentClassName): Type {
             if ($currentType instanceof StaticType && $currentClassName !== $currentType->getClassName()) {
                 return new FullyQualifiedObjectType($currentType->getClassName());
             }
@@ -148,12 +148,12 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Scalar $returnedExpr
      */
-    private function resolveLiteralReturnNode($returnedExpr, Scope $scope) : ?Node
+    private function resolveLiteralReturnNode($returnedExpr, Scope $scope): ?Node
     {
         $returnType = $scope->getType($returnedExpr);
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
     }
-    private function resolveConstFetchReturnNode(ClassConstFetch $classConstFetch, Scope $scope) : ?Node
+    private function resolveConstFetchReturnNode(ClassConstFetch $classConstFetch, Scope $scope): ?Node
     {
         $constType = $scope->getType($classConstFetch);
         if ($constType instanceof MixedType) {

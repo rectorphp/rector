@@ -69,7 +69,7 @@ class Arrays
      * @param  array<T2>  $array2
      * @return array<T1|T2>
      */
-    public static function mergeTree(array $array1, array $array2) : array
+    public static function mergeTree(array $array1, array $array2): array
     {
         $res = $array1 + $array2;
         foreach (array_intersect_key($array1, $array2) as $k => $v) {
@@ -83,14 +83,14 @@ class Arrays
      * Returns zero-indexed position of given array key. Returns null if key is not found.
      * @param string|int $key
      */
-    public static function getKeyOffset(array $array, $key) : ?int
+    public static function getKeyOffset(array $array, $key): ?int
     {
         return Helpers::falseToNull(array_search(self::toKey($key), array_keys($array), \true));
     }
     /**
      * @deprecated  use  getKeyOffset()
      */
-    public static function searchKey(array $array, $key) : ?int
+    public static function searchKey(array $array, $key): ?int
     {
         return self::getKeyOffset($array, $key);
     }
@@ -98,7 +98,7 @@ class Arrays
      * Tests an array for the presence of value.
      * @param mixed $value
      */
-    public static function contains(array $array, $value) : bool
+    public static function contains(array $array, $value): bool
     {
         return in_array($value, $array, \true);
     }
@@ -165,7 +165,7 @@ class Arrays
      * If $key is null (or does not exist), it is inserted at the beginning.
      * @param string|int|null $key
      */
-    public static function insertBefore(array &$array, $key, array $inserted) : void
+    public static function insertBefore(array &$array, $key, array $inserted): void
     {
         $offset = $key === null ? 0 : (int) self::getKeyOffset($array, $key);
         $array = array_slice($array, 0, $offset, \true) + $inserted + array_slice($array, $offset, count($array), \true);
@@ -175,7 +175,7 @@ class Arrays
      * If $key is null (or does not exist), it is inserted at the end.
      * @param string|int|null $key
      */
-    public static function insertAfter(array &$array, $key, array $inserted) : void
+    public static function insertAfter(array &$array, $key, array $inserted): void
     {
         if ($key === null || ($offset = self::getKeyOffset($array, $key)) === null) {
             $offset = count($array) - 1;
@@ -187,7 +187,7 @@ class Arrays
      * @param string|int $oldKey
      * @param string|int $newKey
      */
-    public static function renameKey(array &$array, $oldKey, $newKey) : bool
+    public static function renameKey(array &$array, $oldKey, $newKey): bool
     {
         $offset = self::getKeyOffset($array, $oldKey);
         if ($offset === null) {
@@ -213,7 +213,7 @@ class Arrays
          */
         string $pattern,
         $invert = \false
-    ) : array
+    ): array
     {
         $flags = $invert ? PREG_GREP_INVERT : 0;
         return Strings::pcre('preg_grep', [$pattern, $array, $flags]);
@@ -221,12 +221,12 @@ class Arrays
     /**
      * Transforms multidimensional array to flat array.
      */
-    public static function flatten(array $array, bool $preserveKeys = \false) : array
+    public static function flatten(array $array, bool $preserveKeys = \false): array
     {
         $res = [];
-        $cb = $preserveKeys ? function ($v, $k) use(&$res) : void {
+        $cb = $preserveKeys ? function ($v, $k) use (&$res): void {
             $res[$k] = $v;
-        } : function ($v) use(&$res) : void {
+        } : function ($v) use (&$res): void {
             $res[] = $v;
         };
         array_walk_recursive($array, $cb);
@@ -237,10 +237,10 @@ class Arrays
      * @return ($value is list ? true : false)
      * @param mixed $value
      */
-    public static function isList($value) : bool
+    public static function isList($value): bool
     {
-        $arrayIsListFunction = function (array $array) : bool {
-            if (\function_exists('array_is_list')) {
+        $arrayIsListFunction = function (array $array): bool {
+            if (function_exists('array_is_list')) {
                 return array_is_list($array);
             }
             if ($array === []) {
@@ -264,7 +264,7 @@ class Arrays
      */
     public static function associate(array $array, $path)
     {
-        $parts = is_array($path) ? $path : preg_split('#(\\[\\]|->|=|\\|)#', $path, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $parts = is_array($path) ? $path : preg_split('#(\[\]|->|=|\|)#', $path, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         if (!$parts || $parts === ['->'] || $parts[0] === '=' || $parts[0] === '|') {
             throw new Nette\InvalidArgumentException("Invalid path '{$path}'.");
         }
@@ -304,7 +304,7 @@ class Arrays
      * Normalizes array to associative array. Replace numeric keys with their values, the new value will be $filling.
      * @param mixed $filling
      */
-    public static function normalize(array $array, $filling = null) : array
+    public static function normalize(array $array, $filling = null): array
     {
         $res = [];
         foreach ($array as $k => $v) {
@@ -341,7 +341,7 @@ class Arrays
      * @param  array<K, V>  $array
      * @param  callable(V, K, array<K, V>): bool  $predicate
      */
-    public static function some(iterable $array, callable $predicate) : bool
+    public static function some(iterable $array, callable $predicate): bool
     {
         foreach ($array as $k => $v) {
             if ($predicate($v, $k, $array)) {
@@ -357,7 +357,7 @@ class Arrays
      * @param  array<K, V>  $array
      * @param  callable(V, K, array<K, V>): bool  $predicate
      */
-    public static function every(iterable $array, callable $predicate) : bool
+    public static function every(iterable $array, callable $predicate): bool
     {
         foreach ($array as $k => $v) {
             if (!$predicate($v, $k, $array)) {
@@ -374,7 +374,7 @@ class Arrays
      * @param  callable(V, K, array<K, V>): bool  $predicate
      * @return array<K, V>
      */
-    public static function filter(array $array, callable $predicate) : array
+    public static function filter(array $array, callable $predicate): array
     {
         $res = [];
         foreach ($array as $k => $v) {
@@ -393,7 +393,7 @@ class Arrays
      * @param  callable(V, K, array<K, V>): R  $transformer
      * @return array<K, R>
      */
-    public static function map(iterable $array, callable $transformer) : array
+    public static function map(iterable $array, callable $transformer): array
     {
         $res = [];
         foreach ($array as $k => $v) {
@@ -412,7 +412,7 @@ class Arrays
      * @param  callable(V, K, array<K, V>): ?array{ResK, ResV}  $transformer
      * @return array<ResK, ResV>
      */
-    public static function mapWithKeys(array $array, callable $transformer) : array
+    public static function mapWithKeys(array $array, callable $transformer): array
     {
         $res = [];
         foreach ($array as $k => $v) {
@@ -427,7 +427,7 @@ class Arrays
      * Invokes all callbacks and returns array of results.
      * @param  callable[]  $callbacks
      */
-    public static function invoke(iterable $callbacks, ...$args) : array
+    public static function invoke(iterable $callbacks, ...$args): array
     {
         $res = [];
         foreach ($callbacks as $k => $cb) {
@@ -439,7 +439,7 @@ class Arrays
      * Invokes method on every object in an array and returns array of results.
      * @param  object[]  $objects
      */
-    public static function invokeMethod(iterable $objects, string $method, ...$args) : array
+    public static function invokeMethod(iterable $objects, string $method, ...$args): array
     {
         $res = [];
         foreach ($objects as $k => $obj) {
@@ -453,7 +453,7 @@ class Arrays
      * @param  T  $object
      * @return T
      */
-    public static function toObject(iterable $array, object $object) : object
+    public static function toObject(iterable $array, object $object): object
     {
         foreach ($array as $k => $v) {
             $object->{$k} = $v;
@@ -475,7 +475,7 @@ class Arrays
      * @param  string[]  $array
      * @return string[]
      */
-    public static function wrap(array $array, string $prefix = '', string $suffix = '') : array
+    public static function wrap(array $array, string $prefix = '', string $suffix = ''): array
     {
         $res = [];
         foreach ($array as $k => $v) {

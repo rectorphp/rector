@@ -78,7 +78,7 @@ final class TypedPropertyFromJMSSerializerAttributeTypeRector extends AbstractRe
         $this->staticTypeMapper = $staticTypeMapper;
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add typed property from JMS Serializer Type attribute', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -99,18 +99,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $classReflection = null;
@@ -150,15 +150,15 @@ CODE_SAMPLE
                     }
                 }
             }
-            if (!\is_string($typeValue)) {
+            if (!is_string($typeValue)) {
                 continue;
             }
-            if (StringUtils::isMatch($typeValue, '#DateTime\\<(.*?)\\>#')) {
+            if (StringUtils::isMatch($typeValue, '#DateTime\<(.*?)\>#')) {
                 // special case for DateTime, which is not a scalar type
                 $typeValue = 'DateTime';
             }
             // skip generic iterable types
-            if (\strpos($typeValue, '<') !== \false) {
+            if (strpos($typeValue, '<') !== \false) {
                 continue;
             }
             $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);

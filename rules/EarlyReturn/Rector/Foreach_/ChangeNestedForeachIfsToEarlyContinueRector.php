@@ -37,7 +37,7 @@ final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
         $this->conditionInverter = $conditionInverter;
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nested ifs to foreach with continue', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -81,17 +81,17 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Foreach_::class];
     }
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $nestedIfsWithOnlyNonReturn = $this->ifManipulator->collectNestedIfsWithNonBreaking($node);
-        if (\count($nestedIfsWithOnlyNonReturn) < 2) {
+        if (count($nestedIfsWithOnlyNonReturn) < 2) {
             return null;
         }
         foreach ($nestedIfsWithOnlyNonReturn as $nestedIfWithOnlyNonReturn) {
@@ -102,10 +102,10 @@ CODE_SAMPLE
     /**
      * @param If_[] $nestedIfsWithOnlyReturn
      */
-    private function processNestedIfsWithNonBreaking(Foreach_ $foreach, array $nestedIfsWithOnlyReturn) : Foreach_
+    private function processNestedIfsWithNonBreaking(Foreach_ $foreach, array $nestedIfsWithOnlyReturn): Foreach_
     {
         // add nested if openly after this
-        $nestedIfsWithOnlyReturnCount = \count($nestedIfsWithOnlyReturn);
+        $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
         // clear
         $foreach->stmts = [];
         foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
@@ -117,14 +117,14 @@ CODE_SAMPLE
                 if ($this->isBooleanOrWithWeakComparison($nestedIfWithOnlyReturn->cond)) {
                     continue;
                 }
-                $foreach->stmts = \array_merge($foreach->stmts, $finalReturn->stmts);
+                $foreach->stmts = array_merge($foreach->stmts, $finalReturn->stmts);
             } else {
                 $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
             }
         }
         return $foreach;
     }
-    private function addInvertedIfStmtWithContinue(If_ $onlyReturnIf, Foreach_ $foreach) : void
+    private function addInvertedIfStmtWithContinue(If_ $onlyReturnIf, Foreach_ $foreach): void
     {
         $invertedCondExpr = $this->conditionInverter->createInvertedCondition($onlyReturnIf->cond);
         // special case
@@ -152,7 +152,7 @@ CODE_SAMPLE
      * Skips:
      * $a === 1 || $b === 2
      */
-    private function isBooleanOrWithWeakComparison(Expr $expr) : bool
+    private function isBooleanOrWithWeakComparison(Expr $expr): bool
     {
         if (!$expr instanceof BooleanOr) {
             return \false;
@@ -168,14 +168,14 @@ CODE_SAMPLE
         }
         return $expr->right instanceof NotEqual;
     }
-    private function negateOrDeNegate(Expr $expr) : Expr
+    private function negateOrDeNegate(Expr $expr): Expr
     {
         if ($expr instanceof BooleanNot) {
             return $expr->expr;
         }
         return new BooleanNot($expr);
     }
-    private function createIfContinue(Expr $expr) : If_
+    private function createIfContinue(Expr $expr): If_
     {
         return new If_($expr, ['stmts' => [new Continue_()]]);
     }

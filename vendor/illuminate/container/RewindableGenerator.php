@@ -36,7 +36,7 @@ class RewindableGenerator implements Countable, IteratorAggregate
      *
      * @return \Traversable
      */
-    public function getIterator() : Traversable
+    public function getIterator(): Traversable
     {
         return ($this->generator)();
     }
@@ -45,9 +45,9 @@ class RewindableGenerator implements Countable, IteratorAggregate
      *
      * @return int
      */
-    public function count() : int
+    public function count(): int
     {
-        if (\is_callable($count = $this->count)) {
+        if (is_callable($count = $this->count)) {
             $this->count = $count();
         }
         return $this->count;

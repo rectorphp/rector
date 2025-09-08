@@ -33,14 +33,14 @@ final class ConfigServiceArgumentsResolver
      * @param SplFileInfo[] $phpConfigFileInfos
      * @return ServiceArguments[]
      */
-    public function resolve(array $phpConfigFileInfos) : array
+    public function resolve(array $phpConfigFileInfos): array
     {
         $servicesArguments = [];
         foreach ($phpConfigFileInfos as $phpConfigFileInfo) {
             // traverse and collect data
             $configStmts = $this->namedSimplePhpParser->parseString($phpConfigFileInfo->getContents());
             $this->nodeTraverser->traverse($configStmts);
-            $servicesArguments = \array_merge($servicesArguments, $this->collectServiceArgumentsNodeVisitor->getServicesArguments());
+            $servicesArguments = array_merge($servicesArguments, $this->collectServiceArgumentsNodeVisitor->getServicesArguments());
         }
         return $servicesArguments;
     }

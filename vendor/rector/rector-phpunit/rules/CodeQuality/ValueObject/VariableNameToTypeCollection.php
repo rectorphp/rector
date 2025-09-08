@@ -16,7 +16,7 @@ final class VariableNameToTypeCollection
     {
         $this->variableNameToType = $variableNameToType;
     }
-    public function matchByVariableName(string $variableName) : ?\Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToType
+    public function matchByVariableName(string $variableName): ?\Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToType
     {
         foreach ($this->variableNameToType as $variableNameToType) {
             if ($variableNameToType->getVariableName() !== $variableName) {
@@ -26,7 +26,7 @@ final class VariableNameToTypeCollection
         }
         return null;
     }
-    public function remove(\Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToType $matchedNullableVariableNameToType) : void
+    public function remove(\Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToType $matchedNullableVariableNameToType): void
     {
         foreach ($this->variableNameToType as $key => $variableNamesToType) {
             if ($matchedNullableVariableNameToType !== $variableNamesToType) {

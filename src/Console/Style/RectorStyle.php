@@ -20,14 +20,14 @@ final class RectorStyle extends SymfonyStyle
     {
         parent::__construct($input, $output);
         // silent output in tests
-        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
             $this->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
     }
     /**
      * @see https://github.com/phpstan/phpstan-src/commit/0993d180e5a15a17631d525909356081be59ffeb
      */
-    public function createProgressBar(int $max = 0) : ProgressBar
+    public function createProgressBar(int $max = 0): ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
         $progressBar->setOverwrite(!$this->isCiDetected());
@@ -48,16 +48,16 @@ final class RectorStyle extends SymfonyStyle
         $this->progressBar = $progressBar;
         return $progressBar;
     }
-    public function progressAdvance(int $step = 1) : void
+    public function progressAdvance(int $step = 1): void
     {
         // hide progress bar in tests
-        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
             return;
         }
         $progressBar = $this->getProgressBar();
         $progressBar->advance($step);
     }
-    private function isCiDetected() : bool
+    private function isCiDetected(): bool
     {
         if ($this->isCiDetected === null) {
             $ciDetector = new CiDetector();
@@ -65,7 +65,7 @@ final class RectorStyle extends SymfonyStyle
         }
         return $this->isCiDetected;
     }
-    private function getProgressBar() : ProgressBar
+    private function getProgressBar(): ProgressBar
     {
         if (!isset($this->progressBar)) {
             throw new RuntimeException('The ProgressBar is not started.');

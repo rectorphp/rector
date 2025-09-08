@@ -48,7 +48,7 @@ final class RemoveIfInstanceofCollectionRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class, Ternary::class, Coalesce::class, BooleanAnd::class, BooleanNot::class];
     }
@@ -87,7 +87,7 @@ final class RemoveIfInstanceofCollectionRector extends AbstractRector
         }
         return $this->refactorTernary($node);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if instance of collection on already known Collection type', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -159,7 +159,7 @@ CODE_SAMPLE
         }
         return $if->stmts;
     }
-    private function refactorTernary(Ternary $ternary) : ?Expr
+    private function refactorTernary(Ternary $ternary): ?Expr
     {
         $isNegated = \false;
         if ($this->isInstanceofCollectionType($ternary->cond)) {
@@ -176,14 +176,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isInstanceofCollectionType(Expr $expr) : bool
+    private function isInstanceofCollectionType(Expr $expr): bool
     {
         if (!$expr instanceof Instanceof_) {
             return \false;
         }
         return $this->collectionTypeDetector->isCollectionType($expr->expr);
     }
-    private function isIsObjectFuncCallOnCollection(Expr $expr) : bool
+    private function isIsObjectFuncCallOnCollection(Expr $expr): bool
     {
         if (!$expr instanceof FuncCall) {
             return \false;
@@ -200,7 +200,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node|\PhpParser\Node\Expr\BinaryOp\Coalesce|\PhpParser\Node\Expr\Ternary|\PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\BooleanAnd $node
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip($node): bool
     {
         // most likely on purpose in tests
         if ($this->testsNodeAnalyzer->isInTestClass($node)) {

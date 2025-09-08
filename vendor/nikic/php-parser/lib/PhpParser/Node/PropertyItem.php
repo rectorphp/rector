@@ -24,14 +24,14 @@ class PropertyItem extends NodeAbstract
         $this->name = \is_string($name) ? new Node\VarLikeIdentifier($name) : $name;
         $this->default = $default;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'default'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'PropertyItem';
     }
 }
 // @deprecated compatibility alias
-\class_alias(\PhpParser\Node\PropertyItem::class, \PhpParser\Node\Stmt\PropertyProperty::class);
+class_alias(\PhpParser\Node\PropertyItem::class, \PhpParser\Node\Stmt\PropertyProperty::class);

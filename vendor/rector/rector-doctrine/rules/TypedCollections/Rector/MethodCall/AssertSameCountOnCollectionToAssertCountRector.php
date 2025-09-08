@@ -31,7 +31,7 @@ final class AssertSameCountOnCollectionToAssertCountRector extends AbstractRecto
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->collectionTypeDetector = $collectionTypeDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $this->assertSame(5, $collection->count()) to $this->assertCount(5, $collection) in tests', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -61,7 +61,7 @@ final class SomeClass extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }

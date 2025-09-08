@@ -54,7 +54,7 @@ class Encoder extends EventEmitter implements WritableStreamInterface
         // @codeCoverageIgnoreStart
         if (\PHP_VERSION_ID < 50500) {
             $errstr = null;
-            \set_error_handler(function ($_, $error) use(&$errstr) {
+            \set_error_handler(function ($_, $error) use (&$errstr) {
                 $errstr = $error;
             });
             // encode data with options given in ctor (depth not supported)

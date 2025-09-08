@@ -26,7 +26,7 @@ final class SimplifyIfElseWithSameContentRector extends AbstractRector
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if/else if they have same content', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return $node->stmts;
     }
-    private function isIfWithConstantReturns(If_ $if) : bool
+    private function isIfWithConstantReturns(If_ $if): bool
     {
         $possibleContents = [];
         $possibleContents[] = $this->betterStandardPrinter->print($if->stmts);
@@ -88,8 +88,8 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
         $possibleContents[] = $this->betterStandardPrinter->print($else->stmts);
-        $uniqueContents = \array_unique($possibleContents);
+        $uniqueContents = array_unique($possibleContents);
         // only one content for all
-        return \count($uniqueContents) === 1;
+        return count($uniqueContents) === 1;
     }
 }

@@ -24,7 +24,7 @@ final class ClassAnnotationAssertResolver
         $this->stmtMethodCallMatcher = $stmtMethodCallMatcher;
         $this->doctrineAnnotationFromNewFactory = $doctrineAnnotationFromNewFactory;
     }
-    public function resolve(Stmt $stmt) : ?DoctrineAnnotationTagValueNode
+    public function resolve(Stmt $stmt): ?DoctrineAnnotationTagValueNode
     {
         $methodCall = $this->stmtMethodCallMatcher->match($stmt, 'addConstraint');
         if (!$methodCall instanceof MethodCall) {

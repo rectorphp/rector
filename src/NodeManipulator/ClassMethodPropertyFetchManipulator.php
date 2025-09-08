@@ -45,10 +45,10 @@ final class ClassMethodPropertyFetchManipulator
      * ↓
      * (SomeType $anotherValue)
      */
-    public function findParamAssignToPropertyName(ClassMethod $classMethod, string $propertyName) : ?Param
+    public function findParamAssignToPropertyName(ClassMethod $classMethod, string $propertyName): ?Param
     {
         $assignedParamName = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$assignedParamName) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($propertyName, &$assignedParamName): ?int {
             if ($node instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -88,11 +88,11 @@ final class ClassMethodPropertyFetchManipulator
      *
      * @return Expr[]
      */
-    public function findAssignsToPropertyName(ClassMethod $classMethod, string $propertyName) : array
+    public function findAssignsToPropertyName(ClassMethod $classMethod, string $propertyName): array
     {
         $assignExprs = [];
         $paramNames = $this->functionLikeManipulator->resolveParamNames($classMethod);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$assignExprs, $paramNames) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($propertyName, &$assignExprs, $paramNames): ?int {
             if ($node instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }

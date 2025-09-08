@@ -22,7 +22,7 @@ final class PropertyAssignMatcher
      * - $this->propertyName = $expr;
      * - $this->propertyName[] = $expr;
      */
-    public function matchPropertyAssignExpr(Assign $assign, string $propertyName) : ?Expr
+    public function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Expr
     {
         $assignVar = $assign->var;
         if ($this->propertyFetchAnalyzer->isLocalPropertyFetchName($assignVar, $propertyName)) {

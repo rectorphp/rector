@@ -21,11 +21,11 @@ final class DowngradeDynamicClassConstFetchRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassConstFetch::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change dynamic class const fetch Example::{$constName} to constant(Example::class . \'::\' . $constName)', [new CodeSample(<<<'CODE_SAMPLE'
 $value = Example::{$constName};
@@ -38,7 +38,7 @@ CODE_SAMPLE
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->name instanceof Identifier) {
             return null;

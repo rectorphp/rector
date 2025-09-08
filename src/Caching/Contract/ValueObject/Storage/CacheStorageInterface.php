@@ -16,7 +16,7 @@ interface CacheStorageInterface
     /**
      * @param mixed $data
      */
-    public function save(string $key, string $variableKey, $data) : void;
-    public function clean(string $key) : void;
-    public function clear() : void;
+    public function save(string $key, string $variableKey, $data): void;
+    public function clean(string $key): void;
+    public function clear(): void;
 }

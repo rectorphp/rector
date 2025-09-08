@@ -60,7 +60,7 @@ final class AddReturnTypeDeclarationFromYieldsRector extends AbstractRector impl
         $this->staticTypeMapper = $staticTypeMapper;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type declarations from yields', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -88,14 +88,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class];
     }
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $scope = ScopeFetcher::fetch($node);
         $yieldNodes = $this->findCurrentScopeYieldNodes($node);
@@ -117,17 +117,17 @@ CODE_SAMPLE
         $node->returnType = $returnTypeNode;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @return Yield_[]|YieldFrom[]
      */
-    private function findCurrentScopeYieldNodes(FunctionLike $functionLike) : array
+    private function findCurrentScopeYieldNodes(FunctionLike $functionLike): array
     {
         $yieldNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $node) use(&$yieldNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $node) use (&$yieldNodes): ?int {
             // skip anonymous class and inner function
             if ($node instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -151,7 +151,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Yield_|\PhpParser\Node\Expr\YieldFrom $yield
      */
-    private function resolveYieldValue($yield) : ?Expr
+    private function resolveYieldValue($yield): ?Expr
     {
         if ($yield instanceof Yield_) {
             return $yield->value;
@@ -162,7 +162,7 @@ CODE_SAMPLE
      * @param array<Yield_|YieldFrom> $yieldNodes
      * @return Type[]
      */
-    private function resolveYieldedTypes(array $yieldNodes) : array
+    private function resolveYieldedTypes(array $yieldNodes): array
     {
         $yieldedTypes = [];
         foreach ($yieldNodes as $yieldNode) {
@@ -197,7 +197,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function resolveClassName($functionLike) : string
+    private function resolveClassName($functionLike): string
     {
         $returnTypeNode = $functionLike->getReturnType();
         if ($returnTypeNode instanceof Identifier && $returnTypeNode->name === 'iterable') {

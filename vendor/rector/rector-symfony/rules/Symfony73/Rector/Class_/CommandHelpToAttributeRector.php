@@ -49,11 +49,11 @@ final class CommandHelpToAttributeRector extends AbstractRector implements MinPh
         $this->reflectionProvider = $reflectionProvider;
         $this->attributeFinder = $attributeFinder;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Moves $this->setHelp() to the "help" named argument of #[AsCommand]', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -84,14 +84,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isAbstract()) {
             return null;
@@ -129,10 +129,10 @@ CODE_SAMPLE
     /**
      * Returns the argument passed to setHelp() and removes the MethodCall node.
      */
-    private function findAndRemoveSetHelpExpr(ClassMethod $configureClassMethod) : ?String_
+    private function findAndRemoveSetHelpExpr(ClassMethod $configureClassMethod): ?String_
     {
         $helpString = null;
-        $this->traverseNodesWithCallable((array) $configureClassMethod->stmts, function (Node $node) use(&$helpString) {
+        $this->traverseNodesWithCallable((array) $configureClassMethod->stmts, function (Node $node) use (&$helpString) {
             if ($node instanceof Class_ || $node instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
         return $helpString;
     }
-    private function isExpressionVariableThis(Stmt $stmt) : bool
+    private function isExpressionVariableThis(Stmt $stmt): bool
     {
         if (!$stmt instanceof Expression) {
             return \false;

@@ -19,7 +19,7 @@ abstract class Cast extends Expr
         $this->attributes = $attributes;
         $this->expr = $expr;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['expr'];
     }

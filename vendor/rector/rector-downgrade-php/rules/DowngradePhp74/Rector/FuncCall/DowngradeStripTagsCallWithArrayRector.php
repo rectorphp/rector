@@ -35,7 +35,7 @@ final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert 2nd argument in `strip_tags()` from array to string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipFuncCall($node)) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         $secondArg->value = $newExpr;
         return $node;
     }
-    private function shouldSkipFuncCall(FuncCall $funcCall) : bool
+    private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         if (!$this->isName($funcCall, 'strip_tags')) {
             return \true;
@@ -126,7 +126,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
      */
-    private function createArrayFromString($expr) : Concat
+    private function createArrayFromString($expr): Concat
     {
         $args = [new Arg(new String_('><')), new Arg($expr)];
         $implodeFuncCall = new FuncCall(new Name('implode'), $args);
@@ -136,7 +136,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
      */
-    private function createIsArrayTernaryFromExpression($expr) : Ternary
+    private function createIsArrayTernaryFromExpression($expr): Ternary
     {
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($expr)]);
         $nullNotIdentical = new NotIdentical($expr, $this->nodeFactory->createNull());

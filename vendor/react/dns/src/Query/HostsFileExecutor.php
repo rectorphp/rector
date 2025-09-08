@@ -30,7 +30,7 @@ final class HostsFileExecutor implements ExecutorInterface
             $expectsColon = $query->type === Message::TYPE_AAAA;
             foreach ($this->hosts->getIpsForHost($query->name) as $ip) {
                 // ensure this is an IPv4/IPV6 address according to query type
-                if ((\strpos($ip, ':') !== \false) === $expectsColon) {
+                if ((strpos($ip, ':') !== \false) === $expectsColon) {
                     $records[] = new Record($query->name, $query->type, $query->class, 0, $ip);
                 }
             }
@@ -54,16 +54,16 @@ final class HostsFileExecutor implements ExecutorInterface
     }
     private function getIpFromHost($host)
     {
-        if (\substr($host, -13) === '.in-addr.arpa') {
+        if (substr($host, -13) === '.in-addr.arpa') {
             // IPv4: read as IP and reverse bytes
-            $ip = @\inet_pton(\substr($host, 0, -13));
+            $ip = @inet_pton(substr($host, 0, -13));
             if ($ip === \false || isset($ip[4])) {
                 return null;
             }
-            return \inet_ntop(\strrev($ip));
-        } elseif (\substr($host, -9) === '.ip6.arpa') {
+            return inet_ntop(strrev($ip));
+        } elseif (substr($host, -9) === '.ip6.arpa') {
             // IPv6: replace dots, reverse nibbles and interpret as hexadecimal string
-            $ip = @\inet_ntop(\pack('H*', \strrev(\str_replace('.', '', \substr($host, 0, -9)))));
+            $ip = @inet_ntop(pack('H*', strrev(str_replace('.', '', substr($host, 0, -9)))));
             if ($ip === \false) {
                 return null;
             }

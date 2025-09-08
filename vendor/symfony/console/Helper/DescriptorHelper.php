@@ -46,7 +46,7 @@ class DescriptorHelper extends Helper
      */
     public function describe(OutputInterface $output, ?object $object, array $options = [])
     {
-        $options = \array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
+        $options = array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
         if (!isset($this->descriptors[$options['format']])) {
             throw new InvalidArgumentException(\sprintf('Unsupported format "%s".', $options['format']));
         }
@@ -63,12 +63,12 @@ class DescriptorHelper extends Helper
         $this->descriptors[$format] = $descriptor;
         return $this;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return 'descriptor';
     }
-    public function getFormats() : array
+    public function getFormats(): array
     {
-        return \array_keys($this->descriptors);
+        return array_keys($this->descriptors);
     }
 }

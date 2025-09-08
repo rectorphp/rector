@@ -38,7 +38,7 @@ final class AllAssignNodePropertyTypeInferer
         $this->astResolver = $astResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferProperty(Property $property, ClassReflection $classReflection, File $file) : ?Type
+    public function inferProperty(Property $property, ClassReflection $classReflection, File $file): ?Type
     {
         if ($classReflection->getFileName() === $file->getFilePath()) {
             $className = $classReflection->getName();

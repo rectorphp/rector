@@ -33,7 +33,7 @@ final class SocketServer extends EventEmitter implements ServerInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #3 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #3 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         // apply default options if not explicitly given
         $context += array('tcp' => array(), 'tls' => array(), 'unix' => array());
@@ -47,20 +47,20 @@ final class SocketServer extends EventEmitter implements ServerInterface
         } elseif ($scheme === 'php') {
             $server = new FdServer($uri, $loop);
         } else {
-            if (\preg_match('#^(?:\\w+://)?\\d+$#', $uri)) {
+            if (preg_match('#^(?:\w+://)?\d+$#', $uri)) {
                 throw new \InvalidArgumentException('Invalid URI given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22));
             }
-            $server = new TcpServer(\str_replace('tls://', '', $uri), $loop, $context['tcp']);
+            $server = new TcpServer(str_replace('tls://', '', $uri), $loop, $context['tcp']);
             if ($scheme === 'tls') {
                 $server = new SecureServer($server, $loop, $context['tls']);
             }
         }
         $this->server = $server;
         $that = $this;
-        $server->on('connection', function (ConnectionInterface $conn) use($that) {
+        $server->on('connection', function (ConnectionInterface $conn) use ($that) {
             $that->emit('connection', array($conn));
         });
-        $server->on('error', function (\Exception $error) use($that) {
+        $server->on('error', function (\Exception $error) use ($that) {
             $that->emit('error', array($error));
         });
     }
@@ -92,7 +92,7 @@ final class SocketServer extends EventEmitter implements ServerInterface
     {
         $errno = 0;
         $errstr = '';
-        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+        \set_error_handler(function ($_, $error) use (&$errno, &$errstr) {
             // Match errstr from PHP's warning message.
             // stream_socket_accept(): accept failed: Connection timed out
             $errstr = \preg_replace('#.*: #', '', $error);
@@ -126,7 +126,7 @@ final class SocketServer extends EventEmitter implements ServerInterface
         // PHP defines the required `strerror()` function through either `ext-sockets`, `ext-posix` or `ext-pcntl`
         $strerror = \function_exists('socket_strerror') ? 'socket_strerror' : (\function_exists('posix_strerror') ? 'posix_strerror' : (\function_exists('pcntl_strerror') ? 'pcntl_strerror' : null));
         if ($strerror !== null) {
-            \assert(\is_string($strerror) && \is_callable($strerror));
+            assert(\is_string($strerror) && \is_callable($strerror));
             // PHP defines most useful errno constants like `ECONNREFUSED` through constants in `ext-sockets` like `SOCKET_ECONNREFUSED`
             // PHP also defines a hand full of errno constants like `EMFILE` through constants in `ext-pcntl` like `PCNTL_EMFILE`
             // go through list of all defined constants like `SOCKET_E*` and `PCNTL_E*` and see if they match the given `$errstr`

@@ -23,9 +23,9 @@ final class MethodCallRemover
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function removeMethodCall(Expression $expression, string $methodName) : void
+    public function removeMethodCall(Expression $expression, string $methodName): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($expression, function (Node $node) use($methodName) : ?Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($expression, function (Node $node) use ($methodName): ?Node {
             if (!$node instanceof MethodCall) {
                 return null;
             }

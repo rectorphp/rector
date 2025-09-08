@@ -28,15 +28,15 @@ final class RenameProperty
         RectorAssert::propertyName($oldProperty);
         RectorAssert::propertyName($newProperty);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->type);
     }
-    public function getOldProperty() : string
+    public function getOldProperty(): string
     {
         return $this->oldProperty;
     }
-    public function getNewProperty() : string
+    public function getNewProperty(): string
     {
         return $this->newProperty;
     }

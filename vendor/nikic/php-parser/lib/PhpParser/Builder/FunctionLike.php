@@ -33,7 +33,7 @@ abstract class FunctionLike extends \PhpParser\Builder\Declaration
     {
         $param = BuilderHelpers::normalizeNode($param);
         if (!$param instanceof Node\Param) {
-            throw new \LogicException(\sprintf('Expected parameter node, got "%s"', $param->getType()));
+            throw new \LogicException(sprintf('Expected parameter node, got "%s"', $param->getType()));
         }
         $this->params[] = $param;
         return $this;

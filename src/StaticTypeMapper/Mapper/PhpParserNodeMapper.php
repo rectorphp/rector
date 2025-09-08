@@ -21,14 +21,14 @@ final class PhpParserNodeMapper
     {
         $this->phpParserNodeMappers = $phpParserNodeMappers;
     }
-    public function mapToPHPStanType(Node $node) : Type
+    public function mapToPHPStanType(Node $node): Type
     {
         foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
-            if (!\is_a($node, $phpParserNodeMapper->getNodeType())) {
+            if (!is_a($node, $phpParserNodeMapper->getNodeType())) {
                 continue;
             }
             return $phpParserNodeMapper->mapToPHPStan($node);
         }
-        throw new NotImplementedYetException(\get_class($node));
+        throw new NotImplementedYetException(get_class($node));
     }
 }

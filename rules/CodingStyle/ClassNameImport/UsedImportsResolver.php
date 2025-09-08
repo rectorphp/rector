@@ -36,7 +36,7 @@ final class UsedImportsResolver
     /**
      * @param Stmt[] $stmts
      */
-    public function resolveForStmts(array $stmts) : UsedImports
+    public function resolveForStmts(array $stmts): UsedImports
     {
         $usedImports = [];
         /** @var Class_|null $class */
@@ -50,7 +50,7 @@ final class UsedImportsResolver
         $usedConstImports = [];
         $usedFunctionImports = [];
         /** @param Use_::TYPE_* $useType */
-        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use(&$usedImports, &$usedFunctionImports, &$usedConstImports) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use (&$usedImports, &$usedFunctionImports, &$usedConstImports): void {
             if ($useType === Use_::TYPE_NORMAL) {
                 if ($useItem->alias instanceof Identifier) {
                     $usedImports[] = new AliasedObjectType($useItem->alias->toString(), $name);

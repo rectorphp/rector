@@ -34,7 +34,7 @@ final class AddArrayFunctionClosureParamTypeRector extends AbstractRector implem
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add array_filter()/array_map() function closure param type, based on passed iterable', [new CodeSample(<<<'CODE_SAMPLE'
 $items = [1, 2, 3];
@@ -49,19 +49,19 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (\count($node->getArgs()) !== 2) {
+        if (count($node->getArgs()) !== 2) {
             return null;
         }
         $hasChanged = \false;
@@ -75,7 +75,7 @@ CODE_SAMPLE
             if (!$firstArgExpr instanceof ArrowFunction && !$firstArgExpr instanceof Closure) {
                 continue;
             }
-            if (\count($firstArgExpr->getParams()) !== 1) {
+            if (count($firstArgExpr->getParams()) !== 1) {
                 continue;
             }
             $arrowFunction = $firstArgExpr;
@@ -104,11 +104,11 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
-    private function resolveArrayItemType(Type $mainType) : ?Type
+    private function resolveArrayItemType(Type $mainType): ?Type
     {
         if ($mainType instanceof ConstantArrayType || $mainType instanceof ArrayType) {
             return $mainType->getItemType();

@@ -39,7 +39,7 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
         $this->classModifierChecker = $classModifierChecker;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type void to function like without any return', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
@@ -66,14 +66,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         // already has return type → skip
         if ($node->returnType instanceof Node) {
@@ -91,11 +91,11 @@ CODE_SAMPLE
         $node->returnType = new Identifier('void');
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VOID_TYPE;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->isAbstract()) {
             return \true;
@@ -113,18 +113,18 @@ CODE_SAMPLE
         }
         return $this->classModifierChecker->isInsideAbstractClass($classMethod) && $classMethod->getStmts() === [];
     }
-    private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod) : bool
+    private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod): bool
     {
         if ($this->classModifierChecker->isInsideFinalClass($classMethod)) {
             return \false;
         }
-        if (\count((array) $classMethod->stmts) !== 1) {
+        if (count((array) $classMethod->stmts) !== 1) {
             return \false;
         }
         $onlyStmt = $classMethod->stmts[0] ?? null;
         return $onlyStmt instanceof Expression && $onlyStmt->expr instanceof Throw_;
     }
-    private function isNotFinalAndEmpty(ClassMethod $classMethod) : bool
+    private function isNotFinalAndEmpty(ClassMethod $classMethod): bool
     {
         if ($this->classModifierChecker->isInsideFinalClass($classMethod)) {
             return \false;

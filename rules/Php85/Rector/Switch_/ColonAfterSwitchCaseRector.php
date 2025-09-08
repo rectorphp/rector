@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ColonAfterSwitchCaseRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change deprecated semicolon to colon after switch case', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($value) {
@@ -32,14 +32,14 @@ switch ($value) {
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $oldTokens = $this->file->getOldTokens();
@@ -52,7 +52,7 @@ CODE_SAMPLE
             if ($endTokenPos < 0) {
                 continue;
             }
-            if (\count($case->stmts) === 0) {
+            if (count($case->stmts) === 0) {
                 $startCaseStmtsPos = isset($node->cases[$key + 1]) ? $node->cases[$key + 1]->getStartTokenPos() : $node->getEndTokenPos();
             } else {
                 $startCaseStmtsPos = $case->stmts[0]->getStartTokenPos();
@@ -66,7 +66,7 @@ CODE_SAMPLE
                     continue 2;
                 }
                 $nextToken = $oldTokens[$nextTokenPos];
-                if (\trim($nextToken->text) === '') {
+                if (trim($nextToken->text) === '') {
                     continue;
                 }
                 if ($nextToken->text === ':') {
@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::COLON_AFTER_SWITCH_CASE;
     }

@@ -23,21 +23,21 @@ use const PHP_EOL;
  */
 final class LscpuLogicalFinder extends ProcOpenBasedFinder
 {
-    public function getCommand() : string
+    public function getCommand(): string
     {
         return 'lscpu -p';
     }
-    protected function countCpuCores(string $process) : ?int
+    protected function countCpuCores(string $process): ?int
     {
         $lines = explode(PHP_EOL, $process);
-        $actualLines = preg_grep('/^\\d+,/', $lines);
+        $actualLines = preg_grep('/^\d+,/', $lines);
         if (!is_array($actualLines)) {
             return null;
         }
         $count = count($actualLines);
         return 0 === $count ? null : $count;
     }
-    public function toString() : string
+    public function toString(): string
     {
         return 'LscpuLogicalFinder';
     }

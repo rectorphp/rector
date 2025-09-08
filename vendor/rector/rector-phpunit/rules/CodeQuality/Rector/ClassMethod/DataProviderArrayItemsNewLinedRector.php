@@ -32,7 +32,7 @@ final class DataProviderArrayItemsNewLinedRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change data provider in PHPUnit test case to newline per item', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -80,14 +80,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->isPublic()) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
         // skip test methods
-        if (\strncmp($node->name->toString(), 'test', \strlen('test')) === 0) {
+        if (strncmp($node->name->toString(), 'test', strlen('test')) === 0) {
             return null;
         }
         // find array in data provider - must contain a return node
@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldRePrint(Array_ $array) : bool
+    private function shouldRePrint(Array_ $array): bool
     {
         foreach ($array->items as $key => $item) {
             if (!$item instanceof ArrayItem) {

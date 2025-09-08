@@ -38,7 +38,7 @@ final class PropertyTypeDecorator
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function decorate(Property $property, ?Type $type) : void
+    public function decorate(Property $property, ?Type $type): void
     {
         if (!$type instanceof Type) {
             return;

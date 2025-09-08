@@ -30,7 +30,7 @@ final class NullabilityColumnPropertyTypeResolver
     /**
      * @var string
      */
-    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
+    private const COLUMN_CLASS = 'Doctrine\ORM\Mapping\Column';
     /**
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
@@ -40,7 +40,7 @@ final class NullabilityColumnPropertyTypeResolver
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
     }
-    public function isNullable(Property $property) : bool
+    public function isNullable(Property $property): bool
     {
         $nullableExpr = $this->attributeFinder->findAttributeByClassArgByName($property, MappingClass::COLUMN, 'nullable');
         if ($nullableExpr instanceof Expr) {
@@ -49,7 +49,7 @@ final class NullabilityColumnPropertyTypeResolver
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $this->isNullableColumn($phpDocInfo);
     }
-    private function isNullableColumn(PhpDocInfo $phpDocInfo) : bool
+    private function isNullableColumn(PhpDocInfo $phpDocInfo): bool
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {

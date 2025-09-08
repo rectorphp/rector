@@ -28,11 +28,11 @@ final class WhileEachToForeachRector extends AbstractRector implements MinPhpVer
     {
         $this->assignManipulator = $assignManipulator;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_EACH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use `foreach()` instead of deprecated `each()`', [new CodeSample(<<<'CODE_SAMPLE'
 while (list($key, $callback) = each($callbacks)) {
@@ -59,14 +59,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [While_::class];
     }
     /**
      * @param While_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->cond instanceof Assign) {
             return null;
@@ -81,13 +81,13 @@ CODE_SAMPLE
             return null;
         }
         $firstArg = $eachFuncCall->getArgs()[0];
-        $foreachedExpr = \count($list->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$firstArg]) : $firstArg->value;
-        $arrayItem = \array_pop($list->items);
+        $foreachedExpr = count($list->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$firstArg]) : $firstArg->value;
+        $arrayItem = array_pop($list->items);
         $isTrailingCommaLast = \false;
         if (!$arrayItem instanceof ArrayItem) {
             $foreachedExpr = $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]);
             /** @var ArrayItem $arrayItem */
-            $arrayItem = \current($list->items);
+            $arrayItem = current($list->items);
             $isTrailingCommaLast = \true;
         }
         $foreach = new Foreach_($foreachedExpr, $arrayItem->value, ['stmts' => $node->stmts]);
@@ -95,7 +95,7 @@ CODE_SAMPLE
         // is key included? add it to foreach
         if ($list->items !== []) {
             /** @var ArrayItem|null $keyItem */
-            $keyItem = \array_pop($list->items);
+            $keyItem = array_pop($list->items);
             if ($keyItem instanceof ArrayItem && !$isTrailingCommaLast) {
                 $foreach->keyVar = $keyItem->value;
             }

@@ -27,7 +27,7 @@ final class DowngradeNumberFormatNoFourthArgRector extends AbstractRector
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade number_format arg to fill 4th arg when only 3rd arg filled', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -52,14 +52,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -68,7 +68,7 @@ CODE_SAMPLE
         $node->args[3] = new Arg(new String_($reflectionFunction->getParameters()[3]->getDefaultValue()));
         return $node;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall): bool
     {
         if (!$this->isName($funcCall, 'number_format')) {
             return \true;

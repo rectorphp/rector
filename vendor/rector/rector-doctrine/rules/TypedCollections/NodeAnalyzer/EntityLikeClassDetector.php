@@ -18,11 +18,11 @@ final class EntityLikeClassDetector
     {
         $this->attrinationFinder = $attrinationFinder;
     }
-    public function detect(Class_ $class) : bool
+    public function detect(Class_ $class): bool
     {
         return $this->attrinationFinder->hasByMany($class, [MappingClass::ENTITY, MappingClass::EMBEDDABLE, OdmMappingClass::DOCUMENT]);
     }
-    public function isToMany(Property $property) : bool
+    public function isToMany(Property $property): bool
     {
         return $this->attrinationFinder->hasByMany($property, [MappingClass::ONE_TO_MANY, MappingClass::MANY_TO_MANY, OdmMappingClass::REFERENCE_MANY, OdmMappingClass::EMBED_MANY]);
     }

@@ -23,14 +23,14 @@ final class Tag implements TagInterface
         $this->name = $name;
         $this->data = $data;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
     /**
      * @return array<string, mixed>
      */
-    public function getData() : array
+    public function getData(): array
     {
         return $this->data;
     }

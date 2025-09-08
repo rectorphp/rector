@@ -38,33 +38,33 @@ final class Chunk implements IteratorAggregate
         $this->endRange = $endRange;
         $this->lines = $lines;
     }
-    public function start() : int
+    public function start(): int
     {
         return $this->start;
     }
-    public function startRange() : int
+    public function startRange(): int
     {
         return $this->startRange;
     }
-    public function end() : int
+    public function end(): int
     {
         return $this->end;
     }
-    public function endRange() : int
+    public function endRange(): int
     {
         return $this->endRange;
     }
     /**
      * @return list<Line>
      */
-    public function lines() : array
+    public function lines(): array
     {
         return $this->lines;
     }
     /**
      * @param list<Line> $lines
      */
-    public function setLines(array $lines) : void
+    public function setLines(array $lines): void
     {
         foreach ($lines as $line) {
             if (!$line instanceof Line) {
@@ -73,7 +73,7 @@ final class Chunk implements IteratorAggregate
         }
         $this->lines = $lines;
     }
-    public function getIterator() : Traversable
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->lines);
     }

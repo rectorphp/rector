@@ -10,6 +10,6 @@ use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([RenameParamToMatchTypeRector::class, RenamePropertyToMatchTypeRector::class, RenameVariableToMatchNewTypeRector::class, RenameVariableToMatchMethodCallReturnTypeRector::class, RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class, RenameForeachValueVariableToMatchExprVariableRector::class]);
 };

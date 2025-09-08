@@ -34,7 +34,7 @@ final class ShortClassExpander
     /**
      * @api
      */
-    public function resolveFqnTargetEntity(string $targetEntity, Node $node) : string
+    public function resolveFqnTargetEntity(string $targetEntity, Node $node): string
     {
         $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);
         if ($this->reflectionProvider->hasClass($targetEntity)) {
@@ -55,7 +55,7 @@ final class ShortClassExpander
         // probably tested class
         return $targetEntity;
     }
-    private function getCleanedUpTargetEntity(string $targetEntity) : string
+    private function getCleanedUpTargetEntity(string $targetEntity): string
     {
         return Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
     }

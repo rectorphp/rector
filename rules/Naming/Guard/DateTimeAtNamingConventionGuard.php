@@ -24,7 +24,7 @@ final class DateTimeAtNamingConventionGuard
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
     }
-    public function isConflicting(PropertyRename $propertyRename) : bool
+    public function isConflicting(PropertyRename $propertyRename): bool
     {
         $type = $this->nodeTypeResolver->getType($propertyRename->getProperty());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
@@ -32,7 +32,7 @@ final class DateTimeAtNamingConventionGuard
         if ($className === null) {
             return \false;
         }
-        if (!\is_a($className, DateTimeInterface::class, \true)) {
+        if (!is_a($className, DateTimeInterface::class, \true)) {
             return \false;
         }
         return StringUtils::isMatch($propertyRename->getCurrentName(), \Rector\Naming\Guard\BreakingVariableRenameGuard::AT_NAMING_REGEX);

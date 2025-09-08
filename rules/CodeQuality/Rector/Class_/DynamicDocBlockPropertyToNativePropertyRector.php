@@ -67,7 +67,7 @@ final class DynamicDocBlockPropertyToNativePropertyRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn dynamic docblock properties on class with no parents to explicit ones', [new CodeSample(<<<'CODE_SAMPLE'
 /**
@@ -98,14 +98,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->phpAttributeAnalyzer->hasPhpAttribute($node, 'AllowDynamicProperties')) {
             return null;
@@ -131,7 +131,7 @@ CODE_SAMPLE
                 }
             }
         }
-        $node->attrGroups = \array_values($node->attrGroups);
+        $node->attrGroups = array_values($node->attrGroups);
         $newProperties = $this->createNewPropertyFromPropertyTagValueNodes($propertyPhpDocTagNodes, $node);
         // remove property tags
         foreach ($propertyPhpDocTagNodes as $propertyPhpDocTagNode) {
@@ -139,12 +139,12 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($classPhpDocInfo, $propertyPhpDocTagNode);
         }
         // merge new properties to start of the file
-        $node->stmts = \array_merge($newProperties, $node->stmts);
+        $node->stmts = array_merge($newProperties, $node->stmts);
         // update doc info
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_DYNAMIC_PROPERTIES;
     }
@@ -152,7 +152,7 @@ CODE_SAMPLE
      * @param PhpDocTagNode[] $propertyPhpDocTagNodes
      * @return Property[]
      */
-    private function createNewPropertyFromPropertyTagValueNodes(array $propertyPhpDocTagNodes, Class_ $class) : array
+    private function createNewPropertyFromPropertyTagValueNodes(array $propertyPhpDocTagNodes, Class_ $class): array
     {
         $newProperties = [];
         foreach ($propertyPhpDocTagNodes as $propertyPhpDocTagNode) {
@@ -161,7 +161,7 @@ CODE_SAMPLE
             if (!$propertyTagValueNode instanceof PropertyTagValueNode) {
                 continue;
             }
-            $propertyName = \ltrim($propertyTagValueNode->propertyName, '$');
+            $propertyName = ltrim($propertyTagValueNode->propertyName, '$');
             if ($this->isPromotedProperty($class, $propertyName)) {
                 continue;
             }
@@ -181,7 +181,7 @@ CODE_SAMPLE
         }
         return $newProperties;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         // skip magic
         $getClassMethod = $class->getMethod('__get');
@@ -197,7 +197,7 @@ CODE_SAMPLE
         }
         return !$this->testsNodeAnalyzer->isInTestClass($class);
     }
-    private function isPromotedProperty(Class_ $class, string $propertyName) : bool
+    private function isPromotedProperty(Class_ $class, string $propertyName): bool
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod instanceof ClassMethod) {

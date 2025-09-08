@@ -45,38 +45,38 @@ class ExecutableFinder
      * @param string|null $default   The default to return if no executable is found
      * @param array       $extraDirs Additional dirs to check into
      */
-    public function find(string $name, ?string $default = null, array $extraDirs = []) : ?string
+    public function find(string $name, ?string $default = null, array $extraDirs = []): ?string
     {
         // windows built-in commands that are present in cmd.exe should not be resolved using PATH as they do not exist as exes
-        if ('\\' === \DIRECTORY_SEPARATOR && \in_array(\strtolower($name), self::CMD_BUILTINS, \true)) {
+        if ('\\' === \DIRECTORY_SEPARATOR && \in_array(strtolower($name), self::CMD_BUILTINS, \true)) {
             return $name;
         }
-        $dirs = \array_merge(\explode(\PATH_SEPARATOR, \getenv('PATH') ?: \getenv('Path')), $extraDirs);
+        $dirs = array_merge(explode(\PATH_SEPARATOR, getenv('PATH') ?: getenv('Path')), $extraDirs);
         $suffixes = [];
         if ('\\' === \DIRECTORY_SEPARATOR) {
-            $pathExt = \getenv('PATHEXT');
+            $pathExt = getenv('PATHEXT');
             $suffixes = $this->suffixes;
-            $suffixes = \array_merge($suffixes, $pathExt ? \explode(\PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com']);
+            $suffixes = array_merge($suffixes, $pathExt ? explode(\PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com']);
         }
-        $suffixes = '' !== \pathinfo($name, \PATHINFO_EXTENSION) ? \array_merge([''], $suffixes) : \array_merge($suffixes, ['']);
+        $suffixes = '' !== pathinfo($name, \PATHINFO_EXTENSION) ? array_merge([''], $suffixes) : array_merge($suffixes, ['']);
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
                 if ('' === $dir) {
                     $dir = '.';
                 }
-                if (@\is_file($file = $dir . \DIRECTORY_SEPARATOR . $name . $suffix) && ('\\' === \DIRECTORY_SEPARATOR || @\is_executable($file))) {
+                if (@is_file($file = $dir . \DIRECTORY_SEPARATOR . $name . $suffix) && ('\\' === \DIRECTORY_SEPARATOR || @is_executable($file))) {
                     return $file;
                 }
-                if (!@\is_dir($dir) && \basename($dir) === $name . $suffix && @\is_executable($dir)) {
+                if (!@is_dir($dir) && basename($dir) === $name . $suffix && @is_executable($dir)) {
                     return $dir;
                 }
             }
         }
-        if ('\\' === \DIRECTORY_SEPARATOR || !\function_exists('exec') || \strlen($name) !== \strcspn($name, '/' . \DIRECTORY_SEPARATOR)) {
+        if ('\\' === \DIRECTORY_SEPARATOR || !\function_exists('exec') || \strlen($name) !== strcspn($name, '/' . \DIRECTORY_SEPARATOR)) {
             return $default;
         }
-        $execResult = \exec('command -v -- ' . \escapeshellarg($name));
-        if (($executablePath = \substr($execResult, 0, \strpos($execResult, \PHP_EOL) ?: null)) && @\is_executable($executablePath)) {
+        $execResult = exec('command -v -- ' . escapeshellarg($name));
+        if (($executablePath = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) && @is_executable($executablePath)) {
             return $executablePath;
         }
         return $default;

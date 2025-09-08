@@ -51,12 +51,12 @@ final class BetterNodeFinder
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
-    public function findInstancesOf($nodes, array $types) : array
+    public function findInstancesOf($nodes, array $types): array
     {
         $foundInstances = [];
         foreach ($types as $type) {
             $currentFoundInstances = $this->findInstanceOf($nodes, $type);
-            $foundInstances = \array_merge($foundInstances, $currentFoundInstances);
+            $foundInstances = array_merge($foundInstances, $currentFoundInstances);
         }
         return $foundInstances;
     }
@@ -66,7 +66,7 @@ final class BetterNodeFinder
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
-    public function findInstanceOf($nodes, string $type) : array
+    public function findInstanceOf($nodes, string $type): array
     {
         return $this->nodeFinder->findInstanceOf($nodes, $type);
     }
@@ -77,7 +77,7 @@ final class BetterNodeFinder
      *
      * @return T|null
      */
-    public function findFirstInstanceOf($nodes, string $type) : ?Node
+    public function findFirstInstanceOf($nodes, string $type): ?Node
     {
         Assert::isAOf($type, Node::class);
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
@@ -86,7 +86,7 @@ final class BetterNodeFinder
      * @param class-string<Node> $type
      * @param Node[] $nodes
      */
-    public function hasInstanceOfName(array $nodes, string $type, string $name) : bool
+    public function hasInstanceOfName(array $nodes, string $type, string $name): bool
     {
         Assert::isAOf($type, Node::class);
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
@@ -94,7 +94,7 @@ final class BetterNodeFinder
     /**
      * @param Node[] $nodes
      */
-    public function hasVariableOfName(array $nodes, string $name) : bool
+    public function hasVariableOfName(array $nodes, string $name): bool
     {
         return $this->findVariableOfName($nodes, $name) instanceof Node;
     }
@@ -103,7 +103,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @return Variable|null
      */
-    public function findVariableOfName($nodes, string $name) : ?Node
+    public function findVariableOfName($nodes, string $name): ?Node
     {
         return $this->findInstanceOfName($nodes, Variable::class, $name);
     }
@@ -111,10 +111,10 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @param array<class-string<Node>> $types
      */
-    public function hasInstancesOf($nodes, array $types) : bool
+    public function hasInstancesOf($nodes, array $types): bool
     {
         Assert::allIsAOf($types, Node::class);
-        return (bool) $this->nodeFinder->findFirst($nodes, static function (Node $node) use($types) : bool {
+        return (bool) $this->nodeFinder->findFirst($nodes, static function (Node $node) use ($types): bool {
             foreach ($types as $type) {
                 if ($node instanceof $type) {
                     return \true;
@@ -128,7 +128,7 @@ final class BetterNodeFinder
      * @param callable(Node $node): bool $filter
      * @return Node[]
      */
-    public function find($nodes, callable $filter) : array
+    public function find($nodes, callable $filter): array
     {
         return $this->nodeFinder->find($nodes, $filter);
     }
@@ -137,7 +137,7 @@ final class BetterNodeFinder
      * @param Node[] $nodes
      * @return Class_|null
      */
-    public function findFirstNonAnonymousClass(array $nodes) : ?Node
+    public function findFirstNonAnonymousClass(array $nodes): ?Node
     {
         // skip anonymous classes
         return $this->findFirst($nodes, fn(Node $node): bool => $node instanceof Class_ && !$this->classAnalyzer->isAnonymousClass($node));
@@ -146,7 +146,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @param callable(Node $filter): bool $filter
      */
-    public function findFirst($nodes, callable $filter) : ?Node
+    public function findFirst($nodes, callable $filter): ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
     }
@@ -154,13 +154,13 @@ final class BetterNodeFinder
      * @template T of Node
      * @param array<class-string<T>>|class-string<T> $types
      */
-    public function hasInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types) : bool
+    public function hasInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types): bool
     {
-        if (\is_string($types)) {
+        if (is_string($types)) {
             $types = [$types];
         }
         $isFoundNode = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $subNode) use($types, &$isFoundNode) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $subNode) use ($types, &$isFoundNode): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -177,10 +177,10 @@ final class BetterNodeFinder
     /**
      * @return Return_[]
      */
-    public function findReturnsScoped(FunctionLike $functionLike) : array
+    public function findReturnsScoped(FunctionLike $functionLike): array
     {
         $returns = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use(&$returns) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use (&$returns): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -203,18 +203,18 @@ final class BetterNodeFinder
      * @param class-string<T>|array<class-string<T>> $types
      * @return T[]
      */
-    public function findInstancesOfScoped(array $nodes, $types) : array
+    public function findInstancesOfScoped(array $nodes, $types): array
     {
         // here verify only pass single nodes as FunctionLike
-        if (\count($nodes) === 1 && $nodes[0] instanceof FunctionLike) {
+        if (count($nodes) === 1 && $nodes[0] instanceof FunctionLike) {
             $nodes = (array) $nodes[0]->getStmts();
         }
-        if (\is_string($types)) {
+        if (is_string($types)) {
             $types = [$types];
         }
         /** @var T[] $foundNodes */
         $foundNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use($types, &$foundNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, static function (Node $subNode) use ($types, &$foundNodes): ?int {
             if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -233,17 +233,17 @@ final class BetterNodeFinder
      * @param array<class-string<T>>|class-string<T> $types
      * @return array<T>
      */
-    public function findInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types) : array
+    public function findInstancesOfInFunctionLikeScoped(FunctionLike $functionLike, $types): array
     {
         return $this->findInstancesOfScoped([$functionLike], $types);
     }
     /**
      * @param callable(Node $node): bool $filter
      */
-    public function findFirstInFunctionLikeScoped(FunctionLike $functionLike, callable $filter) : ?Node
+    public function findFirstInFunctionLikeScoped(FunctionLike $functionLike, callable $filter): ?Node
     {
         $scopedNode = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use(&$scopedNode, $filter) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $subNode) use (&$scopedNode, $filter): ?int {
             if (!$filter($subNode)) {
                 if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -260,7 +260,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @param class-string<T> $type
      */
-    private function findInstanceOfName($nodes, string $type, string $name) : ?Node
+    private function findInstanceOfName($nodes, string $type, string $name): ?Node
     {
         Assert::isAOf($type, Node::class);
         return $this->nodeFinder->findFirst($nodes, fn(Node $node): bool => $node instanceof $type && $this->nodeNameResolver->isName($node, $name));

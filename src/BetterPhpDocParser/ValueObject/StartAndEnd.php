@@ -22,11 +22,11 @@ final class StartAndEnd
             throw new ShouldNotHappenException();
         }
     }
-    public function getStart() : int
+    public function getStart(): int
     {
         return $this->start;
     }
-    public function getEnd() : int
+    public function getEnd(): int
     {
         return $this->end;
     }

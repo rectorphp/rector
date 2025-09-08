@@ -36,11 +36,11 @@ final class NProcFinder extends ProcOpenBasedFinder
         parent::__construct($executor);
         $this->all = $all;
     }
-    public function toString() : string
+    public function toString(): string
     {
         return sprintf('NProcFinder(all=%s)', $this->all ? 'true' : 'false');
     }
-    protected function getCommand() : string
+    protected function getCommand(): string
     {
         return 'nproc' . ($this->all ? ' --all' : '');
     }

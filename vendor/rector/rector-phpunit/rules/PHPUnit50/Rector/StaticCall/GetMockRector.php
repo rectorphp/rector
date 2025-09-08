@@ -34,7 +34,7 @@ final class GetMockRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns getMock*() methods to createMock()', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -63,14 +63,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
             return null;
@@ -79,14 +79,14 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($node);
-        if ($classReflection instanceof ClassReflection && $classReflection->getName() !== 'PHPUnit\\Framework\\TestCase') {
+        if ($classReflection instanceof ClassReflection && $classReflection->getName() !== 'PHPUnit\Framework\TestCase') {
             return null;
         }
         if ($node->isFirstClassCallable()) {
             return null;
         }
         // narrow args to one
-        if (\count($node->args) > 1) {
+        if (count($node->args) > 1) {
             $node->args = [$node->getArgs()[0]];
         }
         $node->name = new Identifier('createMock');

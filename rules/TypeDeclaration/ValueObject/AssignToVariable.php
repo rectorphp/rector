@@ -19,11 +19,11 @@ final class AssignToVariable
         $this->variableName = $variableName;
         $this->assignedExpr = $assignedExpr;
     }
-    public function getVariableName() : string
+    public function getVariableName(): string
     {
         return $this->variableName;
     }
-    public function getAssignedExpr() : Expr
+    public function getAssignedExpr(): Expr
     {
         return $this->assignedExpr;
     }

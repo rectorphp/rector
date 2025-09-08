@@ -32,7 +32,7 @@ final class ExpectExceptionMethodCallFactory
      * @param PhpDocTagNode[] $phpDocTagNodes
      * @return Expression[]
      */
-    public function createFromTagValueNodes(array $phpDocTagNodes, string $methodName) : array
+    public function createFromTagValueNodes(array $phpDocTagNodes, string $methodName): array
     {
         $methodCallExpressions = [];
         foreach ($phpDocTagNodes as $phpDocTagNode) {
@@ -41,7 +41,7 @@ final class ExpectExceptionMethodCallFactory
         }
         return $methodCallExpressions;
     }
-    private function createMethodCall(PhpDocTagNode $phpDocTagNode, string $methodName) : MethodCall
+    private function createMethodCall(PhpDocTagNode $phpDocTagNode, string $methodName): MethodCall
     {
         if (!$phpDocTagNode->value instanceof GenericTagValueNode) {
             throw new ShouldNotHappenException();
@@ -49,7 +49,7 @@ final class ExpectExceptionMethodCallFactory
         $expr = $this->createExpectedExpr($phpDocTagNode, $phpDocTagNode->value);
         return $this->nodeFactory->createMethodCall('this', $methodName, [new Arg($expr)]);
     }
-    private function createExpectedExpr(PhpDocTagNode $phpDocTagNode, GenericTagValueNode $genericTagValueNode) : Expr
+    private function createExpectedExpr(PhpDocTagNode $phpDocTagNode, GenericTagValueNode $genericTagValueNode): Expr
     {
         if ($phpDocTagNode->name === '@expectedExceptionMessage') {
             return new String_($genericTagValueNode->value);

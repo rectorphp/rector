@@ -23,20 +23,20 @@ final class OnlyInPowerShellFinder implements CpuCoreFinder
     {
         $this->decoratedFinder = $decoratedFinder;
     }
-    public function diagnose() : string
+    public function diagnose(): string
     {
         $powerShellModulePath = getenv('PSModulePath');
         return $this->skip() ? sprintf('Skipped; no power shell module path detected ("%s").', $powerShellModulePath) : $this->decoratedFinder->diagnose();
     }
-    public function find() : ?int
+    public function find(): ?int
     {
         return $this->skip() ? null : $this->decoratedFinder->find();
     }
-    public function toString() : string
+    public function toString(): string
     {
         return sprintf('OnlyInPowerShellFinder(%s)', $this->decoratedFinder->toString());
     }
-    private function skip() : bool
+    private function skip(): bool
     {
         return \false === getenv('PSModulePath');
     }

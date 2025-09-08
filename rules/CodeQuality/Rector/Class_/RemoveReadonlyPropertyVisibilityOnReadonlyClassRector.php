@@ -32,11 +32,11 @@ final class RemoveReadonlyPropertyVisibilityOnReadonlyClassRector extends Abstra
         $this->visibilityManipulator = $visibilityManipulator;
         $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::READONLY_CLASS;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove readonly property visibility on readonly class', [new CodeSample(<<<'CODE_SAMPLE'
 final readonly class SomeClass
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->isReadonly()) {
             return null;

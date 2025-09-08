@@ -23,11 +23,11 @@ final class ExtractArrayArgOnQueryBuilderSelectRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Extract array arg on QueryBuilder select, addSelect, groupBy, addGroupBy', [new CodeSample(<<<'CODE_SAMPLE'
 function query(\Doctrine\DBAL\Query\QueryBuilder $queryBuilder)
@@ -46,13 +46,13 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?MethodCall
+    public function refactor(Node $node): ?MethodCall
     {
         $varType = $this->nodeTypeResolver->getType($node->var);
         if (!$varType instanceof ObjectType) {
             return null;
         }
-        if (!$varType->isInstanceOf('Doctrine\\DBAL\\Query\\QueryBuilder')->yes()) {
+        if (!$varType->isInstanceOf('Doctrine\DBAL\Query\QueryBuilder')->yes()) {
             return null;
         }
         if (!$this->isNames($node->name, ['select', 'addSelect', 'groupBy', 'addGroupBy'])) {
@@ -62,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 1) {
+        if (count($args) !== 1) {
             return null;
         }
         $currentArg = $args[0]->value;

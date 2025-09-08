@@ -23,7 +23,7 @@ class MethodTagValueParameterNode implements Node
         $this->parameterName = $parameterName;
         $this->defaultValue = $defaultValue;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $type = $this->type !== null ? "{$this->type} " : '';
         $isReference = $this->isReference ? '&' : '';

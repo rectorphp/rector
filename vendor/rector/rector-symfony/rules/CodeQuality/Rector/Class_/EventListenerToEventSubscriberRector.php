@@ -77,7 +77,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
             new EventNameToClassAndConstant('console.error', SymfonyClass::CONSOLE_EVENTS_CLASS, 'ERROR'),
         ];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeListener
@@ -116,14 +116,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -143,7 +143,7 @@ CODE_SAMPLE
     /**
      * @param array<string, ServiceDefinition[]> $eventsToMethods
      */
-    private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods) : void
+    private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods): void
     {
         $class->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
         $classShortName = $this->classNaming->getShortName($class);
@@ -156,7 +156,7 @@ CODE_SAMPLE
     /**
      * @see https://symfony.com/doc/current/event_dispatcher.html#event-dispatcher_event-listener-attributes
      */
-    private function hasAsListenerAttribute(Class_ $class) : bool
+    private function hasAsListenerAttribute(Class_ $class): bool
     {
         if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAttribute::AS_EVENT_LISTENER)) {
             return \true;
@@ -171,7 +171,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         // anonymous class
         if ($class->isAnonymous()) {

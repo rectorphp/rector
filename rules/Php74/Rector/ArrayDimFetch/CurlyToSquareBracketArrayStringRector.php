@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CurlyToSquareBracketArrayStringRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_CURLY_BRACKET_ARRAY_STRING;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change curly based array and string to square bracket', [new CodeSample(<<<'CODE_SAMPLE'
 $string = 'test';
@@ -42,14 +42,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ArrayDimFetch::class];
     }
     /**
      * @param ArrayDimFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isFollowedByCurlyBracket($this->file, $node)) {
             return null;
@@ -58,7 +58,7 @@ CODE_SAMPLE
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
-    private function isFollowedByCurlyBracket(File $file, ArrayDimFetch $arrayDimFetch) : bool
+    private function isFollowedByCurlyBracket(File $file, ArrayDimFetch $arrayDimFetch): bool
     {
         $oldTokens = $file->getOldTokens();
         $endTokenPost = $arrayDimFetch->getEndTokenPos();

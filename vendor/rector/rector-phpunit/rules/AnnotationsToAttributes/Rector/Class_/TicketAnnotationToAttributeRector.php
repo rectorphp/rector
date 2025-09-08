@@ -54,7 +54,7 @@ final class TicketAnnotationToAttributeRector extends AbstractRector implements 
     /**
      * @var string
      */
-    private const TICKET_CLASS = 'PHPUnit\\Framework\\Attributes\\Ticket';
+    private const TICKET_CLASS = 'PHPUnit\Framework\Attributes\Ticket';
     public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -63,7 +63,7 @@ final class TicketAnnotationToAttributeRector extends AbstractRector implements 
         $this->reflectionProvider = $reflectionProvider;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change annotations with value to attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -89,18 +89,18 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -136,7 +136,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createTicketAttribute(string $stringValue) : Attribute
+    private function createTicketAttribute(string $stringValue): Attribute
     {
         $fullyQualified = new FullyQualified(self::TICKET_CLASS);
         $ticketString = new String_($stringValue);

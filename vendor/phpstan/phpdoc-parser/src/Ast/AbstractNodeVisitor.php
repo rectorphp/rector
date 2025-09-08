@@ -11,7 +11,7 @@ namespace PHPStan\PhpDocParser\Ast;
  */
 abstract class AbstractNodeVisitor implements \PHPStan\PhpDocParser\Ast\NodeVisitor
 {
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         return null;
     }
@@ -23,7 +23,7 @@ abstract class AbstractNodeVisitor implements \PHPStan\PhpDocParser\Ast\NodeVisi
     {
         return null;
     }
-    public function afterTraverse(array $nodes) : ?array
+    public function afterTraverse(array $nodes): ?array
     {
         return null;
     }

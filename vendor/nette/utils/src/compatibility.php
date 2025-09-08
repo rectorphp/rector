@@ -13,8 +13,8 @@ if (\false) {
     interface IHtmlString extends Nette\HtmlStringable
     {
     }
-} elseif (!\interface_exists(IHtmlString::class)) {
-    \class_alias(Nette\HtmlStringable::class, IHtmlString::class);
+} elseif (!interface_exists(IHtmlString::class)) {
+    class_alias(Nette\HtmlStringable::class, IHtmlString::class);
 }
 namespace RectorPrefix202509\Nette\Localization;
 
@@ -23,6 +23,6 @@ if (\false) {
     interface ITranslator extends Translator
     {
     }
-} elseif (!\interface_exists(ITranslator::class)) {
-    \class_alias(Translator::class, ITranslator::class);
+} elseif (!interface_exists(ITranslator::class)) {
+    class_alias(Translator::class, ITranslator::class);
 }

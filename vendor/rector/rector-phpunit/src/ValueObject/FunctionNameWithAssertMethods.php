@@ -23,15 +23,15 @@ final class FunctionNameWithAssertMethods
         $this->assetMethodName = $assetMethodName;
         $this->notAssertMethodName = $notAssertMethodName;
     }
-    public function getFunctionName() : string
+    public function getFunctionName(): string
     {
         return $this->functionName;
     }
-    public function getAssetMethodName() : string
+    public function getAssetMethodName(): string
     {
         return $this->assetMethodName;
     }
-    public function getNotAssertMethodName() : string
+    public function getNotAssertMethodName(): string
     {
         return $this->notAssertMethodName;
     }

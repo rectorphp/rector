@@ -39,7 +39,7 @@ final class NarrowReturnUnionToCollectionRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->unionCollectionTagValueNodeNarrower = $unionCollectionTagValueNodeNarrower;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow union type to Collection type in method docblock', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -72,14 +72,14 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node): ?ClassMethod
     {
         $hasChanged = \false;
         if ($this->refactorReturnDocblockTag($node)) {
@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorReturnDocblockTag(ClassMethod $classMethod) : bool
+    private function refactorReturnDocblockTag(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {
@@ -111,14 +111,14 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
         return \true;
     }
-    private function hasNativeCollectionType(ClassMethod $classMethod) : bool
+    private function hasNativeCollectionType(ClassMethod $classMethod): bool
     {
         if (!$classMethod->returnType instanceof Node) {
             return \false;
         }
         return $this->isName($classMethod->returnType, DoctrineClass::COLLECTION);
     }
-    private function refactorNativeReturn(ClassMethod $classMethod) : bool
+    private function refactorNativeReturn(ClassMethod $classMethod): bool
     {
         if (!$classMethod->returnType instanceof Node) {
             return \false;
@@ -143,7 +143,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function hasNativeReturnCollectionType(UnionType $unionType) : bool
+    private function hasNativeReturnCollectionType(UnionType $unionType): bool
     {
         foreach ($unionType->types as $unionedType) {
             if ($this->isName($unionedType, DoctrineClass::COLLECTION)) {

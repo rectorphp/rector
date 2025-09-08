@@ -15,7 +15,7 @@ class Regex
     /**
      * @param non-empty-string $pattern
      */
-    public static function isMatch(string $pattern, string $subject, int $offset = 0) : bool
+    public static function isMatch(string $pattern, string $subject, int $offset = 0): bool
     {
         return (bool) Preg::match($pattern, $subject, $matches, 0, $offset);
     }
@@ -23,7 +23,7 @@ class Regex
      * @param non-empty-string $pattern
      * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
-    public static function match(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchResult
+    public static function match(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchResult
     {
         self::checkOffsetCapture($flags, 'matchWithOffsets');
         $count = Preg::match($pattern, $subject, $matches, $flags, $offset);
@@ -36,7 +36,7 @@ class Regex
      * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @throws UnexpectedNullMatchException
      */
-    public static function matchStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchStrictGroupsResult
+    public static function matchStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchStrictGroupsResult
     {
         // @phpstan-ignore composerPcre.maybeUnsafeStrictGroups
         $count = Preg::matchStrictGroups($pattern, $subject, $matches, $flags, $offset);
@@ -48,7 +48,7 @@ class Regex
      * @param non-empty-string $pattern
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
-    public static function matchWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchWithOffsetsResult
+    public static function matchWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchWithOffsetsResult
     {
         $count = Preg::matchWithOffsets($pattern, $subject, $matches, $flags, $offset);
         return new MatchWithOffsetsResult($count, $matches);
@@ -57,7 +57,7 @@ class Regex
      * @param non-empty-string $pattern
      * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
-    public static function matchAll(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchAllResult
+    public static function matchAll(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllResult
     {
         self::checkOffsetCapture($flags, 'matchAllWithOffsets');
         self::checkSetOrder($flags);
@@ -71,7 +71,7 @@ class Regex
      * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @throws UnexpectedNullMatchException
      */
-    public static function matchAllStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchAllStrictGroupsResult
+    public static function matchAllStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllStrictGroupsResult
     {
         self::checkOffsetCapture($flags, 'matchAllWithOffsets');
         self::checkSetOrder($flags);
@@ -85,7 +85,7 @@ class Regex
      * @param non-empty-string $pattern
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
-    public static function matchAllWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchAllWithOffsetsResult
+    public static function matchAllWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllWithOffsetsResult
     {
         self::checkSetOrder($flags);
         $count = Preg::matchAllWithOffsets($pattern, $subject, $matches, $flags, $offset);
@@ -96,7 +96,7 @@ class Regex
      * @param string|string[] $replacement
      * @param string          $subject
      */
-    public static function replace($pattern, $replacement, $subject, int $limit = -1) : ReplaceResult
+    public static function replace($pattern, $replacement, $subject, int $limit = -1): ReplaceResult
     {
         $result = Preg::replace($pattern, $replacement, $subject, $limit, $count);
         return new ReplaceResult($count, $result);
@@ -107,7 +107,7 @@ class Regex
      * @param string          $subject
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
-    public static function replaceCallback($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0) : ReplaceResult
+    public static function replaceCallback($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {
         $result = Preg::replaceCallback($pattern, $replacement, $subject, $limit, $count, $flags);
         return new ReplaceResult($count, $result);
@@ -120,7 +120,7 @@ class Regex
      * @param string          $subject
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
-    public static function replaceCallbackStrictGroups($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0) : ReplaceResult
+    public static function replaceCallbackStrictGroups($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {
         $result = Preg::replaceCallbackStrictGroups($pattern, $replacement, $subject, $limit, $count, $flags);
         return new ReplaceResult($count, $result);
@@ -130,18 +130,18 @@ class Regex
      * @param string $subject
      * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
-    public static function replaceCallbackArray(array $pattern, $subject, int $limit = -1, int $flags = 0) : ReplaceResult
+    public static function replaceCallbackArray(array $pattern, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {
         $result = Preg::replaceCallbackArray($pattern, $subject, $limit, $count, $flags);
         return new ReplaceResult($count, $result);
     }
-    private static function checkOffsetCapture(int $flags, string $useFunctionName) : void
+    private static function checkOffsetCapture(int $flags, string $useFunctionName): void
     {
         if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
             throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the return type, use ' . $useFunctionName . '() instead');
         }
     }
-    private static function checkSetOrder(int $flags) : void
+    private static function checkSetOrder(int $flags): void
     {
         if (($flags & \PREG_SET_ORDER) !== 0) {
             throw new \InvalidArgumentException('PREG_SET_ORDER is not supported as it changes the return type');

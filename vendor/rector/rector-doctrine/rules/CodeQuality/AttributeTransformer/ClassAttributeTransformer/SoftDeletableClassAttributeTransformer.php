@@ -21,11 +21,11 @@ final class SoftDeletableClassAttributeTransformer implements ClassAttributeTran
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function transform(EntityMapping $entityMapping, Class_ $class) : bool
+    public function transform(EntityMapping $entityMapping, Class_ $class): bool
     {
         $classMapping = $entityMapping->getClassMapping();
         $softDeletableMapping = $classMapping['gedmo']['soft_deleteable'] ?? null;
-        if (!\is_array($softDeletableMapping)) {
+        if (!is_array($softDeletableMapping)) {
             return \false;
         }
         $args = $this->nodeFactory->createArgs($softDeletableMapping);
@@ -38,7 +38,7 @@ final class SoftDeletableClassAttributeTransformer implements ClassAttributeTran
         $class->attrGroups[] = AttributeFactory::createGroup($this->getClassName(), $args);
         return \true;
     }
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return MappingClass::GEDMO_SOFT_DELETEABLE;
     }

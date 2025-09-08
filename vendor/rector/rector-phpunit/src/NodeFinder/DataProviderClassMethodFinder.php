@@ -43,14 +43,14 @@ final class DataProviderClassMethodFinder
     /**
      * @return ClassMethod[]
      */
-    public function find(Class_ $class) : array
+    public function find(Class_ $class): array
     {
         $parentAbstractClasses = $this->resolveParentAbstractClasses($class);
-        $targetClasses = \array_merge([$class], $parentAbstractClasses);
+        $targetClasses = array_merge([$class], $parentAbstractClasses);
         // foreach to find method names
         $dataProviderMethodNames = [];
         foreach ($targetClasses as $targetClass) {
-            $dataProviderMethodNames = \array_merge($dataProviderMethodNames, $this->resolverDataProviderClassMethodNames($targetClass));
+            $dataProviderMethodNames = array_merge($dataProviderMethodNames, $this->resolverDataProviderClassMethodNames($targetClass));
         }
         $dataProviderClassMethods = [];
         foreach ($dataProviderMethodNames as $dataProviderMethodName) {
@@ -65,9 +65,9 @@ final class DataProviderClassMethodFinder
     /**
      * @return string[]
      */
-    public function findDataProviderNamesForClassMethod(ClassMethod $classMethod) : array
+    public function findDataProviderNamesForClassMethod(ClassMethod $classMethod): array
     {
-        $dataProviderAttributes = $this->findAttributesByClass($classMethod, 'PHPUnit\\Framework\\Attributes\\DataProvider');
+        $dataProviderAttributes = $this->findAttributesByClass($classMethod, 'PHPUnit\Framework\Attributes\DataProvider');
         if ($dataProviderAttributes !== []) {
             return $this->resolveAttributeMethodNames($dataProviderAttributes);
         }
@@ -89,7 +89,7 @@ final class DataProviderClassMethodFinder
      * @param class-string $attributeClass
      * @return Attribute[]
      */
-    public function findAttributesByClass(ClassMethod $classMethod, string $attributeClass) : array
+    public function findAttributesByClass(ClassMethod $classMethod, string $attributeClass): array
     {
         $foundAttributes = [];
         /** @var AttributeGroup $attrGroup */
@@ -109,24 +109,24 @@ final class DataProviderClassMethodFinder
     /**
      * @return string[]
      */
-    private function resolverDataProviderClassMethodNames(Class_ $class) : array
+    private function resolverDataProviderClassMethodNames(Class_ $class): array
     {
         $dataProviderMethodNames = [];
         foreach ($class->getMethods() as $classMethod) {
             $currentDataProviderMethodNames = $this->findDataProviderNamesForClassMethod($classMethod);
-            $dataProviderMethodNames = \array_merge($dataProviderMethodNames, $currentDataProviderMethodNames);
+            $dataProviderMethodNames = array_merge($dataProviderMethodNames, $currentDataProviderMethodNames);
         }
         return $dataProviderMethodNames;
     }
-    private function resolveMethodName(GenericTagValueNode $genericTagValueNode) : string
+    private function resolveMethodName(GenericTagValueNode $genericTagValueNode): string
     {
         $rawValue = $genericTagValueNode->value;
-        return \trim($rawValue, '()');
+        return trim($rawValue, '()');
     }
     /**
      * @return Class_[]
      */
-    private function resolveParentAbstractClasses(Class_ $class) : array
+    private function resolveParentAbstractClasses(Class_ $class): array
     {
         // resolve from parent one?
         $classReflection = $this->reflectionResolver->resolveClassReflection($class);
@@ -136,7 +136,7 @@ final class DataProviderClassMethodFinder
         $parentClasses = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
             // is the top parent class? stop
-            if ($parentClassReflection->getName() === 'PHPUnit\\Framework\\TestCase') {
+            if ($parentClassReflection->getName() === 'PHPUnit\Framework\TestCase') {
                 break;
             }
             /** @var Class_ $parentClass */
@@ -149,7 +149,7 @@ final class DataProviderClassMethodFinder
      * @param Attribute[] $dataProviderAttributes
      * @return string[]
      */
-    private function resolveAttributeMethodNames(array $dataProviderAttributes) : array
+    private function resolveAttributeMethodNames(array $dataProviderAttributes): array
     {
         $dataProviderMethodNames = [];
         foreach ($dataProviderAttributes as $dataProviderAttribute) {

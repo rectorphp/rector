@@ -35,7 +35,7 @@ final class MakeDispatchFirstArgumentEventRector extends AbstractRector
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make event object a first argument of dispatch() method, event name as second', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -64,14 +64,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -96,17 +96,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall): bool
     {
         if (!$this->isName($methodCall->name, 'dispatch')) {
             return \true;
         }
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\Contracts\EventDispatcher\EventDispatcherInterface'))) {
             return \true;
         }
         return !isset($methodCall->args[1]);
     }
-    private function refactorStringArgument(MethodCall $methodCall) : void
+    private function refactorStringArgument(MethodCall $methodCall): void
     {
         // swap arguments
         [$methodCall->args[0], $methodCall->args[1]] = [$methodCall->args[1], $methodCall->args[0]];
@@ -114,7 +114,7 @@ CODE_SAMPLE
             unset($methodCall->args[1]);
         }
     }
-    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr) : void
+    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr): void
     {
         if (!$this->isName($funcCall, 'get_class')) {
             return;
@@ -132,7 +132,7 @@ CODE_SAMPLE
     /**
      * Is the event name just `::class`? We can remove it
      */
-    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall) : bool
+    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
     {
         $secondArg = $methodCall->args[1];
         if (!$secondArg instanceof Arg) {

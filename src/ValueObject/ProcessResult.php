@@ -31,26 +31,26 @@ final class ProcessResult
     /**
      * @return SystemError[]
      */
-    public function getSystemErrors() : array
+    public function getSystemErrors(): array
     {
         return $this->systemErrors;
     }
     /**
      * @return FileDiff[]
      */
-    public function getFileDiffs(bool $onlyWithChanges = \true) : array
+    public function getFileDiffs(bool $onlyWithChanges = \true): array
     {
         if ($onlyWithChanges) {
-            return \array_filter($this->fileDiffs, fn(FileDiff $fileDiff): bool => $fileDiff->getDiff() !== '');
+            return array_filter($this->fileDiffs, fn(FileDiff $fileDiff): bool => $fileDiff->getDiff() !== '');
         }
         return $this->fileDiffs;
     }
     /**
      * @param SystemError[] $systemErrors
      */
-    public function addSystemErrors(array $systemErrors) : void
+    public function addSystemErrors(array $systemErrors): void
     {
         Assert::allIsInstanceOf($systemErrors, SystemError::class);
-        $this->systemErrors = \array_merge($this->systemErrors, $systemErrors);
+        $this->systemErrors = array_merge($this->systemErrors, $systemErrors);
     }
 }

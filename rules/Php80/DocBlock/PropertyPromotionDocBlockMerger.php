@@ -52,7 +52,7 @@ final class PropertyPromotionDocBlockMerger
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockUpdater = $docBlockUpdater;
     }
-    public function mergePropertyAndParamDocBlocks(Property $property, Param $param, ?ParamTagValueNode $paramTagValueNode) : void
+    public function mergePropertyAndParamDocBlocks(Property $property, Param $param, ?ParamTagValueNode $paramTagValueNode): void
     {
         $paramComments = $param->getComments();
         // already has @param tag → give it priority over @var and remove @var
@@ -62,14 +62,14 @@ final class PropertyPromotionDocBlockMerger
                 $propertyDocInfo->removeByType(VarTagValueNode::class);
                 $propertyComments = $this->phpDocInfoPrinter->printToComments($propertyDocInfo);
                 /** @var Comment[] $mergedComments */
-                $mergedComments = \array_merge($paramComments, $propertyComments);
+                $mergedComments = array_merge($paramComments, $propertyComments);
                 $mergedComments = $this->removeEmptyComments($mergedComments);
                 $param->setAttribute(AttributeKey::COMMENTS, $mergedComments);
             }
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($param);
     }
-    public function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName) : void
+    public function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName): void
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
@@ -91,8 +91,8 @@ final class PropertyPromotionDocBlockMerger
      * @param Comment[] $mergedComments
      * @return Comment[]
      */
-    private function removeEmptyComments(array $mergedComments) : array
+    private function removeEmptyComments(array $mergedComments): array
     {
-        return \array_filter($mergedComments, static fn(Comment $comment): bool => $comment->getText() !== '');
+        return array_filter($mergedComments, static fn(Comment $comment): bool => $comment->getText() !== '');
     }
 }

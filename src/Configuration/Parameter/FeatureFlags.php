@@ -11,7 +11,7 @@ use Rector\Configuration\Option;
  */
 final class FeatureFlags
 {
-    public static function treatClassesAsFinal(Class_ $class) : bool
+    public static function treatClassesAsFinal(Class_ $class): bool
     {
         // abstract class never can be treated as "final"
         // as always must be overridden

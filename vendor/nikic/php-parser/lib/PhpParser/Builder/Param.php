@@ -151,7 +151,7 @@ class Param implements PhpParser\Builder
      *
      * @return Node\Param The built parameter node
      */
-    public function getNode() : Node
+    public function getNode(): Node
     {
         return new Node\Param(new Node\Expr\Variable($this->name), $this->default, $this->type, $this->byRef, $this->variadic, [], $this->flags, $this->attributeGroups);
     }

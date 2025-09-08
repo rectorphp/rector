@@ -20,21 +20,21 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
      * @var FuncCallToStaticCall[]
      */
     private array $funcCallsToStaticCalls = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn defined function call to static method call', [new ConfiguredCodeSample('view("...", []);', 'SomeClass::render("...", []);', [new FuncCallToStaticCall('view', 'SomeStaticClass', 'render')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->funcCallsToStaticCalls as $funcCallToStaticCall) {
             if (!$this->isName($node, $funcCallToStaticCall->getOldFuncName())) {
@@ -47,7 +47,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, FuncCallToStaticCall::class);
         $this->funcCallsToStaticCalls = $configuration;

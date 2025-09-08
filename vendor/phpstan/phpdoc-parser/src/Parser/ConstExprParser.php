@@ -20,13 +20,13 @@ class ConstExprParser
     /**
      * @internal
      */
-    public function toDoctrine() : self
+    public function toDoctrine(): self
     {
         $self = new self($this->config);
         $self->parseDoctrineStrings = \true;
         return $self;
     }
-    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\ConstExpr\ConstExprNode
+    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\ConstExpr\ConstExprNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -104,7 +104,7 @@ class ConstExprParser
         }
         throw new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER, null, $tokens->currentTokenLine());
     }
-    private function parseArray(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, int $endToken, int $startIndex) : Ast\ConstExpr\ConstExprArrayNode
+    private function parseArray(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, int $endToken, int $startIndex): Ast\ConstExpr\ConstExprArrayNode
     {
         $items = [];
         $startLine = $tokens->currentTokenLine();
@@ -120,7 +120,7 @@ class ConstExprParser
      * This method is supposed to be called with TokenIterator after reading TOKEN_DOUBLE_QUOTED_STRING and shifting
      * to the next token.
      */
-    public function parseDoctrineString(string $text, \PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\ConstExpr\DoctrineConstExprStringNode
+    public function parseDoctrineString(string $text, \PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\ConstExpr\DoctrineConstExprStringNode
     {
         // Because of how Lexer works, a valid Doctrine string
         // can consist of a sequence of TOKEN_DOUBLE_QUOTED_STRING and TOKEN_DOCTRINE_ANNOTATION_STRING
@@ -130,7 +130,7 @@ class ConstExprParser
         }
         return new Ast\ConstExpr\DoctrineConstExprStringNode(Ast\ConstExpr\DoctrineConstExprStringNode::unescape($text));
     }
-    private function parseArrayItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\ConstExpr\ConstExprArrayItemNode
+    private function parseArrayItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Ast\ConstExpr\ConstExprArrayItemNode
     {
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
@@ -149,7 +149,7 @@ class ConstExprParser
      * @param T $node
      * @return T
      */
-    private function enrichWithAttributes(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\ConstExpr\ConstExprNode $node, int $startLine, int $startIndex) : Ast\ConstExpr\ConstExprNode
+    private function enrichWithAttributes(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\ConstExpr\ConstExprNode $node, int $startLine, int $startIndex): Ast\ConstExpr\ConstExprNode
     {
         if ($this->config->useLinesAttributes) {
             $node->setAttribute(Ast\Attribute::START_LINE, $startLine);

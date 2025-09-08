@@ -12,7 +12,7 @@ final class CollectionTagValueNodeAnalyzer
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
      */
-    public function detect($tagValueNode) : bool
+    public function detect($tagValueNode): bool
     {
         if (!$tagValueNode->type instanceof GenericTypeNode) {
             return \false;

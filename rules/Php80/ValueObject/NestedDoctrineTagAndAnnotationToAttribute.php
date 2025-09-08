@@ -19,11 +19,11 @@ final class NestedDoctrineTagAndAnnotationToAttribute
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
         $this->nestedAnnotationToAttribute = $nestedAnnotationToAttribute;
     }
-    public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
+    public function getDoctrineAnnotationTagValueNode(): DoctrineAnnotationTagValueNode
     {
         return $this->doctrineAnnotationTagValueNode;
     }
-    public function getNestedAnnotationToAttribute() : \Rector\Php80\ValueObject\NestedAnnotationToAttribute
+    public function getNestedAnnotationToAttribute(): \Rector\Php80\ValueObject\NestedAnnotationToAttribute
     {
         return $this->nestedAnnotationToAttribute;
     }

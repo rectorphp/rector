@@ -29,7 +29,7 @@ final class SetArrayToNewCollectionRector extends AbstractRector
     {
         $this->collectionParamCallDetector = $collectionParamCallDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array to new ArrayCollection() on collection typed property', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
@@ -66,7 +66,7 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, New_::class, StaticCall::class];
     }

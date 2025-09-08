@@ -27,12 +27,12 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/N8oLqv/1
      */
-    private const WINDOWS_DRIVE_REGEX = '#^[a-zA-z]\\:[\\/\\\\]#';
+    private const WINDOWS_DRIVE_REGEX = '#^[a-zA-z]\:[\/\\\\]#';
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Migrate include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require being changed depends on the current working directory.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -61,14 +61,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Include_::class];
     }
     /**
      * @param Include_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->expr instanceof Concat && $node->expr->left instanceof String_ && $this->isRefactorableStringPath($node->expr->left)) {
             $node->expr->left = $this->prefixWithDirConstant($node->expr->left);
@@ -83,29 +83,29 @@ CODE_SAMPLE
         /** @var string $includeValue */
         $includeValue = $this->valueResolver->getValue($node->expr);
         // skip phar
-        if (\strncmp($includeValue, 'phar://', \strlen('phar://')) === 0) {
+        if (strncmp($includeValue, 'phar://', strlen('phar://')) === 0) {
             return null;
         }
         // skip absolute paths
-        if (\strncmp($includeValue, '/', \strlen('/')) === 0 || \strncmp($includeValue, '\\', \strlen('\\')) === 0) {
+        if (strncmp($includeValue, '/', strlen('/')) === 0 || strncmp($includeValue, '\\', strlen('\\')) === 0) {
             return null;
         }
-        if (\strpos($includeValue, 'config/') !== \false) {
+        if (strpos($includeValue, 'config/') !== \false) {
             return null;
         }
         if (StringUtils::isMatch($includeValue, self::WINDOWS_DRIVE_REGEX)) {
             return null;
         }
         // add preslash to string
-        $node->expr->value = \strncmp($includeValue, './', \strlen('./')) === 0 ? Strings::substring($includeValue, 1) : '/' . $includeValue;
+        $node->expr->value = strncmp($includeValue, './', strlen('./')) === 0 ? Strings::substring($includeValue, 1) : '/' . $includeValue;
         $node->expr = $this->prefixWithDirConstant($node->expr);
         return $node;
     }
-    private function isRefactorableStringPath(String_ $string) : bool
+    private function isRefactorableStringPath(String_ $string): bool
     {
-        return \strncmp($string->value, 'phar://', \strlen('phar://')) !== 0;
+        return strncmp($string->value, 'phar://', strlen('phar://')) !== 0;
     }
-    private function prefixWithDirConstant(String_ $string) : Concat
+    private function prefixWithDirConstant(String_ $string): Concat
     {
         $this->removeExtraDotSlash($string);
         $this->prependSlashIfMissing($string);
@@ -114,16 +114,16 @@ CODE_SAMPLE
     /**
      * Remove "./" which would break the path
      */
-    private function removeExtraDotSlash(String_ $string) : void
+    private function removeExtraDotSlash(String_ $string): void
     {
-        if (\strncmp($string->value, './', \strlen('./')) !== 0) {
+        if (strncmp($string->value, './', strlen('./')) !== 0) {
             return;
         }
-        $string->value = Strings::replace($string->value, '#^\\.\\/#', '/');
+        $string->value = Strings::replace($string->value, '#^\.\/#', '/');
     }
-    private function prependSlashIfMissing(String_ $string) : void
+    private function prependSlashIfMissing(String_ $string): void
     {
-        if (\strncmp($string->value, '/', \strlen('/')) === 0) {
+        if (strncmp($string->value, '/', strlen('/')) === 0) {
             return;
         }
         $string->value = '/' . $string->value;

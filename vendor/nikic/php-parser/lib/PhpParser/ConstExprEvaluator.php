@@ -62,7 +62,7 @@ class ConstExprEvaluator
      */
     public function evaluateSilently(Expr $expr)
     {
-        \set_error_handler(function ($num, $str, $file, $line) {
+        set_error_handler(function ($num, $str, $file, $line) {
             throw new \ErrorException($str, 0, $num, $file, $line);
         });
         try {
@@ -73,7 +73,7 @@ class ConstExprEvaluator
             }
             throw $e;
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
     /**
@@ -133,7 +133,7 @@ class ConstExprEvaluator
         }
         return ($this->fallbackEvaluator)($expr);
     }
-    private function evaluateArray(Expr\Array_ $expr) : array
+    private function evaluateArray(Expr\Array_ $expr): array
     {
         $array = [];
         foreach ($expr->items as $item) {

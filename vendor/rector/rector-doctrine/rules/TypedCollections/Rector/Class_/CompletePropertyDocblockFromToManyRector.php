@@ -70,7 +70,7 @@ final class CompletePropertyDocblockFromToManyRector extends AbstractRector
         $this->targetEntityResolver = $targetEntityResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Improve Doctrine property @var collections type to make them useful both for PHPStan and PHPStorm', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -119,14 +119,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->entityLikeClassDetector->detect($node)) {
             return null;
@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorProperty(Property $property) : bool
+    private function refactorProperty(Property $property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->hasByAnnotationClasses(CollectionMapping::TO_MANY_CLASSES)) {
@@ -150,7 +150,7 @@ CODE_SAMPLE
         }
         return (bool) $this->refactorPropertyAttribute($property, $phpDocInfo);
     }
-    private function refactorPropertyPhpDocInfo(Property $property, PhpDocInfo $phpDocInfo) : ?Property
+    private function refactorPropertyPhpDocInfo(Property $property, PhpDocInfo $phpDocInfo): ?Property
     {
         $varTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($varTagValueNode instanceof VarTagValueNode) {
@@ -173,7 +173,7 @@ CODE_SAMPLE
         }
         return $property;
     }
-    private function refactorPropertyAttribute(Property $property, PhpDocInfo $phpDocInfo) : ?Property
+    private function refactorPropertyAttribute(Property $property, PhpDocInfo $phpDocInfo): ?Property
     {
         $toManyAttribute = $this->attributeFinder->findAttributeByClasses($property, CollectionMapping::TO_MANY_CLASSES);
         if (!$toManyAttribute instanceof Attribute) {

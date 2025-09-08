@@ -151,7 +151,7 @@ class LimitingServer extends EventEmitter implements ServerInterface
         }
         $this->connections[] = $connection;
         $that = $this;
-        $connection->on('close', function () use($that, $connection) {
+        $connection->on('close', function () use ($that, $connection) {
             $that->handleDisconnection($connection);
         });
         // pause accepting new connections if limit exceeded

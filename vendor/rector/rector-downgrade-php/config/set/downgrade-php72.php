@@ -11,7 +11,7 @@ use Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgR
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
-return static function (RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_71);
     $rectorConfig->rules([DowngradeObjectTypeDeclarationRector::class, DowngradeParameterTypeWideningRector::class, DowngradePregUnmatchedAsNullConstantRector::class, DowngradeStreamIsattyRector::class, DowngradeJsonDecodeNullAssociativeArgRector::class, DowngradePhp72JsonConstRector::class]);
 };

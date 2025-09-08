@@ -28,15 +28,15 @@ final class ReplaceParentCallByPropertyCall
         RectorAssert::methodName($method);
         RectorAssert::propertyName($property);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType(): ObjectType
     {
         return new ObjectType($this->class);
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    public function getProperty() : string
+    public function getProperty(): string
     {
         return $this->property;
     }

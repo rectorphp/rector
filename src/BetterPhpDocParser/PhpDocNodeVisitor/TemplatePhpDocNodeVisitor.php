@@ -29,7 +29,7 @@ final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implemen
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof TemplateTagValueNode) {
             return null;
@@ -48,14 +48,14 @@ final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implemen
         $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
         return $spacingAwareTemplateTagValueNode;
     }
-    private function resolvePreposition(BetterTokenIterator $betterTokenIterator, int $startIndex, int $endIndex) : string
+    private function resolvePreposition(BetterTokenIterator $betterTokenIterator, int $startIndex, int $endIndex): string
     {
         $partialTokens = $betterTokenIterator->partialTokens($startIndex, $endIndex);
         foreach ($partialTokens as $partialToken) {
             if ($partialToken[1] !== Lexer::TOKEN_IDENTIFIER) {
                 continue;
             }
-            if (!\in_array($partialToken[0], ['as', 'of'], \true)) {
+            if (!in_array($partialToken[0], ['as', 'of'], \true)) {
                 continue;
             }
             return $partialToken[0];

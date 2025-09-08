@@ -41,12 +41,12 @@ final class ReturnTypeDeclarationUpdater
     /**
      * @param class-string $className
      */
-    public function updateClassMethod(ClassMethod $classMethod, string $className) : void
+    public function updateClassMethod(ClassMethod $classMethod, string $className): void
     {
         $this->removeReturnDocBlocks($classMethod);
         $this->updatePhp($classMethod, $className);
     }
-    private function removeReturnDocBlocks(ClassMethod $classMethod) : void
+    private function removeReturnDocBlocks(ClassMethod $classMethod): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->removeByType(ReturnTagValueNode::class);
@@ -55,7 +55,7 @@ final class ReturnTypeDeclarationUpdater
     /**
      * @param class-string $className
      */
-    private function updatePhp(ClassMethod $classMethod, string $className) : void
+    private function updatePhp(ClassMethod $classMethod, string $className): void
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return;

@@ -31,7 +31,7 @@ final class ConfigurationFactory
      * @api used in tests
      * @param string[] $paths
      */
-    public function createForTests(array $paths) : Configuration
+    public function createForTests(array $paths): Configuration
     {
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
         return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false, null, null);
@@ -39,7 +39,7 @@ final class ConfigurationFactory
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function createFromInput(InputInterface $input) : Configuration
+    public function createFromInput(InputInterface $input): Configuration
     {
         $isDryRun = (bool) $input->getOption(\Rector\Configuration\Option::DRY_RUN);
         $shouldClearCache = (bool) $input->getOption(\Rector\Configuration\Option::CLEAR_CACHE);
@@ -72,7 +72,7 @@ final class ConfigurationFactory
         $levelOverflows = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::LEVEL_OVERFLOWS);
         return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $kaizenStepCount);
     }
-    private function shouldShowProgressBar(InputInterface $input, string $outputFormat) : bool
+    private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Configuration\Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
@@ -83,7 +83,7 @@ final class ConfigurationFactory
         }
         return $outputFormat === ConsoleOutputFormatter::NAME;
     }
-    private function shouldShowDiffs(InputInterface $input) : bool
+    private function shouldShowDiffs(InputInterface $input): bool
     {
         $noDiffs = (bool) $input->getOption(\Rector\Configuration\Option::NO_DIFFS);
         if ($noDiffs) {
@@ -95,7 +95,7 @@ final class ConfigurationFactory
     /**
      * @return string[]|mixed[]
      */
-    private function resolvePaths(InputInterface $input) : array
+    private function resolvePaths(InputInterface $input): array
     {
         $commandLinePaths = (array) $input->getArgument(\Rector\Configuration\Option::SOURCE);
         // give priority to command line
@@ -111,11 +111,11 @@ final class ConfigurationFactory
     /**
      * @param string[] $paths
      */
-    private function setFilesWithoutExtensionParameter(array $paths) : void
+    private function setFilesWithoutExtensionParameter(array $paths): void
     {
         foreach ($paths as $path) {
-            if (\is_file($path) && \pathinfo($path, \PATHINFO_EXTENSION) === '') {
-                $path = \realpath($path);
+            if (is_file($path) && pathinfo($path, \PATHINFO_EXTENSION) === '') {
+                $path = realpath($path);
                 if ($path === \false) {
                     continue;
                 }
@@ -123,7 +123,7 @@ final class ConfigurationFactory
             }
         }
     }
-    private function resolveMemoryLimit(InputInterface $input) : ?string
+    private function resolveMemoryLimit(InputInterface $input): ?string
     {
         $memoryLimit = $input->getOption(\Rector\Configuration\Option::MEMORY_LIMIT);
         if ($memoryLimit !== null) {

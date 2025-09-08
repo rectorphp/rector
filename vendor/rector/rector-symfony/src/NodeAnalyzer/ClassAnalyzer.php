@@ -15,7 +15,7 @@ final class ClassAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function hasImplements(Class_ $class, string $interfaceFQN) : bool
+    public function hasImplements(Class_ $class, string $interfaceFQN): bool
     {
         foreach ($class->implements as $implement) {
             if ($this->nodeNameResolver->isName($implement, $interfaceFQN)) {

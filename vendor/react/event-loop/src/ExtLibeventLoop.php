@@ -52,7 +52,7 @@ final class ExtLibeventLoop implements LoopInterface
     private $signalEvents = array();
     public function __construct()
     {
-        if (!\function_exists('event_base_new')) {
+        if (!\function_exists('event_base_new') && !\function_exists('RectorPrefix202509\event_base_new')) {
             throw new BadMethodCallException('Cannot create ExtLibeventLoop, ext-libevent extension missing');
         }
         $this->eventBase = \event_base_new();
@@ -193,7 +193,7 @@ final class ExtLibeventLoop implements LoopInterface
     {
         $that = $this;
         $timers = $this->timerEvents;
-        $this->timerCallback = function ($_, $__, $timer) use($timers, $that) {
+        $this->timerCallback = function ($_, $__, $timer) use ($timers, $that) {
             \call_user_func($timer->getCallback(), $timer);
             // Timer already cancelled ...
             if (!$timers->contains($timer)) {
@@ -219,7 +219,7 @@ final class ExtLibeventLoop implements LoopInterface
     {
         $read =& $this->readListeners;
         $write =& $this->writeListeners;
-        $this->streamCallback = function ($stream, $flags) use(&$read, &$write) {
+        $this->streamCallback = function ($stream, $flags) use (&$read, &$write) {
             $key = (int) $stream;
             if (\EV_READ === (\EV_READ & $flags) && isset($read[$key])) {
                 \call_user_func($read[$key], $stream);

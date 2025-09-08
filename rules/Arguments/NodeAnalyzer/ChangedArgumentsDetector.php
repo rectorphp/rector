@@ -33,14 +33,14 @@ final class ChangedArgumentsDetector
     /**
      * @param mixed $value
      */
-    public function isDefaultValueChanged(Param $param, $value) : bool
+    public function isDefaultValueChanged(Param $param, $value): bool
     {
         if (!$param->default instanceof Expr) {
             return \false;
         }
         return !$this->valueResolver->isValue($param->default, $value);
     }
-    public function isTypeChanged(Param $param, ?Type $newType) : bool
+    public function isTypeChanged(Param $param, ?Type $newType): bool
     {
         if (!$param->type instanceof Node) {
             return \false;

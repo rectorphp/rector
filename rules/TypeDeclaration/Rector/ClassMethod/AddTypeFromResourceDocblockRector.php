@@ -59,7 +59,7 @@ final class AddTypeFromResourceDocblockRector extends AbstractRector implements 
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add param and return types on resource docblock', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -91,23 +91,23 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['App\\ValueObject\\Resource'])]);
+, ['App\ValueObject\Resource'])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULLABLE_TYPE;
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         $phpdocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -163,12 +163,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
-        Assert::stringNotEmpty(\current($configuration));
-        $this->newTypeFromResourceDoc = \current($configuration);
+        Assert::stringNotEmpty(current($configuration));
+        $this->newTypeFromResourceDoc = current($configuration);
     }
-    private function resolveNewType(Type $type) : ?Type
+    private function resolveNewType(Type $type): ?Type
     {
         $newType = null;
         if ($type instanceof UnionType) {

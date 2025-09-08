@@ -25,11 +25,11 @@ class AsCommand
         if (!$hidden && !$aliases) {
             return;
         }
-        $name = \explode('|', $name);
-        $name = \array_merge($name, $aliases);
+        $name = explode('|', $name);
+        $name = array_merge($name, $aliases);
         if ($hidden && '' !== $name[0]) {
-            \array_unshift($name, '');
+            array_unshift($name, '');
         }
-        $this->name = \implode('|', $name);
+        $this->name = implode('|', $name);
     }
 }

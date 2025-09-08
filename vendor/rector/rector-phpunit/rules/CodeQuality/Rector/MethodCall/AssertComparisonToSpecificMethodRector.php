@@ -48,21 +48,21 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->binaryOpWithAssertMethods = [new BinaryOpWithAssertMethod(Identical::class, 'assertSame', 'assertNotSame'), new BinaryOpWithAssertMethod(NotIdentical::class, 'assertNotSame', 'assertSame'), new BinaryOpWithAssertMethod(Equal::class, 'assertEquals', 'assertNotEquals'), new BinaryOpWithAssertMethod(NotEqual::class, 'assertNotEquals', 'assertEquals'), new BinaryOpWithAssertMethod(Greater::class, 'assertGreaterThan', 'assertLessThan'), new BinaryOpWithAssertMethod(Smaller::class, 'assertLessThan', 'assertGreaterThan'), new BinaryOpWithAssertMethod(GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new BinaryOpWithAssertMethod(SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns comparison operations to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue($foo === $bar, "message");', '$this->assertSame($bar, $foo, "message");'), new CodeSample('$this->assertFalse($foo >= $bar, "message");', '$this->assertLessThanOrEqual($bar, $foo, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
@@ -79,9 +79,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processCallWithBinaryOp($node, BinaryOp $binaryOp) : ?Node
+    private function processCallWithBinaryOp($node, BinaryOp $binaryOp): ?Node
     {
-        $binaryOpClass = \get_class($binaryOp);
+        $binaryOpClass = get_class($binaryOp);
         foreach ($this->binaryOpWithAssertMethods as $binaryOpWithAssertMethod) {
             if ($binaryOpClass !== $binaryOpWithAssertMethod->getBinaryOpClass()) {
                 continue;
@@ -96,7 +96,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function changeArgumentsOrder($node, bool $shouldKeepOrder) : void
+    private function changeArgumentsOrder($node, bool $shouldKeepOrder): void
     {
         $oldArguments = $node->getArgs();
         /** @var BinaryOp $expression */
@@ -110,9 +110,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         }
         unset($oldArguments[0]);
         $newArgs = [$firstArgument, $secondArgument];
-        $node->args = \array_merge($newArgs, $oldArguments);
+        $node->args = array_merge($newArgs, $oldArguments);
     }
-    private function isConstantValue(Expr $expr) : bool
+    private function isConstantValue(Expr $expr): bool
     {
         $staticType = $this->nodeTypeResolver->getType($expr);
         if ($staticType instanceof ConstantScalarType) {

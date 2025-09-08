@@ -30,11 +30,11 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Prior PHP 8.2 FilesystemIterator::SKIP_DOTS was always set and could not be removed, therefore FilesystemIterator::SKIP_DOTS is added in order to keep this behaviour', [new CodeSample('new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME);', 'new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::SKIP_DOTS);')]);
     }
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class];
     }
@@ -43,7 +43,7 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
      *
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?New_
+    public function refactor(Node $node): ?New_
     {
         if ($node->isFirstClassCallable()) {
             return null;
@@ -62,14 +62,14 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
         $node->args[1] = new Arg(new BitwiseOr($flags, $classConstFetch));
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::FILESYSTEM_ITERATOR_SKIP_DOTS;
     }
     /**
      * Is the constant {@see \FilesystemIterator::SKIP_DOTS} present within $node?
      */
-    private function isSkipDotsPresent(Expr $expr) : bool
+    private function isSkipDotsPresent(Expr $expr): bool
     {
         while ($expr instanceof BitwiseOr) {
             if ($this->isSkipDots($expr->right)) {
@@ -82,16 +82,16 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
     /**
      * Tells if $expr is equal to {@see \FilesystemIterator::SKIP_DOTS}.
      */
-    private function isSkipDots(Expr $expr) : bool
+    private function isSkipDots(Expr $expr): bool
     {
         if (!$expr instanceof ClassConstFetch) {
             // can be anything
             return \true;
         }
-        if (!\defined('FilesystemIterator::SKIP_DOTS')) {
+        if (!defined('FilesystemIterator::SKIP_DOTS')) {
             return \true;
         }
-        $value = \constant('FilesystemIterator::SKIP_DOTS');
+        $value = constant('FilesystemIterator::SKIP_DOTS');
         return $this->valueResolver->isValue($expr, $value);
     }
 }

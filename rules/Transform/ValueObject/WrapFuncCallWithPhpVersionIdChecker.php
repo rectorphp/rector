@@ -18,11 +18,11 @@ final class WrapFuncCallWithPhpVersionIdChecker
         $this->functionName = $functionName;
         $this->phpVersionId = $phpVersionId;
     }
-    public function getFunctionName() : string
+    public function getFunctionName(): string
     {
         return $this->functionName;
     }
-    public function getPhpVersionId() : int
+    public function getPhpVersionId(): int
     {
         return $this->phpVersionId;
     }

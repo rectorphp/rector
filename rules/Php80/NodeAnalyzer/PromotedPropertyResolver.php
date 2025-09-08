@@ -12,7 +12,7 @@ final class PromotedPropertyResolver
     /**
      * @return Param[]
      */
-    public function resolveFromClass(Class_ $class) : array
+    public function resolveFromClass(Class_ $class): array
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {

@@ -25,15 +25,15 @@ final class HappyEyeBallsConnector implements ConnectorInterface
         // with null default. Mark all parameters optional and check accordingly.
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #1 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         if (!$connector instanceof ConnectorInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($connector) expected React\\Socket\\ConnectorInterface');
+            throw new \InvalidArgumentException('Argument #2 ($connector) expected React\Socket\ConnectorInterface');
         }
         if (!$resolver instanceof ResolverInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #3 ($resolver) expected React\\Dns\\Resolver\\ResolverInterface');
+            throw new \InvalidArgumentException('Argument #3 ($resolver) expected React\Dns\Resolver\ResolverInterface');
         }
         $this->loop = $loop ?: Loop::get();
         $this->connector = $connector;

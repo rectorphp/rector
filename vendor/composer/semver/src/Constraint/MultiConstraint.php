@@ -88,7 +88,7 @@ class MultiConstraint implements ConstraintInterface
         if (!$parts) {
             return $this->conjunctive ? 'true' : 'false';
         }
-        return $this->conjunctive ? \implode('&&', $parts) : \implode('||', $parts);
+        return $this->conjunctive ? implode('&&', $parts) : implode('||', $parts);
     }
     /**
      * @param ConstraintInterface $provider
@@ -147,7 +147,7 @@ class MultiConstraint implements ConstraintInterface
         foreach ($this->constraints as $constraint) {
             $constraints[] = (string) $constraint;
         }
-        return $this->string = '[' . \implode($this->conjunctive ? ' ' : ' || ', $constraints) . ']';
+        return $this->string = '[' . implode($this->conjunctive ? ' ' : ' || ', $constraints) . ']';
     }
     /**
      * {@inheritDoc}
@@ -217,7 +217,7 @@ class MultiConstraint implements ConstraintInterface
             $optimized = \false;
             for ($i = 1, $l = \count($constraints); $i < $l; $i++) {
                 $right = $constraints[$i];
-                if ($left instanceof self && $left->conjunctive && $right instanceof self && $right->conjunctive && \count($left->constraints) === 2 && \count($right->constraints) === 2 && ($left0 = (string) $left->constraints[0]) && $left0[0] === '>' && $left0[1] === '=' && ($left1 = (string) $left->constraints[1]) && $left1[0] === '<' && ($right0 = (string) $right->constraints[0]) && $right0[0] === '>' && $right0[1] === '=' && ($right1 = (string) $right->constraints[1]) && $right1[0] === '<' && \substr($left1, 2) === \substr($right0, 3)) {
+                if ($left instanceof self && $left->conjunctive && $right instanceof self && $right->conjunctive && \count($left->constraints) === 2 && \count($right->constraints) === 2 && ($left0 = (string) $left->constraints[0]) && $left0[0] === '>' && $left0[1] === '=' && ($left1 = (string) $left->constraints[1]) && $left1[0] === '<' && ($right0 = (string) $right->constraints[0]) && $right0[0] === '>' && $right0[1] === '=' && ($right1 = (string) $right->constraints[1]) && $right1[0] === '<' && substr($left1, 2) === substr($right0, 3)) {
                     $optimized = \true;
                     $left = new MultiConstraint(array($left->constraints[0], $right->constraints[1]), \true);
                 } else {

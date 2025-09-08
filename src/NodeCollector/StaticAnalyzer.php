@@ -10,7 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Util\StringUtils;
 final class StaticAnalyzer
 {
-    public function isStaticMethod(ClassReflection $classReflection, string $methodName, ?Class_ $class = null) : bool
+    public function isStaticMethod(ClassReflection $classReflection, string $methodName, ?Class_ $class = null): bool
     {
         if ($classReflection->hasNativeMethod($methodName)) {
             $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
@@ -30,13 +30,13 @@ final class StaticAnalyzer
         // @see https://regex101.com/r/tlvfTB/1
         return $this->hasStaticAnnotation($methodName, $classReflection);
     }
-    private function hasStaticAnnotation(string $methodName, ClassReflection $classReflection) : bool
+    private function hasStaticAnnotation(string $methodName, ClassReflection $classReflection): bool
     {
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
         if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return \false;
         }
         // @see https://regex101.com/r/7Zkej2/1
-        return StringUtils::isMatch($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
+        return StringUtils::isMatch($resolvedPhpDocBlock->getPhpDocString(), '#@method\s*static\s*((([\w\|\\\\]+)|\$this)*+(\[\])*)*\s+\b' . $methodName . 'b#');
     }
 }

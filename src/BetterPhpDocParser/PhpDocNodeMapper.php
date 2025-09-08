@@ -44,7 +44,7 @@ final class PhpDocNodeMapper
             $this->phpDocNodeTraverser->addPhpDocNodeVisitor($phpDocNodeVisitor);
         }
     }
-    public function transform(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator) : void
+    public function transform(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator): void
     {
         $this->currentTokenIteratorProvider->setBetterTokenIterator($betterTokenIterator);
         $this->phpDocNodeTraverser->traverse($phpDocNode);

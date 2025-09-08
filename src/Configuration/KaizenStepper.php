@@ -22,29 +22,29 @@ final class KaizenStepper
     /**
      * @param positive-int $stepCount
      */
-    public function setStepCount(int $stepCount) : void
+    public function setStepCount(int $stepCount): void
     {
         $this->stepCount = $stepCount;
     }
-    public function enabled() : bool
+    public function enabled(): bool
     {
         return $this->stepCount !== null;
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function recordAppliedRule(string $rectorClass) : void
+    public function recordAppliedRule(string $rectorClass): void
     {
         $this->kaizenRulesDetector->addRule($rectorClass);
     }
-    public function shouldKeepImproving(string $rectorClass) : bool
+    public function shouldKeepImproving(string $rectorClass): bool
     {
         $appliedRectorClasses = $this->kaizenRulesDetector->loadRules();
         // is rule already in applied rules? keep going
-        if (\in_array($rectorClass, $appliedRectorClasses)) {
+        if (in_array($rectorClass, $appliedRectorClasses)) {
             return \true;
         }
         // make sure we made enough changes
-        return \count($appliedRectorClasses) < $this->stepCount;
+        return count($appliedRectorClasses) < $this->stepCount;
     }
 }

@@ -29,12 +29,12 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
     {
         $this->header = $header;
     }
-    public function getDiff(array $diff) : string
+    public function getDiff(array $diff): string
     {
         $buffer = fopen('php://memory', 'r+b');
         if ('' !== $this->header) {
             fwrite($buffer, $this->header);
-            if (\substr_compare($this->header, "\n", -\strlen("\n")) !== 0) {
+            if (substr_compare($this->header, "\n", -strlen("\n")) !== 0) {
                 fwrite($buffer, "\n");
             }
         }

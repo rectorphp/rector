@@ -16,5 +16,5 @@ interface ProcessExecutor
     /**
      * @return array{string, string}|null STDOUT & STDERR tuple
      */
-    public function execute(string $command) : ?array;
+    public function execute(string $command): ?array;
 }

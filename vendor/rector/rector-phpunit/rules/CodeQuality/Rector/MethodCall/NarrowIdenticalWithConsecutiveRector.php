@@ -25,7 +25,7 @@ final class NarrowIdenticalWithConsecutiveRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Narrow identical withConsecutive() and willReturnOnConsecutiveCalls() to single call', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
@@ -68,14 +68,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<MethodCall>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
         $uniqueArgValues = $this->resolveUniqueArgValues($node);
         // multiple unique values
-        if (\count($uniqueArgValues) !== 1) {
+        if (count($uniqueArgValues) !== 1) {
             return null;
         }
         $firstArg = $node->getArgs()[0];
@@ -109,13 +109,13 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveUniqueArgValues(MethodCall $methodCall) : array
+    private function resolveUniqueArgValues(MethodCall $methodCall): array
     {
         $printerStandard = new Standard();
         $printedValues = [];
         foreach ($methodCall->getArgs() as $arg) {
             $printedValues[] = $printerStandard->prettyPrintExpr($arg->value);
         }
-        return \array_unique($printedValues);
+        return array_unique($printedValues);
     }
 }

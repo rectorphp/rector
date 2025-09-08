@@ -38,11 +38,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $this->staticTypeMapper = $staticTypeMapper;
         $this->renamedNameCollector = $renamedNameCollector;
     }
-    public function setCurrentPhpNode(PhpNode $phpNode) : void
+    public function setCurrentPhpNode(PhpNode $phpNode): void
     {
         $this->currentPhpNode = $phpNode;
     }
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(Node $node): void
     {
         if ($this->oldToNewTypes === []) {
             throw new ShouldNotHappenException('Configure "$oldToNewClasses" first');
@@ -52,7 +52,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         $this->hasChanged = \false;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (!$node instanceof IdentifierTypeNode) {
             return null;
@@ -89,18 +89,18 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     /**
      * @param OldToNewType[] $oldToNewTypes
      */
-    public function setOldToNewTypes(array $oldToNewTypes) : void
+    public function setOldToNewTypes(array $oldToNewTypes): void
     {
         $this->oldToNewTypes = $oldToNewTypes;
     }
-    public function hasChanged() : bool
+    public function hasChanged(): bool
     {
         return $this->hasChanged;
     }
-    private function ensureFQCNObject(ObjectType $objectType, string $identifierName) : ObjectType
+    private function ensureFQCNObject(ObjectType $objectType, string $identifierName): ObjectType
     {
-        if ($objectType instanceof ShortenedObjectType && \strncmp($identifierName, '\\', \strlen('\\')) === 0) {
-            return new ObjectType(\ltrim($identifierName, '\\'));
+        if ($objectType instanceof ShortenedObjectType && strncmp($identifierName, '\\', strlen('\\')) === 0) {
+            return new ObjectType(ltrim($identifierName, '\\'));
         }
         if ($objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType) {
             return new ObjectType($objectType->getFullyQualifiedName());

@@ -25,7 +25,7 @@ class Int_ extends Scalar
         $this->attributes = $attributes;
         $this->value = $value;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['value'];
     }
@@ -38,37 +38,37 @@ class Int_ extends Scalar
      *
      * @return Int_ The constructed LNumber, including kind attribute
      */
-    public static function fromString(string $str, array $attributes = [], bool $allowInvalidOctal = \false) : \PhpParser\Node\Scalar\Int_
+    public static function fromString(string $str, array $attributes = [], bool $allowInvalidOctal = \false): \PhpParser\Node\Scalar\Int_
     {
         $attributes['rawValue'] = $str;
-        $str = \str_replace('_', '', $str);
+        $str = str_replace('_', '', $str);
         if ('0' !== $str[0] || '0' === $str) {
             $attributes['kind'] = \PhpParser\Node\Scalar\Int_::KIND_DEC;
             return new \PhpParser\Node\Scalar\Int_((int) $str, $attributes);
         }
         if ('x' === $str[1] || 'X' === $str[1]) {
             $attributes['kind'] = \PhpParser\Node\Scalar\Int_::KIND_HEX;
-            return new \PhpParser\Node\Scalar\Int_(\hexdec($str), $attributes);
+            return new \PhpParser\Node\Scalar\Int_(hexdec($str), $attributes);
         }
         if ('b' === $str[1] || 'B' === $str[1]) {
             $attributes['kind'] = \PhpParser\Node\Scalar\Int_::KIND_BIN;
-            return new \PhpParser\Node\Scalar\Int_(\bindec($str), $attributes);
+            return new \PhpParser\Node\Scalar\Int_(bindec($str), $attributes);
         }
-        if (!$allowInvalidOctal && \strpbrk($str, '89')) {
+        if (!$allowInvalidOctal && strpbrk($str, '89')) {
             throw new Error('Invalid numeric literal', $attributes);
         }
         // Strip optional explicit octal prefix.
         if ('o' === $str[1] || 'O' === $str[1]) {
-            $str = \substr($str, 2);
+            $str = substr($str, 2);
         }
         // use intval instead of octdec to get proper cutting behavior with malformed numbers
         $attributes['kind'] = \PhpParser\Node\Scalar\Int_::KIND_OCT;
-        return new \PhpParser\Node\Scalar\Int_(\intval($str, 8), $attributes);
+        return new \PhpParser\Node\Scalar\Int_(intval($str, 8), $attributes);
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Scalar_Int';
     }
 }
 // @deprecated compatibility alias
-\class_alias(\PhpParser\Node\Scalar\Int_::class, \PhpParser\Node\Scalar\LNumber::class);
+class_alias(\PhpParser\Node\Scalar\Int_::class, \PhpParser\Node\Scalar\LNumber::class);

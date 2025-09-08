@@ -64,7 +64,7 @@ class Lexer
     /**
      * @return list<array{string, int, int}>
      */
-    public function tokenize(string $s) : array
+    public function tokenize(string $s): array
     {
         if ($this->regexp === null) {
             $this->regexp = $this->generateRegexp();
@@ -83,48 +83,48 @@ class Lexer
         $tokens[] = ['', self::TOKEN_END, $line];
         return $tokens;
     }
-    private function generateRegexp() : string
+    private function generateRegexp(): string
     {
         $patterns = [
-            self::TOKEN_HORIZONTAL_WS => '[\\x09\\x20]++',
-            self::TOKEN_IDENTIFIER => '(?:[\\\\]?+[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF-]*+)++',
-            self::TOKEN_THIS_VARIABLE => '\\$this(?![0-9a-z_\\x80-\\xFF])',
-            self::TOKEN_VARIABLE => '\\$[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF]*+',
+            self::TOKEN_HORIZONTAL_WS => '[\x09\x20]++',
+            self::TOKEN_IDENTIFIER => '(?:[\\\\]?+[a-z_\x80-\xFF][0-9a-z_\x80-\xFF-]*+)++',
+            self::TOKEN_THIS_VARIABLE => '\$this(?![0-9a-z_\x80-\xFF])',
+            self::TOKEN_VARIABLE => '\$[a-z_\x80-\xFF][0-9a-z_\x80-\xFF]*+',
             // '&' followed by TOKEN_VARIADIC, TOKEN_VARIABLE, TOKEN_EQUAL, TOKEN_EQUAL or TOKEN_CLOSE_PARENTHESES
-            self::TOKEN_REFERENCE => '&(?=\\s*+(?:[.,=)]|(?:\\$(?!this(?![0-9a-z_\\x80-\\xFF])))))',
-            self::TOKEN_UNION => '\\|',
+            self::TOKEN_REFERENCE => '&(?=\s*+(?:[.,=)]|(?:\$(?!this(?![0-9a-z_\x80-\xFF])))))',
+            self::TOKEN_UNION => '\|',
             self::TOKEN_INTERSECTION => '&',
-            self::TOKEN_NULLABLE => '\\?',
+            self::TOKEN_NULLABLE => '\?',
             self::TOKEN_NEGATED => '!',
-            self::TOKEN_OPEN_PARENTHESES => '\\(',
-            self::TOKEN_CLOSE_PARENTHESES => '\\)',
+            self::TOKEN_OPEN_PARENTHESES => '\(',
+            self::TOKEN_CLOSE_PARENTHESES => '\)',
             self::TOKEN_OPEN_ANGLE_BRACKET => '<',
             self::TOKEN_CLOSE_ANGLE_BRACKET => '>',
-            self::TOKEN_OPEN_SQUARE_BRACKET => '\\[',
-            self::TOKEN_CLOSE_SQUARE_BRACKET => '\\]',
-            self::TOKEN_OPEN_CURLY_BRACKET => '\\{',
-            self::TOKEN_CLOSE_CURLY_BRACKET => '\\}',
+            self::TOKEN_OPEN_SQUARE_BRACKET => '\[',
+            self::TOKEN_CLOSE_SQUARE_BRACKET => '\]',
+            self::TOKEN_OPEN_CURLY_BRACKET => '\{',
+            self::TOKEN_CLOSE_CURLY_BRACKET => '\}',
             self::TOKEN_COMMA => ',',
-            self::TOKEN_COMMENT => '\\/\\/[^\\r\\n]*(?=\\n|\\r|\\*/)',
-            self::TOKEN_VARIADIC => '\\.\\.\\.',
+            self::TOKEN_COMMENT => '\/\/[^\r\n]*(?=\n|\r|\*/)',
+            self::TOKEN_VARIADIC => '\.\.\.',
             self::TOKEN_DOUBLE_COLON => '::',
             self::TOKEN_DOUBLE_ARROW => '=>',
             self::TOKEN_ARROW => '->',
             self::TOKEN_EQUAL => '=',
             self::TOKEN_COLON => ':',
-            self::TOKEN_OPEN_PHPDOC => '/\\*\\*(?=\\s)\\x20?+',
-            self::TOKEN_CLOSE_PHPDOC => '\\*/',
+            self::TOKEN_OPEN_PHPDOC => '/\*\*(?=\s)\x20?+',
+            self::TOKEN_CLOSE_PHPDOC => '\*/',
             self::TOKEN_PHPDOC_TAG => '@(?:[a-z][a-z0-9-\\\\]+:)?[a-z][a-z0-9-\\\\]*+',
-            self::TOKEN_DOCTRINE_TAG => '@[a-z_\\\\][a-z0-9_\\:\\\\]*[a-z_][a-z0-9_]*',
-            self::TOKEN_PHPDOC_EOL => '\\r?+\\n[\\x09\\x20]*+(?:\\*(?!/)\\x20?+)?',
-            self::TOKEN_FLOAT => '[+\\-]?(?:(?:[0-9]++(_[0-9]++)*\\.[0-9]*+(_[0-9]++)*(?:e[+\\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]*+(_[0-9]++)*\\.[0-9]++(_[0-9]++)*(?:e[+\\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]++(_[0-9]++)*e[+\\-]?[0-9]++(_[0-9]++)*))',
-            self::TOKEN_INTEGER => '[+\\-]?(?:(?:0b[0-1]++(_[0-1]++)*)|(?:0o[0-7]++(_[0-7]++)*)|(?:0x[0-9a-f]++(_[0-9a-f]++)*)|(?:[0-9]++(_[0-9]++)*))',
-            self::TOKEN_SINGLE_QUOTED_STRING => '\'(?:\\\\[^\\r\\n]|[^\'\\r\\n\\\\])*+\'',
-            self::TOKEN_DOUBLE_QUOTED_STRING => '"(?:\\\\[^\\r\\n]|[^"\\r\\n\\\\])*+"',
+            self::TOKEN_DOCTRINE_TAG => '@[a-z_\\\\][a-z0-9_\:\\\\]*[a-z_][a-z0-9_]*',
+            self::TOKEN_PHPDOC_EOL => '\r?+\n[\x09\x20]*+(?:\*(?!/)\x20?+)?',
+            self::TOKEN_FLOAT => '[+\-]?(?:(?:[0-9]++(_[0-9]++)*\.[0-9]*+(_[0-9]++)*(?:e[+\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]*+(_[0-9]++)*\.[0-9]++(_[0-9]++)*(?:e[+\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]++(_[0-9]++)*e[+\-]?[0-9]++(_[0-9]++)*))',
+            self::TOKEN_INTEGER => '[+\-]?(?:(?:0b[0-1]++(_[0-1]++)*)|(?:0o[0-7]++(_[0-7]++)*)|(?:0x[0-9a-f]++(_[0-9a-f]++)*)|(?:[0-9]++(_[0-9]++)*))',
+            self::TOKEN_SINGLE_QUOTED_STRING => '\'(?:\\\\[^\r\n]|[^\'\r\n\\\\])*+\'',
+            self::TOKEN_DOUBLE_QUOTED_STRING => '"(?:\\\\[^\r\n]|[^"\r\n\\\\])*+"',
             self::TOKEN_DOCTRINE_ANNOTATION_STRING => '"(?:""|[^"])*+"',
-            self::TOKEN_WILDCARD => '\\*',
+            self::TOKEN_WILDCARD => '\*',
             // anything but TOKEN_CLOSE_PHPDOC or TOKEN_HORIZONTAL_WS or TOKEN_EOL
-            self::TOKEN_OTHER => '(?:(?!\\*/)[^\\s])++',
+            self::TOKEN_OTHER => '(?:(?!\*/)[^\s])++',
         ];
         foreach ($patterns as $type => &$pattern) {
             $pattern = '(?:' . $pattern . ')(*MARK:' . $type . ')';

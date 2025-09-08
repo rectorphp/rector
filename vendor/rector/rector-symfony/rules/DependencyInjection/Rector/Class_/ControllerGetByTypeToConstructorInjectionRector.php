@@ -40,7 +40,7 @@ final class ControllerGetByTypeToConstructorInjectionRector extends AbstractRect
         $this->propertyNaming = $propertyNaming;
         $this->thisGetTypeMatcher = $thisGetTypeMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('From `$container->get(SomeType::class)` in controllers to constructor injection (step 1/x)', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -73,25 +73,25 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
         }
         $propertyMetadatas = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$propertyMetadatas) : ?Node {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas): ?Node {
             if (!$node instanceof MethodCall) {
                 return null;
             }
             $className = $this->thisGetTypeMatcher->match($node);
-            if (!\is_string($className)) {
+            if (!is_string($className)) {
                 return null;
             }
             $propertyName = $this->propertyNaming->fqnToVariableName($className);
@@ -107,7 +107,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClass(Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class): bool
     {
         // keep it safe
         if (!$class->isFinal()) {

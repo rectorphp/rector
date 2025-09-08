@@ -25,7 +25,7 @@ final class MyCLabsClassToEnumRector extends AbstractRector implements MinPhpVer
     {
         $this->enumFactory = $enumFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor MyCLabs enum class to native Enum', [new CodeSample(<<<'CODE_SAMPLE'
 use MyCLabs\Enum\Enum;
@@ -48,21 +48,21 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node, new ObjectType('MyCLabs\Enum\Enum'))) {
             return null;
         }
         return $this->enumFactory->createFromClass($node);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ENUM;
     }

@@ -29,7 +29,7 @@ final class FamilyRelationsAnalyzer
      * @return string[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
      */
-    public function getClassLikeAncestorNames($classOrName) : array
+    public function getClassLikeAncestorNames($classOrName): array
     {
         $ancestorNames = [];
         if ($classOrName instanceof Name) {
@@ -38,23 +38,23 @@ final class FamilyRelationsAnalyzer
                 return [];
             }
             $classReflection = $this->reflectionProvider->getClass($fullName);
-            $ancestors = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-            return \array_map(static fn(ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
+            $ancestors = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+            return array_map(static fn(ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
         }
         if ($classOrName instanceof Interface_) {
             foreach ($classOrName->extends as $extendInterfaceName) {
                 $ancestorNames[] = $this->nodeNameResolver->getName($extendInterfaceName);
-                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
             }
         }
         if ($classOrName instanceof Class_) {
             if ($classOrName->extends instanceof Name) {
                 $ancestorNames[] = $this->nodeNameResolver->getName($classOrName->extends);
-                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($classOrName->extends));
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($classOrName->extends));
             }
             foreach ($classOrName->implements as $implement) {
                 $ancestorNames[] = $this->nodeNameResolver->getName($implement);
-                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($implement));
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($implement));
             }
         }
         /** @var string[] $ancestorNames */

@@ -29,11 +29,11 @@ final class RemoveZeroBreakContinueRector extends AbstractRector implements MinP
     {
         $this->valueResolver = $valueResolver;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NO_ZERO_BREAK;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove 0 from break and continue', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -70,14 +70,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Break_::class, Continue_::class];
     }
     /**
      * @param Break_|Continue_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->num instanceof Expr) {
             return null;
@@ -101,7 +101,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
      */
-    private function processVariableNum($stmt, Variable $numVariable) : ?Node
+    private function processVariableNum($stmt, Variable $numVariable): ?Node
     {
         $staticType = $this->getType($numVariable);
         if ($staticType->isConstantValue()->yes()) {

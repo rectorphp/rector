@@ -27,28 +27,28 @@ final class ConstraintUrlOptionRector extends AbstractRector
     /**
      * @var string
      */
-    private const URL_CONSTRAINT_CLASS = 'Symfony\\Component\\Validator\\Constraints\\Url';
+    private const URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.', [new CodeSample('$constraint = new Url(["checkDNS" => true]);', '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?New_
+    public function refactor(Node $node): ?New_
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Validator\\Constraints\\Url'))) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\Component\Validator\Constraints\Url'))) {
             return null;
         }
         foreach ($node->getArgs() as $arg) {
@@ -71,7 +71,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
         }
         return null;
     }
-    private function isCheckDNSKey(ArrayItem $arrayItem) : bool
+    private function isCheckDNSKey(ArrayItem $arrayItem): bool
     {
         if (!$arrayItem->key instanceof Expr) {
             return \false;

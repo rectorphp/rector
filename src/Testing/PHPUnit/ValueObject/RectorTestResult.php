@@ -23,20 +23,20 @@ final class RectorTestResult
         $this->changedContents = $changedContents;
         $this->processResult = $processResult;
     }
-    public function getChangedContents() : string
+    public function getChangedContents(): string
     {
         return $this->changedContents;
     }
     /**
      * @return array<class-string<RectorInterface>>
      */
-    public function getAppliedRectorClasses() : array
+    public function getAppliedRectorClasses(): array
     {
         $rectorClasses = [];
         foreach ($this->processResult->getFileDiffs(\false) as $fileDiff) {
-            $rectorClasses = \array_merge($rectorClasses, $fileDiff->getRectorClasses());
+            $rectorClasses = array_merge($rectorClasses, $fileDiff->getRectorClasses());
         }
-        \sort($rectorClasses);
-        return \array_unique($rectorClasses);
+        sort($rectorClasses);
+        return array_unique($rectorClasses);
     }
 }

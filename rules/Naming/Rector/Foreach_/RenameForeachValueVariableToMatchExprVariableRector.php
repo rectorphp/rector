@@ -43,7 +43,7 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
         $this->stmtsManipulator = $stmtsManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename value variable name in foreach loop to match expression variable', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -74,14 +74,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -135,10 +135,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName) : void
+    private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName): void
     {
         $foreach->valueVar = new Variable($singularValueVarName);
-        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use($singularValueVarName, $valueVarName) : ?Variable {
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use ($singularValueVarName, $valueVarName): ?Variable {
             if (!$node instanceof Variable) {
                 return null;
             }

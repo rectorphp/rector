@@ -16,14 +16,14 @@ final class StringNodeAnnotationToAttributeMapper implements AnnotationToAttribu
     /**
      * @param mixed $value
      */
-    public function isCandidate($value) : bool
+    public function isCandidate($value): bool
     {
         return $value instanceof StringNode;
     }
     /**
      * @param StringNode $value
      */
-    public function map($value) : Expr
+    public function map($value): Expr
     {
         return new String_($value->value, [AttributeKey::KIND => $value->getAttribute(AttributeKey::KIND)]);
     }

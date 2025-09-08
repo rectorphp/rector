@@ -15,11 +15,11 @@ use InvalidArgumentException;
 use function sprintf;
 final class InflectorFactory
 {
-    public static function create() : LanguageInflectorFactory
+    public static function create(): LanguageInflectorFactory
     {
         return self::createForLanguage(Language::ENGLISH);
     }
-    public static function createForLanguage(string $language) : LanguageInflectorFactory
+    public static function createForLanguage(string $language): LanguageInflectorFactory
     {
         switch ($language) {
             case Language::ENGLISH:

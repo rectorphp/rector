@@ -19,7 +19,7 @@ final class DoctrineAnnotationFromNewFactory
     {
         $this->doctrineAnnotationKeyToValuesResolver = $doctrineAnnotationKeyToValuesResolver;
     }
-    public function create(New_ $new) : DoctrineAnnotationTagValueNode
+    public function create(New_ $new): DoctrineAnnotationTagValueNode
     {
         $annotationName = $this->resolveAnnotationName($new);
         $newArgs = $new->getArgs();
@@ -31,7 +31,7 @@ final class DoctrineAnnotationFromNewFactory
         }
         return new DoctrineAnnotationTagValueNode(new ShortenedIdentifierTypeNode($annotationName), null, $annotationKeyToValues);
     }
-    private function resolveAnnotationName(New_ $new) : string
+    private function resolveAnnotationName(New_ $new): string
     {
         $className = $new->class;
         $originalName = $className->getAttribute(AttributeKey::ORIGINAL_NAME);

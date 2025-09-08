@@ -33,7 +33,7 @@ final class Promise implements PromiseInterface
         $resolver = $canceller = null;
         $this->call($cb);
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         if (null !== $this->result) {
             return $this->result->then($onFulfilled, $onRejected);
@@ -48,8 +48,8 @@ final class Promise implements PromiseInterface
         // keeping a cyclic reference between parent and follower.
         $parent = $this;
         ++$parent->requiredCancelRequests;
-        return new static($this->resolver($onFulfilled, $onRejected), static function () use(&$parent) : void {
-            \assert($parent instanceof self);
+        return new static($this->resolver($onFulfilled, $onRejected), static function () use (&$parent): void {
+            assert($parent instanceof self);
             --$parent->requiredCancelRequests;
             if ($parent->requiredCancelRequests <= 0) {
                 $parent->cancel();
@@ -63,9 +63,9 @@ final class Promise implements PromiseInterface
      * @param callable(TThrowable): (PromiseInterface<TRejected>|TRejected) $onRejected
      * @return PromiseInterface<T|TRejected>
      */
-    public function catch(callable $onRejected) : PromiseInterface
+    public function catch(callable $onRejected): PromiseInterface
     {
-        return $this->then(null, static function (\Throwable $reason) use($onRejected) {
+        return $this->then(null, static function (\Throwable $reason) use ($onRejected) {
             if (!_checkTypehint($onRejected, $reason)) {
                 return new RejectedPromise($reason);
             }
@@ -75,20 +75,20 @@ final class Promise implements PromiseInterface
             return $onRejected($reason);
         });
     }
-    public function finally(callable $onFulfilledOrRejected) : PromiseInterface
+    public function finally(callable $onFulfilledOrRejected): PromiseInterface
     {
-        return $this->then(static function ($value) use($onFulfilledOrRejected) : PromiseInterface {
+        return $this->then(static function ($value) use ($onFulfilledOrRejected): PromiseInterface {
             /** @var T $value */
-            return resolve($onFulfilledOrRejected())->then(function () use($value) {
+            return resolve($onFulfilledOrRejected())->then(function () use ($value) {
                 return $value;
             });
-        }, static function (\Throwable $reason) use($onFulfilledOrRejected) : PromiseInterface {
-            return resolve($onFulfilledOrRejected())->then(function () use($reason) : RejectedPromise {
+        }, static function (\Throwable $reason) use ($onFulfilledOrRejected): PromiseInterface {
+            return resolve($onFulfilledOrRejected())->then(function () use ($reason): RejectedPromise {
                 return new RejectedPromise($reason);
             });
         });
     }
-    public function cancel() : void
+    public function cancel(): void
     {
         $this->cancelled = \true;
         $canceller = $this->canceller;
@@ -124,7 +124,7 @@ final class Promise implements PromiseInterface
      * @deprecated 3.0.0 Use `catch()` instead
      * @see self::catch()
      */
-    public function otherwise(callable $onRejected) : PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->catch($onRejected);
     }
@@ -132,17 +132,17 @@ final class Promise implements PromiseInterface
      * @deprecated 3.0.0 Use `finally()` instead
      * @see self::finally()
      */
-    public function always(callable $onFulfilledOrRejected) : PromiseInterface
+    public function always(callable $onFulfilledOrRejected): PromiseInterface
     {
         return $this->finally($onFulfilledOrRejected);
     }
-    private function resolver(?callable $onFulfilled = null, ?callable $onRejected = null) : callable
+    private function resolver(?callable $onFulfilled = null, ?callable $onRejected = null): callable
     {
-        return function (callable $resolve, callable $reject) use($onFulfilled, $onRejected) : void {
-            $this->handlers[] = static function (PromiseInterface $promise) use($onFulfilled, $onRejected, $resolve, $reject) : void {
+        return function (callable $resolve, callable $reject) use ($onFulfilled, $onRejected): void {
+            $this->handlers[] = static function (PromiseInterface $promise) use ($onFulfilled, $onRejected, $resolve, $reject): void {
                 $promise = $promise->then($onFulfilled, $onRejected);
                 if ($promise instanceof self && $promise->result === null) {
-                    $promise->handlers[] = static function (PromiseInterface $promise) use($resolve, $reject) : void {
+                    $promise->handlers[] = static function (PromiseInterface $promise) use ($resolve, $reject): void {
                         $promise->then($resolve, $reject);
                     };
                 } else {
@@ -151,7 +151,7 @@ final class Promise implements PromiseInterface
             };
         };
     }
-    private function reject(\Throwable $reason) : void
+    private function reject(\Throwable $reason): void
     {
         if (null !== $this->result) {
             return;
@@ -161,7 +161,7 @@ final class Promise implements PromiseInterface
     /**
      * @param PromiseInterface<T> $result
      */
-    private function settle(PromiseInterface $result) : void
+    private function settle(PromiseInterface $result): void
     {
         $result = $this->unwrap($result);
         if ($result === $this) {
@@ -188,7 +188,7 @@ final class Promise implements PromiseInterface
      * @param PromiseInterface<T> $promise
      * @return PromiseInterface<T>
      */
-    private function unwrap(PromiseInterface $promise) : PromiseInterface
+    private function unwrap(PromiseInterface $promise): PromiseInterface
     {
         while ($promise instanceof self && null !== $promise->result) {
             /** @var PromiseInterface<T> $promise */
@@ -199,7 +199,7 @@ final class Promise implements PromiseInterface
     /**
      * @param callable(callable(mixed):void,callable(\Throwable):void):void $cb
      */
-    private function call(callable $cb) : void
+    private function call(callable $cb): void
     {
         // Explicitly overwrite argument with null value. This ensure that this
         // argument does not show up in the stack trace in PHP 7+ only.
@@ -221,7 +221,7 @@ final class Promise implements PromiseInterface
                 $ref->setAccessible(\true);
             }
         } else {
-            \assert($callback instanceof \Closure || \is_string($callback));
+            assert($callback instanceof \Closure || \is_string($callback));
             $ref = new \ReflectionFunction($callback);
         }
         $args = $ref->getNumberOfParameters();
@@ -238,12 +238,12 @@ final class Promise implements PromiseInterface
                 // These assumptions are covered by the test suite, so if you ever feel like
                 // refactoring this, go ahead, any alternative suggestions are welcome!
                 $target =& $this;
-                $callback(static function ($value) use(&$target) : void {
+                $callback(static function ($value) use (&$target): void {
                     if ($target !== null) {
                         $target->settle(resolve($value));
                         $target = null;
                     }
-                }, static function (\Throwable $reason) use(&$target) : void {
+                }, static function (\Throwable $reason) use (&$target): void {
                     if ($target !== null) {
                         $target->reject($reason);
                         $target = null;

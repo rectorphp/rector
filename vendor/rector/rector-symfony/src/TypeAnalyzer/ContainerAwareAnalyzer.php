@@ -22,7 +22,7 @@ final class ContainerAwareAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->getMethodAwareObjectTypes = [new ObjectType(SymfonyClass::ABSTRACT_CONTROLLER), new ObjectType(SymfonyClass::CONTROLLER), new ObjectType(SymfonyClass::CONTROLLER_TRAIT)];
     }
-    public function isGetMethodAwareType(Expr $expr) : bool
+    public function isGetMethodAwareType(Expr $expr): bool
     {
         return $this->nodeTypeResolver->isObjectTypes($expr, $this->getMethodAwareObjectTypes);
     }

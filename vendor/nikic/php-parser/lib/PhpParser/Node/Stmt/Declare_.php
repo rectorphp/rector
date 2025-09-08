@@ -24,11 +24,11 @@ class Declare_ extends Node\Stmt
         $this->declares = $declares;
         $this->stmts = $stmts;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['declares', 'stmts'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Declare';
     }

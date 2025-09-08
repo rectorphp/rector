@@ -27,7 +27,7 @@ final class ArrayMergeFromArraySpreadFactory
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function createFromArray(Array_ $array, MutatingScope $mutatingScope) : FuncCall
+    public function createFromArray(Array_ $array, MutatingScope $mutatingScope): FuncCall
     {
         $newArrayItems = $this->disolveArrayItems($array);
         return $this->createArrayMergeFuncCall($newArrayItems, $mutatingScope);
@@ -40,7 +40,7 @@ final class ArrayMergeFromArraySpreadFactory
      *    to be added once the next spread is found, or at the end
      * @return ArrayItem[]
      */
-    private function disolveArrayItems(Array_ $array) : array
+    private function disolveArrayItems(Array_ $array): array
     {
         $newItems = [];
         $accumulatedItems = [];
@@ -68,9 +68,9 @@ final class ArrayMergeFromArraySpreadFactory
     /**
      * @param ArrayItem[] $arrayItems
      */
-    private function createArrayMergeFuncCall(array $arrayItems, MutatingScope $mutatingScope) : FuncCall
+    private function createArrayMergeFuncCall(array $arrayItems, MutatingScope $mutatingScope): FuncCall
     {
-        $args = \array_map(function (ArrayItem $arrayItem) use($mutatingScope) : Arg {
+        $args = array_map(function (ArrayItem $arrayItem) use ($mutatingScope): Arg {
             if ($arrayItem->unpack) {
                 // Do not unpack anymore
                 $arrayItem->unpack = \false;
@@ -83,12 +83,12 @@ final class ArrayMergeFromArraySpreadFactory
     /**
      * @param array<ArrayItem> $items
      */
-    private function createArrayItemFromArray(array $items) : ArrayItem
+    private function createArrayItemFromArray(array $items): ArrayItem
     {
         $array = new Array_($items);
         return new ArrayItem($array);
     }
-    private function createArgFromSpreadArrayItem(MutatingScope $mutatingScope, ArrayItem $arrayItem) : Arg
+    private function createArgFromSpreadArrayItem(MutatingScope $mutatingScope, ArrayItem $arrayItem): Arg
     {
         // By now every item is a variable
         /** @var Variable $variable */
@@ -125,7 +125,7 @@ final class ArrayMergeFromArraySpreadFactory
      * Iterables: objects declaring the interface Traversable,
      * For "iterable" type, it can be array
      */
-    private function isIterableType(Type $type) : bool
+    private function isIterableType(Type $type): bool
     {
         if ($type instanceof IterableType) {
             return \false;

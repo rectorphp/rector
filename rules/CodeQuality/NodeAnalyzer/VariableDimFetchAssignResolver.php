@@ -32,7 +32,7 @@ final class VariableDimFetchAssignResolver
      * @param Stmt[] $stmts
      * @return KeyAndExpr[]
      */
-    public function resolveFromStmtsAndVariable(array $stmts, Variable $variable) : array
+    public function resolveFromStmtsAndVariable(array $stmts, Variable $variable): array
     {
         $keysAndExprs = [];
         foreach ($stmts as $stmt) {
@@ -57,7 +57,7 @@ final class VariableDimFetchAssignResolver
         }
         return $keysAndExprs;
     }
-    private function matchKeyOnArrayDimFetchOfVariable(Assign $assign, Variable $variable) : ?Expr
+    private function matchKeyOnArrayDimFetchOfVariable(Assign $assign, Variable $variable): ?Expr
     {
         if (!$assign->var instanceof ArrayDimFetch) {
             return null;
@@ -75,7 +75,7 @@ final class VariableDimFetchAssignResolver
     /**
      * @param KeyAndExpr[] $keysAndExprs
      */
-    private function hasExclusivelyNullKeyOrFilledKey(array $keysAndExprs) : bool
+    private function hasExclusivelyNullKeyOrFilledKey(array $keysAndExprs): bool
     {
         $alwaysNullKey = \true;
         $alwaysStringKey = \true;

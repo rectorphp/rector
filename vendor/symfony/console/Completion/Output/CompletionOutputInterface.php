@@ -19,5 +19,5 @@ use RectorPrefix202509\Symfony\Component\Console\Output\OutputInterface;
  */
 interface CompletionOutputInterface
 {
-    public function write(CompletionSuggestions $suggestions, OutputInterface $output) : void;
+    public function write(CompletionSuggestions $suggestions, OutputInterface $output): void;
 }

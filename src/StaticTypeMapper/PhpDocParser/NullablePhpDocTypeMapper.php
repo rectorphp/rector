@@ -31,19 +31,19 @@ final class NullablePhpDocTypeMapper implements PhpDocTypeMapperInterface
         $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
-    public function getNodeType() : string
+    public function getNodeType(): string
     {
         return NullableTypeNode::class;
     }
     /**
      * @param NullableTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         if ($typeNode->type instanceof IdentifierTypeNode) {
             $type = $this->identifierPhpDocTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
             if ($type instanceof UnionType) {
-                return new UnionType(\array_merge([new NullType()], $type->getTypes()));
+                return new UnionType(array_merge([new NullType()], $type->getTypes()));
             }
             return new UnionType([new NullType(), $type]);
         }

@@ -32,7 +32,7 @@ final class FuncGetArgsToVariadicParamRector extends AbstractRector implements M
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor `func_get_args()` in to a variadic param', [new CodeSample(<<<'CODE_SAMPLE'
 function run()
@@ -50,14 +50,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->params !== [] || $node->stmts === null) {
             return null;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VARIADIC_PARAM;
     }
@@ -109,12 +109,12 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function hasFunctionOrClosureInside($functionLike, Variable $variable) : bool
+    private function hasFunctionOrClosureInside($functionLike, Variable $variable): bool
     {
         if ($functionLike->stmts === null) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst($functionLike->stmts, function (Node $node) use($variable) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($functionLike->stmts, function (Node $node) use ($variable): bool {
             if (!$node instanceof Closure && !$node instanceof Function_) {
                 return \false;
             }
@@ -134,7 +134,7 @@ CODE_SAMPLE
      * @return Expression<Assign>|null
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function matchFuncGetArgsVariableAssign($functionLike) : ?Expression
+    private function matchFuncGetArgsVariableAssign($functionLike): ?Expression
     {
         /** @var Expression[] $expressions */
         $expressions = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Expression::class);
@@ -153,12 +153,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createVariadicParam(string $variableName) : Param
+    private function createVariadicParam(string $variableName): Param
     {
         $variable = new Variable($variableName);
         return new Param($variable, null, null, \false, \true);
     }
-    private function isFuncGetArgsFuncCall(Expr $expr) : bool
+    private function isFuncGetArgsFuncCall(Expr $expr): bool
     {
         if (!$expr instanceof FuncCall) {
             return \false;

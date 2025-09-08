@@ -16,21 +16,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FlipNegatedTernaryInstanceofRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Flip negated ternary of `instanceof` to direct use of object', [new CodeSample('echo ! $object instanceof Product ? null : $object->getPrice();', 'echo $object instanceof Product ? $object->getPrice() : null;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->if instanceof Expr) {
             return null;

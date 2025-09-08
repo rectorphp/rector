@@ -29,7 +29,7 @@ final class MethodCallAnnotationAssertResolver
         $this->doctrineAnnotationFromNewFactory = $doctrineAnnotationFromNewFactory;
         $this->stmtMethodCallMatcher = $stmtMethodCallMatcher;
     }
-    public function resolve(Stmt $stmt) : ?ClassMethodAndAnnotation
+    public function resolve(Stmt $stmt): ?ClassMethodAndAnnotation
     {
         $methodCall = $this->stmtMethodCallMatcher->match($stmt, 'addGetterConstraint');
         if (!$methodCall instanceof MethodCall) {
@@ -39,7 +39,7 @@ final class MethodCallAnnotationAssertResolver
         $firstArgValue = $args[0]->value;
         $propertyName = $this->valueResolver->getValue($firstArgValue);
         // based on https://github.com/symfony/symfony/blob/7d4b42cbeef195e0a01272b9c5f464f0afe52542/src/Symfony/Component/Validator/Mapping/GetterMetadata.php#L45-L47
-        $possibleMethodNames = ['get' . \ucfirst((string) $propertyName), 'is' . \ucfirst((string) $propertyName), 'has' . \ucfirst((string) $propertyName)];
+        $possibleMethodNames = ['get' . ucfirst((string) $propertyName), 'is' . ucfirst((string) $propertyName), 'has' . ucfirst((string) $propertyName)];
         $secondArgValue = $args[1]->value;
         if (!$secondArgValue instanceof New_) {
             // nothing we can do... or can we?

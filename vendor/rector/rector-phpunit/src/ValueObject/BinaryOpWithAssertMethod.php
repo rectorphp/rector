@@ -23,15 +23,15 @@ final class BinaryOpWithAssertMethod
         $this->assetMethodName = $assetMethodName;
         $this->notAssertMethodName = $notAssertMethodName;
     }
-    public function getBinaryOpClass() : string
+    public function getBinaryOpClass(): string
     {
         return $this->binaryOpClass;
     }
-    public function getAssetMethodName() : string
+    public function getAssetMethodName(): string
     {
         return $this->assetMethodName;
     }
-    public function getNotAssertMethodName() : string
+    public function getNotAssertMethodName(): string
     {
         return $this->notAssertMethodName;
     }

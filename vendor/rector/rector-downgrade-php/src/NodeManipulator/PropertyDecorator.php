@@ -36,7 +36,7 @@ final class PropertyDecorator
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
      */
-    public function decorateWithDocBlock($property, $typeNode) : void
+    public function decorateWithDocBlock($property, $typeNode): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {

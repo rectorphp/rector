@@ -53,7 +53,7 @@ final class RemoveUnusedPrivateMethodParameterRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused parameter, if not required by interface or parent class', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
@@ -100,15 +100,15 @@ CODE_SAMPLE
             if (!$this->removeCallerArgs($node, $classMethod, $unusedParameters)) {
                 continue;
             }
-            $unusedParameterPositions = \array_keys($unusedParameters);
-            foreach (\array_keys($classMethod->params) as $key) {
-                if (!\in_array($key, $unusedParameterPositions, \true)) {
+            $unusedParameterPositions = array_keys($unusedParameters);
+            foreach (array_keys($classMethod->params) as $key) {
+                if (!in_array($key, $unusedParameterPositions, \true)) {
                     continue;
                 }
                 unset($classMethod->params[$key]);
             }
             // reset param keys
-            $classMethod->params = \array_values($classMethod->params);
+            $classMethod->params = array_values($classMethod->params);
             $this->clearPhpDocInfo($classMethod, $unusedParameters);
             $hasChanged = \true;
         }
@@ -120,19 +120,19 @@ CODE_SAMPLE
     /**
      * @param Param[] $unusedParameters
      */
-    private function removeCallerArgs(Class_ $class, ClassMethod $classMethod, array $unusedParameters) : bool
+    private function removeCallerArgs(Class_ $class, ClassMethod $classMethod, array $unusedParameters): bool
     {
         $classMethods = $class->getMethods();
         if ($classMethods === []) {
             return \false;
         }
         $methodName = $this->getName($classMethod);
-        $keysArg = \array_keys($unusedParameters);
+        $keysArg = array_keys($unusedParameters);
         $classObjectType = new ObjectType((string) $this->getName($class));
         $callers = [];
         foreach ($classMethods as $classMethod) {
             /** @var MethodCall[]|StaticCall[] $callers */
-            $callers = \array_merge($callers, $this->resolveCallers($classMethod, $methodName, $classObjectType));
+            $callers = array_merge($callers, $this->resolveCallers($classMethod, $methodName, $classObjectType));
         }
         foreach ($callers as $caller) {
             if ($caller->isFirstClassCallable()) {
@@ -159,23 +159,23 @@ CODE_SAMPLE
      * @param int[] $keysArg
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function cleanupArgs($call, array $keysArg) : void
+    private function cleanupArgs($call, array $keysArg): void
     {
         $args = $call->getArgs();
-        foreach (\array_keys($args) as $key) {
-            if (\in_array($key, $keysArg, \true)) {
+        foreach (array_keys($args) as $key) {
+            if (in_array($key, $keysArg, \true)) {
                 unset($args[$key]);
             }
         }
         // reset arg keys
-        $call->args = \array_values($args);
+        $call->args = array_values($args);
     }
     /**
      * @return MethodCall[]|StaticCall[]
      */
-    private function resolveCallers(ClassMethod $classMethod, string $methodName, ObjectType $classObjectType) : array
+    private function resolveCallers(ClassMethod $classMethod, string $methodName, ObjectType $classObjectType): array
     {
-        return $this->betterNodeFinder->find($classMethod, function (Node $subNode) use($methodName, $classObjectType) : bool {
+        return $this->betterNodeFinder->find($classMethod, function (Node $subNode) use ($methodName, $classObjectType): bool {
             if (!$subNode instanceof MethodCall && !$subNode instanceof StaticCall) {
                 return \false;
             }
@@ -189,7 +189,7 @@ CODE_SAMPLE
     /**
      * @param Param[] $unusedParameters
      */
-    private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters) : void
+    private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $hasChanged = \false;

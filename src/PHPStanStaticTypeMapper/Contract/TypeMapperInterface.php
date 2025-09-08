@@ -18,15 +18,15 @@ interface TypeMapperInterface
     /**
      * @return class-string<TType>
      */
-    public function getNodeClass() : string;
+    public function getNodeClass(): string;
     /**
      * @param TType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode;
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode;
     /**
      * @param TType $type
      * @param TypeKind::* $typeKind
      * @return Name|ComplexType|Identifier|null
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node;
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node;
 }

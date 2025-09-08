@@ -13,21 +13,21 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
  */
 final class IterableTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return IterableType::class;
     }
     /**
      * @param IterableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
     /**
      * @param IterableType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : Identifier
+    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
     {
         return new Identifier('iterable');
     }

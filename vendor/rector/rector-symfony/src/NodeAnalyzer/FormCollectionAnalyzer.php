@@ -22,13 +22,13 @@ final class FormCollectionAnalyzer
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isCollectionType(MethodCall $methodCall) : bool
+    public function isCollectionType(MethodCall $methodCall): bool
     {
         $typeValue = $methodCall->getArgs()[1]->value;
         if (!$typeValue instanceof ClassConstFetch) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }
-        if (!$this->nodeNameResolver->isName($typeValue->class, 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CollectionType')) {
+        if (!$this->nodeNameResolver->isName($typeValue->class, 'Symfony\Component\Form\Extension\Core\Type\CollectionType')) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }
         return \true;

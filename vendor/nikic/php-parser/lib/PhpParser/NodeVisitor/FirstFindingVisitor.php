@@ -27,11 +27,11 @@ class FirstFindingVisitor extends NodeVisitorAbstract
      *
      * @return null|Node Found node (or null if not found)
      */
-    public function getFoundNode() : ?Node
+    public function getFoundNode(): ?Node
     {
         return $this->foundNode;
     }
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->foundNode = null;
         return null;

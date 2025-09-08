@@ -37,7 +37,7 @@ final class ConditionResolver
         $this->phpVersionProvider = $phpVersionProvider;
         $this->valueResolver = $valueResolver;
     }
-    public function resolveFromExpr(Expr $expr) : ?ConditionInterface
+    public function resolveFromExpr(Expr $expr): ?ConditionInterface
     {
         if ($this->isVersionCompareFuncCall($expr)) {
             /** @var FuncCall $expr */
@@ -46,7 +46,7 @@ final class ConditionResolver
         if (!$expr instanceof Identical && !$expr instanceof Equal && !$expr instanceof NotIdentical && !$expr instanceof NotEqual) {
             return null;
         }
-        $binaryClass = \get_class($expr);
+        $binaryClass = get_class($expr);
         if ($this->isVersionCompareFuncCall($expr->left)) {
             /** @var FuncCall $funcCall */
             $funcCall = $expr->left;
@@ -64,14 +64,14 @@ final class ConditionResolver
         }
         return null;
     }
-    private function isVersionCompareFuncCall(Expr $expr) : bool
+    private function isVersionCompareFuncCall(Expr $expr): bool
     {
         if (!$expr instanceof FuncCall) {
             return \false;
         }
         return $this->nodeNameResolver->isName($expr, 'version_compare');
     }
-    private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall) : ?VersionCompareCondition
+    private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall): ?VersionCompareCondition
     {
         $firstVersion = $this->resolveArgumentValue($funcCall, 0);
         if ($firstVersion === null) {
@@ -88,7 +88,7 @@ final class ConditionResolver
         }
         return new VersionCompareCondition($firstVersion, $secondVersion, $versionCompareSign);
     }
-    private function resolveFuncCall(FuncCall $funcCall, Expr $expr, string $binaryClass) : ?BinaryToVersionCompareCondition
+    private function resolveFuncCall(FuncCall $funcCall, Expr $expr, string $binaryClass): ?BinaryToVersionCompareCondition
     {
         $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
         if (!$versionCompareCondition instanceof VersionCompareCondition) {
@@ -97,7 +97,7 @@ final class ConditionResolver
         $expectedValue = $this->valueResolver->getValue($expr);
         return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
     }
-    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition) : ?int
+    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?int
     {
         if (!isset($funcCall->args[$argumentPosition])) {
             return null;
@@ -108,10 +108,10 @@ final class ConditionResolver
         $firstArgValue = $funcCall->args[$argumentPosition]->value;
         /** @var mixed|null $version */
         $version = $this->valueResolver->getValue($firstArgValue);
-        if (\in_array($version, ['PHP_VERSION', 'PHP_VERSION_ID'], \true)) {
+        if (in_array($version, ['PHP_VERSION', 'PHP_VERSION_ID'], \true)) {
             return $this->phpVersionProvider->provide();
         }
-        if (\is_string($version)) {
+        if (is_string($version)) {
             return PhpVersionFactory::createIntVersion($version);
         }
         return $version;

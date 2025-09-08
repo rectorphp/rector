@@ -17,18 +17,18 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class ConditionalTypeForParameterMapper implements TypeMapperInterface
 {
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return ConditionalTypeForParameter::class;
     }
     /**
      * @param ConditionalTypeForParameter $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
@@ -36,7 +36,7 @@ final class ConditionalTypeForParameterMapper implements TypeMapperInterface
      * @param ConditionalTypeForParameter $type
      * @param TypeKind::* $typeKind
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         $type = TypeCombinator::union($type->getIf(), $type->getElse());
         return $this->phpStanStaticTypeMapper->mapToPhpParserNode($type, $typeKind);

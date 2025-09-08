@@ -24,7 +24,7 @@ final class ObjectWithoutClassTypeWithParentTypes extends ObjectWithoutClassType
     /**
      * @return TypeWithClassName[]
      */
-    public function getParentTypes() : array
+    public function getParentTypes(): array
     {
         return $this->parentTypes;
     }

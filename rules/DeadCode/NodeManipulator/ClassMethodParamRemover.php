@@ -21,7 +21,7 @@ final class ClassMethodParamRemover
         $this->paramAnalyzer = $paramAnalyzer;
         $this->complexNodeRemover = $complexNodeRemover;
     }
-    public function processRemoveParams(ClassMethod $classMethod) : ?ClassMethod
+    public function processRemoveParams(ClassMethod $classMethod): ?ClassMethod
     {
         $paramKeysToBeRemoved = [];
         foreach ($classMethod->params as $key => $param) {

@@ -43,9 +43,9 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
         $this->exprAnalyzer = $exprAnalyzer;
         $this->uninitializedPropertyAnalyzer = $uninitializedPropertyAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\DisallowedConstructs\\DisallowedEmptyRule');
+        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule');
         return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeEmptyArray
 {
@@ -69,14 +69,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Empty_::class, BooleanNot::class];
     }
     /**
      * @param Empty_|BooleanNot $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr
+    public function refactor(Node $node): ?\PhpParser\Node\Expr
     {
         $scope = ScopeFetcher::fetch($node);
         if ($node instanceof BooleanNot) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
         }
         return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
     }
-    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope) : ?\PhpParser\Node\Expr
+    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope): ?\PhpParser\Node\Expr
     {
         if (!$booleanNot->expr instanceof Empty_) {
             return null;
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
         return $result;
     }
-    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty) : ?\PhpParser\Node\Expr
+    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty): ?\PhpParser\Node\Expr
     {
         if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
             return null;
@@ -124,7 +124,7 @@ CODE_SAMPLE
         }
         return $result;
     }
-    private function createDimFetchBooleanAnd(ArrayDimFetch $arrayDimFetch) : ?BooleanAnd
+    private function createDimFetchBooleanAnd(ArrayDimFetch $arrayDimFetch): ?BooleanAnd
     {
         $exprType = $this->nodeTypeResolver->getNativeType($arrayDimFetch);
         $isset = new Isset_([$arrayDimFetch]);

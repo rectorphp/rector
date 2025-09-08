@@ -19,11 +19,11 @@ class PostDec extends Expr
         $this->attributes = $attributes;
         $this->var = $var;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['var'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_PostDec';
     }

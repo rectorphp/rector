@@ -22,7 +22,7 @@ class RulesetInflector implements WordInflector
     {
         $this->rulesets = array_merge([$ruleset], $rulesets);
     }
-    public function inflect(string $word) : string
+    public function inflect(string $word): string
     {
         if ($word === '') {
             return '';

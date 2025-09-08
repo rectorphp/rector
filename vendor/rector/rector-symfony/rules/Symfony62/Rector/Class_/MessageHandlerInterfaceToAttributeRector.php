@@ -44,11 +44,11 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces MessageHandlerInterface with AsMessageHandler attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -78,14 +78,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->reflectionProvider->hasClass(MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
             return null;
@@ -112,7 +112,7 @@ CODE_SAMPLE
     /**
      * @param ServiceDefinition[] $handlers
      */
-    private function checkForServices(Class_ $class, array $handlers) : ?Class_
+    private function checkForServices(Class_ $class, array $handlers): ?Class_
     {
         $hasChanged = \false;
         foreach ($handlers as $handler) {

@@ -27,11 +27,11 @@ class Namespace_ extends Node\Stmt implements StmtsAwareInterface
         $this->name = $name;
         $this->stmts = $stmts;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name', 'stmts'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Namespace';
     }

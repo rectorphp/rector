@@ -12,7 +12,7 @@ class IdentifierTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $this->name = $name;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name;
     }

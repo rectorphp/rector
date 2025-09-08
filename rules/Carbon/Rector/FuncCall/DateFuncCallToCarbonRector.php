@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DateFuncCallToCarbonRector extends AbstractRector
 {
     private const TIME_UNITS = [['weeks', 604800], ['days', 86400], ['hours', 3600], ['minutes', 60], ['seconds', 1]];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert `date()` function call to `Carbon::now()->format(*)`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -48,14 +48,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Minus::class, FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof Minus) {
             $left = $node->left;
@@ -101,7 +101,7 @@ CODE_SAMPLE
                 return $this->createCarbonParseTimestamp($dateExpr);
             }
             if ($dateExpr instanceof Expr && $baseTimestamp instanceof String_) {
-                $isRelative = \strncmp($baseTimestamp->value, '+', \strlen('+')) === 0 || \strncmp($baseTimestamp->value, '-', \strlen('-')) === 0;
+                $isRelative = strncmp($baseTimestamp->value, '+', strlen('+')) === 0 || strncmp($baseTimestamp->value, '-', strlen('-')) === 0;
                 if ($isRelative) {
                     return null;
                     // @todo implement relative changes based on second arg
@@ -110,50 +110,50 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function getArgValue(FuncCall $funcCall, int $index) : ?Expr
+    private function getArgValue(FuncCall $funcCall, int $index): ?Expr
     {
         if (!isset($funcCall->args[$index]) || !$funcCall->args[$index] instanceof Arg) {
             return null;
         }
         return $funcCall->args[$index]->value;
     }
-    private function createCarbonNowFormat(String_ $string) : MethodCall
+    private function createCarbonNowFormat(String_ $string): MethodCall
     {
         return new MethodCall($this->createCarbonNow(), 'format', [new Arg($string)]);
     }
-    private function createCarbonNow() : StaticCall
+    private function createCarbonNow(): StaticCall
     {
-        return new StaticCall(new FullyQualified('Carbon\\Carbon'), 'now');
+        return new StaticCall(new FullyQualified('Carbon\Carbon'), 'now');
     }
-    private function createCarbonParseTimestamp(Expr $dateExpr) : MethodCall
+    private function createCarbonParseTimestamp(Expr $dateExpr): MethodCall
     {
-        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'parse', [new Arg($dateExpr)]);
+        $staticCall = new StaticCall(new FullyQualified('Carbon\Carbon'), 'parse', [new Arg($dateExpr)]);
         return new MethodCall($staticCall, 'getTimestamp');
     }
-    private function createCarbonParseFormat(Expr $dateExpr, Expr $format) : MethodCall
+    private function createCarbonParseFormat(Expr $dateExpr, Expr $format): MethodCall
     {
-        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'parse', [new Arg($dateExpr)]);
+        $staticCall = new StaticCall(new FullyQualified('Carbon\Carbon'), 'parse', [new Arg($dateExpr)]);
         return new MethodCall($staticCall, 'format', [new Arg($format)]);
     }
-    private function createCarbonFromTimestamp(Expr $timestampExpr, Expr $format) : MethodCall
+    private function createCarbonFromTimestamp(Expr $timestampExpr, Expr $format): MethodCall
     {
-        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'createFromTimestamp', [new Arg($timestampExpr)]);
+        $staticCall = new StaticCall(new FullyQualified('Carbon\Carbon'), 'createFromTimestamp', [new Arg($timestampExpr)]);
         return new MethodCall($staticCall, 'format', [new Arg($format)]);
     }
     /**
      * @param array{unit: string, value: int} $timeUnit
      */
-    private function createCarbonSubtract(array $timeUnit) : MethodCall
+    private function createCarbonSubtract(array $timeUnit): MethodCall
     {
-        $staticCall = new StaticCall(new FullyQualified('Carbon\\Carbon'), 'now');
-        $methodName = 'sub' . \ucfirst($timeUnit['unit']);
+        $staticCall = new StaticCall(new FullyQualified('Carbon\Carbon'), 'now');
+        $methodName = 'sub' . ucfirst($timeUnit['unit']);
         $methodCall = new MethodCall($staticCall, $methodName, [new Arg(new Int_($timeUnit['value']))]);
         return new MethodCall($methodCall, 'getTimestamp');
     }
     /**
      * @return array{unit: string, value: int}|null
      */
-    private function detectTimeUnit(Expr $expr) : ?array
+    private function detectTimeUnit(Expr $expr): ?array
     {
         $product = $this->calculateProduct($expr);
         if ($product === null) {
@@ -181,12 +181,12 @@ CODE_SAMPLE
         if ($multipliers === []) {
             return null;
         }
-        return \array_product($multipliers);
+        return array_product($multipliers);
     }
     /**
      * @return int[]
      */
-    private function extractMultipliers(Node $node) : array
+    private function extractMultipliers(Node $node): array
     {
         $multipliers = [];
         if (!$node instanceof Mul) {
@@ -195,12 +195,12 @@ CODE_SAMPLE
         if ($node->left instanceof Int_) {
             $multipliers[] = $node->left->value;
         } elseif ($node->left instanceof Mul) {
-            $multipliers = \array_merge($multipliers, $this->extractMultipliers($node->left));
+            $multipliers = array_merge($multipliers, $this->extractMultipliers($node->left));
         }
         if ($node->right instanceof Int_) {
             $multipliers[] = $node->right->value;
         } elseif ($node->right instanceof Mul) {
-            $multipliers = \array_merge($multipliers, $this->extractMultipliers($node->right));
+            $multipliers = array_merge($multipliers, $this->extractMultipliers($node->right));
         }
         return $multipliers;
     }

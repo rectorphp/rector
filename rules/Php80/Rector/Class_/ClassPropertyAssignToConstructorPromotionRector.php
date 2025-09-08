@@ -129,7 +129,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change simple property init and assign to constructor promotion', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
@@ -154,7 +154,7 @@ class SomeClass
 CODE_SAMPLE
 , [self::INLINE_PUBLIC => \false, self::RENAME_PROPERTY => \true, self::ALLOW_MODEL_BASED_CLASSES => \true])]);
     }
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? \false;
         $this->renameProperty = $configuration[self::RENAME_PROPERTY] ?? \true;
@@ -163,14 +163,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
@@ -226,11 +226,11 @@ CODE_SAMPLE
             $param->flags = $property->flags;
             $param->hooks = $property->hooks;
             // copy attributes of the old property
-            $param->attrGroups = \array_merge($param->attrGroups, $property->attrGroups);
+            $param->attrGroups = array_merge($param->attrGroups, $property->attrGroups);
             $this->processUnionType($property, $param);
             $this->propertyPromotionDocBlockMerger->mergePropertyAndParamDocBlocks($property, $param, $paramTagValueNode);
             // update variable to property fetch references
-            $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use($promotionCandidate, $propertyName) {
+            $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use ($promotionCandidate, $propertyName) {
                 if ($node instanceof Class_ || $node instanceof FunctionLike) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
@@ -248,11 +248,11 @@ CODE_SAMPLE
         }
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::PROPERTY_PROMOTION;
     }
-    private function processUnionType(Property $property, Param $param) : void
+    private function processUnionType(Property $property, Param $param): void
     {
         if ($property->type instanceof Node) {
             $param->type = $property->type;
@@ -278,7 +278,7 @@ CODE_SAMPLE
         $paramType = TypeCombinator::union($paramType, $defaultType);
         $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
     }
-    private function shouldSkipParam(Param $param) : bool
+    private function shouldSkipParam(Param $param): bool
     {
         if ($param->variadic) {
             return \true;
@@ -303,7 +303,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isCallableTypeIdentifier(?Node $node) : bool
+    private function isCallableTypeIdentifier(?Node $node): bool
     {
         return $node instanceof Identifier && $this->isName($node, 'callable');
     }

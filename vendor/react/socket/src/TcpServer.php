@@ -130,7 +130,7 @@ final class TcpServer extends EventEmitter implements ServerInterface
     {
         if ($loop !== null && !$loop instanceof LoopInterface) {
             // manual type check to support legacy PHP < 7.1
-            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\\EventLoop\\LoopInterface');
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
         $this->loop = $loop ?: Loop::get();
         // a single port has been given => assume localhost
@@ -197,7 +197,7 @@ final class TcpServer extends EventEmitter implements ServerInterface
             return;
         }
         $that = $this;
-        $this->loop->addReadStream($this->master, function ($master) use($that) {
+        $this->loop->addReadStream($this->master, function ($master) use ($that) {
             try {
                 $newSocket = SocketServer::accept($master);
             } catch (\RuntimeException $e) {

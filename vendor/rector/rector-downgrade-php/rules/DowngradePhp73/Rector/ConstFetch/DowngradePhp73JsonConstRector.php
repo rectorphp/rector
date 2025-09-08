@@ -61,7 +61,7 @@ final class DowngradePhp73JsonConstRector extends AbstractRector
         $this->jsonConstCleaner = $jsonConstCleaner;
         $this->defineFuncCallAnalyzer = $defineFuncCallAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove Json constant that available only in php 7.3', [new CodeSample(<<<'CODE_SAMPLE'
 json_encode($content, JSON_THROW_ON_ERROR);
@@ -86,7 +86,7 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ConstFetch::class, BitwiseOr::class, If_::class, TryCatch::class, Expression::class];
     }
@@ -105,7 +105,7 @@ CODE_SAMPLE
             return null;
         }
         if ($node instanceof TryCatch) {
-            $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) : ?int {
+            $this->traverseNodesWithCallable($node->stmts, function (Node $subNode): ?int {
                 if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
         return $this->jsonConstCleaner->clean($node, [JsonConstant::THROW_ON_ERROR]);
     }
-    private function markConstantKnownInInnerStmts(If_ $if) : void
+    private function markConstantKnownInInnerStmts(If_ $if): void
     {
         if (!$this->defineFuncCallAnalyzer->isDefinedWithConstants($if->cond, [JsonConstant::THROW_ON_ERROR])) {
             return;
@@ -135,7 +135,7 @@ CODE_SAMPLE
             return null;
         });
     }
-    private function resolveFuncCall(Expression $Expression) : ?FuncCall
+    private function resolveFuncCall(Expression $Expression): ?FuncCall
     {
         $expr = $Expression->expr;
         if ($expr instanceof Assign) {
@@ -158,7 +158,7 @@ CODE_SAMPLE
      * complex analysis to be 100% accurate, beyond Rector actual capabilities.
      * @return null|array<Expression|If_>
      */
-    private function refactorStmt(Expression $Expression) : ?array
+    private function refactorStmt(Expression $Expression): ?array
     {
         if ($Expression->getAttribute(self::IS_EXPRESSION_INSIDE_TRY_CATCH) === \true) {
             return null;
@@ -170,7 +170,7 @@ CODE_SAMPLE
             return null;
         }
         // Nothing to do if not a refactored function
-        if (!\in_array($this->getName($funcCall), self::REFACTOR_FUNCS, \true)) {
+        if (!in_array($this->getName($funcCall), self::REFACTOR_FUNCS, \true)) {
             return null;
         }
         // Nothing to do if the flag `JSON_THROW_ON_ERROR` is not set in args
@@ -185,7 +185,7 @@ CODE_SAMPLE
      * Search if a given constant is set within a list of `Arg`
      * @param array<Arg|VariadicPlaceholder> $args
      */
-    private function hasConstFetchInArgs(array $args, string $constName) : bool
+    private function hasConstFetchInArgs(array $args, string $constName): bool
     {
         foreach ($args as $arg) {
             // Only `Arg` instances are handled.
@@ -205,7 +205,7 @@ CODE_SAMPLE
     /**
      * Search if a given constant is set within a `BitwiseOr`
      */
-    private function hasConstFetchInBitwiseOr(BitwiseOr $bitwiseOr, string $constName) : bool
+    private function hasConstFetchInBitwiseOr(BitwiseOr $bitwiseOr, string $constName): bool
     {
         $found = \false;
         foreach ([$bitwiseOr->left, $bitwiseOr->right] as $subNode) {

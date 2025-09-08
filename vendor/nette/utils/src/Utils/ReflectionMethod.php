@@ -20,13 +20,13 @@ final class ReflectionMethod extends \ReflectionMethod
      */
     public function __construct($objectOrMethod, ?string $method = null)
     {
-        if (is_string($objectOrMethod) && \strpos($objectOrMethod, '::') !== \false) {
+        if (is_string($objectOrMethod) && strpos($objectOrMethod, '::') !== \false) {
             [$objectOrMethod, $method] = explode('::', $objectOrMethod, 2);
         }
         parent::__construct($objectOrMethod, $method);
         $this->originalClass = new \ReflectionClass($objectOrMethod);
     }
-    public function getOriginalClass() : \ReflectionClass
+    public function getOriginalClass(): \ReflectionClass
     {
         return $this->originalClass;
     }

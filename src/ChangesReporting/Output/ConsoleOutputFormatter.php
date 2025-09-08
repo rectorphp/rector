@@ -32,7 +32,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs(), $configuration->isReportingWithRealPath());
@@ -48,21 +48,21 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $message = $this->createSuccessMessage($processResult, $configuration);
         $this->symfonyStyle->success($message);
     }
-    public function getName() : string
+    public function getName(): string
     {
         return self::NAME;
     }
     /**
      * @param FileDiff[] $fileDiffs
      */
-    private function reportFileDiffs(array $fileDiffs, bool $absoluteFilePath) : void
+    private function reportFileDiffs(array $fileDiffs, bool $absoluteFilePath): void
     {
-        if (\count($fileDiffs) <= 0) {
+        if (count($fileDiffs) <= 0) {
             return;
         }
         // normalize
-        \ksort($fileDiffs);
-        $message = \sprintf('%d file%s with changes', \count($fileDiffs), \count($fileDiffs) === 1 ? '' : 's');
+        ksort($fileDiffs);
+        $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
         $this->symfonyStyle->title($message);
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
@@ -73,7 +73,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
                 $filePath .= ':' . $firstLineNumber;
             }
             $filePathWithUrl = $this->addEditorUrl($filePath, $fileDiff->getAbsoluteFilePath(), $fileDiff->getRelativeFilePath(), (string) $fileDiff->getFirstLineNumber());
-            $message = \sprintf('<options=bold>%d) %s</>', ++$i, $filePathWithUrl);
+            $message = sprintf('<options=bold>%d) %s</>', ++$i, $filePathWithUrl);
             $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
@@ -87,39 +87,39 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     /**
      * @param SystemError[] $errors
      */
-    private function reportErrors(array $errors, bool $absoluteFilePath) : void
+    private function reportErrors(array $errors, bool $absoluteFilePath): void
     {
         foreach ($errors as $error) {
             $errorMessage = $error->getMessage();
             $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
-            $errorMessage = \str_replace("\r\n", "\n", $errorMessage);
+            $errorMessage = str_replace("\r\n", "\n", $errorMessage);
             $filePath = $absoluteFilePath ? $error->getAbsoluteFilePath() : $error->getRelativeFilePath();
-            $message = \sprintf('Could not process %s%s, due to: %s"%s".', $filePath !== null ? '"' . $filePath . '" file' : 'some files', $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', "\n", $errorMessage);
+            $message = sprintf('Could not process %s%s, due to: %s"%s".', $filePath !== null ? '"' . $filePath . '" file' : 'some files', $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', "\n", $errorMessage);
             if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
             $this->symfonyStyle->error($message);
         }
     }
-    private function normalizePathsToRelativeWithLine(string $errorMessage) : string
+    private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {
-        $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
+        $regex = '#' . preg_quote(getcwd(), '#') . '/#';
         $errorMessage = Strings::replace($errorMessage, $regex);
         return Strings::replace($errorMessage, self::ON_LINE_REGEX);
     }
-    private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration) : string
+    private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration): string
     {
-        $changeCount = \count($processResult->getFileDiffs());
+        $changeCount = count($processResult->getFileDiffs());
         if ($changeCount === 0) {
             return 'Rector is done!';
         }
-        return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have been changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
+        return sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have been changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
     }
-    private function addEditorUrl(string $filePath, ?string $absoluteFilePath, ?string $relativeFilePath, ?string $lineNumber) : string
+    private function addEditorUrl(string $filePath, ?string $absoluteFilePath, ?string $relativeFilePath, ?string $lineNumber): string
     {
         $editorUrl = SimpleParameterProvider::provideStringParameter(Option::EDITOR_URL, '');
         if ($editorUrl !== '') {
-            $editorUrl = \str_replace(['%file%', '%relFile%', '%line%'], [(string) $absoluteFilePath, (string) $relativeFilePath, (string) $lineNumber], $editorUrl);
+            $editorUrl = str_replace(['%file%', '%relFile%', '%line%'], [(string) $absoluteFilePath, (string) $relativeFilePath, (string) $lineNumber], $editorUrl);
             $filePath = '<href=' . OutputFormatter::escape($editorUrl) . '>' . $filePath . '</>';
         }
         return $filePath;

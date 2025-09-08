@@ -34,19 +34,19 @@ final class MethodCallToStaticCall
         RectorAssert::className($newClass);
         RectorAssert::className($newMethod);
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType(): ObjectType
     {
         return new ObjectType($this->oldClass);
     }
-    public function getOldMethod() : string
+    public function getOldMethod(): string
     {
         return $this->oldMethod;
     }
-    public function getNewClass() : string
+    public function getNewClass(): string
     {
         return $this->newClass;
     }
-    public function getNewMethod() : string
+    public function getNewMethod(): string
     {
         return $this->newMethod;
     }

@@ -19,11 +19,11 @@ class Variable extends Expr
         $this->attributes = $attributes;
         $this->name = $name;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['name'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Expr_Variable';
     }

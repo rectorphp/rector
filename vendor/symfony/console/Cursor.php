@@ -25,7 +25,7 @@ final class Cursor
     public function __construct(OutputInterface $output, $input = null)
     {
         $this->output = $output;
-        $this->input = $input ?? (\defined('STDIN') ? \STDIN : \fopen('php://input', 'r+'));
+        $this->input = $input ?? (\defined('STDIN') ? \STDIN : fopen('php://input', 'r+'));
     }
     /**
      * @return $this
@@ -120,7 +120,7 @@ final class Cursor
     /**
      * Clears all the output from the current line after the current position.
      */
-    public function clearLineAfter() : self
+    public function clearLineAfter(): self
     {
         $this->output->write("\x1b[K");
         return $this;
@@ -148,18 +148,18 @@ final class Cursor
     /**
      * Returns the current cursor position as x,y coordinates.
      */
-    public function getCurrentPosition() : array
+    public function getCurrentPosition(): array
     {
         static $isTtySupported;
-        if (!($isTtySupported ??= '/' === \DIRECTORY_SEPARATOR && \stream_isatty(\STDOUT))) {
+        if (!$isTtySupported ??= '/' === \DIRECTORY_SEPARATOR && stream_isatty(\STDOUT)) {
             return [1, 1];
         }
-        $sttyMode = \shell_exec('stty -g');
-        \shell_exec('stty -icanon -echo');
-        @\fwrite($this->input, "\x1b[6n");
-        $code = \trim(\fread($this->input, 1024));
-        \shell_exec(\sprintf('stty %s', $sttyMode));
-        \sscanf($code, "\x1b[%d;%dR", $row, $col);
+        $sttyMode = shell_exec('stty -g');
+        shell_exec('stty -icanon -echo');
+        @fwrite($this->input, "\x1b[6n");
+        $code = trim(fread($this->input, 1024));
+        shell_exec(\sprintf('stty %s', $sttyMode));
+        sscanf($code, "\x1b[%d;%dR", $row, $col);
         return [$col, $row];
     }
 }

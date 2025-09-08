@@ -36,29 +36,29 @@ final class NestedAnnotationToAttribute implements AnnotationToAttributeInterfac
             }
         }
     }
-    public function getTag() : string
+    public function getTag(): string
     {
         return $this->tag;
     }
     /**
      * @return AnnotationPropertyToAttributeClass[]
      */
-    public function getAnnotationPropertiesToAttributeClasses() : array
+    public function getAnnotationPropertiesToAttributeClasses(): array
     {
         return $this->annotationPropertiesToAttributeClasses;
     }
-    public function getAttributeClass() : string
+    public function getAttributeClass(): string
     {
         return $this->tag;
     }
-    public function shouldRemoveOriginal() : bool
+    public function shouldRemoveOriginal(): bool
     {
         return $this->removeOriginal;
     }
-    public function hasExplicitParameters() : bool
+    public function hasExplicitParameters(): bool
     {
         foreach ($this->annotationPropertiesToAttributeClasses as $annotationPropertyToAttributeClass) {
-            if (\is_string($annotationPropertyToAttributeClass->getAnnotationProperty())) {
+            if (is_string($annotationPropertyToAttributeClass->getAnnotationProperty())) {
                 return \true;
             }
         }

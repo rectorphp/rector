@@ -25,7 +25,7 @@ final class NameScopeFactory
     {
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function createNameScopeFromNodeWithoutTemplateTypes(Node $node) : NameScope
+    public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope) {
@@ -44,7 +44,7 @@ final class NameScopeFactory
      * @param array<Use_|GroupUse> $useNodes
      * @return array<string, string>
      */
-    private function resolveUseNamesByAlias(array $useNodes) : array
+    private function resolveUseNamesByAlias(array $useNodes): array
     {
         $useNamesByAlias = [];
         foreach ($useNodes as $useNode) {
@@ -53,7 +53,7 @@ final class NameScopeFactory
                 /** @var UseItem $useUse */
                 $aliasName = $useUse->getAlias()->name;
                 // uses must be lowercase, as PHPStan lowercases it
-                $lowercasedAliasName = \strtolower($aliasName);
+                $lowercasedAliasName = strtolower($aliasName);
                 $useNamesByAlias[$lowercasedAliasName] = $prefix . $useUse->name->toString();
             }
         }

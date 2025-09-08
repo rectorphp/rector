@@ -26,16 +26,16 @@ final class ParentClassToTraits
         RectorAssert::className($parentType);
         Assert::allString($traitNames);
     }
-    public function getParentType() : string
+    public function getParentType(): string
     {
         return $this->parentType;
     }
     /**
      * @return string[]
      */
-    public function getTraitNames() : array
+    public function getTraitNames(): array
     {
         // keep the Trait order the way it is in config
-        return \array_reverse($this->traitNames);
+        return array_reverse($this->traitNames);
     }
 }

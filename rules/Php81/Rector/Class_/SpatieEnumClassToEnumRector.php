@@ -32,11 +32,11 @@ final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhp
     {
         $this->enumFactory = $enumFactory;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ENUM;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor Spatie enum class to native Enum', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use \Spatie\Enum\Enum;
@@ -63,16 +63,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Enum_
+    public function refactor(Node $node): ?Enum_
     {
-        if (!$this->isObjectType($node, new ObjectType('Spatie\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node, new ObjectType('Spatie\Enum\Enum'))) {
             return null;
         }
         return $this->enumFactory->createFromSpatieClass($node, $this->toUpperSnakeCase);
@@ -80,7 +80,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         $this->toUpperSnakeCase = $configuration[self::TO_UPPER_SNAKE_CASE] ?? \false;
     }

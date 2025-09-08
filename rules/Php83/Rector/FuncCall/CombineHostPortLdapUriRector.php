@@ -30,7 +30,7 @@ final class CombineHostPortLdapUriRector extends AbstractRector implements MinPh
     {
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Combine separated host and port on ldap_connect() args', [new CodeSample(<<<'CODE_SAMPLE'
 ldap_connect('ldap://ldap.example.com', 389);
@@ -43,14 +43,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node, 'ldap_connect')) {
             return null;
@@ -59,7 +59,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (\count($args) !== 2) {
+        if (count($args) !== 2) {
             return null;
         }
         $firstArg = $args[0]->value;
@@ -80,7 +80,7 @@ CODE_SAMPLE
         $node->args = $args;
         return $node;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_HOST_PORT_SEPARATE_ARGS;
     }

@@ -60,7 +60,7 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
         $this->valueResolver = $valueResolver;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `switch()` to `match()`', [new CodeSample(<<<'CODE_SAMPLE'
 switch ($input) {
@@ -86,16 +86,16 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (!\is_array($node->stmts)) {
+        if (!is_array($node->stmts)) {
             return null;
         }
         $hasChanged = \false;
@@ -144,7 +144,7 @@ CODE_SAMPLE
                 if ($arm->conds === null) {
                     continue;
                 }
-                $arm->conds = \array_values($arm->conds);
+                $arm->conds = array_values($arm->conds);
             }
             $node->stmts[$key] = $isReturn ? new Return_($match) : new Expression($match);
             $this->mirrorComments($node->stmts[$key], $stmt);
@@ -155,11 +155,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::MATCH_EXPRESSION;
     }
-    private function castMatchCond(Match_ $match) : void
+    private function castMatchCond(Match_ $match): void
     {
         $type = $this->nodeTypeResolver->getNativeType($match->cond);
         $isNativeCondString = $type->isString()->yes();
@@ -189,7 +189,7 @@ CODE_SAMPLE
             $match->cond = $newMatchCond;
         }
     }
-    private function mirrorDynamicBoolExpr(Match_ $match) : void
+    private function mirrorDynamicBoolExpr(Match_ $match): void
     {
         // switch(true) already just use
         // switch(false) is dead code that can be on purpose
@@ -220,7 +220,7 @@ CODE_SAMPLE
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    private function resolveAssignVar(array $condAndExprs) : ?Expr
+    private function resolveAssignVar(array $condAndExprs): ?Expr
     {
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();

@@ -30,21 +30,21 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
-    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode) : void
+    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode): void
     {
         // iterating all phpdocs has big overhead. peek into the phpdoc to exit early
-        if (\strpos($phpDocNode->__toString(), '::') === \false) {
+        if (strpos($phpDocNode->__toString(), '::') === \false) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use($phpNode) : ?\PHPStan\PhpDocParser\Ast\Node {
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
             if (!$node instanceof ArrayItemNode) {
                 return null;
             }
-            if (!\is_string($node->value)) {
+            if (!is_string($node->value)) {
                 return null;
             }
-            $splitScopeResolution = \explode('::', $node->value);
-            if (\count($splitScopeResolution) !== 2) {
+            $splitScopeResolution = explode('::', $node->value);
+            if (count($splitScopeResolution) !== 2) {
                 return null;
             }
             $className = $this->resolveFullyQualifiedClass($splitScopeResolution[0], $phpNode);
@@ -52,7 +52,7 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(string $className, PhpNode $phpNode) : string
+    private function resolveFullyQualifiedClass(string $className, PhpNode $phpNode): string
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);
         return $nameScope->resolveStringName($className);

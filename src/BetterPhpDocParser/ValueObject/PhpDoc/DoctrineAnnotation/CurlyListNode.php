@@ -22,7 +22,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
         Assert::allIsInstanceOf($this->arrayItemNodes, ArrayItemNode::class);
         parent::__construct($this->arrayItemNodes);
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         // possibly list items
         return $this->implode($this->values);
@@ -30,12 +30,12 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
     /**
      * @param mixed[] $array
      */
-    private function implode(array $array) : string
+    private function implode(array $array): string
     {
         $itemContents = '';
-        $lastItemKey = \array_key_last($array);
+        $lastItemKey = array_key_last($array);
         foreach ($array as $key => $value) {
-            if (\is_int($key)) {
+            if (is_int($key)) {
                 $itemContents .= (string) $value;
             } else {
                 $itemContents .= $key . '=' . $value;

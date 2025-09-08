@@ -45,7 +45,7 @@ final class ForeachToArrayAllRector extends AbstractRector implements MinPhpVers
         $this->stmtsManipulator = $stmtsManipulator;
         $this->foreachKeyUsedInConditionalAnalyzer = $foreachKeyUsedInConditionalAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace foreach with boolean assignment and break with array_all', [new CodeSample(<<<'CODE_SAMPLE'
 $found = true;
@@ -64,14 +64,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [StmtsAwareInterface::class];
     }
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -120,22 +120,22 @@ CODE_SAMPLE
             $newExpression = new Expression($newAssign);
             unset($node->stmts[$key - 1]);
             $node->stmts[$key] = $newExpression;
-            $node->stmts = \array_values($node->stmts);
+            $node->stmts = array_values($node->stmts);
             return $node;
         }
         return null;
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_ALL;
     }
-    private function isValidForeachStructure(Foreach_ $foreach, Variable $assignedVariable) : bool
+    private function isValidForeachStructure(Foreach_ $foreach, Variable $assignedVariable): bool
     {
-        if (\count($foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return \false;
         }
         $firstStmt = $foreach->stmts[0];
-        if (!$firstStmt instanceof If_ || \count($firstStmt->stmts) !== 2) {
+        if (!$firstStmt instanceof If_ || count($firstStmt->stmts) !== 2) {
             return \false;
         }
         $assignmentStmt = $firstStmt->stmts[0];

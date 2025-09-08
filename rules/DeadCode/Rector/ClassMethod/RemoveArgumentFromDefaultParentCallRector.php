@@ -44,7 +44,7 @@ final class RemoveArgumentFromDefaultParentCallRector extends AbstractRector
         $this->valueResolver = $valueResolver;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove default argument from parent call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeParent
@@ -87,14 +87,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Class_
+    public function refactor(Node $node): ?Class_
     {
         if (!$node->extends instanceof FullyQualified) {
             return null;
@@ -103,7 +103,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $ancestors = \array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->isClass() && $ancestorClassReflection->getName() !== $classReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->isClass() && $ancestorClassReflection->getName() !== $classReflection->getName());
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isPrivate()) {
@@ -143,7 +143,7 @@ CODE_SAMPLE
                     }
                     $method = $nativeClassReflection->getMethod($methodName);
                     $parameters = $method->getParameters();
-                    $totalParameters = \count($parameters);
+                    $totalParameters = count($parameters);
                     $justChanged = \false;
                     for ($index = $totalParameters - 1; $index >= 0; --$index) {
                         if (!$parameters[$index]->isDefaultValueAvailable()) {
@@ -169,7 +169,7 @@ CODE_SAMPLE
                         }
                     }
                     if ($justChanged) {
-                        $stmt->expr->args = \array_values($args);
+                        $stmt->expr->args = array_values($args);
                     }
                     break;
                 }

@@ -34,12 +34,12 @@ class HostsFile
         }
         // Windows actually stores the path in the registry under
         // \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\DataBasePath
-        $path = '%SystemRoot%\\system32\\drivers\\etc\\hosts';
-        $base = \getenv('SystemRoot');
+        $path = '%SystemRoot%\system32\drivers\etc\hosts';
+        $base = getenv('SystemRoot');
         if ($base === \false) {
-            $base = 'C:\\Windows';
+            $base = 'C:\Windows';
         }
-        return \str_replace('%SystemRoot%', $base, $path);
+        return str_replace('%SystemRoot%', $base, $path);
     }
     /**
      * Loads a hosts file (from the given path or default location)
@@ -59,7 +59,7 @@ class HostsFile
         if ($path === null) {
             $path = self::getDefaultPath();
         }
-        $contents = @\file_get_contents($path);
+        $contents = @file_get_contents($path);
         if ($contents === \false) {
             throw new RuntimeException('Unable to load hosts file "' . $path . '"');
         }
@@ -74,7 +74,7 @@ class HostsFile
     public function __construct($contents)
     {
         // remove all comments from the contents
-        $contents = \preg_replace('/[ \\t]*#.*/', '', \strtolower($contents));
+        $contents = preg_replace('/[ \t]*#.*/', '', strtolower($contents));
         $this->contents = $contents;
     }
     /**
@@ -85,17 +85,17 @@ class HostsFile
      */
     public function getIpsForHost($name)
     {
-        $name = \strtolower($name);
+        $name = strtolower($name);
         $ips = array();
-        foreach (\preg_split('/\\r?\\n/', $this->contents) as $line) {
-            $parts = \preg_split('/\\s+/', $line);
-            $ip = \array_shift($parts);
-            if ($parts && \array_search($name, $parts) !== \false) {
+        foreach (preg_split('/\r?\n/', $this->contents) as $line) {
+            $parts = preg_split('/\s+/', $line);
+            $ip = array_shift($parts);
+            if ($parts && array_search($name, $parts) !== \false) {
                 // remove IPv6 zone ID (`fe80::1%lo0` => `fe80:1`)
-                if (\strpos($ip, ':') !== \false && ($pos = \strpos($ip, '%')) !== \false) {
-                    $ip = \substr($ip, 0, $pos);
+                if (strpos($ip, ':') !== \false && ($pos = strpos($ip, '%')) !== \false) {
+                    $ip = substr($ip, 0, $pos);
                 }
-                if (@\inet_pton($ip) !== \false) {
+                if (@inet_pton($ip) !== \false) {
                     $ips[] = $ip;
                 }
             }
@@ -111,19 +111,19 @@ class HostsFile
     public function getHostsForIp($ip)
     {
         // check binary representation of IP to avoid string case and short notation
-        $ip = @\inet_pton($ip);
+        $ip = @inet_pton($ip);
         if ($ip === \false) {
             return array();
         }
         $names = array();
-        foreach (\preg_split('/\\r?\\n/', $this->contents) as $line) {
-            $parts = \preg_split('/\\s+/', $line, -1, \PREG_SPLIT_NO_EMPTY);
-            $addr = (string) \array_shift($parts);
+        foreach (preg_split('/\r?\n/', $this->contents) as $line) {
+            $parts = preg_split('/\s+/', $line, -1, \PREG_SPLIT_NO_EMPTY);
+            $addr = (string) array_shift($parts);
             // remove IPv6 zone ID (`fe80::1%lo0` => `fe80:1`)
-            if (\strpos($addr, ':') !== \false && ($pos = \strpos($addr, '%')) !== \false) {
-                $addr = \substr($addr, 0, $pos);
+            if (strpos($addr, ':') !== \false && ($pos = strpos($addr, '%')) !== \false) {
+                $addr = substr($addr, 0, $pos);
             }
-            if (@\inet_pton($addr) === $ip) {
+            if (@inet_pton($addr) === $ip) {
                 foreach ($parts as $part) {
                     $names[] = $part;
                 }

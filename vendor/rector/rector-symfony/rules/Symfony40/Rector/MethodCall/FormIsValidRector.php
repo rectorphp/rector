@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormIsValidRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 if ($form->isValid()) {
@@ -32,14 +32,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$node->cond instanceof MethodCall) {
             return null;
@@ -68,11 +68,11 @@ CODE_SAMPLE
         $node->cond = new BooleanAnd($this->nodeFactory->createMethodCall($variableName, 'isSubmitted'), $this->nodeFactory->createMethodCall($variableName, 'isValid'));
         return $node;
     }
-    private function shouldSkipMethodCall(MethodCall $methodCall) : bool
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
         if (!$this->isName($methodCall->name, 'isValid')) {
             return \true;
         }
-        return !$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\Form'));
+        return !$this->isObjectType($methodCall->var, new ObjectType('Symfony\Component\Form\Form'));
     }
 }

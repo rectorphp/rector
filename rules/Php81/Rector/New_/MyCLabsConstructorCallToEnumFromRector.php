@@ -26,7 +26,7 @@ final class MyCLabsConstructorCallToEnumFromRector extends AbstractRector implem
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    private const MY_C_LABS_CLASS = 'MyCLabs\\Enum\\Enum';
+    private const MY_C_LABS_CLASS = 'MyCLabs\Enum\Enum';
     private const DEFAULT_ENUM_CONSTRUCTOR = 'from';
     public function __construct(ReflectionProvider $reflectionProvider)
     {
@@ -35,22 +35,22 @@ final class MyCLabsConstructorCallToEnumFromRector extends AbstractRector implem
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         return $this->refactorConstructorCallToStaticFromCall($node);
     }
-    public function provideMinPhpVersion() : int
+    public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ENUM;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor MyCLabs Enum using constructor for instantiation', [new CodeSample(<<<'CODE_SAMPLE'
 $enum = new Enum($args);
@@ -60,13 +60,13 @@ $enum = Enum::from($args);
 CODE_SAMPLE
 )]);
     }
-    private function refactorConstructorCallToStaticFromCall(New_ $new) : ?StaticCall
+    private function refactorConstructorCallToStaticFromCall(New_ $new): ?StaticCall
     {
         if (!$this->isObjectType($new->class, new ObjectType(self::MY_C_LABS_CLASS))) {
             return null;
         }
         $classname = $this->getName($new->class);
-        if (\in_array($classname, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
+        if (in_array($classname, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
             $classname = ($nullsafeVariable1 = ScopeFetcher::fetch($new)->getClassReflection()) ? $nullsafeVariable1->getName() : null;
         }
         if ($classname === null) {
@@ -77,7 +77,7 @@ CODE_SAMPLE
         }
         return new StaticCall(new FullyQualified($classname), self::DEFAULT_ENUM_CONSTRUCTOR, $new->args);
     }
-    private function isMyCLabsConstructor(New_ $new, string $classname) : bool
+    private function isMyCLabsConstructor(New_ $new, string $classname): bool
     {
         $classReflection = $this->reflectionProvider->getClass($classname);
         if (!$classReflection->hasMethod(MethodName::CONSTRUCT)) {

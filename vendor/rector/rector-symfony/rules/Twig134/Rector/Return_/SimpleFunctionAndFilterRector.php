@@ -45,7 +45,7 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         $this->reflectionResolver = $reflectionResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeExtension extends Twig_Extension
@@ -88,14 +88,14 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;
@@ -108,7 +108,7 @@ CODE_SAMPLE
             if (!$stmt instanceof Return_ || !$stmt->expr instanceof Expr) {
                 continue;
             }
-            $this->traverseNodesWithCallable($stmt->expr, function (Node $node) use(&$hasChanged) : ?Node {
+            $this->traverseNodesWithCallable($stmt->expr, function (Node $node) use (&$hasChanged): ?Node {
                 if (!$node instanceof ArrayItem) {
                     return null;
                 }
@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
         }
         return !$this->isNames($classMethod, ['getFunctions', 'getFilters']);
     }
-    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType, bool &$hasChanged) : void
+    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType, bool &$hasChanged): void
     {
         foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
@@ -163,13 +163,13 @@ CODE_SAMPLE
     /**
      * @param Arg[] $oldArguments
      */
-    private function decorateArrayItem(ArrayItem $arrayItem, array $oldArguments, string $filterName) : void
+    private function decorateArrayItem(ArrayItem $arrayItem, array $oldArguments, string $filterName): void
     {
         /** @var New_ $new */
         $new = $arrayItem->value;
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
-            $new->args = \array_merge([new Arg(new String_($filterName))], $oldArguments);
+            $new->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
             return;
         }
         // not array yet, wrap to one

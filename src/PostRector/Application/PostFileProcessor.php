@@ -62,7 +62,7 @@ final class PostFileProcessor implements ResetableInterface
         $this->unusedImportRemovingPostRector = $unusedImportRemovingPostRector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function reset() : void
+    public function reset(): void
     {
         $this->postRectors = [];
     }
@@ -70,7 +70,7 @@ final class PostFileProcessor implements ResetableInterface
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function traverse(array $stmts, File $file) : array
+    public function traverse(array $stmts, File $file): array
     {
         foreach ($this->getPostRectors() as $postRector) {
             // file must be set early into PostRector class to ensure its usage
@@ -87,7 +87,7 @@ final class PostFileProcessor implements ResetableInterface
     /**
      * @param Stmt[] $stmts
      */
-    private function shouldSkipPostRector(PostRectorInterface $postRector, string $filePath, array $stmts) : bool
+    private function shouldSkipPostRector(PostRectorInterface $postRector, string $filePath, array $stmts): bool
     {
         if ($this->skipper->shouldSkipElementAndFilePath($postRector, $filePath)) {
             return \true;
@@ -102,7 +102,7 @@ final class PostFileProcessor implements ResetableInterface
      * Load on the fly, to allow test reset with different configuration
      * @return PostRectorInterface[]
      */
-    private function getPostRectors() : array
+    private function getPostRectors(): array
     {
         if ($this->postRectors !== []) {
             return $this->postRectors;

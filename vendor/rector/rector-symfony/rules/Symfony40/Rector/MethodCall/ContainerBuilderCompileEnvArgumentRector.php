@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns old default value to parameter in ContainerBuilder->build() method in DI in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,22 +33,22 @@ CODE_SAMPLE
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if (!$this->isName($node->name, 'compile')) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             return null;
         }
-        if (\count($node->args) === 1) {
+        if (count($node->args) === 1) {
             return null;
         }
         $node->args = $this->nodeFactory->createArgs([$this->nodeFactory->createTrue()]);

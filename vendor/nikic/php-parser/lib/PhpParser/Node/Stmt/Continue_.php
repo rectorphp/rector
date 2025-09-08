@@ -19,11 +19,11 @@ class Continue_ extends Node\Stmt
         $this->attributes = $attributes;
         $this->num = $num;
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['num'];
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_Continue';
     }

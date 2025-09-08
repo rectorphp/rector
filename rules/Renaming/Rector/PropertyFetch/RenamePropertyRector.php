@@ -26,21 +26,21 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      */
     private array $renamedProperties = [];
     private bool $hasChanged = \false;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace defined old properties by new ones', [new ConfiguredCodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;', [new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [PropertyFetch::class, ClassLike::class];
     }
     /**
      * @param PropertyFetch|ClassLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassLike) {
             $this->hasChanged = \false;
@@ -57,12 +57,12 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RenameProperty::class);
         $this->renamedProperties = $configuration;
     }
-    private function renameProperty(ClassLike $classLike, RenameProperty $renameProperty) : void
+    private function renameProperty(ClassLike $classLike, RenameProperty $renameProperty): void
     {
         $classLikeName = (string) $this->getName($classLike);
         $renamePropertyObjectType = $renameProperty->getObjectType();
@@ -85,7 +85,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         $this->hasChanged = \true;
         $property->props[0]->name = new VarLikeIdentifier($newProperty);
     }
-    private function refactorPropertyFetch(PropertyFetch $propertyFetch) : ?PropertyFetch
+    private function refactorPropertyFetch(PropertyFetch $propertyFetch): ?PropertyFetch
     {
         foreach ($this->renamedProperties as $renamedProperty) {
             $oldProperty = $renamedProperty->getOldProperty();

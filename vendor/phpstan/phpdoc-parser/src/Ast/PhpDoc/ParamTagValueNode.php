@@ -23,7 +23,7 @@ class ParamTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagVal
         $this->parameterName = $parameterName;
         $this->description = $description;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         $reference = $this->isReference ? '&' : '';
         $variadic = $this->isVariadic ? '...' : '';

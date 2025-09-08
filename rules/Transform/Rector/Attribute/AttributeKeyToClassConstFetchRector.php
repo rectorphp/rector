@@ -41,7 +41,7 @@ final class AttributeKeyToClassConstFetchRector extends AbstractRector implement
     {
         $this->valueResolver = $valueResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace key value on specific attribute to class constant', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\Column;
@@ -62,19 +62,19 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, [new AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
+, [new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', ['string' => 'STRING'])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes() : array
+    public function getNodeTypes(): array
     {
         return [Class_::class, Property::class, Param::class, ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class, Interface_::class];
     }
     /**
      * @param Class_|Property|Param|ClassMethod|Function_|Closure|ArrowFunction|Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node): ?Node
     {
         if ($node->attrGroups === []) {
             return null;
@@ -95,12 +95,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AttributeKeyToClassConstFetch::class);
         $this->attributeKeysToClassConstFetches = $configuration;
     }
-    private function processToClassConstFetch(AttributeGroup $attributeGroup, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch) : bool
+    private function processToClassConstFetch(AttributeGroup $attributeGroup, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch): bool
     {
         $hasChanged = \false;
         foreach ($attributeGroup->attrs as $attribute) {
@@ -122,7 +122,7 @@ CODE_SAMPLE
         }
         return $hasChanged;
     }
-    private function processArg(Arg $arg, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch) : bool
+    private function processArg(Arg $arg, AttributeKeyToClassConstFetch $attributeKeyToClassConstFetch): bool
     {
         $value = $this->valueResolver->getValue($arg->value);
         $constName = $attributeKeyToClassConstFetch->getValuesToConstantsMap()[$value] ?? null;

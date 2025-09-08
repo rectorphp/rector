@@ -14,14 +14,14 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
  */
 final class OversizedArrayTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass() : string
+    public function getNodeClass(): string
     {
         return OversizedArrayType::class;
     }
     /**
      * @param OversizedArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
@@ -29,7 +29,7 @@ final class OversizedArrayTypeMapper implements TypeMapperInterface
      * @param TypeKind::* $typeKind
      * @param OversizedArrayType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : Identifier
+    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
     {
         return new Identifier('array');
     }

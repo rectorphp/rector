@@ -33,11 +33,11 @@ class UnixPipes extends AbstractPipes
         $this->haveReadSupport = $haveReadSupport;
         parent::__construct($input);
     }
-    public function __sleep() : array
+    public function __sleep(): array
     {
         throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
-    public function __wakeup() : void
+    public function __wakeup(): void
     {
         throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
@@ -45,10 +45,10 @@ class UnixPipes extends AbstractPipes
     {
         $this->close();
     }
-    public function getDescriptors() : array
+    public function getDescriptors(): array
     {
         if (!$this->haveReadSupport) {
-            $nullstream = \fopen('/dev/null', 'c');
+            $nullstream = fopen('/dev/null', 'c');
             return [['pipe', 'r'], $nullstream, $nullstream];
         }
         if ($this->ttyMode) {
@@ -64,11 +64,11 @@ class UnixPipes extends AbstractPipes
             ['pipe', 'w'],
         ];
     }
-    public function getFiles() : array
+    public function getFiles(): array
     {
         return [];
     }
-    public function readAndWrite(bool $blocking, bool $close = \false) : array
+    public function readAndWrite(bool $blocking, bool $close = \false): array
     {
         $this->unblock();
         $w = $this->write();
@@ -76,9 +76,9 @@ class UnixPipes extends AbstractPipes
         $r = $this->pipes;
         unset($r[0]);
         // let's have a look if something changed in streams
-        \set_error_handler(\Closure::fromCallable([$this, 'handleError']));
-        if (($r || $w) && \false === \stream_select($r, $w, $e, 0, $blocking ? Process::TIMEOUT_PRECISION * 1000000.0 : 0)) {
-            \restore_error_handler();
+        set_error_handler(\Closure::fromCallable([$this, 'handleError']));
+        if (($r || $w) && \false === stream_select($r, $w, $e, 0, $blocking ? Process::TIMEOUT_PRECISION * 1000000.0 : 0)) {
+            restore_error_handler();
             // if a system call has been interrupted, forget about it, let's try again
             // otherwise, an error occurred, let's reset pipes
             if (!$this->hasSystemCallBeenInterrupted()) {
@@ -86,30 +86,30 @@ class UnixPipes extends AbstractPipes
             }
             return $read;
         }
-        \restore_error_handler();
+        restore_error_handler();
         foreach ($r as $pipe) {
             // prior PHP 5.4 the array passed to stream_select is modified and
             // lose key association, we have to find back the key
-            $read[$type = \array_search($pipe, $this->pipes, \true)] = '';
+            $read[$type = array_search($pipe, $this->pipes, \true)] = '';
             do {
-                $data = @\fread($pipe, self::CHUNK_SIZE);
+                $data = @fread($pipe, self::CHUNK_SIZE);
                 $read[$type] .= $data;
             } while (isset($data[0]) && ($close || isset($data[self::CHUNK_SIZE - 1])));
             if (!isset($read[$type][0])) {
                 unset($read[$type]);
             }
-            if ($close && \feof($pipe)) {
-                \fclose($pipe);
+            if ($close && feof($pipe)) {
+                fclose($pipe);
                 unset($this->pipes[$type]);
             }
         }
         return $read;
     }
-    public function haveReadSupport() : bool
+    public function haveReadSupport(): bool
     {
         return $this->haveReadSupport;
     }
-    public function areOpen() : bool
+    public function areOpen(): bool
     {
         return (bool) $this->pipes;
     }

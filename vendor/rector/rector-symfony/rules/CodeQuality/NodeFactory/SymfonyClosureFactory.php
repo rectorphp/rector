@@ -22,19 +22,19 @@ final class SymfonyClosureFactory
     /**
      * @param Stmt[] $stmts
      */
-    public function create(string $configClass, Closure $closure, array $stmts) : Closure
+    public function create(string $configClass, Closure $closure, array $stmts): Closure
     {
         $closure->params[0] = $this->createConfigParam($configClass);
         $closure->stmts = $stmts;
         return $closure;
     }
-    private function createConfigParam(string $configClass) : Param
+    private function createConfigParam(string $configClass): Param
     {
         $configVariable = $this->createConfigVariable($configClass);
         $fullyQualified = new FullyQualified($configClass);
         return new Param($configVariable, null, $fullyQualified);
     }
-    private function createConfigVariable(string $configClass) : Variable
+    private function createConfigVariable(string $configClass): Variable
     {
         $variableName = $this->propertyNaming->fqnToVariableName($configClass);
         return new Variable($variableName);

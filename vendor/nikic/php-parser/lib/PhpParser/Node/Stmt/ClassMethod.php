@@ -53,18 +53,18 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
         $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->params = $subNodes['params'] ?? [];
         $this->returnType = $subNodes['returnType'] ?? null;
-        $this->stmts = \array_key_exists('stmts', $subNodes) ? $subNodes['stmts'] : [];
+        $this->stmts = array_key_exists('stmts', $subNodes) ? $subNodes['stmts'] : [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
-    public function getSubNodeNames() : array
+    public function getSubNodeNames(): array
     {
         return ['attrGroups', 'flags', 'byRef', 'name', 'params', 'returnType', 'stmts'];
     }
-    public function returnsByRef() : bool
+    public function returnsByRef(): bool
     {
         return $this->byRef;
     }
-    public function getParams() : array
+    public function getParams(): array
     {
         return $this->params;
     }
@@ -72,64 +72,64 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
     {
         return $this->returnType;
     }
-    public function getStmts() : ?array
+    public function getStmts(): ?array
     {
         return $this->stmts;
     }
-    public function getAttrGroups() : array
+    public function getAttrGroups(): array
     {
         return $this->attrGroups;
     }
     /**
      * Whether the method is explicitly or implicitly public.
      */
-    public function isPublic() : bool
+    public function isPublic(): bool
     {
         return ($this->flags & Modifiers::PUBLIC) !== 0 || ($this->flags & Modifiers::VISIBILITY_MASK) === 0;
     }
     /**
      * Whether the method is protected.
      */
-    public function isProtected() : bool
+    public function isProtected(): bool
     {
         return (bool) ($this->flags & Modifiers::PROTECTED);
     }
     /**
      * Whether the method is private.
      */
-    public function isPrivate() : bool
+    public function isPrivate(): bool
     {
         return (bool) ($this->flags & Modifiers::PRIVATE);
     }
     /**
      * Whether the method is abstract.
      */
-    public function isAbstract() : bool
+    public function isAbstract(): bool
     {
         return (bool) ($this->flags & Modifiers::ABSTRACT);
     }
     /**
      * Whether the method is final.
      */
-    public function isFinal() : bool
+    public function isFinal(): bool
     {
         return (bool) ($this->flags & Modifiers::FINAL);
     }
     /**
      * Whether the method is static.
      */
-    public function isStatic() : bool
+    public function isStatic(): bool
     {
         return (bool) ($this->flags & Modifiers::STATIC);
     }
     /**
      * Whether the method is magic.
      */
-    public function isMagic() : bool
+    public function isMagic(): bool
     {
         return isset(self::$magicNames[$this->name->toLowerString()]);
     }
-    public function getType() : string
+    public function getType(): string
     {
         return 'Stmt_ClassMethod';
     }
