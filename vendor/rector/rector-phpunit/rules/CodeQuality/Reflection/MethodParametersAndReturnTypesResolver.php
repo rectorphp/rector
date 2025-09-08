@@ -13,6 +13,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Enum\ClassName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -61,6 +62,9 @@ final class MethodParametersAndReturnTypesResolver
         }
         $methodName = $call->name->toString();
         $callerType = $this->nodeTypeResolver->getType($call instanceof MethodCall ? $call->var : $call->class);
+        if ($callerType instanceof ThisType) {
+            $callerType = $callerType->getStaticObjectType();
+        }
         if (!$callerType instanceof ObjectType) {
             return null;
         }
