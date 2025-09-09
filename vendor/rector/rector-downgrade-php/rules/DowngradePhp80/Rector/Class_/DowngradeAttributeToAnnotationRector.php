@@ -5,12 +5,14 @@ namespace Rector\DowngradePhp80\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -18,6 +20,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\NodeFactory\DoctrineAnnotationFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -106,14 +109,8 @@ CODE_SAMPLE
             foreach ($attrGroup->attrs as $key => $attribute) {
                 if ($this->shouldSkipAttribute($attribute)) {
                     if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
-                        if ($node->getStartTokenPos() === strlen($attribute->name->toString()) - 2) {
-                            $indentation = '';
-                        } else {
-                            $indent = $attrGroup->getEndTokenPos() - $node->getStartTokenPos() + 2;
-                            $indentation = $indent > 0 ? str_repeat(' ', $indent) : '';
-                        }
                         // add new line
-                        $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $indentation . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
+                        $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $this->resolveIndentation($node, $attrGroup, $attribute) . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
                         $this->isDowngraded = \true;
                     }
                     continue;
@@ -150,6 +147,18 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $configuration;
+    }
+    private function resolveIndentation(Node $node, AttributeGroup $attributeGroup, Attribute $attribute): string
+    {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return '';
+        }
+        if ($node->getStartTokenPos() === strlen($attribute->name->toString()) - 2 || $node instanceof Class_ && $scope->isInFirstLevelStatement()) {
+            return '';
+        }
+        $indent = $attributeGroup->getEndTokenPos() - $node->getStartTokenPos() + 2;
+        return $indent > 0 ? str_repeat(' ', $indent) : '';
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Function_ $node
