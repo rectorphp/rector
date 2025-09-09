@@ -44,7 +44,7 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
     /**
      * @var string[]
      */
-    private const SKIPPED_ATTRIBUTES = ['Attribute', 'ReturnTypeWillChange', 'AllowDynamicProperties'];
+    private const SKIPPED_ATTRIBUTES = ['Attribute', 'ReturnTypeWillChange', 'AllowDynamicProperties', 'Override'];
     /**
      * @var DowngradeAttributeToAnnotation[]
      */
@@ -106,8 +106,14 @@ CODE_SAMPLE
             foreach ($attrGroup->attrs as $key => $attribute) {
                 if ($this->shouldSkipAttribute($attribute)) {
                     if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
+                        if ($node->getStartTokenPos() === strlen($attribute->name->toString()) - 2) {
+                            $indentation = '';
+                        } else {
+                            $indent = $attrGroup->getEndTokenPos() - $node->getStartTokenPos() + 2;
+                            $indentation = $indent > 0 ? str_repeat(' ', $indent) : '';
+                        }
                         // add new line
-                        $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
+                        $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $indentation . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
                         $this->isDowngraded = \true;
                     }
                     continue;

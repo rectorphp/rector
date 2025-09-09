@@ -507,8 +507,8 @@
         },
         {
             "name": "illuminate\/container",
-            "version": "v11.45.3",
-            "version_normalized": "11.45.3.0",
+            "version": "v11.46.0",
+            "version_normalized": "11.46.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/container.git",
@@ -564,8 +564,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v11.45.3",
-            "version_normalized": "11.45.3.0",
+            "version": "v11.46.0",
+            "version_normalized": "11.46.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1685,12 +1685,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "4efe5217ded739452bc3c18a20fb85a3091e6647"
+                "reference": "787002f318824ddda0a2aa00e11ace97ef9e1e5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4efe5217ded739452bc3c18a20fb85a3091e6647",
-                "reference": "4efe5217ded739452bc3c18a20fb85a3091e6647",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/787002f318824ddda0a2aa00e11ace97ef9e1e5d",
+                "reference": "787002f318824ddda0a2aa00e11ace97ef9e1e5d",
                 "shasum": ""
             },
             "require": {
@@ -1713,7 +1713,7 @@
                 "tomasvotruba\/class-leak": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-09-08T21:06:48+00:00",
+            "time": "2025-09-08T22:26:01+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1746,12 +1746,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "35a459d15ed536e8f623d431e2d554c61b9d85db"
+                "reference": "757bfc884573955309427ae0d16f7af634cac90c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/35a459d15ed536e8f623d431e2d554c61b9d85db",
-                "reference": "35a459d15ed536e8f623d431e2d554c61b9d85db",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/757bfc884573955309427ae0d16f7af634cac90c",
+                "reference": "757bfc884573955309427ae0d16f7af634cac90c",
                 "shasum": ""
             },
             "require": {
@@ -1769,7 +1769,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-09-08T18:23:00+00:00",
+            "time": "2025-09-09T12:06:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

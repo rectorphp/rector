@@ -81,25 +81,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isRepositoryClass($node)) {
+        $repositoryClass = $this->matchServiceRepositoryClass($node);
+        if ($repositoryClass === null) {
             return null;
         }
         $entityClass = $this->getEntityClassFromConstructor($node);
         if ($entityClass === null || $this->hasExtendsAnnotation($node)) {
             return null;
         }
-        $this->addAnnotationToNode($node, $entityClass);
+        $this->addAnnotationToNode($node, $entityClass, $repositoryClass);
         return $node;
     }
-    private function isRepositoryClass(Class_ $class): bool
+    private function matchServiceRepositoryClass(Class_ $class): ?string
     {
         if (!$class->extends instanceof Name) {
-            return \false;
+            return null;
         }
-        if ($this->isName($class->extends, DoctrineClass::SERVICE_ENTITY_REPOSITORY)) {
-            return \true;
+        if (!$this->isNames($class->extends, [DoctrineClass::SERVICE_ENTITY_REPOSITORY, DoctrineClass::SERVICE_DOCUMENT_REPOSITORY])) {
+            return null;
         }
-        return $this->isName($class->extends, DoctrineClass::SERVICE_DOCUMENT_REPOSITORY);
+        return $this->getName($class->extends);
     }
     private function getEntityClassFromConstructor(Class_ $class): ?string
     {
@@ -127,10 +128,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function addAnnotationToNode(Class_ $class, string $entityClass): void
+    private function addAnnotationToNode(Class_ $class, string $entityClass, string $repositoryClass): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $genericsAnnotation = sprintf('\%s<\%s>', DoctrineClass::SERVICE_ENTITY_REPOSITORY, $entityClass);
+        $genericsAnnotation = sprintf('\%s<\%s>', $repositoryClass, $entityClass);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@extends', new GenericTagValueNode($genericsAnnotation)));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
     }
