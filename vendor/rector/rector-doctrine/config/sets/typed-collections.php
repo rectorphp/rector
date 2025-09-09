@@ -41,6 +41,8 @@ use Rector\Doctrine\TypedCollections\Rector\NullsafeMethodCall\RemoveNullsafeOnC
 use Rector\Doctrine\TypedCollections\Rector\Property\NarrowPropertyUnionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\Property\TypedPropertyFromToManyRelationTypeRector;
 return static function (RectorConfig $rectorConfig): void {
+    // rule that handle docblocks only, safer to apply
+    $rectorConfig->import(__DIR__ . '/typed-collections-docblocks.php');
     $rectorConfig->rules([
         // init
         InitializeCollectionInConstructorRector::class,
