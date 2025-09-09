@@ -7,14 +7,12 @@ use Rector\Config\RectorConfig;
 use Rector\Doctrine\TypedCollections\Rector\Assign\ArrayDimFetchAssignToAddCollectionCallRector;
 use Rector\Doctrine\TypedCollections\Rector\Assign\ArrayOffsetSetToSetCollectionCallRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteParamDocblockFromSetterToCollectionRector;
-use Rector\Doctrine\TypedCollections\Rector\Class_\CompletePropertyDocblockFromToManyRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToManyRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\InitializeCollectionInConstructorRector;
 use Rector\Doctrine\TypedCollections\Rector\Class_\RemoveNullFromInstantiatedArrayCollectionPropertyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionGetterNativeTypeRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionParamTypeSetterToCollectionPropertyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\CollectionSetterParamNativeTypeRector;
-use Rector\Doctrine\TypedCollections\Rector\ClassMethod\DefaultCollectionKeyRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowArrayCollectionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowParamUnionToCollectionRector;
 use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowReturnUnionToCollectionRector;
@@ -68,13 +66,11 @@ return static function (RectorConfig $rectorConfig): void {
         TypedPropertyFromToManyRelationTypeRector::class,
         RemoveNullFromNullableCollectionTypeRector::class,
         // docblocks
-        DefaultCollectionKeyRector::class,
         NarrowArrayCollectionToCollectionRector::class,
         // @param docblock
         CompleteParamDocblockFromSetterToCollectionRector::class,
         NarrowParamUnionToCollectionRector::class,
         // @var docblock
-        CompletePropertyDocblockFromToManyRector::class,
         NarrowPropertyUnionToCollectionRector::class,
         // @return docblock
         NarrowReturnUnionToCollectionRector::class,

@@ -22,8 +22,8 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Rector\Doctrine\CodeQuality\Enum\DocumentMappingKey;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
-use Rector\Doctrine\CodeQuality\Enum\OdmMappingKey;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
@@ -113,7 +113,7 @@ final class CollectionTypeResolver
             return $this->resolveFromDoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNodeOrAttribute, $property);
         }
         if ($doctrineAnnotationTagValueNodeOrAttribute instanceof Attribute) {
-            $targetEntityExpr = $this->findExprByArgNames($doctrineAnnotationTagValueNodeOrAttribute->args, [EntityMappingKey::TARGET_ENTITY, OdmMappingKey::TARGET_DOCUMENT]);
+            $targetEntityExpr = $this->findExprByArgNames($doctrineAnnotationTagValueNodeOrAttribute->args, [EntityMappingKey::TARGET_ENTITY, DocumentMappingKey::TARGET_DOCUMENT]);
             if (!$targetEntityExpr instanceof ClassConstFetch) {
                 return null;
             }

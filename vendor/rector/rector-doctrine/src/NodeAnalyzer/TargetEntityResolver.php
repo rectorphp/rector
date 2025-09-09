@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Doctrine\CodeQuality\Enum\DocumentMappingKey;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
 use Rector\Exception\NotImplementedYetException;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -33,7 +34,7 @@ final class TargetEntityResolver
             if (!$arg->name instanceof Identifier) {
                 continue;
             }
-            if ($arg->name->toString() !== EntityMappingKey::TARGET_ENTITY) {
+            if (!in_array($arg->name->toString(), [EntityMappingKey::TARGET_ENTITY, DocumentMappingKey::TARGET_DOCUMENT], \true)) {
                 continue;
             }
             return $this->resolveFromExpr($arg->value);
