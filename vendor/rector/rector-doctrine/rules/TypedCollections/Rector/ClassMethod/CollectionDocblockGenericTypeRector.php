@@ -128,15 +128,7 @@ CODE_SAMPLE
         if ($collectionAddMethodCalls === []) {
             return null;
         }
-        $setTypeClasses = [];
-        foreach ($collectionAddMethodCalls as $collectionAddMethodCall) {
-            $setArg = $collectionAddMethodCall->getArgs()[0];
-            $setType = $this->getType($setArg->value);
-            if (!isset($setType->getObjectClassNames()[0])) {
-                continue;
-            }
-            $setTypeClasses[] = $setType->getObjectClassNames()[0];
-        }
+        $setTypeClasses = $this->resolveSetTypeClasses($collectionAddMethodCalls);
         if (count($setTypeClasses) !== 1) {
             return null;
         }
@@ -150,5 +142,22 @@ CODE_SAMPLE
         $phpDocInfo->addTagValueNode($returnTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return null;
+    }
+    /**
+     * @param MethodCall[] $collectionAddMethodCalls
+     * @return string[]
+     */
+    private function resolveSetTypeClasses(array $collectionAddMethodCalls): array
+    {
+        $setTypeClasses = [];
+        foreach ($collectionAddMethodCalls as $collectionAddMethodCall) {
+            $setArg = $collectionAddMethodCall->getArgs()[0];
+            $setType = $this->getType($setArg->value);
+            if (!isset($setType->getObjectClassNames()[0])) {
+                continue;
+            }
+            $setTypeClasses[] = $setType->getObjectClassNames()[0];
+        }
+        return array_unique($setTypeClasses);
     }
 }
