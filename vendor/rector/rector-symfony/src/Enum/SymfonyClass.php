@@ -113,4 +113,8 @@ final class SymfonyClass
      * @var string
      */
     public const PARAMETER_BAG = 'Symfony\Component\HttpFoundation\ParameterBag';
+    /**
+     * @var string
+     */
+    public const SYMFONY_STYLE = 'Symfony\Component\Console\Style\SymfonyStyle';
 }

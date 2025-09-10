@@ -9,31 +9,58 @@ final class CommandArgument
     /**
      * @readonly
      */
+    private string $nameValue;
+    /**
+     * @readonly
+     */
     private Expr $name;
     /**
      * @readonly
      */
-    private Expr $mode;
+    private ?Expr $mode;
     /**
      * @readonly
      */
-    private Expr $description;
-    public function __construct(Expr $name, Expr $mode, Expr $description)
+    private ?Expr $description;
+    /**
+     * @readonly
+     */
+    private ?Expr $default;
+    /**
+     * @readonly
+     */
+    private bool $isArray;
+    public function __construct(string $nameValue, Expr $name, ?Expr $mode, ?Expr $description, ?Expr $default, bool $isArray)
     {
+        $this->nameValue = $nameValue;
         $this->name = $name;
         $this->mode = $mode;
         $this->description = $description;
+        $this->default = $default;
+        $this->isArray = $isArray;
+    }
+    public function getNameValue(): string
+    {
+        return $this->nameValue;
     }
     public function getName(): Expr
     {
         return $this->name;
     }
-    public function getMode(): Expr
+    public function getMode(): ?Expr
     {
         return $this->mode;
     }
-    public function getDescription(): Expr
+    public function getDescription(): ?Expr
     {
         return $this->description;
+    }
+    public function getDefault(): ?Expr
+    {
+        return $this->default;
+    }
+    public function isArray(): bool
+    {
+        return $this->isArray;
     }
 }

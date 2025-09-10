@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony73\NodeFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
@@ -44,17 +45,25 @@ final class CommandInvokeParamsFactory
     {
         $argumentParams = [];
         foreach ($commandArguments as $commandArgument) {
-            $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
-            $variableName = str_replace('-', '_', $argumentName);
+            $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
-            $argumentParam->type = new Identifier('string');
-            $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
-            if ($modeValue === null || $modeValue === 2) {
+            if ($commandArgument->isArray()) {
+                $argumentParam->type = new Identifier('array');
+            } else {
+                $argumentParam->type = new Identifier('string');
+            }
+            if ($commandArgument->getDefault() instanceof Expr) {
+                $argumentParam->default = $commandArgument->getDefault();
+            }
+            if ($this->isOptionalArgument($commandArgument)) {
                 $argumentParam->type = new NullableType($argumentParam->type);
             }
-            // @todo fill type or default value
             // @todo default string, multiple values array
-            $argumentParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), [new Arg($commandArgument->getName(), \false, \false, [], new Identifier('name')), new Arg($commandArgument->getDescription(), \false, \false, [], new Identifier('description'))])]);
+            $argumentArgs = [new Arg($commandArgument->getName(), \false, \false, [], new Identifier('name'))];
+            if ($this->isNonEmptyExpr($commandArgument->getDescription())) {
+                $argumentArgs[] = new Arg($commandArgument->getDescription(), \false, \false, [], new Identifier('description'));
+            }
+            $argumentParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), $argumentArgs)]);
             $argumentParams[] = $argumentParam;
         }
         return $argumentParams;
@@ -67,13 +76,50 @@ final class CommandInvokeParamsFactory
     {
         $optionParams = [];
         foreach ($commandOptions as $commandOption) {
-            $optionName = $commandOption->getName();
-            $variableName = str_replace('-', '_', $optionName);
+            $variableName = $this->createCamelCase($commandOption->getNameValue());
             $optionParam = new Param(new Variable($variableName));
-            // @todo fill type or default value
-            $optionParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION))]);
+            if ($commandOption->getDefault() instanceof Expr) {
+                $optionParam->default = $commandOption->getDefault();
+            }
+            $optionArgs = [new Arg($commandOption->getName(), \false, \false, [], new Identifier('name'))];
+            if ($this->isNonEmptyExpr($commandOption->getShortcut())) {
+                $optionArgs[] = new Arg($commandOption->getShortcut(), \false, \false, [], new Identifier('shortcut'));
+            }
+            if ($this->isNonEmptyExpr($commandOption->getMode())) {
+                $optionArgs[] = new Arg($commandOption->getMode(), \false, \false, [], new Identifier('mode'));
+            }
+            if ($this->isNonEmptyExpr($commandOption->getDescription())) {
+                $optionArgs[] = new Arg($commandOption->getDescription(), \false, \false, [], new Identifier('description'));
+            }
+            $optionParam->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION), $optionArgs)]);
             $optionParams[] = $optionParam;
         }
         return $optionParams;
+    }
+    private function createCamelCase(string $value): string
+    {
+        // Replace dashes/underscores with spaces
+        $value = str_replace(['-', '_'], ' ', strtolower($value));
+        // Capitalize each word, then remove spaces
+        $value = str_replace(' ', '', ucwords($value));
+        // Lowercase first character to make it camelCase
+        return lcfirst($value);
+    }
+    private function isOptionalArgument(CommandArgument $commandArgument): bool
+    {
+        if (!$commandArgument->getMode() instanceof Expr) {
+            return \true;
+        }
+        return $this->valueResolver->isValue($commandArgument->getMode(), 2);
+    }
+    private function isNonEmptyExpr(?Expr $expr): bool
+    {
+        if (!$expr instanceof Expr) {
+            return \false;
+        }
+        if ($this->valueResolver->isNull($expr)) {
+            return \false;
+        }
+        return !$this->valueResolver->isValue($expr, '');
     }
 }
