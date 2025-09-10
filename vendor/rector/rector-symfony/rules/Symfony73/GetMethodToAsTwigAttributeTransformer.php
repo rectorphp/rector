@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use Rector\Symfony\Enum\TwigClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 /**
@@ -58,6 +59,7 @@ final class GetMethodToAsTwigAttributeTransformer
         if (!$getMethod instanceof ClassMethod) {
             return \false;
         }
+        $originalMethod = clone $getMethod;
         $hasChanged = \false;
         foreach ((array) $getMethod->stmts as $stmt) {
             // handle return array simple case
@@ -87,7 +89,8 @@ final class GetMethodToAsTwigAttributeTransformer
                 if ($this->isLocalCallable($secondArg->value)) {
                     $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
                     if (!is_string($localMethodName)) {
-                        continue;
+                        $getMethod = $originalMethod;
+                        return \false;
                     }
                     $localMethod = $class->getMethod($localMethodName);
                     if (!$localMethod instanceof ClassMethod) {
@@ -101,6 +104,9 @@ final class GetMethodToAsTwigAttributeTransformer
                 }
             }
             $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
+        }
+        if ($hasChanged && $class->extends instanceof FullyQualified && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
+            $class->extends = null;
         }
         return $hasChanged;
     }
