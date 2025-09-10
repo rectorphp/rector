@@ -122,7 +122,7 @@ CODE_SAMPLE
     private function resolveNamedPositions(FuncCall $funcCall, array $args): array
     {
         $functionName = $this->getName($funcCall);
-        $argNames = NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES[$functionName];
+        $argNames = NameNullToStrictNullFunctionMap::FUNCTION_TO_PARAM_NAMES[$functionName] ?? [];
         $positions = [];
         foreach ($args as $position => $arg) {
             if (!$arg->name instanceof Identifier) {

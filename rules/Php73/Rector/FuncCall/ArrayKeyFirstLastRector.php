@@ -120,6 +120,9 @@ CODE_SAMPLE
             if ($this->hasInternalPointerChangeNext($stmtsAware, $key + 1, $totalKeys, $keyFuncCall)) {
                 continue;
             }
+            if (!isset(self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($stmt->expr)])) {
+                continue;
+            }
             $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($stmt->expr)];
             $keyFuncCall->name = new Name($newName);
             $this->changeNextKeyCall($stmtsAware, $key + 2, $resetOrEndFuncCall, $keyFuncCall->name);

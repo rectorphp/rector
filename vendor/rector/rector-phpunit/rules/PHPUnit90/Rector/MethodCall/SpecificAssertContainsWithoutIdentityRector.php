@@ -99,6 +99,9 @@ CODE_SAMPLE
         }
         /* here we search for element of array without identity check  and we can replace functions */
         $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
         $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$methodName]);
         unset($node->args[3], $node->args[4]);
         return $node;

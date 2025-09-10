@@ -98,7 +98,9 @@ CODE_SAMPLE
             if ($this->shouldSkip($stmt)) {
                 continue;
             }
+            /** @var Stmt $stmt */
             $endLine = $stmt->getEndLine();
+            /** @var Stmt $nextStmt */
             $line = $nextStmt->getStartLine();
             $rangeLine = $line - $endLine;
             if ($rangeLine > 1) {
