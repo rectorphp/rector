@@ -8,7 +8,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
-use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Naming\Naming\AliasNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -91,11 +90,6 @@ final class NameImporter
             $nameInUse->setAttribute(AttributeKey::NAMESPACED_NAME, $fullyQualified->toString());
             return $nameInUse;
         }
-        $nameInNamespacedScope = $this->resolveNameInNamespacedScope($fullyQualified);
-        if ($nameInNamespacedScope instanceof Name) {
-            $nameInNamespacedScope->setAttribute(AttributeKey::NAMESPACED_NAME, $fullyQualified->toString());
-            return $nameInNamespacedScope;
-        }
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $fullyQualified, $fullyQualifiedObjectType)) {
             return null;
@@ -108,29 +102,6 @@ final class NameImporter
         }
         $this->addUseImport($file, $fullyQualified, $fullyQualifiedObjectType);
         return $fullyQualifiedObjectType->getShortNameNode();
-    }
-    private function resolveNameInNamespacedScope(FullyQualified $fullyQualified): ?Name
-    {
-        /**
-         * Note: Don't use ScopeFetcher::fetch() on Name instance,
-         * Scope can be null on Name
-         * This is part of ScopeAnalyzer::NON_REFRESHABLE_NODES
-         * @see https://github.com/rectorphp/rector-src/blob/9929af7c0179929b4fde6915cb7a06c3141dde6c/src/NodeAnalyzer/ScopeAnalyzer.php#L17
-         */
-        $scope = $fullyQualified->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
-        $namespace = $scope->getNamespace();
-        if ($namespace === null) {
-            return null;
-        }
-        $shortName = $fullyQualified->getLast();
-        $namepaceFullyQualifiedName = substr($fullyQualified->toString(), 0, -strlen($shortName) - 1);
-        if ($namepaceFullyQualifiedName === $namespace) {
-            return new Name($shortName);
-        }
-        return null;
     }
     private function addUseImport(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
