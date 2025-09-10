@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Symfony73\ValueObject;
 
 use PhpParser\Node\Expr;
+use PHPStan\Type\Type;
 final class CommandOption
 {
     /**
@@ -30,7 +31,19 @@ final class CommandOption
      * @readonly
      */
     private ?Expr $default;
-    public function __construct(string $nameValue, Expr $name, ?Expr $shortcut, ?Expr $mode, ?Expr $description, ?Expr $default)
+    /**
+     * @readonly
+     */
+    private bool $isArray;
+    /**
+     * @readonly
+     */
+    private bool $isImplicitBoolean;
+    /**
+     * @readonly
+     */
+    private ?Type $defaultType;
+    public function __construct(string $nameValue, Expr $name, ?Expr $shortcut, ?Expr $mode, ?Expr $description, ?Expr $default, bool $isArray, bool $isImplicitBoolean, ?Type $defaultType)
     {
         $this->nameValue = $nameValue;
         $this->name = $name;
@@ -38,6 +51,9 @@ final class CommandOption
         $this->mode = $mode;
         $this->description = $description;
         $this->default = $default;
+        $this->isArray = $isArray;
+        $this->isImplicitBoolean = $isImplicitBoolean;
+        $this->defaultType = $defaultType;
     }
     public function getName(): Expr
     {
@@ -62,5 +78,17 @@ final class CommandOption
     public function getDefault(): ?Expr
     {
         return $this->default;
+    }
+    public function getDefaultType(): ?Type
+    {
+        return $this->defaultType;
+    }
+    public function isArray(): bool
+    {
+        return $this->isArray;
+    }
+    public function isImplicitBoolean(): bool
+    {
+        return $this->isImplicitBoolean;
     }
 }

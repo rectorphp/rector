@@ -106,7 +106,7 @@ final class SomeCommand extends Command
 
         // ...
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
 CODE_SAMPLE
@@ -122,7 +122,7 @@ final class SomeCommand
     public function __invoke(
         #[Argument(name: 'argument', description: 'Argument description')]
         string $argument,
-        #[Option]
+        #[Option(name: 'option', shortcut: 'o', mode: Option::VALUE_NONE, description: 'Option description')]
         bool $option = false,
     ) {
         $someArgument = $argument;
@@ -130,7 +130,7 @@ final class SomeCommand
 
         // ...
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
 CODE_SAMPLE
@@ -182,16 +182,7 @@ CODE_SAMPLE
         $executeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
         // 6. remove parent class
         $node->extends = null;
-        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
-            foreach ($attrGroup->attrs as $attributeKey => $attr) {
-                if ($this->isName($attr->name, 'Override')) {
-                    unset($attrGroup->attrs[$attributeKey]);
-                }
-            }
-            if ($attrGroup->attrs === []) {
-                unset($executeClassMethod->attrGroups[$attrGroupKey]);
-            }
-        }
+        $this->removeOverrideAttributeAsDifferentMethod($executeClassMethod);
         if ($configureClassMethod instanceof ClassMethod) {
             // 7. replace input->getArgument() and input->getOption() calls with direct variable access
             $this->consoleOptionAndArgumentMethodCallVariableReplacer->replace($executeClassMethod);
@@ -255,5 +246,19 @@ CODE_SAMPLE
         }
         // the left-most var must be $this
         return $current instanceof Variable && $this->isName($current, 'this');
+    }
+    private function removeOverrideAttributeAsDifferentMethod(ClassMethod $executeClassMethod): void
+    {
+        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attr) {
+                if ($this->isName($attr->name, 'Override')) {
+                    unset($attrGroup->attrs[$attributeKey]);
+                }
+            }
+            // is attribute empty? remove whole group
+            if ($attrGroup->attrs === []) {
+                unset($executeClassMethod->attrGroups[$attrGroupKey]);
+            }
+        }
     }
 }

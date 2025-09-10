@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Symfony73\NodeFactory;
 
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
@@ -12,7 +15,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PHPStan\Type\Type;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Symfony73\ValueObject\CommandArgument;
 use Rector\Symfony\Symfony73\ValueObject\CommandOption;
@@ -22,9 +28,14 @@ final class CommandInvokeParamsFactory
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private StaticTypeMapper $staticTypeMapper;
+    public function __construct(ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->valueResolver = $valueResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     /**
      * @param CommandArgument[] $commandArguments
@@ -47,11 +58,7 @@ final class CommandInvokeParamsFactory
         foreach ($commandArguments as $commandArgument) {
             $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
-            if ($commandArgument->isArray()) {
-                $argumentParam->type = new Identifier('array');
-            } else {
-                $argumentParam->type = new Identifier('string');
-            }
+            $this->decorateParamType($argumentParam, $commandArgument);
             if ($commandArgument->getDefault() instanceof Expr) {
                 $argumentParam->default = $commandArgument->getDefault();
             }
@@ -80,7 +87,10 @@ final class CommandInvokeParamsFactory
             $optionParam = new Param(new Variable($variableName));
             if ($commandOption->getDefault() instanceof Expr) {
                 $optionParam->default = $commandOption->getDefault();
+            } elseif ($commandOption->isImplicitBoolean()) {
+                $optionParam->default = new ConstFetch(new Name('false'));
             }
+            $this->decorateParamType($optionParam, $commandOption);
             $optionArgs = [new Arg($commandOption->getName(), \false, \false, [], new Identifier('name'))];
             if ($this->isNonEmptyExpr($commandOption->getShortcut())) {
                 $optionArgs[] = new Arg($commandOption->getShortcut(), \false, \false, [], new Identifier('shortcut'));
@@ -121,5 +131,32 @@ final class CommandInvokeParamsFactory
             return \false;
         }
         return !$this->valueResolver->isValue($expr, '');
+    }
+    /**
+     * @param \Rector\Symfony\Symfony73\ValueObject\CommandArgument|\Rector\Symfony\Symfony73\ValueObject\CommandOption $commandArgumentOrOption
+     */
+    private function decorateParamType(Param $argumentParam, $commandArgumentOrOption): void
+    {
+        if ($commandArgumentOrOption instanceof CommandOption && $commandArgumentOrOption->isImplicitBoolean()) {
+            $argumentParam->type = new Identifier('bool');
+            return;
+        }
+        if ($commandArgumentOrOption->isArray()) {
+            $argumentParam->type = new Identifier('array');
+            return;
+        }
+        $defaultType = $commandArgumentOrOption->getDefaultType();
+        if ($defaultType instanceof Type) {
+            $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($defaultType, TypeKind::PARAM);
+            if ($paramType instanceof Node) {
+                $argumentParam->type = $paramType;
+                return;
+            }
+        }
+        // fallback
+        if ($commandArgumentOrOption instanceof CommandOption) {
+            return;
+        }
+        $argumentParam->type = new Identifier('string');
     }
 }
