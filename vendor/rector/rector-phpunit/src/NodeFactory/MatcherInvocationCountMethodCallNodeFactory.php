@@ -6,17 +6,30 @@ namespace Rector\PHPUnit\NodeFactory;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\PHPUnit\Composer\ProjectPackageVersionResolver;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\PHPUnit\Enum\ConsecutiveVariable;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
+/**
+ * Handle silent rename "getInvocationCount()" to "numberOfInvocations()" in PHPUnit 10
+ * https://github.com/sebastianbergmann/phpunit/commit/2ba8b7fded44a1a75cf5712a3b7310a8de0b6bb8#diff-3b464bb32b9187dd2d047fd1c21773aa32c19b20adebc083e1a49267c524a980
+ */
 final class MatcherInvocationCountMethodCallNodeFactory
 {
     /**
      * @readonly
      */
-    private ProjectPackageVersionResolver $projectPackageVersionResolver;
-    public function __construct(ProjectPackageVersionResolver $projectPackageVersionResolver)
+    private ReflectionProvider $reflectionProvider;
+    /**
+     * @var string
+     */
+    private const GET_INVOCATION_COUNT = 'getInvocationCount';
+    /**
+     * @var string
+     */
+    private const NUMBER_OF_INVOCATIONS = 'numberOfInvocations';
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
-        $this->projectPackageVersionResolver = $projectPackageVersionResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function create(): MethodCall
     {
@@ -26,12 +39,16 @@ final class MatcherInvocationCountMethodCallNodeFactory
     }
     private function getInvocationMethodName(): string
     {
-        $projectPHPUnitVersion = $this->projectPackageVersionResolver->findPackageVersion('phpunit/phpunit');
-        if ($projectPHPUnitVersion === null || version_compare($projectPHPUnitVersion, '10.0', '>=')) {
-            // phpunit 10 naming
-            return 'numberOfInvocations';
+        if (!$this->reflectionProvider->hasClass(PHPUnitClassName::INVOCATION_ORDER)) {
+            // fallback to PHPUnit 9
+            return self::GET_INVOCATION_COUNT;
+        }
+        $invocationOrderClassReflection = $this->reflectionProvider->getClass(PHPUnitClassName::INVOCATION_ORDER);
+        // phpunit 10 naming
+        if ($invocationOrderClassReflection->hasNativeMethod(self::GET_INVOCATION_COUNT)) {
+            return self::GET_INVOCATION_COUNT;
         }
         // phpunit 9 naming
-        return 'getInvocationCount';
+        return self::NUMBER_OF_INVOCATIONS;
     }
 }

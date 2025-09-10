@@ -17,4 +17,8 @@ final class PHPUnitClassName
      * @var string
      */
     public const ASSERT = 'PHPUnit\Framework\Assert';
+    /**
+     * @var string
+     */
+    public const INVOCATION_ORDER = 'PHPUnit\Framework\MockObject\Rule\InvocationOrder';
 }

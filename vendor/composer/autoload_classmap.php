@@ -1945,7 +1945,6 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\ParamTypesAndReturnType' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/ParamTypesAndReturnType.php',
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\VariableNameToType' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/VariableNameToType.php',
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\VariableNameToTypeCollection' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/VariableNameToTypeCollection.php',
-    'Rector\\PHPUnit\\Composer\\ProjectPackageVersionResolver' => $vendorDir . '/rector/rector-phpunit/src/Composer/ProjectPackageVersionResolver.php',
     'Rector\\PHPUnit\\Enum\\AssertMethod' => $vendorDir . '/rector/rector-phpunit/src/Enum/AssertMethod.php',
     'Rector\\PHPUnit\\Enum\\BehatClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/BehatClassName.php',
     'Rector\\PHPUnit\\Enum\\ConsecutiveMethodName' => $vendorDir . '/rector/rector-phpunit/src/Enum/ConsecutiveMethodName.php',

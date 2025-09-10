@@ -2193,7 +2193,6 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\PHPUnit\\CodeQuality\\ValueObject\\ParamTypesAndReturnType' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/ParamTypesAndReturnType.php',
         'Rector\\PHPUnit\\CodeQuality\\ValueObject\\VariableNameToType' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/VariableNameToType.php',
         'Rector\\PHPUnit\\CodeQuality\\ValueObject\\VariableNameToTypeCollection' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/VariableNameToTypeCollection.php',
-        'Rector\\PHPUnit\\Composer\\ProjectPackageVersionResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Composer/ProjectPackageVersionResolver.php',
         'Rector\\PHPUnit\\Enum\\AssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/AssertMethod.php',
         'Rector\\PHPUnit\\Enum\\BehatClassName' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/BehatClassName.php',
         'Rector\\PHPUnit\\Enum\\ConsecutiveMethodName' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/ConsecutiveMethodName.php',
