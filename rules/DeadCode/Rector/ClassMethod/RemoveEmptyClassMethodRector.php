@@ -145,10 +145,6 @@ CODE_SAMPLE
         if ($this->controllerClassMethodManipulator->isControllerClassMethod($class, $classMethod)) {
             return \true;
         }
-        if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
-            // has parent class?
-            return $class->extends instanceof FullyQualified;
-        }
         if ($this->isName($classMethod, MethodName::CLONE)) {
             return !$classMethod->isPublic();
         }
