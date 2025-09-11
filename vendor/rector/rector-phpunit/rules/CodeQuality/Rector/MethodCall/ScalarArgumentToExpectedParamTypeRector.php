@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar;
@@ -93,10 +94,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [MethodCall::class, StaticCall::class, New_::class];
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param MethodCall|StaticCall|New_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -146,27 +147,27 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $callLike
      */
-    private function shouldSkipCall($call): bool
+    private function shouldSkipCall($callLike): bool
     {
-        if (!$this->isInTestClass($call)) {
+        if (!$this->isInTestClass($callLike)) {
             return \true;
         }
-        if ($call->isFirstClassCallable()) {
+        if ($callLike->isFirstClassCallable()) {
             return \true;
         }
-        if ($call->getArgs() === []) {
+        if ($callLike->getArgs() === []) {
             return \true;
         }
-        return !$this->hasStringOrNumberArguments($call);
+        return !$this->hasStringOrNumberArguments($callLike);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $callLike
      */
-    private function hasStringOrNumberArguments($call): bool
+    private function hasStringOrNumberArguments($callLike): bool
     {
-        foreach ($call->getArgs() as $arg) {
+        foreach ($callLike->getArgs() as $arg) {
             if ($arg->value instanceof Int_) {
                 return \true;
             }
@@ -180,7 +181,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $call
      */
     private function isInTestClass($call): bool
     {
