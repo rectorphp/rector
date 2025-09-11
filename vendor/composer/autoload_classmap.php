@@ -2670,6 +2670,7 @@ return array(
     'Rector\\Transform\\ValueObject\\WrapReturn' => $baseDir . '/rules/Transform/ValueObject/WrapReturn.php',
     'Rector\\TypeDeclarationDocblocks\\NodeAnalyzer\\ConstructorAssignedTypeResolver' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeAnalyzer/ConstructorAssignedTypeResolver.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockGetterReturnArrayFromPropertyDocblockVarRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockGetterReturnArrayFromPropertyDocblockVarRector.php',
+    'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockReturnArrayFromDirectArrayInstanceRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockReturnArrayFromDirectArrayInstanceRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',

@@ -2918,6 +2918,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\Transform\\ValueObject\\WrapReturn' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/WrapReturn.php',
         'Rector\\TypeDeclarationDocblocks\\NodeAnalyzer\\ConstructorAssignedTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeAnalyzer/ConstructorAssignedTypeResolver.php',
         'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockGetterReturnArrayFromPropertyDocblockVarRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockGetterReturnArrayFromPropertyDocblockVarRector.php',
+        'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockReturnArrayFromDirectArrayInstanceRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockReturnArrayFromDirectArrayInstanceRector.php',
         'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',

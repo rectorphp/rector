@@ -10,5 +10,5 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArray
  * @experimental * 2025-09, experimental hidden set for type declaration in docblocks
  */
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([DocblockVarFromParamDocblockInConstructorRector::class, DocblockGetterReturnArrayFromPropertyDocblockVarRector::class]);
+    $rectorConfig->rules([DocblockVarFromParamDocblockInConstructorRector::class, DocblockVarFromParamDocblockInConstructorRector::class, DocblockGetterReturnArrayFromPropertyDocblockVarRector::class]);
 };
