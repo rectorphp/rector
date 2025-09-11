@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;

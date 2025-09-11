@@ -4,9 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -86,10 +84,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        $position = $this->argsAnalyzer->hasNamedArg($args) ? $this->resolveNamedPosition($args) : 2;
-        if ($position === null) {
-            return null;
-        }
+        $position = $this->argsAnalyzer->resolveArgPosition($args, 'limit', 2);
         if (!isset($args[$position])) {
             return null;
         }
@@ -109,22 +104,6 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_STRING_FUNCTION;
-    }
-    /**
-     * @param Arg[] $args
-     */
-    private function resolveNamedPosition(array $args): ?int
-    {
-        foreach ($args as $position => $arg) {
-            if (!$arg->name instanceof Identifier) {
-                continue;
-            }
-            if (!$this->isName($arg->name, 'limit')) {
-                continue;
-            }
-            return $position;
-        }
-        return null;
     }
     private function shouldSkip(FuncCall $funcCall): bool
     {

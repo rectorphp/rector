@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php85\Rector\Class_;
 
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -25,7 +27,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SleepToSerializeRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     */
     private BetterNodeFinder $betterNodeFinder;
+    /**
+     * @readonly
+     */
     private ReturnAnalyzer $returnAnalyzer;
     public function __construct(BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer)
     {
@@ -94,15 +102,15 @@ CODE_SAMPLE
             if (!$return->expr instanceof Array_) {
                 return null;
             }
-            if (count($return->expr->items) > 0) {
+            if ($return->expr->items !== []) {
                 $newItems = [];
                 foreach ($return->expr->items as $item) {
-                    if ($item !== null && $item->value instanceof Node\Scalar\String_) {
+                    if ($item !== null && $item->value instanceof String_) {
                         $propName = $item->value->value;
-                        $newItems[] = new ArrayItem(new PropertyFetch(new Node\Expr\Variable('this'), $propName), $item->value);
+                        $newItems[] = new ArrayItem(new PropertyFetch(new Variable('this'), $propName), $item->value);
                     }
                 }
-                if (count($newItems) > 0) {
+                if ($newItems !== []) {
                     $hasChanged = \true;
                     $return->expr->items = $newItems;
                 }
