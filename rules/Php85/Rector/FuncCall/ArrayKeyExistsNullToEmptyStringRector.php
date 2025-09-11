@@ -12,7 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\Php81\NodeManipulator\NullToStrictStringConverter;
+use Rector\Php81\NodeManipulator\NullToStrictStringIntConverter;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
@@ -32,11 +32,11 @@ final class ArrayKeyExistsNullToEmptyStringRector extends AbstractRector impleme
     /**
      * @readonly
      */
-    private NullToStrictStringConverter $nullToStrictStringConverter;
-    public function __construct(ReflectionResolver $reflectionResolver, NullToStrictStringConverter $nullToStrictStringConverter)
+    private NullToStrictStringIntConverter $nullToStrictStringIntConverter;
+    public function __construct(ReflectionResolver $reflectionResolver, NullToStrictStringIntConverter $nullToStrictStringIntConverter)
     {
         $this->reflectionResolver = $reflectionResolver;
-        $this->nullToStrictStringConverter = $nullToStrictStringConverter;
+        $this->nullToStrictStringIntConverter = $nullToStrictStringIntConverter;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $node, $scope);
-        $result = $this->nullToStrictStringConverter->convertIfNull($node, $args, $this->resolvePosition($args), $isTrait, $scope, $parametersAcceptor);
+        $result = $this->nullToStrictStringIntConverter->convertIfNull($node, $args, $this->resolvePosition($args), $isTrait, $scope, $parametersAcceptor);
         if ($result instanceof Node) {
             return $result;
         }

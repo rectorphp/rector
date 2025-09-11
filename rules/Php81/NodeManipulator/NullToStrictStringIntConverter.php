@@ -5,10 +5,12 @@ namespace Rector\Php81\NodeManipulator;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast\Int_ as CastInt_;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
@@ -22,7 +24,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
-final class NullToStrictStringConverter
+final class NullToStrictStringIntConverter
 {
     /**
      * @readonly
@@ -45,18 +47,18 @@ final class NullToStrictStringConverter
     /**
      * @param Arg[] $args
      */
-    public function convertIfNull(FuncCall $funcCall, array $args, int $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor): ?FuncCall
+    public function convertIfNull(FuncCall $funcCall, array $args, int $position, bool $isTrait, Scope $scope, ParametersAcceptor $parametersAcceptor, string $targetType = 'string'): ?FuncCall
     {
         if (!isset($args[$position])) {
             return null;
         }
         $argValue = $args[$position]->value;
         if ($this->valueResolver->isNull($argValue)) {
-            $args[$position]->value = new String_('');
+            $args[$position]->value = $targetType === 'string' ? new String_('') : new Int_(0);
             $funcCall->args = $args;
             return $funcCall;
         }
-        if ($this->shouldSkipValue($argValue, $scope, $isTrait)) {
+        if ($this->shouldSkipValue($argValue, $scope, $isTrait, $targetType)) {
             return null;
         }
         $parameter = $parametersAcceptor->getParameters()[$position] ?? null;
@@ -66,28 +68,34 @@ final class NullToStrictStringConverter
                 return null;
             }
         }
-        if ($argValue instanceof Ternary && !$this->shouldSkipValue($argValue->else, $scope, $isTrait)) {
+        if ($argValue instanceof Ternary && !$this->shouldSkipValue($argValue->else, $scope, $isTrait, $targetType)) {
             if ($this->valueResolver->isNull($argValue->else)) {
-                $argValue->else = new String_('');
+                $argValue->else = $targetType === 'string' ? new String_('') : new Int_(0);
             } else {
-                $argValue->else = new CastString_($argValue->else);
+                $argValue->else = $targetType === 'string' ? new CastString_($argValue->else) : new CastInt_($argValue->else);
             }
             $args[$position]->value = $argValue;
             $funcCall->args = $args;
             return $funcCall;
         }
-        $args[$position]->value = new CastString_($argValue);
+        $args[$position]->value = $targetType === 'string' ? new CastString_($argValue) : new CastInt_($argValue);
         $funcCall->args = $args;
         return $funcCall;
     }
-    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait): bool
+    private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait, string $targetType): bool
     {
         $type = $this->nodeTypeResolver->getType($expr);
-        if ($type->isString()->yes()) {
+        if ($type->isString()->yes() && $targetType === 'string') {
+            return \true;
+        }
+        if ($type->isInteger()->yes() && $targetType === 'int') {
             return \true;
         }
         $nativeType = $this->nodeTypeResolver->getNativeType($expr);
-        if ($nativeType->isString()->yes()) {
+        if ($nativeType->isString()->yes() && $targetType === 'string') {
+            return \true;
+        }
+        if ($nativeType->isInteger()->yes() && $targetType === 'int') {
             return \true;
         }
         if ($this->shouldSkipType($type)) {
