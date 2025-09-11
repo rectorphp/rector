@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Php85\Rector\Class_;
 
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\PhpParser\Node\BetterNodeFinder;
