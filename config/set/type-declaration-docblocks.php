@@ -4,11 +4,13 @@ declare (strict_types=1);
 namespace RectorPrefix202509;
 
 use Rector\Config\RectorConfig;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarFromParamDocblockInConstructorRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
 /**
  * @experimental * 2025-09, experimental hidden set for type declaration in docblocks
  */
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([DocblockVarFromParamDocblockInConstructorRector::class, DocblockVarFromParamDocblockInConstructorRector::class, DocblockGetterReturnArrayFromPropertyDocblockVarRector::class]);
+    $rectorConfig->rules([AddReturnArrayDocblockBasedOnArrayMapRector::class, AddReturnDocblockForScalarArrayFromAssignsRector::class, DocblockVarFromParamDocblockInConstructorRector::class, DocblockVarFromParamDocblockInConstructorRector::class, DocblockGetterReturnArrayFromPropertyDocblockVarRector::class]);
 };
