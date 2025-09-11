@@ -2185,6 +2185,7 @@ return array(
     'Rector\\Php84\\Rector\\Param\\ExplicitNullableParamTypeRector' => $baseDir . '/rules/Php84/Rector/Param/ExplicitNullableParamTypeRector.php',
     'Rector\\Php85\\Rector\\ArrayDimFetch\\ArrayFirstLastRector' => $baseDir . '/rules/Php85/Rector/ArrayDimFetch/ArrayFirstLastRector.php',
     'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => $baseDir . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
+    'Rector\\Php85\\Rector\\Class_\\SleepToSerializeRector' => $baseDir . '/rules/Php85/Rector/Class_/SleepToSerializeRector.php',
     'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => $baseDir . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
