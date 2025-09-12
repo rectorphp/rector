@@ -105,9 +105,7 @@ CODE_SAMPLE
         if (!$returnedType instanceof ConstantArrayType) {
             return null;
         }
-        $genericKeyType = $this->constantToGenericType($returnedType->getKeyType());
-        $genericItemType = $this->constantToGenericType($returnedType->getItemType());
-        $genericTypeNode = $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
+        $genericTypeNode = $this->createGenericArrayTypeFromConstantArrayType($returnedType);
         $returnTagValueNode = new ReturnTagValueNode($genericTypeNode, '');
         $phpDocInfo->addTagValueNode($returnTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
@@ -133,10 +131,28 @@ CODE_SAMPLE
         // unclear
         return new MixedType();
     }
-    private function createArrayGenericTypeNode(Type $keyType, Type $itemType): GenericTypeNode
+    private function createGenericArrayTypeFromConstantArrayType(ConstantArrayType $constantArrayType): GenericTypeNode
+    {
+        $genericKeyType = $this->constantToGenericType($constantArrayType->getKeyType());
+        $itemType = $constantArrayType->getItemType();
+        if ($itemType instanceof ConstantArrayType) {
+            $genericItemType = $this->createGenericArrayTypeFromConstantArrayType($itemType);
+        } else {
+            $genericItemType = $this->constantToGenericType($itemType);
+        }
+        return $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
+    }
+    /**
+     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $itemType
+     */
+    private function createArrayGenericTypeNode(Type $keyType, $itemType): GenericTypeNode
     {
         $keyDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($keyType);
-        $itemDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($itemType);
+        if ($itemType instanceof Type) {
+            $itemDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($itemType);
+        } else {
+            $itemDocTypeNode = $itemType;
+        }
         return new GenericTypeNode(new IdentifierTypeNode('array'), [$keyDocTypeNode, $itemDocTypeNode]);
     }
 }
