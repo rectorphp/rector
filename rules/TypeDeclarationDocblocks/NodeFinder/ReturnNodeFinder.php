@@ -32,6 +32,9 @@ final class ReturnNodeFinder
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($functionLike, $returnsScoped)) {
             return null;
         }
+        if (count($returnsScoped) !== 1) {
+            return null;
+        }
         return $returnsScoped[0];
     }
 }
