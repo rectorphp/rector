@@ -141,12 +141,17 @@ CODE_SAMPLE
         if ($referencedClasses === []) {
             return null;
         }
-        $parentClassesAndInterfaces = [];
-        foreach ($referencedClasses as $referencedClass) {
-            $parentClassesAndInterfaces[] = $this->resolveParentClassesAndInterfaces($referencedClass);
+        $uniqueReferencedClasses = array_unique($referencedClasses, \SORT_REGULAR);
+        if (count($uniqueReferencedClasses) === 1) {
+            $firstSharedType = $uniqueReferencedClasses[0];
+        } else {
+            $parentClassesAndInterfaces = [];
+            foreach ($referencedClasses as $referencedClass) {
+                $parentClassesAndInterfaces[] = $this->resolveParentClassesAndInterfaces($referencedClass);
+            }
+            $firstSharedTypes = array_intersect(...$parentClassesAndInterfaces);
+            $firstSharedType = $firstSharedTypes[0] ?? null;
         }
-        $firstSharedTypes = array_intersect(...$parentClassesAndInterfaces);
-        $firstSharedType = $firstSharedTypes[0] ?? null;
         if ($firstSharedType === null) {
             return null;
         }
