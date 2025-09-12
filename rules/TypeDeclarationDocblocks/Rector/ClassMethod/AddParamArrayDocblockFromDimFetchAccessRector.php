@@ -1,0 +1,169 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Rector\AbstractRector;
+use Rector\TypeDeclarationDocblocks\NodeFinder\DimFetchFinder;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector\AddParamArrayDocblockFromDimFetchAccessRectorTest
+ */
+final class AddParamArrayDocblockFromDimFetchAccessRector extends AbstractRector
+{
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private DimFetchFinder $dimFetchFinder;
+    /**
+     * @readonly
+     */
+    private DocBlockUpdater $docBlockUpdater;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DimFetchFinder $dimFetchFinder, DocBlockUpdater $docBlockUpdater)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->dimFetchFinder = $dimFetchFinder;
+        $this->docBlockUpdater = $docBlockUpdater;
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add @param docblock array type, based on array dim fetch access', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
+{
+    public function process(array $data): void
+    {
+        $item = $data['key'];
+
+        $anotherItem = $data['another_key'];
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function process(array $data): void
+    {
+        $item = $data['key'];
+
+        $anotherItem = $data['another_key'];
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class];
+    }
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->getParams() === []) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChanged = \false;
+        foreach ($node->getParams() as $param) {
+            if (!$param->type instanceof Node) {
+                continue;
+            }
+            if (!$this->isName($param->type, 'array')) {
+                continue;
+            }
+            /** @var string $paramName */
+            $paramName = $this->getName($param->var);
+            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+            // already defined, lets skip it
+            if ($paramTagValueNode instanceof ParamTagValueNode) {
+                continue;
+            }
+            $dimFetches = $this->dimFetchFinder->findByVariableName($node, $paramName);
+            if ($dimFetches === []) {
+                continue;
+            }
+            $keyTypes = [];
+            foreach ($dimFetches as $dimFetch) {
+                // nothing to resolve here
+                if (!$dimFetch->dim instanceof Expr) {
+                    continue;
+                }
+                $keyTypes[] = $this->getType($dimFetch->dim);
+            }
+            // most likely not being read
+            if ($keyTypes === []) {
+                continue;
+            }
+            if ($this->isOnlyStringType($keyTypes)) {
+                $paramTagValueNode = $this->createParamTagValueNode($paramName, 'string');
+                $phpDocInfo->addTagValueNode($paramTagValueNode);
+                $hasChanged = \true;
+                continue;
+            }
+            if ($this->isOnlyIntegerType($keyTypes)) {
+                $paramTagValueNode = $this->createParamTagValueNode($paramName, 'int');
+                $phpDocInfo->addTagValueNode($paramTagValueNode);
+                $hasChanged = \true;
+                continue;
+            }
+        }
+        if ($hasChanged === \false) {
+            return null;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        return $node;
+    }
+    /**
+     * @param Type[] $keyTypes
+     */
+    private function isOnlyStringType(array $keyTypes): bool
+    {
+        foreach ($keyTypes as $keyType) {
+            if ($keyType->isString()->yes()) {
+                continue;
+            }
+            return \false;
+        }
+        return \true;
+    }
+    /**
+     * @param Type[] $keyTypes
+     */
+    private function isOnlyIntegerType(array $keyTypes): bool
+    {
+        foreach ($keyTypes as $keyType) {
+            if ($keyType->isInteger()->yes()) {
+                continue;
+            }
+            return \false;
+        }
+        return \true;
+    }
+    private function createParamTagValueNode(string $paramName, string $keyTypeValue): ParamTagValueNode
+    {
+        $arrayGenericTypeNode = new GenericTypeNode(new IdentifierTypeNode('array'), [new IdentifierTypeNode($keyTypeValue), new IdentifierTypeNode('mixed')]);
+        return new ParamTagValueNode($arrayGenericTypeNode, \false, '$' . $paramName, '', \false);
+    }
+}
