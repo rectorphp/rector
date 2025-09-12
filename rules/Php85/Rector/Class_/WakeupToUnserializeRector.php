@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php85\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -80,11 +81,10 @@ CODE_SAMPLE
         $classMethod->stmts = [$this->assignProperties()];
         return $node;
     }
-    protected function assignProperties(): Foreach_
+    private function assignProperties(): Foreach_
     {
         $assign = new Assign(new PropertyFetch(new Variable('this'), new Variable('property')), new Variable('value'));
-        $if = new If_(new FuncCall(new Name('property_exists'), [new Node\Arg(new Variable('this')), new Node\Arg(new Variable('property'))]), ['stmts' => [new Expression($assign)]]);
-        $foreach = new Foreach_(new Variable('data'), new Variable('value'), ['keyVar' => new Variable('property'), 'stmts' => [$if]]);
-        return $foreach;
+        $if = new If_(new FuncCall(new Name('property_exists'), [new Arg(new Variable('this')), new Arg(new Variable('property'))]), ['stmts' => [new Expression($assign)]]);
+        return new Foreach_(new Variable('data'), new Variable('value'), ['keyVar' => new Variable('property'), 'stmts' => [$if]]);
     }
 }

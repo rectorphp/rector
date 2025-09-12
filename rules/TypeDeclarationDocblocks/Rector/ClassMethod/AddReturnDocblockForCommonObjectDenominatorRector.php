@@ -129,6 +129,12 @@ CODE_SAMPLE
             if ($valueType->getReferencedClasses() === []) {
                 return null;
             }
+            /**
+             * nested structure
+             */
+            if ($valueType->isArray()->yes()) {
+                return null;
+            }
             $referencedClasses = array_merge($referencedClasses, $valueType->getReferencedClasses());
         }
         // nothing to find here
