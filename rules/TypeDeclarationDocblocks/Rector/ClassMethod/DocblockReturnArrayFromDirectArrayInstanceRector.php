@@ -116,16 +116,16 @@ CODE_SAMPLE
      */
     private function constantToGenericType(Type $type): Type
     {
-        if ($type instanceof StringType) {
+        if ($type->isString()->yes()) {
             return new StringType();
         }
-        if ($type instanceof IntegerType) {
+        if ($type->isInteger()->yes()) {
             return new IntegerType();
         }
-        if ($type instanceof BooleanType) {
+        if ($type->isBoolean()->yes()) {
             return new BooleanType();
         }
-        if ($type instanceof FloatType) {
+        if ($type->isFloat()->yes()) {
             return new FloatType();
         }
         // unclear
