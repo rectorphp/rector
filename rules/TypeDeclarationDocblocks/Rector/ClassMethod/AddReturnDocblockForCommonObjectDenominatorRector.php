@@ -130,9 +130,9 @@ CODE_SAMPLE
                 return null;
             }
             /**
-             * nested structure
+             * not an object, can be nested array, or string class as Foo::class
              */
-            if ($valueType->isArray()->yes()) {
+            if (!$valueType->isObject()->yes()) {
                 return null;
             }
             $referencedClasses = array_merge($referencedClasses, $valueType->getReferencedClasses());
