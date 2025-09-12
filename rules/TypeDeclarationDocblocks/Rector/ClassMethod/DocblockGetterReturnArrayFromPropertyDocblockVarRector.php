@@ -8,6 +8,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
@@ -97,6 +100,12 @@ CODE_SAMPLE
             return null;
         }
         $propertyFetchType = $this->getType($propertyFetch);
+        if ($propertyFetchType instanceof ArrayType && $propertyFetchType->getKeyType() instanceof MixedType && $propertyFetchType->getItemType() instanceof MixedType) {
+            return null;
+        }
+        if ($propertyFetchType instanceof UnionType) {
+            return null;
+        }
         $propertyFetchDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($propertyFetchType);
         $returnTagValueNode = new ReturnTagValueNode($propertyFetchDocTypeNode, '');
         $phpDocInfo->addTagValueNode($returnTagValueNode);
