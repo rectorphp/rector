@@ -16,6 +16,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -134,6 +135,9 @@ CODE_SAMPLE
     private function createGenericArrayTypeFromConstantArrayType(ConstantArrayType $constantArrayType): GenericTypeNode
     {
         $genericKeyType = $this->constantToGenericType($constantArrayType->getKeyType());
+        if ($constantArrayType->getItemType() instanceof NeverType) {
+            $genericKeyType = new IntegerType();
+        }
         $itemType = $constantArrayType->getItemType();
         if ($itemType instanceof ConstantArrayType) {
             $genericItemType = $this->createGenericArrayTypeFromConstantArrayType($itemType);
