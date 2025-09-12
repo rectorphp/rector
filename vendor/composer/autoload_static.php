@@ -2435,6 +2435,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\Php85\\Rector\\ArrayDimFetch\\ArrayFirstLastRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ArrayDimFetch/ArrayFirstLastRector.php',
         'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
         'Rector\\Php85\\Rector\\Class_\\SleepToSerializeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Class_/SleepToSerializeRector.php',
+        'Rector\\Php85\\Rector\\Class_\\WakeupToUnserializeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Class_/WakeupToUnserializeRector.php',
         'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
