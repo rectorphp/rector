@@ -4,14 +4,13 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
+use Rector\TypeDeclarationDocblocks\PrivateMethodFlagger;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,14 +31,19 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
      */
     private LocalMethodCallFinder $localMethodCallFinder;
     /**
+     * @readonly
+     */
+    private PrivateMethodFlagger $privateMethodFlagger;
+    /**
      * @var int
      */
     private const MAX_UNION_TYPES = 3;
-    public function __construct(CallTypesResolver $callTypesResolver, ClassMethodParamTypeCompleter $classMethodParamTypeCompleter, LocalMethodCallFinder $localMethodCallFinder)
+    public function __construct(CallTypesResolver $callTypesResolver, ClassMethodParamTypeCompleter $classMethodParamTypeCompleter, LocalMethodCallFinder $localMethodCallFinder, PrivateMethodFlagger $privateMethodFlagger)
     {
         $this->callTypesResolver = $callTypesResolver;
         $this->classMethodParamTypeCompleter = $classMethodParamTypeCompleter;
         $this->localMethodCallFinder = $localMethodCallFinder;
+        $this->privateMethodFlagger = $privateMethodFlagger;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -88,7 +92,7 @@ CODE_SAMPLE
             if ($classMethod->params === []) {
                 continue;
             }
-            if (!$this->isClassMethodPrivate($node, $classMethod)) {
+            if (!$this->privateMethodFlagger->isClassMethodPrivate($node, $classMethod)) {
                 continue;
             }
             if ($classMethod->isPublic()) {
@@ -105,16 +109,5 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    private function isClassMethodPrivate(Class_ $class, ClassMethod $classMethod): bool
-    {
-        if ($classMethod->isPrivate()) {
-            return \true;
-        }
-        if ($classMethod->isFinal() && !$class->extends instanceof Name && $class->implements === []) {
-            return \true;
-        }
-        $isClassFinal = $class->isFinal() || FeatureFlags::treatClassesAsFinal($class);
-        return $isClassFinal && !$class->extends instanceof Name && $class->implements === [] && $classMethod->isProtected();
     }
 }
