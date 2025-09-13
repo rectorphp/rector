@@ -1085,6 +1085,7 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\ConstExprClassNameDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/ConstExprClassNameDecorator.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',
+    'Rector\\BetterPhpDocParser\\PhpDocParser\\PhpDocTagGenericUsesDecorator' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/PhpDocTagGenericUsesDecorator.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\ArrayParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\PlainValueParser' => $baseDir . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',

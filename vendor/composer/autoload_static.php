@@ -1333,6 +1333,7 @@ class ComposerStaticInit2c278beb4e563f4f2550db2567226f71
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ConstExprClassNameDecorator' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/ConstExprClassNameDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',
+        'Rector\\BetterPhpDocParser\\PhpDocParser\\PhpDocTagGenericUsesDecorator' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/PhpDocTagGenericUsesDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\ArrayParser' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\PlainValueParser' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
