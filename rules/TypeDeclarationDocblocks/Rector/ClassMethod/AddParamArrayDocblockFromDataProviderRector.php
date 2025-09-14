@@ -144,7 +144,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $parameterType = $this->parameterTypeFromDataProviderResolver->resolve($paramPosition, $dataProviderNodes->getClassMethods());
-                $generalizedParameterType = $this->typeNormalizer->generalizeConstantBoolTypes($parameterType);
+                $generalizedParameterType = $this->typeNormalizer->generalizeConstantTypes($parameterType);
                 $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedParameterType);
                 $paramTagValueNode = new ParamTagValueNode($parameterTypeNode, \false, '$' . $paramName, '', \false);
                 $phpDocInfo->addTagValueNode($paramTagValueNode);

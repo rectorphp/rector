@@ -121,7 +121,7 @@ CODE_SAMPLE
                 if (!$resolvedParameterType instanceof Type) {
                     continue;
                 }
-                $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantBoolTypes($resolvedParameterType);
+                $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantTypes($resolvedParameterType);
                 $arrayDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($normalizedResolvedParameterType);
                 $paramTagValueNode = new ParamTagValueNode($arrayDocTypeNode, \false, '$' . $parameterName, '', \false);
                 $classMethodPhpDocInfo->addTagValueNode($paramTagValueNode);
