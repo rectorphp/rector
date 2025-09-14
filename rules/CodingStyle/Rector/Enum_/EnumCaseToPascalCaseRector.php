@@ -156,7 +156,7 @@ CODE_SAMPLE
     }
     private function convertToPascalCase(string $name): string
     {
-        $parts = explode('_', strtolower($name));
-        return implode('', array_map(\Closure::fromCallable('ucfirst'), $parts));
+        $parts = explode('_', $name);
+        return implode('', array_map(fn($part): string => ctype_upper((string) $part) ? ucfirst(strtolower((string) $part)) : ucfirst((string) $part), $parts));
     }
 }
