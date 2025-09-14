@@ -6,6 +6,7 @@ namespace RectorPrefix202509;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector;
+use Rector\TypeDeclarationDocblocks\Rector\Class_\AddReturnDocblockDataProviderRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\ClassMethodArrayDocblockParamFromLocalCallsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarFromParamDocblockInConstructorRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDataProviderRector;
@@ -16,5 +17,16 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArray
  * @experimental * 2025-09, experimental hidden set for type declaration in docblocks
  */
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([AddReturnArrayDocblockBasedOnArrayMapRector::class, AddReturnDocblockForScalarArrayFromAssignsRector::class, DocblockVarFromParamDocblockInConstructorRector::class, DocblockGetterReturnArrayFromPropertyDocblockVarRector::class, AddReturnDocblockForCommonObjectDenominatorRector::class, AddParamArrayDocblockFromDimFetchAccessRector::class, AddParamArrayDocblockFromDataProviderRector::class, ClassMethodArrayDocblockParamFromLocalCallsRector::class]);
+    $rectorConfig->rules([
+        AddReturnArrayDocblockBasedOnArrayMapRector::class,
+        AddReturnDocblockForScalarArrayFromAssignsRector::class,
+        DocblockVarFromParamDocblockInConstructorRector::class,
+        DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
+        AddReturnDocblockForCommonObjectDenominatorRector::class,
+        AddParamArrayDocblockFromDimFetchAccessRector::class,
+        ClassMethodArrayDocblockParamFromLocalCallsRector::class,
+        // tests
+        AddParamArrayDocblockFromDataProviderRector::class,
+        AddReturnDocblockDataProviderRector::class,
+    ]);
 };
