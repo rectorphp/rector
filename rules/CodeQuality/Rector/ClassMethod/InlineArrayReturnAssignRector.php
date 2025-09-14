@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -80,6 +81,13 @@ CODE_SAMPLE
         $returnedVariableName = $this->getName($lastStmt->expr);
         if (!is_string($returnedVariableName)) {
             return null;
+        }
+        if ($node instanceof FunctionLike) {
+            foreach ($node->getParams() as $param) {
+                if ($this->isName($param->var, $returnedVariableName)) {
+                    return null;
+                }
+            }
         }
         $emptyArrayAssign = $this->resolveDefaultEmptyArrayAssign($stmts, $returnedVariableName);
         if (!$this->areAssignExclusiveToDimFetchVariable($stmts, $emptyArrayAssign, $returnedVariableName)) {
