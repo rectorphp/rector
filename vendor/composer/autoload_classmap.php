@@ -2681,6 +2681,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddReturnDocblockForCommonObjectDenominatorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddReturnDocblockForCommonObjectDenominatorRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockGetterReturnArrayFromPropertyDocblockVarRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockGetterReturnArrayFromPropertyDocblockVarRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockReturnArrayFromDirectArrayInstanceRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockReturnArrayFromDirectArrayInstanceRector.php',
+    'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\AddReturnDocblockDataProviderRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/AddReturnDocblockDataProviderRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\ClassMethodArrayDocblockParamFromLocalCallsRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/ClassMethodArrayDocblockParamFromLocalCallsRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',

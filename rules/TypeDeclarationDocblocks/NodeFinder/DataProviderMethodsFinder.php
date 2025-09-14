@@ -26,6 +26,18 @@ final class DataProviderMethodsFinder
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
     }
+    /**
+     * @return ClassMethod[]
+     */
+    public function findDataProviderNodesInClass(Class_ $class): array
+    {
+        $dataProviderClassMethods = [];
+        foreach ($class->getMethods() as $classMethod) {
+            $currentDataProviderNodes = $this->findDataProviderNodes($class, $classMethod);
+            $dataProviderClassMethods = array_merge($dataProviderClassMethods, $currentDataProviderNodes->getClassMethods());
+        }
+        return $dataProviderClassMethods;
+    }
     public function findDataProviderNodes(Class_ $class, ClassMethod $classMethod): DataProviderNodes
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);

@@ -63,10 +63,25 @@ CODE_SAMPLE
     {
         $params = $node->getParams();
         $args = $callLike->getArgs();
-        if ($callLike->isFirstClassCallable() || $this->isChainedCall($callLike) || $this->isUsingNamedArgs($args) || $this->isUsingByRef($params) || $this->isNotUsingSameParamsForArgs($params, $args) || $this->isDependantMethod($callLike, $params) || $this->isUsingThisInNonObjectContext($callLike, $scope)) {
+        if ($callLike->isFirstClassCallable()) {
             return \true;
         }
-        return \false;
+        if ($this->isChainedCall($callLike)) {
+            return \true;
+        }
+        if ($this->isUsingNamedArgs($args)) {
+            return \true;
+        }
+        if ($this->isUsingByRef($params)) {
+            return \true;
+        }
+        if ($this->isNotUsingSameParamsForArgs($params, $args)) {
+            return \true;
+        }
+        if ($this->isDependantMethod($callLike, $params)) {
+            return \true;
+        }
+        return $this->isUsingThisInNonObjectContext($callLike, $scope);
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
@@ -182,9 +197,6 @@ CODE_SAMPLE
         if (!$callLike instanceof MethodCall) {
             return \false;
         }
-        if (!$callLike->var instanceof CallLike) {
-            return \false;
-        }
-        return \true;
+        return $callLike->var instanceof CallLike;
     }
 }
