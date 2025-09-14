@@ -3,39 +3,39 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
-use Rector\PhpParser\Comparing\NodeComparator;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Value\ValueResolver;
 final class VariableDimFetchAssignResolver
 {
     /**
      * @readonly
      */
-    private NodeComparator $nodeComparator;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder)
+    private ValueResolver $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
     {
-        $this->nodeComparator = $nodeComparator;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->valueResolver = $valueResolver;
     }
     /**
      * @param Stmt[] $stmts
-     * @return KeyAndExpr[]
+     * @return array<mixed, KeyAndExpr[]>
      */
-    public function resolveFromStmtsAndVariable(array $stmts, Variable $variable): array
+    public function resolveFromStmtsAndVariable(array $stmts, ?Assign $emptyArrayAssign): array
     {
-        $keysAndExprs = [];
+        $exprs = [];
+        $key = 0;
         foreach ($stmts as $stmt) {
+            if ($stmt instanceof Expression && $stmt->expr === $emptyArrayAssign) {
+                continue;
+            }
+            if ($stmt instanceof Return_) {
+                continue;
+            }
             if (!$stmt instanceof Expression) {
                 return [];
             }
@@ -44,51 +44,29 @@ final class VariableDimFetchAssignResolver
                 return [];
             }
             $assign = $stmtExpr;
-            $keyExpr = $this->matchKeyOnArrayDimFetchOfVariable($assign, $variable);
-            if ($assign->var instanceof ArrayDimFetch && $assign->var->var instanceof ArrayDimFetch) {
-                return [];
+            $dimValues = [];
+            $arrayDimFetch = $assign->var;
+            while ($arrayDimFetch instanceof ArrayDimFetch) {
+                $dimValues[] = $arrayDimFetch->dim instanceof Expr ? $this->valueResolver->getValue($arrayDimFetch->dim) : $key;
+                $arrayDimFetch = $arrayDimFetch->var;
             }
-            $keysAndExprs[] = new KeyAndExpr($keyExpr, $assign->expr, $stmt->getComments());
+            ++$key;
+            $this->setNestedKeysExpr($exprs, $dimValues, $assign->expr);
         }
-        // we can only work with same variable
-        // and exclusively various keys or empty keys
-        if (!$this->hasExclusivelyNullKeyOrFilledKey($keysAndExprs)) {
-            return [];
-        }
-        return $keysAndExprs;
-    }
-    private function matchKeyOnArrayDimFetchOfVariable(Assign $assign, Variable $variable): ?Expr
-    {
-        if (!$assign->var instanceof ArrayDimFetch) {
-            return null;
-        }
-        $arrayDimFetch = $assign->var;
-        if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $variable)) {
-            return null;
-        }
-        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($subNode, $variable));
-        if ($isFoundInExpr) {
-            return null;
-        }
-        return $arrayDimFetch->dim;
+        return $exprs;
     }
     /**
-     * @param KeyAndExpr[] $keysAndExprs
+     * @param mixed[] $exprsByKeys
+     * @param array<string|int> $keys
      */
-    private function hasExclusivelyNullKeyOrFilledKey(array $keysAndExprs): bool
+    private function setNestedKeysExpr(array &$exprsByKeys, array $keys, Expr $expr): void
     {
-        $alwaysNullKey = \true;
-        $alwaysStringKey = \true;
-        foreach ($keysAndExprs as $keyAndExpr) {
-            if ($keyAndExpr->getKeyExpr() instanceof Expr) {
-                $alwaysNullKey = \false;
-            } else {
-                $alwaysStringKey = \false;
-            }
+        $reference =& $exprsByKeys;
+        $keys = array_reverse($keys);
+        foreach ($keys as $key) {
+            // create intermediate arrays automatically
+            $reference =& $reference[$key];
         }
-        if ($alwaysNullKey) {
-            return \true;
-        }
-        return $alwaysStringKey;
+        $reference = $expr;
     }
 }
