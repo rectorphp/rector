@@ -93,6 +93,10 @@ CODE_SAMPLE
         if (!$this->areAssignExclusiveToDimFetchVariable($stmts, $emptyArrayAssign, $returnedVariableName)) {
             return null;
         }
+        // init maybe from before if
+        if ($emptyArrayAssign === null && !$node instanceof FunctionLike) {
+            return null;
+        }
         $keysAndExprsByKey = $this->variableDimFetchAssignResolver->resolveFromStmtsAndVariable($stmts, $emptyArrayAssign);
         if ($keysAndExprsByKey === []) {
             return null;
