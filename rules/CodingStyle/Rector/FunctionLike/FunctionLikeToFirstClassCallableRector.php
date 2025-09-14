@@ -6,17 +6,21 @@ namespace Rector\CodingStyle\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
+use PhpParser\NodeVisitor;
+use PHPStan\Analyser\Scope;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202509\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FunctionLike\FunctionLikeToFirstClassCallableRector\FunctionLikeToFirstClassCallableRectorTest
  */
@@ -38,120 +42,148 @@ CODE_SAMPLE
     }
     /**
      * @param ArrowFunction|Closure $node
-     * @return null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?\PhpParser\Node\Expr\CallLike
     {
-        $extractedMethodCall = $this->extractMethodCallFromFuncLike($node);
-        if (!$extractedMethodCall instanceof MethodCall && !$extractedMethodCall instanceof StaticCall) {
+        $callLike = $this->extractCallLike($node);
+        if ($callLike === null) {
             return null;
         }
-        if ($extractedMethodCall instanceof MethodCall) {
-            return new MethodCall($extractedMethodCall->var, $extractedMethodCall->name, [new VariadicPlaceholder()]);
+        if ($this->shouldSkip($node, $callLike, ScopeFetcher::fetch($node))) {
+            return null;
         }
-        return new StaticCall($extractedMethodCall->class, $extractedMethodCall->name, [new VariadicPlaceholder()]);
+        $callLike->args = [new VariadicPlaceholder()];
+        return $callLike;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike
+     */
+    private function shouldSkip($node, $callLike, Scope $scope): bool
+    {
+        $params = $node->getParams();
+        $args = $callLike->getArgs();
+        if ($callLike->isFirstClassCallable() || $this->isChainedCall($callLike) || $this->isUsingNamedArgs($args) || $this->isUsingByRef($params) || $this->isNotUsingSameParamsForArgs($params, $args) || $this->isDependantMethod($callLike, $params) || $this->isUsingThisInNonObjectContext($callLike, $scope)) {
+            return \true;
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
-    private function extractMethodCallFromFuncLike($node)
+    private function extractCallLike($node)
     {
-        if ($node instanceof ArrowFunction) {
-            if (($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) && !$node->expr->isFirstClassCallable() && $this->notUsingNamedArgs($node->expr->getArgs()) && $this->notUsingByRef($node->getParams()) && $this->sameParamsForArgs($node->getParams(), $node->expr->getArgs()) && $this->isNonDependantMethod($node->expr, $node->getParams())) {
-                return $node->expr;
+        if ($node instanceof Closure) {
+            if (count($node->stmts) !== 1 || !$node->stmts[0] instanceof Return_) {
+                return null;
             }
+            $callLike = $node->stmts[0]->expr;
+        } else {
+            $callLike = $node->expr;
+        }
+        if (!$callLike instanceof FuncCall && !$callLike instanceof MethodCall && !$callLike instanceof StaticCall) {
             return null;
         }
-        if (count($node->stmts) != 1 || !$node->getStmts()[0] instanceof Return_) {
-            return null;
-        }
-        $callLike = $node->getStmts()[0]->expr;
-        if (!$callLike instanceof MethodCall && !$callLike instanceof StaticCall) {
-            return null;
-        }
-        if (!$callLike->isFirstClassCallable() && $this->notUsingNamedArgs($callLike->getArgs()) && $this->notUsingByRef($node->getParams()) && $this->sameParamsForArgs($node->getParams(), $callLike->getArgs()) && $this->isNonDependantMethod($callLike, $node->getParams())) {
-            return $callLike;
-        }
-        return null;
+        return $callLike;
     }
     /**
-     * @param Node\Param[] $params
-     * @param Node\Arg[] $args
+     * @param Param[] $params
+     * @param Arg[] $args
      */
-    private function sameParamsForArgs(array $params, array $args): bool
+    private function isNotUsingSameParamsForArgs(array $params, array $args): bool
     {
-        Assert::allIsInstanceOf($args, Arg::class);
-        Assert::allIsInstanceOf($params, Param::class);
         if (count($args) > count($params)) {
-            return \false;
+            return \true;
         }
         if (count($args) === 1 && $args[0]->unpack) {
-            return $params[0]->variadic;
+            return !$params[0]->variadic;
         }
         foreach ($args as $key => $arg) {
             if (!$this->nodeComparator->areNodesEqual($arg->value, $params[$key]->var)) {
-                return \false;
+                return \true;
             }
         }
-        return \true;
+        return \false;
     }
     /**
-     * Makes sure the parameter isn't used to make the call e.g. in the var or class
-     *
      * @param Param[] $params
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function isNonDependantMethod($expr, array $params): bool
+    private function isDependantMethod($expr, array $params): bool
     {
-        Assert::allIsInstanceOf($params, Param::class);
+        if ($expr instanceof FuncCall) {
+            return \false;
+        }
         $found = \false;
+        $parentNode = $expr instanceof MethodCall ? $expr->var : $expr->class;
         foreach ($params as $param) {
-            if ($expr instanceof MethodCall) {
-                $this->traverseNodesWithCallable($expr->var, function (Node $node) use ($param, &$found) {
-                    if ($this->nodeComparator->areNodesEqual($node, $param->var)) {
-                        $found = \true;
-                    }
-                    return null;
-                });
-            }
-            if ($expr instanceof StaticCall) {
-                $this->traverseNodesWithCallable($expr->class, function (Node $node) use ($param, &$found) {
-                    if ($this->nodeComparator->areNodesEqual($node, $param->var)) {
-                        $found = \true;
-                    }
-                    return null;
-                });
-            }
+            $this->traverseNodesWithCallable($parentNode, function (Node $node) use ($param, &$found) {
+                if ($this->nodeComparator->areNodesEqual($node, $param->var)) {
+                    $found = \true;
+                    return NodeVisitor::STOP_TRAVERSAL;
+                }
+            });
             if ($found) {
-                return \false;
+                return \true;
             }
         }
-        return \true;
+        return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike
+     */
+    private function isUsingThisInNonObjectContext($callLike, Scope $scope): bool
+    {
+        if (!$callLike instanceof MethodCall) {
+            return \false;
+        }
+        if (in_array('this', $scope->getDefinedVariables(), \true)) {
+            return \false;
+        }
+        $found = \false;
+        $this->traverseNodesWithCallable($callLike, function (Node $node) use (&$found) {
+            if ($this->isName($node, 'this')) {
+                $found = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
+            }
+        });
+        return $found;
     }
     /**
      * @param Param[] $params
      */
-    private function notUsingByRef(array $params): bool
+    private function isUsingByRef(array $params): bool
     {
-        Assert::allIsInstanceOf($params, Param::class);
         foreach ($params as $param) {
             if ($param->byRef) {
-                return \false;
+                return \true;
             }
         }
-        return \true;
+        return \false;
     }
     /**
      * @param Arg[] $args
      */
-    private function notUsingNamedArgs(array $args): bool
+    private function isUsingNamedArgs(array $args): bool
     {
-        Assert::allIsInstanceOf($args, Arg::class);
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {
-                return \false;
+                return \true;
             }
+        }
+        return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike
+     */
+    private function isChainedCall($callLike): bool
+    {
+        if (!$callLike instanceof MethodCall) {
+            return \false;
+        }
+        if (!$callLike->var instanceof CallLike) {
+            return \false;
         }
         return \true;
     }
