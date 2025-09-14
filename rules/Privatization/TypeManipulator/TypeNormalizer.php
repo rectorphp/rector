@@ -23,7 +23,7 @@ final class TypeNormalizer
      * @deprecated This method is deprecated and will be removed in the next major release.
      * Use @see generalizeConstantTypes() instead.
      */
-    public function generalizeConstantBoolTypes(\PHPStan\Type\Type $type): Type
+    public function generalizeConstantBoolTypes(Type $type): Type
     {
         return $this->generalizeConstantTypes($type);
     }

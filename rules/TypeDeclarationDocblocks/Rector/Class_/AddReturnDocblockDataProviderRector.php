@@ -164,11 +164,9 @@ CODE_SAMPLE
             $yields = $this->yieldNodeFinder->find($dataProviderClassMethod);
             if ($yields !== []) {
                 $yieldType = $this->yieldTypeResolver->resolveFromYieldNodes($yields, $dataProviderClassMethod);
-                if ($yieldType instanceof FullyQualifiedGenericObjectType) {
-                    if ($yieldType->getClassName() === 'Generator') {
-                        // most likely, a static iterator is used in data test fixtures
-                        $yieldType = new FullyQualifiedGenericObjectType('Iterator', $yieldType->getTypes());
-                    }
+                if ($yieldType instanceof FullyQualifiedGenericObjectType && $yieldType->getClassName() === 'Generator') {
+                    // most likely, a static iterator is used in data test fixtures
+                    $yieldType = new FullyQualifiedGenericObjectType('Iterator', $yieldType->getTypes());
                 }
                 $this->addGeneratedTypeReturnDocblockType($yieldType, $classMethodPhpDocInfo, $dataProviderClassMethod);
                 $hasChanged = \true;

@@ -6,6 +6,9 @@ namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -122,6 +125,10 @@ CODE_SAMPLE
                     continue;
                 }
                 $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantTypes($resolvedParameterType);
+                // most likely mixed, skip
+                if ($this->isArrayMixed($normalizedResolvedParameterType)) {
+                    continue;
+                }
                 $arrayDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($normalizedResolvedParameterType);
                 $paramTagValueNode = new ParamTagValueNode($arrayDocTypeNode, \false, '$' . $parameterName, '', \false);
                 $classMethodPhpDocInfo->addTagValueNode($paramTagValueNode);
@@ -133,5 +140,15 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function isArrayMixed(Type $type): bool
+    {
+        if (!$type instanceof ArrayType) {
+            return \false;
+        }
+        if (!$type->getItemType() instanceof MixedType) {
+            return \false;
+        }
+        return $type->getKeyType() instanceof IntegerType;
     }
 }
