@@ -62,10 +62,10 @@ CODE_SAMPLE
     private function shouldSkip($node, $callLike, Scope $scope): bool
     {
         $params = $node->getParams();
-        $args = $callLike->getArgs();
         if ($callLike->isFirstClassCallable()) {
             return \true;
         }
+        $args = $callLike->getArgs();
         if ($this->isChainedCall($callLike)) {
             return \true;
         }
