@@ -10,15 +10,21 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
+use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 final class VariableDimFetchAssignResolver
 {
     /**
      * @readonly
      */
+    private ExprAnalyzer $exprAnalyzer;
+    /**
+     * @readonly
+     */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(ExprAnalyzer $exprAnalyzer, ValueResolver $valueResolver)
     {
+        $this->exprAnalyzer = $exprAnalyzer;
         $this->valueResolver = $valueResolver;
     }
     /**
@@ -47,6 +53,9 @@ final class VariableDimFetchAssignResolver
             $dimValues = [];
             $arrayDimFetch = $assign->var;
             while ($arrayDimFetch instanceof ArrayDimFetch) {
+                if ($arrayDimFetch->dim instanceof Expr && $this->exprAnalyzer->isDynamicExpr($arrayDimFetch->dim)) {
+                    return [];
+                }
                 $dimValues[] = $arrayDimFetch->dim instanceof Expr ? $this->valueResolver->getValue($arrayDimFetch->dim) : $key;
                 $arrayDimFetch = $arrayDimFetch->var;
             }
