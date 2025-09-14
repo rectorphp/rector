@@ -173,6 +173,9 @@ CODE_SAMPLE
             if (!$assign->expr instanceof Array_) {
                 continue;
             }
+            if ($assign->expr->items !== []) {
+                continue;
+            }
             return $assign;
         }
         return null;
