@@ -11,8 +11,6 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -51,7 +49,7 @@ final class ClassNameImportSkipper
     public function shouldSkipName(FullyQualified $fullyQualified, array $uses): bool
     {
         if (substr_count($fullyQualified->toCodeString(), '\\') === 1) {
-            return $this->shouldSkipShortName($fullyQualified);
+            return $this->isFunctionOrConstantImport($fullyQualified);
         }
         // verify long name, as short name verify may conflict
         // see test PR: https://github.com/rectorphp/rector-src/pull/6208
@@ -78,14 +76,6 @@ final class ClassNameImportSkipper
             }
         }
         return \false;
-    }
-    private function shouldSkipShortName(FullyQualified $fullyQualified): bool
-    {
-        if ($this->isFunctionOrConstantImport($fullyQualified)) {
-            return \true;
-        }
-        // Importing root namespace classes (like \DateTime) is optional
-        return !SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
     }
     private function isFunctionOrConstantImport(FullyQualified $fullyQualified): bool
     {
