@@ -22,7 +22,13 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class TypeNormalizer
 {
+    /**
+     * @readonly
+     */
     private TypeFactory $typeFactory;
+    /**
+     * @readonly
+     */
     private StaticTypeMapper $staticTypeMapper;
     /**
      * @var int
