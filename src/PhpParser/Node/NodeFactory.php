@@ -29,6 +29,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -365,6 +367,11 @@ final class NodeFactory
             return $arrayItem;
         }
         if ($item instanceof New_) {
+            $arrayItem = new ArrayItem($item);
+            $this->decorateArrayItemWithKey($key, $arrayItem);
+            return $arrayItem;
+        }
+        if ($item instanceof UnaryPlus || $item instanceof UnaryMinus) {
             $arrayItem = new ArrayItem($item);
             $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
