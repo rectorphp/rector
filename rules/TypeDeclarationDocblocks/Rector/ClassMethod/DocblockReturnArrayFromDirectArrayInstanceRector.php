@@ -15,12 +15,15 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -42,11 +45,16 @@ final class DocblockReturnArrayFromDirectArrayInstanceRector extends AbstractRec
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->typeFactory = $typeFactory;
     }
     public function getNodeTypes(): array
     {
@@ -128,6 +136,17 @@ CODE_SAMPLE
         }
         if ($type->isFloat()->yes()) {
             return new FloatType();
+        }
+        if ($type instanceof UnionType || $type instanceof IntersectionType) {
+            $genericComplexTypes = [];
+            foreach ($type->getTypes() as $splitType) {
+                $genericComplexTypes[] = $this->constantToGenericType($splitType);
+            }
+            $genericComplexTypes = $this->typeFactory->uniquateTypes($genericComplexTypes);
+            if (count($genericComplexTypes) > 1) {
+                return new UnionType($genericComplexTypes);
+            }
+            return $genericComplexTypes[0];
         }
         // unclear
         return new MixedType();
