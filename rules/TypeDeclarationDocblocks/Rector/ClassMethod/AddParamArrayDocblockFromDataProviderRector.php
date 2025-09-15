@@ -6,6 +6,8 @@ namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -144,6 +146,10 @@ CODE_SAMPLE
                     continue;
                 }
                 $parameterType = $this->parameterTypeFromDataProviderResolver->resolve($paramPosition, $dataProviderNodes->getClassMethods());
+                // skip mixed type, as it is not informative
+                if ($parameterType instanceof ArrayType && $parameterType->getItemType() instanceof MixedType) {
+                    continue;
+                }
                 $generalizedParameterType = $this->typeNormalizer->generalizeConstantTypes($parameterType);
                 $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedParameterType);
                 $paramTagValueNode = new ParamTagValueNode($parameterTypeNode, \false, '$' . $paramName, '', \false);
