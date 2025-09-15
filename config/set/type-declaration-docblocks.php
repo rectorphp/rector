@@ -13,18 +13,23 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForCommonObjectDenominatorRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 /**
  * @experimental * 2025-09, experimental hidden set for type declaration in docblocks
  */
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
-        AddReturnArrayDocblockBasedOnArrayMapRector::class,
-        AddReturnDocblockForScalarArrayFromAssignsRector::class,
+        // property var
         DocblockVarFromParamDocblockInConstructorRector::class,
-        DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
-        AddReturnDocblockForCommonObjectDenominatorRector::class,
+        // param
         AddParamArrayDocblockFromDimFetchAccessRector::class,
         ClassMethodArrayDocblockParamFromLocalCallsRector::class,
+        // return
+        DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
+        AddReturnDocblockForCommonObjectDenominatorRector::class,
+        AddReturnArrayDocblockBasedOnArrayMapRector::class,
+        AddReturnDocblockForScalarArrayFromAssignsRector::class,
+        DocblockReturnArrayFromDirectArrayInstanceRector::class,
         // tests
         AddParamArrayDocblockFromDataProviderRector::class,
         AddReturnDocblockDataProviderRector::class,

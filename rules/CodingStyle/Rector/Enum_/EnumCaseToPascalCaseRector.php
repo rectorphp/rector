@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Enum_;
 
-use PHPStan\BetterReflection\Reflector\DefaultReflector;
-use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use PHPStan\Reflection\ClassReflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
+use PHPStan\BetterReflection\Reflector\DefaultReflector;
+use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -154,7 +154,10 @@ CODE_SAMPLE
     private function isEnumCase(ClassReflection $classReflection, string $name, string $pascalName): bool
     {
         // the enum case might have already been renamed, need to check both
-        return $classReflection->hasEnumCase($name) || $classReflection->hasEnumCase($pascalName);
+        if ($classReflection->hasEnumCase($name)) {
+            return \true;
+        }
+        return $classReflection->hasEnumCase($pascalName);
     }
     private function convertToPascalCase(string $name): string
     {
