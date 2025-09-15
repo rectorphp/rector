@@ -12,6 +12,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -57,6 +60,9 @@ final class UnionTypeMapper implements TypeMapperInterface
     {
         $unionTypesNodes = [];
         foreach ($type->getTypes() as $unionedType) {
+            if ($unionedType instanceof ArrayType && $unionedType->getItemType() instanceof NeverType) {
+                $unionedType = new ArrayType($unionedType->getKeyType(), new MixedType());
+            }
             $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
         }
         return new BracketsAwareUnionTypeNode($unionTypesNodes);
