@@ -5,6 +5,7 @@ namespace Rector\TypeDeclarationDocblocks\TypeResolver;
 
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
@@ -12,6 +13,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -91,6 +93,9 @@ final class ConstantArrayTypeGeneralizer
         if ($type->isFloat()->yes()) {
             return new FloatType();
         }
+        if ($type->isObject()->yes()) {
+            return new ObjectWithoutClassType();
+        }
         if ($type instanceof UnionType || $type instanceof IntersectionType) {
             $genericComplexTypes = [];
             foreach ($type->getTypes() as $splitType) {
@@ -101,6 +106,9 @@ final class ConstantArrayTypeGeneralizer
                 return new UnionType($genericComplexTypes);
             }
             return $genericComplexTypes[0];
+        }
+        if ($type instanceof ConstantArrayType) {
+            return new ArrayType(new MixedType(), new MixedType());
         }
         // unclear
         return new MixedType();
