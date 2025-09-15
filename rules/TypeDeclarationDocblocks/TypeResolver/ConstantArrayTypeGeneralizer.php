@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks\TypeResolver;
 
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
@@ -33,7 +33,10 @@ final class ConstantArrayTypeGeneralizer
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
     }
-    public function generalize(ConstantArrayType $constantArrayType, bool $isFresh = \true): GenericTypeNode
+    /**
+     * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode
+     */
+    public function generalize(ConstantArrayType $constantArrayType, bool $isFresh = \true)
     {
         if ($isFresh) {
             $this->currentNesting = 0;
@@ -41,10 +44,10 @@ final class ConstantArrayTypeGeneralizer
             ++$this->currentNesting;
         }
         $genericKeyType = $this->typeNormalizer->generalizeConstantTypes($constantArrayType->getKeyType());
-        if ($constantArrayType->getItemType() instanceof NeverType) {
-            $genericKeyType = new IntegerType();
-        }
         $itemType = $constantArrayType->getItemType();
+        if ($itemType instanceof NeverType) {
+            return ArrayShapeNode::createSealed([]);
+        }
         if ($itemType instanceof ConstantArrayType) {
             if ($this->currentNesting >= self::MAX_NESTING) {
                 $genericItemType = new MixedType();
@@ -61,7 +64,7 @@ final class ConstantArrayTypeGeneralizer
         return $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
     }
     /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $itemType
+     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode $itemType
      */
     private function createArrayGenericTypeNode(Type $keyType, $itemType): GenericTypeNode
     {
