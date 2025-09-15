@@ -9,23 +9,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclarationDocblocks\TypeResolver\ConstantArrayTypeGeneralizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -44,17 +32,12 @@ final class DocblockReturnArrayFromDirectArrayInstanceRector extends AbstractRec
     /**
      * @readonly
      */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
-    private TypeFactory $typeFactory;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory)
+    private ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->typeFactory = $typeFactory;
+        $this->constantArrayTypeGeneralizer = $constantArrayTypeGeneralizer;
     }
     public function getNodeTypes(): array
     {
@@ -114,68 +97,10 @@ CODE_SAMPLE
         if (!$returnedType instanceof ConstantArrayType) {
             return null;
         }
-        $genericTypeNode = $this->createGenericArrayTypeFromConstantArrayType($returnedType);
+        $genericTypeNode = $this->constantArrayTypeGeneralizer->generalize($returnedType);
         $returnTagValueNode = new ReturnTagValueNode($genericTypeNode, '');
         $phpDocInfo->addTagValueNode($returnTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
-    }
-    /**
-     * covers constant types too and makes them more generic
-     */
-    private function constantToGenericType(Type $type): Type
-    {
-        if ($type->isString()->yes()) {
-            return new StringType();
-        }
-        if ($type->isInteger()->yes()) {
-            return new IntegerType();
-        }
-        if ($type->isBoolean()->yes()) {
-            return new BooleanType();
-        }
-        if ($type->isFloat()->yes()) {
-            return new FloatType();
-        }
-        if ($type instanceof UnionType || $type instanceof IntersectionType) {
-            $genericComplexTypes = [];
-            foreach ($type->getTypes() as $splitType) {
-                $genericComplexTypes[] = $this->constantToGenericType($splitType);
-            }
-            $genericComplexTypes = $this->typeFactory->uniquateTypes($genericComplexTypes);
-            if (count($genericComplexTypes) > 1) {
-                return new UnionType($genericComplexTypes);
-            }
-            return $genericComplexTypes[0];
-        }
-        // unclear
-        return new MixedType();
-    }
-    private function createGenericArrayTypeFromConstantArrayType(ConstantArrayType $constantArrayType): GenericTypeNode
-    {
-        $genericKeyType = $this->constantToGenericType($constantArrayType->getKeyType());
-        if ($constantArrayType->getItemType() instanceof NeverType) {
-            $genericKeyType = new IntegerType();
-        }
-        $itemType = $constantArrayType->getItemType();
-        if ($itemType instanceof ConstantArrayType) {
-            $genericItemType = $this->createGenericArrayTypeFromConstantArrayType($itemType);
-        } else {
-            $genericItemType = $this->constantToGenericType($itemType);
-        }
-        return $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
-    }
-    /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $itemType
-     */
-    private function createArrayGenericTypeNode(Type $keyType, $itemType): GenericTypeNode
-    {
-        $keyDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($keyType);
-        if ($itemType instanceof Type) {
-            $itemDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($itemType);
-        } else {
-            $itemDocTypeNode = $itemType;
-        }
-        return new GenericTypeNode(new IdentifierTypeNode('array'), [$keyDocTypeNode, $itemDocTypeNode]);
     }
 }

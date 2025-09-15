@@ -2685,6 +2685,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\AddReturnDocblockDataProviderRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/AddReturnDocblockDataProviderRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\ClassMethodArrayDocblockParamFromLocalCallsRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/ClassMethodArrayDocblockParamFromLocalCallsRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
+    'Rector\\TypeDeclarationDocblocks\\TypeResolver\\ConstantArrayTypeGeneralizer' => $baseDir . '/rules/TypeDeclarationDocblocks/TypeResolver/ConstantArrayTypeGeneralizer.php',
     'Rector\\TypeDeclarationDocblocks\\TypeResolver\\YieldTypeResolver' => $baseDir . '/rules/TypeDeclarationDocblocks/TypeResolver/YieldTypeResolver.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
