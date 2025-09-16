@@ -5,7 +5,6 @@ namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
@@ -50,13 +49,6 @@ final class ClassNameImportSkipper
     {
         if (substr_count($fullyQualified->toCodeString(), '\\') === 1) {
             return $this->isFunctionOrConstantImport($fullyQualified);
-        }
-        // verify long name, as short name verify may conflict
-        // see test PR: https://github.com/rectorphp/rector-src/pull/6208
-        // ref https://3v4l.org/21H5j vs https://3v4l.org/GIHSB
-        $originalName = $fullyQualified->getAttribute(AttributeKey::ORIGINAL_NAME);
-        if ($originalName instanceof Name && $originalName->getLast() === $originalName->toString()) {
-            return \true;
         }
         $stringName = $fullyQualified->toString();
         $lastUseName = $fullyQualified->getLast();
