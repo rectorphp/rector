@@ -115,7 +115,7 @@ CODE_SAMPLE
         $name = (string) $this->getName($node->name);
         switch (\true) {
             case $node instanceof StaticPropertyFetch:
-                $hasMember = $isFinal ? $classReflection->hasProperty($name) : $classReflection->hasNativeProperty($name);
+                $hasMember = $isFinal ? $classReflection->hasStaticProperty($name) : $classReflection->hasNativeProperty($name);
                 break;
             case $node instanceof StaticCall:
                 $hasMember = $isFinal ? $classReflection->hasMethod($name) : $classReflection->hasNativeMethod($name);
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
         switch (\true) {
             case $node instanceof StaticPropertyFetch:
-                $reflection = $isFinal ? $classReflection->getProperty($name, $scope) : $classReflection->getNativeProperty($name);
+                $reflection = $isFinal ? $classReflection->getStaticProperty($name) : $classReflection->getNativeProperty($name);
                 break;
             case $node instanceof StaticCall:
                 $reflection = $isFinal ? $classReflection->getMethod($name, $scope) : $classReflection->getNativeMethod($name);

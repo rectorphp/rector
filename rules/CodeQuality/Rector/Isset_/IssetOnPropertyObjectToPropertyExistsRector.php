@@ -125,7 +125,7 @@ CODE_SAMPLE
             if ($issetExpr->var instanceof ArrayDimFetch) {
                 continue;
             }
-            if (!$classReflection->hasProperty($propertyFetchName) || $classReflection->isBuiltin()) {
+            if (!$classReflection->hasInstanceProperty($propertyFetchName) || $classReflection->isBuiltin()) {
                 $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetExpr->var, $propertyFetchName, $issetExpr, $isNegated);
             } elseif ($isNegated) {
                 $newNodes[] = $this->createIdenticalToNull($issetExpr);

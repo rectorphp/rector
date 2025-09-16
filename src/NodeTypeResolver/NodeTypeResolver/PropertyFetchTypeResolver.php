@@ -78,14 +78,14 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface, Node
             return new MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
-        if (!$classReflection->hasProperty($propertyName)) {
+        if (!$classReflection->hasInstanceProperty($propertyName)) {
             return new MixedType();
         }
         $propertyFetchScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if (!$propertyFetchScope instanceof Scope) {
             return new MixedType();
         }
-        $extendedPropertyReflection = $classReflection->getProperty($propertyName, $propertyFetchScope);
+        $extendedPropertyReflection = $classReflection->getInstanceProperty($propertyName, $propertyFetchScope);
         return $extendedPropertyReflection->getReadableType();
     }
 }

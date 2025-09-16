@@ -36,7 +36,7 @@ final class MissingPropertiesResolver
                 continue;
             }
             // 2. is part of class docblock or another magic, skip it
-            if ($classReflection->hasProperty($definedPropertyWithType->getName())) {
+            if ($classReflection->hasInstanceProperty($definedPropertyWithType->getName())) {
                 continue;
             }
             // 3. is fetched by parent class on non-private property etc., skip it

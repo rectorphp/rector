@@ -124,7 +124,7 @@ final class ParentPropertyLookupGuard
     private function isGuardedByParents(array $parentClassReflections, string $propertyName, string $className): bool
     {
         foreach ($parentClassReflections as $parentClassReflection) {
-            if ($parentClassReflection->hasProperty($propertyName)) {
+            if ($parentClassReflection->hasInstanceProperty($propertyName) || $parentClassReflection->hasStaticProperty($propertyName)) {
                 return \false;
             }
             if ($this->isFoundInParentClassMethods($parentClassReflection, $propertyName, $className)) {
