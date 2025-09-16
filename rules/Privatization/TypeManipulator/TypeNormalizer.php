@@ -33,7 +33,7 @@ final class TypeNormalizer
     /**
      * @var int
      */
-    private const MAX_PRINTED_UNION_DOC_LENGHT = 60;
+    private const MAX_PRINTED_UNION_DOC_LENGHT = 77;
     public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->typeFactory = $typeFactory;
