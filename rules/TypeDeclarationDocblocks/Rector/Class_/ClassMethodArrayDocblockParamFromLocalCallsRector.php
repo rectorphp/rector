@@ -6,6 +6,8 @@ namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -130,6 +132,9 @@ CODE_SAMPLE
                     continue;
                 }
                 $arrayDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($normalizedResolvedParameterType);
+                if ($arrayDocTypeNode instanceof IdentifierTypeNode && $arrayDocTypeNode->name === 'mixed') {
+                    $arrayDocTypeNode = new ArrayTypeNode($arrayDocTypeNode);
+                }
                 $paramTagValueNode = new ParamTagValueNode($arrayDocTypeNode, \false, '$' . $parameterName, '', \false);
                 $classMethodPhpDocInfo->addTagValueNode($paramTagValueNode);
                 $hasChanged = \true;
