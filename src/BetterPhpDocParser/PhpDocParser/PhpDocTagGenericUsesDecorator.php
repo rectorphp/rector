@@ -13,7 +13,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 /**
- * Decorate node with fully qualified class name for generic annotations for @uses
+ * Decorate node with fully qualified class name for generic annotations for @uses, @used-by, and @see
  * e.g. @uses Direction::*
  *
  * @see https://docs.phpdoc.org/guide/references/phpdoc/tags/uses.html
@@ -46,7 +46,7 @@ final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterfac
             if (!$node->value instanceof GenericTagValueNode) {
                 return null;
             }
-            if (!in_array($node->name, ['@uses', '@used-by'], \true)) {
+            if (!in_array($node->name, ['@uses', '@used-by', '@see'], \true)) {
                 return null;
             }
             $reference = $node->value->value;

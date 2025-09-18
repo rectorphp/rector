@@ -377,10 +377,12 @@ final class PhpDocInfo
             if ($genericTagValueNode->value === '') {
                 continue;
             }
+            // add default original value
+            $resolvedClasses[] = $genericTagValueNode->value;
             if (strpos($genericTagValueNode->value, '::') === \false) {
-                $resolvedClasses[] = $genericTagValueNode->value;
                 continue;
             }
+            // add resolved class name if any
             $resolvedClass = $genericTagValueNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
             if ($resolvedClass === null) {
                 $resolvedClasses[] = $genericTagValueNode->value;
