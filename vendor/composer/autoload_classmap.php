@@ -2680,6 +2680,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\PrivateMethodFlagger' => $baseDir . '/rules/TypeDeclarationDocblocks/PrivateMethodFlagger.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddParamArrayDocblockFromDataProviderRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddParamArrayDocblockFromDataProviderRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddParamArrayDocblockFromDimFetchAccessRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddParamArrayDocblockFromDimFetchAccessRector.php',
+    'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddReturnDocblockForArrayDimAssignedObjectRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddReturnDocblockForArrayDimAssignedObjectRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddReturnDocblockForCommonObjectDenominatorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddReturnDocblockForCommonObjectDenominatorRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockGetterReturnArrayFromPropertyDocblockVarRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockGetterReturnArrayFromPropertyDocblockVarRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockReturnArrayFromDirectArrayInstanceRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockReturnArrayFromDirectArrayInstanceRector.php',
