@@ -12,6 +12,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PostRector\Guard\AddUseStatementGuard;
 use Rector\Renaming\Collector\RenamedNameCollector;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
@@ -28,14 +29,19 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      */
     private RenamedNameCollector $renamedNameCollector;
     /**
+     * @readonly
+     */
+    private AddUseStatementGuard $addUseStatementGuard;
+    /**
      * @var array<string, string>
      */
     private array $oldToNewClasses = [];
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, RenamedNameCollector $renamedNameCollector)
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, RenamedNameCollector $renamedNameCollector, AddUseStatementGuard $addUseStatementGuard)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->useImportsRemover = $useImportsRemover;
         $this->renamedNameCollector = $renamedNameCollector;
+        $this->addUseStatementGuard = $addUseStatementGuard;
     }
     /**
      * @param Stmt[] $nodes
@@ -71,6 +77,9 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     public function shouldTraverse(array $stmts): bool
     {
         $this->oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        return $this->oldToNewClasses !== [];
+        if ($this->oldToNewClasses === []) {
+            return \false;
+        }
+        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
     }
 }
