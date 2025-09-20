@@ -7,6 +7,8 @@ use RectorPrefix202509\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Rector\Util\RectorClassesSorter;
 use RectorPrefix202509\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202509\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
@@ -85,7 +87,7 @@ final class FileDiff implements SerializableInterface
         return $rectorShortClasses;
     }
     /**
-     * @return array<class-string<RectorInterface>>
+     * @return array<class-string<RectorInterface|PostRectorInterface>>
      */
     public function getRectorClasses(): array
     {
@@ -93,7 +95,7 @@ final class FileDiff implements SerializableInterface
         foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
-        return $this->sortClasses($rectorClasses);
+        return RectorClassesSorter::sort($rectorClasses);
     }
     public function getFirstLineNumber(): ?int
     {
@@ -136,16 +138,5 @@ final class FileDiff implements SerializableInterface
             $rectorWithLineChanges[] = RectorWithLineChange::decode($rectorWithLineChangesJson);
         }
         return new self($json[BridgeItem::RELATIVE_FILE_PATH], $json[BridgeItem::DIFF], $json[BridgeItem::DIFF_CONSOLE_FORMATTED], $rectorWithLineChanges);
-    }
-    /**
-     * @template TType as object
-     * @param array<class-string<TType>> $rectorClasses
-     * @return array<class-string<TType>>
-     */
-    private function sortClasses(array $rectorClasses): array
-    {
-        $rectorClasses = array_unique($rectorClasses);
-        sort($rectorClasses);
-        return $rectorClasses;
     }
 }

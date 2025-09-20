@@ -352,7 +352,7 @@ final class RectorConfig extends Container
      * @internal Used only for bridge
      * @return array<class-string<RectorInterface>>
      */
-    public function getRectorClasses(): array
+    public function getMainRectorClasses(): array
     {
         return $this->tags[RectorInterface::class] ?? [];
     }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
@@ -43,12 +44,17 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->currentUses = $this->useImportsResolver->resolve();
         return $nodes;
     }
-    public function enterNode(Node $node): ?\PhpParser\Node
+    public function enterNode(Node $node): ?\PhpParser\Node\Name
     {
         if (!$node instanceof FullyQualified) {
             return null;
         }
-        return $this->nameImporter->importName($node, $this->getFile(), $this->currentUses);
+        $name = $this->nameImporter->importName($node, $this->getFile(), $this->currentUses);
+        if (!$name instanceof Name) {
+            return null;
+        }
+        $this->addRectorClassWithLine($node);
+        return $name;
     }
     /**
      * @param Stmt[] $stmts

@@ -43,6 +43,9 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
             return $nodes;
         }
         $rootNode = $this->resolveRootNode($nodes);
+        if (!$rootNode instanceof FileWithoutNamespace && !$rootNode instanceof Namespace_) {
+            return $nodes;
+        }
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($this->getFile()->getFilePath());
         $constantUseImportTypes = $this->useNodesToAddCollector->getConstantImportsByFilePath($this->getFile()->getFilePath());
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFilePath($this->getFile()->getFilePath());
@@ -51,13 +54,11 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
-        if ($rootNode instanceof FileWithoutNamespace) {
-            $nodes = $rootNode->stmts;
+        $stmts = $rootNode instanceof FileWithoutNamespace ? $rootNode->stmts : $nodes;
+        if ($this->processStmtsWithImportedUses($stmts, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode)) {
+            $this->addRectorClassWithLine($rootNode);
         }
-        if (!$rootNode instanceof FileWithoutNamespace && !$rootNode instanceof Namespace_) {
-            return $nodes;
-        }
-        return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode);
+        return $nodes;
     }
     public function enterNode(Node $node): int
     {
@@ -72,25 +73,23 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         return NodeVisitor::STOP_TRAVERSAL;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $constantUseImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
-     * @return Stmt[]
      * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
-    private function resolveNodesWithImportedUses(array $nodes, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace): array
+    private function processStmtsWithImportedUses(array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace): bool
     {
         // A. has namespace? add under it
         if ($namespace instanceof Namespace_) {
             // then add, to prevent adding + removing false positive of same short use
-            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
-            return $nodes;
+            return $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
         }
         // B. no namespace? add in the top
         $useImportTypes = $this->filterOutNonNamespacedNames($useImportTypes);
         // then add, to prevent adding + removing false positive of same short use
-        return $this->useImportsAdder->addImportsToStmts($namespace, $nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
+        return $this->useImportsAdder->addImportsToStmts($namespace, $stmts, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
     }
     /**
      * Prevents

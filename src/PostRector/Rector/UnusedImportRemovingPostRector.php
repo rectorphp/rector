@@ -80,6 +80,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         if ($hasChanged === \false) {
             return null;
         }
+        $this->addRectorClassWithLine($node);
         $node->stmts = array_values($node->stmts);
         return $node;
     }

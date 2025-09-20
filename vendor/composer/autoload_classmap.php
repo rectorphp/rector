@@ -2820,6 +2820,7 @@ return array(
     'Rector\\Util\\NewLineSplitter' => $baseDir . '/src/Util/NewLineSplitter.php',
     'Rector\\Util\\NodePrinter' => $baseDir . '/src/Util/NodePrinter.php',
     'Rector\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
+    'Rector\\Util\\RectorClassesSorter' => $baseDir . '/src/Util/RectorClassesSorter.php',
     'Rector\\Util\\Reflection\\PrivatesAccessor' => $baseDir . '/src/Util/Reflection/PrivatesAccessor.php',
     'Rector\\Util\\StringUtils' => $baseDir . '/src/Util/StringUtils.php',
     'Rector\\Validation\\RectorAssert' => $baseDir . '/src/Validation/RectorAssert.php',

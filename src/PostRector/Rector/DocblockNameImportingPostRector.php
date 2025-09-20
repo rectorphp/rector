@@ -49,6 +49,7 @@ final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\Ab
         if (!$hasDocChanged) {
             return null;
         }
+        $this->addRectorClassWithLine($node);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }

@@ -3068,6 +3068,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\Util\\NewLineSplitter' => __DIR__ . '/../..' . '/src/Util/NewLineSplitter.php',
         'Rector\\Util\\NodePrinter' => __DIR__ . '/../..' . '/src/Util/NodePrinter.php',
         'Rector\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
+        'Rector\\Util\\RectorClassesSorter' => __DIR__ . '/../..' . '/src/Util/RectorClassesSorter.php',
         'Rector\\Util\\Reflection\\PrivatesAccessor' => __DIR__ . '/../..' . '/src/Util/Reflection/PrivatesAccessor.php',
         'Rector\\Util\\StringUtils' => __DIR__ . '/../..' . '/src/Util/StringUtils.php',
         'Rector\\Validation\\RectorAssert' => __DIR__ . '/../..' . '/src/Validation/RectorAssert.php',

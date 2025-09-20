@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Application;
 
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Renaming\Collector\RenamedNameCollector;
 final class UseImportsRemover
 {
@@ -17,31 +18,36 @@ final class UseImportsRemover
         $this->renamedNameCollector = $renamedNameCollector;
     }
     /**
-     * @param Stmt[] $stmts
      * @param string[] $removedUses
-     * @return Stmt[]
+     * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $node
      */
-    public function removeImportsFromStmts(array $stmts, array $removedUses): array
+    public function removeImportsFromStmts($node, array $removedUses): bool
     {
         $hasRemoved = \false;
-        foreach ($stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Use_) {
                 continue;
             }
-            $stmt = $this->removeUseFromUse($removedUses, $stmt);
-            // remove empty uses
-            if ($stmt->uses === []) {
-                unset($stmts[$key]);
+            if ($this->removeUseFromUse($removedUses, $stmt)) {
+                $node->stmts[$key] = $stmt;
                 $hasRemoved = \true;
             }
+            // remove empty uses
+            if ($stmt->uses === []) {
+                unset($node->stmts[$key]);
+            }
         }
-        return $hasRemoved ? array_values($stmts) : $stmts;
+        if ($hasRemoved) {
+            $node->stmts = array_values($node->stmts);
+        }
+        return $hasRemoved;
     }
     /**
      * @param string[] $removedUses
      */
-    private function removeUseFromUse(array $removedUses, Use_ $use): Use_
+    private function removeUseFromUse(array $removedUses, Use_ $use): bool
     {
+        $hasChanged = \false;
         foreach ($use->uses as $usesKey => $useUse) {
             $useName = $useUse->name->toString();
             if (!in_array($useName, $removedUses, \true)) {
@@ -51,7 +57,11 @@ final class UseImportsRemover
                 continue;
             }
             unset($use->uses[$usesKey]);
+            $hasChanged = \true;
         }
-        return $use;
+        if ($hasChanged) {
+            $use->uses = array_values($use->uses);
+        }
+        return $hasChanged;
     }
 }
