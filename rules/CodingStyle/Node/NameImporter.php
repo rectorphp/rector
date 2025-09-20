@@ -101,7 +101,23 @@ final class NameImporter
             return null;
         }
         $this->addUseImport($file, $fullyQualified, $fullyQualifiedObjectType);
-        return $fullyQualifiedObjectType->getShortNameNode();
+        $name = $fullyQualifiedObjectType->getShortNameNode();
+        $oldTokens = $file->getOldTokens();
+        $startTokenPos = $fullyQualified->getStartTokenPos();
+        if (!isset($oldTokens[$startTokenPos])) {
+            return $name;
+        }
+        $tokenShortName = $oldTokens[$startTokenPos];
+        if (strncmp($tokenShortName->text, '\\', strlen('\\')) === 0) {
+            return $name;
+        }
+        if (strpos($tokenShortName->text, '\\') !== \false) {
+            return $name;
+        }
+        if ($name->toString() !== $tokenShortName->text) {
+            return $name;
+        }
+        return null;
     }
     private function addUseImport(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
