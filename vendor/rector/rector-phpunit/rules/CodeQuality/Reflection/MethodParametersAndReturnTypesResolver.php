@@ -74,6 +74,9 @@ final class MethodParametersAndReturnTypesResolver
                 return null;
             }
             $classReflection = $this->reflectionProvider->getClass($className);
+            if (!$classReflection->hasConstructor()) {
+                return null;
+            }
             return $this->resolveParameterTypes($classReflection->getConstructor(), $classReflection);
         }
         if (!$callLike->name instanceof Identifier) {
@@ -112,6 +115,9 @@ final class MethodParametersAndReturnTypesResolver
                 return [];
             }
             $classReflection = $this->reflectionProvider->getClass($className);
+            if (!$classReflection->hasConstructor()) {
+                return [];
+            }
             return $this->resolveParameterNames($classReflection->getConstructor());
         }
         if (!$callLike->name instanceof Identifier) {
