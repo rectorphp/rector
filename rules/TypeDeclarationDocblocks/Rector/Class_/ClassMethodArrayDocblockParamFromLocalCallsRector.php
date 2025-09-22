@@ -6,19 +6,12 @@ namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
-use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
+use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -33,14 +26,6 @@ final class ClassMethodArrayDocblockParamFromLocalCallsRector extends AbstractRe
     /**
      * @readonly
      */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
     private CallTypesResolver $callTypesResolver;
     /**
      * @readonly
@@ -49,15 +34,13 @@ final class ClassMethodArrayDocblockParamFromLocalCallsRector extends AbstractRe
     /**
      * @readonly
      */
-    private TypeNormalizer $typeNormalizer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, TypeNormalizer $typeNormalizer)
+    private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->callTypesResolver = $callTypesResolver;
         $this->localMethodCallFinder = $localMethodCallFinder;
-        $this->typeNormalizer = $typeNormalizer;
+        $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getNodeTypes(): array
     {
@@ -126,34 +109,15 @@ CODE_SAMPLE
                 if (!$resolvedParameterType instanceof Type) {
                     continue;
                 }
-                $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantTypes($resolvedParameterType);
-                // most likely mixed, skip
-                if ($this->isArrayMixed($normalizedResolvedParameterType)) {
-                    continue;
+                $hasClassMethodChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($resolvedParameterType, $classMethodPhpDocInfo, $classMethod, $parameterName);
+                if ($hasClassMethodChanged) {
+                    $hasChanged = \true;
                 }
-                $arrayDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($normalizedResolvedParameterType);
-                if ($arrayDocTypeNode instanceof IdentifierTypeNode && $arrayDocTypeNode->name === 'mixed') {
-                    $arrayDocTypeNode = new ArrayTypeNode($arrayDocTypeNode);
-                }
-                $paramTagValueNode = new ParamTagValueNode($arrayDocTypeNode, \false, '$' . $parameterName, '', \false);
-                $classMethodPhpDocInfo->addTagValueNode($paramTagValueNode);
-                $hasChanged = \true;
-                $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
             }
         }
         if (!$hasChanged) {
             return null;
         }
         return $node;
-    }
-    private function isArrayMixed(Type $type): bool
-    {
-        if (!$type instanceof ArrayType) {
-            return \false;
-        }
-        if (!$type->getItemType() instanceof MixedType) {
-            return \false;
-        }
-        return $type->getKeyType() instanceof IntegerType;
     }
 }
