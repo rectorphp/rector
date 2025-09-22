@@ -13,6 +13,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TypeResolver\ConstantArrayTypeGeneralizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,11 +34,16 @@ final class DocblockReturnArrayFromDirectArrayInstanceRector extends AbstractRec
      * @readonly
      */
     private ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer)
+    /**
+     * @readonly
+     */
+    private ReturnNodeFinder $returnNodeFinder;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer, ReturnNodeFinder $returnNodeFinder)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->constantArrayTypeGeneralizer = $constantArrayTypeGeneralizer;
+        $this->returnNodeFinder = $returnNodeFinder;
     }
     public function getNodeTypes(): array
     {
@@ -82,10 +88,10 @@ CODE_SAMPLE
         if ($phpDocInfo->getReturnTagValue() instanceof ReturnTagValueNode) {
             return null;
         }
-        if ($node->stmts === null || count($node->stmts) !== 1) {
+        if ($node->stmts === null) {
             return null;
         }
-        $soleReturn = $node->stmts[0];
+        $soleReturn = $this->returnNodeFinder->findOnlyReturnWithExpr($node);
         if (!$soleReturn instanceof Return_) {
             return null;
         }
