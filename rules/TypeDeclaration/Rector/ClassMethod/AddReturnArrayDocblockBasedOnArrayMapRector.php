@@ -130,7 +130,10 @@ CODE_SAMPLE
         $arrayType = new ArrayType(new MixedType(), $returnType);
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $returnOriginalType = $functionLikePhpDocInfo->getReturnType();
-        if ($returnOriginalType instanceof IntersectionType && $returnOriginalType->isArray()->yes()) {
+        if ($returnOriginalType instanceof ArrayType && !$returnOriginalType->getItemType() instanceof MixedType) {
+            return null;
+        }
+        if ($returnOriginalType instanceof IntersectionType) {
             return null;
         }
         $hasChanged = $this->phpDocTypeChanger->changeReturnType($node, $functionLikePhpDocInfo, $arrayType);
