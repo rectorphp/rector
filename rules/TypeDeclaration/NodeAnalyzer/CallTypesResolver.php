@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -49,6 +50,10 @@ final class CallTypesResolver
                 // simply returns array marks as unknown as can be anything and in any position
                 if (!$arg instanceof Arg || $arg->unpack || $arg->name instanceof Identifier) {
                     return [];
+                }
+                if ($arg->value instanceof Array_ && $arg->value->items === []) {
+                    // skip empty array, as it doesn't add any value
+                    continue;
                 }
                 $staticTypesByArgumentPosition[$position][] = $this->resolveStrictArgValueType($arg);
             }
