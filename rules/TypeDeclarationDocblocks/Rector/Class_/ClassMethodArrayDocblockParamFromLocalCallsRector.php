@@ -91,7 +91,7 @@ CODE_SAMPLE
             }
             $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $methodCalls = $this->localMethodCallFinder->match($node, $classMethod);
-            $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
+            $classMethodParameterTypes = $this->callTypesResolver->resolveTypesFromCalls($methodCalls);
             foreach ($classMethod->getParams() as $parameterPosition => $param) {
                 if ($param->type === null) {
                     continue;
