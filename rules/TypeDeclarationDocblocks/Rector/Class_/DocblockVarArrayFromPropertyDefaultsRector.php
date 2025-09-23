@@ -80,8 +80,9 @@ CODE_SAMPLE
             if ($propertyPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
                 continue;
             }
-            $this->nodeDocblockTypeDecorator->decorateGenericIterableVarType($propertyDefaultType, $propertyPhpDocInfo, $property);
-            $hasChanged = \true;
+            if ($this->nodeDocblockTypeDecorator->decorateGenericIterableVarType($propertyDefaultType, $propertyPhpDocInfo, $property)) {
+                $hasChanged = \true;
+            }
         }
         if (!$hasChanged) {
             return null;
