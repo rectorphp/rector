@@ -8,6 +8,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArray
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\AddReturnDocblockDataProviderRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\ClassMethodArrayDocblockParamFromLocalCallsRector;
+use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarArrayFromGetterReturnRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarArrayFromPropertyDefaultsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarFromParamDocblockInConstructorRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDataProviderRector;
@@ -24,6 +25,7 @@ return static function (RectorConfig $rectorConfig): void {
         // property var
         DocblockVarFromParamDocblockInConstructorRector::class,
         DocblockVarArrayFromPropertyDefaultsRector::class,
+        DocblockVarArrayFromGetterReturnRector::class,
         // param
         AddParamArrayDocblockFromDimFetchAccessRector::class,
         ClassMethodArrayDocblockParamFromLocalCallsRector::class,
