@@ -31,13 +31,18 @@ final class TypeNormalizer
      */
     private StaticTypeMapper $staticTypeMapper;
     /**
+     * @readonly
+     */
+    private \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver;
+    /**
      * @var int
      */
     private const MAX_PRINTED_UNION_DOC_LENGHT = 77;
-    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper)
+    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver)
     {
         $this->typeFactory = $typeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->arrayTypeLeastCommonDenominatorResolver = $arrayTypeLeastCommonDenominatorResolver;
     }
     /**
      * @deprecated This method is deprecated and will be removed in the next major release.
@@ -95,6 +100,10 @@ final class TypeNormalizer
                     $unionedDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedUnionType);
                     // too long
                     if (strlen((string) $unionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGHT) {
+                        $alwaysKnownArrayType = $this->narrowToAlwaysKnownArrayType($generalizedUnionType);
+                        if ($alwaysKnownArrayType instanceof ArrayType) {
+                            return $alwaysKnownArrayType;
+                        }
                         return new MixedType();
                     }
                     return $generalizedUnionType;
@@ -123,5 +132,14 @@ final class TypeNormalizer
             return \false;
         }
         return \true;
+    }
+    private function narrowToAlwaysKnownArrayType(UnionType $unionType): ?ArrayType
+    {
+        // always an array?
+        if (count($unionType->getArrays()) !== count($unionType->getTypes())) {
+            return null;
+        }
+        $arrayUniqueKeyType = $this->arrayTypeLeastCommonDenominatorResolver->sharedArrayStructure(...$unionType->getTypes());
+        return new ArrayType($arrayUniqueKeyType, new MixedType());
     }
 }

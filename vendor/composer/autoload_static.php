@@ -2519,6 +2519,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\Privatization\\Rector\\Class_\\FinalizeTestCaseClassRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
+        'Rector\\Privatization\\TypeManipulator\\ArrayTypeLeastCommonDenominatorResolver' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/ArrayTypeLeastCommonDenominatorResolver.php',
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
         'Rector\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',

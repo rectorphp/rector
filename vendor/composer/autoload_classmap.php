@@ -2271,6 +2271,7 @@ return array(
     'Rector\\Privatization\\Rector\\Class_\\FinalizeTestCaseClassRector' => $baseDir . '/rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php',
     'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => $baseDir . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
     'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => $baseDir . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
+    'Rector\\Privatization\\TypeManipulator\\ArrayTypeLeastCommonDenominatorResolver' => $baseDir . '/rules/Privatization/TypeManipulator/ArrayTypeLeastCommonDenominatorResolver.php',
     'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => $baseDir . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
     'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => $baseDir . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
     'Rector\\ProcessAnalyzer\\RectifiedAnalyzer' => $baseDir . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
