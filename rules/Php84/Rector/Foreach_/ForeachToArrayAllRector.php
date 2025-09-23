@@ -95,13 +95,13 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::ARRAY_ALL;
     }
-    private function refactorBooleanAssignmentPattern(StmtsAwareInterface $node): ?Node
+    private function refactorBooleanAssignmentPattern(StmtsAwareInterface $stmtsAware): ?Node
     {
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
                 continue;
             }
-            $prevStmt = $node->stmts[$key - 1] ?? null;
+            $prevStmt = $stmtsAware->stmts[$key - 1] ?? null;
             if (!$prevStmt instanceof Expression) {
                 continue;
             }
@@ -120,7 +120,7 @@ CODE_SAMPLE
             if (!$this->isValidBooleanAssignmentForeachStructure($foreach, $assignedVariable)) {
                 continue;
             }
-            if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $key + 1, (string) $this->getName($foreach->valueVar))) {
+            if ($this->stmtsManipulator->isVariableUsedInNextStmt($stmtsAware, $key + 1, (string) $this->getName($foreach->valueVar))) {
                 continue;
             }
             /** @var If_ $firstNodeInsideForeach */
@@ -139,21 +139,21 @@ CODE_SAMPLE
             $funcCall = $this->nodeFactory->createFuncCall('array_all', [$foreach->expr, $arrowFunction]);
             $newAssign = new Assign($assignedVariable, $funcCall);
             $newExpression = new Expression($newAssign);
-            unset($node->stmts[$key - 1]);
-            $node->stmts[$key] = $newExpression;
-            $node->stmts = array_values($node->stmts);
-            return $node;
+            unset($stmtsAware->stmts[$key - 1]);
+            $stmtsAware->stmts[$key] = $newExpression;
+            $stmtsAware->stmts = array_values($stmtsAware->stmts);
+            return $stmtsAware;
         }
         return null;
     }
-    private function refactorEarlyReturnPattern(StmtsAwareInterface $node): ?Node
+    private function refactorEarlyReturnPattern(StmtsAwareInterface $stmtsAware): ?Node
     {
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
                 continue;
             }
             $foreach = $stmt;
-            $nextStmt = $node->stmts[$key + 1] ?? null;
+            $nextStmt = $stmtsAware->stmts[$key + 1] ?? null;
             if (!$nextStmt instanceof Return_) {
                 continue;
             }
@@ -179,10 +179,10 @@ CODE_SAMPLE
             $negatedCondition = $condition instanceof BooleanNot ? $condition->expr : new BooleanNot($condition);
             $arrowFunction = new ArrowFunction(['params' => $params, 'expr' => $negatedCondition]);
             $funcCall = $this->nodeFactory->createFuncCall('array_all', [$foreach->expr, $arrowFunction]);
-            $node->stmts[$key] = new Return_($funcCall);
-            unset($node->stmts[$key + 1]);
-            $node->stmts = array_values($node->stmts);
-            return $node;
+            $stmtsAware->stmts[$key] = new Return_($funcCall);
+            unset($stmtsAware->stmts[$key + 1]);
+            $stmtsAware->stmts = array_values($stmtsAware->stmts);
+            return $stmtsAware;
         }
         return null;
     }
