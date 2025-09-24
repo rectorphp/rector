@@ -113,14 +113,11 @@ final class CallTypesResolver
             $unionedType = $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
             // narrow parents to most child type
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
+            if ($staticTypeByArgumentPosition[$position]->isNull()->yes()) {
+                $staticTypeByArgumentPosition[$position] = new MixedType();
+            }
         }
-        if (count($staticTypeByArgumentPosition) !== 1) {
-            return $staticTypeByArgumentPosition;
-        }
-        if (!$staticTypeByArgumentPosition[0]->isNull()->yes()) {
-            return $staticTypeByArgumentPosition;
-        }
-        return [new MixedType()];
+        return $staticTypeByArgumentPosition;
     }
     private function narrowParentObjectTreeToSingleObjectChildType(Type $type): Type
     {
