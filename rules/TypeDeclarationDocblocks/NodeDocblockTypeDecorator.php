@@ -48,6 +48,10 @@ final class NodeDocblockTypeDecorator
         }
         $normalizedType = $this->typeNormalizer->generalizeConstantTypes($type);
         $typeNode = $this->createTypeNode($normalizedType);
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
+            return \false;
+        }
         $paramTagValueNode = new ParamTagValueNode($typeNode, \false, '$' . $parameterName, '', \false);
         $this->addTagValueNodeAndUpdatePhpDocInfo($phpDocInfo, $paramTagValueNode, $classMethod);
         return \true;
@@ -59,6 +63,10 @@ final class NodeDocblockTypeDecorator
             // no value
             return \false;
         }
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
+            return \false;
+        }
         $returnTagValueNode = new ReturnTagValueNode($typeNode, '');
         $this->addTagValueNodeAndUpdatePhpDocInfo($classMethodPhpDocInfo, $returnTagValueNode, $classMethod);
         return \true;
@@ -68,6 +76,10 @@ final class NodeDocblockTypeDecorator
         $typeNode = $this->createTypeNode($type);
         if ($this->isBareMixedType($type)) {
             // no value
+            return \false;
+        }
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
         $varTagValueNode = new VarTagValueNode($typeNode, '', '');
