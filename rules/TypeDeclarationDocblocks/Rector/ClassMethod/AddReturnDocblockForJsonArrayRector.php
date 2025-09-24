@@ -124,6 +124,9 @@ CODE_SAMPLE
             if (!$this->isName($expr, 'json_decode')) {
                 return \false;
             }
+            if ($expr->isFirstClassCallable()) {
+                return \false;
+            }
             if (count($expr->getArgs()) !== 2) {
                 return \false;
             }
@@ -135,6 +138,9 @@ CODE_SAMPLE
                 return \false;
             }
             if (!$this->isName($expr->name, 'decode')) {
+                return \false;
+            }
+            if ($expr->isFirstClassCallable()) {
                 return \false;
             }
             if (count($expr->getArgs()) !== 2) {
