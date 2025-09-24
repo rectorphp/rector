@@ -14,7 +14,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
-use Rector\TypeDeclarationDocblocks\NodeFinder\DimFetchFinder;
+use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,15 +29,15 @@ final class AddParamArrayDocblockFromDimFetchAccessRector extends AbstractRector
     /**
      * @readonly
      */
-    private DimFetchFinder $dimFetchFinder;
+    private ArrayDimFetchFinder $arrayDimFetchFinder;
     /**
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DimFetchFinder $dimFetchFinder, DocBlockUpdater $docBlockUpdater)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, DocBlockUpdater $docBlockUpdater)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->dimFetchFinder = $dimFetchFinder;
+        $this->arrayDimFetchFinder = $arrayDimFetchFinder;
         $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -100,7 +100,7 @@ CODE_SAMPLE
             if ($paramTagValueNode instanceof ParamTagValueNode) {
                 continue;
             }
-            $dimFetches = $this->dimFetchFinder->findByVariableName($node, $paramName);
+            $dimFetches = $this->arrayDimFetchFinder->findByVariableName($node, $paramName);
             if ($dimFetches === []) {
                 continue;
             }
