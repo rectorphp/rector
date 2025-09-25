@@ -28,7 +28,7 @@ final class IncreaseDeclareStrictTypesRector extends AbstractRector implements C
      * @readonly
      */
     private DeclareStrictTypeFinder $declareStrictTypeFinder;
-    private const LIMIT = 'limit';
+    public const LIMIT = 'limit';
     private int $limit = 10;
     private int $changedItemCount = 0;
     public function __construct(DeclareStrictTypeFinder $declareStrictTypeFinder)
