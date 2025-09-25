@@ -54,6 +54,7 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -178,6 +179,14 @@ final class PHPStanNodeScopeResolver
                 /** @var MutatingScope $mutatingScope */
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                if ($node instanceof Class_) {
+                    if ($node->extends instanceof FullyQualified) {
+                        $node->extends->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    }
+                    foreach ($node->implements as $implement) {
+                        $implement->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    }
+                }
                 return;
             }
             if ($node instanceof Trait_) {

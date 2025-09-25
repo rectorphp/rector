@@ -77,13 +77,13 @@ final class ClassRenamer
         $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
         // execute FullyQualified before Name on purpose so next Name check is pure Name node
         if ($node instanceof FullyQualified) {
-            return $this->refactorName($node, $oldToNewClasses);
+            return $this->refactorName($node, $oldToNewClasses, $scope);
         }
         // Name as parent of FullyQualified executed for fallback annotation to attribute rename to Name
         if ($node instanceof Name) {
             $phpAttributeName = $node->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
             if (is_string($phpAttributeName)) {
-                return $this->refactorName(new FullyQualified($phpAttributeName), $oldToNewClasses);
+                return $this->refactorName(new FullyQualified($phpAttributeName), $oldToNewClasses, $scope);
             }
             return null;
         }
@@ -130,7 +130,7 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorName(FullyQualified $fullyQualified, array $oldToNewClasses): ?FullyQualified
+    private function refactorName(FullyQualified $fullyQualified, array $oldToNewClasses, ?Scope $scope): ?FullyQualified
     {
         if ($fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
             return null;
@@ -140,7 +140,7 @@ final class ClassRenamer
         if ($newName === null) {
             return null;
         }
-        if (!$this->isClassToInterfaceValidChange($fullyQualified, $newName)) {
+        if (!$this->isClassToInterfaceValidChange($fullyQualified, $newName, $scope)) {
             return null;
         }
         if ($this->shouldSkip($newName, $fullyQualified)) {
@@ -187,7 +187,7 @@ final class ClassRenamer
      * - implements SomeInterface
      * - implements SomeClass
      */
-    private function isClassToInterfaceValidChange(FullyQualified $fullyQualified, string $newClassName): bool
+    private function isClassToInterfaceValidChange(FullyQualified $fullyQualified, string $newClassName, ?Scope $scope): bool
     {
         if (!$this->reflectionProvider->hasClass($newClassName)) {
             return \true;
@@ -195,6 +195,12 @@ final class ClassRenamer
         $classReflection = $this->reflectionProvider->getClass($newClassName);
         // ensure new is not with interface
         if ($fullyQualified->getAttribute(AttributeKey::IS_NEW_INSTANCE_NAME) !== \true) {
+            if ($fullyQualified->getAttribute(AttributeKey::IS_CLASS_EXTENDS) === \true && $scope instanceof Scope) {
+                $currentClassReflection = $scope->getClassReflection();
+                if ($currentClassReflection instanceof ClassReflection && $currentClassReflection->getName() === $newClassName) {
+                    return \false;
+                }
+            }
             return $this->isValidClassNameChange($fullyQualified, $classReflection);
         }
         if (!$classReflection->isInterface()) {
