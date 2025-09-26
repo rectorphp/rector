@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory;
@@ -43,7 +44,7 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
         $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->classAnalyzer = $classAnalyzer;
-        $this->successHandlerObjectType = new ObjectType('Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface');
+        $this->successHandlerObjectType = new ObjectType(SymfonyClass::LOGOUT_SUCCESS_HANDLER);
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -121,11 +122,11 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, $this->successHandlerObjectType)) {
             return null;
         }
-        if (!$this->classAnalyzer->hasImplements($node, 'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface')) {
+        if (!$this->classAnalyzer->hasImplements($node, SymfonyClass::LOGOUT_SUCCESS_HANDLER)) {
             return null;
         }
         $this->refactorImplements($node);
-        $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $node->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
         // 2. refactor logout() class method to onLogout()
         $onLogoutSuccessClassMethod = null;
         foreach ($node->stmts as $key => $stmt) {
