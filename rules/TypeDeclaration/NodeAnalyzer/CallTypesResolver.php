@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -83,7 +84,7 @@ final class CallTypesResolver
             }
         }
         // unite to single type
-        return $this->unionToSingleType($staticTypesByArgumentPosition);
+        return $this->unionToSingleType($staticTypesByArgumentPosition, \true);
     }
     private function resolveStrictArgValueType(Arg $arg): Type
     {
@@ -106,12 +107,14 @@ final class CallTypesResolver
      * @param array<int, Type[]> $staticTypesByArgumentPosition
      * @return array<int, Type>
      */
-    private function unionToSingleType(array $staticTypesByArgumentPosition): array
+    private function unionToSingleType(array $staticTypesByArgumentPosition, bool $removeMixedArray = \false): array
     {
         $staticTypeByArgumentPosition = [];
         foreach ($staticTypesByArgumentPosition as $position => $staticTypes) {
+            if ($removeMixedArray) {
+                $staticTypes = array_filter($staticTypes, fn(Type $type): bool => !$this->isArrayMixedMixedType($type));
+            }
             $unionedType = $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
-            // narrow parents to most child type
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
             if ($staticTypeByArgumentPosition[$position]->isNull()->yes()) {
                 $staticTypeByArgumentPosition[$position] = new MixedType();
@@ -186,5 +189,15 @@ final class CallTypesResolver
             return \false;
         }
         return $expr->items === [];
+    }
+    private function isArrayMixedMixedType(Type $type): bool
+    {
+        if (!$type instanceof ArrayType) {
+            return \false;
+        }
+        if (!$type->getItemType() instanceof MixedType) {
+            return \false;
+        }
+        return $type->getKeyType() instanceof MixedType;
     }
 }
