@@ -198,6 +198,13 @@ final class CallTypesResolver
     private function isArrayMixedMixedType(Type $type): bool
     {
         if (!$type instanceof ArrayType) {
+            if ($type instanceof UnionType) {
+                foreach ($type->getTypes() as $subType) {
+                    if ($subType instanceof ArrayType && $this->isArrayMixedMixedType($subType)) {
+                        return \true;
+                    }
+                }
+            }
             return \false;
         }
         if (!$type->getItemType() instanceof MixedType) {
