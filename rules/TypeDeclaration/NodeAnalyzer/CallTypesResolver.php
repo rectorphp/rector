@@ -116,9 +116,6 @@ final class CallTypesResolver
             }
             $unionedType = $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
-            if ($staticTypeByArgumentPosition[$position]->isNull()->yes()) {
-                $staticTypeByArgumentPosition[$position] = new MixedType();
-            }
             if ($staticTypeByArgumentPosition[$position] instanceof UnionType) {
                 foreach ($staticTypeByArgumentPosition[$position]->getTypes() as $subType) {
                     if ($subType instanceof MixedType) {
