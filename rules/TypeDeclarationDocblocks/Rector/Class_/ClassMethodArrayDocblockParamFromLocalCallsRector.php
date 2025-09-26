@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
@@ -113,6 +114,8 @@ CODE_SAMPLE
                 if ($resolvedParameterType instanceof MixedType) {
                     continue;
                 }
+                // in case of array type declaration, null cannot be passed or is already casted
+                $resolvedParameterType = TypeCombinator::removeNull($resolvedParameterType);
                 $hasClassMethodChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($resolvedParameterType, $classMethodPhpDocInfo, $classMethod, $parameterName);
                 if ($hasClassMethodChanged) {
                     $hasChanged = \true;
