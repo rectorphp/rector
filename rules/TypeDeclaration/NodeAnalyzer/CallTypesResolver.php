@@ -119,6 +119,14 @@ final class CallTypesResolver
             if ($staticTypeByArgumentPosition[$position]->isNull()->yes()) {
                 $staticTypeByArgumentPosition[$position] = new MixedType();
             }
+            if ($staticTypeByArgumentPosition[$position] instanceof UnionType) {
+                foreach ($staticTypeByArgumentPosition[$position]->getTypes() as $subType) {
+                    if ($subType instanceof MixedType) {
+                        $staticTypeByArgumentPosition[$position] = new MixedType();
+                        continue 2;
+                    }
+                }
+            }
         }
         return $staticTypeByArgumentPosition;
     }
