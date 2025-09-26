@@ -101,8 +101,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
                 $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
                 return new UnionType($scalarTypes);
             }
-            $identifierTypeNode->name = ltrim($identifierTypeNode->name, '@');
-            $objectType = new ObjectType($identifierTypeNode->name);
+            $objectType = new ObjectType(ltrim($identifierTypeNode->name, '@'));
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope, $withPreslash);

@@ -121,7 +121,7 @@ final class NameImporter
     }
     private function addUseImport(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
-        if ($this->useNodesToAddCollector->hasImport($file, $fullyQualified, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->hasImport($file, $fullyQualifiedObjectType)) {
             return;
         }
         if ($fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
