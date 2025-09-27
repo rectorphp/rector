@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -127,11 +128,11 @@ CODE_SAMPLE
             if ($expr->isFirstClassCallable()) {
                 return \false;
             }
-            if (count($expr->getArgs()) !== 2) {
+            $arg = $expr->getArg('associative', 1);
+            if (!$arg instanceof Arg) {
                 return \false;
             }
-            $secondArg = $expr->getArgs()[1];
-            return $this->valueResolver->isTrue($secondArg->value);
+            return $this->valueResolver->isTrue($arg->value);
         }
         if ($expr instanceof StaticCall) {
             if (!$this->isName($expr->class, NetteClassName::JSON)) {
@@ -143,11 +144,11 @@ CODE_SAMPLE
             if ($expr->isFirstClassCallable()) {
                 return \false;
             }
-            if (count($expr->getArgs()) !== 2) {
+            $arg = $expr->getArg('forceArrays', 1);
+            if (!$arg instanceof Arg) {
                 return \false;
             }
-            $secondArg = $expr->getArgs()[1];
-            return $this->valueResolver->isTrue($secondArg->value);
+            return $this->valueResolver->isTrue($arg->value);
         }
         return \false;
     }
