@@ -53,10 +53,6 @@ final class CallTypesResolver
                     return [];
                 }
                 /** @var Arg $arg */
-                if ($this->isEmptyArray($arg->value)) {
-                    // skip empty array, as it doesn't add any value
-                    continue;
-                }
                 $staticTypesByArgumentPosition[$position][] = $this->resolveStrictArgValueType($arg);
             }
         }
