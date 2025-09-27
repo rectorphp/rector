@@ -12,7 +12,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -193,12 +195,12 @@ final class CallTypesResolver
     }
     private function isArrayMixedMixedType(Type $type): bool
     {
-        if (!$type instanceof ArrayType) {
+        if (!$type instanceof ArrayType && !$type instanceof ConstantArrayType) {
             return \false;
         }
-        if (!$type->getItemType() instanceof MixedType) {
+        if (!$type->getItemType() instanceof MixedType && !$type->getItemType() instanceof NeverType) {
             return \false;
         }
-        return $type->getKeyType() instanceof MixedType;
+        return $type->getKeyType() instanceof MixedType || $type->getKeyType() instanceof NeverType;
     }
 }
