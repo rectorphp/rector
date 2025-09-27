@@ -150,6 +150,9 @@ CODE_SAMPLE
                 if ($parameterType instanceof ArrayType && $parameterType->getItemType() instanceof MixedType) {
                     continue;
                 }
+                if ($parameterType instanceof MixedType) {
+                    continue;
+                }
                 $generalizedParameterType = $this->typeNormalizer->generalizeConstantTypes($parameterType);
                 $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedParameterType);
                 $paramTagValueNode = new ParamTagValueNode($parameterTypeNode, \false, '$' . $paramName, '', \false);
