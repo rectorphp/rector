@@ -16,9 +16,11 @@ use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Parser\InlineCodeParser;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,11 +38,16 @@ final class DowngradeJsonValidateRector extends AbstractRector
     /**
      * @readonly
      */
+    private VariableNaming $variableNaming;
+    /**
+     * @readonly
+     */
     private ExprInTopStmtMatcher $exprInTopStmtMatcher;
     private ?Closure $cachedClosure = null;
-    public function __construct(InlineCodeParser $inlineCodeParser, ExprInTopStmtMatcher $exprInTopStmtMatcher)
+    public function __construct(InlineCodeParser $inlineCodeParser, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
+        $this->variableNaming = $variableNaming;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -98,7 +105,8 @@ CODE_SAMPLE
         if (!$expr instanceof FuncCall) {
             return null;
         }
-        $variable = new Variable('jsonValidate');
+        $scope = ScopeFetcher::fetch($node);
+        $variable = new Variable($this->variableNaming->createCountedValueName('jsonValidate', $scope));
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
         $expr->name = $variable;
@@ -131,10 +139,7 @@ CODE_SAMPLE
         if ($scope instanceof Scope && $scope->isInFunctionExists('json_validate')) {
             return \true;
         }
-        if ($callLike->isFirstClassCallable()) {
-            return \true;
-        }
-        $args = $callLike->getArgs();
+        $args = $callLike->args;
         return count($args) < 1;
     }
 }
