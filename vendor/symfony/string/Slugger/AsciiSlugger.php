@@ -91,8 +91,8 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
         $unicodeString = (new UnicodeString($string))->ascii($transliterator);
         if (\is_array($this->symbolsMap)) {
             $map = null;
-            if (isset($this->symbolsMap[$locale])) {
-                $map = $this->symbolsMap[$locale];
+            if (isset($this->symbolsMap[$locale ?? ''])) {
+                $map = $this->symbolsMap[$locale ?? ''];
             } else {
                 $parent = self::getParentLocale($locale);
                 if ($parent && isset($this->symbolsMap[$parent])) {
