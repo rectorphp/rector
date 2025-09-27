@@ -118,7 +118,12 @@ final class CallTypesResolver
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
             if ($staticTypeByArgumentPosition[$position] instanceof UnionType) {
                 foreach ($staticTypeByArgumentPosition[$position]->getTypes() as $subType) {
+                    // has another type over mixed is not allowed, even on native type
                     if ($subType instanceof MixedType) {
+                        $staticTypeByArgumentPosition[$position] = new MixedType();
+                        continue 2;
+                    }
+                    if ($removeMixedArray && $subType instanceof ArrayType && $this->isArrayMixedMixedType($subType)) {
                         $staticTypeByArgumentPosition[$position] = new MixedType();
                         continue 2;
                     }
@@ -198,13 +203,6 @@ final class CallTypesResolver
     private function isArrayMixedMixedType(Type $type): bool
     {
         if (!$type instanceof ArrayType) {
-            if ($type instanceof UnionType) {
-                foreach ($type->getTypes() as $subType) {
-                    if ($subType instanceof ArrayType && $this->isArrayMixedMixedType($subType)) {
-                        return \true;
-                    }
-                }
-            }
             return \false;
         }
         if (!$type->getItemType() instanceof MixedType) {
