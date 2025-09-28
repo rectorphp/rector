@@ -19,6 +19,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class TypeNormalizer
 {
@@ -35,14 +36,19 @@ final class TypeNormalizer
      */
     private \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver;
     /**
+     * @readonly
+     */
+    private TypeHasher $typeHasher;
+    /**
      * @var int
      */
     private const MAX_PRINTED_UNION_DOC_LENGHT = 77;
-    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver)
+    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver, TypeHasher $typeHasher)
     {
         $this->typeFactory = $typeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->arrayTypeLeastCommonDenominatorResolver = $arrayTypeLeastCommonDenominatorResolver;
+        $this->typeHasher = $typeHasher;
     }
     /**
      * @deprecated This method is deprecated and will be removed in the next major release.
@@ -91,7 +97,26 @@ final class TypeNormalizer
             if ($type instanceof UnionType) {
                 $generalizedUnionedTypes = [];
                 foreach ($type->getTypes() as $unionedType) {
-                    $generalizedUnionedTypes[] = $this->generalizeConstantTypes($unionedType);
+                    $generalizedUnionedType = $this->generalizeConstantTypes($unionedType);
+                    if ($generalizedUnionedType instanceof ArrayType) {
+                        $keyType = $this->typeHasher->createTypeHash($generalizedUnionedType->getKeyType());
+                        foreach ($generalizedUnionedTypes as $key => $existingUnionedType) {
+                            if (!$existingUnionedType instanceof ArrayType) {
+                                continue;
+                            }
+                            $existingKeyType = $this->typeHasher->createTypeHash($existingUnionedType->getKeyType());
+                            if ($keyType !== $existingKeyType) {
+                                continue;
+                            }
+                            $uniqueTypes = $this->typeFactory->uniquateTypes([$existingUnionedType->getItemType(), $generalizedUnionedType->getItemType()]);
+                            if (count($uniqueTypes) !== 1) {
+                                continue;
+                            }
+                            $generalizedUnionedTypes[$key] = new ArrayType($existingUnionedType->getKeyType(), $uniqueTypes[0]);
+                            continue 2;
+                        }
+                    }
+                    $generalizedUnionedTypes[] = $generalizedUnionedType;
                 }
                 $uniqueGeneralizedUnionTypes = $this->typeFactory->uniquateTypes($generalizedUnionedTypes);
                 if (count($uniqueGeneralizedUnionTypes) > 1) {
