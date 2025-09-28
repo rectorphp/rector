@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -21,7 +22,6 @@ use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Enum\NativeFuncCallPositions;
@@ -39,19 +39,14 @@ final class AddParamArrayDocblockBasedOnCallableNativeFuncCallRector extends Abs
     /**
      * @readonly
      */
-    private ArgsAnalyzer $argsAnalyzer;
-    /**
-     * @readonly
-     */
     private PhpDocTypeChanger $phpDocTypeChanger;
     /**
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArgsAnalyzer $argsAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->argsAnalyzer = $argsAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->staticTypeMapper = $staticTypeMapper;
     }
@@ -117,14 +112,15 @@ CODE_SAMPLE
                 return null;
             }
             $args = $subNode->getArgs();
-            if ($this->argsAnalyzer->hasNamedArg($args)) {
-                return null;
-            }
             if (count($args) < 2) {
                 return null;
             }
             $funcCallName = (string) $this->getName($subNode);
-            $arrayArgValue = $args[NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS[$funcCallName]['array']]->value;
+            $arrayArg = $subNode->getArg('array', NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS[$funcCallName]['array']);
+            if (!$arrayArg instanceof Arg) {
+                return null;
+            }
+            $arrayArgValue = $arrayArg->value;
             if (!$arrayArgValue instanceof Variable) {
                 return null;
             }
@@ -137,7 +133,11 @@ CODE_SAMPLE
             if (!$arrayArgValueType->isArray()->yes()) {
                 return null;
             }
-            $callbackArgValue = $args[NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS[$funcCallName]['callback']]->value;
+            $callbackArg = $subNode->getArg('callback', NativeFuncCallPositions::ARRAY_AND_CALLBACK_POSITIONS[$funcCallName]['callback']);
+            if (!$callbackArg instanceof Arg) {
+                return null;
+            }
+            $callbackArgValue = $callbackArg->value;
             if (!$callbackArgValue instanceof ArrowFunction && !$callbackArgValue instanceof Closure) {
                 return null;
             }
