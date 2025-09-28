@@ -58,11 +58,11 @@ final class NodeDocblockTypeDecorator
     }
     public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, ClassMethod $classMethod): bool
     {
-        $typeNode = $this->createTypeNode($type);
         if ($this->isBareMixedType($type)) {
             // no value
             return \false;
         }
+        $typeNode = $this->createTypeNode($type);
         // no value iterable type
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;

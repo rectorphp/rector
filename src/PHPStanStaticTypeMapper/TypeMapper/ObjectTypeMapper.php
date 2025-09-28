@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
@@ -33,6 +35,9 @@ final class ObjectTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+            if ($type instanceof ArrayType && ($type->getItemType() instanceof MixedType && $type->getKeyType() instanceof MixedType)) {
+                return new ArrayType(new MixedType(), new MixedType(\true));
+            }
             if (!$type instanceof ObjectType) {
                 return $traverse($type);
             }
@@ -45,9 +50,9 @@ final class ObjectTypeMapper implements TypeMapperInterface
                 return new ObjectType('\\' . $type->getClassName());
             }
             if ($type instanceof GenericObjectType) {
-                return $traverse(new GenericObjectType('\\' . $type->getClassName(), $type->getTypes()));
+                return $traverse(new GenericObjectType('\\' . $type->getClassName(), $type->getTypes()), $traverse);
             }
-            return $traverse($type);
+            return $traverse($type, $traverse);
         });
         return $type->toPhpDocNode();
     }
