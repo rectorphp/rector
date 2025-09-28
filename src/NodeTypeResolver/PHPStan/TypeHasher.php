@@ -26,7 +26,7 @@ final class TypeHasher
             return $type->describe(VerbosityLevel::precise()) . $type->isExplicitMixed();
         }
         if ($type instanceof ArrayType) {
-            return $this->createTypeHash($type->getIterableValueType()) . $this->createTypeHash($type->getIterableKeyType()) . '[]';
+            return $this->createTypeHash($type->getIterableValueType()) . $this->createTypeHash($type->getIterableKeyType()) . $type->getItemType()->describe(VerbosityLevel::precise()) . '[]';
         }
         if ($type instanceof GenericObjectType) {
             return $type->describe(VerbosityLevel::precise());
