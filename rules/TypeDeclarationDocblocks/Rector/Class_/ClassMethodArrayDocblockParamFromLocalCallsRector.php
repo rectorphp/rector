@@ -106,7 +106,7 @@ CODE_SAMPLE
                 if ($parameterTagValueNode instanceof ParamTagValueNode) {
                     continue;
                 }
-                $resolvedParameterType = $classMethodParameterTypes[$parameterPosition] ?? null;
+                $resolvedParameterType = $classMethodParameterTypes[$parameterPosition] ?? $classMethodParameterTypes[$parameterName] ?? null;
                 if (!$resolvedParameterType instanceof Type) {
                     continue;
                 }

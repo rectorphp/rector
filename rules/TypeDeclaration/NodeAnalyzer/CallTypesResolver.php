@@ -63,7 +63,7 @@ final class CallTypesResolver
     }
     /**
      * @param MethodCall[]|StaticCall[] $calls
-     * @return array<int, Type>
+     * @return array<int|string, Type>
      */
     public function resolveTypesFromCalls(array $calls): array
     {
@@ -71,14 +71,19 @@ final class CallTypesResolver
         foreach ($calls as $call) {
             foreach ($call->args as $position => $arg) {
                 if ($this->shouldSkipArg($arg)) {
-                    return [];
+                    continue;
                 }
                 /** @var Arg $arg */
                 if ($this->isEmptyArray($arg->value)) {
                     // skip empty array, as it doesn't add any value
                     continue;
                 }
-                $staticTypesByArgumentPosition[$position][] = $this->resolveArgValueType($arg);
+                if ($arg->name instanceof Identifier) {
+                    $positionOrName = $arg->name->toString();
+                } else {
+                    $positionOrName = $position;
+                }
+                $staticTypesByArgumentPosition[$positionOrName][] = $this->resolveArgValueType($arg);
             }
         }
         // unite to single type
@@ -181,10 +186,7 @@ final class CallTypesResolver
         if ($arg instanceof VariadicPlaceholder) {
             return \true;
         }
-        if ($arg->unpack) {
-            return \true;
-        }
-        return $arg->name instanceof Identifier;
+        return $arg->unpack;
     }
     private function isEmptyArray(Expr $expr): bool
     {
