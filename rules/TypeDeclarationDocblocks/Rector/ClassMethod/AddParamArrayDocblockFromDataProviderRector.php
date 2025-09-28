@@ -135,7 +135,7 @@ CODE_SAMPLE
                 if (!$param->type instanceof Node) {
                     continue;
                 }
-                if (!$this->isName($param->type, 'array')) {
+                if (!$this->isNames($param->type, ['array', 'iterable'])) {
                     continue;
                 }
                 /** @var string $paramName */
