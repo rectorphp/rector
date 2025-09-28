@@ -99,7 +99,7 @@ final class TypeNormalizer
                     // avoid too huge print in docblock
                     $unionedDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedUnionType);
                     // too long
-                    if (strlen((string) $unionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGHT) {
+                    if (strlen((string) $unionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGHT && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
                         $alwaysKnownArrayType = $this->narrowToAlwaysKnownArrayType($generalizedUnionType);
                         if ($alwaysKnownArrayType instanceof ArrayType) {
                             return $alwaysKnownArrayType;
@@ -141,5 +141,18 @@ final class TypeNormalizer
         }
         $arrayUniqueKeyType = $this->arrayTypeLeastCommonDenominatorResolver->sharedArrayStructure(...$unionType->getTypes());
         return new ArrayType($arrayUniqueKeyType, new MixedType());
+    }
+    /**
+     * Is object only? avoid trimming, as auto import handles it better
+     */
+    private function avoidPrintedDocblockTrimming(UnionType $unionType): bool
+    {
+        if ($unionType->getConstantScalarTypes() !== []) {
+            return \false;
+        }
+        if ($unionType->getConstantArrays() !== []) {
+            return \false;
+        }
+        return $unionType->getObjectClassNames() !== [];
     }
 }
