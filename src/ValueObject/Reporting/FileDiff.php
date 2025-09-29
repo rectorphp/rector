@@ -95,7 +95,7 @@ final class FileDiff implements SerializableInterface
         foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
-        return RectorClassesSorter::sort($rectorClasses);
+        return RectorClassesSorter::sortAndFilterOutPostRectors($rectorClasses);
     }
     public function getFirstLineNumber(): ?int
     {

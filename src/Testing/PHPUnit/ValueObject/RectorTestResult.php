@@ -38,6 +38,6 @@ final class RectorTestResult
         foreach ($this->processResult->getFileDiffs(\false) as $fileDiff) {
             $rectorClasses = array_merge($rectorClasses, $fileDiff->getRectorClasses());
         }
-        return RectorClassesSorter::sort($rectorClasses);
+        return RectorClassesSorter::sortAndFilterOutPostRectors($rectorClasses);
     }
 }
