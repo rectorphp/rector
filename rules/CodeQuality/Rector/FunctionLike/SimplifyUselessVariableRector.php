@@ -57,6 +57,9 @@ final class SimplifyUselessVariableRector extends AbstractRector implements Conf
         $this->callAnalyzer = $callAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
+    /**
+     * @param array<string, mixed> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->onlyDirectAssign = $configuration[self::ONLY_DIRECT_ASSIGN] ?? \false;

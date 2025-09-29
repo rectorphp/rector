@@ -95,6 +95,9 @@ CODE_SAMPLE
         // workaround, as Rector now only hooks to specific nodes, not arrays
         return null;
     }
+    /**
+     * @param array<string, mixed> $configuration
+     */
     public function configure(array $configuration): void
     {
         Assert::keyExists($configuration, self::LIMIT);
