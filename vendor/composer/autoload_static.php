@@ -1540,6 +1540,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\Config\\Level\\CodeQualityLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodeQualityLevel.php',
         'Rector\\Config\\Level\\CodingStyleLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodingStyleLevel.php',
         'Rector\\Config\\Level\\DeadCodeLevel' => __DIR__ . '/../..' . '/src/Config/Level/DeadCodeLevel.php',
+        'Rector\\Config\\Level\\TypeDeclarationDocblocksLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationDocblocksLevel.php',
         'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',
         'Rector\\Config\\RegisteredService' => __DIR__ . '/../..' . '/src/Config/RegisteredService.php',

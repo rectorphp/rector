@@ -1292,6 +1292,7 @@ return array(
     'Rector\\Config\\Level\\CodeQualityLevel' => $baseDir . '/src/Config/Level/CodeQualityLevel.php',
     'Rector\\Config\\Level\\CodingStyleLevel' => $baseDir . '/src/Config/Level/CodingStyleLevel.php',
     'Rector\\Config\\Level\\DeadCodeLevel' => $baseDir . '/src/Config/Level/DeadCodeLevel.php',
+    'Rector\\Config\\Level\\TypeDeclarationDocblocksLevel' => $baseDir . '/src/Config/Level/TypeDeclarationDocblocksLevel.php',
     'Rector\\Config\\Level\\TypeDeclarationLevel' => $baseDir . '/src/Config/Level/TypeDeclarationLevel.php',
     'Rector\\Config\\RectorConfig' => $baseDir . '/src/Config/RectorConfig.php',
     'Rector\\Config\\RegisteredService' => $baseDir . '/src/Config/RegisteredService.php',
