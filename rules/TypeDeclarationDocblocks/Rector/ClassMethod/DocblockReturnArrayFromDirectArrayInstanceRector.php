@@ -107,6 +107,10 @@ CODE_SAMPLE
         if (!$returnedType instanceof ConstantArrayType) {
             return null;
         }
+        if (count($returnedType->getReferencedClasses()) > 1) {
+            // better handled by shared-interface/class rule, to avoid turning objects to mixed
+            return null;
+        }
         $genericTypeNode = $this->constantArrayTypeGeneralizer->generalize($returnedType);
         $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $genericTypeNode);
         return $node;
