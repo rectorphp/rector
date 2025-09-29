@@ -2944,6 +2944,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarArrayFromGetterReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarArrayFromGetterReturnRector.php',
         'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarArrayFromPropertyDefaultsRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarArrayFromPropertyDefaultsRector.php',
         'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
+        'Rector\\TypeDeclarationDocblocks\\TagNodeAnalyzer\\UsefulArrayTagNodeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/TagNodeAnalyzer/UsefulArrayTagNodeAnalyzer.php',
         'Rector\\TypeDeclarationDocblocks\\TypeResolver\\ConstantArrayTypeGeneralizer' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/TypeResolver/ConstantArrayTypeGeneralizer.php',
         'Rector\\TypeDeclarationDocblocks\\TypeResolver\\YieldTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/TypeResolver/YieldTypeResolver.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',

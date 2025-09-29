@@ -2696,6 +2696,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarArrayFromGetterReturnRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarArrayFromGetterReturnRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarArrayFromPropertyDefaultsRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarArrayFromPropertyDefaultsRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarFromParamDocblockInConstructorRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarFromParamDocblockInConstructorRector.php',
+    'Rector\\TypeDeclarationDocblocks\\TagNodeAnalyzer\\UsefulArrayTagNodeAnalyzer' => $baseDir . '/rules/TypeDeclarationDocblocks/TagNodeAnalyzer/UsefulArrayTagNodeAnalyzer.php',
     'Rector\\TypeDeclarationDocblocks\\TypeResolver\\ConstantArrayTypeGeneralizer' => $baseDir . '/rules/TypeDeclarationDocblocks/TypeResolver/ConstantArrayTypeGeneralizer.php',
     'Rector\\TypeDeclarationDocblocks\\TypeResolver\\YieldTypeResolver' => $baseDir . '/rules/TypeDeclarationDocblocks/TypeResolver/YieldTypeResolver.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',

@@ -99,6 +99,17 @@ final class PhpDocTypeChanger
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
         return \true;
     }
+    public function changeReturnTypeNode(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, TypeNode $newTypeNode): void
+    {
+        $existingReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if ($existingReturnTagValueNode instanceof ReturnTagValueNode) {
+            $existingReturnTagValueNode->type = $newTypeNode;
+        } else {
+            $returnTagValueNode = new ReturnTagValueNode($newTypeNode, '');
+            $phpDocInfo->addTagValueNode($returnTagValueNode);
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
+    }
     public function changeReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType): bool
     {
         // better not touch this, can crash
