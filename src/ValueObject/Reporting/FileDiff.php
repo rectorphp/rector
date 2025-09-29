@@ -7,7 +7,6 @@ use RectorPrefix202509\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Util\RectorClassesSorter;
 use RectorPrefix202509\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202509\Webmozart\Assert\Assert;
@@ -87,7 +86,7 @@ final class FileDiff implements SerializableInterface
         return $rectorShortClasses;
     }
     /**
-     * @return array<class-string<RectorInterface|PostRectorInterface>>
+     * @return array<class-string<RectorInterface>>
      */
     public function getRectorClasses(): array
     {
