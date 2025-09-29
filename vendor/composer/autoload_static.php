@@ -1565,7 +1565,6 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\Console\\ConsoleApplication' => __DIR__ . '/../..' . '/src/Console/ConsoleApplication.php',
         'Rector\\Console\\ExitCode' => __DIR__ . '/../..' . '/src/Console/ExitCode.php',
         'Rector\\Console\\Formatter\\ColorConsoleDiffFormatter' => __DIR__ . '/../..' . '/src/Console/Formatter/ColorConsoleDiffFormatter.php',
-        'Rector\\Console\\Formatter\\ConsoleDiffer' => __DIR__ . '/../..' . '/src/Console/Formatter/ConsoleDiffer.php',
         'Rector\\Console\\Notifier' => __DIR__ . '/../..' . '/src/Console/Notifier.php',
         'Rector\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
         'Rector\\Console\\ProcessConfigureDecorator' => __DIR__ . '/../..' . '/src/Console/ProcessConfigureDecorator.php',
