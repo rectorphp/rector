@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Privatization\TypeManipulator;
 
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
+use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -67,7 +68,7 @@ final class TypeNormalizer
     public function generalizeConstantTypes(Type $type): Type
     {
         return TypeTraverser::map($type, function (Type $type, callable $traverseCallback): Type {
-            if ($type instanceof AccessoryNonFalsyStringType || $type instanceof AccessoryLiteralStringType) {
+            if ($type instanceof AccessoryNonFalsyStringType || $type instanceof AccessoryLiteralStringType || $type instanceof AccessoryNonEmptyStringType) {
                 return new StringType();
             }
             if ($type instanceof ConstantBooleanType) {
