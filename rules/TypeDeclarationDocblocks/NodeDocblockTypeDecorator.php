@@ -113,6 +113,9 @@ final class NodeDocblockTypeDecorator
     }
     private function isBareMixedType(Type $type): bool
     {
+        if ($type instanceof MixedType) {
+            return \true;
+        }
         $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantTypes($type);
         // most likely mixed, skip
         return $this->isArrayMixed($normalizedResolvedParameterType);

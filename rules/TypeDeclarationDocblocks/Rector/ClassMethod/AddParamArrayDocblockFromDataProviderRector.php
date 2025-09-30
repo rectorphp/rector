@@ -5,17 +5,13 @@ namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ParameterTypeFromDataProviderResolver;
+use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\NodeFinder\DataProviderMethodsFinder;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,10 +23,6 @@ final class AddParamArrayDocblockFromDataProviderRector extends AbstractRector
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
      */
@@ -46,20 +38,19 @@ final class AddParamArrayDocblockFromDataProviderRector extends AbstractRector
     /**
      * @readonly
      */
-    private StaticTypeMapper $staticTypeMapper;
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
     /**
      * @readonly
      */
-    private TypeNormalizer $typeNormalizer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderMethodsFinder $dataProviderMethodsFinder, ParameterTypeFromDataProviderResolver $parameterTypeFromDataProviderResolver, StaticTypeMapper $staticTypeMapper, TypeNormalizer $typeNormalizer)
+    private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderMethodsFinder $dataProviderMethodsFinder, ParameterTypeFromDataProviderResolver $parameterTypeFromDataProviderResolver, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockUpdater = $docBlockUpdater;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->dataProviderMethodsFinder = $dataProviderMethodsFinder;
         $this->parameterTypeFromDataProviderResolver = $parameterTypeFromDataProviderResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->typeNormalizer = $typeNormalizer;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -142,23 +133,15 @@ CODE_SAMPLE
                 $paramName = $this->getName($param->var);
                 $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
                 // already defined, lets skip it
-                if ($paramTagValueNode instanceof ParamTagValueNode) {
+                if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {
                     continue;
                 }
                 $parameterType = $this->parameterTypeFromDataProviderResolver->resolve($paramPosition, $dataProviderNodes->getClassMethods());
-                // skip mixed type, as it is not informative
-                if ($parameterType instanceof ArrayType && $parameterType->getItemType() instanceof MixedType) {
+                $hasParamTypeChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($parameterType, $phpDocInfo, $classMethod, $param, $paramName);
+                if (!$hasParamTypeChanged) {
                     continue;
                 }
-                if ($parameterType instanceof MixedType) {
-                    continue;
-                }
-                $generalizedParameterType = $this->typeNormalizer->generalizeConstantTypes($parameterType);
-                $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedParameterType);
-                $paramTagValueNode = new ParamTagValueNode($parameterTypeNode, \false, '$' . $paramName, '', \false);
-                $phpDocInfo->addTagValueNode($paramTagValueNode);
                 $hasChanged = \true;
-                $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
             }
         }
         if (!$hasChanged) {
