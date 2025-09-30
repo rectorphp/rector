@@ -11,10 +11,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,11 +36,16 @@ final class AddParamArrayDocblockFromDimFetchAccessRector extends AbstractRector
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, DocBlockUpdater $docBlockUpdater, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->arrayDimFetchFinder = $arrayDimFetchFinder;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -97,7 +104,7 @@ CODE_SAMPLE
             $paramName = $this->getName($param->var);
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
             // already defined, lets skip it
-            if ($paramTagValueNode instanceof ParamTagValueNode) {
+            if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {
                 continue;
             }
             $dimFetches = $this->arrayDimFetchFinder->findByVariableName($node, $paramName);
@@ -117,14 +124,12 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->isOnlyStringType($keyTypes)) {
-                $paramTagValueNode = $this->createParamTagValueNode($paramName, 'string');
-                $phpDocInfo->addTagValueNode($paramTagValueNode);
+                $this->createParamTagValueNode($phpDocInfo, $paramName, 'string', $paramTagValueNode);
                 $hasChanged = \true;
                 continue;
             }
             if ($this->isOnlyIntegerType($keyTypes)) {
-                $paramTagValueNode = $this->createParamTagValueNode($paramName, 'int');
-                $phpDocInfo->addTagValueNode($paramTagValueNode);
+                $this->createParamTagValueNode($phpDocInfo, $paramName, 'int', $paramTagValueNode);
                 $hasChanged = \true;
                 continue;
             }
@@ -161,9 +166,14 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function createParamTagValueNode(string $paramName, string $keyTypeValue): ParamTagValueNode
+    private function createParamTagValueNode(PhpDocInfo $phpDocInfo, string $paramName, string $keyTypeValue, ?ParamTagValueNode $paramTagValueNode): void
     {
         $arrayGenericTypeNode = new GenericTypeNode(new IdentifierTypeNode('array'), [new IdentifierTypeNode($keyTypeValue), new IdentifierTypeNode('mixed')]);
-        return new ParamTagValueNode($arrayGenericTypeNode, \false, '$' . $paramName, '', \false);
+        if ($paramTagValueNode instanceof ParamTagValueNode) {
+            $paramTagValueNode->type = $arrayGenericTypeNode;
+        } else {
+            $paramTagValueNode = new ParamTagValueNode($arrayGenericTypeNode, \false, '$' . $paramName, '', \false);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
+        }
     }
 }
