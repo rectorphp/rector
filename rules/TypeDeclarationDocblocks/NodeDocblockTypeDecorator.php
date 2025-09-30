@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -17,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -34,13 +36,18 @@ final class NodeDocblockTypeDecorator
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, DocBlockUpdater $docBlockUpdater)
+    /**
+     * @readonly
+     */
+    private PhpDocTypeChanger $phpDocTypeChanger;
+    public function __construct(TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, DocBlockUpdater $docBlockUpdater, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockUpdater = $docBlockUpdater;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, ClassMethod $classMethod, string $parameterName): bool
+    public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, ClassMethod $classMethod, Param $param, string $parameterName): bool
     {
         if ($this->isBareMixedType($type)) {
             // no value
@@ -52,8 +59,7 @@ final class NodeDocblockTypeDecorator
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        $paramTagValueNode = new ParamTagValueNode($typeNode, \false, '$' . $parameterName, '', \false);
-        $this->addTagValueNodeAndUpdatePhpDocInfo($phpDocInfo, $paramTagValueNode, $classMethod);
+        $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $normalizedType, $param, $parameterName);
         return \true;
     }
     public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, ClassMethod $classMethod): bool

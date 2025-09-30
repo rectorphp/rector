@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,11 +32,16 @@ final class AddParamArrayDocblockFromAssignsParamToParamReferenceRector extends 
     /**
      * @readonly
      */
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    /**
+     * @readonly
+     */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->arrayDimFetchFinder = $arrayDimFetchFinder;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -93,7 +99,7 @@ CODE_SAMPLE
             $paramName = $this->getName($param);
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
             // already defined, lets skip it
-            if ($paramTagValueNode instanceof ParamTagValueNode) {
+            if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {
                 continue;
             }
             $exprs = $this->arrayDimFetchFinder->findDimFetchAssignToVariableName($node, $paramName);
@@ -103,7 +109,7 @@ CODE_SAMPLE
             }
             $assignedExprType = $this->getType($exprs[0]);
             $iterableType = new ArrayType(new MixedType(), $assignedExprType);
-            $hasParamTypeChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($iterableType, $phpDocInfo, $node, $paramName);
+            $hasParamTypeChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($iterableType, $phpDocInfo, $node, $param, $paramName);
             if (!$hasParamTypeChanged) {
                 continue;
             }

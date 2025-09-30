@@ -118,7 +118,7 @@ CODE_SAMPLE
                 }
                 // in case of array type declaration, null cannot be passed or is already casted
                 $resolvedParameterType = TypeCombinator::removeNull($resolvedParameterType);
-                $hasClassMethodChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($resolvedParameterType, $classMethodPhpDocInfo, $classMethod, $parameterName);
+                $hasClassMethodChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($resolvedParameterType, $classMethodPhpDocInfo, $classMethod, $param, $parameterName);
                 if ($hasClassMethodChanged) {
                     $hasChanged = \true;
                 }
