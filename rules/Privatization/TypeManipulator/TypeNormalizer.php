@@ -67,7 +67,9 @@ final class TypeNormalizer
      */
     public function generalizeConstantTypes(Type $type): Type
     {
-        return TypeTraverser::map($type, function (Type $type, callable $traverseCallback): Type {
+        $deep = 0;
+        return TypeTraverser::map($type, function (Type $type, callable $traverseCallback) use (&$deep): Type {
+            ++$deep;
             if ($type instanceof AccessoryNonFalsyStringType || $type instanceof AccessoryLiteralStringType || $type instanceof AccessoryNonEmptyStringType) {
                 return new StringType();
             }
@@ -86,7 +88,7 @@ final class TypeNormalizer
             if ($type instanceof ConstantArrayType) {
                 // is relevant int constantArrayType?
                 if ($this->isImplicitNumberedListKeyType($type)) {
-                    $keyType = new MixedType();
+                    $keyType = $deep === 1 ? new MixedType() : new IntegerType();
                 } else {
                     $keyType = $this->generalizeConstantTypes($type->getKeyType());
                 }
