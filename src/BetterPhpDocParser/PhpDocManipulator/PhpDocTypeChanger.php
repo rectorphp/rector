@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -107,6 +108,17 @@ final class PhpDocTypeChanger
         } else {
             $returnTagValueNode = new ReturnTagValueNode($newTypeNode, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
+    }
+    public function changeParamTypeNode(ClassMethod $functionLike, PhpDocInfo $phpDocInfo, Param $param, string $paramName, TypeNode $newTypeNode): void
+    {
+        $existingParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+        if ($existingParamTagValueNode instanceof ParamTagValueNode) {
+            $existingParamTagValueNode->type = $newTypeNode;
+        } else {
+            $paramTagValueNode = $this->paramPhpDocNodeFactory->create($newTypeNode, $param);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
     }

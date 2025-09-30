@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -16,6 +15,7 @@ use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\NodeFinder\DataProviderMethodsFinder;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\NodeFinder\YieldNodeFinder;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Rector\TypeDeclarationDocblocks\TypeResolver\YieldTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -51,8 +51,12 @@ final class AddReturnDocblockDataProviderRector extends AbstractRector
     /**
      * @readonly
      */
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    /**
+     * @readonly
+     */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderMethodsFinder $dataProviderMethodsFinder, ReturnNodeFinder $returnNodeFinder, YieldTypeResolver $yieldTypeResolver, YieldNodeFinder $yieldNodeFinder, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderMethodsFinder $dataProviderMethodsFinder, ReturnNodeFinder $returnNodeFinder, YieldTypeResolver $yieldTypeResolver, YieldNodeFinder $yieldNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -60,6 +64,7 @@ final class AddReturnDocblockDataProviderRector extends AbstractRector
         $this->returnNodeFinder = $returnNodeFinder;
         $this->yieldTypeResolver = $yieldTypeResolver;
         $this->yieldNodeFinder = $yieldNodeFinder;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getNodeTypes(): array
@@ -132,7 +137,7 @@ CODE_SAMPLE
             $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($dataProviderClassMethod);
             $returnTagValueNode = $classMethodPhpDocInfo->getReturnTagValue();
             // already set
-            if ($returnTagValueNode instanceof ReturnTagValueNode) {
+            if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($returnTagValueNode)) {
                 continue;
             }
             $soleReturn = $this->returnNodeFinder->findOnlyReturnWithExpr($dataProviderClassMethod);
