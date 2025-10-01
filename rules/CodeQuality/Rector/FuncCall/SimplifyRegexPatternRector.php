@@ -22,7 +22,7 @@ final class SimplifyRegexPatternRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const COMPLEX_PATTERN_TO_SIMPLE = ['[0-9]' => 'd', '[a-zA-Z0-9_]' => 'w', '[A-Za-z0-9_]' => 'w', '[0-9a-zA-Z_]' => 'w', '[0-9A-Za-z_]' => 'w', '[\r\n\t\f\v ]' => 's'];
+    private const COMPLEX_PATTERN_TO_SIMPLE = ['[0-9]' => '\\\\d', '[a-zA-Z0-9_]' => '\\\\w', '[A-Za-z0-9_]' => '\\\\w', '[0-9a-zA-Z_]' => '\\\\w', '[0-9A-Za-z_]' => '\\\\w', '[\r\n\t\f\v ]' => '\\\\s'];
     public function __construct(RegexPatternDetector $regexPatternDetector)
     {
         $this->regexPatternDetector = $regexPatternDetector;
