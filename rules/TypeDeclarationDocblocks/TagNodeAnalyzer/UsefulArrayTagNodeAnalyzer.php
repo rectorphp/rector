@@ -21,6 +21,6 @@ final class UsefulArrayTagNodeAnalyzer
         if (!$type instanceof IdentifierTypeNode) {
             return \true;
         }
-        return $type->name !== 'array';
+        return !in_array($type->name, ['array', 'mixed'], \true);
     }
 }
