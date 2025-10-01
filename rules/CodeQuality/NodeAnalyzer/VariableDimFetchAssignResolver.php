@@ -4,12 +4,14 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\ValueObject\KeyAndExpr;
+use Rector\Exception\NotImplementedYetException;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 final class VariableDimFetchAssignResolver
@@ -73,7 +75,10 @@ final class VariableDimFetchAssignResolver
         $reference =& $exprsByKeys;
         $keys = array_reverse($keys);
         foreach ($keys as $key) {
-            // create intermediate arrays automatically
+            if ($reference instanceof Array_) {
+                // currently it fails here with Cannot use object of type PhpParser\Node\Expr\Array_ as array
+                throw new NotImplementedYetException();
+            }
             $reference =& $reference[$key];
         }
         $reference = $expr;
