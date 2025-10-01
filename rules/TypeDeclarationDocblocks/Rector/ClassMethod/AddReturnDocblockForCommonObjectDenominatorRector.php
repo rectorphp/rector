@@ -17,10 +17,11 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -43,13 +44,18 @@ final class AddReturnDocblockForCommonObjectDenominatorRector extends AbstractRe
     /**
      * @readonly
      */
-    private PhpDocTypeChanger $phpDocTypeChanger;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ReturnNodeFinder $returnNodeFinder, ReflectionProvider $reflectionProvider, PhpDocTypeChanger $phpDocTypeChanger)
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    /**
+     * @readonly
+     */
+    private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ReturnNodeFinder $returnNodeFinder, ReflectionProvider $reflectionProvider, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->returnNodeFinder = $returnNodeFinder;
         $this->reflectionProvider = $reflectionProvider;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -111,8 +117,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnType = $phpDocInfo->getReturnType();
-        if ($returnType instanceof ArrayType && !$returnType->getItemType() instanceof MixedType) {
+        if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
             return null;
         }
         // definitely not an array return
@@ -160,7 +165,7 @@ CODE_SAMPLE
             return null;
         }
         $objectTypeArrayType = new ArrayType($this->resolveKeyType($returnedType), new FullyQualifiedObjectType($firstSharedType));
-        $hasChanged = $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $objectTypeArrayType);
+        $hasChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableReturnType($objectTypeArrayType, $phpDocInfo, $node);
         if (!$hasChanged) {
             return null;
         }
