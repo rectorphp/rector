@@ -231,6 +231,10 @@ CODE_SAMPLE
         if ($expr instanceof DNumber) {
             return new FloatType();
         }
+        $exprType = $this->nodeTypeResolver->getNativeType($expr);
+        if ($exprType->isScalar()->yes()) {
+            return $exprType;
+        }
         return null;
     }
 }
