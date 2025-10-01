@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -27,6 +26,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -164,7 +164,7 @@ CODE_SAMPLE
                 $isParamAccessedArrayDimFetch = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
             }
-            if ($variableType instanceof ObjectType && $this->typeComparator->isSubtype($variableType, new ObjectType('ArrayAccess'))) {
+            if ($this->isArrayAccess($variableType)) {
                 $isParamAccessedArrayDimFetch = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
             }
@@ -188,17 +188,8 @@ CODE_SAMPLE
     private function shouldStop(Node $node, Param $param, string $paramName): bool
     {
         $nodeToCheck = null;
-        if (!$param->default instanceof Expr) {
-            if ($node instanceof Isset_) {
-                foreach ($node->vars as $var) {
-                    if ($var instanceof ArrayDimFetch && $var->var instanceof Variable && $var->var->name === $paramName) {
-                        return \true;
-                    }
-                }
-            }
-            if ($node instanceof Empty_ && $node->expr instanceof ArrayDimFetch && $node->expr->var instanceof Variable && $node->expr->var->name === $paramName) {
-                return \true;
-            }
+        if (!$param->default instanceof Expr && ($node instanceof Empty_ && $node->expr instanceof ArrayDimFetch && $node->expr->var instanceof Variable && $node->expr->var->name === $paramName)) {
+            return \true;
         }
         if ($node instanceof FuncCall && !$node->isFirstClassCallable() && $this->isNames($node, ['is_array', 'is_string', 'is_int', 'is_bool', 'is_float'])) {
             $firstArg = $node->getArgs()[0];
@@ -267,5 +258,12 @@ CODE_SAMPLE
             return $node->var instanceof Variable && $this->isName($node->var, $paramName);
         }
         return \false;
+    }
+    private function isArrayAccess(Type $type): bool
+    {
+        if (!$type instanceof ObjectType) {
+            return \false;
+        }
+        return $this->typeComparator->isSubtype($type, new ObjectType('ArrayAccess'));
     }
 }
