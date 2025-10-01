@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix202509;
+namespace RectorPrefix202510;
 
 foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
     if (\file_exists($file)) {

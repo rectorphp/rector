@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeAnalyzer;
 
-use RectorPrefix202509\Nette\Utils\FileSystem;
-use RectorPrefix202509\Nette\Utils\Strings;
+use RectorPrefix202510\Nette\Utils\FileSystem;
+use RectorPrefix202510\Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Exception\ShouldNotHappenException;
 final class RepositoryClassResolver

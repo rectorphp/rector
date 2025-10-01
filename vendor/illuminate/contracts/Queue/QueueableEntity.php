@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202509\Illuminate\Contracts\Queue;
+namespace RectorPrefix202510\Illuminate\Contracts\Queue;
 
 interface QueueableEntity
 {

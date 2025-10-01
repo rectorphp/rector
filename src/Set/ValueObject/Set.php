@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
 use Rector\Set\Contract\SetInterface;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */

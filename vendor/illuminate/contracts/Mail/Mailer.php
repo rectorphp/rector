@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202509\Illuminate\Contracts\Mail;
+namespace RectorPrefix202510\Illuminate\Contracts\Mail;
 
 interface Mailer
 {

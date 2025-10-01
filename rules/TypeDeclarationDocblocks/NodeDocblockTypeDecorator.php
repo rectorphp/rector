@@ -6,9 +6,6 @@ namespace Rector\TypeDeclarationDocblocks;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -19,7 +16,6 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class NodeDocblockTypeDecorator
@@ -35,16 +31,11 @@ final class NodeDocblockTypeDecorator
     /**
      * @readonly
      */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
     private PhpDocTypeChanger $phpDocTypeChanger;
-    public function __construct(TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, DocBlockUpdater $docBlockUpdater, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, ClassMethod $classMethod, Param $param, string $parameterName): bool
@@ -86,8 +77,7 @@ final class NodeDocblockTypeDecorator
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        $varTagValueNode = new VarTagValueNode($typeNode, '', '');
-        $this->addTagValueNodeAndUpdatePhpDocInfo($phpDocInfo, $varTagValueNode, $property);
+        $this->phpDocTypeChanger->changeVarTypeNode($property, $phpDocInfo, $typeNode);
         return \true;
     }
     private function createTypeNode(Type $type): TypeNode
@@ -99,15 +89,6 @@ final class NodeDocblockTypeDecorator
             return new ArrayTypeNode($typeNode);
         }
         return $typeNode;
-    }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod $stmt
-     */
-    private function addTagValueNodeAndUpdatePhpDocInfo(PhpDocInfo $phpDocInfo, $tagValueNode, $stmt): void
-    {
-        $phpDocInfo->addTagValueNode($tagValueNode);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
     }
     private function isBareMixedType(Type $type): bool
     {

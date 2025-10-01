@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202509;
+namespace RectorPrefix202510;
 
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;

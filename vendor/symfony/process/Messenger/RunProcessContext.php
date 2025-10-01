@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202509\Symfony\Component\Process\Messenger;
+namespace RectorPrefix202510\Symfony\Component\Process\Messenger;
 
-use RectorPrefix202509\Symfony\Component\Process\Process;
+use RectorPrefix202510\Symfony\Component\Process\Process;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */

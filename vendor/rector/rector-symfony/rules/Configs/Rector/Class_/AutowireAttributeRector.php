@@ -20,11 +20,11 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\ValueObject\MethodName;
-use RectorPrefix202509\Symfony\Component\Finder\Finder;
-use RectorPrefix202509\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202510\Symfony\Component\Finder\Finder;
+use RectorPrefix202510\Symfony\Component\Finder\SplFileInfo;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * The param/env is only available since Symfony 6.3
  * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute

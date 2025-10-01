@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
-use RectorPrefix202509\Composer\Semver\Semver;
+use RectorPrefix202510\Composer\Semver\Semver;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Set\Contract\SetInterface;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */

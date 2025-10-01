@@ -12,7 +12,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameCast;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Cast\RenameCastRector\RenameCastRectorTest
  */

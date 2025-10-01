@@ -111,7 +111,7 @@ final class PhpDocTypeChanger
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
     }
-    public function changeParamTypeNode(ClassMethod $functionLike, PhpDocInfo $phpDocInfo, Param $param, string $paramName, TypeNode $newTypeNode): void
+    public function changeParamTypeNode(ClassMethod $classMethod, PhpDocInfo $phpDocInfo, Param $param, string $paramName, TypeNode $newTypeNode): void
     {
         $existingParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         if ($existingParamTagValueNode instanceof ParamTagValueNode) {
@@ -120,7 +120,7 @@ final class PhpDocTypeChanger
             $paramTagValueNode = $this->paramPhpDocNodeFactory->create($newTypeNode, $param);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($functionLike);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     public function changeReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, Type $newType): bool
     {
@@ -204,9 +204,14 @@ final class PhpDocTypeChanger
      */
     public function changeVarTypeNode(Stmt $stmt, PhpDocInfo $phpDocInfo, TypeNode $typeNode): void
     {
-        // add completely new one
-        $varTagValueNode = new VarTagValueNode($typeNode, '', '');
-        $phpDocInfo->addTagValueNode($varTagValueNode);
+        $existingVarTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if ($existingVarTagValueNode instanceof VarTagValueNode) {
+            $existingVarTagValueNode->type = $typeNode;
+        } else {
+            // add completely new one
+            $varTagValueNode = new VarTagValueNode($typeNode, '', '');
+            $phpDocInfo->addTagValueNode($varTagValueNode);
+        }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($stmt);
     }
 }

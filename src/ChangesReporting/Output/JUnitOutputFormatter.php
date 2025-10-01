@@ -12,7 +12,7 @@ use DOMElement;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202509\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202510\Symfony\Component\Console\Style\SymfonyStyle;
 final class JUnitOutputFormatter implements OutputFormatterInterface
 {
     /**

@@ -18,7 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use RectorPrefix202509\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
+use RectorPrefix202510\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use Rector\Enum\ClassName;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\SetUpAssignedMockTypesResolver;

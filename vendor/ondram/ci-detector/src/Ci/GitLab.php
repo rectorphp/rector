@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202509\OndraM\CiDetector\Ci;
+namespace RectorPrefix202510\OndraM\CiDetector\Ci;
 
-use RectorPrefix202509\OndraM\CiDetector\CiDetector;
-use RectorPrefix202509\OndraM\CiDetector\Env;
-use RectorPrefix202509\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202510\OndraM\CiDetector\CiDetector;
+use RectorPrefix202510\OndraM\CiDetector\Env;
+use RectorPrefix202510\OndraM\CiDetector\TrinaryLogic;
 class GitLab extends AbstractCi
 {
     public static function isDetected(Env $env): bool

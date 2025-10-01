@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202509\React\Socket;
+namespace RectorPrefix202510\React\Socket;
 
-use RectorPrefix202509\React\EventLoop\Loop;
-use RectorPrefix202509\React\EventLoop\LoopInterface;
-use RectorPrefix202509\React\Promise;
+use RectorPrefix202510\React\EventLoop\Loop;
+use RectorPrefix202510\React\EventLoop\LoopInterface;
+use RectorPrefix202510\React\Promise;
 use BadMethodCallException;
 use InvalidArgumentException;
 use UnexpectedValueException;
@@ -30,7 +30,7 @@ final class SecureConnector implements ConnectorInterface
     }
     public function connect($uri)
     {
-        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202509\stream_socket_enable_crypto')) {
+        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202510\stream_socket_enable_crypto')) {
             return Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)'));
             // @codeCoverageIgnore
         }
@@ -87,7 +87,7 @@ final class SecureConnector implements ConnectorInterface
             }
             throw $e;
         });
-        return new \RectorPrefix202509\React\Promise\Promise(function ($resolve, $reject) use ($promise) {
+        return new \RectorPrefix202510\React\Promise\Promise(function ($resolve, $reject) use ($promise) {
             $promise->then($resolve, $reject);
         }, function ($_, $reject) use (&$promise, $uri, &$connected) {
             if ($connected) {

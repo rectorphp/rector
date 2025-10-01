@@ -30,7 +30,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @experimental Check generic array key/value types in runtime with assert. Generics for impatient people.
  *
@@ -57,7 +57,7 @@ final class AddAssertArrayFromClassMethodDocblockRector extends AbstractRector i
         return new RuleDefinition('Add key and value assert based on docblock @param type declarations (pick from "webmozart" or "beberlei" asserts)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202509;
+namespace RectorPrefix202510;
 
 class SomeClass
 {
@@ -74,9 +74,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202509;
+namespace RectorPrefix202510;
 
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 class SomeClass
 {
     /**

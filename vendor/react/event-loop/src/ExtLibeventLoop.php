@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix202509\React\EventLoop;
+namespace RectorPrefix202510\React\EventLoop;
 
 use BadMethodCallException;
 use Event;
 use EventBase;
-use RectorPrefix202509\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix202509\React\EventLoop\Timer\Timer;
+use RectorPrefix202510\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix202510\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * [Deprecated] An `ext-libevent` based event loop.
@@ -52,7 +52,7 @@ final class ExtLibeventLoop implements LoopInterface
     private $signalEvents = array();
     public function __construct()
     {
-        if (!\function_exists('event_base_new') && !\function_exists('RectorPrefix202509\event_base_new')) {
+        if (!\function_exists('event_base_new') && !\function_exists('RectorPrefix202510\event_base_new')) {
             throw new BadMethodCallException('Cannot create ExtLibeventLoop, ext-libevent extension missing');
         }
         $this->eventBase = \event_base_new();

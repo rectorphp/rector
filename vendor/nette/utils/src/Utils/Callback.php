@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202509\Nette\Utils;
+namespace RectorPrefix202510\Nette\Utils;
 
-use RectorPrefix202509\Nette;
+use RectorPrefix202510\Nette;
 use function explode, func_get_args, ini_get, is_array, is_callable, is_object, is_string, preg_replace, restore_error_handler, set_error_handler, sprintf, str_contains, str_ends_with;
 /**
  * PHP callable tools.

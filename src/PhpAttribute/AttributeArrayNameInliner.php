@@ -10,7 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
-use RectorPrefix202509\Webmozart\Assert\Assert;
+use RectorPrefix202510\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**

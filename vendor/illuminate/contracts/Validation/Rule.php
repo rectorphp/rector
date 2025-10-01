@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202509\Illuminate\Contracts\Validation;
+namespace RectorPrefix202510\Illuminate\Contracts\Validation;
 
 /**
  * @deprecated see ValidationRule

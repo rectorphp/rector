@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202509\React\Dns\Resolver;
+namespace RectorPrefix202510\React\Dns\Resolver;
 
-use RectorPrefix202509\React\Dns\Model\Message;
-use RectorPrefix202509\React\Dns\Query\ExecutorInterface;
-use RectorPrefix202509\React\Dns\Query\Query;
-use RectorPrefix202509\React\Dns\RecordNotFoundException;
+use RectorPrefix202510\React\Dns\Model\Message;
+use RectorPrefix202510\React\Dns\Query\ExecutorInterface;
+use RectorPrefix202510\React\Dns\Query\Query;
+use RectorPrefix202510\React\Dns\RecordNotFoundException;
 /**
  * @see ResolverInterface for the base interface
  */

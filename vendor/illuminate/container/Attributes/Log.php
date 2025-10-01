@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202509\Illuminate\Container\Attributes;
+namespace RectorPrefix202510\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202509\Illuminate\Contracts\Container\Container;
-use RectorPrefix202509\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202510\Illuminate\Contracts\Container\Container;
+use RectorPrefix202510\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Log implements ContextualAttribute
 {

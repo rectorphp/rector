@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202509\Symfony\Component\Console\CI;
+namespace RectorPrefix202510\Symfony\Component\Console\CI;
 
-use RectorPrefix202509\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202510\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Utility class for Github actions.
  *
