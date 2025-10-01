@@ -7,10 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,10 +26,15 @@ final class DocblockVarArrayFromPropertyDefaultsRector extends AbstractRector
      * @readonly
      */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    /**
+     * @readonly
+     */
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
     }
     public function getNodeTypes(): array
     {
@@ -77,7 +82,7 @@ CODE_SAMPLE
             $propertyDefaultType = $this->getType($soleProperty->default);
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             // type is already known
-            if ($propertyPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
+            if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($propertyPhpDocInfo->getVarTagValueNode())) {
                 continue;
             }
             if ($this->nodeDocblockTypeDecorator->decorateGenericIterableVarType($propertyDefaultType, $propertyPhpDocInfo, $property)) {
