@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks;
 
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -52,7 +53,7 @@ final class NodeDocblockTypeDecorator
         $this->phpDocTypeChanger->changeParamTypeNode($classMethod, $phpDocInfo, $param, $parameterName, $typeNode);
         return \true;
     }
-    public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, ClassMethod $classMethod): bool
+    public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
     {
         if ($this->isBareMixedType($type)) {
             // no value
@@ -63,7 +64,7 @@ final class NodeDocblockTypeDecorator
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        $this->phpDocTypeChanger->changeReturnTypeNode($classMethod, $classMethodPhpDocInfo, $typeNode);
+        $this->phpDocTypeChanger->changeReturnTypeNode($functionLike, $classMethodPhpDocInfo, $typeNode);
         return \true;
     }
     public function decorateGenericIterableVarType(Type $type, PhpDocInfo $phpDocInfo, Property $property): bool

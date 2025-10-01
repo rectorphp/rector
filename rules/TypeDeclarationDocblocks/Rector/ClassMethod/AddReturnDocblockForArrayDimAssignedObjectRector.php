@@ -20,10 +20,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -44,22 +43,17 @@ final class AddReturnDocblockForArrayDimAssignedObjectRector extends AbstractRec
     /**
      * @readonly
      */
-    private PhpDocTypeChanger $phpDocTypeChanger;
-    /**
-     * @readonly
-     */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
     private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ReturnNodeFinder $returnNodeFinder, PhpDocTypeChanger $phpDocTypeChanger, StaticTypeMapper $staticTypeMapper, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ReturnNodeFinder $returnNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->returnNodeFinder = $returnNodeFinder;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -140,8 +134,9 @@ CODE_SAMPLE
             return null;
         }
         $objectTypeArrayType = new ArrayType(new MixedType(), $arrayObjectType);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($objectTypeArrayType);
-        $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $returnTypeNode);
+        if (!$this->nodeDocblockTypeDecorator->decorateGenericIterableReturnType($objectTypeArrayType, $phpDocInfo, $node)) {
+            return null;
+        }
         return $node;
     }
     private function matchArrayObjectType(Type $returnedType): ?Type
