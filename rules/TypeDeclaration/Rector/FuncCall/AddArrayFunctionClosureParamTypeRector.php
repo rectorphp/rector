@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -71,20 +72,28 @@ CODE_SAMPLE
             }
             $arrayPosition = $positions['array'];
             $callbackPosition = $positions['callback'];
-            $firstArgExpr = $node->getArgs()[$callbackPosition]->value;
-            if (!$firstArgExpr instanceof ArrowFunction && !$firstArgExpr instanceof Closure) {
+            $callbackArg = $node->getArg('callback', $callbackPosition);
+            if (!$callbackArg instanceof Arg) {
                 continue;
             }
-            if (count($firstArgExpr->getParams()) !== 1) {
+            $callbackArgExpr = $callbackArg->value;
+            if (!$callbackArgExpr instanceof ArrowFunction && !$callbackArgExpr instanceof Closure) {
                 continue;
             }
-            $arrowFunction = $firstArgExpr;
+            if (count($callbackArgExpr->getParams()) !== 1) {
+                continue;
+            }
+            $arrowFunction = $callbackArgExpr;
             $arrowFunctionParam = $arrowFunction->getParams()[0];
             // param is known already
             if ($arrowFunctionParam->type instanceof Node) {
                 continue;
             }
-            $passedExprType = $this->getType($node->getArgs()[$arrayPosition]->value);
+            $arrayArg = $node->getArg('array', $arrayPosition);
+            if (!$arrayArg instanceof Arg) {
+                continue;
+            }
+            $passedExprType = $this->getType($arrayArg->value);
             $singlePassedExprType = $this->resolveArrayItemType($passedExprType);
             if (!$singlePassedExprType instanceof Type) {
                 continue;
