@@ -16,6 +16,7 @@ use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
+use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -38,12 +39,17 @@ final class ClassMethodArrayDocblockParamFromLocalCallsRector extends AbstractRe
     /**
      * @readonly
      */
+    private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
+    /**
+     * @readonly
+     */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->callTypesResolver = $callTypesResolver;
         $this->localMethodCallFinder = $localMethodCallFinder;
+        $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getNodeTypes(): array
@@ -103,17 +109,11 @@ CODE_SAMPLE
                 $parameterName = $this->getName($param);
                 $parameterTagValueNode = $classMethodPhpDocInfo->getParamTagValueByName($parameterName);
                 // already known, skip
-                if ($parameterTagValueNode instanceof ParamTagValueNode) {
+                if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($parameterTagValueNode)) {
                     continue;
                 }
                 $resolvedParameterType = $classMethodParameterTypes[$parameterPosition] ?? $classMethodParameterTypes[$parameterName] ?? null;
                 if (!$resolvedParameterType instanceof Type) {
-                    continue;
-                }
-                if ($resolvedParameterType instanceof MixedType) {
-                    continue;
-                }
-                if ($resolvedParameterType instanceof ArrayType && $resolvedParameterType->getItemType() instanceof MixedType && $resolvedParameterType->getKeyType() instanceof MixedType) {
                     continue;
                 }
                 // in case of array type declaration, null cannot be passed or is already casted
