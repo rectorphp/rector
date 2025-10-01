@@ -11,9 +11,8 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,21 +28,16 @@ final class DocblockGetterReturnArrayFromPropertyDocblockVarRector extends Abstr
     /**
      * @readonly
      */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
     private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
     /**
      * @readonly
      */
-    private PhpDocTypeChanger $phpDocTypeChanger;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger)
+    private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
     }
     public function getNodeTypes(): array
     {
@@ -99,10 +93,6 @@ CODE_SAMPLE
         if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
             return null;
         }
-        //        // return tag is already given
-        //        if ($phpDocInfo->getReturnTagValue() instanceof ReturnTagValueNode) {
-        //            return null;
-        //        }
         $propertyFetch = $this->matchReturnLocalPropertyFetch($node);
         if (!$propertyFetch instanceof PropertyFetch) {
             return null;
@@ -114,12 +104,9 @@ CODE_SAMPLE
         if ($propertyFetchType instanceof UnionType) {
             return null;
         }
-        $propertyFetchDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($propertyFetchType);
-        $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $propertyFetchDocTypeNode);
-        //        $returnTagValueNode = new ReturnTagValueNode($propertyFetchDocTypeNode, '');
-        //        $phpDocInfo->addTagValueNode($returnTagValueNode);
-        //
-        //        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        if (!$this->nodeDocblockTypeDecorator->decorateGenericIterableReturnType($propertyFetchType, $phpDocInfo, $node)) {
+            return null;
+        }
         return $node;
     }
     private function matchReturnLocalPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
