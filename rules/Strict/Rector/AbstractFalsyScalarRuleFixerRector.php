@@ -20,7 +20,7 @@ abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector impleme
     public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';
     protected bool $treatAsNonEmpty = \false;
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {

@@ -38,7 +38,7 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
     private const DEFAULT_LIMIT_VALUE = 1000000;
     private int $limitValue = self::DEFAULT_LIMIT_VALUE;
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {

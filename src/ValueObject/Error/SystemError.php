@@ -67,7 +67,7 @@ final class SystemError implements SerializableInterface
         return [BridgeItem::MESSAGE => $this->message, BridgeItem::RELATIVE_FILE_PATH => $this->relativeFilePath, BridgeItem::ABSOLUTE_FILE_PATH => $this->getAbsoluteFilePath(), BridgeItem::LINE => $this->line, BridgeItem::RECTOR_CLASS => $this->rectorClass];
     }
     /**
-     * @param mixed[] $json
+     * @param array<string, mixed> $json
      */
     public static function decode(array $json): self
     {

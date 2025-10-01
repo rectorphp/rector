@@ -78,7 +78,7 @@ CODE_SAMPLE
         return $this->enumFactory->createFromSpatieClass($node, $this->toUpperSnakeCase);
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {

@@ -27,7 +27,7 @@ final class CacheItem
         $this->data = $data;
     }
     /**
-     * @param mixed[] $properties
+     * @param array<string, mixed> $properties
      */
     public static function __set_state(array $properties): self
     {

@@ -28,7 +28,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
         return $this->implode($this->values);
     }
     /**
-     * @param mixed[] $array
+     * @param ArrayItemNode[] $array
      */
     private function implode(array $array): string
     {

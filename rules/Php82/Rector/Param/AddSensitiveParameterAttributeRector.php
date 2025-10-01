@@ -35,7 +35,7 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {

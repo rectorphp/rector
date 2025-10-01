@@ -121,7 +121,7 @@ CODE_SAMPLE
         return [Class_::class];
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {
