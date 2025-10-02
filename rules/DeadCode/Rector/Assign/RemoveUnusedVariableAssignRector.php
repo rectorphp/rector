@@ -8,13 +8,16 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeVisitor;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
@@ -168,6 +171,23 @@ CODE_SAMPLE
             if (!$stmt->expr instanceof Assign) {
                 continue;
             }
+            $this->traverseNodesWithCallable($stmt->expr->expr, function (Node $subNode) use (&$refVariableNames) {
+                if ($subNode instanceof Class_ || $subNode instanceof Function_) {
+                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
+                if (!$subNode instanceof Closure) {
+                    return null;
+                }
+                foreach ($subNode->uses as $closureUse) {
+                    if (!$closureUse->var instanceof Variable) {
+                        continue;
+                    }
+                    if (!$closureUse->byRef) {
+                        continue;
+                    }
+                    $refVariableNames[] = (string) $this->getName($closureUse->var);
+                }
+            });
             $assign = $stmt->expr;
             if (!$assign->var instanceof Variable) {
                 continue;
