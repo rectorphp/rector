@@ -121,7 +121,7 @@ final class EregToPcreTransformer
                 $r[$rr] .= '[' . $cls . ']';
             } elseif ($char === ')') {
                 break;
-            } elseif ($char === '*' || $char === '+' || $char === '?') {
+            } elseif (in_array($char, ['*', '+', '?'], \true)) {
                 throw new InvalidEregException('unescaped metacharacter "' . $char . '"');
             } elseif ($char === '{') {
                 if ($i + 1 < $l && strpos('0123456789', $content[$i + 1]) !== \false) {
@@ -158,7 +158,7 @@ final class EregToPcreTransformer
             }
             // piece after the atom (only ONE of them is possible)
             $char = $content[$i];
-            if ($char === '*' || $char === '+' || $char === '?') {
+            if (in_array($char, ['*', '+', '?'], \true)) {
                 $r[$rr] .= $char;
                 ++$i;
             } elseif ($char === '{') {
