@@ -204,7 +204,7 @@ CODE_SAMPLE
         if ($node instanceof AssignOpCoalesce) {
             $nodeToCheck = $node->var;
         }
-        if ($this->isMethodCallOrArrayDimFetch($paramName, $nodeToCheck)) {
+        if ($this->isMethodCall($paramName, $nodeToCheck)) {
             return \true;
         }
         if ($nodeToCheck instanceof Variable && $this->isName($nodeToCheck, $paramName)) {
@@ -249,12 +249,9 @@ CODE_SAMPLE
         }
         return $node instanceof Array_ && $node->expr instanceof Variable && $this->isName($node->expr, $paramName);
     }
-    private function isMethodCallOrArrayDimFetch(string $paramName, ?Node $node): bool
+    private function isMethodCall(string $paramName, ?Node $node): bool
     {
         if ($node instanceof MethodCall) {
-            return $node->var instanceof Variable && $this->isName($node->var, $paramName);
-        }
-        if ($node instanceof ArrayDimFetch) {
             return $node->var instanceof Variable && $this->isName($node->var, $paramName);
         }
         return \false;
