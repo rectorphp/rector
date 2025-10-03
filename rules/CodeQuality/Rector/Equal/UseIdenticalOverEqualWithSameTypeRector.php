@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\MixedType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -70,7 +71,7 @@ CODE_SAMPLE
             return $this->processIdenticalOrNotIdentical($node);
         }
         // different types
-        if (!$leftStaticType->equals($rightStaticType)) {
+        if (!$leftStaticType->equals($rightStaticType) && (!$leftStaticType instanceof BooleanType && !$rightStaticType instanceof BooleanType)) {
             return null;
         }
         return $this->processIdenticalOrNotIdentical($node);
