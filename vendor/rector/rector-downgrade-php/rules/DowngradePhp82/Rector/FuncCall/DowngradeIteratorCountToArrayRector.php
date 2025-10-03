@@ -64,7 +64,7 @@ CODE_SAMPLE
     }
     /**
      * @param Ternary|FuncCall $node
-     * @return null|\PhpParser\Node\Expr\FuncCall|int
+     * @return null|FuncCall|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
     public function refactor(Node $node)
     {
