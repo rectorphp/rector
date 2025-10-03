@@ -23,7 +23,7 @@ final class UsefulArrayTagNodeAnalyzer
         if (!$type instanceof IdentifierTypeNode) {
             return !$this->isMixedArray($type);
         }
-        return !in_array($type->name, ['array', 'mixed'], \true);
+        return !in_array($type->name, ['array', 'mixed', 'iterable'], \true);
     }
     public function isMixedArray(TypeNode $typeNode): bool
     {
