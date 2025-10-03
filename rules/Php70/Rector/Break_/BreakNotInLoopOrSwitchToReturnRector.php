@@ -77,7 +77,7 @@ CODE_SAMPLE
     }
     /**
      * @param Switch_|Break_ $node
-     * @return \PhpParser\Node\Stmt\Return_|null|int
+     * @return Return_|null|NodeVisitor::REMOVE_NODE
      */
     public function refactor(Node $node)
     {

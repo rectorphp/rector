@@ -78,7 +78,7 @@ CODE_SAMPLE
     }
     /**
      * @param FuncCall|Expression|Assign|ArrayItem|Node\Arg $node
-     * @return null|int|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\Cast
+     * @return null|NodeVisitor::DONT_TRAVERSE_CHILDREN|Expression|Assign|Cast
      */
     public function refactor(Node $node)
     {

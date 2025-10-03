@@ -90,7 +90,7 @@ CODE_SAMPLE
     }
     /**
      * @param Property|ClassConst|Array_ $node
-     * @return int|null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
+     * @return StaticCall|MethodCall|null|NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN
      */
     public function refactor(Node $node)
     {

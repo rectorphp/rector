@@ -46,7 +46,7 @@ CODE_SAMPLE
     }
     /**
      * @param Unset_|Assign|Expression $node
-     * @return int|null|\PhpParser\Node
+     * @return NodeVisitor::REMOVE_NODE|Node|null
      */
     public function refactor(Node $node)
     {

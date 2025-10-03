@@ -142,7 +142,7 @@ CODE_SAMPLE;
             $this->kaizenStepper->recordAppliedRule(static::class);
         }
         if ($isIntRefactoredNode) {
-            // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
+            // @see NodeVisitor::* codes, e.g. removal of node of stopping the traversing
             if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
                 // log here, so we can remove the node in leaveNode() method
                 $this->toBeRemovedNodeId = spl_object_id($originalNode);

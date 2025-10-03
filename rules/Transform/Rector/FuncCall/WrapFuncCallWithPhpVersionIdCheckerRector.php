@@ -53,7 +53,7 @@ CODE_SAMPLE
     }
     /**
      * @param StmtsAwareInterface $node
-     * @return null|\PhpParser\Node|int
+     * @return null|Node|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
     public function refactor(Node $node)
     {

@@ -84,7 +84,7 @@ CODE_SAMPLE
     }
     /**
      * @param String_|FuncCall|ClassConst $node
-     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Expr\ClassConstFetch|null|int
+     * @return Concat|ClassConstFetch|null|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
     public function refactor(Node $node)
     {
