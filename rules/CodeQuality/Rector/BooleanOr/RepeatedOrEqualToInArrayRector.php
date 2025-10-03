@@ -135,7 +135,9 @@ CODE_SAMPLE
             if (!$this->isEqualOrIdentical($currentBooleanOr->left->right)) {
                 return null;
             }
-            $comparedExprAndValueExprs[] = $this->matchComparedExprAndValueExpr($currentBooleanOr->left->right);
+            /** @var Identical|Equal $leftRight */
+            $leftRight = $currentBooleanOr->left->right;
+            $comparedExprAndValueExprs[] = $this->matchComparedExprAndValueExpr($leftRight);
             $currentBooleanOr = $currentBooleanOr->left;
         }
         if (!$this->isEqualOrIdentical($currentBooleanOr->left)) {
