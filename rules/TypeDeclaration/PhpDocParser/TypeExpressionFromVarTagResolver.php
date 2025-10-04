@@ -98,7 +98,7 @@ final class TypeExpressionFromVarTagResolver
     private function generateOrExpression(array $unionExpressions)
     {
         $booleanOr = new BooleanOr($unionExpressions[0], $unionExpressions[1]);
-        if (count($unionExpressions) == 2) {
+        if (count($unionExpressions) === 2) {
             return $booleanOr;
         }
         array_splice($unionExpressions, 0, 2, [$booleanOr]);
@@ -111,7 +111,7 @@ final class TypeExpressionFromVarTagResolver
     private function generateAndExpression(array $intersectionExpressions)
     {
         $booleanAnd = new BooleanAnd($intersectionExpressions[0], $intersectionExpressions[1]);
-        if (count($intersectionExpressions) == 2) {
+        if (count($intersectionExpressions) === 2) {
             return $booleanAnd;
         }
         array_splice($intersectionExpressions, 0, 2, [$booleanAnd]);

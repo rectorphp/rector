@@ -45,7 +45,7 @@ final class OnlyRuleResolver
             }
         }
         $matching = array_unique($matching);
-        if (count($matching) == 1) {
+        if (count($matching) === 1) {
             return $matching[0];
         }
         if (count($matching) > 1) {
