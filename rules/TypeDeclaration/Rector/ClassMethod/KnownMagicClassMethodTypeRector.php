@@ -73,7 +73,7 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
-                return null;
+                continue;
             }
             if ($this->isNames($classMethod, [MethodName::CALL, MethodName::CALL_STATIC])) {
                 $secondParam = $classMethod->getParams()[1];
