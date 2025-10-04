@@ -51,6 +51,10 @@ final class MethodName
     /**
      * @var string
      */
+    public const CALL_STATIC = '__callStatic';
+    /**
+     * @var string
+     */
     public const TO_STRING = '__toString';
     /**
      * @var string
@@ -60,4 +64,8 @@ final class MethodName
      * @var string
      */
     public const ISSET = '__isset';
+    /**
+     * @var string
+     */
+    public const UNSET = '__unset';
 }
