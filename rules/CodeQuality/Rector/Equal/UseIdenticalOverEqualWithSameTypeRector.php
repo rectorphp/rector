@@ -15,6 +15,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,7 +66,7 @@ CODE_SAMPLE
         $leftStaticType = $this->nodeTypeResolver->getNativeType($node->left);
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
         // objects can be different by content
-        if (!$leftStaticType->isObject()->no() || !$rightStaticType->isObject()->no()) {
+        if ($this->hasObjectType($leftStaticType) || $this->hasObjectType($rightStaticType)) {
             return null;
         }
         if ($leftStaticType instanceof MixedType || $rightStaticType instanceof MixedType) {
@@ -77,6 +78,18 @@ CODE_SAMPLE
             return null;
         }
         return $this->processIdenticalOrNotIdentical($node);
+    }
+    private function hasObjectType(Type $type): bool
+    {
+        $hasObjecType = \false;
+        TypeTraverser::map($type, function (Type $type, callable $traverseCallback) use (&$hasObjecType): Type {
+            // maybe has object type? mark as object type
+            if (!$type->isObject()->no()) {
+                $hasObjecType = \true;
+            }
+            return $traverseCallback($type);
+        });
+        return $hasObjecType;
     }
     private function normalizeScalarType(Type $type): Type
     {
