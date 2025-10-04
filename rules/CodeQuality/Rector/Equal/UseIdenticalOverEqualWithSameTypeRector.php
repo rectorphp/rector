@@ -9,9 +9,8 @@ use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,6 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private TypeComparator $typeComparator;
+    public function __construct(TypeComparator $typeComparator)
+    {
+        $this->typeComparator = $typeComparator;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use ===/!== over ==/!=, it values have the same type', [new CodeSample(<<<'CODE_SAMPLE'
@@ -61,9 +68,6 @@ CODE_SAMPLE
         }
         $leftStaticType = $this->nodeTypeResolver->getNativeType($node->left);
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
-        if ($this->shouldSkipCompareBoolToNumeric($leftStaticType, $rightStaticType)) {
-            return null;
-        }
         // objects can be different by content
         if (!$leftStaticType->isObject()->no() || !$rightStaticType->isObject()->no()) {
             return null;
@@ -75,31 +79,10 @@ CODE_SAMPLE
             return $this->processIdenticalOrNotIdentical($node);
         }
         // different types
-        if (!$leftStaticType->equals($rightStaticType) && (!$leftStaticType instanceof BooleanType && !$rightStaticType instanceof BooleanType)) {
+        if (!$this->typeComparator->areTypesEqual($leftStaticType, $rightStaticType)) {
             return null;
         }
         return $this->processIdenticalOrNotIdentical($node);
-    }
-    private function shouldSkipCompareBoolToNumeric(Type $leftStaticType, Type $rightStaticType): bool
-    {
-        if ($leftStaticType instanceof BooleanType) {
-            return $this->shouldSkipNumericType($rightStaticType);
-        }
-        if ($rightStaticType instanceof BooleanType) {
-            return $this->shouldSkipNumericType($leftStaticType);
-        }
-        return \false;
-    }
-    private function shouldSkipNumericType(Type $type): bool
-    {
-        // use ! ->no() as to verify both yes and maybe
-        if (!$type->isNumericString()->no()) {
-            return \true;
-        }
-        if (!$type->isInteger()->no()) {
-            return \true;
-        }
-        return !$type->isFloat()->no();
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $node
