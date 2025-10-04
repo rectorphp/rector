@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PHPStan\Type\MixedType;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,14 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
 {
-    /**
-     * @readonly
-     */
-    private TypeComparator $typeComparator;
-    public function __construct(TypeComparator $typeComparator)
-    {
-        $this->typeComparator = $typeComparator;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use ===/!== over ==/!=, it values have the same type', [new CodeSample(<<<'CODE_SAMPLE'
@@ -78,8 +69,11 @@ CODE_SAMPLE
         if ($leftStaticType->isString()->yes() && $rightStaticType->isString()->yes()) {
             return $this->processIdenticalOrNotIdentical($node);
         }
+        if ($leftStaticType->isBoolean()->yes() && $rightStaticType->isBoolean()->yes()) {
+            return $this->processIdenticalOrNotIdentical($node);
+        }
         // different types
-        if (!$this->typeComparator->areTypesEqual($leftStaticType, $rightStaticType)) {
+        if (!$leftStaticType->equals($rightStaticType)) {
             return null;
         }
         return $this->processIdenticalOrNotIdentical($node);
