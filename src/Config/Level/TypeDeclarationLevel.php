@@ -22,6 +22,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeFromTryCatchTypeRecto
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\KnownMagicClassMethodTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
@@ -103,6 +104,8 @@ final class TypeDeclarationLevel
         AddReturnTypeFromTryCatchTypeRector::class,
         ReturnTypeFromStrictTypedCallRector::class,
         ChildDoctrineRepositoryClassTypeRector::class,
+        // php native types
+        KnownMagicClassMethodTypeRector::class,
         // param
         AddMethodCallBasedStrictParamTypeRector::class,
         ParamTypeByParentCallTypeRector::class,
