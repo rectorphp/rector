@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,6 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class KnownMagicClassMethodTypeRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    {
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add known magic methods parameter and return type declarations', [new CodeSample(<<<'CODE_SAMPLE'
@@ -55,17 +64,21 @@ CODE_SAMPLE
             if (!$classMethod->isMagic()) {
                 continue;
             }
-            if ($this->isName($classMethod, MethodName::CALL)) {
-                $firstParam = $classMethod->getParams()[0];
-                if (!$firstParam->type instanceof Node) {
-                    $firstParam->type = new Identifier('string');
-                    $hasChanged = \true;
-                }
-                $secondParam = $classMethod->getParams()[1];
-                if (!$secondParam->type instanceof Node) {
-                    $secondParam->type = new Name('array');
-                    $hasChanged = \true;
-                }
+            if (!$this->isName($classMethod, MethodName::CALL)) {
+                continue;
+            }
+            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
+                return null;
+            }
+            $firstParam = $classMethod->getParams()[0];
+            if (!$firstParam->type instanceof Node) {
+                $firstParam->type = new Identifier('string');
+                $hasChanged = \true;
+            }
+            $secondParam = $classMethod->getParams()[1];
+            if (!$secondParam->type instanceof Node) {
+                $secondParam->type = new Name('array');
+                $hasChanged = \true;
             }
         }
         if ($hasChanged) {
