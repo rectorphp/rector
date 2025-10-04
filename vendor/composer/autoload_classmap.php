@@ -2736,6 +2736,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => $baseDir . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamArrayDocblockBasedOnCallableNativeFuncCallRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamFromDimFetchKeyUseRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamFromDimFetchKeyUseRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',

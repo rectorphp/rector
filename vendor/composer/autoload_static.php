@@ -2984,6 +2984,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamArrayDocblockBasedOnCallableNativeFuncCallRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamFromDimFetchKeyUseRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamFromDimFetchKeyUseRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromPropertyTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php',

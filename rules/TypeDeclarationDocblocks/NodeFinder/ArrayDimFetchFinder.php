@@ -61,4 +61,17 @@ final class ArrayDimFetchFinder
             return $this->nodeNameResolver->isName($arrayDimFetch->var, $variableName);
         });
     }
+    /**
+     * @return ArrayDimFetch[]
+     */
+    public function findByDimName(ClassMethod $classMethod, string $dimName): array
+    {
+        $dimFetches = $this->betterNodeFinder->findInstancesOfScoped([$classMethod], ArrayDimFetch::class);
+        return array_filter($dimFetches, function (ArrayDimFetch $arrayDimFetch) use ($dimName): bool {
+            if (!$arrayDimFetch->dim instanceof Variable) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($arrayDimFetch->dim, $dimName);
+        });
+    }
 }
