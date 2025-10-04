@@ -61,7 +61,7 @@ CODE_SAMPLE
         }
         $leftStaticType = $this->nodeTypeResolver->getNativeType($node->left);
         $rightStaticType = $this->nodeTypeResolver->getNativeType($node->right);
-        if ($this->shouldSkipCompareNumericString($leftStaticType, $rightStaticType)) {
+        if ($this->shouldSkipCompareBoolToNumeric($leftStaticType, $rightStaticType)) {
             return null;
         }
         // objects can be different by content
@@ -80,14 +80,20 @@ CODE_SAMPLE
         }
         return $this->processIdenticalOrNotIdentical($node);
     }
-    private function shouldSkipCompareNumericString(Type $leftStaticType, Type $rightStaticType): bool
+    private function shouldSkipCompareBoolToNumeric(Type $leftStaticType, Type $rightStaticType): bool
     {
-        // use ! ->no() as to support both yes and maybe
+        // use ! ->no() as to verify both yes and maybe
         if ($leftStaticType instanceof BooleanType) {
-            return !$rightStaticType->isNumericString()->no();
+            if (!$rightStaticType->isNumericString()->no()) {
+                return \true;
+            }
+            return !$rightStaticType->isInteger()->no();
         }
         if ($rightStaticType instanceof BooleanType) {
-            return !$leftStaticType->isNumericString()->no();
+            if (!$leftStaticType->isNumericString()->no()) {
+                return \true;
+            }
+            return !$leftStaticType->isInteger()->no();
         }
         return \false;
     }
