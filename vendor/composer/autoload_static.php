@@ -1624,6 +1624,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
         'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
+        'Rector\\DeadCode\\Rector\\Concat\\RemoveUnusedClosureVariableUseRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Concat/RemoveUnusedClosureVariableUseRector.php',
         'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
         'Rector\\DeadCode\\Rector\\Expression\\RemoveDeadStmtRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php',
         'Rector\\DeadCode\\Rector\\Expression\\SimplifyMirrorAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php',
