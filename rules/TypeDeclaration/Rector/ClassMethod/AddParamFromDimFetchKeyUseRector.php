@@ -11,6 +11,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,10 +27,15 @@ final class AddParamFromDimFetchKeyUseRector extends AbstractRector
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(ArrayDimFetchFinder $arrayDimFetchFinder, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(ArrayDimFetchFinder $arrayDimFetchFinder, StaticTypeMapper $staticTypeMapper, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->arrayDimFetchFinder = $arrayDimFetchFinder;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -78,6 +84,9 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->params === []) {
+                continue;
+            }
+            if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
                 continue;
             }
             foreach ($classMethod->getParams() as $param) {
