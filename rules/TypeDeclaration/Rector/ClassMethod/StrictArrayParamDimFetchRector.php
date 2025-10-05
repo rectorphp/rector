@@ -126,11 +126,11 @@ CODE_SAMPLE
         }
         $paramName = $this->getName($param);
         $isParamAccessedArrayDimFetch = \false;
-        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use ($param, $paramName, &$isParamAccessedArrayDimFetch): ?int {
+        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use ($paramName, &$isParamAccessedArrayDimFetch): ?int {
             if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($this->shouldStop($node, $param, $paramName)) {
+            if ($this->shouldStop($node, $paramName)) {
                 // force set to false to avoid too early replaced
                 $isParamAccessedArrayDimFetch = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
@@ -185,12 +185,9 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldStop(Node $node, Param $param, string $paramName): bool
+    private function shouldStop(Node $node, string $paramName): bool
     {
         $nodeToCheck = null;
-        if (!$param->default instanceof Expr && ($node instanceof Empty_ && $node->expr instanceof ArrayDimFetch && $node->expr->var instanceof Variable && $node->expr->var->name === $paramName)) {
-            return \true;
-        }
         if ($node instanceof FuncCall && !$node->isFirstClassCallable() && $this->isNames($node, ['is_array', 'is_string', 'is_int', 'is_bool', 'is_float'])) {
             $firstArg = $node->getArgs()[0];
             $nodeToCheck = $firstArg->value;
