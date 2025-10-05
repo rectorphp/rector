@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\Concat;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,9 +19,14 @@ final class RemoveUnusedClosureVariableUseRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -62,7 +68,7 @@ CODE_SAMPLE
             if (!is_string($useVariableName)) {
                 continue;
             }
-            $isUseUsed = (bool) $this->betterNodeFinder->findVariableOfName($node->stmts, $useVariableName);
+            $isUseUsed = (bool) $this->betterNodeFinder->findFirst($node->stmts, fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $useVariable->var));
             if ($isUseUsed) {
                 continue;
             }
