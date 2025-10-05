@@ -85,6 +85,10 @@ CODE_SAMPLE
         if ($firstArgValue instanceof Array_) {
             return $this->createMethodCall($firstArgValue, $secondArgValue);
         }
+        if ($firstArgValue instanceof MethodCall && $firstArgValue->isFirstClassCallable()) {
+            $firstArgValue->args = [$this->createUnpackedArg($secondArgValue)];
+            return $firstArgValue;
+        }
         return null;
     }
     public function provideMinPhpVersion(): int
