@@ -76,8 +76,6 @@ CODE_SAMPLE
             $hasChanged = \true;
         }
         if ($hasChanged) {
-            // reset keys, to keep as expected
-            $node->uses = array_values($node->uses);
             return $node;
         }
         return null;
