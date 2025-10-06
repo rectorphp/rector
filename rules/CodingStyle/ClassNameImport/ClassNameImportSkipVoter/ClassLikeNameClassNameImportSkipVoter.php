@@ -45,8 +45,12 @@ final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkip
         $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
         $namespace = strtolower((string) $namespace);
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
-        $subClassName = substr($fullyQualifiedObjectType->getClassName(), 0, -strlen($fullyQualifiedObjectType->getShortName()) - 1);
-        $fullyQualifiedObjectTypeNamespace = strtolower((string) $subClassName);
+        /**
+         * on php 7.x, substr() result can return false, so force (string) is needed
+         * @see https://github.com/rectorphp/rector-src/pull/7436
+         */
+        $subClassName = (string) substr($fullyQualifiedObjectType->getClassName(), 0, -strlen($fullyQualifiedObjectType->getShortName()) - 1);
+        $fullyQualifiedObjectTypeNamespace = strtolower($subClassName);
         foreach ($classLikeNames as $classLikeName) {
             if (strtolower($classLikeName) !== $shortNameLowered) {
                 continue;
