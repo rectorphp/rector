@@ -22,10 +22,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -43,7 +47,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Enum\ObjectReference;
-use Rector\Exception\NotImplementedYetException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeDecorator\PropertyTypeDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -346,7 +349,7 @@ final class NodeFactory
     private function createArrayItem($item, $key = null): ArrayItem
     {
         $arrayItem = null;
-        if ($item instanceof Variable || $item instanceof MethodCall || $item instanceof StaticCall || $item instanceof FuncCall || $item instanceof Concat || $item instanceof Scalar || $item instanceof Cast || $item instanceof ConstFetch) {
+        if ($item instanceof Variable || $item instanceof MethodCall || $item instanceof StaticCall || $item instanceof FuncCall || $item instanceof Concat || $item instanceof Scalar || $item instanceof Cast || $item instanceof ConstFetch || $item instanceof PropertyFetch || $item instanceof StaticPropertyFetch || $item instanceof NullsafePropertyFetch || $item instanceof NullsafeMethodCall || $item instanceof Clone_ || $item instanceof Instanceof_) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
             $string = new String_($item->toString());
@@ -376,8 +379,16 @@ final class NodeFactory
             $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
-        $nodeClass = is_object($item) ? get_class($item) : $item;
-        throw new NotImplementedYetException(sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
+        // fallback to other nodes
+        if ($item instanceof Expr) {
+            $arrayItem = new ArrayItem($item);
+            $this->decorateArrayItemWithKey($key, $arrayItem);
+            return $arrayItem;
+        }
+        $itemValue = BuilderHelpers::normalizeValue($item);
+        $arrayItem = new ArrayItem($itemValue);
+        $this->decorateArrayItemWithKey($key, $arrayItem);
+        return $arrayItem;
     }
     /**
      * @param int|string|null $key
