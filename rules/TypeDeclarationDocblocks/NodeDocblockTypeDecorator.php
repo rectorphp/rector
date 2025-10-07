@@ -5,7 +5,6 @@ namespace Rector\TypeDeclarationDocblocks;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -39,7 +38,7 @@ final class NodeDocblockTypeDecorator
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, ClassMethod $classMethod, Param $param, string $parameterName): bool
+    public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, FunctionLike $functionLike, Param $param, string $parameterName): bool
     {
         if ($this->isBareMixedType($type)) {
             // no value
@@ -50,7 +49,7 @@ final class NodeDocblockTypeDecorator
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        $this->phpDocTypeChanger->changeParamTypeNode($classMethod, $phpDocInfo, $param, $parameterName, $typeNode);
+        $this->phpDocTypeChanger->changeParamTypeNode($functionLike, $phpDocInfo, $param, $parameterName, $typeNode);
         return \true;
     }
     public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
