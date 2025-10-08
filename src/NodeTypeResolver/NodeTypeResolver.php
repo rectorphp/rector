@@ -38,6 +38,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -54,9 +55,11 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyArrayTypeCorrecto
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
+use Rector\Php\PhpVersionProvider;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
+use Rector\ValueObject\PhpVersion;
 final class NodeTypeResolver
 {
     /**
@@ -92,6 +95,10 @@ final class NodeTypeResolver
      */
     private NodeNameResolver $nodeNameResolver;
     /**
+     * @readonly
+     */
+    private PhpVersionProvider $phpVersionProvider;
+    /**
      * @var string
      */
     private const ERROR_MESSAGE = '%s itself does not have any type. Check the %s node instead';
@@ -102,7 +109,7 @@ final class NodeTypeResolver
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, AccessoryNonEmptyArrayTypeCorrector $accessoryNonEmptyArrayTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, iterable $nodeTypeResolvers)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, AccessoryNonEmptyArrayTypeCorrector $accessoryNonEmptyArrayTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, iterable $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
@@ -112,6 +119,7 @@ final class NodeTypeResolver
         $this->accessoryNonEmptyArrayTypeCorrector = $accessoryNonEmptyArrayTypeCorrector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpVersionProvider = $phpVersionProvider;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
             if ($nodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
                 $nodeTypeResolver->autowire($this);
@@ -527,6 +535,9 @@ final class NodeTypeResolver
             if (!$functionReflection instanceof NativeFunctionReflection) {
                 return $scope->getNativeType($expr);
             }
+            if ($this->isSubstrOnPHP74($expr)) {
+                return new UnionType([new StringType(), new ConstantBooleanType(\false)]);
+            }
             return $scope->getType($expr);
         }
         return $scope->getNativeType($expr);
@@ -553,5 +564,18 @@ final class NodeTypeResolver
             return \false;
         }
         return $classReflection->getName() === $objectType->getClassName();
+    }
+    /**
+     * substr can return false on php 7.x and bellow
+     */
+    private function isSubstrOnPHP74(FuncCall $funcCall): bool
+    {
+        if ($funcCall->isFirstClassCallable()) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($funcCall, 'substr')) {
+            return \false;
+        }
+        return !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_80);
     }
 }
