@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use Rector\CodingStyle\ClassNameImport\NamespaceBeforeClassNameResolver;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -25,9 +26,14 @@ final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkip
      * @readonly
      */
     private ShortNameResolver $shortNameResolver;
-    public function __construct(ShortNameResolver $shortNameResolver)
+    /**
+     * @readonly
+     */
+    private NamespaceBeforeClassNameResolver $namespaceBeforeClassNameResolver;
+    public function __construct(ShortNameResolver $shortNameResolver, NamespaceBeforeClassNameResolver $namespaceBeforeClassNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
+        $this->namespaceBeforeClassNameResolver = $namespaceBeforeClassNameResolver;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
@@ -45,7 +51,7 @@ final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkip
         $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
         $namespace = strtolower((string) $namespace);
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
-        $subClassName = substr($fullyQualifiedObjectType->getClassName(), 0, -strlen($fullyQualifiedObjectType->getShortName()) - 1);
+        $subClassName = $this->namespaceBeforeClassNameResolver->resolve($fullyQualifiedObjectType);
         $fullyQualifiedObjectTypeNamespace = strtolower($subClassName);
         foreach ($classLikeNames as $classLikeName) {
             if (strtolower($classLikeName) !== $shortNameLowered) {

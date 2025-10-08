@@ -1490,6 +1490,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ShortClassImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ShortClassImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\UsesClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/UsesClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipper' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipper.php',
+        'Rector\\CodingStyle\\ClassNameImport\\NamespaceBeforeClassNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/NamespaceBeforeClassNameResolver.php',
         'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',
         'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
         'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',

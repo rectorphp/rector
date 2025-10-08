@@ -1242,6 +1242,7 @@ return array(
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ShortClassImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ShortClassImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\UsesClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/UsesClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipper' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipper.php',
+    'Rector\\CodingStyle\\ClassNameImport\\NamespaceBeforeClassNameResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/NamespaceBeforeClassNameResolver.php',
     'Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/ShortNameResolver.php',
     'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => $baseDir . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
     'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
