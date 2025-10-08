@@ -12,12 +12,14 @@ use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -95,6 +97,10 @@ CODE_SAMPLE
         $nodeType = $this->nodeTypeResolver->getNativeType($node->expr);
         if ($nodeType instanceof MixedType) {
             return null;
+        }
+        // substr can return false on php 7.x
+        if ($node->expr instanceof FuncCall && $this->isName($node->expr, 'substr') && !$node->expr->isFirstClassCallable()) {
+            $nodeType = new UnionType([new StringType(), new ConstantBooleanType(\false)]);
         }
         if ($nodeType instanceof ConstantArrayType && $nodeClass === Array_::class) {
             if ($this->shouldSkip($node->expr)) {

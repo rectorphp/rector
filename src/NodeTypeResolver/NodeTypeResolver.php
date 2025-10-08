@@ -38,7 +38,6 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -527,10 +526,6 @@ final class NodeTypeResolver
             $functionReflection = $this->reflectionProvider->getFunction($functionName, null);
             if (!$functionReflection instanceof NativeFunctionReflection) {
                 return $scope->getNativeType($expr);
-            }
-            // substr can return false on php 7.x
-            if ($this->nodeNameResolver->isName($expr, 'substr') && !$expr->isFirstClassCallable()) {
-                return new UnionType([new StringType(), new ConstantBooleanType(\false)]);
             }
             return $scope->getType($expr);
         }
