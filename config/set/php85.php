@@ -17,6 +17,7 @@ use Rector\Php85\Rector\FuncCall\ArrayKeyExistsNullToEmptyStringRector;
 use Rector\Php85\Rector\FuncCall\ChrArgModuloRector;
 use Rector\Php85\Rector\FuncCall\OrdSingleByteRector;
 use Rector\Php85\Rector\FuncCall\RemoveFinfoBufferContextArgRector;
+use Rector\Php85\Rector\ShellExec\ShellExecFunctionCallOverBackticksRector;
 use Rector\Php85\Rector\Switch_\ColonAfterSwitchCaseRector;
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
@@ -31,7 +32,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Transform\Rector\FuncCall\WrapFuncCallWithPhpVersionIdCheckerRector;
 use Rector\Transform\ValueObject\WrapFuncCallWithPhpVersionIdChecker;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class, DeprecatedAnnotationToDeprecatedAttributeRector::class, ColonAfterSwitchCaseRector::class, ArrayKeyExistsNullToEmptyStringRector::class, ChrArgModuloRector::class, SleepToSerializeRector::class, OrdSingleByteRector::class, WakeupToUnserializeRector::class]);
+    $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class, DeprecatedAnnotationToDeprecatedAttributeRector::class, ColonAfterSwitchCaseRector::class, ArrayKeyExistsNullToEmptyStringRector::class, ChrArgModuloRector::class, SleepToSerializeRector::class, OrdSingleByteRector::class, WakeupToUnserializeRector::class, ShellExecFunctionCallOverBackticksRector::class]);
     $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [
         // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_key_length_parameter_of_openssl_pkey_derive
         new RemoveFuncCallArg('openssl_pkey_derive', 2),

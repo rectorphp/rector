@@ -2447,6 +2447,7 @@ class ComposerStaticInitaec8d909b4f5341922f1774ccd2ec774
         'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\OrdSingleByteRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/OrdSingleByteRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
+        'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
         'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
