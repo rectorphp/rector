@@ -7,12 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -39,13 +41,18 @@ final class ClosureArrowFunctionAnalyzer
      * @readonly
      */
     private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ArrayChecker $arrayChecker, PhpDocInfoFactory $phpDocInfoFactory, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     */
+    private CompactFuncCallAnalyzer $compactFuncCallAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ArrayChecker $arrayChecker, PhpDocInfoFactory $phpDocInfoFactory, NodeTypeResolver $nodeTypeResolver, CompactFuncCallAnalyzer $compactFuncCallAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->arrayChecker = $arrayChecker;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
     public function matchArrowFunctionExpr(Closure $closure): ?Expr
     {
@@ -64,10 +71,31 @@ final class ClosureArrowFunctionAnalyzer
         if ($this->shouldSkipForUsedReferencedValue($closure)) {
             return null;
         }
+        if ($this->shouldSkipForUseVariableUsedByCompact($closure)) {
+            return null;
+        }
         if ($this->shouldSkipMoreSpecificTypeWithVarDoc($return, $return->expr)) {
             return null;
         }
         return $return->expr;
+    }
+    private function shouldSkipForUseVariableUsedByCompact(Closure $closure): bool
+    {
+        $variables = array_map(fn(ClosureUse $use): Variable => $use->var, $closure->uses);
+        if ($variables === []) {
+            return \false;
+        }
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (Node $node) use ($variables): bool {
+            if (!$node instanceof FuncCall) {
+                return \false;
+            }
+            foreach ($variables as $variable) {
+                if ($this->compactFuncCallAnalyzer->isInCompact($node, $variable)) {
+                    return \true;
+                }
+            }
+            return \false;
+        });
     }
     /**
      * Ensure @var doc usage with more specific type on purpose to be skipped
