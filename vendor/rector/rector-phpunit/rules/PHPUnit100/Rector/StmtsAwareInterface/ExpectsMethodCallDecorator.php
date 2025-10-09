@@ -33,8 +33,6 @@ final class ExpectsMethodCallDecorator
      * Replace $this->expects(...)
      * with
      * $expects = ...
-     *
-     * @param Expression<MethodCall> $expression
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     public function decorate(Expression $expression)
