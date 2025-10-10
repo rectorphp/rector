@@ -83,6 +83,9 @@ CODE_SAMPLE
                 return null;
             }
             $methodName = $this->getName($node->name);
+            if ($methodName === null) {
+                return null;
+            }
             $hasChanged = \true;
             return $this->nodeFactory->createStaticCall('self', $methodName, $node->getArgs());
         });

@@ -1158,7 +1158,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanOr\\RepeatedOrEqualToInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanOr/RepeatedOrEqualToInArrayRector.php',
     'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => $baseDir . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
-    'Rector\\CodeQuality\\Rector\\ClassConstFetch\\ConvertStaticPrivateConstantToSelfRector' => $baseDir . '/rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php',
+    'Rector\\CodeQuality\\Rector\\ClassConstFetch\\VariableConstFetchToClassConstFetchRector' => $baseDir . '/rules/CodeQuality/Rector/ClassConstFetch/VariableConstFetchToClassConstFetchRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\ExplicitReturnNullRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/ExplicitReturnNullRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',

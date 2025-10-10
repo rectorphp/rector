@@ -202,7 +202,11 @@ CODE_SAMPLE
                 $hasChanged = \true;
             }
             if (!$innerClosure->returnType instanceof Node) {
-                $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterTypesAndReturnType->getReturnType(), TypeKind::RETURN);
+                $returnType = $parameterTypesAndReturnType->getReturnType();
+                if (!$returnType instanceof Type) {
+                    return null;
+                }
+                $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
                 if ($returnTypeNode instanceof Node) {
                     $innerClosure->returnType = $returnTypeNode;
                     $hasChanged = \true;

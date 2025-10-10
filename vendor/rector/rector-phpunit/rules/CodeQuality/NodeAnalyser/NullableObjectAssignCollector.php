@@ -71,6 +71,9 @@ final class NullableObjectAssignCollector
             return null;
         }
         $variableName = $this->nodeNameResolver->getName($assign->var);
+        if (!is_string($variableName)) {
+            return null;
+        }
         return new VariableNameToType($variableName, $bareVariableType->getClassName());
     }
 }

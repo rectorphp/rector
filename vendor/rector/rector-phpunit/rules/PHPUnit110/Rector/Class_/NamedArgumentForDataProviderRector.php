@@ -134,7 +134,7 @@ CODE_SAMPLE
         return array_values(array_filter($dataProviderNameMapping));
     }
     /**
-     * @param list<Node\Stmt> $stmts
+     * @param array<Node\Stmt> $stmts
      * @return array<string, Array_>
      */
     public function getResolvedVariables(array $stmts): array
