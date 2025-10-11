@@ -86,6 +86,13 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($binaryOp->right, $secondVariableAndExprAssign->getVariable())) {
             return null;
         }
+        $resolveParamByRefVariables = $this->resolveParamByRefVariables($node);
+        if ($this->isNames($binaryOp->left, $resolveParamByRefVariables)) {
+            return null;
+        }
+        if ($this->isNames($binaryOp->right, $resolveParamByRefVariables)) {
+            return null;
+        }
         $binaryOp->left = $firstVariableAndExprAssign->getExpr();
         $binaryOp->right = $secondVariableAndExprAssign->getExpr();
         $node->stmts = [$thirdStmt];
@@ -94,6 +101,28 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VARIADIC_PARAM;
+    }
+    /**
+     * @return string[]
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function resolveParamByRefVariables($node): array
+    {
+        $paramByRefVariables = [];
+        foreach ($node->params as $param) {
+            if (!$param->var instanceof Variable) {
+                continue;
+            }
+            if (!$param->byRef) {
+                continue;
+            }
+            $paramName = $this->getName($param->var);
+            if ($paramName === null) {
+                continue;
+            }
+            $paramByRefVariables[] = $paramName;
+        }
+        return $paramByRefVariables;
     }
     private function matchToVariableAssignExpr(Stmt $stmt): ?VariableAndExprAssign
     {
