@@ -118,6 +118,15 @@ CODE_SAMPLE
                 $extractValues = array_merge($extractValues, array_keys($appendExtractValues));
                 continue;
             }
+            if ($stmt instanceof Static_) {
+                foreach ($stmt->vars as $staticVar) {
+                    $staticVarName = $this->getName($staticVar->var);
+                    if ($staticVarName === null) {
+                        continue;
+                    }
+                    $extractValues[] = $staticVarName;
+                }
+            }
             if ($this->shouldSkip($node, $key, $stmt, $extractValues)) {
                 continue;
             }
