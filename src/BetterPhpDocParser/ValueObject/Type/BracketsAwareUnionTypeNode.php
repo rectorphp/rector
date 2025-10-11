@@ -25,11 +25,17 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
      */
     public function __toString(): string
     {
-        $this->types = array_unique($this->types, \SORT_REGULAR);
-        if (!$this->isWrappedInBrackets) {
-            return implode('|', $this->types);
+        $types = [];
+        // get the actual strings first before array_unique
+        // to avoid similar object but different printing to be treated as unique
+        foreach ($this->types as $type) {
+            $types[] = (string) $type;
         }
-        return '(' . implode('|', $this->types) . ')';
+        $types = array_unique($types);
+        if (!$this->isWrappedInBrackets) {
+            return implode('|', $types);
+        }
+        return '(' . implode('|', $types) . ')';
     }
     public function isWrappedInBrackets(): bool
     {
