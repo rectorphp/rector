@@ -108,7 +108,7 @@ CODE_SAMPLE
             return null;
         }
         // skip complex cases
-        if ($assign->expr instanceof MethodCall) {
+        if ($assign->expr instanceof MethodCall && $assign->expr->args !== []) {
             return null;
         }
         return new VariableAndExprAssign($assign->var, $assign->expr);
