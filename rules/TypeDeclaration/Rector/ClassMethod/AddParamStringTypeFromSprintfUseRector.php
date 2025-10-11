@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\VariableInSprintfMaskMatcher;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,9 +21,14 @@ final class AddParamStringTypeFromSprintfUseRector extends AbstractRector
      * @readonly
      */
     private VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher;
-    public function __construct(VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->variableInSprintfMaskMatcher = $variableInSprintfMaskMatcher;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -63,6 +69,9 @@ CODE_SAMPLE
             return null;
         }
         if ($node->getParams() === []) {
+            return null;
+        }
+        if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
             return null;
         }
         $hasChanged = \false;
