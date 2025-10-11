@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Rector\AbstractRector;

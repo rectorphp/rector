@@ -16,8 +16,4 @@ final class CacheKey
      * @var string
      */
     public const FILE_HASH_KEY = 'file_hash';
-    /**
-     * @var string
-     */
-    public const KAIZEN_RULES = 'kaizen_rules';
 }

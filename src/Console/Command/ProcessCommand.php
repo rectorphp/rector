@@ -127,10 +127,6 @@ EOF
             return self::SUCCESS;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
-        if ($configuration->isKaizenEnabled()) {
-            $this->symfonyStyle->writeln(sprintf('<fg=yellow>[EXPERIMENTAL] Running Kaizen mode. Only first %d rule%s will be applied</>', $configuration->getKaizenStepCount(), $configuration->getKaizenStepCount() > 1 ? 's' : ''));
-            $this->symfonyStyle->newLine(1);
-        }
         $this->memoryLimiter->adjust($configuration);
         $this->configurationRuleFilter->setConfiguration($configuration);
         // disable console output in case of json output formatter

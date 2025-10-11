@@ -23,7 +23,6 @@ use Rector\Application\NodeAttributeReIndexer;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Configuration\KaizenStepper;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
@@ -67,8 +66,7 @@ CODE_SAMPLE;
     private array $nodesToReturn = [];
     private CreatedByRuleDecorator $createdByRuleDecorator;
     private ?int $toBeRemovedNodeId = null;
-    private KaizenStepper $kaizenStepper;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, KaizenStepper $kaizenStepper): void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -79,7 +77,6 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
-        $this->kaizenStepper = $kaizenStepper;
     }
     /**
      * @return Node[]|null
@@ -103,10 +100,6 @@ CODE_SAMPLE;
             return null;
         }
         if (is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
-            return null;
-        }
-        // should keep improving?
-        if ($this->kaizenStepper->enabled() && !$this->kaizenStepper->shouldKeepImproving(static::class)) {
             return null;
         }
         $filePath = $this->file->getFilePath();
@@ -136,10 +129,6 @@ CODE_SAMPLE;
                 $this->decorateCurrentAndChildren($node);
                 return null;
             }
-        }
-        // take it step by step
-        if ($this->kaizenStepper->enabled()) {
-            $this->kaizenStepper->recordAppliedRule(static::class);
         }
         if ($isIntRefactoredNode) {
             // @see NodeVisitor::* codes, e.g. removal of node of stopping the traversing

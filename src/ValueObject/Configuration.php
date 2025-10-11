@@ -81,17 +81,11 @@ final class Configuration
      */
     private array $levelOverflows = [];
     /**
-     * @var positive-int|null
-     * @readonly
-     */
-    private ?int $kaizenStepCount = null;
-    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param LevelOverflow[] $levelOverflows
-     * @param positive-int|null $kaizenStepCount
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], ?int $kaizenStepCount = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [])
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -109,10 +103,6 @@ final class Configuration
         $this->onlyRule = $onlyRule;
         $this->onlySuffix = $onlySuffix;
         $this->levelOverflows = $levelOverflows;
-        $this->kaizenStepCount = $kaizenStepCount;
-        if (is_int($kaizenStepCount)) {
-            Assert::positiveInteger($kaizenStepCount, 'Change "--kaizen" value to a positive integer');
-        }
     }
     public function isDryRun(): bool
     {
@@ -197,17 +187,5 @@ final class Configuration
         $setRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::SET_REGISTERED_RULES);
         $ruleDuplicatedRegistrations = array_intersect($rootStandaloneRegisteredRules, $setRegisteredRules);
         return array_unique($ruleDuplicatedRegistrations);
-    }
-    /**
-     * @return positive-int
-     */
-    public function getKaizenStepCount(): int
-    {
-        Assert::notNull($this->kaizenStepCount);
-        return $this->kaizenStepCount;
-    }
-    public function isKaizenEnabled(): bool
-    {
-        return $this->kaizenStepCount !== null;
     }
 }

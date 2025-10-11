@@ -8,7 +8,6 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202510\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202510\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
  */
@@ -44,11 +43,6 @@ final class ConfigurationFactory
         $isDryRun = (bool) $input->getOption(\Rector\Configuration\Option::DRY_RUN);
         $shouldClearCache = (bool) $input->getOption(\Rector\Configuration\Option::CLEAR_CACHE);
         $outputFormat = (string) $input->getOption(\Rector\Configuration\Option::OUTPUT_FORMAT);
-        $kaizenStepCount = $input->getOption(\Rector\Configuration\Option::KAIZEN);
-        if ($kaizenStepCount !== null) {
-            $kaizenStepCount = (int) $kaizenStepCount;
-            Assert::positiveInteger($kaizenStepCount, 'Change "--kaizen" value to a positive integer');
-        }
         $showProgressBar = $this->shouldShowProgressBar($input, $outputFormat);
         $showDiffs = $this->shouldShowDiffs($input);
         $paths = $this->resolvePaths($input);
@@ -70,7 +64,7 @@ final class ConfigurationFactory
         $memoryLimit = $this->resolveMemoryLimit($input);
         $isReportingWithRealPath = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::ABSOLUTE_FILE_PATH);
         $levelOverflows = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::LEVEL_OVERFLOWS);
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $kaizenStepCount);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
     {
