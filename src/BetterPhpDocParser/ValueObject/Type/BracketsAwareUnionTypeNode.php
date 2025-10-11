@@ -25,6 +25,7 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
      */
     public function __toString(): string
     {
+        $this->types = array_unique($this->types, \SORT_REGULAR);
         if (!$this->isWrappedInBrackets) {
             return implode('|', $this->types);
         }
