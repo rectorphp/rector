@@ -49,8 +49,6 @@ final class PhpDocTagRemover
     }
     private function areAnnotationNamesEqual(string $firstAnnotationName, string $secondAnnotationName): bool
     {
-        $firstAnnotationName = trim($firstAnnotationName, '@');
-        $secondAnnotationName = trim($secondAnnotationName, '@');
-        return $firstAnnotationName === $secondAnnotationName;
+        return trim($firstAnnotationName, '@') === trim($secondAnnotationName, '@');
     }
 }
