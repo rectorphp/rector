@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Runner\Version;
 use Rector\Config\RectorConfig;
 use Rector\DependencyInjection\LazyContainerFactory;
 abstract class AbstractLazyTestCase extends TestCase
@@ -52,7 +53,12 @@ abstract class AbstractLazyTestCase extends TestCase
     {
         if (file_exists(__DIR__ . '/../../../preload.php')) {
             if (file_exists(__DIR__ . '/../../../vendor')) {
-                require_once __DIR__ . '/../../../preload.php';
+                /**
+                 * On PHPUnit 12+, when classmap autoloaded, it means preload already loaded early
+                 */
+                if (!class_exists(Version::class, \true) || (int) Version::id() < 12) {
+                    require_once __DIR__ . '/../../../preload.php';
+                }
                 // test case in rector split package
             } elseif (file_exists(__DIR__ . '/../../../../../../vendor')) {
                 require_once __DIR__ . '/../../../preload-split-package.php';
