@@ -111,6 +111,9 @@ CODE_SAMPLE
         if ($assign->expr instanceof CallLike && !$assign->expr->isFirstClassCallable() && $assign->expr->getArgs() !== []) {
             return null;
         }
+        if ($assign->expr instanceof BinaryOp) {
+            return null;
+        }
         return new VariableAndExprAssign($assign->var, $assign->expr);
     }
 }
