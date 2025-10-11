@@ -1,0 +1,27 @@
+stages:
+    - setup
+    - rector
+    - commit_changes
+
+setup:
+    stage: setup
+    # see https://github.com/thecodingmachine/docker-images-php
+    image: thecodingmachine/php:8.2-v4-slim-cli
+
+rector:
+    stage: rector
+    script:
+        - vendor/bin/rector --ansi
+        # @todo apply coding standard if used
+
+commit_changes:
+    stage: commit_changes
+    script:
+        - git config --global user.email "ci@gitlab.com"
+        - git config --global user.name "GitLab CI
+        # - git checkout $CI_COMMIT_REF_NAME
+        - git add .
+        - git commit -m "[rector] Rector fixes"
+        - git push origin $CI_COMMIT_REF_NAME
+    only:
+        - merge_requests
