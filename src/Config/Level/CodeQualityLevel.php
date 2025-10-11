@@ -88,7 +88,7 @@ use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
  *
  * From the safest rules to more changing ones.
  *
- * @experimental This list can change in time, based on community feedback,
+ * This list can change in time, based on community feedback,
  * what rules are safer than others. The safest rules will be always in the top.
  */
 final class CodeQualityLevel

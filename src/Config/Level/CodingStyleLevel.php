@@ -39,7 +39,7 @@ use Rector\Visibility\Rector\ClassMethod\ExplicitPublicClassMethodRector;
  *
  * From the safest rules to more changing ones.
  *
- * @experimental This list can change in time, based on community feedback,
+ * This list can change in time, based on community feedback,
  * what rules are safer than other. The safest rules will be always in the top.
  */
 final class CodingStyleLevel

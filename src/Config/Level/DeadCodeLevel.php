@@ -65,7 +65,7 @@ use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
  *
  * From the safest rules to more changing ones.
  *
- * @experimental Since 0.19.7 This list can change in time, based on community feedback,
+ * This list can change in time, based on community feedback,
  * what rules are safer than other. The safest rules will be always in the top.
  */
 final class DeadCodeLevel
