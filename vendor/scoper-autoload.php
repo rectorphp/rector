@@ -33,7 +33,7 @@ humbug_phpscoper_expose_class('SameBeforeAfterFixtureDetector', 'RectorPrefix202
 humbug_phpscoper_expose_class('NoPhpFileInFixturesDetector', 'RectorPrefix202510\NoPhpFileInFixturesDetector');
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202510\AutoloadIncluder');
 humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202510\SomeClass');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit3f713fb19592b0751a95e49cdd93e958', 'RectorPrefix202510\ComposerAutoloaderInit3f713fb19592b0751a95e49cdd93e958');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit100ccc9176c32b7be45ab2960a573d86', 'RectorPrefix202510\ComposerAutoloaderInit100ccc9176c32b7be45ab2960a573d86');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202510\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202510\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202510\Normalizer');
