@@ -1650,6 +1650,7 @@ class ComposerStaticInit100ccc9176c32b7be45ab2960a573d86
         'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',
         'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
         'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
+        'Rector\\DeadCode\\Rector\\Stmt\\RemoveConditionExactReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveConditionExactReturnRector.php',
         'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
         'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
         'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',

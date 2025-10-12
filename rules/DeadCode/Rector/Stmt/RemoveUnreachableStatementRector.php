@@ -62,6 +62,10 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
+        // at least 2 items are needed
+        if (count($node->stmts) < 2) {
+            return null;
+        }
         $originalStmts = $node->stmts;
         $cleanedStmts = $this->processCleanUpUnreachableStmts($node, $node->stmts);
         if ($cleanedStmts === $originalStmts) {

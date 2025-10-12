@@ -1402,6 +1402,7 @@ return array(
     'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => $baseDir . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',
     'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => $baseDir . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
     'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => $baseDir . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
+    'Rector\\DeadCode\\Rector\\Stmt\\RemoveConditionExactReturnRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveConditionExactReturnRector.php',
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
     'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => $baseDir . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
     'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => $baseDir . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',

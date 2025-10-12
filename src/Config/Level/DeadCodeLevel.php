@@ -52,6 +52,7 @@ use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\DeadCode\Rector\Stmt\RemoveConditionExactReturnRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
@@ -117,6 +118,7 @@ final class DeadCodeLevel
         RemoveDeadCatchRector::class,
         RemoveDeadTryCatchRector::class,
         RemoveDeadIfForeachForRector::class,
+        RemoveConditionExactReturnRector::class,
         RemoveDeadStmtRector::class,
         UnwrapFutureCompatibleIfPhpVersionRector::class,
         RemoveParentCallWithoutParentRector::class,
