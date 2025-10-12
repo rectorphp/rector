@@ -91,12 +91,7 @@ final class FilesFinder
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
         $filePaths = array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
-        $toBeChangedFiles = $this->unchangedFilesFilter->filterFilePaths($filePaths);
-        // no files to be changed, early return empty
-        if ($toBeChangedFiles === []) {
-            return [];
-        }
-        return $toBeChangedFiles;
+        return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
     /**
      * @param string[] $paths
