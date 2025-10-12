@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,6 +21,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveConditionExactReturnRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private SideEffectNodeDetector $sideEffectNodeDetector;
+    public function __construct(SideEffectNodeDetector $sideEffectNodeDetector)
+    {
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove if with condition and return with same expr, followed by compared expr return', [new CodeSample(<<<'CODE_SAMPLE'
@@ -77,11 +86,7 @@ CODE_SAMPLE
                 continue;
             }
             $identicalOrEqual = $stmt->cond;
-            // skip obvious complexity
-            if ($identicalOrEqual->right instanceof MethodCall) {
-                continue;
-            }
-            if ($identicalOrEqual->right instanceof StaticCall) {
+            if ($this->sideEffectNodeDetector->detect($identicalOrEqual->right)) {
                 continue;
             }
             if (!$this->nodeComparator->areNodesEqual($identicalOrEqual->right, $soleIfReturn->expr)) {
