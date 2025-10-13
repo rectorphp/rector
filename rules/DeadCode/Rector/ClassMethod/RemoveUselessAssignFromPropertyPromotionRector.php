@@ -67,7 +67,7 @@ CODE_SAMPLE
             if ($param->isReadonly()) {
                 continue;
             }
-            $variableNames[] = (string) $this->getName($param->var);
+            $variableNames[] = $this->getName($param);
         }
         if ($variableNames === []) {
             return null;

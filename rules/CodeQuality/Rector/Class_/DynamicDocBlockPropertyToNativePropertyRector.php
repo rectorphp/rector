@@ -205,7 +205,7 @@ CODE_SAMPLE
                 if (!$param->isPromoted()) {
                     continue;
                 }
-                $paramName = $this->getName($param->var);
+                $paramName = $this->getName($param);
                 if ($paramName === $propertyName) {
                     return \true;
                 }

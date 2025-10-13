@@ -56,8 +56,7 @@ final class ExpectedNameResolver
         if ($expectedName === null) {
             return null;
         }
-        /** @var string $currentName */
-        $currentName = $this->nodeNameResolver->getName($param->var);
+        $currentName = $this->nodeNameResolver->getName($param);
         if ($currentName === $expectedName || substr_compare($currentName, ucfirst($expectedName), -strlen(ucfirst($expectedName))) === 0) {
             return null;
         }

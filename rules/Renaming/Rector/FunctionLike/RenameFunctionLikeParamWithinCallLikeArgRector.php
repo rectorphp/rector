@@ -110,7 +110,7 @@ CODE_SAMPLE
             if (!$param->var instanceof Variable) {
                 continue;
             }
-            if (($functionLike instanceof Closure || $functionLike instanceof ArrowFunction) && $this->breakingVariableRenameGuard->shouldSkipVariable((string) $this->getName($param->var), $renameFunctionLikeParamWithinCallLikeArg->getNewParamName(), $functionLike, $param->var)) {
+            if (($functionLike instanceof Closure || $functionLike instanceof ArrowFunction) && $this->breakingVariableRenameGuard->shouldSkipVariable($this->getName($param), $renameFunctionLikeParamWithinCallLikeArg->getNewParamName(), $functionLike, $param->var)) {
                 continue;
             }
             $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($functionLike, $param, $renameFunctionLikeParamWithinCallLikeArg->getNewParamName());

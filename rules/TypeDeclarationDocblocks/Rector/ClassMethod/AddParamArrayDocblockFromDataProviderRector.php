@@ -129,8 +129,7 @@ CODE_SAMPLE
                 if (!$this->isNames($param->type, ['array', 'iterable'])) {
                     continue;
                 }
-                /** @var string $paramName */
-                $paramName = $this->getName($param->var);
+                $paramName = $this->getName($param);
                 $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
                 // already defined, lets skip it
                 if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {

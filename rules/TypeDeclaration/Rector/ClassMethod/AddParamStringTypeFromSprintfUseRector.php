@@ -87,8 +87,7 @@ CODE_SAMPLE
             if ($param->default instanceof Expr && !$param->default instanceof String_) {
                 continue;
             }
-            /** @var string $variableName */
-            $variableName = $this->getName($param->var);
+            $variableName = $this->getName($param);
             if (!$this->variableInSprintfMaskMatcher->matchMask($node, $variableName, '%s')) {
                 continue;
             }

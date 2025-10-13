@@ -17,6 +17,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -40,12 +41,17 @@ final class AddParamArrayDocblockFromDimFetchAccessRector extends AbstractRector
      * @readonly
      */
     private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, DocBlockUpdater $docBlockUpdater, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ArrayDimFetchFinder $arrayDimFetchFinder, DocBlockUpdater $docBlockUpdater, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->arrayDimFetchFinder = $arrayDimFetchFinder;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -100,8 +106,7 @@ CODE_SAMPLE
             if (!$this->isName($param->type, 'array')) {
                 continue;
             }
-            /** @var string $paramName */
-            $paramName = $this->getName($param->var);
+            $paramName = $this->getName($param);
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
             // already defined, lets skip it
             if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {
@@ -109,6 +114,10 @@ CODE_SAMPLE
             }
             $dimFetches = $this->arrayDimFetchFinder->findByVariableName($node, $paramName);
             if ($dimFetches === []) {
+                continue;
+            }
+            // skip for now, not to create more error on incompatible parent @param doc override
+            if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
                 continue;
             }
             $keyTypes = [];
