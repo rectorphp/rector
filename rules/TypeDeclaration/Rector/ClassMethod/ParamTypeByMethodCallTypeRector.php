@@ -4,12 +4,14 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -116,25 +118,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
     /**
-     * @param Class_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            if ($this->shouldSkipClassMethod($classMethod)) {
-                continue;
-            }
-            /** @var array<StaticCall|MethodCall|FuncCall> $callers */
-            $callers = $this->betterNodeFinder->findInstancesOf($classMethod, [StaticCall::class, MethodCall::class, FuncCall::class]);
-            $hasClassMethodChanged = $this->refactorClassMethod($classMethod, $callers);
-            if ($hasClassMethodChanged) {
-                $hasChanged = \true;
-            }
+        if ($node instanceof ClassMethod && $this->shouldSkipClassMethod($node)) {
+            return null;
         }
+        /** @var array<StaticCall|MethodCall|FuncCall> $callers */
+        $callers = $this->betterNodeFinder->findInstancesOf($node, [StaticCall::class, MethodCall::class, FuncCall::class]);
+        $hasChanged = $this->refactorFunctionLike($node, $callers);
         if ($hasChanged) {
             return $node;
         }
@@ -147,7 +143,10 @@ CODE_SAMPLE
         }
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
-    private function shouldSkipParam(Param $param, ClassMethod $classMethod): bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    private function shouldSkipParam(Param $param, $functionLike): bool
     {
         // already has type, skip
         if ($param->type instanceof Node) {
@@ -156,16 +155,20 @@ CODE_SAMPLE
         if ($param->variadic) {
             return \true;
         }
-        return !$this->paramTypeAddGuard->isLegal($param, $classMethod);
+        if (!$functionLike instanceof ClassMethod) {
+            return \false;
+        }
+        return !$this->paramTypeAddGuard->isLegal($param, $functionLike);
     }
     /**
      * @param array<StaticCall|MethodCall|FuncCall> $callers
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function refactorClassMethod(ClassMethod $classMethod, array $callers): bool
+    private function refactorFunctionLike($functionLike, array $callers): bool
     {
         $hasChanged = \false;
-        foreach ($classMethod->params as $param) {
-            if ($this->shouldSkipParam($param, $classMethod)) {
+        foreach ($functionLike->params as $param) {
+            if ($this->shouldSkipParam($param, $functionLike)) {
                 continue;
             }
             $paramTypes = [];
