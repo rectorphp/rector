@@ -104,21 +104,21 @@ CODE_SAMPLE
                 foreach ($dimFetches as $dimFetch) {
                     $dimFetchType = $this->getType($dimFetch->var);
                     if (!$dimFetchType instanceof ArrayType && !$dimFetchType instanceof ConstantArrayType) {
-                        continue;
+                        continue 2;
                     }
                     if ($dimFetch->dim instanceof Variable) {
                         $type = $this->nodeTypeResolver->getType($dimFetch->dim);
                         if ($type instanceof UnionType) {
-                            continue;
+                            continue 2;
                         }
                     }
-                    $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($dimFetchType->getKeyType(), TypeKind::PARAM);
-                    if (!$paramTypeNode instanceof Node) {
-                        continue;
-                    }
-                    $param->type = $paramTypeNode;
-                    $hasChanged = \true;
                 }
+                $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($dimFetchType->getKeyType(), TypeKind::PARAM);
+                if (!$paramTypeNode instanceof Node) {
+                    continue;
+                }
+                $param->type = $paramTypeNode;
+                $hasChanged = \true;
             }
         }
         if ($hasChanged) {

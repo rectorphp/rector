@@ -46,9 +46,7 @@ final class VariableInSprintfMaskMatcher
     public function matchMask($functionLike, string $variableName, string $mask): bool
     {
         $funcCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $functionLike->stmts, FuncCall::class);
-        $funcCalls = array_values(array_filter($funcCalls, function (FuncCall $funcCall): bool {
-            return $this->nodeNameResolver->isName($funcCall->name, 'sprintf');
-        }));
+        $funcCalls = array_values(array_filter($funcCalls, fn(FuncCall $funcCall): bool => $this->nodeNameResolver->isName($funcCall->name, 'sprintf')));
         if (count($funcCalls) !== 1) {
             return \false;
         }
