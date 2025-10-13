@@ -5,6 +5,8 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use RectorPrefix202510\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -41,11 +43,16 @@ final class VariableInSprintfMaskMatcher
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     public function matchMask($functionLike, string $variableName, string $mask): bool
     {
-        $funcCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $functionLike->stmts, FuncCall::class);
+        if ($functionLike instanceof ArrowFunction) {
+            $stmts = [$functionLike->expr];
+        } else {
+            $stmts = (array) $functionLike->stmts;
+        }
+        $funcCalls = $this->betterNodeFinder->findInstancesOfScoped($stmts, FuncCall::class);
         $funcCalls = array_values(array_filter($funcCalls, fn(FuncCall $funcCall): bool => $this->nodeNameResolver->isName($funcCall->name, 'sprintf')));
         if (count($funcCalls) !== 1) {
             return \false;
