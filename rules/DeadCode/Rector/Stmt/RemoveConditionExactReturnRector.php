@@ -49,10 +49,6 @@ final class SomeClass
 {
     public function __construct(array $items)
     {
-        if ($items === []) {
-            return [];
-        }
-
         return $items;
     }
 }
