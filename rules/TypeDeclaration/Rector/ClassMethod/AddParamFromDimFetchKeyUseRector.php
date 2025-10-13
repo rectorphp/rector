@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -103,6 +105,12 @@ CODE_SAMPLE
                     $dimFetchType = $this->getType($dimFetch->var);
                     if (!$dimFetchType instanceof ArrayType && !$dimFetchType instanceof ConstantArrayType) {
                         continue;
+                    }
+                    if ($dimFetch->dim instanceof Variable) {
+                        $type = $this->nodeTypeResolver->getType($dimFetch->dim);
+                        if ($type instanceof UnionType) {
+                            continue;
+                        }
                     }
                     $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($dimFetchType->getKeyType(), TypeKind::PARAM);
                     if (!$paramTypeNode instanceof Node) {
