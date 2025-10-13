@@ -7,11 +7,12 @@ use RectorPrefix202510\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Value\ValueResolver;
 final class VariableInSprintfMaskMatcher
 {
     /**
@@ -22,10 +23,20 @@ final class VariableInSprintfMaskMatcher
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     */
+    private NodeTypeResolver $nodeTypeResolver;
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->valueResolver = $valueResolver;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -46,12 +57,13 @@ final class VariableInSprintfMaskMatcher
             }
             /** @var Arg $messageArg */
             $messageArg = array_shift($args);
-            if (!$messageArg->value instanceof String_) {
+            $type = $this->nodeTypeResolver->getType($messageArg->value);
+            $messageValue = $this->valueResolver->getValue($messageArg->value);
+            if (!is_string($messageValue)) {
                 continue;
             }
-            $string = $messageArg->value;
             // match all %s, %d types by position
-            $masks = Strings::match($string->value, '#%[sd]#');
+            $masks = Strings::match($messageValue, '#%[sd]#');
             foreach ($args as $position => $arg) {
                 if (!$arg->value instanceof Variable) {
                     continue;
