@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -57,7 +59,6 @@ final class VariableInSprintfMaskMatcher
             }
             /** @var Arg $messageArg */
             $messageArg = array_shift($args);
-            $type = $this->nodeTypeResolver->getType($messageArg->value);
             $messageValue = $this->valueResolver->getValue($messageArg->value);
             if (!is_string($messageValue)) {
                 continue;
@@ -76,6 +77,10 @@ final class VariableInSprintfMaskMatcher
                 }
                 $knownMaskOnPosition = $masks[$position];
                 if ($knownMaskOnPosition !== $mask) {
+                    continue;
+                }
+                $type = $this->nodeTypeResolver->getNativeType($arg->value);
+                if ($type instanceof MixedType && $type->getSubtractedType() instanceof UnionType) {
                     continue;
                 }
                 return \true;
