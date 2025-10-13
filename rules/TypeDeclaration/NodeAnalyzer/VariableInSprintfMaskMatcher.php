@@ -46,45 +46,47 @@ final class VariableInSprintfMaskMatcher
     public function matchMask($functionLike, string $variableName, string $mask): bool
     {
         $funcCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $functionLike->stmts, FuncCall::class);
-        foreach ($funcCalls as $funcCall) {
-            if (!$this->nodeNameResolver->isName($funcCall->name, 'sprintf')) {
+        if (count($funcCalls) !== 1) {
+            return \false;
+        }
+        $funcCall = $funcCalls[0];
+        if (!$this->nodeNameResolver->isName($funcCall->name, 'sprintf')) {
+            return \false;
+        }
+        if ($funcCall->isFirstClassCallable()) {
+            return \false;
+        }
+        $args = $funcCall->getArgs();
+        if (count($args) < 2) {
+            return \false;
+        }
+        /** @var Arg $messageArg */
+        $messageArg = array_shift($args);
+        $messageValue = $this->valueResolver->getValue($messageArg->value);
+        if (!is_string($messageValue)) {
+            return \false;
+        }
+        // match all %s, %d types by position
+        $masks = Strings::match($messageValue, '#%[sd]#');
+        foreach ($args as $position => $arg) {
+            if (!$arg->value instanceof Variable) {
                 continue;
             }
-            if ($funcCall->isFirstClassCallable()) {
+            if (!$this->nodeNameResolver->isName($arg->value, $variableName)) {
                 continue;
             }
-            $args = $funcCall->getArgs();
-            if (count($args) < 2) {
+            if (!isset($masks[$position])) {
                 continue;
             }
-            /** @var Arg $messageArg */
-            $messageArg = array_shift($args);
-            $messageValue = $this->valueResolver->getValue($messageArg->value);
-            if (!is_string($messageValue)) {
+            $knownMaskOnPosition = $masks[$position];
+            if ($knownMaskOnPosition !== $mask) {
                 continue;
             }
-            // match all %s, %d types by position
-            $masks = Strings::match($messageValue, '#%[sd]#');
-            foreach ($args as $position => $arg) {
-                if (!$arg->value instanceof Variable) {
-                    continue;
-                }
-                if (!$this->nodeNameResolver->isName($arg->value, $variableName)) {
-                    continue;
-                }
-                if (!isset($masks[$position])) {
-                    continue;
-                }
-                $knownMaskOnPosition = $masks[$position];
-                if ($knownMaskOnPosition !== $mask) {
-                    continue;
-                }
-                $type = $this->nodeTypeResolver->getNativeType($arg->value);
-                if ($type instanceof MixedType && $type->getSubtractedType() instanceof UnionType) {
-                    continue;
-                }
-                return \true;
+            $type = $this->nodeTypeResolver->getNativeType($arg->value);
+            if ($type instanceof MixedType && $type->getSubtractedType() instanceof UnionType) {
+                continue;
             }
+            return \true;
         }
         return \false;
     }
