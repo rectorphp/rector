@@ -52,13 +52,25 @@ final class NodeDocblockTypeDecorator
         $this->phpDocTypeChanger->changeParamTypeNode($functionLike, $phpDocInfo, $param, $parameterName, $typeNode);
         return \true;
     }
-    public function decorateGenericIterableReturnType(Type $type, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
+    /**
+     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeOrTypeNode
+     */
+    public function decorateGenericIterableReturnType($typeOrTypeNode, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
     {
+        if ($typeOrTypeNode instanceof TypeNode) {
+            $type = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeOrTypeNode, $functionLike);
+        } else {
+            $type = $typeOrTypeNode;
+        }
         if ($this->isBareMixedType($type)) {
             // no value
             return \false;
         }
-        $typeNode = $this->createTypeNode($type);
+        if ($typeOrTypeNode instanceof TypeNode) {
+            $typeNode = $typeOrTypeNode;
+        } else {
+            $typeNode = $this->createTypeNode($typeOrTypeNode);
+        }
         // no value iterable type
         if ($typeNode instanceof IdentifierTypeNode) {
             return \false;
@@ -82,9 +94,9 @@ final class NodeDocblockTypeDecorator
     }
     private function createTypeNode(Type $type): TypeNode
     {
-        $generalizedReturnType = $this->typeNormalizer->generalizeConstantTypes($type);
-        // turn into rather generic short return type, to keep it open to extension later and readable to human
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedReturnType);
+        $generalizedType = $this->typeNormalizer->generalizeConstantTypes($type);
+        // turn into rather generic short return typeOrTypeNode, to keep it open to extension later and readable to human
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedType);
         if ($typeNode instanceof IdentifierTypeNode && $typeNode->name === 'mixed') {
             return new ArrayTypeNode($typeNode);
         }

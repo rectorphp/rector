@@ -12,6 +12,7 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
@@ -73,6 +74,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         if ($isGenericArray) {
             return $this->createGenericArrayType($type, \true);
+        }
+        // keep "int" key in arary<int, mixed>
+        if ($type->getKeyType() instanceof IntegerType) {
+            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getKeyType());
+            if (!$type->isList()->maybe()) {
+                $nestedTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
+                return new GenericTypeNode(new IdentifierTypeNode('array'), [$keyTypeNode, $nestedTypeNode]);
+            }
         }
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
         return new SpacingAwareArrayTypeNode($itemTypeNode);

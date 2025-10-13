@@ -103,6 +103,8 @@ final class PhpDocTypeChanger
     {
         $existingReturnTagValueNode = $phpDocInfo->getReturnTagValue();
         if ($existingReturnTagValueNode instanceof ReturnTagValueNode) {
+            // enforce reprint of copied type node
+            $newTypeNode->setAttribute('orig_node', null);
             $existingReturnTagValueNode->type = $newTypeNode;
         } else {
             $returnTagValueNode = new ReturnTagValueNode($newTypeNode, '');

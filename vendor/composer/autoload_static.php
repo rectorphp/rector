@@ -2933,6 +2933,7 @@ class ComposerStaticInit100ccc9176c32b7be45ab2960a573d86
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayDimFetchFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayDimFetchFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayMapClosureExprFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayMapClosureExprFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\DataProviderMethodsFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/DataProviderMethodsFinder.php',
+        'Rector\\TypeDeclarationDocblocks\\NodeFinder\\GetterClassMethodPropertyFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/GetterClassMethodPropertyFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\PropertyGetterFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/PropertyGetterFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ReturnNodeFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/ReturnNodeFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\YieldNodeFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/YieldNodeFinder.php',

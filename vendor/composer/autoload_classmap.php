@@ -2685,6 +2685,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayDimFetchFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayDimFetchFinder.php',
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayMapClosureExprFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayMapClosureExprFinder.php',
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\DataProviderMethodsFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/DataProviderMethodsFinder.php',
+    'Rector\\TypeDeclarationDocblocks\\NodeFinder\\GetterClassMethodPropertyFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/GetterClassMethodPropertyFinder.php',
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\PropertyGetterFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/PropertyGetterFinder.php',
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ReturnNodeFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/ReturnNodeFinder.php',
     'Rector\\TypeDeclarationDocblocks\\NodeFinder\\YieldNodeFinder' => $baseDir . '/rules/TypeDeclarationDocblocks/NodeFinder/YieldNodeFinder.php',
