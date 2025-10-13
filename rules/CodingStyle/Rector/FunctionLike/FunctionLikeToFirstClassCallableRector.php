@@ -28,8 +28,10 @@ final class FunctionLikeToFirstClassCallableRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('converts function like to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
-function ($parameter) { return Call::to($parameter); }
+        return new RuleDefinition('Converts arrow function and closures to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+function ($parameter) {
+    return Call::to($parameter);
+}
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 Call::to(...);

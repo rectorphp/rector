@@ -54,7 +54,7 @@ final class SideEffectNodeDetector
         if ($expr instanceof Assign) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->detectCallExpr($subNode));
+        return (bool) $this->betterNodeFinder->findFirst($expr, \Closure::fromCallable([$this, 'detectCallExpr']));
     }
     public function detectCallExpr(Node $node): bool
     {

@@ -136,7 +136,7 @@ CODE_SAMPLE
     }
     private function hasCallLikeInAssignExpr(Expr $expr): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, fn(Node $subNode): bool => $this->sideEffectNodeDetector->detectCallExpr($subNode));
+        return (bool) $this->betterNodeFinder->findFirst($expr, \Closure::fromCallable([$this->sideEffectNodeDetector, 'detectCallExpr']));
     }
     /**
      * @param Stmt[] $stmts

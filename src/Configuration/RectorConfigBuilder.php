@@ -144,7 +144,7 @@ final class RectorConfigBuilder
     public function __invoke(RectorConfig $rectorConfig): void
     {
         if ($this->setGroups !== [] || $this->setProviders !== []) {
-            $setProviderCollector = new SetProviderCollector(array_map(static fn(string $setProvider): SetProviderInterface => $rectorConfig->make($setProvider), \array_keys($this->setProviders)));
+            $setProviderCollector = new SetProviderCollector(array_map(\Closure::fromCallable([$rectorConfig, 'make']), \array_keys($this->setProviders)));
             $setManager = new SetManager($setProviderCollector, new InstalledPackageResolver(getcwd()));
             $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
             SimpleParameterProvider::addParameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->groupLoadedSets);
