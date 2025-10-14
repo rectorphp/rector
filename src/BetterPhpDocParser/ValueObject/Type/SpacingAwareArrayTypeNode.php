@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
@@ -47,10 +48,37 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
     }
     private function printUnionType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): string
     {
-        $unionedTypes = [];
         if ($bracketsAwareUnionTypeNode->isWrappedInBrackets()) {
             return $bracketsAwareUnionTypeNode . '[]';
         }
+        // If all types in the union are GenericTypeNode, use array<union> syntax
+        $allGeneric = \true;
+        $firstGenericTypeName = null;
+        foreach ($bracketsAwareUnionTypeNode->types as $unionedType) {
+            if (!$unionedType instanceof GenericTypeNode) {
+                $allGeneric = \false;
+                break;
+            }
+            // ensure only check on base level
+            // avoid mix usage without [] added
+            if (count($unionedType->genericTypes) !== 1) {
+                $allGeneric = \false;
+                break;
+            }
+            // ensure all generic types has the same base type
+            $currentTypeName = $unionedType->type->name;
+            if ($firstGenericTypeName === null) {
+                $firstGenericTypeName = $currentTypeName;
+            } elseif ($firstGenericTypeName !== $currentTypeName) {
+                // Different generic base types (e.g., class-string vs array)
+                $allGeneric = \false;
+                break;
+            }
+        }
+        if ($allGeneric) {
+            return sprintf('array<int, %s>', (string) $bracketsAwareUnionTypeNode);
+        }
+        $unionedTypes = [];
         foreach ($bracketsAwareUnionTypeNode->types as $unionedType) {
             $unionedTypes[] = $unionedType . '[]';
         }
