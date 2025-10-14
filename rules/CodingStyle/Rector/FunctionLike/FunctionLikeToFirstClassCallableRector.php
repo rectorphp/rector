@@ -19,12 +19,14 @@ use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FunctionLike\FunctionLikeToFirstClassCallableRector\FunctionLikeToFirstClassCallableRectorTest
  */
-final class FunctionLikeToFirstClassCallableRector extends AbstractRector
+final class FunctionLikeToFirstClassCallableRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -200,5 +202,9 @@ CODE_SAMPLE
             return \false;
         }
         return $callLike->var instanceof CallLike;
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
     }
 }
