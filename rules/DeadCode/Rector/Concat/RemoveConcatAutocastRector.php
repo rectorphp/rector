@@ -5,8 +5,10 @@ namespace Rector\DeadCode\Rector\Concat;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Cast\String_;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -58,6 +60,21 @@ CODE_SAMPLE
     }
     private function removeStringCast(Expr $expr): Expr
     {
-        return $expr instanceof String_ ? $expr->expr : $expr;
+        if (!$expr instanceof String_) {
+            return $expr;
+        }
+        $targetExpr = $expr->expr;
+        $tokens = $this->file->getOldTokens();
+        if ($expr->expr instanceof BinaryOp) {
+            $castStartTokenPos = $expr->getStartTokenPos();
+            $targetExprStartTokenPos = $targetExpr->getStartTokenPos();
+            while (++$castStartTokenPos < $targetExprStartTokenPos) {
+                if (isset($tokens[$castStartTokenPos]) && (string) $tokens[$castStartTokenPos] === '(') {
+                    $targetExpr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+                    break;
+                }
+            }
+        }
+        return $targetExpr;
     }
 }

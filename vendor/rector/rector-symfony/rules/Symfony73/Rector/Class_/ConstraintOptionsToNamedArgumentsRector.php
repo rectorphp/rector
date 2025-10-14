@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector
@@ -71,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if ($className === 'Symfony\Component\Validator\Constraints\Collection' && count($args) === 1 && $args[0]->value instanceof Array_) {
+        if ($className === SymfonyClass::SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION && count($args) === 1 && $args[0]->value instanceof Array_) {
             if ($args[0]->name instanceof Identifier) {
                 return null;
             }
