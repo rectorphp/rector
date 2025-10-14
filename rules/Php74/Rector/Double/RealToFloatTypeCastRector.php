@@ -3,18 +3,20 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\Double;
 
+use Rector\Renaming\Rector\Cast\RenameCastRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php74\Rector\Double\RealToFloatTypeCastRector\RealToFloatTypeCastRectorTest
+ * @deprecated Use same but configurable `Rector\Renaming\Rector\Cast\RenameCastRector` with configuration instead
  */
-final class RealToFloatTypeCastRector extends AbstractRector implements MinPhpVersionInterface
+final class RealToFloatTypeCastRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
     public function provideMinPhpVersion(): int
     {
@@ -58,12 +60,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $kind = $node->getAttribute(AttributeKey::KIND);
-        if ($kind !== Double::KIND_REAL) {
-            return null;
-        }
-        $node->setAttribute(AttributeKey::KIND, Double::KIND_FLOAT);
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('This rule is deprecated. Use configurable "%s" rule instead.', RenameCastRector::class));
     }
 }
