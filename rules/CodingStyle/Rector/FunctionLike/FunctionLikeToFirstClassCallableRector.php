@@ -59,6 +59,10 @@ CODE_SAMPLE
         $callLike->args = [new VariadicPlaceholder()];
         return $callLike;
     }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
+    }
     /**
      * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $node
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike
@@ -202,9 +206,5 @@ CODE_SAMPLE
             return \false;
         }
         return $callLike->var instanceof CallLike;
-    }
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
     }
 }

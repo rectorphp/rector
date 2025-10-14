@@ -682,6 +682,11 @@ final class PhpVersionFeature
      */
     public const DEPRECATE_ORD_WITH_MULTIBYTE_STRING = \Rector\ValueObject\PhpVersion::PHP_85;
     /**
+     * @see https://wiki.php.net/rfc/property-hooks
+     * @var int
+     */
+    public const PROPERTY_HOOKS = \Rector\ValueObject\PhpVersion::PHP_84;
+    /**
      * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_backticks_as_an_alias_for_shell_exec
      * @var int
      */

@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\Double;
 
-use Rector\Renaming\Rector\Cast\RenameCastRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\Renaming\Rector\Cast\RenameCastRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
