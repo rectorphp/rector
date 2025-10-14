@@ -22,6 +22,9 @@ if (
 
     // load preload.php on local PHPUnit installation
     && ! class_exists(Version::class, false)
+
+    // load preload.php only on PHPUnit 12+
+    && class_exists(Version::class, true) && (int) Version::id() >= 12
 ) {
     require_once __DIR__ . '/preload.php';
 }
