@@ -20,7 +20,7 @@ final class ClassMethodVisibilityGuard
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
         /** @var ClassReflection[] $parentClassReflections */
-        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $parentClassReflections = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
         foreach ($parentClassReflections as $parentClassReflection) {
             if ($parentClassReflection->hasMethod($methodName)) {
                 return \true;

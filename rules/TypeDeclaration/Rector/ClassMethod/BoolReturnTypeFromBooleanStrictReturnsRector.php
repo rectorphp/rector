@@ -165,8 +165,8 @@ CODE_SAMPLE
         if (!$functionReflection->isBuiltin()) {
             return \false;
         }
-        foreach ($functionReflection->getVariants() as $variant) {
-            if (!$variant->getNativeReturnType()->isBoolean()->yes()) {
+        foreach ($functionReflection->getVariants() as $extendedParametersAcceptor) {
+            if (!$extendedParametersAcceptor->getNativeReturnType()->isBoolean()->yes()) {
                 return \false;
             }
         }

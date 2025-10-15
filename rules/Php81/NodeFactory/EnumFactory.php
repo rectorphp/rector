@@ -80,7 +80,7 @@ final class EnumFactory
                 $enum->stmts[] = $this->createEnumCaseFromConst($constant);
             }
         }
-        $enum->stmts = array_merge($enum->stmts, $class->getMethods());
+        $enum->stmts = [...$enum->stmts, ...$class->getMethods()];
         return $enum;
     }
     public function createFromSpatieClass(Class_ $class, bool $enumNameInSnakeCase = \false): Enum_

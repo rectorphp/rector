@@ -38,7 +38,7 @@ final class FamilyRelationsAnalyzer
                 return [];
             }
             $classReflection = $this->reflectionProvider->getClass($fullName);
-            $ancestors = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+            $ancestors = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
             return array_map(static fn(ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
         }
         if ($classOrName instanceof Interface_) {

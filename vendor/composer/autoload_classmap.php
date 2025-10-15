@@ -1792,6 +1792,7 @@ return array(
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => $baseDir . '/src/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => $baseDir . '/src/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
     'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => $baseDir . '/src/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
+    'Rector\\NodeTypeResolver\\NodeTypeCorrector' => $baseDir . '/src/NodeTypeResolver/NodeTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyArrayTypeCorrector' => $baseDir . '/src/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyArrayTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => $baseDir . '/src/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\GenericClassStringTypeCorrector' => $baseDir . '/src/NodeTypeResolver/NodeTypeCorrector/GenericClassStringTypeCorrector.php',

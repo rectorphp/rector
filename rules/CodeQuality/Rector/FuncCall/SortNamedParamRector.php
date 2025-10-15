@@ -122,6 +122,6 @@ CODE_SAMPLE
             $order2 = $order[$argName2->name] ?? \PHP_INT_MAX;
             return $order1 <=> $order2;
         });
-        return array_merge($sortedArgs, $toSortArgs);
+        return [...$sortedArgs, ...$toSortArgs];
     }
 }

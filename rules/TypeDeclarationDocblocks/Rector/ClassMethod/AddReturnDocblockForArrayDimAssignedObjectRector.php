@@ -13,9 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
-use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -139,20 +137,15 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function matchArrayObjectType(Type $returnedType): ?Type
+    private function matchArrayObjectType(Type $type): ?Type
     {
-        if ($returnedType instanceof IntersectionType) {
-            foreach ($returnedType->getTypes() as $intersectionedType) {
-                if ($intersectionedType instanceof AccessoryArrayListType) {
-                    continue;
-                }
-                if ($intersectionedType instanceof ArrayType && $intersectionedType->getItemType() instanceof ObjectType) {
-                    return $intersectionedType->getItemType();
-                }
-                return null;
-            }
+        if (!$type instanceof ArrayType) {
+            return null;
         }
-        return null;
+        if (!$type->getItemType() instanceof ObjectType) {
+            return null;
+        }
+        return $type->getItemType();
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike

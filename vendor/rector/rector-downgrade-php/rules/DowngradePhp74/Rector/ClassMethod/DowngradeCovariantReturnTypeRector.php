@@ -182,7 +182,7 @@ CODE_SAMPLE
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($bareReturnType);
         $methodName = $this->getName($classMethod);
         /** @var ClassReflection[] $parentClassesAndInterfaces */
-        $parentClassesAndInterfaces = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $parentClassesAndInterfaces = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
         return $this->resolveMatchingReturnType($parentClassesAndInterfaces, $methodName, $classMethod, $returnType);
     }
     private function addDocBlockReturn(ClassMethod $classMethod): void

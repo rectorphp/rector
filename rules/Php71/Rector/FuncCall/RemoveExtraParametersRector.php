@@ -138,8 +138,8 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
     private function resolveMaximumAllowedParameterCount($functionLikeReflection): int
     {
         $parameterCounts = [0];
-        foreach ($functionLikeReflection->getVariants() as $variant) {
-            $parameterCounts[] = count($variant->getParameters());
+        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
+            $parameterCounts[] = count($parametersAcceptor->getParameters());
         }
         return max($parameterCounts);
     }

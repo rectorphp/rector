@@ -163,9 +163,9 @@ CODE_SAMPLE
         }
         $extendedMethodReflection = $classReflection->getConstructor();
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
-        foreach ($extendedParametersAcceptor->getParameters() as $position => $parameterReflectionWithPhpDoc) {
-            $parameterType = $parameterReflectionWithPhpDoc->getType();
-            $className = ClassNameFromObjectTypeResolver::resolve($parameterReflectionWithPhpDoc->getType());
+        foreach ($extendedParametersAcceptor->getParameters() as $position => $extendedParameterReflection) {
+            $parameterType = $extendedParameterReflection->getType();
+            $className = ClassNameFromObjectTypeResolver::resolve($extendedParameterReflection->getType());
             if ($className === null) {
                 continue;
             }

@@ -57,7 +57,7 @@ final class PhpAttributeAnalyzer
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        $ancestorClassReflections = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $nativeReflection = $ancestorClassReflection->getNativeReflection();
             if ((method_exists($nativeReflection, 'getAttributes') ? $nativeReflection->getAttributes($attributeClass) : []) !== []) {

@@ -174,7 +174,7 @@ CODE_SAMPLE
         }
         /** @var ClassMethod $constructorClassMethod */
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        $constructorClassMethod->stmts = array_merge($assigns, (array) $constructorClassMethod->stmts);
+        $constructorClassMethod->stmts = [...$assigns, ...(array) $constructorClassMethod->stmts];
     }
     /**
      * @param Param[] $params
