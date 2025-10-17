@@ -178,7 +178,7 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($className, $methodName, $scope);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $call
      * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
      */
     public function resolveFunctionLikeReflectionFromCall($call)
@@ -188,6 +188,9 @@ final class ReflectionResolver
         }
         if ($call instanceof StaticCall) {
             return $this->resolveMethodReflectionFromStaticCall($call);
+        }
+        if ($call instanceof New_) {
+            return $this->resolveMethodReflectionFromNew($call);
         }
         return $this->resolveFunctionReflectionFromFuncCall($call);
     }
