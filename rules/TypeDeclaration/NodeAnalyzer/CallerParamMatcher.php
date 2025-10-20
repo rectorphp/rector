@@ -21,11 +21,9 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PhpParser\AstResolver;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class CallerParamMatcher
 {
@@ -124,7 +122,6 @@ final class CallerParamMatcher
     private function matchCallArgPosition($call, Param $param): ?int
     {
         $paramName = $this->nodeNameResolver->getName($param);
-        $scope = ScopeFetcher::fetch($call);
         foreach ($call->args as $argPosition => $arg) {
             if (!$arg instanceof Arg) {
                 continue;
@@ -134,10 +131,6 @@ final class CallerParamMatcher
             }
             if (!$this->nodeNameResolver->isName($arg->value, $paramName)) {
                 continue;
-            }
-            $currentType = $scope->getType($arg->value);
-            if ($currentType instanceof MixedType && $currentType->getSubtractedType() instanceof Type) {
-                return null;
             }
             return $argPosition;
         }
