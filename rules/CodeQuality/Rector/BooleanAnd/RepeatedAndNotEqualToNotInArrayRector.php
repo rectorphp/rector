@@ -1,14 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQuality\Rector\BooleanOr;
+namespace Rector\CodeQuality\Rector\BooleanAnd;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -18,9 +19,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector\RepeatedOrEqualToInArrayRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector\RepeatedAndNotEqualToNotInArrayRectorTest
  */
-final class RepeatedOrEqualToInArrayRector extends AbstractRector
+final class RepeatedAndNotEqualToNotInArrayRector extends AbstractRector
 {
     /**
      * @readonly
@@ -32,14 +33,14 @@ final class RepeatedOrEqualToInArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Simplify repeated || compare of same value, to in_array() call', [new CodeSample(<<<'CODE_SAMPLE'
-if ($value === 10 || $value === 20 || $value === 30) {
+        return new RuleDefinition('Simplify repeated && compare of same value, to ! in_array() call', [new CodeSample(<<<'CODE_SAMPLE'
+if ($value !== 10 && $value !== 20 && $value !== 30) {
     // ...
 }
 
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-if (in_array($value, [10, 20, 30], true)) {
+if (! in_array($value, [10, 20, 30], true)) {
     // ...
 }
 CODE_SAMPLE
@@ -50,18 +51,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [BooleanOr::class];
+        return [BooleanAnd::class];
     }
     /**
-     * @param BooleanOr $node
+     * @param BooleanAnd $node
      */
-    public function refactor(Node $node): ?FuncCall
+    public function refactor(Node $node): ?BooleanNot
     {
-        if (!$this->isEqualOrIdentical($node->right)) {
+        if (!$this->isNotEqualOrNotIdentical($node->right)) {
             return null;
         }
         // match compared variable and expr
-        if (!$node->left instanceof BooleanOr && !$this->isEqualOrIdentical($node->left)) {
+        if (!$node->left instanceof BooleanAnd && !$this->isNotEqualOrNotIdentical($node->left)) {
             return null;
         }
         $comparedExprAndValueExprs = $this->matchComparedAndDesiredValues($node);
@@ -83,27 +84,21 @@ CODE_SAMPLE
         }
         $array = $this->nodeFactory->createArray($valueExprs);
         $args = $this->nodeFactory->createArgs([$firstComparedExprAndValue->getComparedExpr(), $array]);
-        $identicals = $this->betterNodeFinder->findInstanceOf($node, Identical::class);
-        $equals = $this->betterNodeFinder->findInstanceOf($node, Equal::class);
-        if ($identicals !== []) {
-            if ($equals !== []) {
-                // mix identical and equals, keep as is
-                // @see https://3v4l.org/24cFl
-                return null;
-            }
+        if ($this->isStrictComparison($node)) {
             $args[] = new Arg(new ConstFetch(new Name('true')));
         }
-        return new FuncCall(new Name('in_array'), $args);
+        $inArrayFuncCall = new FuncCall(new Name('in_array'), $args);
+        return new BooleanNot($inArrayFuncCall);
     }
-    private function isEqualOrIdentical(Expr $expr): bool
+    private function isNotEqualOrNotIdentical(Expr $expr): bool
     {
-        if ($expr instanceof Identical) {
+        if ($expr instanceof NotIdentical) {
             return \true;
         }
-        return $expr instanceof Equal;
+        return $expr instanceof NotEqual;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $expr
+     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $expr
      */
     private function matchComparedExprAndValueExpr($expr): ComparedExprAndValueExpr
     {
@@ -124,29 +119,40 @@ CODE_SAMPLE
     /**
      * @return null|ComparedExprAndValueExpr[]
      */
-    private function matchComparedAndDesiredValues(BooleanOr $booleanOr): ?array
+    private function matchComparedAndDesiredValues(BooleanAnd $booleanAnd): ?array
     {
-        /** @var Identical|Equal $rightCompare */
-        $rightCompare = $booleanOr->right;
+        /** @var NotIdentical|NotEqual $rightCompare */
+        $rightCompare = $booleanAnd->right;
         // match compared expr and desired value
         $comparedExprAndValueExprs = [$this->matchComparedExprAndValueExpr($rightCompare)];
-        $currentBooleanOr = $booleanOr;
-        while ($currentBooleanOr->left instanceof BooleanOr) {
-            if (!$this->isEqualOrIdentical($currentBooleanOr->left->right)) {
+        $currentBooleanAnd = $booleanAnd;
+        while ($currentBooleanAnd->left instanceof BooleanAnd) {
+            if (!$this->isNotEqualOrNotIdentical($currentBooleanAnd->left->right)) {
                 return null;
             }
-            /** @var Identical|Equal $leftRight */
-            $leftRight = $currentBooleanOr->left->right;
+            /** @var NotIdentical|NotEqual $leftRight */
+            $leftRight = $currentBooleanAnd->left->right;
             $comparedExprAndValueExprs[] = $this->matchComparedExprAndValueExpr($leftRight);
-            $currentBooleanOr = $currentBooleanOr->left;
+            $currentBooleanAnd = $currentBooleanAnd->left;
         }
-        if (!$this->isEqualOrIdentical($currentBooleanOr->left)) {
+        if (!$this->isNotEqualOrNotIdentical($currentBooleanAnd->left)) {
             return null;
         }
-        /** @var Identical|Equal $leftCompare */
-        $leftCompare = $currentBooleanOr->left;
+        /** @var NotIdentical|NotEqual $leftCompare */
+        $leftCompare = $currentBooleanAnd->left;
         $comparedExprAndValueExprs[] = $this->matchComparedExprAndValueExpr($leftCompare);
         // keep original natural order, as left/right goes from bottom up
         return array_reverse($comparedExprAndValueExprs);
+    }
+    private function isStrictComparison(BooleanAnd $booleanAnd): bool
+    {
+        $notIdenticals = $this->betterNodeFinder->findInstanceOf($booleanAnd, NotIdentical::class);
+        $notEquals = $this->betterNodeFinder->findInstanceOf($booleanAnd, NotEqual::class);
+        if ($notIdenticals !== []) {
+            // mix not identical and not equals, keep as is
+            // @see https://3v4l.org/2SoHZ
+            return $notEquals === [];
+        }
+        return \false;
     }
 }

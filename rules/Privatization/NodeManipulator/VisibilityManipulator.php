@@ -199,7 +199,7 @@ final class VisibilityManipulator
         if ($isStatic) {
             $this->makeNonStatic($node);
         }
-        if ($visibility !== Visibility::STATIC && $visibility !== Visibility::ABSTRACT && $visibility !== Visibility::FINAL) {
+        if (!in_array($visibility, [Visibility::STATIC, Visibility::ABSTRACT, Visibility::FINAL], \true)) {
             $this->removeVisibility($node);
         }
         $this->addVisibilityFlag($node, $visibility);
