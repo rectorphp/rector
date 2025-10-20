@@ -91,7 +91,7 @@ Method                                                   | Description
 `positiveInteger($value, $message = '')`                 | Check that a value is a positive (non-zero) integer
 `float($value, $message = '')`                           | Check that a value is a float
 `numeric($value, $message = '')`                         | Check that a value is numeric
-`natural($value, $message= ''')`                         | Check that a value is a non-negative integer
+`natural($value, $message = '')`                         | Check that a value is a non-negative integer
 `boolean($value, $message = '')`                         | Check that a value is a boolean
 `scalar($value, $message = '')`                          | Check that a value is a scalar
 `object($value, $message = '')`                          | Check that a value is an object
@@ -223,7 +223,7 @@ Assert::allIsInstanceOf($employees, 'Acme\Employee');
 ### Nullable Assertions
 
 All of the above assertions can be prefixed with `nullOr*()` to run the
-assertion only if it the value is not `null`:
+assertion only if the value is not `null`:
 
 ```php
 Assert::nullOrString($middleName, 'The middle name must be a string or null. Got: %s');
@@ -243,7 +243,7 @@ Overriding the following methods in your assertion class allows you to change th
 * `protected static function valueToString($value)`
   * This method is used for error messages, to convert the value to a string value for displaying. You could use this for representing a value object with a `__toString` method for example.
 * `protected static function typeToString($value)`
-  * This method is used for error messages, to convert the a value to a string representing its type.
+  * This method is used for error messages, to convert a value to a string representing its type.
 * `protected static function strlen($value)`
   * This method is used to calculate string length for relevant methods, using the `mb_strlen` if available and useful.
 * `protected static function reportInvalidArgument($message)`

@@ -120,7 +120,7 @@ CODE_SAMPLE
                 $attributeValue = $this->resolveAttributeValue($desiredTagValueNode->value, $annotationWithValueToAttribute);
                 $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems($annotationWithValueToAttribute->getAttributeClass(), [$attributeValue]);
                 if ($node instanceof ClassMethod && $annotationWithValueToAttribute->getIsOnClassLevel() && $this->currentClass instanceof Class_) {
-                    Assert::isInstanceOf($this->currentClass, Class_::class);
+                    Assert::isAOf($this->currentClass, Class_::class);
                     $this->currentClass->attrGroups = array_merge($this->currentClass->attrGroups, [$attributeGroup]);
                 } else {
                     $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);

@@ -15,14 +15,14 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-date": "*",
+        "ext-filter": "*"
     },
-    "require-dev": {
-        "phpunit\/phpunit": "^8.5.13"
-    },
-    "conflict": {
-        "phpstan\/phpstan": "<0.12.20",
-        "vimeo\/psalm": "<4.6.1 || 4.6.2"
+    "suggest": {
+        "ext-intl": "",
+        "ext-simplexml": "",
+        "ext-spl": ""
     },
     "autoload": {
         "psr-4": {
@@ -31,13 +31,26 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202510\\Webmozart\\Assert\\Tests\\": "tests\/",
-            "RectorPrefix202510\\Webmozart\\Assert\\Bin\\": "bin\/src"
+            "RectorPrefix202510\\Webmozart\\Assert\\Bin\\": "bin\/src",
+            "RectorPrefix202510\\Webmozart\\Assert\\Tests\\": "tests\/"
         }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "1.10-dev"
         }
+    },
+    "scripts": {
+        "install-tools": [
+            "composer --working-dir=tools\/php-cs-fixer install",
+            "composer --working-dir=tools\/phpunit install",
+            "composer --working-dir=tools\/psalm install",
+            "composer --working-dir=tools\/roave-bc-check install"
+        ],
+        "bc-check": ".\/tools\/roave-bc-check\/vendor\/bin\/roave-backward-compatibility-check",
+        "cs-check": ".\/tools\/php-cs-fixer\/vendor\/bin\/php-cs-fixer check",
+        "cs-fix": ".\/tools\/php-cs-fixer\/vendor\/bin\/php-cs-fixer fix",
+        "static-analysis": ".\/tools\/psalm\/vendor\/bin\/psalm --threads=4 --root=$(pwd)",
+        "test": ".\/tools\/phpunit\/vendor\/bin\/phpunit"
     }
 }

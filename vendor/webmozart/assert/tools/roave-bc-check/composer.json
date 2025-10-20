@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "roave\/backward-compatibility-check": "^8.10"
+    }
+}
