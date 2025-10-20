@@ -46,7 +46,7 @@ class Name extends NodeAbstract
     public function getFirst(): string
     {
         if (\false !== $pos = \strpos($this->name, '\\')) {
-            return \substr($this->name, 0, $pos);
+            return (string) \substr($this->name, 0, $pos);
         }
         return $this->name;
     }
@@ -58,7 +58,7 @@ class Name extends NodeAbstract
     public function getLast(): string
     {
         if (\false !== $pos = \strrpos($this->name, '\\')) {
-            return \substr($this->name, $pos + 1);
+            return (string) \substr($this->name, $pos + 1);
         }
         return $this->name;
     }
@@ -172,7 +172,7 @@ class Name extends NodeAbstract
         if ($offset === 1 && $length === null) {
             // Short-circuit the common case.
             if (\false !== $pos = \strpos($this->name, '\\')) {
-                return new static(\substr($this->name, $pos + 1));
+                return new static((string) \substr($this->name, $pos + 1));
             }
             return null;
         }

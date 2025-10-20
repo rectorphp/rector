@@ -245,7 +245,7 @@ class TokenStream
                 $content = $token->text;
                 $newlinePos = \strrpos($content, "\n");
                 if (\false !== $newlinePos) {
-                    $indent = $this->getIndent(\substr($content, $newlinePos + 1), $tabWidth);
+                    $indent = $this->getIndent((string) \substr($content, $newlinePos + 1), $tabWidth);
                 } elseif ($i === 1 && $this->tokens[0]->id === \T_OPEN_TAG && $this->tokens[0]->text[\strlen($this->tokens[0]->text) - 1] === "\n") {
                     // Special case: Newline at the end of opening tag followed by whitespace.
                     $indent = $this->getIndent($content, $tabWidth);

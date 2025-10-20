@@ -1852,6 +1852,7 @@ class ComposerStaticInit100ccc9176c32b7be45ab2960a573d86
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrEndsWithRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
+        'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeSubstrFalsyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeSubstrFalsyRector.php',
         'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeMixedTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php',
         'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
         'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradeInstanceofStringableRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Instanceof_/DowngradeInstanceofStringableRector.php',

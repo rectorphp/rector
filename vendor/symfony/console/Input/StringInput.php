@@ -59,9 +59,9 @@ class StringInput extends ArgvInput
                     $token = null;
                 }
             } elseif (preg_match('/([^="\'\s]+?)(=?)(' . self::REGEX_QUOTED_STRING . '+)/A', $input, $match, 0, $cursor)) {
-                $token .= $match[1] . $match[2] . stripcslashes(str_replace(['"\'', '\'"', '\'\'', '""'], '', substr($match[3], 1, -1)));
+                $token .= $match[1] . $match[2] . stripcslashes(str_replace(['"\'', '\'"', '\'\'', '""'], '', (string) substr($match[3], 1, -1)));
             } elseif (preg_match('/' . self::REGEX_QUOTED_STRING . '/A', $input, $match, 0, $cursor)) {
-                $token .= stripcslashes(substr($match[0], 1, -1));
+                $token .= stripcslashes((string) substr($match[0], 1, -1));
             } elseif (preg_match('/' . self::REGEX_UNQUOTED_STRING . '/A', $input, $match, 0, $cursor)) {
                 $token .= $match[1];
             } else {

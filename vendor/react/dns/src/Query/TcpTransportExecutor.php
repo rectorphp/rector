@@ -235,7 +235,7 @@ class TcpTransportExecutor implements ExecutorInterface
             return;
         }
         if (isset($this->writeBuffer[$written])) {
-            $this->writeBuffer = \substr($this->writeBuffer, $written);
+            $this->writeBuffer = (string) \substr($this->writeBuffer, $written);
         } else {
             $this->loop->removeWriteStream($this->socket);
             $this->writePending = \false;
@@ -263,7 +263,7 @@ class TcpTransportExecutor implements ExecutorInterface
             if (!isset($this->readBuffer[$length + 1])) {
                 return;
             }
-            $data = \substr($this->readBuffer, 2, $length);
+            $data = (string) \substr($this->readBuffer, 2, $length);
             $this->readBuffer = (string) substr($this->readBuffer, $length + 2);
             try {
                 $response = $this->parser->parseMessage($data);

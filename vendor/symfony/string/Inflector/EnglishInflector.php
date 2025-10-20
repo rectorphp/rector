@@ -357,7 +357,7 @@ final class EnglishInflector implements InflectorInterface
                             break;
                         }
                     }
-                    $newBase = substr($plural, 0, $pluralLength - $suffixLength);
+                    $newBase = (string) substr($plural, 0, $pluralLength - $suffixLength);
                     $newSuffix = $map[4];
                     // Check whether the first character in the plural suffix
                     // is uppercased. If yes, uppercase the first character in
@@ -418,7 +418,7 @@ final class EnglishInflector implements InflectorInterface
                             break;
                         }
                     }
-                    $newBase = substr($singular, 0, $singularLength - $suffixLength);
+                    $newBase = (string) substr($singular, 0, $singularLength - $suffixLength);
                     $newSuffix = $map[4];
                     // Check whether the first character in the singular suffix
                     // is uppercased. If yes, uppercase the first character in

@@ -105,7 +105,7 @@ class StreamEncryption
             $error = \str_replace(array("\r", "\n"), ' ', $errstr);
             // remove useless function name from error message
             if (($pos = \strpos($error, "): ")) !== \false) {
-                $error = \substr($error, $pos + 3);
+                $error = (string) \substr($error, $pos + 3);
             }
         });
         $result = \stream_socket_enable_crypto($socket, $toggle, $method);

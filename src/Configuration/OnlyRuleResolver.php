@@ -29,7 +29,7 @@ final class OnlyRuleResolver
         $rule = str_replace('\\\\', '\\', $rule);
         //remove single quotes appearing when single-quoting arguments on windows
         if (strncmp($rule, "'", strlen("'")) === 0 && substr_compare($rule, "'", -strlen("'")) === 0) {
-            $rule = substr($rule, 1, -1);
+            $rule = (string) substr($rule, 1, -1);
         }
         $rule = ltrim($rule, '\\');
         foreach ($this->rectors as $rector) {

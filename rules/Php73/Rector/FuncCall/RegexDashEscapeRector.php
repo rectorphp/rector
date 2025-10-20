@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         if ($node->getAttribute(AttributeKey::RAW_VALUE) !== null) {
-            $stringValue = substr($node->getAttribute(AttributeKey::RAW_VALUE), 1, -1);
+            $stringValue = (string) substr($node->getAttribute(AttributeKey::RAW_VALUE), 1, -1);
         } else {
             $stringValue = $node->value;
         }

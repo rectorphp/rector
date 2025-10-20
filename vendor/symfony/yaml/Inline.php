@@ -71,7 +71,7 @@ class Inline
                 $result = self::parseScalar($value, $flags, null, $i, \true, $references);
         }
         // some comments are allowed at the end
-        if (preg_replace('/\s*#.*$/A', '', substr($value, $i))) {
+        if (preg_replace('/\s*#.*$/A', '', (string) substr($value, $i))) {
             throw new ParseException(\sprintf('Unexpected characters near "%s".', substr($value, $i)), self::$parsedLineNumber + 1, $value, self::$parsedFilename);
         }
         if (null !== $tag && '' !== $tag) {
@@ -253,7 +253,7 @@ class Inline
             $isQuoted = \true;
             $output = self::parseQuotedScalar($scalar, $i);
             if (null !== $delimiters) {
-                $tmp = ltrim(substr($scalar, $i), " \n");
+                $tmp = ltrim((string) substr($scalar, $i), " \n");
                 if ('' === $tmp) {
                     throw new ParseException(\sprintf('Unexpected end of line, expected one of "%s".', implode('', $delimiters)), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                 }
@@ -265,13 +265,13 @@ class Inline
             // "normal" string
             $isQuoted = \false;
             if (!$delimiters) {
-                $output = substr($scalar, $i);
+                $output = (string) substr($scalar, $i);
                 $i += \strlen($output);
                 // remove comments
                 if (Parser::preg_match('/[ \t]+#/', $output, $match, \PREG_OFFSET_CAPTURE)) {
-                    $output = substr($output, 0, $match[0][1]);
+                    $output = (string) substr($output, 0, $match[0][1]);
                 }
-            } elseif (Parser::preg_match('/^(.*?)(' . implode('|', $delimiters) . ')/', substr($scalar, $i), $match)) {
+            } elseif (Parser::preg_match('/^(.*?)(' . implode('|', $delimiters) . ')/', (string) substr($scalar, $i), $match)) {
                 $output = $match[1];
                 $i += \strlen($output);
                 $output = trim($output);
@@ -295,10 +295,10 @@ class Inline
      */
     private static function parseQuotedScalar(string $scalar, int &$i = 0): string
     {
-        if (!Parser::preg_match('/' . self::REGEX_QUOTED_STRING . '/Au', substr($scalar, $i), $match)) {
+        if (!Parser::preg_match('/' . self::REGEX_QUOTED_STRING . '/Au', (string) substr($scalar, $i), $match)) {
             throw new ParseException(\sprintf('Malformed inline YAML string: "%s".', substr($scalar, $i)), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
         }
-        $output = substr($match[0], 1, -1);
+        $output = (string) substr($match[0], 1, -1);
         $unescaper = new Unescaper();
         if ('"' == $scalar[$i]) {
             $output = $unescaper->unescapeDoubleQuotedString($output);
@@ -510,9 +510,9 @@ class Inline
         $scalar = trim($scalar);
         if (strncmp($scalar, '*', strlen('*')) === 0) {
             if (\false !== $pos = strpos($scalar, '#')) {
-                $value = substr($scalar, 1, $pos - 2);
+                $value = (string) substr($scalar, 1, $pos - 2);
             } else {
-                $value = substr($scalar, 1);
+                $value = (string) substr($scalar, 1);
             }
             // an unquoted *
             if ('' === $value) {
@@ -536,20 +536,20 @@ class Inline
             case '!' === $scalar[0]:
                 switch (\true) {
                     case strncmp($scalar, '!!str ', strlen('!!str ')) === 0:
-                        $s = substr($scalar, 6);
+                        $s = (string) substr($scalar, 6);
                         if (\in_array($s[0] ?? '', ['"', "'"], \true)) {
                             $isQuotedString = \true;
                             $s = self::parseQuotedScalar($s);
                         }
                         return $s;
                     case strncmp($scalar, '! ', strlen('! ')) === 0:
-                        return substr($scalar, 2);
+                        return (string) substr($scalar, 2);
                     case strncmp($scalar, '!php/object', strlen('!php/object')) === 0:
                         if (self::$objectSupport) {
                             if (!isset($scalar[12])) {
                                 throw new ParseException('Missing value for tag "!php/object".', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                             }
-                            return unserialize(self::parseScalar(substr($scalar, 12)));
+                            return unserialize(self::parseScalar((string) substr($scalar, 12)));
                         }
                         if (self::$exceptionOnInvalidType) {
                             throw new ParseException('Object support when parsing a YAML file has been disabled.', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -561,7 +561,7 @@ class Inline
                                 throw new ParseException('Missing value for tag "!php/const".', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                             }
                             $i = 0;
-                            if (\defined($const = self::parseScalar(substr($scalar, 11), 0, null, $i, \false))) {
+                            if (\defined($const = self::parseScalar((string) substr($scalar, 11), 0, null, $i, \false))) {
                                 return \constant($const);
                             }
                             throw new ParseException(\sprintf('The constant "%s" is not defined.', $const), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -576,7 +576,7 @@ class Inline
                                 throw new ParseException('Missing value for tag "!php/enum".', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                             }
                             $i = 0;
-                            $enumName = self::parseScalar(substr($scalar, 10), 0, null, $i, \false);
+                            $enumName = self::parseScalar((string) substr($scalar, 10), 0, null, $i, \false);
                             $useName = strpos($enumName, '::') !== \false;
                             $enum = $useName ? strstr($enumName, '::', \true) : $enumName;
                             if (!class_exists($enum)) {
@@ -586,7 +586,7 @@ class Inline
                                 return $enum::cases();
                             }
                             if ($useValue = substr_compare($enumName, '->value', -strlen('->value')) === 0) {
-                                $enumName = substr($enumName, 0, -7);
+                                $enumName = (string) substr($enumName, 0, -7);
                             }
                             if (!\defined($enumName)) {
                                 throw new ParseException(\sprintf('The string "%s" is not the name of a valid enum.', $enumName), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -607,7 +607,7 @@ class Inline
                     case strncmp($scalar, '!!float ', strlen('!!float ')) === 0:
                         return (float) substr($scalar, 8);
                     case strncmp($scalar, '!!binary ', strlen('!!binary ')) === 0:
-                        return self::evaluateBinaryScalar(substr($scalar, 9));
+                        return self::evaluateBinaryScalar((string) substr($scalar, 9));
                 }
                 throw new ParseException(\sprintf('The string "%s" could not be parsed as it uses an unsupported built-in tag.', $scalar), self::$parsedLineNumber, $scalar, self::$parsedFilename);
             case preg_match('/^(?:\+|-)?0o(?P<value>[0-7_]++)$/', $scalar, $matches):
@@ -668,7 +668,7 @@ class Inline
             return null;
         }
         $tagLength = strcspn($value, " \t\n[]{},", $i + 1);
-        $tag = substr($value, $i + 1, $tagLength);
+        $tag = (string) substr($value, $i + 1, $tagLength);
         $nextOffset = $i + $tagLength + 1;
         $nextOffset += strspn($value, ' ', $nextOffset);
         if ('' === $tag && (!isset($value[$nextOffset]) || \in_array($value[$nextOffset], [']', '}', ','], \true))) {

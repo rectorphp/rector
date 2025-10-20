@@ -63,7 +63,7 @@ final class Server extends EventEmitter implements ServerInterface
         $scheme = 'tcp';
         $pos = \strpos($uri, '://');
         if ($pos !== \false) {
-            $scheme = \substr($uri, 0, $pos);
+            $scheme = (string) \substr($uri, 0, $pos);
         }
         if ($scheme === 'unix') {
             $server = new UnixServer($uri, $loop, $context['unix']);

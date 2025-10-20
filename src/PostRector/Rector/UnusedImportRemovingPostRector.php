@@ -202,7 +202,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             return \true;
         }
         if (strncmp($name, $namespacedPrefix, strlen($namespacedPrefix)) === 0) {
-            $subNamespace = substr($name, strlen($namespacedPrefix));
+            $subNamespace = (string) substr($name, strlen($namespacedPrefix));
             return strpos($subNamespace, '\\') === \false;
         }
         return \false;

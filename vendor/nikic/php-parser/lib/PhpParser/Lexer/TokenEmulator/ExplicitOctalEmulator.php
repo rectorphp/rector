@@ -29,7 +29,7 @@ class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
     }
     private function resolveIntegerOrFloatToken(string $str): int
     {
-        $str = substr($str, 1);
+        $str = (string) substr($str, 1);
         $str = str_replace('_', '', $str);
         $num = octdec($str);
         return is_float($num) ? \T_DNUMBER : \T_LNUMBER;

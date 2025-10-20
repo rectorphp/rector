@@ -186,11 +186,11 @@ CODE_SAMPLE
         }
         $cleanMask = Strings::replace($mask, '#\%\%#', '%');
         if (substr_compare($mask, '%s', -strlen('%s')) === 0 || substr_compare($mask, '%d', -strlen('%d')) === 0) {
-            $bareString = new String_(substr($cleanMask, 0, -2));
+            $bareString = new String_((string) substr($cleanMask, 0, -2));
             return new Concat($bareString, $argumentVariables[0]);
         }
         if (strncmp($mask, '%s', strlen('%s')) === 0 || strncmp($mask, '%d', strlen('%d')) === 0) {
-            $bareString = new String_(substr($cleanMask, 2));
+            $bareString = new String_((string) substr($cleanMask, 2));
             return new Concat($argumentVariables[0], $bareString);
         }
         return null;

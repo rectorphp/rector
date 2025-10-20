@@ -151,6 +151,6 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
             // no parent locale
             return null;
         }
-        return substr($locale, 0, -\strlen($str));
+        return (string) substr($locale, 0, -\strlen($str));
     }
 }

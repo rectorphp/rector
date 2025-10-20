@@ -430,7 +430,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     {
         $p = substr($m, 0, 3);
         if ($p === 'get' || $p === 'set' || $p === 'add') {
-            $m = substr($m, 3);
+            $m = (string) substr($m, 3);
             $m[0] = $m[0] | " ";
             if ($p === 'get') {
                 return $this->attrs[$m] ?? null;

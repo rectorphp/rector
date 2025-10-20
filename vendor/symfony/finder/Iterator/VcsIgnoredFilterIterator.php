@@ -59,7 +59,7 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
                 // rules in ignored directories are ignored, no need to check further.
                 break;
             }
-            $fileRelativePath = substr($fileRealPath, \strlen($parentDirectory) + 1);
+            $fileRelativePath = (string) substr($fileRealPath, \strlen($parentDirectory) + 1);
             if (null === $regexps = $this->readGitignoreFile("{$parentDirectory}/.gitignore")) {
                 continue;
             }

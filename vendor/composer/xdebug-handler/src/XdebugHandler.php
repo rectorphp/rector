@@ -330,7 +330,7 @@ class XdebugHandler
             }
             // Check and remove directives after HOST and PATH sections
             if (Preg::isMatchWithOffsets($sectionRegex, $data, $matches)) {
-                $data = substr($data, 0, $matches[0][1]);
+                $data = (string) substr($data, 0, $matches[0][1]);
             }
             $content .= Preg::replace($xdebugRegex, ';$1', $data) . \PHP_EOL;
         }

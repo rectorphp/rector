@@ -17,9 +17,9 @@ class StringUnescaper
     {
         $quote = $string[0];
         if ($quote === '\'') {
-            return str_replace(['\\\\', '\\\''], ['\\', '\''], substr($string, 1, -1));
+            return str_replace(['\\\\', '\\\''], ['\\', '\''], (string) substr($string, 1, -1));
         }
-        return self::parseEscapeSequences(substr($string, 1, -1), '"');
+        return self::parseEscapeSequences((string) substr($string, 1, -1), '"');
     }
     /**
      * Implementation based on https://github.com/nikic/PHP-Parser/blob/b0edd4c41111042d43bb45c6c657b2e0db367d9e/lib/PhpParser/Node/Scalar/String_.php#L90-L130
@@ -33,7 +33,7 @@ class StringUnescaper
                 return self::REPLACEMENTS[$str];
             }
             if ($str[0] === 'x' || $str[0] === 'X') {
-                return chr((int) hexdec(substr($str, 1)));
+                return chr((int) hexdec((string) substr($str, 1)));
             }
             if ($str[0] === 'u') {
                 if (!isset($matches[2])) {

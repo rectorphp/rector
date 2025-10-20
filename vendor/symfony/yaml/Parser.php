@@ -144,7 +144,7 @@ class Parser
                     // Inline first child
                     $currentLineNumber = $this->getRealCurrentLineNb();
                     $sequenceIndentation = \strlen($values['leadspaces']) + 1;
-                    $sequenceYaml = substr($this->currentLine, $sequenceIndentation);
+                    $sequenceYaml = (string) substr($this->currentLine, $sequenceIndentation);
                     $sequenceYaml .= "\n" . $this->getNextEmbedBlock($sequenceIndentation, \true);
                     $data[] = $this->parseBlock($currentLineNumber, rtrim($sequenceYaml), $flags);
                 } elseif (!isset($values['value']) || '' == trim($values['value'], ' ') || strncmp(ltrim($values['value'], ' '), '#', strlen('#')) === 0) {
@@ -187,7 +187,7 @@ class Parser
                     $mergeNode = \true;
                     $allowOverwrite = \true;
                     if (isset($values['value'][0]) && '*' === $values['value'][0]) {
-                        $refName = substr(rtrim($values['value']), 1);
+                        $refName = (string) substr(rtrim($values['value']), 1);
                         if (!\array_key_exists($refName, $this->refs)) {
                             if (\false !== $pos = array_search($refName, $this->refsBeingParsed, \true)) {
                                 throw new ParseException(\sprintf('Circular reference [%s] detected for reference "%s".', implode(', ', array_merge(\array_slice($this->refsBeingParsed, $pos), [$refName])), $refName), $this->currentLineNb + 1, $this->currentLine, $this->filename);
@@ -392,7 +392,7 @@ class Parser
                             $value .= ' ';
                         }
                         if ('' !== $trimmedLine && substr_compare($line, '\\', -strlen('\\')) === 0) {
-                            $value .= ltrim(substr($line, 0, -1));
+                            $value .= ltrim((string) substr($line, 0, -1));
                         } elseif ('' !== $trimmedLine) {
                             $value .= $trimmedLine;
                         }
@@ -512,7 +512,7 @@ class Parser
         }
         $data = [];
         if ($this->getCurrentLineIndentation() >= $newIndent) {
-            $data[] = substr($this->currentLine, $newIndent ?? 0);
+            $data[] = (string) substr($this->currentLine, $newIndent ?? 0);
         } elseif ($this->isCurrentLineEmpty() || $this->isCurrentLineComment()) {
             $data[] = $this->currentLine;
         } else {
@@ -538,11 +538,11 @@ class Parser
                 break;
             }
             if ($this->isCurrentLineBlank()) {
-                $data[] = substr($this->currentLine, $newIndent ?? 0);
+                $data[] = (string) substr($this->currentLine, $newIndent ?? 0);
                 continue;
             }
             if ($indent >= $newIndent) {
-                $data[] = substr($this->currentLine, $newIndent ?? 0);
+                $data[] = (string) substr($this->currentLine, $newIndent ?? 0);
             } elseif ($this->isCurrentLineComment()) {
                 $data[] = $this->currentLine;
             } elseif (0 == $indent) {
@@ -594,9 +594,9 @@ class Parser
     {
         if (strncmp($value, '*', strlen('*')) === 0) {
             if (\false !== $pos = strpos($value, '#')) {
-                $value = substr($value, 1, $pos - 2);
+                $value = (string) substr($value, 1, $pos - 2);
             } else {
-                $value = substr($value, 1);
+                $value = (string) substr($value, 1);
             }
             if (!\array_key_exists($value, $this->refs)) {
                 if (\false !== $pos = array_search($value, $this->refsBeingParsed, \true)) {
@@ -613,7 +613,7 @@ class Parser
                 if ('!!binary' === $matches['tag']) {
                     return Inline::evaluateBinaryScalar($data);
                 }
-                return new TaggedValue(substr($matches['tag'], 1), $data);
+                return new TaggedValue((string) substr($matches['tag'], 1), $data);
             }
             return $data;
         }
@@ -630,7 +630,7 @@ class Parser
                 case "'":
                     $cursor = \strlen(rtrim($this->currentLine)) - \strlen(rtrim($value));
                     $parsedValue = Inline::parse($this->lexInlineQuotedString($cursor), $flags, $this->refs);
-                    if (isset($this->currentLine[$cursor]) && preg_replace('/\s*(#.*)?$/A', '', substr($this->currentLine, $cursor))) {
+                    if (isset($this->currentLine[$cursor]) && preg_replace('/\s*(#.*)?$/A', '', (string) substr($this->currentLine, $cursor))) {
                         throw new ParseException(\sprintf('Unexpected characters near "%s".', substr($this->currentLine, $cursor)));
                     }
                     return $parsedValue;
@@ -703,7 +703,7 @@ class Parser
             $pattern = \sprintf('/^ {%d}(.*)$/', $indentation);
             while ($notEOF && ($isCurrentLineBlank || self::preg_match($pattern, $this->currentLine, $matches))) {
                 if ($isCurrentLineBlank && \strlen($this->currentLine) > $indentation) {
-                    $blockLines[] = substr($this->currentLine, $indentation);
+                    $blockLines[] = (string) substr($this->currentLine, $indentation);
                 } elseif ($isCurrentLineBlank) {
                     $blockLines[] = '';
                 } else {
@@ -880,7 +880,7 @@ class Parser
     private function trimTag(string $value): string
     {
         if ('!' === $value[0]) {
-            return ltrim(substr($value, 1, strcspn($value, " \r\n", 1)), ' ');
+            return ltrim((string) substr($value, 1, strcspn($value, " \r\n", 1)), ' ');
         }
         return $value;
     }
@@ -892,7 +892,7 @@ class Parser
         if ($nextLineCheck && !$this->isNextLineIndented()) {
             return null;
         }
-        $tag = substr($matches['tag'], 1);
+        $tag = (string) substr($matches['tag'], 1);
         // Built-in tags
         if ($tag && '!' === $tag[0]) {
             throw new ParseException(\sprintf('The built-in tag "!%s" is not implemented.', $tag), $this->getRealCurrentLineNb() + 1, $value, $this->filename);
@@ -970,7 +970,7 @@ class Parser
         if ($cursor === $offset) {
             throw new ParseException('Malformed unquoted YAML string.');
         }
-        return substr($this->currentLine, $offset, $cursor - $offset);
+        return (string) substr($this->currentLine, $offset, $cursor - $offset);
     }
     private function lexInlineMapping(int &$cursor = 0, bool $consumeUntilEol = \true): string
     {
@@ -1007,7 +1007,7 @@ class Parser
                         $value .= $this->currentLine[$cursor];
                         ++$cursor;
                         if ($consumeUntilEol && isset($this->currentLine[$cursor]) && ($whitespaces = strspn($this->currentLine, ' ', $cursor) + $cursor) < \strlen($this->currentLine) && '#' !== $this->currentLine[$whitespaces]) {
-                            throw new ParseException(\sprintf('Unexpected token "%s".', trim(substr($this->currentLine, $cursor))));
+                            throw new ParseException(\sprintf('Unexpected token "%s".', trim((string) substr($this->currentLine, $cursor))));
                         }
                         return $value;
                     case '#':

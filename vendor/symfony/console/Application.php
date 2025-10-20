@@ -604,7 +604,7 @@ class Application implements ResetInterface
         if (empty($commands) || \count(preg_grep('{^' . $expr . '$}i', $commands)) < 1) {
             if (\false !== $pos = strrpos($name, ':')) {
                 // check if a namespace exists and contains commands
-                $this->findNamespace(substr($name, 0, $pos));
+                $this->findNamespace((string) substr($name, 0, $pos));
             }
             $message = \sprintf('Command "%s" is not defined.', $name);
             if ($alternatives = $this->findAlternatives($name, $allCommands)) {
@@ -704,7 +704,7 @@ class Application implements ResetInterface
         $abbrevs = [];
         foreach ($names as $name) {
             for ($len = \strlen($name); $len > 0; --$len) {
-                $abbrev = substr($name, 0, $len);
+                $abbrev = (string) substr($name, 0, $len);
                 $abbrevs[$abbrev][] = $name;
             }
         }

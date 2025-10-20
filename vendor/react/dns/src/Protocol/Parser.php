@@ -98,7 +98,7 @@ final class Parser
         if ($labels === null || !isset($data[$consumed + 4 - 1])) {
             return array(null, null);
         }
-        list($type, $class) = array_values(unpack('n*', substr($data, $consumed, 4)));
+        list($type, $class) = array_values(unpack('n*', (string) substr($data, $consumed, 4)));
         $consumed += 4;
         return array(new Query(implode('.', $labels), $type, $class), $consumed);
     }
@@ -113,15 +113,15 @@ final class Parser
         if ($name === null || !isset($data[$consumed + 10 - 1])) {
             return array(null, null);
         }
-        list($type, $class) = array_values(unpack('n*', substr($data, $consumed, 4)));
+        list($type, $class) = array_values(unpack('n*', (string) substr($data, $consumed, 4)));
         $consumed += 4;
-        list($ttl) = array_values(unpack('N', substr($data, $consumed, 4)));
+        list($ttl) = array_values(unpack('N', (string) substr($data, $consumed, 4)));
         $consumed += 4;
         // TTL is a UINT32 that must not have most significant bit set for BC reasons
         if ($ttl < 0 || $ttl >= 1 << 31) {
             $ttl = 0;
         }
-        list($rdLength) = array_values(unpack('n', substr($data, $consumed, 2)));
+        list($rdLength) = array_values(unpack('n', (string) substr($data, $consumed, 2)));
         $consumed += 2;
         if (!isset($data[$consumed + $rdLength - 1])) {
             return array(null, null);
@@ -130,12 +130,12 @@ final class Parser
         $expected = $consumed + $rdLength;
         if (Message::TYPE_A === $type) {
             if ($rdLength === 4) {
-                $rdata = inet_ntop(substr($data, $consumed, $rdLength));
+                $rdata = inet_ntop((string) substr($data, $consumed, $rdLength));
                 $consumed += $rdLength;
             }
         } elseif (Message::TYPE_AAAA === $type) {
             if ($rdLength === 16) {
-                $rdata = inet_ntop(substr($data, $consumed, $rdLength));
+                $rdata = inet_ntop((string) substr($data, $consumed, $rdLength));
                 $consumed += $rdLength;
             }
         } elseif (Message::TYPE_CNAME === $type || Message::TYPE_PTR === $type || Message::TYPE_NS === $type) {
@@ -149,20 +149,20 @@ final class Parser
             }
         } elseif (Message::TYPE_MX === $type) {
             if ($rdLength > 2) {
-                list($priority) = array_values(unpack('n', substr($data, $consumed, 2)));
+                list($priority) = array_values(unpack('n', (string) substr($data, $consumed, 2)));
                 list($target, $consumed) = $this->readDomain($data, $consumed + 2);
                 $rdata = array('priority' => $priority, 'target' => $target);
             }
         } elseif (Message::TYPE_SRV === $type) {
             if ($rdLength > 6) {
-                list($priority, $weight, $port) = array_values(unpack('n*', substr($data, $consumed, 6)));
+                list($priority, $weight, $port) = array_values(unpack('n*', (string) substr($data, $consumed, 6)));
                 list($target, $consumed) = $this->readDomain($data, $consumed + 6);
                 $rdata = array('priority' => $priority, 'weight' => $weight, 'port' => $port, 'target' => $target);
             }
         } elseif (Message::TYPE_SSHFP === $type) {
             if ($rdLength > 2) {
-                list($algorithm, $hash) = \array_values(\unpack('C*', \substr($data, $consumed, 2)));
-                $fingerprint = \bin2hex(\substr($data, $consumed + 2, $rdLength - 2));
+                list($algorithm, $hash) = \array_values(\unpack('C*', (string) \substr($data, $consumed, 2)));
+                $fingerprint = \bin2hex((string) \substr($data, $consumed + 2, $rdLength - 2));
                 $consumed += $rdLength;
                 $rdata = array('algorithm' => $algorithm, 'type' => $hash, 'fingerprint' => $fingerprint);
             }
@@ -170,14 +170,14 @@ final class Parser
             list($mname, $consumed) = $this->readDomain($data, $consumed);
             list($rname, $consumed) = $this->readDomain($data, $consumed);
             if ($mname !== null && $rname !== null && isset($data[$consumed + 20 - 1])) {
-                list($serial, $refresh, $retry, $expire, $minimum) = array_values(unpack('N*', substr($data, $consumed, 20)));
+                list($serial, $refresh, $retry, $expire, $minimum) = array_values(unpack('N*', (string) substr($data, $consumed, 20)));
                 $consumed += 20;
                 $rdata = array('mname' => $mname, 'rname' => $rname, 'serial' => $serial, 'refresh' => $refresh, 'retry' => $retry, 'expire' => $expire, 'minimum' => $minimum);
             }
         } elseif (Message::TYPE_OPT === $type) {
             $rdata = array();
             while (isset($data[$consumed + 4 - 1])) {
-                list($code, $length) = array_values(unpack('n*', substr($data, $consumed, 4)));
+                list($code, $length) = array_values(unpack('n*', (string) substr($data, $consumed, 4)));
                 $value = (string) substr($data, $consumed + 4, $length);
                 if ($code === Message::OPT_TCP_KEEPALIVE && $value === '') {
                     $value = null;
@@ -192,17 +192,17 @@ final class Parser
             }
         } elseif (Message::TYPE_CAA === $type) {
             if ($rdLength > 3) {
-                list($flag, $tagLength) = array_values(unpack('C*', substr($data, $consumed, 2)));
+                list($flag, $tagLength) = array_values(unpack('C*', (string) substr($data, $consumed, 2)));
                 if ($tagLength > 0 && $rdLength - 2 - $tagLength > 0) {
-                    $tag = substr($data, $consumed + 2, $tagLength);
-                    $value = substr($data, $consumed + 2 + $tagLength, $rdLength - 2 - $tagLength);
+                    $tag = (string) substr($data, $consumed + 2, $tagLength);
+                    $value = (string) substr($data, $consumed + 2 + $tagLength, $rdLength - 2 - $tagLength);
                     $consumed += $rdLength;
                     $rdata = array('flag' => $flag, 'tag' => $tag, 'value' => $value);
                 }
             }
         } else {
             // unknown types simply parse rdata as an opaque binary string
-            $rdata = substr($data, $consumed, $rdLength);
+            $rdata = (string) substr($data, $consumed, $rdLength);
             $consumed += $rdLength;
         }
         // ensure parsing record data consumes expact number of bytes indicated in record length
@@ -259,7 +259,7 @@ final class Parser
             if ($length & 0xc0 || !isset($data[$consumed + $length - 1])) {
                 return array(null, null);
             }
-            $labels[] = substr($data, $consumed + 1, $length);
+            $labels[] = (string) substr($data, $consumed + 1, $length);
             $consumed += $length + 1;
         }
         return array($labels, $consumed);

@@ -10,6 +10,6 @@ final class NamespaceBeforeClassNameResolver
     {
         $className = $fullyQualifiedObjectType->getClassName();
         $shortName = $fullyQualifiedObjectType->getShortName();
-        return $className === $shortName ? '' : substr($className, 0, -strlen($shortName) - 1);
+        return $className === $shortName ? '' : (string) substr($className, 0, -strlen($shortName) - 1);
     }
 }

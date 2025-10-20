@@ -28,7 +28,7 @@ final class FallbackExecutor implements ExecutorInterface
                 $promise = $fallback->query($query)->then($resolve, function (\Exception $e2) use ($e1, $reject) {
                     $append = $e2->getMessage();
                     if (($pos = strpos($append, ':')) !== \false) {
-                        $append = substr($append, $pos + 2);
+                        $append = (string) substr($append, $pos + 2);
                     }
                     // reject with combined error message if both queries fail
                     $reject(new \RuntimeException($e1->getMessage() . '. ' . $append));

@@ -46,16 +46,16 @@ final class Grapheme
             set_error_handler(function () use (&$hasError) {
                 $hasError = \true;
             });
-            $next = substr($s, $start);
+            $next = (string) substr($s, $start);
             restore_error_handler();
             if ($hasError) {
-                substr($s, $start);
+                (string) substr($s, $start);
                 $s = '';
             } else {
                 $s = $next;
             }
         } else {
-            $s = substr($s, $start);
+            $s = (string) substr($s, $start);
         }
         $size = (int) $size;
         $type = (int) $type;

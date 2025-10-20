@@ -31,7 +31,7 @@ final class NullsafeTokenEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEm
                 $replacement = [new Token(\T_NULLSAFE_OBJECT_OPERATOR, '?->', $token->line, $token->pos), new Token(\T_STRING, $matches[1], $token->line, $token->pos + 3)];
                 $matchLen = \strlen($matches[0]);
                 if ($matchLen !== \strlen($token->text)) {
-                    $replacement[] = new Token(\T_ENCAPSED_AND_WHITESPACE, \substr($token->text, $matchLen), $token->line, $token->pos + $matchLen);
+                    $replacement[] = new Token(\T_ENCAPSED_AND_WHITESPACE, (string) \substr($token->text, $matchLen), $token->line, $token->pos + $matchLen);
                 }
                 array_splice($tokens, $i, 1, $replacement);
                 $c += \count($replacement) - 1;

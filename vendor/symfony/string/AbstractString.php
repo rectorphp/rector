@@ -534,7 +534,7 @@ abstract class AbstractString implements \JsonSerializable
             $prefix = (string) $prefix;
         }
         if ('' !== $prefix && \strlen($this->string) >= \strlen($prefix) && 0 === substr_compare($this->string, $prefix, 0, \strlen($prefix), $this->ignoreCase)) {
-            $str->string = substr($this->string, \strlen($prefix));
+            $str->string = (string) substr($this->string, \strlen($prefix));
         }
         return $str;
     }
@@ -565,7 +565,7 @@ abstract class AbstractString implements \JsonSerializable
             $suffix = (string) $suffix;
         }
         if ('' !== $suffix && \strlen($this->string) >= \strlen($suffix) && 0 === substr_compare($this->string, $suffix, -\strlen($suffix), null, $this->ignoreCase)) {
-            $str->string = substr($this->string, 0, -\strlen($suffix));
+            $str->string = (string) substr($this->string, 0, -\strlen($suffix));
         }
         return $str;
     }

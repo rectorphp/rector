@@ -114,7 +114,7 @@ class Normalizer
         $result = $tail = '';
         $i = $s[0] < "\x80" ? 1 : $ulenMask[$s[0] & "\xf0"];
         $len = \strlen($s);
-        $lastUchr = substr($s, 0, $i);
+        $lastUchr = (string) substr($s, 0, $i);
         $lastUcls = isset($combClass[$lastUchr]) ? 256 : 0;
         while ($i < $len) {
             if ($s[$i] < "\x80") {
@@ -134,7 +134,7 @@ class Normalizer
                 continue;
             }
             $ulen = $ulenMask[$s[$i] & "\xf0"];
-            $uchr = substr($s, $i, $ulen);
+            $uchr = (string) substr($s, $i, $ulen);
             if ($lastUchr < "ᄀ" || "ᄒ" < $lastUchr || $uchr < "ᅡ" || "ᅵ" < $uchr || $lastUcls) {
                 // Table lookup and combining chars composition
                 $ucls = $combClass[$uchr] ?? 0;
@@ -155,7 +155,7 @@ class Normalizer
                 $L = \ord($lastUchr[2]) - 0x80;
                 $V = \ord($uchr[2]) - 0xa1;
                 $T = 0;
-                $uchr = substr($s, $i + $ulen, 3);
+                $uchr = (string) substr($s, $i + $ulen, 3);
                 if ("ᆧ" <= $uchr && $uchr <= "ᇂ") {
                     $T = \ord($uchr[2]) - 0xa7;
                     0 > $T && $T += 0x40;
@@ -195,7 +195,7 @@ class Normalizer
                 continue;
             }
             $ulen = $ulenMask[$s[$i] & "\xf0"];
-            $uchr = substr($s, $i, $ulen);
+            $uchr = (string) substr($s, $i, $ulen);
             $i += $ulen;
             if ($uchr < "가" || "힣" < $uchr) {
                 // Table lookup
@@ -215,7 +215,7 @@ class Normalizer
                         while ($j--) {
                             $s[$i + $j] = $uchr[$ulen + $j];
                         }
-                        $uchr = substr($uchr, 0, $ulen);
+                        $uchr = (string) substr($uchr, 0, $ulen);
                     }
                 }
                 if (isset($combClass[$uchr])) {

@@ -316,7 +316,7 @@ class Strings
                     while ($i && $first[$i - 1] >= "\x80" && $first[$i] >= "\x80" && $first[$i] < "\xc0") {
                         $i--;
                     }
-                    return substr($first, 0, $i);
+                    return (string) substr($first, 0, $i);
                 }
             }
         }
@@ -382,7 +382,7 @@ class Strings
     public static function before(string $haystack, string $needle, int $nth = 1): ?string
     {
         $pos = self::pos($haystack, $needle, $nth);
-        return $pos === null ? null : substr($haystack, 0, $pos);
+        return $pos === null ? null : (string) substr($haystack, 0, $pos);
     }
     /**
      * Returns part of $haystack after $nth occurence of $needle or returns null if the needle was not found.
@@ -391,7 +391,7 @@ class Strings
     public static function after(string $haystack, string $needle, int $nth = 1): ?string
     {
         $pos = self::pos($haystack, $needle, $nth);
-        return $pos === null ? null : substr($haystack, $pos + strlen($needle));
+        return $pos === null ? null : (string) substr($haystack, $pos + strlen($needle));
     }
     /**
      * Returns position in characters of $nth occurence of $needle in $haystack or null if the $needle was not found.
@@ -400,7 +400,7 @@ class Strings
     public static function indexOf(string $haystack, string $needle, int $nth = 1): ?int
     {
         $pos = self::pos($haystack, $needle, $nth);
-        return $pos === null ? null : self::length(substr($haystack, 0, $pos));
+        return $pos === null ? null : self::length((string) substr($haystack, 0, $pos));
     }
     /**
      * Returns position in characters of $nth occurence of $needle in $haystack or null if the needle was not found.
@@ -575,9 +575,9 @@ class Strings
         foreach ($groups as &$matches) {
             foreach ($matches as &$match) {
                 if ($match[1] > $lastBytes) {
-                    $lastChars += self::length(substr($s, $lastBytes, $match[1] - $lastBytes));
+                    $lastChars += self::length((string) substr($s, $lastBytes, $match[1] - $lastBytes));
                 } elseif ($match[1] < $lastBytes) {
-                    $lastChars -= self::length(substr($s, $match[1], $lastBytes - $match[1]));
+                    $lastChars -= self::length((string) substr($s, $match[1], $lastBytes - $match[1]));
                 }
                 $lastBytes = $match[1];
                 $match[1] = $lastChars;

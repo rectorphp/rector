@@ -325,7 +325,7 @@ class ByteString extends AbstractString
     public function slice(int $start = 0, ?int $length = null)
     {
         $str = clone $this;
-        $str->string = substr($this->string, $start, $length ?? \PHP_INT_MAX);
+        $str->string = (string) substr($this->string, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }
     /**

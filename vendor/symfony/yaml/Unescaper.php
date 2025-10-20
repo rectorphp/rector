@@ -90,11 +90,11 @@ class Unescaper
             case 'P':
                 return " ";
             case 'x':
-                return self::utf8chr(hexdec(substr($value, 2, 2)));
+                return self::utf8chr(hexdec((string) substr($value, 2, 2)));
             case 'u':
-                return self::utf8chr(hexdec(substr($value, 2, 4)));
+                return self::utf8chr(hexdec((string) substr($value, 2, 4)));
             case 'U':
-                return self::utf8chr(hexdec(substr($value, 2, 8)));
+                return self::utf8chr(hexdec((string) substr($value, 2, 8)));
             default:
                 throw new ParseException(\sprintf('Found unknown escape character "%s".', $value));
         }

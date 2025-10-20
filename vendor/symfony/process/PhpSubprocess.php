@@ -97,7 +97,7 @@ class PhpSubprocess extends Process
             }
             // Check and remove directives after HOST and PATH sections
             if (preg_match('/^\s*\[(?:PATH|HOST)\s*=/mi', $data, $matches, \PREG_OFFSET_CAPTURE)) {
-                $data = substr($data, 0, $matches[0][1]);
+                $data = (string) substr($data, 0, $matches[0][1]);
             }
             $content .= $data . "\n";
         }

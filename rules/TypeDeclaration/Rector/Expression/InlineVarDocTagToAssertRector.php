@@ -87,7 +87,7 @@ CODE_SAMPLE
         $expressionVariableName = $node->expr->var->name;
         foreach ($phpDocInfo->getPhpDocNode()->getVarTagValues() as $varTagValueNode) {
             //remove $ from variable name
-            $variableName = substr($varTagValueNode->variableName, 1);
+            $variableName = (string) substr($varTagValueNode->variableName, 1);
             if ($variableName === $expressionVariableName && $varTagValueNode->description === '') {
                 $typeExpression = $this->typeExpressionFromVarTagResolver->resolveTypeExpressionFromVarTag($varTagValueNode->type, new Variable($variableName));
                 if ($typeExpression instanceof Expr) {

@@ -125,7 +125,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
                 continue;
             }
             // convert byte position to character position.
-            $pos = Helper::length(substr($message, 0, $pos));
+            $pos = Helper::length((string) substr($message, 0, $pos));
             // add the text up to the next tag
             $output .= $this->applyCurrentStyle(Helper::substr($message, $offset, $pos - $offset), $output, $width, $currentLineLength);
             $offset = $pos + Helper::length($text);

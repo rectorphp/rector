@@ -39,7 +39,7 @@ class Gitignore
         foreach ($gitignoreLines as $line) {
             $line = preg_replace('~(?<!\\\\)[ \t]+$~', '', $line);
             if (strncmp($line, '!', strlen('!')) === 0) {
-                $line = substr($line, 1);
+                $line = (string) substr($line, 1);
                 $isNegative = \true;
             } else {
                 $isNegative = \false;
@@ -63,7 +63,7 @@ class Gitignore
         $slashPos = strpos($gitignoreLine, '/');
         if (\false !== $slashPos && \strlen($gitignoreLine) - 1 !== $slashPos) {
             if (0 === $slashPos) {
-                $gitignoreLine = substr($gitignoreLine, 1);
+                $gitignoreLine = (string) substr($gitignoreLine, 1);
             }
             $isAbsolute = \true;
         } else {

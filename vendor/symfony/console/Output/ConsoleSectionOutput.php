@@ -146,7 +146,7 @@ class ConsoleSectionOutput extends StreamOutput
     {
         // Simulate newline behavior for consistent output formatting, avoiding extra logic
         if (!$newline && substr_compare($message, \PHP_EOL, -strlen(\PHP_EOL)) === 0) {
-            $message = substr($message, 0, -\strlen(\PHP_EOL));
+            $message = (string) substr($message, 0, -\strlen(\PHP_EOL));
             $newline = \true;
         }
         if (!$this->isDecorated()) {

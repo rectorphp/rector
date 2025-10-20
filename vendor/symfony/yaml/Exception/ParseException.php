@@ -100,7 +100,7 @@ class ParseException extends RuntimeException
         $this->message = $this->rawMessage;
         $dot = \false;
         if (substr_compare($this->message, '.', -strlen('.')) === 0) {
-            $this->message = substr($this->message, 0, -1);
+            $this->message = (string) substr($this->message, 0, -1);
             $dot = \true;
         }
         if (null !== $this->parsedFile) {

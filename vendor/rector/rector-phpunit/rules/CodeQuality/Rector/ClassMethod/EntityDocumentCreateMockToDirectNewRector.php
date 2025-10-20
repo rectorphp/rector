@@ -215,7 +215,7 @@ CODE_SAMPLE
     {
         // guess the setter name
         if (strncmp($methodName, 'get', strlen('get')) === 0) {
-            return 'set' . ucfirst(substr($methodName, 3));
+            return 'set' . ucfirst((string) substr($methodName, 3));
         }
         if (strncmp($methodName, 'is', strlen('is')) === 0) {
             $mockedClassReflection = $this->reflectionProvider->getClass($mockedClass);

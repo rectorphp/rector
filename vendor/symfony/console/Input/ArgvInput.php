@@ -86,7 +86,7 @@ class ArgvInput extends Input
      */
     private function parseShortOption(string $token): void
     {
-        $name = substr($token, 1);
+        $name = (string) substr($token, 1);
         if (\strlen($name) > 1) {
             if ($this->definition->hasShortcut($name[0]) && $this->definition->getOptionForShortcut($name[0])->acceptValue()) {
                 // an option with a value (with no space)
@@ -113,7 +113,7 @@ class ArgvInput extends Input
             }
             $option = $this->definition->getOptionForShortcut($name[$i]);
             if ($option->acceptValue()) {
-                $this->addLongOption($option->getName(), $i === $len - 1 ? null : substr($name, $i + 1));
+                $this->addLongOption($option->getName(), $i === $len - 1 ? null : (string) substr($name, $i + 1));
                 break;
             } else {
                 $this->addLongOption($option->getName(), null);
@@ -125,12 +125,12 @@ class ArgvInput extends Input
      */
     private function parseLongOption(string $token): void
     {
-        $name = substr($token, 2);
+        $name = (string) substr($token, 2);
         if (\false !== $pos = strpos($name, '=')) {
-            if ('' === $value = substr($name, $pos + 1)) {
+            if ('' === $value = (string) substr($name, $pos + 1)) {
                 array_unshift($this->parsed, $value);
             }
-            $this->addLongOption(substr($name, 0, $pos), $value);
+            $this->addLongOption((string) substr($name, 0, $pos), $value);
         } else {
             $this->addLongOption($name, null);
         }
@@ -243,7 +243,7 @@ class ArgvInput extends Input
                 }
                 // If it's a long option, consider that everything after "--" is the option name.
                 // Otherwise, use the last char (if it's a short option set, only the last one can take a value with space separator)
-                $name = '-' === $token[1] ? substr($token, 2) : substr($token, -1);
+                $name = '-' === $token[1] ? (string) substr($token, 2) : substr($token, -1);
                 if (!isset($this->options[$name]) && !$this->definition->hasShortcut($name)) {
                     // noop
                 } elseif ((isset($this->options[$name]) || isset($this->options[$name = $this->definition->shortcutToName($name)])) && $this->tokens[$i + 1] === $this->options[$name]) {
@@ -304,7 +304,7 @@ class ArgvInput extends Input
                 //   For short options, test for '-o' at beginning
                 $leading = strncmp($value, '--', strlen('--')) === 0 ? $value . '=' : $value;
                 if ('' !== $leading && strncmp($token, $leading, strlen($leading)) === 0) {
-                    return substr($token, \strlen($leading));
+                    return (string) substr($token, \strlen($leading));
                 }
             }
         }

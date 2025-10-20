@@ -216,7 +216,7 @@ final class Mbstring
         $result = '';
         while ($i < $len) {
             $ulen = $s[$i] < "\x80" ? 1 : $ulenMask[$s[$i] & "\xf0"];
-            $uchr = substr($s, $i, $ulen);
+            $uchr = (string) substr($s, $i, $ulen);
             $i += $ulen;
             $c = self::mb_ord($uchr);
             for ($j = 0; $j < $cnt; $j += 4) {
@@ -280,7 +280,7 @@ final class Mbstring
             $len = \strlen($s);
             while ($i < $len) {
                 $ulen = $s[$i] < "\x80" ? 1 : $ulenMask[$s[$i] & "\xf0"];
-                $uchr = substr($s, $i, $ulen);
+                $uchr = (string) substr($s, $i, $ulen);
                 $i += $ulen;
                 if (isset($map[$uchr])) {
                     $uchr = $map[$uchr];
@@ -588,9 +588,9 @@ final class Mbstring
             return \false;
         }
         if ($part) {
-            return substr($haystack, 0, $pos);
+            return (string) substr($haystack, 0, $pos);
         }
-        return substr($haystack, $pos);
+        return (string) substr($haystack, $pos);
     }
     public static function mb_get_info($type = 'all')
     {

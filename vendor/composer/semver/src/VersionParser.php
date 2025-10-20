@@ -105,7 +105,7 @@ class VersionParser
         }
         // strip off stability flag
         if (preg_match('{@(?:' . self::$stabilitiesRegex . ')$}i', $version, $match)) {
-            $version = substr($version, 0, strlen($version) - strlen($match[0]));
+            $version = (string) substr($version, 0, strlen($version) - strlen($match[0]));
         }
         // normalize master/trunk/default branches to dev-name for BC with 1.x as these used to be valid constraints
         if (\in_array($version, array('master', 'trunk', 'default'), \true)) {
@@ -313,7 +313,7 @@ class VersionParser
             if (empty($matches[5]) && empty($matches[7]) && empty($matches[8])) {
                 $stabilitySuffix .= '-dev';
             }
-            $lowVersion = $this->normalize(substr($constraint . $stabilitySuffix, 1));
+            $lowVersion = $this->normalize((string) substr($constraint . $stabilitySuffix, 1));
             $lowerBound = new Constraint('>=', $lowVersion);
             // For upper bound, we increment the position of one more significance,
             // but highPosition = 0 would be illegal
@@ -341,7 +341,7 @@ class VersionParser
             if (empty($matches[5]) && empty($matches[7]) && empty($matches[8])) {
                 $stabilitySuffix .= '-dev';
             }
-            $lowVersion = $this->normalize(substr($constraint . $stabilitySuffix, 1));
+            $lowVersion = $this->normalize((string) substr($constraint . $stabilitySuffix, 1));
             $lowerBound = new Constraint('>=', $lowVersion);
             // For upper bound, we increment the position of one more significance,
             // but highPosition = 0 would be illegal

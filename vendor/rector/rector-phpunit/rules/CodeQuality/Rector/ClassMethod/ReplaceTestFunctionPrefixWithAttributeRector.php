@@ -81,9 +81,9 @@ CODE_SAMPLE
         }
         if ($node->name->toString() !== 'test' && $node->name->toString() !== 'test_') {
             if (strncmp($node->name->toString(), 'test_', strlen('test_')) === 0) {
-                $node->name->name = lcfirst(substr($node->name->name, 5));
+                $node->name->name = lcfirst((string) substr($node->name->name, 5));
             } elseif (strncmp($node->name->toString(), 'test', strlen('test')) === 0) {
-                $node->name->name = lcfirst(substr($node->name->name, 4));
+                $node->name->name = lcfirst((string) substr($node->name->name, 4));
             }
         }
         $coversAttributeGroup = $this->createAttributeGroup();

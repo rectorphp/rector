@@ -144,7 +144,7 @@ class NodeDumper
             throw new \InvalidArgumentException('Can only dump nodes and arrays.');
         }
         if ($indent) {
-            $this->nl = \substr($this->nl, 0, -4);
+            $this->nl = (string) \substr($this->nl, 0, -4);
         }
     }
     protected function dumpFlags(int $flags): string

@@ -87,7 +87,7 @@ final class StaticDoctrineAnnotationParser
             $tokenIterator->next();
         }
         // the remaining of the annotation content is the comment
-        $comment = substr($annotationContent, $tokenIterator->currentTokenOffset());
+        $comment = (string) substr($annotationContent, $tokenIterator->currentTokenOffset());
         // we only keep the first line as this will be added as a line comment at the end of the attribute
         $commentLines = NewLineSplitter::split($comment);
         return $commentLines[0];

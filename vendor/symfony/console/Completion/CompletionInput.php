@@ -72,7 +72,7 @@ final class CompletionInput extends ArgvInput
             if (($nullsafeVariable1 = $option) ? $nullsafeVariable1->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $option->getName();
-                $this->completionValue = $optionValue ?: (strncmp($optionToken, '--', strlen('--')) !== 0 ? substr($optionToken, 2) : '');
+                $this->completionValue = $optionValue ?: (strncmp($optionToken, '--', strlen('--')) !== 0 ? (string) substr($optionToken, 2) : '');
                 return;
             }
         }

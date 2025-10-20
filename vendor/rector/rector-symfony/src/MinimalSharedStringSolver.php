@@ -52,6 +52,6 @@ final class MinimalSharedStringSolver
      */
     private function result(array $longestIndexes, int $longestLength, string $stringA): string
     {
-        return $longestIndexes === [] ? '' : substr($stringA, $longestIndexes[0], $longestLength);
+        return $longestIndexes === [] ? '' : (string) substr($stringA, $longestIndexes[0], $longestLength);
     }
 }

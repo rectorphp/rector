@@ -143,7 +143,7 @@ final class TcpServer extends EventEmitter implements ServerInterface
         }
         // parse_url() does not accept null ports (random port assignment) => manually remove
         if (\substr($uri, -2) === ':0') {
-            $parts = \parse_url(\substr($uri, 0, -2));
+            $parts = \parse_url((string) \substr($uri, 0, -2));
             if ($parts) {
                 $parts['port'] = 0;
             }

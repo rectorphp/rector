@@ -59,7 +59,7 @@ final class DependencyInjectionMethodCallAnalyzer
     }
     private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1): string
     {
-        $lastCount = substr($propertyName, strlen($originalPropertyName));
+        $lastCount = (string) substr($propertyName, strlen($originalPropertyName));
         if (is_numeric($lastCount)) {
             $count = (int) $lastCount;
         }

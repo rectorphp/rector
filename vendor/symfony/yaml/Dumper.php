@@ -116,7 +116,7 @@ class Dumper
                     $dumpObjectAsInlineMap = !(array) $value;
                 }
                 $willBeInlined = $inline - 1 <= 0 || !\is_array($value) && $dumpObjectAsInlineMap || !$value;
-                $output .= \sprintf('%s%s%s%s', $prefix, $dumpAsMap ? Inline::dump($key, $flags) . ':' : '-', $willBeInlined || $compactNestedMapping && \is_array($value) && Inline::isHash($value) ? ' ' : "\n", $compactNestedMapping && \is_array($value) && Inline::isHash($value) ? substr($this->doDump($value, $inline - 1, $indent + 2, $flags, $nestingLevel + 1), $indent + 2) : $this->doDump($value, $inline - 1, $willBeInlined ? 0 : $indent + $this->indentation, $flags, $nestingLevel + 1)) . ($willBeInlined ? "\n" : '');
+                $output .= \sprintf('%s%s%s%s', $prefix, $dumpAsMap ? Inline::dump($key, $flags) . ':' : '-', $willBeInlined || $compactNestedMapping && \is_array($value) && Inline::isHash($value) ? ' ' : "\n", $compactNestedMapping && \is_array($value) && Inline::isHash($value) ? (string) substr($this->doDump($value, $inline - 1, $indent + 2, $flags, $nestingLevel + 1), $indent + 2) : $this->doDump($value, $inline - 1, $willBeInlined ? 0 : $indent + $this->indentation, $flags, $nestingLevel + 1)) . ($willBeInlined ? "\n" : '');
             }
         }
         return $output;

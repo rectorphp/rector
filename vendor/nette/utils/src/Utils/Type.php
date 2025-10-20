@@ -53,7 +53,7 @@ final class Type
             throw new Nette\InvalidArgumentException("Invalid type '{$type}'.");
         }
         if ($type[0] === '?') {
-            return new self([substr($type, 1), 'null']);
+            return new self([(string) substr($type, 1), 'null']);
         }
         $unions = [];
         foreach (explode('|', $type) as $part) {

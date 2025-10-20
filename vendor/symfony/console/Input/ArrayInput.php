@@ -112,9 +112,9 @@ class ArrayInput extends Input
                 return;
             }
             if (strncmp($key, '--', strlen('--')) === 0) {
-                $this->addLongOption(substr($key, 2), $value);
+                $this->addLongOption((string) substr($key, 2), $value);
             } elseif (strncmp($key, '-', strlen('-')) === 0) {
-                $this->addShortOption(substr($key, 1), $value);
+                $this->addShortOption((string) substr($key, 1), $value);
             } else {
                 $this->addArgument($key, $value);
             }

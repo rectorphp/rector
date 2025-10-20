@@ -24,7 +24,7 @@ class DoctrineConstExprStringNode extends \PHPStan\PhpDocParser\Ast\ConstExpr\Co
     public static function unescape(string $value): string
     {
         // from https://github.com/doctrine/annotations/blob/a9ec7af212302a75d1f92fa65d3abfbd16245a2a/lib/Doctrine/Common/Annotations/DocLexer.php#L103-L107
-        return str_replace('""', '"', substr($value, 1, strlen($value) - 2));
+        return str_replace('""', '"', (string) substr($value, 1, strlen($value) - 2));
     }
     private static function escape(string $value): string
     {

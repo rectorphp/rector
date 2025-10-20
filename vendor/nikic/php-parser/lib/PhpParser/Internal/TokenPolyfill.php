@@ -136,7 +136,7 @@ class TokenPolyfill
                 // Emulate PHP 8.0 comment format, which does not include trailing whitespace anymore.
                 if ($id === \T_COMMENT && \substr($text, 0, 2) !== '/*' && \preg_match('/(\r\n|\n|\r)$/D', $text, $matches)) {
                     $trailingNewline = $matches[0];
-                    $text = \substr($text, 0, -\strlen($trailingNewline));
+                    $text = (string) \substr($text, 0, -\strlen($trailingNewline));
                     $tokens[] = new static($id, $text, $line, $pos);
                     $pos += \strlen($text);
                     if ($i + 1 < $numTokens && $origTokens[$i + 1][0] === \T_WHITESPACE) {
@@ -173,7 +173,7 @@ class TokenPolyfill
                     if ($lastWasSeparator) {
                         // Trailing separator is not part of the name.
                         $j--;
-                        $newText = \substr($newText, 0, -1);
+                        $newText = (string) \substr($newText, 0, -1);
                     }
                     if ($j > $i + 1) {
                         if ($id === \T_NS_SEPARATOR) {

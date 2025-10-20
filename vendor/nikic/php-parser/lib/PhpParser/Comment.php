@@ -156,7 +156,7 @@ class Comment implements \JsonSerializable
             //
             // is handled by removing the difference between the shortest whitespace prefix on all
             // lines and the length of the "/* " opening sequence.
-            $prefixLen = $this->getShortestWhitespacePrefixLen(substr($text, $newlinePos + 1));
+            $prefixLen = $this->getShortestWhitespacePrefixLen((string) substr($text, $newlinePos + 1));
             $removeLen = $prefixLen - strlen($matches[0]);
             return preg_replace('(^\s{' . $removeLen . '})m', '', $text);
         }

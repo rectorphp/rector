@@ -116,7 +116,7 @@ final class FileCacheStorage implements CacheStorageInterface
     {
         $keyHash = sha1($key);
         $firstDirectory = sprintf('%s/%s', $this->directory, substr($keyHash, 0, 2));
-        $secondDirectory = sprintf('%s/%s', $firstDirectory, substr($keyHash, 2, 2));
+        $secondDirectory = sprintf('%s/%s', $firstDirectory, (string) substr($keyHash, 2, 2));
         $filePath = sprintf('%s/%s.php', $secondDirectory, $keyHash);
         return new CacheFilePaths($firstDirectory, $secondDirectory, $filePath);
     }

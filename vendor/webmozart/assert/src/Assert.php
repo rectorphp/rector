@@ -879,7 +879,7 @@ class Assert
      */
     public static function notEndsWith($value, $suffix, $message = '')
     {
-        if ($suffix === \substr($value, -\strlen($suffix))) {
+        if ($suffix === (string) \substr($value, -\strlen($suffix))) {
             static::reportInvalidArgument(\sprintf($message ?: 'Expected a value not to end with %2$s. Got: %s', static::valueToString($value), static::valueToString($suffix)));
         }
     }
@@ -1516,14 +1516,14 @@ class Assert
     {
         if ('nullOr' === \substr($name, 0, 6)) {
             if (null !== $arguments[0]) {
-                $method = \lcfirst(\substr($name, 6));
+                $method = \lcfirst((string) \substr($name, 6));
                 \call_user_func_array(array(static::class, $method), $arguments);
             }
             return;
         }
         if ('all' === \substr($name, 0, 3)) {
             static::isIterable($arguments[0]);
-            $method = \lcfirst(\substr($name, 3));
+            $method = \lcfirst((string) \substr($name, 3));
             $args = $arguments;
             foreach ($arguments[0] as $entry) {
                 $args[0] = $entry;

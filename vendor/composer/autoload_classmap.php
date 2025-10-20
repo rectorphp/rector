@@ -1604,6 +1604,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrEndsWithRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
+    'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeSubstrFalsyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeSubstrFalsyRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeMixedTypeDeclarationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradeInstanceofStringableRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Instanceof_/DowngradeInstanceofStringableRector.php',

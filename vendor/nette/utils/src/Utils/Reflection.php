@@ -44,7 +44,7 @@ final class Reflection
                 }
                 return $rcc->getValue();
             } elseif (!defined($const)) {
-                $const = substr((string) strrchr($const, '\\'), 1);
+                $const = (string) substr((string) strrchr($const, '\\'), 1);
                 if (!defined($const)) {
                     $name = self::toString($param);
                     throw new \ReflectionException("Unable to resolve constant {$orig} used as default value of {$name}.");

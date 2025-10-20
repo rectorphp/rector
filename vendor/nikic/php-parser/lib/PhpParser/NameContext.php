@@ -222,7 +222,7 @@ class NameContext
         }
         $namespacePrefix = strtolower($this->namespace . '\\');
         if (0 === strpos($lcName, $namespacePrefix)) {
-            return new Name(substr($name, strlen($namespacePrefix)));
+            return new Name((string) substr($name, strlen($namespacePrefix)));
         }
         return null;
     }
@@ -233,8 +233,8 @@ class NameContext
             return $name;
         }
         // Constants have case-insensitive namespace and case-sensitive short-name
-        $ns = substr($name, 0, $nsSep);
-        $shortName = substr($name, $nsSep + 1);
+        $ns = (string) substr($name, 0, $nsSep);
+        $shortName = (string) substr($name, $nsSep + 1);
         return strtolower($ns) . '\\' . $shortName;
     }
 }

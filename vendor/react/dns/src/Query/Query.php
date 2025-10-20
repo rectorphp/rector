@@ -53,7 +53,7 @@ final class Query
         $ref = new \ReflectionClass('RectorPrefix202510\React\Dns\Model\Message');
         foreach ($ref->getConstants() as $name => $value) {
             if ($value === $this->type && \strpos($name, 'TYPE_') === 0) {
-                $type = \substr($name, 5);
+                $type = (string) \substr($name, 5);
                 break;
             }
         }

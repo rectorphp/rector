@@ -82,7 +82,7 @@ abstract class AbstractUnicodeString extends AbstractString
         while (\strlen($s) - 1 > $i = strspn($s, self::ASCII)) {
             if (0 < --$i) {
                 $str->string .= substr($s, 0, $i);
-                $s = substr($s, $i);
+                $s = (string) substr($s, $i);
             }
             if (!$rule = array_shift($rules)) {
                 $rules = [];

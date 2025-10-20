@@ -47,6 +47,6 @@ class TrimmedBufferOutput extends Output
         if ($newline) {
             $this->buffer .= \PHP_EOL;
         }
-        $this->buffer = substr($this->buffer, 0 - $this->maxLength);
+        $this->buffer = (string) substr($this->buffer, 0 - $this->maxLength);
     }
 }

@@ -222,7 +222,7 @@ class UnicodeString extends AbstractUnicodeString
             while ('' !== $tail && \false !== $i = $indexOf($tail, $from)) {
                 $slice = grapheme_substr($tail, 0, $i);
                 $result .= $slice . $to;
-                $tail = substr($tail, \strlen($slice) + \strlen($from));
+                $tail = (string) substr($tail, \strlen($slice) + \strlen($from));
             }
             $str->string = $result . $tail;
             if (normalizer_is_normalized($str->string)) {
@@ -294,7 +294,7 @@ class UnicodeString extends AbstractUnicodeString
         while (1 < $limit && \false !== $i = $indexOf($tail, $delimiter)) {
             $str->string = grapheme_substr($tail, 0, $i);
             $chunks[] = clone $str;
-            $tail = substr($tail, \strlen($str->string) + \strlen($delimiter));
+            $tail = (string) substr($tail, \strlen($str->string) + \strlen($delimiter));
             --$limit;
         }
         $str->string = $tail;

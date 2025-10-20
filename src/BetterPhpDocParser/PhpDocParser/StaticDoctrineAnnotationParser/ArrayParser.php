@@ -152,7 +152,7 @@ final class ArrayParser
         $valueQuoteKind = $this->resolveQuoteKind($rawValue);
         if (is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $value = new StringNode(substr($rawValue, 1, strlen($rawValue) - 2));
+            $value = new StringNode((string) substr($rawValue, 1, strlen($rawValue) - 2));
         } elseif ($valueQuoteKind === null && is_string($rawValue)) {
             $lowerRawValue = strtolower($rawValue);
             switch ($lowerRawValue) {
@@ -175,7 +175,7 @@ final class ArrayParser
         $keyQuoteKind = $this->resolveQuoteKind($rawKey);
         if (is_string($rawKey) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $key = new StringNode(substr($rawKey, 1, strlen($rawKey) - 2));
+            $key = new StringNode((string) substr($rawKey, 1, strlen($rawKey) - 2));
         } else {
             $key = $rawKey;
         }

@@ -75,7 +75,7 @@ abstract class Helper implements HelperInterface
             return (new UnicodeString($string))->slice($from, $length);
         }
         if (\false === $encoding = mb_detect_encoding($string, null, \true)) {
-            return substr($string, $from, $length);
+            return (string) substr($string, $from, $length);
         }
         return mb_substr($string, $from, $length, $encoding);
     }

@@ -294,7 +294,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
         unset($phpDocNode->children[$key]);
         $classNode = new PhpDocTagNode($phpDocTagNode->name, $phpDocTagNode->value);
         $description = Strings::replace($description, self::LONG_ANNOTATION_REGEX, '');
-        $description = substr($description, 0, -7);
+        $description = (string) substr($description, 0, -7);
         $phpDocTagNode->value->description = $description;
         $phpDocNode->children[$key] = $classNode;
         array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);

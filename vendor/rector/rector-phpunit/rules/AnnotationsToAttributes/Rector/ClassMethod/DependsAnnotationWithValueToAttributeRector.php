@@ -186,7 +186,7 @@ CODE_SAMPLE
         if (substr_compare($attributeValue, '::class', -strlen('::class')) !== 0) {
             return null;
         }
-        $className = substr($attributeValue, 0, -7);
+        $className = (string) substr($attributeValue, 0, -7);
         return $className . '::class';
     }
     private function resolveDependsClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue): ?string

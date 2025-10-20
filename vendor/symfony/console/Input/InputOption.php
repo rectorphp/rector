@@ -69,7 +69,7 @@ class InputOption
     public function __construct(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null, $suggestedValues = [])
     {
         if (strncmp($name, '--', strlen('--')) === 0) {
-            $name = substr($name, 2);
+            $name = (string) substr($name, 2);
         }
         if (empty($name)) {
             throw new InvalidArgumentException('An option name cannot be empty.');

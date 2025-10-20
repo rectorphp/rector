@@ -76,7 +76,7 @@ class ExecutableFinder
             return $default;
         }
         $execResult = exec('command -v -- ' . escapeshellarg($name));
-        if (($executablePath = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) && @is_executable($executablePath)) {
+        if (($executablePath = (string) substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) && @is_executable($executablePath)) {
             return $executablePath;
         }
         return $default;

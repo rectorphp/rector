@@ -58,7 +58,7 @@ class Float_ extends Scalar
             if (\false === strpbrk($str, '.eE')) {
                 // substr($str, 0, strcspn($str, '89')) cuts the string at the first invalid digit
                 // (8 or 9) so that only the digits before that are used.
-                return octdec(substr($str, 0, strcspn($str, '89')));
+                return octdec((string) substr($str, 0, strcspn($str, '89')));
             }
         }
         // dec

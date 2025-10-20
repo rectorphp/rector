@@ -103,12 +103,12 @@ class Validators
     {
         foreach (explode('|', $expected) as $item) {
             if (substr_compare($item, '[]', -strlen('[]')) === 0) {
-                if (is_iterable($value) && self::everyIs($value, substr($item, 0, -2))) {
+                if (is_iterable($value) && self::everyIs($value, (string) substr($item, 0, -2))) {
                     return \true;
                 }
                 continue;
             } elseif (strncmp($item, '?', strlen('?')) === 0) {
-                $item = substr($item, 1);
+                $item = (string) substr($item, 1);
                 if ($value === null) {
                     return \true;
                 }

@@ -106,10 +106,10 @@ final class BuilderHelpers
                 throw new \LogicException('Name cannot be empty');
             }
             if ($name[0] === '\\') {
-                return new Name\FullyQualified(substr($name, 1));
+                return new Name\FullyQualified((string) substr($name, 1));
             }
             if (0 === strpos($name, 'namespace\\')) {
-                return new Name\Relative(substr($name, strlen('namespace\\')));
+                return new Name\Relative((string) substr($name, strlen('namespace\\')));
             }
             return new Name($name);
         }
@@ -153,7 +153,7 @@ final class BuilderHelpers
         $nullable = \false;
         if (strlen($type) > 0 && $type[0] === '?') {
             $nullable = \true;
-            $type = substr($type, 1);
+            $type = (string) substr($type, 1);
         }
         $builtinTypes = ['array', 'callable', 'bool', 'int', 'float', 'string', 'iterable', 'void', 'object', 'null', 'false', 'mixed', 'never', 'true'];
         $lowerType = strtolower($type);

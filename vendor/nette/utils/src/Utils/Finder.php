@@ -103,7 +103,7 @@ class Finder implements \IteratorAggregate
                 throw new Nette\InvalidArgumentException("Invalid mask '{$mask}'");
             }
             if (strncmp($mask, '**/', strlen('**/')) === 0) {
-                $mask = substr($mask, 3);
+                $mask = (string) substr($mask, 3);
             }
             $this->find[] = [$mask, $mode];
         }
@@ -419,8 +419,8 @@ class Finder implements \IteratorAggregate
     private static function splitRecursivePart(string $path): array
     {
         $a = strrpos($path, '/');
-        $parts = preg_split('~(?<=^|/)\*\*($|/)~', substr($path, 0, $a + 1), 2);
-        return isset($parts[1]) ? [$parts[0], $parts[1] . substr($path, $a + 1), \true] : [$parts[0], substr($path, $a + 1), \false];
+        $parts = preg_split('~(?<=^|/)\*\*($|/)~', (string) substr($path, 0, $a + 1), 2);
+        return isset($parts[1]) ? [$parts[0], $parts[1] . substr($path, $a + 1), \true] : [$parts[0], (string) substr($path, $a + 1), \false];
     }
     /**
      * Converts wildcards to regular expression.
@@ -431,7 +431,7 @@ class Finder implements \IteratorAggregate
             return '##';
         } elseif (strncmp($mask, './', strlen('./')) === 0) {
             $anchor = '^';
-            $mask = substr($mask, 2);
+            $mask = (string) substr($mask, 2);
         } else {
             $anchor = '(?:^|/)';
         }

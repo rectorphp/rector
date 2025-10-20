@@ -690,13 +690,13 @@ abstract class ParserAbstract implements \PhpParser\Parser
         $end = $newlineAtEnd ? '(?:(?=[\r\n])|\z)' : '(?=[\r\n])';
         $regex = '/' . $start . '([ \t]*)(' . $end . ')?/';
         return preg_replace_callback($regex, function ($matches) use ($indentLen, $indentChar, $attributes) {
-            $prefix = substr($matches[1], 0, $indentLen);
+            $prefix = (string) substr($matches[1], 0, $indentLen);
             if (\false !== strpos($prefix, $indentChar === " " ? "\t" : " ")) {
                 $this->emitError(new \PhpParser\Error('Invalid indentation - tabs and spaces cannot be mixed', $attributes));
             } elseif (strlen($prefix) < $indentLen && !isset($matches[2])) {
                 $this->emitError(new \PhpParser\Error('Invalid body indentation level ' . '(expecting an indentation level of at least ' . $indentLen . ')', $attributes));
             }
-            return substr($matches[0], strlen($prefix));
+            return (string) substr($matches[0], strlen($prefix));
         }, $string);
     }
     /**

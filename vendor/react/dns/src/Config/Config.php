@@ -83,7 +83,7 @@ final class Config
         foreach ($matches[1] as $ip) {
             // remove IPv6 zone ID (`fe80::1%lo0` => `fe80:1`)
             if (strpos($ip, ':') !== \false && ($pos = strpos($ip, '%')) !== \false) {
-                $ip = substr($ip, 0, $pos);
+                $ip = (string) substr($ip, 0, $pos);
             }
             if (@inet_pton($ip) !== \false) {
                 $config->nameservers[] = $ip;

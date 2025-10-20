@@ -225,9 +225,9 @@ class Php7 extends \PhpParser\ParserAbstract
         }, 93 => static function ($self, $stackPos) {
             $self->semValue = new Name($self->semStack[$stackPos - (1 - 1)], $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 94 => null, 95 => static function ($self, $stackPos) {
-            $self->semValue = new Name(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name((string) substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 96 => static function ($self, $stackPos) {
-            $self->semValue = new Expr\Variable(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Expr\Variable((string) substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 97 => static function ($self, $stackPos) {
             /* nothing */
         }, 98 => static function ($self, $stackPos) {
@@ -829,7 +829,7 @@ class Php7 extends \PhpParser\ParserAbstract
             $self->semStack[$stackPos - (3 - 1)][] = $self->semStack[$stackPos - (3 - 3)];
             $self->semValue = $self->semStack[$stackPos - (3 - 1)];
         }, 398 => static function ($self, $stackPos) {
-            $self->semValue = new Node\VarLikeIdentifier(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Node\VarLikeIdentifier((string) substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 399 => static function ($self, $stackPos) {
             $self->semValue = new Node\PropertyItem($self->semStack[$stackPos - (1 - 1)], null, $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 400 => static function ($self, $stackPos) {
@@ -1098,9 +1098,9 @@ class Php7 extends \PhpParser\ParserAbstract
         }, 533 => static function ($self, $stackPos) {
             $self->semValue = new Name($self->semStack[$stackPos - (1 - 1)], $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 534 => static function ($self, $stackPos) {
-            $self->semValue = new Name\FullyQualified(substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name\FullyQualified((string) substr($self->semStack[$stackPos - (1 - 1)], 1), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 535 => static function ($self, $stackPos) {
-            $self->semValue = new Name\Relative(substr($self->semStack[$stackPos - (1 - 1)], 10), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
+            $self->semValue = new Name\Relative((string) substr($self->semStack[$stackPos - (1 - 1)], 10), $self->getAttributes($self->tokenStartStack[$stackPos - (1 - 1)], $self->tokenEndStack[$stackPos]));
         }, 536 => null, 537 => null, 538 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (3 - 2)];
         }, 539 => static function ($self, $stackPos) {
