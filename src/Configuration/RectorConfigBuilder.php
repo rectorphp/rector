@@ -705,7 +705,7 @@ final class RectorConfigBuilder
         // too high
         $levelRulesCount = count($levelRules);
         if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow(__METHOD__, $level, $levelRulesCount, 'TypeDeclarationDocblocksLevel', 'TYPE_DECLARATION_DOCBLOCKS');
+            $this->levelOverflows[] = new LevelOverflow(__METHOD__, $level, $levelRulesCount, 'typeDeclarationDocblocks', 'TYPE_DECLARATION_DOCBLOCKS');
         }
         $this->rules = array_merge($this->rules, $levelRules);
         return $this;
