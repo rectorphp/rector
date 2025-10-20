@@ -23,7 +23,7 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
     private array $removedFunctions = [];
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove defined function calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $x = 'something';
 var_dump($x);
 CODE_SAMPLE
