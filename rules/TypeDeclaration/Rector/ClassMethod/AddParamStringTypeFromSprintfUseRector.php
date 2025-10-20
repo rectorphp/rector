@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\Guard\ParamTypeAddGuard;
 use Rector\TypeDeclaration\NodeAnalyzer\VariableInSprintfMaskMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,10 +30,15 @@ final class AddParamStringTypeFromSprintfUseRector extends AbstractRector
      * @readonly
      */
     private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
-    public function __construct(VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    /**
+     * @readonly
+     */
+    private ParamTypeAddGuard $paramTypeAddGuard;
+    public function __construct(VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard)
     {
         $this->variableInSprintfMaskMatcher = $variableInSprintfMaskMatcher;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->paramTypeAddGuard = $paramTypeAddGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -85,6 +91,9 @@ CODE_SAMPLE
             }
             // skip non string default value
             if ($param->default instanceof Expr && !$param->default instanceof String_) {
+                continue;
+            }
+            if (!$this->paramTypeAddGuard->isLegal($param, $node)) {
                 continue;
             }
             $variableName = $this->getName($param);
