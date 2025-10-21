@@ -129,8 +129,6 @@ CODE_SAMPLE;
                 $this->decorateCurrentAndChildren($node);
                 return null;
             }
-        }
-        if ($isIntRefactoredNode) {
             // @see NodeVisitor::* codes, e.g. removal of node of stopping the traversing
             if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
                 // log here, so we can remove the node in leaveNode() method
