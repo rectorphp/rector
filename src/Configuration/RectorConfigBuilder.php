@@ -35,6 +35,9 @@ use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
+use RectorPrefix202510\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202510\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202510\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202510\Symfony\Component\Finder\Finder;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
@@ -544,6 +547,11 @@ final class RectorConfigBuilder
     ): self
     {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
+        if ($strictBooleans) {
+            $message = 'The "strictBooleans" set is deprecated as mostly risky and not practical. Remove it from withPreparedSets() method and use "codeQuality" and "codingStyle" sets instead. They already contain more granular and stable rules on same note.';
+            $symfonyStyle = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
+            $symfonyStyle->warning($message);
+        }
         $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
