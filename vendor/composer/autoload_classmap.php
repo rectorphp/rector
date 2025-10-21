@@ -1154,6 +1154,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\RepeatedAndNotEqualToNotInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RepeatedAndNotEqualToNotInArrayRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\SimplifyEmptyArrayCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/SimplifyEmptyArrayCheckRector.php',
+    'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceConstantBooleanNotRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/ReplaceConstantBooleanNotRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanOr\\RepeatedOrEqualToInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanOr/RepeatedOrEqualToInArrayRector.php',
