@@ -4,32 +4,21 @@ declare (strict_types=1);
 namespace Rector\Strict\Rector\Ternary;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
-use PHPStan\Analyser\Scope;
-use Rector\PHPStan\ScopeFetcher;
-use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Fixer Rector for PHPStan rule:
  * https://github.com/phpstan/phpstan-strict-rules/blob/master/src/Rules/DisallowedConstructs/DisallowedShortTernaryRule.php
  *
- * @see \Rector\Tests\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector\DisallowedShortTernaryRuleFixerRectorTest
+ * @deprecated as risky and not practical
  */
-final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
+final class DisallowedShortTernaryRuleFixerRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ExactCompareFactory $exactCompareFactory;
-    private bool $hasChanged = \false;
-    public function __construct(ExactCompareFactory $exactCompareFactory)
-    {
-        $this->exactCompareFactory = $exactCompareFactory;
-    }
+    public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';
     public function getRuleDefinition(): RuleDefinition
     {
         $errorMessage = sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule');
@@ -65,42 +54,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Ternary
     {
-        $this->hasChanged = \false;
-        // skip non-short ternary
-        if ($node->if instanceof Expr) {
-            return null;
-        }
-        $scope = ScopeFetcher::fetch($node);
-        // special case for reset() function
-        if ($node->cond instanceof FuncCall && $this->isName($node->cond, 'reset')) {
-            $this->refactorResetFuncCall($node, $node->cond, $scope);
-            if (!$this->hasChanged) {
-                return null;
-            }
-            return $node;
-        }
-        $exprType = $scope->getNativeType($node->cond);
-        $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
-        if (!$compareExpr instanceof Expr) {
-            return null;
-        }
-        $node->if = $node->cond;
-        $node->cond = $compareExpr;
-        return $node;
-    }
-    private function refactorResetFuncCall(Ternary $ternary, FuncCall $resetFuncCall, Scope $scope): void
-    {
-        $ternary->if = $ternary->cond;
-        if ($resetFuncCall->isFirstClassCallable()) {
-            return;
-        }
-        $firstArgValue = $resetFuncCall->getArgs()[0]->value;
-        $firstArgType = $scope->getNativeType($firstArgValue);
-        $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue, $this->treatAsNonEmpty);
-        if (!$falsyCompareExpr instanceof Expr) {
-            return;
-        }
-        $ternary->cond = $falsyCompareExpr;
-        $this->hasChanged = \true;
+        throw new ShouldNotHappenException('This rule is deprecated as risky and not practical');
     }
 }

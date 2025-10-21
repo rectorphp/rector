@@ -523,10 +523,28 @@ final class RectorConfigBuilder
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
-    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $typeDeclarationDocblocks = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false, bool $carbon = \false, bool $rectorPreset = \false, bool $phpunitCodeQuality = \false, bool $doctrineCodeQuality = \false, bool $symfonyCodeQuality = \false, bool $symfonyConfigs = \false): self
+    public function withPreparedSets(
+        bool $deadCode = \false,
+        bool $codeQuality = \false,
+        bool $codingStyle = \false,
+        bool $typeDeclarations = \false,
+        bool $typeDeclarationDocblocks = \false,
+        bool $privatization = \false,
+        bool $naming = \false,
+        bool $instanceOf = \false,
+        bool $earlyReturn = \false,
+        /** @deprecated */
+        bool $strictBooleans = \false,
+        bool $carbon = \false,
+        bool $rectorPreset = \false,
+        bool $phpunitCodeQuality = \false,
+        bool $doctrineCodeQuality = \false,
+        bool $symfonyCodeQuality = \false,
+        bool $symfonyConfigs = \false
+    ): self
     {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
-        $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::STRICT_BOOLEANS => $strictBooleans, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
+        $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->sets[] = $setPath;

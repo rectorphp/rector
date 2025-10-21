@@ -6,27 +6,17 @@ namespace Rector\Strict\Rector\BooleanNot;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BooleanNot;
-use Rector\PHPStan\ScopeFetcher;
-use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * Fixer Rector for PHPStan rule:
- * https://github.com/phpstan/phpstan-strict-rules/blob/0705fefc7c9168529fd130e341428f5f10f4f01d/src/Rules/BooleansInConditions/BooleanInBooleanNotRule.php
- *
- * @see \Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\BooleanInBooleanNotRuleFixerRectorTest
+ * @deprecated as risky and requires manual checking
  */
-final class BooleanInBooleanNotRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
+final class BooleanInBooleanNotRuleFixerRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ExactCompareFactory $exactCompareFactory;
-    public function __construct(ExactCompareFactory $exactCompareFactory)
-    {
-        $this->exactCompareFactory = $exactCompareFactory;
-    }
+    public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';
     public function getRuleDefinition(): RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\BooleansInConditions\BooleanInBooleanNotRule');
@@ -70,11 +60,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Expr
     {
-        $scope = ScopeFetcher::fetch($node);
-        $exprType = $scope->getNativeType($node->expr);
-        if ($exprType->isBoolean()->yes()) {
-            return null;
-        }
-        return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $node->expr, $this->treatAsNonEmpty);
+        throw new ShouldNotHappenException('This rule is deprecated as risky and not practical');
     }
 }
