@@ -9,18 +9,10 @@ use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
-use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 final class StaticTypeAnalyzer
 {
-    /**
-     * @readonly
-     */
-    private UnionTypeAnalyzer $unionTypeAnalyzer;
-    public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer)
-    {
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
-    }
     public function isAlwaysTruableType(Type $type): bool
     {
         if ($type instanceof MixedType) {
@@ -32,7 +24,7 @@ final class StaticTypeAnalyzer
         if ($type instanceof ArrayType) {
             return $this->isAlwaysTruableArrayType($type);
         }
-        if ($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type)) {
+        if ($type instanceof UnionType && TypeCombinator::containsNull($type)) {
             return \false;
         }
         // always trueish

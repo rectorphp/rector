@@ -8,20 +8,16 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\NodeFactory;
-use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 final class PropertyTypeDecorator
 {
-    /**
-     * @readonly
-     */
-    private UnionTypeAnalyzer $unionTypeAnalyzer;
     /**
      * @readonly
      */
@@ -34,9 +30,8 @@ final class PropertyTypeDecorator
      * @readonly
      */
     private NodeFactory $nodeFactory;
-    public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, PhpVersionProvider $phpVersionProvider, NodeFactory $nodeFactory)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PhpVersionProvider $phpVersionProvider, NodeFactory $nodeFactory)
     {
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeFactory = $nodeFactory;
@@ -46,7 +41,7 @@ final class PropertyTypeDecorator
      */
     public function decoratePropertyUnionType(UnionType $unionType, $typeNode, Property $property, PhpDocInfo $phpDocInfo, bool $changeVarTypeFallback = \true): void
     {
-        if (!$this->unionTypeAnalyzer->isNullable($unionType)) {
+        if (!TypeCombinator::containsNull($unionType)) {
             if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 $property->type = $typeNode;
                 return;

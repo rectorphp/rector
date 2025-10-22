@@ -7,7 +7,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Validation\RectorAssert;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddParamTypeForFunctionLikeWithinCallLikeDeclarationRector\AddParamTypeForFunctionLikeWithinCallLikeDeclarationRectorTest
+ * @deprecated as related rule is deprecated
  */
 final class AddParamTypeForFunctionLikeWithinCallLikeArgDeclaration
 {

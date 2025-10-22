@@ -17,13 +17,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -57,10 +57,6 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
     /**
      * @readonly
      */
-    private UnionTypeAnalyzer $unionTypeAnalyzer;
-    /**
-     * @readonly
-     */
     private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
@@ -70,13 +66,12 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, UnionTypeAnalyzer $unionTypeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->returnTagRemover = $returnTagRemover;
         $this->reflectionResolver = $reflectionResolver;
         $this->privatesAccessor = $privatesAccessor;
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -240,7 +235,7 @@ CODE_SAMPLE
         if (!$parentReturnType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
-        if (!$this->unionTypeAnalyzer->isNullable($parentReturnType)) {
+        if (!TypeCombinator::containsNull($parentReturnType)) {
             return \false;
         }
         foreach ($parentReturnType->getTypes() as $type) {
