@@ -174,7 +174,7 @@ CODE_SAMPLE
         $methodName = $this->getName($functionLike);
         // parent classes or implemented interfaces
         /** @var ClassReflection[] $parentClassReflections */
-        $parentClassReflections = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
+        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($parentClassReflections as $parentClassReflection) {
             $parentReflectionMethod = $this->resolveParentReflectionMethod($parentClassReflection, $methodName);
             if (!$parentReflectionMethod instanceof ReflectionMethod) {

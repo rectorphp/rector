@@ -8,13 +8,13 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.3",
-        "phpstan\/phpstan": "^2.1.8",
+        "phpstan\/phpstan": "^2.1.30",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
-        "phpunit\/phpunit": "^11.4",
+        "phpunit\/phpunit": "^11.5",
         "rector\/rector-src": "dev-main",
         "symplify\/easy-coding-standard": "^12.3",
         "symplify\/rule-doc-generator": "^12.2",
-        "symplify\/vendor-patches": "^11.3",
+        "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^1.0",
         "tracy\/tracy": "^2.10"
     },

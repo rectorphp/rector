@@ -86,7 +86,7 @@ final class PropertyFetchFinder
         $nodes = [$class];
         $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
         $hasTrait = $nodesTrait !== [];
-        $nodes = [...$nodes, ...$nodesTrait];
+        $nodes = array_merge($nodes, $nodesTrait);
         return $this->findPropertyFetchesInClassLike($class, $nodes, $propertyName, $hasTrait, $scope);
     }
     /**
@@ -162,7 +162,7 @@ final class PropertyFetchFinder
     private function resolveNodesToLocate(Class_ $class): array
     {
         $propertyWithHooks = array_filter($class->getProperties(), fn(Property $property): bool => $property->hooks !== []);
-        return [...$propertyWithHooks, ...$class->getMethods()];
+        return array_merge($propertyWithHooks, $class->getMethods());
     }
     /**
      * @param Stmt[] $stmts

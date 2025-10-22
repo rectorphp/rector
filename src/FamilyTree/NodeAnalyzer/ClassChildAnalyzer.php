@@ -53,7 +53,7 @@ final class ClassChildAnalyzer
             return [];
         }
         $parentClassMethods = [];
-        $parents = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
+        $parents = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         foreach ($parents as $parent) {
             if (!$parent->hasNativeMethod($methodName)) {
                 continue;

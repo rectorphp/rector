@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/array_unpacking_string_keys
  *
+ * @api testing if useful
+ *
  * @see \Rector\Tests\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector\DowngradeArraySpreadStringKeyRectorTest
  */
 final class DowngradeArraySpreadStringKeyRector extends AbstractRector
