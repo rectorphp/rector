@@ -45,8 +45,7 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule');
-        return new RuleDefinition($errorMessage, [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change empty() check to explicit strict comparisons', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeEmptyArray
 {
     public function run(array $items)
