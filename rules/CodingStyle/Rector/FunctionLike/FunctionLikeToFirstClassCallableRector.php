@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FunctionLike;
 
-use PHPStan\Type\CallableType;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -14,6 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
@@ -22,6 +22,7 @@ use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ResolvedFunctionVariantWithOriginal;
+use PHPStan\Type\CallableType;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\PhpParser\AstResolver;
 use Rector\PHPStan\ScopeFetcher;
@@ -190,6 +191,14 @@ CODE_SAMPLE
         foreach ($args as $key => $arg) {
             if (!$this->nodeComparator->areNodesEqual($arg->value, $params[$key]->var)) {
                 return \true;
+            }
+            if ($arg->value instanceof Variable) {
+                $variableName = (string) $this->getName($arg->value);
+                foreach ($params as $param) {
+                    if ($param->var instanceof Variable && $this->isName($param->var, $variableName) && $param->variadic && !$arg->unpack) {
+                        return \true;
+                    }
+                }
             }
         }
         return \false;

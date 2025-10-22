@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\PHPUnit\AnnotationsToAttributes\NodeFactory\RequiresAttributeFactory;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -31,7 +31,7 @@ final class RequiresAnnotationWithValueToAttributeRector extends AbstractRector 
     /**
      * @readonly
      */
-    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
+    private RequiresAttributeFactory $requiresAttributeFactory;
     /**
      * @readonly
      */
@@ -44,10 +44,10 @@ final class RequiresAnnotationWithValueToAttributeRector extends AbstractRector 
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpAttributeGroupFactory $phpAttributeGroupFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, RequiresAttributeFactory $requiresAttributeFactory, TestsNodeAnalyzer $testsNodeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
-        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
+        $this->requiresAttributeFactory = $requiresAttributeFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -60,26 +60,11 @@ use PHPUnit\Framework\TestCase;
 /**
  * @requires PHP > 8.4
  * @requires PHPUnit >= 10
- * @requires OS Windows
- * @requires OSFAMILY Darwin
- * @requires function someFunction
- * @requires function \some\className::someMethod
- * @requires extension mysqli
- * @requires extension mysqli >= 8.3.0
- * @requires setting date.timezone Europe/Berlin
  */
 
 final class SomeTest extends TestCase
 {
     /**
-     * @requires PHP > 8.4
-     * @requires PHPUnit >= 10
-     * @requires OS Windows
-     * @requires OSFAMILY Darwin
-     * @requires function someFunction
-     * @requires function \some\className::someMethod
-     * @requires extension mysqli
-     * @requires extension mysqli >= 8.3.0
      * @requires setting date.timezone Europe/Berlin
      */
     public function test()
@@ -92,24 +77,8 @@ use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\RequiresPhp('> 8.4')]
 #[\PHPUnit\Framework\Attributes\RequiresPhpunit('>= 10')]
-#[\PHPUnit\Framework\Attributes\RequiresOperatingSystem('Windows')]
-#[\PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily('Darwin')]
-#[\PHPUnit\Framework\Attributes\RequiresFunction('someFunction')]
-#[\PHPUnit\Framework\Attributes\RequiresMethod(\some\className::class, 'someMethod')]
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli')]
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli', '>= 8.3.0')]
-#[\PHPUnit\Framework\Attributes\RequiresSetting('date.timezone', 'Europe/Berlin')]
 final class SomeTest extends TestCase
 {
-
-    #[\PHPUnit\Framework\Attributes\RequiresPhp('> 8.4')]
-    #[\PHPUnit\Framework\Attributes\RequiresPhpunit('>= 10')]
-    #[\PHPUnit\Framework\Attributes\RequiresOperatingSystem('Windows')]
-    #[\PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily('Darwin')]
-    #[\PHPUnit\Framework\Attributes\RequiresFunction('someFunction')]
-    #[\PHPUnit\Framework\Attributes\RequiresMethod(\some\className::class, 'someMethod')]
-    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli')]
-    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('mysqli', '>= 8.3.0')]
     #[\PHPUnit\Framework\Attributes\RequiresSetting('date.timezone', 'Europe/Berlin')]
     public function test()
     {
@@ -137,6 +106,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
+        if ($node instanceof ClassMethod) {
+            return $this->refactorClassMethod($node);
+        }
         $hasChanged = \false;
         if ($node instanceof Class_) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -149,65 +121,8 @@ CODE_SAMPLE
                     $hasChanged = \true;
                 }
             }
-            foreach ($node->getMethods() as $classMethod) {
-                $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-                if ($phpDocInfo instanceof PhpDocInfo) {
-                    $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
-                    if ($requiresAttributeGroups !== []) {
-                        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
-                        $classMethod->attrGroups = array_merge($classMethod->attrGroups, $requiresAttributeGroups);
-                        $this->removeMethodRequiresAnnotations($phpDocInfo);
-                        $hasChanged = \true;
-                    }
-                }
-            }
         }
         return $hasChanged ? $node : null;
-    }
-    private function createAttributeGroup(string $annotationValue): ?AttributeGroup
-    {
-        $annotationValues = explode(' ', $annotationValue, 2);
-        $type = array_shift($annotationValues);
-        $attributeValue = array_shift($annotationValues);
-        switch ($type) {
-            case 'PHP':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhp';
-                $attributeValue = [$attributeValue];
-                break;
-            case 'PHPUnit':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhpunit';
-                $attributeValue = [$attributeValue];
-                break;
-            case 'OS':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresOperatingSystem';
-                $attributeValue = [$attributeValue];
-                break;
-            case 'OSFAMILY':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily';
-                $attributeValue = [$attributeValue];
-                break;
-            case 'function':
-                if (strpos((string) $attributeValue, '::') !== \false) {
-                    $attributeClass = 'PHPUnit\Framework\Attributes\RequiresMethod';
-                    $attributeValue = explode('::', (string) $attributeValue);
-                    $attributeValue[0] .= '::class';
-                } else {
-                    $attributeClass = 'PHPUnit\Framework\Attributes\RequiresFunction';
-                    $attributeValue = [$attributeValue];
-                }
-                break;
-            case 'extension':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresPhpExtension';
-                $attributeValue = explode(' ', (string) $attributeValue, 2);
-                break;
-            case 'setting':
-                $attributeClass = 'PHPUnit\Framework\Attributes\RequiresSetting';
-                $attributeValue = explode(' ', (string) $attributeValue, 2);
-                break;
-            default:
-                return null;
-        }
-        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, array_merge($attributeValue));
     }
     /**
      * @return array<string, AttributeGroup|null>
@@ -221,7 +136,7 @@ CODE_SAMPLE
                 continue;
             }
             $requires = $desiredTagValueNode->value->value;
-            $attributeGroups[$requires] = $this->createAttributeGroup($requires);
+            $attributeGroups[$requires] = $this->requiresAttributeFactory->create($requires);
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
         return $attributeGroups;
@@ -238,5 +153,20 @@ CODE_SAMPLE
             $hasChanged = \true;
         }
         return $hasChanged;
+    }
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+        $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
+        if ($requiresAttributeGroups === []) {
+            return null;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
+        $classMethod->attrGroups = array_merge($classMethod->attrGroups, $requiresAttributeGroups);
+        $this->removeMethodRequiresAnnotations($phpDocInfo);
+        return $classMethod;
     }
 }

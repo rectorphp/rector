@@ -1889,6 +1889,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => $baseDir . '/src/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
     'Rector\\PHPStan\\ScopeFetcher' => $baseDir . '/src/PHPStan/ScopeFetcher.php',
+    'Rector\\PHPUnit\\AnnotationsToAttributes\\NodeFactory\\RequiresAttributeFactory' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/NodeFactory/RequiresAttributeFactory.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DependsAnnotationWithValueToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php',
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
