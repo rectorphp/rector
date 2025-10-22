@@ -9,6 +9,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
+use Rector\Php81\Rector\ClassMethod\NewInInitializerRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictIntPregSlitFuncCallLimitArgRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;
@@ -34,5 +35,6 @@ return static function (RectorConfig $rectorConfig): void {
         FunctionLikeToFirstClassCallableRector::class,
         ClosureFromCallableToFirstClassCallableRector::class,
         RemoveReflectionSetAccessibleCallsRector::class,
+        NewInInitializerRector::class,
     ]);
 };
