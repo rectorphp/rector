@@ -18,6 +18,7 @@ use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullable
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
+use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareOnCountableWithMethodToAssertCountRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
@@ -88,6 +89,7 @@ return static function (RectorConfig $rectorConfig): void {
         AssertEmptyNullableObjectToAssertInstanceofRector::class,
         // avoid call on nullable object
         AddInstanceofAssertForNullableInstanceRector::class,
+        AssertArrayCastedObjectToAssertSameRector::class,
         /**
          * Improve direct testing of your code, without mock creep. Make it simple, clear and easy to maintain:
          *

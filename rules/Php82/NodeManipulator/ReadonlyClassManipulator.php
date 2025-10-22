@@ -14,10 +14,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php81\Enum\AttributeName;
-use Rector\Php81\NodeManipulator\AttributeGroupNewLiner;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use Rector\ValueObject\Application\File;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
 final class ReadonlyClassManipulator
@@ -34,18 +32,13 @@ final class ReadonlyClassManipulator
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    /**
-     * @readonly
-     */
-    private AttributeGroupNewLiner $attributeGroupNewLiner;
-    public function __construct(VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider, AttributeGroupNewLiner $attributeGroupNewLiner)
+    public function __construct(VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
-    public function process(Class_ $class, File $file): ?\PhpParser\Node\Stmt\Class_
+    public function process(Class_ $class): ?\PhpParser\Node\Stmt\Class_
     {
         $scope = ScopeFetcher::fetch($class);
         if ($this->shouldSkip($class, $scope)) {
@@ -60,9 +53,6 @@ final class ReadonlyClassManipulator
         }
         foreach ($class->getProperties() as $property) {
             $this->visibilityManipulator->removeReadonly($property);
-        }
-        if ($class->attrGroups !== []) {
-            $this->attributeGroupNewLiner->newLine($file, $class);
         }
         return $class;
     }
