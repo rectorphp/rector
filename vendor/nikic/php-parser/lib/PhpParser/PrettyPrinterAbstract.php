@@ -629,8 +629,10 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
                     return $this->pFallback($fallbackNode, $precedence, $lhsPrecedence);
                 }
                 [$printFn, $findToken] = $this->modifierChangeMap[$key];
+                $skipWSPos = $this->origTokens->skipRightWhitespace($pos);
+                $result .= $this->origTokens->getTokenCode($pos, $skipWSPos, $indentAdjustment);
                 $result .= $this->{$printFn}($subNode);
-                $pos = $this->origTokens->findRight($pos, $findToken);
+                $pos = $this->origTokens->findRight($skipWSPos, $findToken);
                 continue;
             }
             $extraLeft = '';
