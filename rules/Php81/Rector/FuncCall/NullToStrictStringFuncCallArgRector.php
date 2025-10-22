@@ -81,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        $positions = $this->resolvePositions($node, $args, $scope);
+        $positions = $this->resolveStringPositions($node, $args, $scope);
         if ($positions === []) {
             return null;
         }
@@ -111,9 +111,9 @@ CODE_SAMPLE
     }
     /**
      * @param Arg[] $args
-     * @return int[]|string[]
+     * @return int[]
      */
-    private function resolvePositions(FuncCall $funcCall, array $args, Scope $scope): array
+    private function resolveStringPositions(FuncCall $funcCall, array $args, Scope $scope): array
     {
         $positions = [];
         $functionName = $this->getName($funcCall);

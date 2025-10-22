@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
@@ -61,9 +62,9 @@ final class NullToStrictStringIntConverter
         if ($this->shouldSkipValue($argValue, $scope, $isTrait, $targetType)) {
             return null;
         }
-        $parameter = $parametersAcceptor->getParameters()[$position] ?? null;
-        if ($parameter instanceof ExtendedNativeParameterReflection && $parameter->getType() instanceof UnionType) {
-            $parameterType = $parameter->getType();
+        $parameterReflection = $parametersAcceptor->getParameters()[$position] ?? null;
+        if ($parameterReflection instanceof ExtendedNativeParameterReflection && $parameterReflection->getType() instanceof UnionType) {
+            $parameterType = $parameterReflection->getType();
             if (!$this->isValidUnionType($parameterType)) {
                 return null;
             }
@@ -96,6 +97,9 @@ final class NullToStrictStringIntConverter
             return \true;
         }
         if ($nativeType->isInteger()->yes() && $targetType === 'int') {
+            return \true;
+        }
+        if ($this->isPossibleArrayVariableName($type, $nativeType, $expr)) {
             return \true;
         }
         if ($this->shouldSkipType($type)) {
@@ -158,5 +162,24 @@ final class NullToStrictStringIntConverter
             return $parentScope->getType($expr) instanceof ErrorType;
         }
         return $type instanceof MixedType && !$type->isExplicitMixed() && $type->getSubtractedType() instanceof NullType;
+    }
+    /**
+     * @see https://github.com/rectorphp/rector/issues/9447 for context
+     */
+    private function isPossibleArrayVariableName(Type $passedType, Type $reflectionParamType, Expr $expr): bool
+    {
+        // could mixed, resp. array, no need to (string) cast array
+        if (!$passedType instanceof MixedType) {
+            return \false;
+        }
+        if (!$reflectionParamType->isArray()->maybe()) {
+            return \false;
+        }
+        if ($expr instanceof Variable && is_string($expr->name)) {
+            $variableName = $expr->name;
+            // most likely plural variable
+            return strlen($variableName) > 3 && substr_compare($variableName, 's', -strlen('s')) === 0;
+        }
+        return \false;
     }
 }
