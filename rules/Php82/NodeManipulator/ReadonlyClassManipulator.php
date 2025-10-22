@@ -56,16 +56,10 @@ final class ReadonlyClassManipulator
         if ($constructClassMethod instanceof ClassMethod) {
             foreach ($constructClassMethod->getParams() as $param) {
                 $this->visibilityManipulator->removeReadonly($param);
-                if ($param->attrGroups !== []) {
-                    $this->attributeGroupNewLiner->newLine($file, $param);
-                }
             }
         }
         foreach ($class->getProperties() as $property) {
             $this->visibilityManipulator->removeReadonly($property);
-            if ($property->attrGroups !== []) {
-                $this->attributeGroupNewLiner->newLine($file, $property);
-            }
         }
         if ($class->attrGroups !== []) {
             $this->attributeGroupNewLiner->newLine($file, $class);
