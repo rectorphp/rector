@@ -377,7 +377,7 @@ final class BetterStandardPrinter extends Standard
     private function cleanStartIndentationOnHeredocNowDoc(string $content): string
     {
         $lines = NewLineSplitter::split($content);
-        $trimmedLines = array_map('ltrim', $lines);
+        $trimmedLines = array_map(\Closure::fromCallable('ltrim'), $lines);
         return implode("\n", $trimmedLines);
     }
     private function resolveIndentSpaces(): string
