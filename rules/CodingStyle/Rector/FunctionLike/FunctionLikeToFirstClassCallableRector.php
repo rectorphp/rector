@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FunctionLike;
 
+use PHPStan\Type\CallableType;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -19,9 +21,12 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ResolvedFunctionVariantWithOriginal;
+use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\PhpParser\AstResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,9 +40,18 @@ final class FunctionLikeToFirstClassCallableRector extends AbstractRector implem
      * @readonly
      */
     private AstResolver $astResolver;
-    public function __construct(AstResolver $astResolver)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
+     * @var string
+     */
+    private const HAS_CALLBACK_SIGNATURE_MULTI_PARAMS = 'has_callback_signature_multi_params';
+    public function __construct(AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->astResolver = $astResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -53,13 +67,39 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [ArrowFunction::class, Closure::class];
+        return [MethodCall::class, FuncCall::class, StaticCall::class, New_::class, ArrowFunction::class, Closure::class];
     }
     /**
-     * @param ArrowFunction|Closure $node
+     * @param MethodCall|FuncCall|StaticCall|New_|ArrowFunction|Closure $node
      */
     public function refactor(Node $node): ?\PhpParser\Node\Expr\CallLike
     {
+        if ($node instanceof CallLike) {
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            $args = $node->getArgs();
+            foreach ($args as $key => $arg) {
+                if ($arg->value instanceof Closure || $arg->value instanceof ArrowFunction) {
+                    // verify caller signature
+                    $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+                    if ($methodReflection === null) {
+                        return null;
+                    }
+                    $reflection = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $node, ScopeFetcher::fetch($node));
+                    if ($reflection instanceof ResolvedFunctionVariantWithOriginal) {
+                        return null;
+                    }
+                    foreach ($reflection->getParameters() as $index => $parameterReflection) {
+                        if ($index === $key && $parameterReflection->getType() instanceof CallableType && count($parameterReflection->getType()->getParameters()) > 1) {
+                            $args[$key]->value->setAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS, \true);
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
         $callLike = $this->extractCallLike($node);
         if ($callLike === null) {
             return null;
@@ -101,6 +141,9 @@ CODE_SAMPLE
             return \true;
         }
         if ($this->isUsingThisInNonObjectContext($callLike, $scope)) {
+            return \true;
+        }
+        if ($node->getAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS) === \true) {
             return \true;
         }
         $functionLike = $this->astResolver->resolveClassMethodOrFunctionFromCall($callLike);
