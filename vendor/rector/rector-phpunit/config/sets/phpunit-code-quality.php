@@ -20,6 +20,7 @@ use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
+use Rector\PHPUnit\CodeQuality\Rector\FuncCall\AssertFuncCallToPHPUnitAssertRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareOnCountableWithMethodToAssertCountRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
@@ -83,6 +84,7 @@ return static function (RectorConfig $rectorConfig): void {
         AssertInstanceOfComparisonRector::class,
         AssertPropertyExistsRector::class,
         AssertRegExpRector::class,
+        AssertFuncCallToPHPUnitAssertRector::class,
         SimplifyForeachInstanceOfRector::class,
         UseSpecificWillMethodRector::class,
         UseSpecificWithMethodRector::class,

@@ -40,7 +40,32 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns assert() calls to their explicit PHPUnit assert alternative', [new CodeSample('assert($value === 100, "message");', '$this->assertSame(100, $value, "message");')]);
+        return new RuleDefinition('Turns assert() calls in tests to PHPUnit assert method alternative', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
+{
+    public function test()
+    {
+        $value = 1000;
+        assert($value === 1000, 'message');
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
+{
+    public function test()
+    {
+        $value = 1000;
+
+        $this->assertSame(1000, $value, "message")
+    }
+}
+CODE_SAMPLE
+)]);
     }
     /**
      * @return class-string[]
