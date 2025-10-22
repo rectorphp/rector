@@ -1874,7 +1874,6 @@ class ComposerStaticInit36c3bd88d3f15f77dd1346f191076db2
         'Rector\\DowngradePhp81\\NodeAnalyzer\\ArraySpreadAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeAnalyzer/ArraySpreadAnalyzer.php',
         'Rector\\DowngradePhp81\\NodeFactory\\ArrayMergeFromArraySpreadFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeFactory/ArrayMergeFromArraySpreadFactory.php',
         'Rector\\DowngradePhp81\\NodeManipulator\\ObjectToResourceReturn' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeManipulator/ObjectToResourceReturn.php',
-        'Rector\\DowngradePhp81\\Rector\\Array_\\DowngradeArraySpreadStringKeyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php',
         'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
         'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeArrayIsListRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php',
         'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',

@@ -1626,7 +1626,6 @@ return array(
     'Rector\\DowngradePhp81\\NodeAnalyzer\\ArraySpreadAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeAnalyzer/ArraySpreadAnalyzer.php',
     'Rector\\DowngradePhp81\\NodeFactory\\ArrayMergeFromArraySpreadFactory' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeFactory/ArrayMergeFromArraySpreadFactory.php',
     'Rector\\DowngradePhp81\\NodeManipulator\\ObjectToResourceReturn' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/NodeManipulator/ObjectToResourceReturn.php',
-    'Rector\\DowngradePhp81\\Rector\\Array_\\DowngradeArraySpreadStringKeyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php',
     'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeArrayIsListRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php',
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
