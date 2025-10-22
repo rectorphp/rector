@@ -5,7 +5,6 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use Rector\FileSystem\FilePathHelper;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
 final class ClassMethodParamVendorLockResolver
@@ -18,15 +17,10 @@ final class ClassMethodParamVendorLockResolver
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private FilePathHelper $filePathHelper;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, FilePathHelper $filePathHelper)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
-        $this->filePathHelper = $filePathHelper;
     }
     public function isVendorLocked(ClassMethod $classMethod): bool
     {
@@ -43,10 +37,7 @@ final class ClassMethodParamVendorLockResolver
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         // has interface vendor lock? → better skip it, as PHPStan has access only to just analyzed classes
-        if ($this->hasParentInterfaceMethod($classReflection, $methodName)) {
-            return \true;
-        }
-        return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '/vendor/');
+        return $this->hasParentInterfaceMethod($classReflection, $methodName);
     }
     /**
      * Has interface even in our project?
@@ -57,31 +48,6 @@ final class ClassMethodParamVendorLockResolver
     {
         foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
             if ($interfaceClassReflection->hasMethod($methodName)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function hasClassMethodLockMatchingFileName(ClassReflection $classReflection, string $methodName, string $filePathPartName): bool
-    {
-        $ancestorClassReflections = [...$classReflection->getParents(), ...$classReflection->getInterfaces()];
-        foreach ($ancestorClassReflections as $ancestorClassReflection) {
-            // parent type
-            if (!$ancestorClassReflection->hasNativeMethod($methodName)) {
-                continue;
-            }
-            // is file in vendor?
-            $fileName = $ancestorClassReflection->getFileName();
-            // probably internal class
-            if ($fileName === null) {
-                continue;
-            }
-            // not conditions? its a match
-            if ($filePathPartName === '') {
-                return \true;
-            }
-            $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
-            if (strpos($normalizedFileName, $filePathPartName) !== \false) {
                 return \true;
             }
         }

@@ -52,11 +52,11 @@ CODE_SAMPLE
     {
         return [FuncCall::class];
     }
+    /**
+     * @param FuncCall $node
+     */
     public function refactor(Node $node): ?FuncCall
     {
-        if (!$node instanceof FuncCall) {
-            return null;
-        }
         if (!$node->name instanceof Name) {
             return null;
         }

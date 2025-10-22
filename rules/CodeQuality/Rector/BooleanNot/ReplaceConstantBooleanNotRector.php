@@ -60,9 +60,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof BooleanNot) {
-            return null;
-        }
         if ($this->valueResolver->isFalse($node->expr)) {
             return new ConstFetch(new Name('true'));
         }

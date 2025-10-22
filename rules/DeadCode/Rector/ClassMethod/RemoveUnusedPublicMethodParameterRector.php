@@ -12,6 +12,7 @@ use Rector\DeadCode\NodeManipulator\ClassMethodParamRemover;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -104,7 +105,7 @@ CODE_SAMPLE
             return \true;
         }
         // parameter is required for contract coupling
-        if ($this->isName($classMethod->name, '__invoke') && $this->phpAttributeAnalyzer->hasPhpAttribute($class, 'Symfony\Component\Messenger\Attribute\AsMessageHandler')) {
+        if ($this->isName($classMethod->name, MethodName::INVOKE) && $this->phpAttributeAnalyzer->hasPhpAttribute($class, 'Symfony\Component\Messenger\Attribute\AsMessageHandler')) {
             return \true;
         }
         return $this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod);
