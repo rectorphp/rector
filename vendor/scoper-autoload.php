@@ -30,10 +30,13 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
     }
 }
 humbug_phpscoper_expose_class('SameBeforeAfterFixtureDetector', 'RectorPrefix202510\SameBeforeAfterFixtureDetector');
+humbug_phpscoper_expose_class('RectorClassFinder', 'RectorPrefix202510\RectorClassFinder');
+humbug_phpscoper_expose_class('RectorSetFinder', 'RectorPrefix202510\RectorSetFinder');
+humbug_phpscoper_expose_class('UsedRectorClassResolver', 'RectorPrefix202510\UsedRectorClassResolver');
 humbug_phpscoper_expose_class('NoPhpFileInFixturesDetector', 'RectorPrefix202510\NoPhpFileInFixturesDetector');
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202510\AutoloadIncluder');
 humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202510\SomeClass');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit36c3bd88d3f15f77dd1346f191076db2', 'RectorPrefix202510\ComposerAutoloaderInit36c3bd88d3f15f77dd1346f191076db2');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit16ec7ff0d8eedd6e2063f6ca578f3794', 'RectorPrefix202510\ComposerAutoloaderInit16ec7ff0d8eedd6e2063f6ca578f3794');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202510\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202510\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202510\Normalizer');

@@ -5,8 +5,6 @@ namespace Rector\Console\Command;
 
 use RectorPrefix202510\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Configuration\ConfigurationRuleFilter;
-use Rector\Configuration\OnlyRuleResolver;
 use Rector\Configuration\Option;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
@@ -27,14 +25,6 @@ final class ListRulesCommand extends Command
      */
     private SkippedClassResolver $skippedClassResolver;
     /**
-     * @readonly
-     */
-    private OnlyRuleResolver $onlyRuleResolver;
-    /**
-     * @readonly
-     */
-    private ConfigurationRuleFilter $configurationRuleFilter;
-    /**
      * @var RectorInterface[]
      * @readonly
      */
@@ -42,12 +32,10 @@ final class ListRulesCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, OnlyRuleResolver $onlyRuleResolver, ConfigurationRuleFilter $configurationRuleFilter, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->skippedClassResolver = $skippedClassResolver;
-        $this->onlyRuleResolver = $onlyRuleResolver;
-        $this->configurationRuleFilter = $configurationRuleFilter;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -61,11 +49,7 @@ final class ListRulesCommand extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $onlyRule = $input->getOption(Option::ONLY);
-        if ($onlyRule !== null) {
-            $onlyRule = $this->onlyRuleResolver->resolve($onlyRule);
-        }
-        $rectorClasses = $this->resolveRectorClasses($onlyRule);
+        $rectorClasses = $this->resolveRectorClasses();
         $skippedClasses = $this->getSkippedCheckers();
         $outputFormat = $input->getOption(Option::OUTPUT_FORMAT);
         if ($outputFormat === 'json') {
@@ -86,12 +70,9 @@ final class ListRulesCommand extends Command
     /**
      * @return array<class-string<RectorInterface>>
      */
-    private function resolveRectorClasses(?string $onlyRule): array
+    private function resolveRectorClasses(): array
     {
         $customRectors = array_filter($this->rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
-        if ($onlyRule !== null) {
-            $customRectors = $this->configurationRuleFilter->filterOnlyRule($customRectors, $onlyRule);
-        }
         $rectorClasses = array_map(static fn(RectorInterface $rector): string => get_class($rector), $customRectors);
         sort($rectorClasses);
         return array_unique($rectorClasses);
