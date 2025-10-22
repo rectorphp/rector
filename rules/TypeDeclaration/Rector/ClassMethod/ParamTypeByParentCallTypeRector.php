@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
@@ -102,6 +104,12 @@ CODE_SAMPLE
             if ($param->type !== null) {
                 continue;
             }
+            if ($param->variadic) {
+                continue;
+            }
+            if ($this->isParamUsedInSpreadArg($node, $param)) {
+                continue;
+            }
             $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
             if (!$parentParam instanceof Param) {
                 continue;
@@ -150,5 +158,20 @@ CODE_SAMPLE
             return \true;
         }
         return !$classReflection->isClass();
+    }
+    private function isParamUsedInSpreadArg(ClassMethod $classMethod, Param $param): bool
+    {
+        /** @var Arg[] $args */
+        $args = $this->betterNodeFinder->findInstancesOfScoped((array) $classMethod->stmts, Arg::class);
+        $paramName = $this->getName($param);
+        foreach ($args as $arg) {
+            if (!$arg->unpack) {
+                continue;
+            }
+            if ($arg->value instanceof Variable && $this->isName($arg->value, $paramName)) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
