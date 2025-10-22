@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202510;
 
+use Rector\CodingStyle\Rector\FuncCall\ClosureFromCallableToFirstClassCallableRector;
 use Rector\CodingStyle\Rector\FunctionLike\FunctionLikeToFirstClassCallableRector;
 use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
@@ -31,6 +32,7 @@ return static function (RectorConfig $rectorConfig): void {
         FirstClassCallableRector::class,
         // closure/arrow function
         FunctionLikeToFirstClassCallableRector::class,
+        ClosureFromCallableToFirstClassCallableRector::class,
         RemoveReflectionSetAccessibleCallsRector::class,
     ]);
 };

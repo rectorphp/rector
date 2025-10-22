@@ -54,25 +54,26 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
             return new FuncCall($this->toFullyQualified($arg->value->value), [new VariadicPlaceholder()]);
         }
         if ($arg->value instanceof Array_) {
-            if (!array_key_exists(0, $arg->value->items) || !array_key_exists(1, $arg->value->items) || !$arg->value->items[1]->value instanceof String_) {
+            $array = $arg->value;
+            if (!array_key_exists(0, $array->items) || !array_key_exists(1, $array->items) || !$array->items[1]->value instanceof String_) {
                 return null;
             }
-            if ($arg->value->items[0]->value instanceof Variable) {
-                return new MethodCall($arg->value->items[0]->value, $arg->value->items[1]->value->value, [new VariadicPlaceholder()]);
+            if ($array->items[0]->value instanceof Variable) {
+                return new MethodCall($array->items[0]->value, $array->items[1]->value->value, [new VariadicPlaceholder()]);
             }
-            if ($arg->value->items[0]->value instanceof String_) {
-                $classNode = new FullyQualified($arg->value->items[0]->value->value);
-            } elseif ($arg->value->items[0]->value instanceof ClassConstFetch) {
-                if ($arg->value->items[0]->value->class instanceof Expr) {
+            if ($array->items[0]->value instanceof String_) {
+                $classNode = new FullyQualified($array->items[0]->value->value);
+            } elseif ($array->items[0]->value instanceof ClassConstFetch) {
+                if ($array->items[0]->value->class instanceof Expr) {
                     return null;
                 }
-                $classNode = new FullyQualified($arg->value->items[0]->value->class->name);
-            } elseif ($arg->value->items[0]->value instanceof FullyQualified) {
-                $classNode = new FullyQualified($arg->value->items[0]->value->name);
+                $classNode = new FullyQualified($array->items[0]->value->class->name);
+            } elseif ($array->items[0]->value instanceof FullyQualified) {
+                $classNode = new FullyQualified($array->items[0]->value->name);
             } else {
                 return null;
             }
-            return new StaticCall($classNode, $arg->value->items[1]->value->value, [new VariadicPlaceholder()]);
+            return new StaticCall($classNode, $array->items[1]->value->value, [new VariadicPlaceholder()]);
         }
         return $node;
     }
