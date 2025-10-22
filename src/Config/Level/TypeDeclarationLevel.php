@@ -55,6 +55,7 @@ use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector;
 use Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayMapRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYieldsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
@@ -115,6 +116,7 @@ final class TypeDeclarationLevel
         ReturnUnionTypeRector::class,
         // closures
         AddClosureNeverReturnTypeRector::class,
+        AddClosureParamTypeForArrayMapRector::class,
         ClosureReturnTypeRector::class,
         AddArrowFunctionParamArrayWhereDimFetchRector::class,
         // more risky rules
