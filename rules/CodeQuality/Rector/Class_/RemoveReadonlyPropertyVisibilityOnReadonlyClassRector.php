@@ -6,7 +6,6 @@ namespace Rector\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Php81\NodeManipulator\AttributeGroupNewLiner;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
@@ -23,14 +22,9 @@ final class RemoveReadonlyPropertyVisibilityOnReadonlyClassRector extends Abstra
      * @readonly
      */
     private VisibilityManipulator $visibilityManipulator;
-    /**
-     * @readonly
-     */
-    private AttributeGroupNewLiner $attributeGroupNewLiner;
-    public function __construct(VisibilityManipulator $visibilityManipulator, AttributeGroupNewLiner $attributeGroupNewLiner)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
-        $this->attributeGroupNewLiner = $attributeGroupNewLiner;
     }
     public function provideMinPhpVersion(): int
     {
@@ -82,9 +76,6 @@ CODE_SAMPLE
                 }
                 $this->visibilityManipulator->removeReadonly($param);
                 $hasChanged = \true;
-                if ($param->attrGroups !== []) {
-                    $this->attributeGroupNewLiner->newLine($this->file, $param);
-                }
             }
         }
         foreach ($node->getProperties() as $property) {
@@ -93,9 +84,6 @@ CODE_SAMPLE
             }
             $this->visibilityManipulator->removeReadonly($property);
             $hasChanged = \true;
-            if ($property->attrGroups !== []) {
-                $this->attributeGroupNewLiner->newLine($this->file, $property);
-            }
         }
         if (!$hasChanged) {
             return null;
