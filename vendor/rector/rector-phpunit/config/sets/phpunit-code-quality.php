@@ -16,6 +16,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\TypeWillReturnCallableArrowFunction
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableInstanceRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
@@ -46,6 +47,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsS
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
+use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ReplaceAtMethodWithDesiredMatcherRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         ConstructClassMethodToSetUpTestCaseRector::class,
@@ -106,5 +108,7 @@ return static function (RectorConfig $rectorConfig): void {
         SingleMockPropertyTypeRector::class,
         // prefer simple mocking
         GetMockBuilderGetMockToCreateMockRector::class,
+        EntityDocumentCreateMockToDirectNewRector::class,
+        ReplaceAtMethodWithDesiredMatcherRector::class,
     ]);
 };
