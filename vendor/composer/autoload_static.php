@@ -1417,6 +1417,7 @@ class ComposerStaticInit16ec7ff0d8eedd6e2063f6ca578f3794
         'Rector\\CodeQuality\\Rector\\Class_\\DynamicDocBlockPropertyToNativePropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/DynamicDocBlockPropertyToNativePropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
+        'Rector\\CodeQuality\\Rector\\Concat\\DirnameDirConcatStringToDirectStringPathRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/DirnameDirConcatStringToDirectStringPathRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
         'Rector\\CodeQuality\\Rector\\Empty_\\SimplifyEmptyCheckOnEmptyArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php',
         'Rector\\CodeQuality\\Rector\\Equal\\UseIdenticalOverEqualWithSameTypeRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Equal/UseIdenticalOverEqualWithSameTypeRector.php',
