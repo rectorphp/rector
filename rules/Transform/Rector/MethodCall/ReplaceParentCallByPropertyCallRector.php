@@ -5,6 +5,7 @@ namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated as this rule was part of removed doctrine service set. It does not work as standalone. Create custom rule instead.
  */
-final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {

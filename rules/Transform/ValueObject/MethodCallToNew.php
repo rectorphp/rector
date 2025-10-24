@@ -4,6 +4,9 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+/**
+ * @deprecated as related rule is deprecated
+ */
 final class MethodCallToNew
 {
     /**

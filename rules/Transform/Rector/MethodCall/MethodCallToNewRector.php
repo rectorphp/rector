@@ -6,30 +6,24 @@ namespace Rector\Transform\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\MethodCallToNew;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToNewRector\MethodCallToNewRectorTest
+ * @deprecated as not used, based on assumptions of factory method body and requires manual work.
  */
-class MethodCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodCallToNewRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var MethodCallToNew[]
-     */
-    private array $methodCallToNew;
     /**
      * @param MethodCallToNew[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, MethodCallToNew::class);
-        $this->methodCallToNew = $configuration;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -50,18 +44,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?New_
     {
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        foreach ($this->methodCallToNew as $methodCallToNew) {
-            if (!$this->isName($node->name, $methodCallToNew->getMethodName())) {
-                continue;
-            }
-            if (!$this->isObjectType($node->var, $methodCallToNew->getObject())) {
-                continue;
-            }
-            return new New_(new FullyQualified($methodCallToNew->getNewClassString()), $node->args);
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('%s as not used, based on assumptions of factory method body and requires manual work.', self::class));
     }
 }
