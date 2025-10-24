@@ -5,21 +5,18 @@ namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\MethodCallToPropertyFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\MethodCallToPropertyFetchRectorTest
+ * @deprecated as part of removed Doctrine set that was not reliable.
  */
-final class MethodCallToPropertyFetchRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodCallToPropertyFetchRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var MethodCallToPropertyFetch[]
-     */
-    private array $methodCallsToPropertyFetches = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn method call `$this->getFirstname()` to property fetch `$this->firstname`', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -54,23 +51,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodCallsToPropertyFetches as $methodCallToPropertyFetch) {
-            if (!$this->isName($node->name, $methodCallToPropertyFetch->getOldMethod())) {
-                continue;
-            }
-            if (!$this->isObjectType($node->var, $methodCallToPropertyFetch->getOldObjectType())) {
-                continue;
-            }
-            return $this->nodeFactory->createPropertyFetch($node->var, $methodCallToPropertyFetch->getNewProperty());
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('The "%s" is deprecated as part of removed Doctrine set that was not reliable.', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, MethodCallToPropertyFetch::class);
-        $this->methodCallsToPropertyFetches = $configuration;
     }
 }
