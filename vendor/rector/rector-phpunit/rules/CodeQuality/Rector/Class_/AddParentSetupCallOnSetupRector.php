@@ -4,36 +4,17 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\AddParentSetupCallOnSetupRector\AddParentSetupCallOnSetupRectorTest
+ * @deprecated as parent setup call depends on the test. Sometimes its on purpose, sometimes not. Better handle manually
  */
-final class AddParentSetupCallOnSetupRector extends AbstractRector
+final class AddParentSetupCallOnSetupRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private TestsNodeAnalyzer $testsNodeAnalyzer;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder)
-    {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add missing parent::setUp() call on setUp() method on test class', [new CodeSample(<<<'CODE_SAMPLE'
@@ -71,29 +52,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-        $setUpMethod = $node->getMethod(MethodName::SET_UP);
-        if (!$setUpMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($setUpMethod->isAbstract() || $setUpMethod->stmts === null) {
-            return null;
-        }
-        $isSetupExists = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($setUpMethod, function (Node $subNode): bool {
-            if (!$subNode instanceof StaticCall) {
-                return \false;
-            }
-            if (!$this->isName($subNode->class, 'parent')) {
-                return \false;
-            }
-            return $this->isName($subNode->name, 'setUp');
-        });
-        if ($isSetupExists) {
-            return null;
-        }
-        $setUpMethod->stmts = array_merge([new Expression(new StaticCall(new Name('parent'), new Identifier('setUp')))], $setUpMethod->stmts);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('Rule "%s" is deprecated. Better add parent::setUp() manually where needed.', self::class));
     }
 }
