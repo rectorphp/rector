@@ -84,20 +84,26 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        foreach ($node->getArgs() as $position => $arg) {
-            if ($arg->unpack) {
+        $args = $node->getArgs();
+        $lastArgPosition = count($args) - 1;
+        for ($position = $lastArgPosition; $position >= 0; --$position) {
+            if (!isset($args[$position])) {
                 continue;
+            }
+            $arg = $args[$position];
+            if ($arg->unpack) {
+                break;
             }
             // skip named args
             if ($arg->name instanceof Node) {
-                continue;
+                break;
             }
             if (!$this->valueResolver->isNull($arg->value)) {
-                continue;
+                break;
             }
             $nullPositions = $this->callLikeParamDefaultResolver->resolveNullPositions($node);
             if (!in_array($position, $nullPositions)) {
-                continue;
+                break;
             }
             unset($node->args[$position]);
             $hasChanged = \true;
