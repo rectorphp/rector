@@ -6,22 +6,21 @@ namespace Rector\Php74\Rector\LNumber;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Util\StringUtils;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * Taking the most generic use case to the account: https://wiki.php.net/rfc/numeric_literal_separator#should_it_be_the_role_of_an_ide_to_group_digits
  * The final check should be done manually
  *
- * @see \Rector\Tests\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector\AddLiteralSeparatorToNumberRectorTest
+ * @deprecated as opinionated and group size depends on context. Cannot be automated. Use manually where neeed isntead.
  */
-final class AddLiteralSeparatorToNumberRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
+final class AddLiteralSeparatorToNumberRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface, DeprecatedInterface
 {
     /**
      * @api
@@ -29,22 +28,10 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      */
     public const LIMIT_VALUE = 'limit_value';
     /**
-     * @var int
-     */
-    private const GROUP_SIZE = 3;
-    /**
-     * @var int
-     */
-    private const DEFAULT_LIMIT_VALUE = 1000000;
-    private int $limitValue = self::DEFAULT_LIMIT_VALUE;
-    /**
      * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {
-        $limitValue = $configuration[self::LIMIT_VALUE] ?? self::DEFAULT_LIMIT_VALUE;
-        Assert::integer($limitValue);
-        $this->limitValue = $limitValue;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -82,73 +69,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
-        if ($this->shouldSkip($node, $rawValue)) {
-            return null;
-        }
-        if (strpos((string) $rawValue, '.') !== \false) {
-            [$mainPart, $decimalPart] = explode('.', (string) $rawValue);
-            $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
-            $literalSeparatedNumber = implode('_', $chunks) . '.' . $decimalPart;
-        } else {
-            $chunks = $this->strSplitNegative($rawValue, self::GROUP_SIZE);
-            $literalSeparatedNumber = implode('_', $chunks);
-            // PHP converts: (string) 1000.0 -> "1000"!
-            if (is_float($node->value)) {
-                $literalSeparatedNumber .= '.0';
-            }
-        }
-        // this cannot be integer directly to $node->value, as PHPStan sees it as error type
-        // @see https://github.com/rectorphp/rector/issues/7454
-        $node->setAttribute(AttributeKey::RAW_VALUE, $literalSeparatedNumber);
-        $node->setAttribute(AttributeKey::REPRINT_RAW_VALUE, \true);
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('%s is deprecated as opinonated and group size depends on context. Cannot be automated. Use manually where needed instead', self::class));
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::LITERAL_SEPARATOR;
-    }
-    /**
-     * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $node
-     * @param mixed $rawValue
-     */
-    private function shouldSkip($node, $rawValue): bool
-    {
-        if (!is_string($rawValue)) {
-            return \true;
-        }
-        // already contains separator
-        if (strpos($rawValue, '_') !== \false) {
-            return \true;
-        }
-        if ($node->value < $this->limitValue) {
-            return \true;
-        }
-        $kind = $node->getAttribute(AttributeKey::KIND);
-        if (in_array($kind, [Int_::KIND_BIN, Int_::KIND_OCT, Int_::KIND_HEX], \true)) {
-            return \true;
-        }
-        // e+/e-
-        if (StringUtils::isMatch($rawValue, '#e#i')) {
-            return \true;
-        }
-        // too short
-        return strlen($rawValue) <= self::GROUP_SIZE;
-    }
-    /**
-     * @param int<1, max> $length
-     * @return string[]
-     */
-    private function strSplitNegative(string $string, int $length): array
-    {
-        $inversed = strrev($string);
-        /** @var string[] $chunks */
-        $chunks = str_split($inversed, $length);
-        $chunks = array_reverse($chunks);
-        foreach ($chunks as $key => $chunk) {
-            $chunks[$key] = strrev($chunk);
-        }
-        return $chunks;
     }
 }
