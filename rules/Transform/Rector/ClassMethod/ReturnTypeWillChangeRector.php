@@ -7,45 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\Php81\Enum\AttributeName;
-use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\Transform\ValueObject\ClassMethodReference;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector\ReturnTypeWillChangeRectorTest
+ * @deprecated as not used in any set, and discourages from type coverage and leads to worse code. Use type declaration set instead, to actually increase type coverage.
  */
 final class ReturnTypeWillChangeRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
 {
-    /**
-     * @readonly
-     */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    /**
-     * @readonly
-     */
-    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
-    /**
-     * @readonly
-     */
-    private ReflectionResolver $reflectionResolver;
-    /**
-     * @var ClassMethodReference[]
-     */
-    private array $returnTypeChangedClassMethodReferences = [];
-    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionResolver $reflectionResolver)
-    {
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->reflectionResolver = $reflectionResolver;
-        $this->returnTypeChangedClassMethodReferences = [new ClassMethodReference('ArrayAccess', 'getIterator'), new ClassMethodReference('ArrayAccess', 'offsetGet')];
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add #[\ReturnTypeWillChange] attribute to configured instanceof class with methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -79,40 +52,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($node);
-        foreach ($node->getMethods() as $classMethod) {
-            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, AttributeName::RETURN_TYPE_WILL_CHANGE)) {
-                continue;
-            }
-            // the return type is known, no need to add attribute
-            if ($classMethod->returnType instanceof Node) {
-                continue;
-            }
-            foreach ($this->returnTypeChangedClassMethodReferences as $returnTypeChangedClassMethodReference) {
-                if (!$classReflection->is($returnTypeChangedClassMethodReference->getClass())) {
-                    continue;
-                }
-                if (!$this->isName($classMethod, $returnTypeChangedClassMethodReference->getMethod())) {
-                    continue;
-                }
-                $classMethod->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass(AttributeName::RETURN_TYPE_WILL_CHANGE);
-                $hasChanged = \true;
-                break;
-            }
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('Rule "%s" is deprecated as not used in any set, and discourages from type coverage and leads to worse code. Use type declaration set instead, to actually increase type coverage.', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, ClassMethodReference::class);
-        $this->returnTypeChangedClassMethodReferences = array_merge($this->returnTypeChangedClassMethodReferences, $configuration);
     }
     public function provideMinPhpVersion(): int
     {
