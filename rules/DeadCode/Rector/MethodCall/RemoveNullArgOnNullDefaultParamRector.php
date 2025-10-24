@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -70,11 +71,11 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [MethodCall::class, StaticCall::class, New_::class];
+        return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class];
     }
     /**
-     * @param MethodCall|StaticCall|New_ $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|null
+     * @param MethodCall|StaticCall|New_|FuncCall $node
+     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall|null
      */
     public function refactor(Node $node)
     {
@@ -82,6 +83,10 @@ CODE_SAMPLE
             return null;
         }
         if ($node->getArgs() === []) {
+            return null;
+        }
+        $nullPositions = $this->callLikeParamDefaultResolver->resolveNullPositions($node);
+        if ($nullPositions === []) {
             return null;
         }
         $hasChanged = \false;
@@ -102,8 +107,7 @@ CODE_SAMPLE
             if (!$this->valueResolver->isNull($arg->value)) {
                 break;
             }
-            $nullPositions = $this->callLikeParamDefaultResolver->resolveNullPositions($node);
-            if (!in_array($position, $nullPositions)) {
+            if (!in_array($position, $nullPositions, \true)) {
                 break;
             }
             unset($node->args[$position]);

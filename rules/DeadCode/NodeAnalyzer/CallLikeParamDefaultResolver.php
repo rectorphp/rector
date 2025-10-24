@@ -3,9 +3,11 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\NodeAnalyzer;
 
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\NullType;
@@ -22,16 +24,16 @@ final class CallLikeParamDefaultResolver
     }
     /**
      * @return int[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
      */
     public function resolveNullPositions($callLike): array
     {
-        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
-        if (!$methodReflection instanceof MethodReflection) {
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
+        if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return [];
         }
         $nullPositions = [];
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());
         foreach ($extendedParametersAcceptor->getParameters() as $position => $extendedParameterReflection) {
             if (!$extendedParameterReflection->getDefaultValue() instanceof NullType) {
                 continue;
@@ -41,15 +43,15 @@ final class CallLikeParamDefaultResolver
         return $nullPositions;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
      */
     public function resolvePositionParameterByName($callLike, string $parameterName): ?int
     {
-        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
-        if (!$methodReflection instanceof MethodReflection) {
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
+        if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return null;
         }
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());
         foreach ($extendedParametersAcceptor->getParameters() as $position => $extendedParameterReflection) {
             if ($extendedParameterReflection->getName() === $parameterName) {
                 return $position;
