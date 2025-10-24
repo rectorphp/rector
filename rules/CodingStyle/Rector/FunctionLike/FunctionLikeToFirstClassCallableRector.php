@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\Annotations\AnnotationMethodReflection;
 use PHPStan\Reflection\ResolvedFunctionVariantWithOriginal;
 use PHPStan\Type\CallableType;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
@@ -145,6 +146,15 @@ CODE_SAMPLE
             return \true;
         }
         if ($node->getAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS) === \true) {
+            return \true;
+        }
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
+        // not exists, probably by magic method
+        if ($reflection === null) {
+            return \true;
+        }
+        // exists, but by @method annotation
+        if ($reflection instanceof AnnotationMethodReflection) {
             return \true;
         }
         $functionLike = $this->astResolver->resolveClassMethodOrFunctionFromCall($callLike);
