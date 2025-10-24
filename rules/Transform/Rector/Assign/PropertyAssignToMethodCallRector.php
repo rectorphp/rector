@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Transform\Rector\Assign;
 
-use Rector\Exception\ShouldNotHappenException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;

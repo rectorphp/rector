@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use Rector\DeadCode\NodeAnalyzer\CallLikeParamDefaultResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
@@ -94,8 +95,8 @@ CODE_SAMPLE
             if ($arg->unpack) {
                 break;
             }
-            // skip named args
-            if ($arg->name instanceof Node) {
+            // stop when found named arg and position not match
+            if ($arg->name instanceof Identifier && $position !== $this->callLikeParamDefaultResolver->resolvePositionParameterByName($node, $arg->name->toString())) {
                 break;
             }
             if (!$this->valueResolver->isNull($arg->value)) {

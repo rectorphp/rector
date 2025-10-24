@@ -40,4 +40,21 @@ final class CallLikeParamDefaultResolver
         }
         return $nullPositions;
     }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     */
+    public function resolvePositionParameterByName($callLike, string $parameterName): ?int
+    {
+        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
+        if (!$methodReflection instanceof MethodReflection) {
+            return null;
+        }
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
+        foreach ($extendedParametersAcceptor->getParameters() as $position => $extendedParameterReflection) {
+            if ($extendedParameterReflection->getName() === $parameterName) {
+                return $position;
+            }
+        }
+        return null;
+    }
 }
