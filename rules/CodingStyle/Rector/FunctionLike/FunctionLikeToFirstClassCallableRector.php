@@ -154,7 +154,7 @@ CODE_SAMPLE
             return \true;
         }
         // exists, but by @method annotation
-        if ($reflection instanceof AnnotationMethodReflection) {
+        if ($reflection instanceof AnnotationMethodReflection && !$reflection->getDeclaringClass()->hasNativeMethod($reflection->getName())) {
             return \true;
         }
         $functionLike = $this->astResolver->resolveClassMethodOrFunctionFromCall($callLike);
