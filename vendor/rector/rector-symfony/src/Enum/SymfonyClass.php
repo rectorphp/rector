@@ -116,6 +116,10 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const PARAMETER_BAG_INTERFACE = 'Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface';
+    /**
+     * @var string
+     */
     public const SYMFONY_STYLE = 'Symfony\Component\Console\Style\SymfonyStyle';
     /**
      * @var string

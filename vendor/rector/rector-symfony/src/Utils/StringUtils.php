@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Utils;
 
+/**
+ * @api might be used soon
+ */
 final class StringUtils
 {
     public static function underscoreToCamelCase(string $value): string

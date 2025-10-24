@@ -1861,12 +1861,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "3a449fa97c4653f5750412b227c3d0c29d8def19"
+                "reference": "6337a1b7fdf4de6c61e4da4fc1c029dcf791567e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/3a449fa97c4653f5750412b227c3d0c29d8def19",
-                "reference": "3a449fa97c4653f5750412b227c3d0c29d8def19",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/6337a1b7fdf4de6c61e4da4fc1c029dcf791567e",
+                "reference": "6337a1b7fdf4de6c61e4da4fc1c029dcf791567e",
                 "shasum": ""
             },
             "require": {
@@ -1874,9 +1874,9 @@
                 "php": ">=8.2"
             },
             "require-dev": {
-                "phpecs\/phpecs": "^2.0.1",
+                "phpecs\/phpecs": "^2.2",
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.1.8",
+                "phpstan\/phpstan": "^2.1.31",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.4",
                 "rector\/rector-src": "dev-main",
@@ -1897,7 +1897,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-10-24T09:26:01+00:00",
+            "time": "2025-10-24T20:00:46+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
