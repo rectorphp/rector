@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -124,7 +125,7 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $call
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
     public function resolveClassMethodOrFunctionFromCall($call)
@@ -167,10 +168,20 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\New_ $call
      */
     public function resolveClassMethodFromCall($call): ?ClassMethod
     {
+        if ($call instanceof New_) {
+            if ($call->class instanceof Class_) {
+                return null;
+            }
+            $className = $this->nodeNameResolver->getName($call->class);
+            if ($className === null) {
+                return null;
+            }
+            return $this->resolveClassMethod($className, MethodName::CONSTRUCT);
+        }
         $callerStaticType = $call instanceof MethodCall || $call instanceof NullsafeMethodCall ? $this->nodeTypeResolver->getType($call->var) : $this->nodeTypeResolver->getType($call->class);
         $className = ClassNameFromObjectTypeResolver::resolve($callerStaticType);
         if ($className === null) {
