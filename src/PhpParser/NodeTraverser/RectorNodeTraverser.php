@@ -10,6 +10,9 @@ use PhpParser\NodeVisitor;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\VersionBonding\PhpVersionedFilter;
+/**
+ * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
+ */
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**

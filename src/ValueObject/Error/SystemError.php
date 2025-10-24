@@ -6,6 +6,9 @@ namespace Rector\ValueObject\Error;
 use RectorPrefix202510\Nette\Utils\Strings;
 use Rector\Parallel\ValueObject\BridgeItem;
 use RectorPrefix202510\Symplify\EasyParallel\Contract\SerializableInterface;
+/**
+ * @see \Rector\Tests\ValueObject\Error\SystemErrorTest
+ */
 final class SystemError implements SerializableInterface
 {
     /**

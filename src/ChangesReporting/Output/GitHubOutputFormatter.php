@@ -16,6 +16,7 @@ use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
 /**
  * @phpstan-type AnnotationProperties array{title?: string|null, file?: string|null, col?: int|null, endColumn?: int|null, line?: int|null, endLine?: int|null}
+ * @see \Rector\Tests\ChangesReporting\Output\GitHubOutputFormatterTest
  */
 final class GitHubOutputFormatter implements OutputFormatterInterface
 {

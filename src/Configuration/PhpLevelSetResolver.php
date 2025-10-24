@@ -9,6 +9,7 @@ use Rector\ValueObject\PhpVersion;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @see PhpLevelSetResolverTest
+ * @see \Rector\Tests\Configuration\PhpLevelSetResolverTest
  */
 final class PhpLevelSetResolver
 {

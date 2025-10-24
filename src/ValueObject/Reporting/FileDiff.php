@@ -10,6 +10,9 @@ use Rector\Parallel\ValueObject\BridgeItem;
 use Rector\Util\RectorClassesSorter;
 use RectorPrefix202510\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202510\Webmozart\Assert\Assert;
+/**
+ * @see \Rector\Tests\ValueObject\Reporting\FileDiffTest
+ */
 final class FileDiff implements SerializableInterface
 {
     /**

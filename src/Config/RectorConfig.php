@@ -24,6 +24,7 @@ use RectorPrefix202510\Symfony\Component\Console\Command\Command;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
  * @api
+ * @see \Rector\Tests\Config\RectorConfigTest
  */
 final class RectorConfig extends Container
 {
