@@ -16,8 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202510\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix202510\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -49,7 +48,7 @@ final class ArgumentValueResolverToValueResolverRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replaces ArgumentValueResolverInterface by ValueResolverInterface', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces ArgumentValueResolverInterface by ValueResolverInterface with supports logic moved to resolve() method', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 
 final class EntityValueResolver implements ArgumentValueResolverInterface
@@ -79,8 +78,8 @@ CODE_SAMPLE
     {
         // Check if the class implements ArgumentValueResolverInterface
         foreach ($class->implements as $key => $interface) {
-            if ($interface->toString() === ArgumentValueResolverInterface::class) {
-                $class->implements[$key] = new FullyQualified(ValueResolverInterface::class);
+            if ($interface->toString() === SymfonyClass::ARGUMENT_RESOLVER_INTERFACE) {
+                $class->implements[$key] = new FullyQualified(SymfonyClass::VALUE_RESOLVER_INTERFACE);
                 return \true;
             }
         }

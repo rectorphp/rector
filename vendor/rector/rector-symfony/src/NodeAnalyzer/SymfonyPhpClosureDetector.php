@@ -43,15 +43,15 @@ final class SymfonyPhpClosureDetector
         }
         return $this->nodeNameResolver->isName($firstParam->type, SymfonyClass::CONTAINER_CONFIGURATOR);
     }
-    public function hasDefaultsAutoconfigure(Closure $closure): bool
+    public function hasDefaultsConfigured(Closure $closure, string $desiredMethodName): bool
     {
         $hasDefaultsAutoconfigure = \false;
         // has defaults autoconfigure?
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use (&$hasDefaultsAutoconfigure): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use (&$hasDefaultsAutoconfigure, $desiredMethodName): ?int {
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node->name, 'autoconfigure')) {
+            if (!$this->nodeNameResolver->isName($node->name, $desiredMethodName)) {
                 return null;
             }
             /** @var MethodCall[] $methodCalls */

@@ -11,6 +11,7 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
+use RectorPrefix202510\Symplify\PHPStanRules\Enum\SymfonyFunctionName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202510\Webmozart\Assert\Assert;
@@ -57,7 +58,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?FuncCall
     {
-        if (!$this->isName($node, 'Symfony\Component\DependencyInjection\Loader\Configurator\service')) {
+        if (!$this->isName($node->name, SymfonyFunctionName::SERVICE)) {
             return null;
         }
         $firstArg = $node->args[0];

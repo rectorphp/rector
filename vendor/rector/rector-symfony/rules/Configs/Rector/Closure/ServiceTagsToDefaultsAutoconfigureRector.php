@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
-        $hasDefaultsAutoconfigure = $this->symfonyPhpClosureDetector->hasDefaultsAutoconfigure($node);
+        $hasDefaultsAutoconfigure = $this->symfonyPhpClosureDetector->hasDefaultsConfigured($node, 'autoconfigure');
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$hasChanged): ?Expr {
             if (!$node instanceof MethodCall) {
