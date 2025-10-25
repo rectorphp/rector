@@ -94,12 +94,7 @@ final class PhpAttributeGroupFactory
         // keep FQN in the attribute, so it can be easily detected later
         $attributeName->setAttribute(AttributeKey::PHP_ATTRIBUTE_NAME, $annotationToAttribute->getAttributeClass());
         $attribute = new Attribute($attributeName, $args);
-        $attributeGroup = new AttributeGroup([$attribute]);
-        $comment = $doctrineAnnotationTagValueNode->getAttribute(AttributeKey::ATTRIBUTE_COMMENT);
-        if ($comment) {
-            $attributeGroup->setAttribute(AttributeKey::ATTRIBUTE_COMMENT, $comment);
-        }
-        return $attributeGroup;
+        return new AttributeGroup([$attribute]);
     }
     /**
      * @api tests

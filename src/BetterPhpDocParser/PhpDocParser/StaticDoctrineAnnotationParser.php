@@ -13,7 +13,6 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayP
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\Util\NewLineSplitter;
 /**
  * Better version of doctrine/annotation - with phpdoc-parser and  static reflection
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\StaticDoctrineAnnotationParserTest
@@ -28,11 +27,6 @@ final class StaticDoctrineAnnotationParser
      * @readonly
      */
     private ArrayParser $arrayParser;
-    /**
-     * @var string
-     * @see https://regex101.com/r/Pthg5d/1
-     */
-    private const END_OF_VALUE_CHARACTERS_REGEX = '/^[)} \r\n"\']+$/i';
     public function __construct(PlainValueParser $plainValueParser, ArrayParser $arrayParser)
     {
         $this->plainValueParser = $plainValueParser;
@@ -79,18 +73,6 @@ final class StaticDoctrineAnnotationParser
             // plain token value
             $key => $value,
         ];
-    }
-    public function getCommentFromRestOfAnnotation(BetterTokenIterator $tokenIterator, string $annotationContent): string
-    {
-        // we skip all the remaining tokens from the end of the declaration of values
-        while (preg_match(self::END_OF_VALUE_CHARACTERS_REGEX, $tokenIterator->currentTokenValue())) {
-            $tokenIterator->next();
-        }
-        // the remaining of the annotation content is the comment
-        $comment = (string) substr($annotationContent, $tokenIterator->currentTokenOffset());
-        // we only keep the first line as this will be added as a line comment at the end of the attribute
-        $commentLines = NewLineSplitter::split($comment);
-        return $commentLines[0];
     }
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1051-L1079

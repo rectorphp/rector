@@ -4788,9 +4788,9 @@ Change annotation to attribute
  class SymfonyRoute
  {
 -    /**
--     * @Route("/path", name="action") api route
+-     * @Route("/path", name="action")
 -     */
-+    #[Route(path: '/path', name: 'action')] // api route
++    #[Route(path: '/path', name: 'action')]
      public function action()
      {
      }
