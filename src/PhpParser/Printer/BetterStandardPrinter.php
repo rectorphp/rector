@@ -264,10 +264,10 @@ final class BetterStandardPrinter extends Standard
         }
         $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
         if ($kind === String_::KIND_DOUBLE_QUOTED) {
-            return $this->wrapValueWith($string, '"');
+            return '"' . $string->value . '"';
         }
         if ($kind === String_::KIND_SINGLE_QUOTED) {
-            return $this->wrapValueWith($string, "'");
+            return "'" . $string->value . "'";
         }
         return parent::pScalar_String($string);
     }
@@ -288,6 +288,9 @@ final class BetterStandardPrinter extends Standard
         }
         return parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
     }
+    /**
+     * Used in rector-downgrade-php
+     */
     protected function pScalar_InterpolatedString(InterpolatedString $interpolatedString): string
     {
         $content = parent::pScalar_InterpolatedString($interpolatedString);
@@ -433,9 +436,5 @@ final class BetterStandardPrinter extends Standard
             }
         }
         return $hasNop;
-    }
-    private function wrapValueWith(String_ $string, string $wrap): string
-    {
-        return $wrap . $string->value . $wrap;
     }
 }
