@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-class ArrayDimFetchToMethodCall
+final class ArrayDimFetchToMethodCall
 {
     /**
      * @readonly
