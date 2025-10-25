@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Foreach_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated as not part of any set and not widely used. Can create less readable code, harder to analyse, read and work with.
  */
-final class MultiDimensionalArrayToArrayDestructRector extends AbstractRector implements MinPhpVersionInterface
+final class MultiDimensionalArrayToArrayDestructRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
