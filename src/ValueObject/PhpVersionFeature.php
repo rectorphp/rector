@@ -691,4 +691,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATE_BACKTICKS = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @see https://wiki.php.net/rfc/pipe-operator-v3
+     * @var int
+     */
+    public const PIPE_OPERATOER = \Rector\ValueObject\PhpVersion::PHP_85;
 }
