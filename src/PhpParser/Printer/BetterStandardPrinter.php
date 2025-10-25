@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Pipe;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
@@ -253,6 +254,10 @@ final class BetterStandardPrinter extends Standard
             return $printedArray . ($this->nl . ']');
         }
         return parent::pExpr_Array($array);
+    }
+    protected function pExpr_BinaryOp_Pipe(Pipe $node, int $precedence, int $lhsPrecedence): string
+    {
+        return $this->pInfixOp(Pipe::class, $node->left, $this->nl . $this->resolveIndentSpaces() . '|> ', $node->right, $precedence, $lhsPrecedence);
     }
     /**
      * Fixes escaping of regular patterns
