@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
+ * @note used in Laravel Rector https://github.com/driftingly/rector-laravel/blob/f46812350e0b4ef535c82d3759e86bb5c6abb651/config/sets/laravel-static-to-injection.php#L23
+ *
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
  */
 final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
