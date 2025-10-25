@@ -2986,7 +2986,6 @@ class ComposerStaticInit16ec7ff0d8eedd6e2063f6ca578f3794
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
         'Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
-        'Rector\\TypeDeclaration\\PhpDocParser\\TypeExpressionFromVarTagResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/TypeExpressionFromVarTagResolver.php',
         'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',

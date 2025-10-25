@@ -2738,7 +2738,6 @@ return array(
     'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => $baseDir . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
     'Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier' => $baseDir . '/rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php',
     'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
-    'Rector\\TypeDeclaration\\PhpDocParser\\TypeExpressionFromVarTagResolver' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/TypeExpressionFromVarTagResolver.php',
     'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => $baseDir . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',

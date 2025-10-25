@@ -3,48 +3,20 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Expression;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\TypeDeclaration\PhpDocParser\TypeExpressionFromVarTagResolver;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\Expression\InlineVarDocTagToAssertRector\InlineVarDocTagToAssertRectorTest
+ * @deprecated as might create production-crashing code. Either use strict assert or proper type declarations instead.
  */
-final class InlineVarDocTagToAssertRector extends AbstractRector implements MinPhpVersionInterface
+final class InlineVarDocTagToAssertRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private TypeExpressionFromVarTagResolver $typeExpressionFromVarTagResolver;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, TypeExpressionFromVarTagResolver $typeExpressionFromVarTagResolver)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->typeExpressionFromVarTagResolver = $typeExpressionFromVarTagResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert inline `@var` tags to calls to `assert()`', [new CodeSample(<<<'CODE_SAMPLE'
@@ -70,37 +42,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
-        if (!$node->expr instanceof Assign) {
-            return null;
-        }
-        if (!$node->expr->var instanceof Variable) {
-            return null;
-        }
-        $docComment = $node->getDocComment();
-        if (!$docComment instanceof Doc) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof PhpDocInfo || $phpDocInfo->getPhpDocNode()->children === []) {
-            return null;
-        }
-        $expressionVariableName = $node->expr->var->name;
-        foreach ($phpDocInfo->getPhpDocNode()->getVarTagValues() as $varTagValueNode) {
-            //remove $ from variable name
-            $variableName = (string) substr($varTagValueNode->variableName, 1);
-            if ($variableName === $expressionVariableName && $varTagValueNode->description === '') {
-                $typeExpression = $this->typeExpressionFromVarTagResolver->resolveTypeExpressionFromVarTag($varTagValueNode->type, new Variable($variableName));
-                if ($typeExpression instanceof Expr) {
-                    $phpDocInfo->removeByType(VarTagValueNode::class, $variableName);
-                    $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-                    $arg = new Arg($typeExpression);
-                    $funcCall = new FuncCall(new Name('assert'), [$arg]);
-                    $expression = new Expression($funcCall);
-                    return [$node, $expression];
-                }
-            }
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated as it might create production-crashing code. Either use strict assert or proper type declarations instead.', self::class));
     }
     public function provideMinPhpVersion(): int
     {
