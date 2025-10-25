@@ -6,6 +6,7 @@ namespace RectorPrefix202510;
 use Rector\Config\RectorConfig;
 use Rector\DowngradePhp85\Rector\Class_\DowngradeFinalPropertyPromotionRector;
 use Rector\DowngradePhp85\Rector\FuncCall\DowngradeArrayFirstLastRector;
+use Rector\DowngradePhp85\Rector\StmtsAwareInterface\DowngradePipeOperatorRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -13,7 +14,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\ValueObject\PhpVersion;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpVersion(PhpVersion::PHP_84);
-    $rectorConfig->rules([DowngradeArrayFirstLastRector::class, DowngradeFinalPropertyPromotionRector::class]);
+    $rectorConfig->rules([DowngradeArrayFirstLastRector::class, DowngradeFinalPropertyPromotionRector::class, DowngradePipeOperatorRector::class]);
     // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_driver_specific_pdo_constants_and_methods
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Pdo\Pgsql', 'copyFromArray', 'pgsqlCopyFromArray'), new MethodCallRename('Pdo\Pgsql', 'copyFromFile', 'pgsqlCopyFromFile'), new MethodCallRename('Pdo\Pgsql', 'copyToArray', 'pgsqlCopyToArray'), new MethodCallRename('Pdo\Pgsql', 'copyToFile', 'pgsqlCopyToFile'), new MethodCallRename('Pdo\Pgsql', 'getNotify', 'pgsqlGetNotify'), new MethodCallRename('Pdo\Pgsql', 'getPid', 'pgsqlGetPid'), new MethodCallRename('Pdo\Pgsql', 'lobCreate', 'pgsqlLOBCreate'), new MethodCallRename('Pdo\Pgsql', 'lobOpen', 'pgsqlLOBOpen'), new MethodCallRename('Pdo\Pgsql', 'lobUnlink', 'pgsqlLOBUnlink'), new MethodCallRename('Pdo\Sqlite', 'createAggregate', 'sqliteCreateAggregate'), new MethodCallRename('Pdo\Sqlite', 'createCollation', 'sqliteCreateCollation'), new MethodCallRename('Pdo\Sqlite', 'createFunction', 'sqliteCreateFunction')]);
     // https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_driver_specific_pdo_constants_and_methods

@@ -1657,6 +1657,7 @@ return array(
     'Rector\\DowngradePhp84\\Rector\\MethodCall\\DowngradeNewMethodCallWithoutParenthesesRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/MethodCall/DowngradeNewMethodCallWithoutParenthesesRector.php',
     'Rector\\DowngradePhp85\\Rector\\Class_\\DowngradeFinalPropertyPromotionRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/Class_/DowngradeFinalPropertyPromotionRector.php',
     'Rector\\DowngradePhp85\\Rector\\FuncCall\\DowngradeArrayFirstLastRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/FuncCall/DowngradeArrayFirstLastRector.php',
+    'Rector\\DowngradePhp85\\Rector\\StmtsAwareInterface\\DowngradePipeOperatorRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/StmtsAwareInterface/DowngradePipeOperatorRector.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',

@@ -8,13 +8,8 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Pipe;
-use PhpParser\Node\Expr\Cast\Array_;
-use PhpParser\Node\Expr\Cast\String_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\VariadicPlaceholder;
@@ -134,7 +129,7 @@ CODE_SAMPLE
             }
             if ($currentIndex === $startIndex) {
                 // First in chain - must be a variable or simple value
-                if (!$arg->value instanceof Variable && !$this->isSimpleValue($arg->value)) {
+                if (!$arg->value instanceof Variable && !$this->exprAnalyzer->isDynamicExpr($arg->value)) {
                     return null;
                 }
                 $chain[] = ['stmt' => $stmt, 'assign' => $expr, 'funcCall' => $funcCall];
@@ -150,13 +145,6 @@ CODE_SAMPLE
             ++$currentIndex;
         }
         return $chain;
-    }
-    private function isSimpleValue(Expr $expr): bool
-    {
-        if ($expr instanceof Array_) {
-            return !$this->exprAnalyzer->isDynamicExpr($expr);
-        }
-        return $expr instanceof ConstFetch || $expr instanceof String_ || $expr instanceof Float_ || $expr instanceof Int_;
     }
     /**
      * @param array<int, array{stmt: Stmt, assign: Expr, funcCall: Expr\FuncCall}> $chain
