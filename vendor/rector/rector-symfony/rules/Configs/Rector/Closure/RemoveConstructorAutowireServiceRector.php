@@ -159,12 +159,16 @@ CODE_SAMPLE
             }
             $methodCall = $methodCall->var;
         }
-        /** @var MethodCall $methodCall */
-        $firstArg = $methodCall->getArgs()[0];
-        if (!$firstArg->value instanceof ClassConstFetch) {
+        if (!$methodCall instanceof MethodCall) {
             return null;
         }
-        return $this->valueResolver->getValue($firstArg->value);
+        foreach ($methodCall->getArgs() as $arg) {
+            if (!$arg->value instanceof ClassConstFetch) {
+                continue;
+            }
+            return $this->valueResolver->getValue($arg->value);
+        }
+        return null;
     }
     private function isParameterTypeMatchingPassedArgExprClass(Expr $serviceArgExpr, ObjectType $objectType): bool
     {
