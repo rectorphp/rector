@@ -89,7 +89,7 @@ CODE_SAMPLE;
             throw new ShouldNotHappenException('File object is missing. Make sure you call $this->currentFileProvider->setFile(...) before traversing.');
         }
         $this->file = $file;
-        return parent::beforeTraverse($nodes);
+        return null;
     }
     /**
      * @return int|\PhpParser\Node|null
