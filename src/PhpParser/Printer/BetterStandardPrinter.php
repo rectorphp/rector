@@ -247,7 +247,7 @@ final class BetterStandardPrinter extends Standard
     }
     protected function pExpr_BinaryOp_Pipe(Pipe $node, int $precedence, int $lhsPrecedence): string
     {
-        return $this->pInfixOp(Pipe::class, $node->left, $this->nl . $this->resolveIndentSpaces() . '|> ', $node->right, $precedence, $lhsPrecedence);
+        return $this->pInfixOp(Pipe::class, $node->left, "\n" . $this->resolveIndentSpaces() . '|> ', $node->right, $precedence, $lhsPrecedence);
     }
     /**
      * Fixes escaping of regular patterns
