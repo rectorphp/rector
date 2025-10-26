@@ -2203,6 +2203,7 @@ class ComposerStaticInit16ec7ff0d8eedd6e2063f6ca578f3794
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\StringCastAssertStringContainsStringRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/StringCastAssertStringContainsStringRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\StmtsAwareInterface\\DeclareStrictTypesTestsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/StmtsAwareInterface/DeclareStrictTypesTestsRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Reflection\\MethodParametersAndReturnTypesResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Reflection/MethodParametersAndReturnTypesResolver.php',
         'Rector\\PHPUnit\\CodeQuality\\ValueObject\\MatchAndReturnMatch' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/MatchAndReturnMatch.php',
         'Rector\\PHPUnit\\CodeQuality\\ValueObject\\ParamTypesAndReturnType' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/ParamTypesAndReturnType.php',

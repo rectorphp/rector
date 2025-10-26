@@ -1955,6 +1955,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\StringCastAssertStringContainsStringRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/StringCastAssertStringContainsStringRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\StmtsAwareInterface\\DeclareStrictTypesTestsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/StmtsAwareInterface/DeclareStrictTypesTestsRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Reflection\\MethodParametersAndReturnTypesResolver' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Reflection/MethodParametersAndReturnTypesResolver.php',
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\MatchAndReturnMatch' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/MatchAndReturnMatch.php',
     'Rector\\PHPUnit\\CodeQuality\\ValueObject\\ParamTypesAndReturnType' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/ValueObject/ParamTypesAndReturnType.php',

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Node;
 
-use PhpParser\Node\DeclareItem;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param as ParamBuilder;
 use PhpParser\Builder\Property as PropertyBuilder;
@@ -13,6 +12,7 @@ use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\DeclareItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
