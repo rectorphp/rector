@@ -69,6 +69,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip as no comments
+        if ($node->getComments() === []) {
+            return null;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
