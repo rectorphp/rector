@@ -10,6 +10,8 @@ use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
@@ -101,10 +103,11 @@ CODE_SAMPLE
     /**
      * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?int
     {
         // workaround, as Rector now only hooks to specific nodes, not arrays
-        return null;
+        // avoid traversing, as we already handled in beforeTraverse()
+        return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
     }
     private function startsWithShebang(File $file): bool
     {

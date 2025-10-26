@@ -32,7 +32,7 @@ final class FromServicePublicToDefaultsPublicRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Instead of per service public() call, use it once in defaults()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Instead of per service public() call, use it once in $services->defaults()->public()', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -84,7 +84,11 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->isName($node->name, 'public') && $node->getArgs() === []) {
+            if (!$this->isName($node->name, 'public')) {
+                return null;
+            }
+            // skip ->defaults()->public()
+            if ($this->isDefaultsCall($node)) {
                 return null;
             }
             $hasChanged = \true;
@@ -97,5 +101,16 @@ CODE_SAMPLE
             $this->serviceDefaultsCallClosureDecorator->decorate($node, 'public');
         }
         return $node;
+    }
+    public function isDefaultsCall(MethodCall $methodCall): bool
+    {
+        $currentMethodCall = $methodCall;
+        while ($currentMethodCall instanceof MethodCall) {
+            if ($this->isName($currentMethodCall->name, 'defaults')) {
+                return \true;
+            }
+            $currentMethodCall = $currentMethodCall->var;
+        }
+        return \false;
     }
 }
