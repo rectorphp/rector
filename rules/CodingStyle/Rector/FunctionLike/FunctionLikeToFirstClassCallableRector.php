@@ -119,8 +119,11 @@ CODE_SAMPLE
      */
     private function shouldSkip($node, $callLike, Scope $scope): bool
     {
-        $params = $node->getParams();
         if ($callLike->isFirstClassCallable()) {
+            return \true;
+        }
+        $params = $node->getParams();
+        if (count($params) !== count($callLike->getArgs())) {
             return \true;
         }
         $args = $callLike->getArgs();
