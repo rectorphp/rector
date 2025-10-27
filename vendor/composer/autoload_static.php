@@ -2461,7 +2461,7 @@ class ComposerStaticInitf26d87b234a1c69444761d39d71bc58e
         'Rector\\Php85\\Rector\\FuncCall\\OrdSingleByteRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/OrdSingleByteRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
         'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
-        'Rector\\Php85\\Rector\\StmtsAwareInterface\\NestedToPipeOperatorRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/StmtsAwareInterface/NestedToPipeOperatorRector.php',
+        'Rector\\Php85\\Rector\\StmtsAwareInterface\\SequentialAssignmentsToPipeOperatorRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/StmtsAwareInterface/SequentialAssignmentsToPipeOperatorRector.php',
         'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',

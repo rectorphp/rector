@@ -22,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/pipe-operator-v3
- * @see \Rector\Tests\Php85\Rector\StmtsAwareInterface\NestedToPipeOperatorRector\NestedToPipeOperatorRectorTest
+ * @see \Rector\Tests\Php85\Rector\StmtsAwareInterface\SequentialAssignmentsToPipeOperatorRector\SequentialAssignmentsToPipeOperatorRectorTest
  */
-final class NestedToPipeOperatorRector extends AbstractRector implements MinPhpVersionInterface
+final class SequentialAssignmentsToPipeOperatorRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -36,19 +36,20 @@ final class NestedToPipeOperatorRector extends AbstractRector implements MinPhpV
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Transform nested function calls and sequential assignments to pipe operator syntax', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Transform sequential assignments to pipe operator syntax', [new CodeSample(<<<'CODE_SAMPLE'
 $value = "hello world";
-$result1 = function3($value);
+$result1 = function1($value);
 $result2 = function2($result1);
-$result = function1($result2);
+
+$result = function3($result2);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $value = "hello world";
 
 $result = $value
-    |> function3(...)
+    |> function1(...)
     |> function2(...)
-    |> function1(...);
+    |> function3(...);
 CODE_SAMPLE
 )]);
     }
@@ -69,33 +70,21 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        // First, try to transform sequential assignments
-        $sequentialChanged = $this->transformSequentialAssignments($node);
-        if ($sequentialChanged) {
-            $hasChanged = \true;
-        }
-        // Then, transform nested function calls
-        $nestedChanged = $this->transformNestedCalls($node);
-        if ($nestedChanged) {
-            $hasChanged = \true;
-        }
-        return $hasChanged ? $node : null;
-    }
-    private function transformSequentialAssignments(StmtsAwareInterface $stmtsAware): bool
-    {
-        $hasChanged = \false;
-        $statements = $stmtsAware->stmts;
+        $statements = $node->stmts;
         $totalStatements = count($statements) - 1;
         for ($i = 0; $i < $totalStatements; ++$i) {
             $chain = $this->findAssignmentChain($statements, $i);
             if ($chain && count($chain) >= 2) {
-                $this->processAssignmentChain($stmtsAware, $chain, $i);
+                $this->processAssignmentChain($node, $chain, $i);
                 $hasChanged = \true;
                 // Skip processed statements
                 $i += count($chain) - 1;
             }
         }
-        return $hasChanged;
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
     }
     /**
      * @param array<int, Stmt> $statements
@@ -188,51 +177,6 @@ CODE_SAMPLE
         $stmts = array_values($stmtsAware->stmts);
         // Reindex the array
         $stmtsAware->stmts = $stmts;
-    }
-    private function transformNestedCalls(StmtsAwareInterface $stmtsAware): bool
-    {
-        $hasChanged = \false;
-        foreach ($stmtsAware->stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
-                continue;
-            }
-            $expr = $stmt->expr;
-            if ($expr instanceof Assign) {
-                $assignedValue = $expr->expr;
-                $processedValue = $this->processNestedCalls($assignedValue);
-                if ($processedValue instanceof Expr && $processedValue !== $assignedValue) {
-                    $expr->expr = $processedValue;
-                    $hasChanged = \true;
-                }
-            } elseif ($expr instanceof FuncCall) {
-                $processedValue = $this->processNestedCalls($expr);
-                if ($processedValue instanceof Expr && $processedValue !== $expr) {
-                    $stmt->expr = $processedValue;
-                    $hasChanged = \true;
-                }
-            }
-        }
-        return $hasChanged;
-    }
-    private function processNestedCalls(Node $node): ?Expr
-    {
-        if (!$node instanceof FuncCall) {
-            return null;
-        }
-        // Check if any argument is a function call
-        foreach ($node->args as $arg) {
-            if (!$arg instanceof Arg) {
-                return null;
-            }
-            if ($arg->value instanceof FuncCall) {
-                return $this->buildPipeExpression($node, $arg->value);
-            }
-        }
-        return null;
-    }
-    private function buildPipeExpression(FuncCall $outerCall, FuncCall $innerCall): Pipe
-    {
-        return new Pipe($innerCall, $this->createPlaceholderCall($outerCall));
     }
     private function createPlaceholderCall(FuncCall $funcCall): FuncCall
     {
