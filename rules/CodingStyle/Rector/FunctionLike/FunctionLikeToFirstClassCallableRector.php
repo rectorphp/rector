@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FunctionLike;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -13,7 +12,6 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -23,19 +21,9 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Reflection\Annotations\AnnotationMethodReflection;
-use PHPStan\Reflection\ExtendedFunctionVariant;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\ResolvedFunctionVariantWithOriginal;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\PhpParser\AstResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -57,14 +45,6 @@ final class FunctionLikeToFirstClassCallableRector extends AbstractRector implem
      */
     private ReflectionResolver $reflectionResolver;
     /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
      * @var string
      */
     private const HAS_CALLBACK_SIGNATURE_MULTI_PARAMS = 'has_callback_signature_multi_params';
@@ -72,12 +52,10 @@ final class FunctionLikeToFirstClassCallableRector extends AbstractRector implem
      * @var string
      */
     private const IS_IN_ASSIGN = 'is_in_assign';
-    public function __construct(AstResolver $astResolver, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -93,10 +71,10 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [Assign::class, MethodCall::class, FuncCall::class, StaticCall::class, New_::class, ArrowFunction::class, Closure::class];
+        return [Assign::class, CallLike::class, ArrowFunction::class, Closure::class];
     }
     /**
-     * @param MethodCall|FuncCall|StaticCall|New_|ArrowFunction|Closure $node
+     * @param CallLike|ArrowFunction|Closure $node
      */
     public function refactor(Node $node): ?\PhpParser\Node\Expr\CallLike
     {
@@ -110,62 +88,13 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            $args = $node->getArgs();
-            foreach ($args as $key => $arg) {
+            $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+            if ($methodReflection instanceof NativeFunctionReflection) {
+                return null;
+            }
+            foreach ($node->getArgs() as $arg) {
                 if ($arg->value instanceof Closure || $arg->value instanceof ArrowFunction) {
-                    // verify caller signature
-                    $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-                    if ($methodReflection === null) {
-                        return null;
-                    }
-                    $reflection = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $node, ScopeFetcher::fetch($node));
-                    if ($reflection instanceof ResolvedFunctionVariantWithOriginal) {
-                        $reflection = ParametersAcceptorSelector::combineAcceptors($methodReflection->getVariants());
-                        if (!$reflection instanceof ExtendedFunctionVariant) {
-                            return null;
-                        }
-                    }
-                    $classMethodOrFunction = $this->astResolver->resolveClassMethodOrFunctionFromCall($node);
-                    if (!$classMethodOrFunction instanceof FunctionLike) {
-                        return null;
-                    }
-                    foreach ($reflection->getParameters() as $index => $parameterReflection) {
-                        if ($index !== $key) {
-                            continue;
-                        }
-                        if ($parameterReflection->getType() instanceof CallableType && count($parameterReflection->getType()->getParameters()) !== 1 && !$methodReflection instanceof NativeFunctionReflection && $this->hasDocCommentForCallable($classMethodOrFunction, $index)) {
-                            $args[$key]->value->setAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS, \true);
-                            return null;
-                        }
-                        $parameterName = $parameterReflection->getName();
-                        $isInvokable = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethodOrFunction, fn(Node $node): bool => $node instanceof FuncCall && $node->name instanceof Variable && $this->isName($node->name, $parameterName) && count($node->args) > 1);
-                        if ($isInvokable) {
-                            $args[$key]->value->setAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS, \true);
-                            return null;
-                        }
-                        $isClosureBindTo = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethodOrFunction, function (Node $node) use ($parameterName): bool {
-                            if (!$node instanceof MethodCall) {
-                                return \false;
-                            }
-                            if (!$node->name instanceof Identifier) {
-                                return \false;
-                            }
-                            if (!$this->isName($node->name, 'bindTo')) {
-                                return \false;
-                            }
-                            if (!$node->var instanceof Variable) {
-                                return \false;
-                            }
-                            if (!$this->isObjectType($node->var, new ObjectType('Closure'))) {
-                                return \false;
-                            }
-                            return $this->isName($node->var, $parameterName);
-                        });
-                        if ($isClosureBindTo) {
-                            $args[$key]->value->setAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS, \true);
-                            return null;
-                        }
-                    }
+                    $arg->value->setAttribute(self::HAS_CALLBACK_SIGNATURE_MULTI_PARAMS, \true);
                 }
             }
             return null;
@@ -183,31 +112,6 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
-    }
-    private function hasDocCommentForCallable(FunctionLike $functionLike, int $index): bool
-    {
-        $docComment = $functionLike->getDocComment();
-        if (!$docComment instanceof Doc) {
-            return \false;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $params = $functionLike->getParams();
-        $paramName = null;
-        foreach ($params as $key => $param) {
-            if ($key === $index) {
-                $paramName = (string) $this->getName($param);
-                break;
-            }
-        }
-        if ($paramName === null) {
-            return \false;
-        }
-        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
-        if ($paramTagValueNode instanceof ParamTagValueNode) {
-            $type = $phpDocInfo->getParamType($paramName);
-            return $type instanceof CallableType && count($type->getParameters()) !== 1 || $type instanceof UnionType;
-        }
-        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $node
