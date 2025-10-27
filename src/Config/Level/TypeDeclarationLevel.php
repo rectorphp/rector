@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Config\Level;
 
+use Rector\CodeQuality\Rector\Class_\ReturnIteratorInDataProviderRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
@@ -76,6 +77,7 @@ final class TypeDeclarationLevel
         AddClosureVoidReturnTypeWhereNoReturnRector::class,
         AddFunctionVoidReturnTypeWhereNoReturnRector::class,
         AddTestsVoidReturnTypeWhereNoReturnRector::class,
+        ReturnIteratorInDataProviderRector::class,
         ReturnTypeFromMockObjectRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
         AddArrowFunctionReturnTypeRector::class,
