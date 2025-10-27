@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Enum\ObjectReference;
@@ -83,49 +84,55 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-        $parentStaticCall = $this->findParentStaticCall($node);
-        if (!$parentStaticCall instanceof StaticCall) {
+        // no parent calls available
+        if ($node->extends === null) {
             return null;
         }
         $hasChanged = \false;
-        $scope = ScopeFetcher::fetch($node);
-        foreach ($node->params as $param) {
-            // already has type, skip
-            if ($param->type !== null) {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkip($classMethod)) {
                 continue;
             }
-            if ($param->variadic) {
+            $parentStaticCall = $this->findParentStaticCall($classMethod);
+            if (!$parentStaticCall instanceof StaticCall) {
                 continue;
             }
-            if ($this->isParamUsedInSpreadArg($node, $param)) {
-                continue;
+            $scope = ScopeFetcher::fetch($classMethod);
+            foreach ($classMethod->params as $param) {
+                // already has type, skip
+                if ($param->type !== null) {
+                    continue;
+                }
+                if ($param->variadic) {
+                    continue;
+                }
+                if ($this->isParamUsedInSpreadArg($classMethod, $param)) {
+                    continue;
+                }
+                $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
+                if (!$parentParam instanceof Param) {
+                    continue;
+                }
+                if (!$parentParam->type instanceof Node) {
+                    continue;
+                }
+                // mimic type
+                $paramType = $parentParam->type;
+                // original attributes have to removed to avoid tokens crashing from origin positions
+                $this->traverseNodesWithCallable($paramType, static function (Node $classMethod) {
+                    $classMethod->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                    return null;
+                });
+                $param->type = $paramType;
+                $hasChanged = \true;
             }
-            $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
-            if (!$parentParam instanceof Param) {
-                continue;
-            }
-            if (!$parentParam->type instanceof Node) {
-                continue;
-            }
-            // mimic type
-            $paramType = $parentParam->type;
-            // original attributes have to removed to avoid tokens crashing from origin positions
-            $this->traverseNodesWithCallable($paramType, static function (Node $node) {
-                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-                return null;
-            });
-            $param->type = $paramType;
-            $hasChanged = \true;
         }
         if ($hasChanged) {
             return $node;
@@ -150,7 +157,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        if ($classMethod->params === []) {
+        if (!$this->hasAtLeastOneParamWithoutType($classMethod)) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
@@ -169,6 +176,18 @@ CODE_SAMPLE
                 continue;
             }
             if ($arg->value instanceof Variable && $this->isName($arg->value, $paramName)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    private function hasAtLeastOneParamWithoutType(ClassMethod $classMethod): bool
+    {
+        foreach ($classMethod->getParams() as $param) {
+            if ($param->variadic) {
+                continue;
+            }
+            if ($param->type === null) {
                 return \true;
             }
         }
