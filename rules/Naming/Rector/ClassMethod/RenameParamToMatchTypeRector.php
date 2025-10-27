@@ -98,7 +98,10 @@ CODE_SAMPLE
         $this->hasChanged = \false;
         foreach ($node->params as $param) {
             // skip as array-like
-            if ($param->variadic || $param->type === null) {
+            if ($param->variadic) {
+                continue;
+            }
+            if ($param->type === null) {
                 continue;
             }
             if ($node instanceof ClassMethod && $this->shouldSkipClassMethodFromVendor($node)) {
