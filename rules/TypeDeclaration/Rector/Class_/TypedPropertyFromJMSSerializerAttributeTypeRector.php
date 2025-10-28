@@ -12,10 +12,10 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -122,7 +122,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
         if (!$this->hasAtLeastOneUntypedPropertyUsingJmsAttribute($node)) {
             return null;
         }
@@ -130,6 +129,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
             if ($this->shouldSkipProperty($property, $classReflection)) {
                 continue;
@@ -187,12 +187,18 @@ CODE_SAMPLE
     {
         if ($typeValue === 'float') {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-            if ($propertyPhpDocInfo instanceof PhpDocInfo) {
-                // fallback to string, as most likely string representation of float
-                if ($propertyPhpDocInfo->getVarType() instanceof StringType) {
-                    $this->varTagRemover->removeVarTag($property);
-                    return new Identifier('string');
-                }
+            // fallback to string, as most likely string representation of float
+            if ($propertyPhpDocInfo instanceof PhpDocInfo && $propertyPhpDocInfo->getVarType() instanceof StringType) {
+                $this->varTagRemover->removeVarTag($property);
+                return new Identifier('string');
+            }
+        }
+        if ($typeValue === 'string') {
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            // fallback to string, as most likely string representation of float
+            if ($propertyPhpDocInfo instanceof PhpDocInfo && $propertyPhpDocInfo->getVarType() instanceof FloatType) {
+                $this->varTagRemover->removeVarTag($property);
+                return new Identifier('float');
             }
         }
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
