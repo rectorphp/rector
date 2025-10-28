@@ -10,11 +10,12 @@ use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector
 use Rector\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Class_\ObjectTypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
+use Rector\TypeDeclaration\Rector\Class_\ScalarTypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
-use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
@@ -136,7 +137,9 @@ final class TypeDeclarationLevel
         ReturnTypeFromStrictFluentReturnRector::class,
         ReturnNeverTypeRector::class,
         StrictStringParamConcatRector::class,
-        TypedPropertyFromJMSSerializerAttributeTypeRector::class,
+        // jms attributes
+        ObjectTypedPropertyFromJMSSerializerAttributeTypeRector::class,
+        ScalarTypedPropertyFromJMSSerializerAttributeTypeRector::class,
         // array parameter from dim fetch assign inside
         StrictArrayParamDimFetchRector::class,
         AddParamFromDimFetchKeyUseRector::class,
