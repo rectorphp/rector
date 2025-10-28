@@ -21,4 +21,8 @@ final class OdmMappingClass
      * @var string
      */
     public const EMBED_MANY = 'Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedMany';
+    /**
+     * @var string
+     */
+    public const EMBED_ONE = 'Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedOne';
 }

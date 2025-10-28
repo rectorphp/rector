@@ -14,5 +14,5 @@ final class CollectionMapping
     /**
      * @var string[]
      */
-    public const TO_ONE_CLASSES = [MappingClass::MANY_TO_ONE, MappingClass::ONE_TO_ONE];
+    public const TO_ONE_CLASSES = [MappingClass::MANY_TO_ONE, MappingClass::ONE_TO_ONE, OdmMappingClass::REFERENCE_ONE, OdmMappingClass::EMBED_ONE];
 }
