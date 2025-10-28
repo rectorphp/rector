@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\Enum\ClassName;
 final class NodeTypes
 {
     /**
@@ -19,5 +20,5 @@ final class NodeTypes
     /**
      * @var string[]
      */
-    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = ['JMS\Serializer\Annotation\Type', 'Doctrine\ORM\Mapping\OneToMany', 'Symfony\Component\Validator\Constraints\Choice', 'Symfony\Component\Validator\Constraints\Email', 'Symfony\Component\Validator\Constraints\Range'];
+    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [ClassName::JMS_TYPE, 'Doctrine\ORM\Mapping\OneToMany', 'Symfony\Component\Validator\Constraints\Choice', 'Symfony\Component\Validator\Constraints\Email', 'Symfony\Component\Validator\Constraints\Range'];
 }

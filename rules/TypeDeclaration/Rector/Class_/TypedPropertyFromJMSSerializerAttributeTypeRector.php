@@ -115,9 +115,6 @@ CODE_SAMPLE
         $hasChanged = \false;
         $classReflection = null;
         foreach ($node->getProperties() as $property) {
-            if (!$property->isPrivate()) {
-                continue;
-            }
             if ($property->type instanceof Node) {
                 continue;
             }
@@ -130,7 +127,7 @@ CODE_SAMPLE
             if (!$classReflection instanceof ClassReflection) {
                 return null;
             }
-            if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, \false)) {
+            if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, \true)) {
                 continue;
             }
             $inferredType = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection, $this->file);
