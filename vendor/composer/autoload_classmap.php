@@ -2798,6 +2798,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromDocblockSetUpDefinedRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromDocblockSetUpDefinedRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromJMSSerializerAttributeTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromJMSSerializerAttributeTypeRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',

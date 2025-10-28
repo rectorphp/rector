@@ -15,6 +15,7 @@ use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector;
@@ -144,5 +145,6 @@ final class TypeDeclarationLevel
         AddArrayFunctionClosureParamTypeRector::class,
         TypedPropertyFromDocblockSetUpDefinedRector::class,
         AddClosureParamTypeFromIterableMethodCallRector::class,
+        TypedStaticPropertyInBehatContextRector::class,
     ];
 }
