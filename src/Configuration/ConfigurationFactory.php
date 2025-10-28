@@ -33,7 +33,7 @@ final class ConfigurationFactory
     public function createForTests(array $paths): Configuration
     {
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
-        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false, null, null);
+        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false);
     }
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.

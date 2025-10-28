@@ -894,6 +894,7 @@ return array(
     'RectorPrefix202510\\Symfony\\Component\\Console\\Helper\\TableRows' => $vendorDir . '/symfony/console/Helper/TableRows.php',
     'RectorPrefix202510\\Symfony\\Component\\Console\\Helper\\TableSeparator' => $vendorDir . '/symfony/console/Helper/TableSeparator.php',
     'RectorPrefix202510\\Symfony\\Component\\Console\\Helper\\TableStyle' => $vendorDir . '/symfony/console/Helper/TableStyle.php',
+    'RectorPrefix202510\\Symfony\\Component\\Console\\Helper\\TerminalInputHelper' => $vendorDir . '/symfony/console/Helper/TerminalInputHelper.php',
     'RectorPrefix202510\\Symfony\\Component\\Console\\Input\\ArgvInput' => $vendorDir . '/symfony/console/Input/ArgvInput.php',
     'RectorPrefix202510\\Symfony\\Component\\Console\\Input\\ArrayInput' => $vendorDir . '/symfony/console/Input/ArrayInput.php',
     'RectorPrefix202510\\Symfony\\Component\\Console\\Input\\Input' => $vendorDir . '/symfony/console/Input/Input.php',

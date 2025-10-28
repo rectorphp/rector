@@ -623,6 +623,9 @@ class Inline
                 switch (\true) {
                     case ctype_digit($scalar):
                     case '-' === $scalar[0] && ctype_digit(substr($scalar, 1)):
+                        if ($scalar < \PHP_INT_MIN || \PHP_INT_MAX < $scalar) {
+                            return $scalar;
+                        }
                         $cast = (int) $scalar;
                         return $scalar === (string) $cast ? $cast : $scalar;
                     case is_numeric($scalar):

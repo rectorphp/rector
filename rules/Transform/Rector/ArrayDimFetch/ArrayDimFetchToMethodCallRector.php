@@ -105,7 +105,7 @@ CODE_SAMPLE
             $isset->vars = $issets;
             array_unshift($exprs, $isset);
         }
-        return array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr, null);
+        return array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr);
     }
     /**
      * @return Stmt[]|int

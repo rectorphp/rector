@@ -121,7 +121,7 @@ CODE_SAMPLE
             if ($this->shouldSkip($variableAndCallForeach, $expectedName)) {
                 return null;
             }
-            $hasChanged = $this->variableRenamer->renameVariableInFunctionLike($variableAndCallForeach->getFunctionLike(), $variableAndCallForeach->getVariableName(), $expectedName, null);
+            $hasChanged = $this->variableRenamer->renameVariableInFunctionLike($variableAndCallForeach->getFunctionLike(), $variableAndCallForeach->getVariableName(), $expectedName);
             // use different variable on purpose to avoid variable re-assign back to false
             // after go to other method
             if ($hasChanged) {

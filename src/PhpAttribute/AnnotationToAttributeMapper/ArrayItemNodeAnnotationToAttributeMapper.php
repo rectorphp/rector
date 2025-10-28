@@ -42,7 +42,7 @@ final class ArrayItemNodeAnnotationToAttributeMapper implements AnnotationToAttr
     {
         $valueExpr = $this->annotationToAttributeMapper->map($arrayItemNode->value);
         if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
-            return new ArrayItem(new String_($valueExpr), null);
+            return new ArrayItem(new String_($valueExpr));
         }
         if ($arrayItemNode->key !== null) {
             /** @var Expr $keyExpr */
