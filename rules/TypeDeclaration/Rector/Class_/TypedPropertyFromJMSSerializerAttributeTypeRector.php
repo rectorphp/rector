@@ -4,10 +4,9 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
@@ -15,7 +14,13 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Enum\ClassName;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
@@ -59,7 +64,19 @@ final class TypedPropertyFromJMSSerializerAttributeTypeRector extends AbstractRe
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, ValueResolver $valueResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, ScalarStringToTypeMapper $scalarStringToTypeMapper, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private AttributeFinder $attributeFinder;
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private VarTagRemover $varTagRemover;
+    public function __construct(MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, ValueResolver $valueResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, ScalarStringToTypeMapper $scalarStringToTypeMapper, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, PhpDocInfoFactory $phpDocInfoFactory, VarTagRemover $varTagRemover)
     {
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
         $this->reflectionResolver = $reflectionResolver;
@@ -67,6 +84,9 @@ final class TypedPropertyFromJMSSerializerAttributeTypeRector extends AbstractRe
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->attributeFinder = $attributeFinder;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->varTagRemover = $varTagRemover;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -103,25 +123,15 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
-        $classReflection = null;
+        if (!$this->hasAtLeastOneUntypedPropertyUsingJmsAttribute($node)) {
+            return null;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
         foreach ($node->getProperties() as $property) {
-            if ($property->type instanceof Node || $property->props[0]->default instanceof Expr) {
-                continue;
-            }
-            if (!$this->phpAttributeAnalyzer->hasPhpAttribute($property, ClassName::JMS_TYPE)) {
-                continue;
-            }
-            // this will be most likely collection, not single type
-            if ($this->phpAttributeAnalyzer->hasPhpAttributes($property, array_merge(CollectionMapping::TO_MANY_CLASSES, CollectionMapping::TO_ONE_CLASSES))) {
-                continue;
-            }
-            if (!$classReflection instanceof ClassReflection) {
-                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-            }
-            if (!$classReflection instanceof ClassReflection) {
-                return null;
-            }
-            if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, \true)) {
+            if ($this->shouldSkipProperty($property, $classReflection)) {
                 continue;
             }
             $typeValue = $this->resolveAttributeType($property);
@@ -132,17 +142,12 @@ CODE_SAMPLE
             if (strpos($typeValue, '<') !== \false) {
                 continue;
             }
-            $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
-            if ($type instanceof MixedType) {
-                // fallback to object type
-                $type = new ObjectType($typeValue);
+            $propertyTypeNode = $this->createTypeNode($typeValue, $property);
+            if (!$propertyTypeNode instanceof Identifier && !$propertyTypeNode instanceof FullyQualified) {
+                continue;
             }
-            $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
-            if (!$propertyType instanceof Identifier && !$propertyType instanceof FullyQualified) {
-                return null;
-            }
-            $property->type = new NullableType($propertyType);
-            $property->props[0]->default = new ConstFetch(new Name('null'));
+            $property->type = new NullableType($propertyTypeNode);
+            $property->props[0]->default = $this->nodeFactory->createNull();
             $hasChanged = \true;
         }
         if ($hasChanged) {
@@ -152,22 +157,63 @@ CODE_SAMPLE
     }
     private function resolveAttributeType(Property $property): ?string
     {
-        foreach ($property->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attr) {
-                if (!$this->isName($attr->name, ClassName::JMS_TYPE)) {
-                    continue;
-                }
-                $typeValue = $this->valueResolver->getValue($attr->args[0]->value);
-                if (!is_string($typeValue)) {
-                    return null;
-                }
-                if (StringUtils::isMatch($typeValue, '#DateTime\<(.*?)\>#')) {
-                    // special case for DateTime, which is not a scalar type
-                    return 'DateTime';
-                }
-                return $typeValue;
+        $jmsTypeAttribute = $this->attributeFinder->findAttributeByClass($property, ClassName::JMS_TYPE);
+        if (!$jmsTypeAttribute instanceof Attribute) {
+            return null;
+        }
+        $typeValue = $this->valueResolver->getValue($jmsTypeAttribute->args[0]->value);
+        if (!is_string($typeValue)) {
+            return null;
+        }
+        if (StringUtils::isMatch($typeValue, '#DateTime\<(.*?)\>#')) {
+            // special case for DateTime, which is not a scalar type
+            return 'DateTime';
+        }
+        return $typeValue;
+    }
+    private function hasAtLeastOneUntypedPropertyUsingJmsAttribute(Class_ $class): bool
+    {
+        foreach ($class->getProperties() as $property) {
+            if ($property->type instanceof Node) {
+                continue;
+            }
+            if ($this->attributeFinder->hasAttributeByClasses($property, [ClassName::JMS_TYPE])) {
+                return \true;
             }
         }
-        return null;
+        return \false;
+    }
+    private function createTypeNode(string $typeValue, Property $property): ?Node
+    {
+        if ($typeValue === 'float') {
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            if ($propertyPhpDocInfo instanceof PhpDocInfo) {
+                // fallback to string, as most likely string representation of float
+                if ($propertyPhpDocInfo->getVarType() instanceof StringType) {
+                    $this->varTagRemover->removeVarTag($property);
+                    return new Identifier('string');
+                }
+            }
+        }
+        $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
+        if ($type instanceof MixedType) {
+            // fallback to object type
+            $type = new ObjectType($typeValue);
+        }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+    }
+    private function shouldSkipProperty(Property $property, ClassReflection $classReflection): bool
+    {
+        if ($property->type instanceof Node || $property->props[0]->default instanceof Expr) {
+            return \true;
+        }
+        if (!$this->phpAttributeAnalyzer->hasPhpAttribute($property, ClassName::JMS_TYPE)) {
+            return \true;
+        }
+        // this will be most likely collection, not single type
+        if ($this->phpAttributeAnalyzer->hasPhpAttributes($property, array_merge(CollectionMapping::TO_MANY_CLASSES, CollectionMapping::TO_ONE_CLASSES))) {
+            return \true;
+        }
+        return !$this->makePropertyTypedGuard->isLegal($property, $classReflection);
     }
 }
