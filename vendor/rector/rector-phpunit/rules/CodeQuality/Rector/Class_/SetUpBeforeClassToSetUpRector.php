@@ -3,33 +3,18 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
-use PhpParser\Modifiers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\SetUpBeforeClassToSetUpRector\SetUpBeforeClassToSetUpRectorTest
+ * @deprecated as can break code easily, e.g. if static is required in tear down as well
  */
-final class SetUpBeforeClassToSetUpRector extends AbstractRector
+final class SetUpBeforeClassToSetUpRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private TestsNodeAnalyzer $testsNodeAnalyzer;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
-    {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change setUpBeforeClass() to setUp() if not needed', [new CodeSample(<<<'CODE_SAMPLE'
@@ -82,65 +67,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $className = $this->getName($node);
-        if ($className === null) {
-            return null;
-        }
-        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-        $setUpBeforeClassMethod = $node->getMethod(MethodName::SET_UP_BEFORE_CLASS);
-        if (!$setUpBeforeClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        $changedPropertyNames = [];
-        // replace static property fetches
-        $this->traverseNodesWithCallable($setUpBeforeClassMethod, function (Node $node) use (&$changedPropertyNames) {
-            if (!$node instanceof Assign) {
-                return null;
-            }
-            if (!$node->var instanceof StaticPropertyFetch) {
-                return null;
-            }
-            $staticPropertyFetch = $node->var;
-            if (!$this->isName($staticPropertyFetch->class, 'self')) {
-                return null;
-            }
-            $node->var = new PropertyFetch(new Variable('this'), $staticPropertyFetch->name);
-            $propertyName = $this->getName($staticPropertyFetch->name);
-            if (!is_string($propertyName)) {
-                return null;
-            }
-            $changedPropertyNames[] = $propertyName;
-        });
-        if ($changedPropertyNames === []) {
-            return null;
-        }
-        // remove static flag
-        $setUpBeforeClassMethod->flags -= Modifiers::STATIC;
-        // remove public flag
-        $setUpBeforeClassMethod->flags -= Modifiers::PUBLIC;
-        // make protected
-        $setUpBeforeClassMethod->flags += Modifiers::PROTECTED;
-        $setUpBeforeClassMethod->name = new Identifier('setUp');
-        foreach ($node->getProperties() as $property) {
-            if (!$property->isStatic()) {
-                continue;
-            }
-            if ($this->isNames($property, $changedPropertyNames)) {
-                $property->flags -= Modifiers::STATIC;
-            }
-        }
-        // replace same property access in the class
-        $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use ($changedPropertyNames): ?PropertyFetch {
-            if (!$node instanceof StaticPropertyFetch) {
-                return null;
-            }
-            if (!$this->isNames($node, $changedPropertyNames)) {
-                return null;
-            }
-            return new PropertyFetch(new Variable('this'), $node->name);
-        });
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated and should not be used anymore. Remove it from your config files.', self::class));
     }
 }
