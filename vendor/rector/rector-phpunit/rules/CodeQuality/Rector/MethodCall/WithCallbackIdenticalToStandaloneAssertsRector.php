@@ -4,14 +4,17 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Return_;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\CodeQuality\NodeFactory\FromBinaryAndAssertExpressionsFactory;
 use Rector\PHPUnit\CodeQuality\ValueObject\ArgAndFunctionLike;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -31,10 +34,15 @@ final class WithCallbackIdenticalToStandaloneAssertsRector extends AbstractRecto
      * @readonly
      */
     private FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->fromBinaryAndAssertExpressionsFactory = $fromBinaryAndAssertExpressionsFactory;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -117,7 +125,8 @@ CODE_SAMPLE
         } else {
             // arrow function -> flip to closure
             $functionLikeInArg = $argAndFunctionLike->getArg();
-            $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('void')]);
+            $externalVariables = $this->resolveExternalClosureUses($innerFunctionLike);
+            $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('void'), 'uses' => $externalVariables]);
             $functionLikeInArg->value = $closure;
         }
         return $node;
@@ -176,5 +185,35 @@ CODE_SAMPLE
             return $innerStmt->expr;
         }
         return $functionLike->expr;
+    }
+    /**
+     * @return ClosureUse[]
+     */
+    private function resolveExternalClosureUses(ArrowFunction $arrowFunction): array
+    {
+        // fill needed uses from arrow function to closure
+        $arrowFunctionVariables = $this->betterNodeFinder->findInstancesOfScoped($arrowFunction->getStmts(), Variable::class);
+        $paramNames = [];
+        foreach ($arrowFunction->getParams() as $param) {
+            $paramNames[] = $this->getName($param);
+        }
+        $externalVariableNames = [];
+        foreach ($arrowFunctionVariables as $arrowFunctionVariable) {
+            // skip those defined in params
+            if ($this->isNames($arrowFunctionVariable, $paramNames)) {
+                continue;
+            }
+            $variableName = $this->getName($arrowFunctionVariable);
+            if (!is_string($variableName)) {
+                continue;
+            }
+            $externalVariableNames[] = $variableName;
+        }
+        $externalVariableNames = array_unique($externalVariableNames);
+        $closureUses = [];
+        foreach ($externalVariableNames as $externalVariableName) {
+            $closureUses[] = new ClosureUse(new Variable($externalVariableName));
+        }
+        return $closureUses;
     }
 }
