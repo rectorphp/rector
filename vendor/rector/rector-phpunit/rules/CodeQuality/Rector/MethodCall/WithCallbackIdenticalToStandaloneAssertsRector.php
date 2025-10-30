@@ -210,6 +210,7 @@ CODE_SAMPLE
             $externalVariableNames[] = $variableName;
         }
         $externalVariableNames = array_unique($externalVariableNames);
+        $externalVariableNames = array_diff($externalVariableNames, ['this']);
         $closureUses = [];
         foreach ($externalVariableNames as $externalVariableName) {
             $closureUses[] = new ClosureUse(new Variable($externalVariableName));
