@@ -3,6 +3,14 @@ Changelog
 
 ## UNRELEASED
 
+## 1.12.1
+
+### Fixed
+
+- Exclude tools from export.
+
+## 1.12.0
+
 ### Fixed
 
 - Corrected messages and typos in various assertions.
