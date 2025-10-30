@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\NodeFactory;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Int_;
@@ -38,6 +40,17 @@ final class FromBinaryAndAssertExpressionsFactory
     {
         $assertMethodCalls = [];
         foreach ($exprs as $expr) {
+            if ($expr instanceof Isset_) {
+                foreach ($expr->vars as $issetVariable) {
+                    if ($issetVariable instanceof ArrayDimFetch) {
+                        $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertArrayHasKey', [$issetVariable->dim, $issetVariable->var]);
+                    } else {
+                        // not supported yet
+                        return null;
+                    }
+                }
+                continue;
+            }
             if ($expr instanceof Instanceof_) {
                 if (!$expr->class instanceof Name) {
                     return null;
@@ -67,6 +80,8 @@ final class FromBinaryAndAssertExpressionsFactory
         if ($assertMethodCalls === []) {
             return null;
         }
+        // to keep order from binary
+        $assertMethodCalls = array_reverse($assertMethodCalls);
         $stmts = [];
         foreach ($assertMethodCalls as $assertMethodCall) {
             $stmts[] = new Expression($assertMethodCall);
