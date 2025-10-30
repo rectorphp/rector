@@ -30,17 +30,18 @@ final class GetFunctionsToAsTwigFunctionAttributeRector extends AbstractRector
     {
         return new RuleDefinition('Changes getFunctions() in TwigExtension to #[AsTwigFunction] marker attribute above local class method', [new CodeSample(<<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
+use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
     public function getFunctions()
     {
         return [
-            new \Twig\TwigFunction('function_name', [$this, 'localMethod']),
+            new \Twig\TwigFunction('function_name', [$this, 'localMethod', 'needs_environment' => true]),
         ];
     }
 
-    public function localMethod($value)
+    public function localMethod(Environment $env, $value)
     {
         return $value;
     }
@@ -49,11 +50,12 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
 use Twig\Attribute\AsTwigFunction;
+use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
-    #[AsTwigFunction('function_name')]
-    public function localMethod($value)
+    #[AsTwigFunction('function_name', needsEnvironment: true)]
+    public function localMethod(Environment $env, $value)
     {
         return $value;
     }
