@@ -2710,6 +2710,7 @@ return array(
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\AddReturnDocblockForJsonArrayRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/AddReturnDocblockForJsonArrayRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockGetterReturnArrayFromPropertyDocblockVarRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockGetterReturnArrayFromPropertyDocblockVarRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\ClassMethod\\DocblockReturnArrayFromDirectArrayInstanceRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/ClassMethod/DocblockReturnArrayFromDirectArrayInstanceRector.php',
+    'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\AddReturnArrayDocblockFromDataProviderParamRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/AddReturnArrayDocblockFromDataProviderParamRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\AddReturnDocblockDataProviderRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/AddReturnDocblockDataProviderRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\ClassMethodArrayDocblockParamFromLocalCallsRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/ClassMethodArrayDocblockParamFromLocalCallsRector.php',
     'Rector\\TypeDeclarationDocblocks\\Rector\\Class_\\DocblockVarArrayFromGetterReturnRector' => $baseDir . '/rules/TypeDeclarationDocblocks/Rector/Class_/DocblockVarArrayFromGetterReturnRector.php',
