@@ -56,7 +56,7 @@ final class SomeTest extends TestCase
         $this->createMock('SomeClass')
             ->expects($this->once())
             ->method('someMethod')
-            ->with($this->callback(function ($args): bool {
+            ->with($this->callback(function (array $args): bool {
                 return count($args) === 2 && $args[0] === 'correct'
             }));
     }
@@ -72,9 +72,11 @@ final class SomeTest extends TestCase
         $this->createMock('SomeClass')
             ->expects($this->once())
             ->method('someMethod')
-            ->with($this->callback(function ($args) {
+            ->with($this->callback(function (array $args): bool {
                 $this->assertCount(2, $args);
                 $this->assertSame('correct', $args[0]);
+
+                return true;
             }));
     }
 }
@@ -118,10 +120,11 @@ CODE_SAMPLE
         if ($assertExpressions === null) {
             return null;
         }
+        // last si return true;
+        $assertExpressions[] = new Return_($this->nodeFactory->createTrue());
         $innerFunctionLike = $argAndFunctionLike->getFunctionLike();
         if ($innerFunctionLike instanceof Closure) {
             $innerFunctionLike->stmts = $assertExpressions;
-            $innerFunctionLike->returnType = new Identifier('void');
         } else {
             // arrow function -> flip to closure
             $functionLikeInArg = $argAndFunctionLike->getArg();
