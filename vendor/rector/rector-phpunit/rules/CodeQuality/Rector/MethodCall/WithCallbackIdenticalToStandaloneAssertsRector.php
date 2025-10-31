@@ -129,7 +129,7 @@ CODE_SAMPLE
             // arrow function -> flip to closure
             $functionLikeInArg = $argAndFunctionLike->getArg();
             $externalVariables = $this->resolveExternalClosureUses($innerFunctionLike);
-            $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('void'), 'uses' => $externalVariables]);
+            $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('bool'), 'uses' => $externalVariables]);
             $functionLikeInArg->value = $closure;
         }
         return $node;
