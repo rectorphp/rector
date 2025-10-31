@@ -10,8 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,10 +29,15 @@ final class MergeWithCallableAndWillReturnRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private StaticTypeMapper $staticTypeMapper;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -115,9 +122,13 @@ CODE_SAMPLE
         }
         /** @var Return_ $return */
         $return = $innerClosure->stmts[count($innerClosure->stmts) - 1];
-        $return->expr = $willReturnMethodCall->getArgs()[0]->value;
+        $returnedExpr = $willReturnMethodCall->getArgs()[0]->value;
+        $return->expr = $returnedExpr;
         $parentCaller->name = new Identifier('willReturnCallback');
         $parentCaller->args = [new Arg($innerClosure)];
+        $returnedExprType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnedExpr);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedExprType, TypeKind::RETURN);
+        $innerClosure->returnType = $returnTypeNode instanceof Node ? $returnTypeNode : null;
         return $parentCaller;
     }
     private function matchFirstArgCallbackMethodCall(MethodCall $withMethodCall): ?MethodCall
