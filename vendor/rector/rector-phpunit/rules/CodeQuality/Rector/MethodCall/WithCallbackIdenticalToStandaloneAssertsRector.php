@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node;
 use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr;
@@ -46,7 +47,7 @@ final class WithCallbackIdenticalToStandaloneAssertsRector extends AbstractRecto
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replaces identical compare in $this->callable() to standalone PHPUnit asserts', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces identical compare in $this->callable() sole return to standalone PHPUnit asserts that show more detailed failure messages', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -109,10 +110,13 @@ CODE_SAMPLE
             return null;
         }
         $innerSoleExpr = $this->matchInnerSoleExpr($argAndFunctionLike->getFunctionLike());
-        if (!$innerSoleExpr instanceof BooleanAnd) {
+        if ($innerSoleExpr instanceof BooleanAnd) {
+            $joinedExprs = $this->extractJoinedExprs($innerSoleExpr);
+        } elseif ($innerSoleExpr instanceof Identical) {
+            $joinedExprs = [$innerSoleExpr];
+        } else {
             return null;
         }
-        $joinedExprs = $this->extractJoinedExprs($innerSoleExpr);
         if ($joinedExprs === null || $joinedExprs === []) {
             return null;
         }
