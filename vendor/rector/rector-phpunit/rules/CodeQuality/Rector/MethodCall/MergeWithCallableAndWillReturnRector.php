@@ -5,8 +5,10 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -126,9 +128,11 @@ CODE_SAMPLE
         $return->expr = $returnedExpr;
         $parentCaller->name = new Identifier('willReturnCallback');
         $parentCaller->args = [new Arg($innerClosure)];
+        if ($returnedExpr instanceof Variable) {
+            $innerClosure->uses[] = new ClosureUse($returnedExpr);
+        }
         $returnedExprType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnedExpr);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedExprType, TypeKind::RETURN);
-        $innerClosure->returnType = $returnTypeNode instanceof Node ? $returnTypeNode : null;
+        $innerClosure->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedExprType, TypeKind::RETURN);
         return $parentCaller;
     }
     private function matchFirstArgCallbackMethodCall(MethodCall $withMethodCall): ?MethodCall
