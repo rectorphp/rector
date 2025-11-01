@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PhpParser\Parser;
 
-use RectorPrefix202510\Nette\Utils\FileSystem;
-use RectorPrefix202510\Nette\Utils\Strings;
+use RectorPrefix202511\Nette\Utils\FileSystem;
+use RectorPrefix202511\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\InterpolatedString;

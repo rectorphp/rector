@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Console\Formatter;
 
-use RectorPrefix202510\Nette\Utils\Strings;
+use RectorPrefix202511\Nette\Utils\Strings;
 use Rector\Util\NewLineSplitter;
-use RectorPrefix202510\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202511\Symfony\Component\Console\Formatter\OutputFormatter;
 /**
  * Inspired by @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/src/Differ/DiffConsoleFormatter.php to be
  * used as standalone class, without need to require whole package by Dariusz Rumiński <dariusz.ruminski@gmail.com>

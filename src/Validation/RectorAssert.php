@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Validation;
 
 use Rector\Util\StringUtils;
-use RectorPrefix202510\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202511\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Rector\Tests\Validation\RectorAssertTest
  */

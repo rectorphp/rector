@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Webmozart\Assert;
+namespace RectorPrefix202511\Webmozart\Assert;
 
 use ArrayAccess;
 use Closure;

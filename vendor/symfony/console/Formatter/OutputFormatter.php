@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202510\Symfony\Component\Console\Formatter;
+namespace RectorPrefix202511\Symfony\Component\Console\Formatter;
 
-use RectorPrefix202510\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202510\Symfony\Component\Console\Helper\Helper;
-use function RectorPrefix202510\Symfony\Component\String\b;
+use RectorPrefix202511\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202511\Symfony\Component\Console\Helper\Helper;
+use function RectorPrefix202511\Symfony\Component\String\b;
 /**
  * Formatter class for console output.
  *

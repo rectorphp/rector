@@ -13,7 +13,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\ValueObject\AddClosureParamTypeFromObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202510\Webmozart\Assert\Assert;
+use RectorPrefix202511\Webmozart\Assert\Assert;
 /**
  * @deprecated as too specific and not useful in Rector core. Implement it locally instead if needed.
  */

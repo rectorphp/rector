@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
 use function explode, is_string, str_contains;
 /**

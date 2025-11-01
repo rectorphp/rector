@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202510\Symfony\Component\Console;
+namespace RectorPrefix202511\Symfony\Component\Console;
 
-use RectorPrefix202510\Symfony\Component\Console\Output\AnsiColorMode;
+use RectorPrefix202511\Symfony\Component\Console\Output\AnsiColorMode;
 class Terminal
 {
     public const DEFAULT_COLOR_MODE = AnsiColorMode::Ansi4;
@@ -100,7 +100,7 @@ class Terminal
             return self::$stty;
         }
         // skip check if shell_exec function is disabled
-        if (!\function_exists('shell_exec') && !\function_exists('RectorPrefix202510\shell_exec')) {
+        if (!\function_exists('shell_exec') && !\function_exists('RectorPrefix202511\shell_exec')) {
             return \false;
         }
         return self::$stty = (bool) shell_exec('stty 2> ' . ('\\' === \DIRECTORY_SEPARATOR ? 'NUL' : '/dev/null'));
@@ -176,7 +176,7 @@ class Terminal
      */
     private static function readFromProcess($command): ?string
     {
-        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202510\proc_open')) {
+        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202511\proc_open')) {
             return null;
         }
         $descriptorspec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];

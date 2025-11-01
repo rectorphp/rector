@@ -7,7 +7,7 @@ use PhpParser\Node\PropertyHook;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use RectorPrefix202510\Webmozart\Assert\Assert;
+use RectorPrefix202511\Webmozart\Assert\Assert;
 final class PropertyHookFactory
 {
     public function create(ClassMethod $classMethod, string $propertyName): ?PropertyHook

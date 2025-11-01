@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Illuminate\Contracts\Cache;
+namespace RectorPrefix202511\Illuminate\Contracts\Cache;
 
 interface Store
 {

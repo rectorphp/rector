@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use Rector\Validation\RectorAssert;
-use RectorPrefix202510\Webmozart\Assert\Assert;
+use RectorPrefix202511\Webmozart\Assert\Assert;
 final class ParentClassToTraits
 {
     /**

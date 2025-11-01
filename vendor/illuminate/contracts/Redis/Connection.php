@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Illuminate\Contracts\Redis;
+namespace RectorPrefix202511\Illuminate\Contracts\Redis;
 
 use Closure;
 interface Connection

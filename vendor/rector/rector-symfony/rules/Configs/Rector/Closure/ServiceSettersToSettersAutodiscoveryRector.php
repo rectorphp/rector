@@ -24,7 +24,7 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
-use RectorPrefix202510\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202511\Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

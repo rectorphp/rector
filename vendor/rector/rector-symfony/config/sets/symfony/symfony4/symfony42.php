@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202510;
+namespace RectorPrefix202511;
 
 use Rector\Config\RectorConfig;
 # https://github.com/symfony/symfony/pull/28447

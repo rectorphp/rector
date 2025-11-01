@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
-use RectorPrefix202510\Nette;
+use RectorPrefix202511\Nette;
 use function array_unique, ini_get, levenshtein, max, min, ob_end_clean, ob_get_clean, ob_start, preg_replace, strlen;
 use const PHP_OS_FAMILY;
 class Helpers

@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
-use RectorPrefix202510\Nette;
+use RectorPrefix202511\Nette;
 use function constant, current, defined, end, explode, file_get_contents, implode, ltrim, next, ord, strrchr, strtolower, substr;
 use const PHP_VERSION_ID, T_AS, T_CLASS, T_COMMENT, T_CURLY_OPEN, T_DOC_COMMENT, T_DOLLAR_OPEN_CURLY_BRACES, T_ENUM, T_INTERFACE, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAMESPACE, T_NS_SEPARATOR, T_STRING, T_TRAIT, T_USE, T_WHITESPACE, TOKEN_PARSE;
 /**

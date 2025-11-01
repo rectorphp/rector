@@ -9,7 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use RectorPrefix202510\PHPUnit\Framework\Attributes\Depends;
+use RectorPrefix202511\PHPUnit\Framework\Attributes\Depends;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;

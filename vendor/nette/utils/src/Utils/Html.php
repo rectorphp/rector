@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
-use RectorPrefix202510\Nette;
-use RectorPrefix202510\Nette\HtmlStringable;
+use RectorPrefix202511\Nette;
+use RectorPrefix202511\Nette\HtmlStringable;
 use function array_merge, array_splice, count, explode, func_num_args, html_entity_decode, htmlspecialchars, http_build_query, implode, is_array, is_bool, is_float, is_object, is_string, json_encode, max, number_format, rtrim, str_contains, str_repeat, str_replace, strip_tags, strncmp, strpbrk, substr;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
 /**

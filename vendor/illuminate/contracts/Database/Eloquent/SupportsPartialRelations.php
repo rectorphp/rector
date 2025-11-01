@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Illuminate\Contracts\Database\Eloquent;
+namespace RectorPrefix202511\Illuminate\Contracts\Database\Eloquent;
 
 interface SupportsPartialRelations
 {

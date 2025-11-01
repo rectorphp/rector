@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202510\\React\\Promise\\": "src\/"
+            "RectorPrefix202511\\React\\Promise\\": "src\/"
         },
         "files": [
             "src\/functions_include.php"
@@ -41,7 +41,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202510\\React\\Promise\\": [
+            "RectorPrefix202511\\React\\Promise\\": [
                 "tests\/fixtures\/",
                 "tests\/"
             ]

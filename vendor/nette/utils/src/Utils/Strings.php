@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
-use RectorPrefix202510\JetBrains\PhpStorm\Language;
-use RectorPrefix202510\Nette;
+use RectorPrefix202511\JetBrains\PhpStorm\Language;
+use RectorPrefix202511\Nette;
 use function array_keys, array_map, array_shift, array_values, bin2hex, class_exists, defined, extension_loaded, function_exists, htmlspecialchars, htmlspecialchars_decode, iconv, iconv_strlen, iconv_substr, implode, in_array, is_array, is_callable, is_int, is_object, is_string, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, pack, preg_last_error, preg_last_error_msg, preg_quote, preg_replace, str_contains, str_ends_with, str_repeat, str_replace, str_starts_with, strlen, strpos, strrev, strrpos, strtolower, strtoupper, strtr, substr, trim, unpack, utf8_decode;
 use const ENT_IGNORE, ENT_NOQUOTES, ICONV_IMPL, MB_CASE_TITLE, PHP_EOL, PREG_OFFSET_CAPTURE, PREG_PATTERN_ORDER, PREG_SET_ORDER, PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY, PREG_SPLIT_OFFSET_CAPTURE, PREG_UNMATCHED_AS_NULL;
 /**

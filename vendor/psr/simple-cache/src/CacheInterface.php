@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Psr\SimpleCache;
+namespace RectorPrefix202511\Psr\SimpleCache;
 
 interface CacheInterface
 {

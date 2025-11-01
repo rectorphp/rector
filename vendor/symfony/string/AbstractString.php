@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202510\Symfony\Component\String;
+namespace RectorPrefix202511\Symfony\Component\String;
 
-use RectorPrefix202510\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix202510\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix202510\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix202511\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix202511\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix202511\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract characters.
  *
@@ -484,7 +484,7 @@ abstract class AbstractString implements \JsonSerializable
         try {
             $b->string = mb_convert_encoding($this->string, $toEncoding, 'UTF-8');
         } catch (\ValueError $e) {
-            if (!\function_exists('iconv') && !\function_exists('RectorPrefix202510\iconv')) {
+            if (!\function_exists('iconv') && !\function_exists('RectorPrefix202511\iconv')) {
                 throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
             }
             $b->string = iconv('UTF-8', $toEncoding, $this->string);

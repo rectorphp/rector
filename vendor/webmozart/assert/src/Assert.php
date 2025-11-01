@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202510\Webmozart\Assert;
+namespace RectorPrefix202511\Webmozart\Assert;
 
 use ArrayAccess;
 use BadMethodCallException;
@@ -1836,7 +1836,7 @@ class Assert
     }
     protected static function strlen($value)
     {
-        if (!\function_exists('mb_detect_encoding') && !\function_exists('RectorPrefix202510\mb_detect_encoding')) {
+        if (!\function_exists('mb_detect_encoding') && !\function_exists('RectorPrefix202511\mb_detect_encoding')) {
             return \strlen($value);
         }
         if (\false === $encoding = \mb_detect_encoding($value)) {

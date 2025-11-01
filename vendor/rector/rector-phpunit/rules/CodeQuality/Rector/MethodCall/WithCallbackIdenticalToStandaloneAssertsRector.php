@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -112,7 +114,7 @@ CODE_SAMPLE
         $innerSoleExpr = $this->matchInnerSoleExpr($argAndFunctionLike->getFunctionLike());
         if ($innerSoleExpr instanceof BooleanAnd) {
             $joinedExprs = $this->extractJoinedExprs($innerSoleExpr);
-        } elseif ($innerSoleExpr instanceof Identical) {
+        } elseif ($innerSoleExpr instanceof Identical || $innerSoleExpr instanceof Instanceof_ || $innerSoleExpr instanceof Isset_) {
             $joinedExprs = [$innerSoleExpr];
         } else {
             return null;

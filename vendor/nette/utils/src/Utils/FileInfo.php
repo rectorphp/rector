@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202510\Nette\Utils;
+namespace RectorPrefix202511\Nette\Utils;
 
-use RectorPrefix202510\Nette;
+use RectorPrefix202511\Nette;
 use const DIRECTORY_SEPARATOR;
 /**
  * Represents the file or directory returned by the Finder.

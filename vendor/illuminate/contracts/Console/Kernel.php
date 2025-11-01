@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Illuminate\Contracts\Console;
+namespace RectorPrefix202511\Illuminate\Contracts\Console;
 
 interface Kernel
 {

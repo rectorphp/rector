@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202510\Illuminate\Contracts\Queue;
+namespace RectorPrefix202511\Illuminate\Contracts\Queue;
 
 interface ShouldQueue
 {
