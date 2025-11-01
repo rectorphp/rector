@@ -58,11 +58,12 @@ final class FromBinaryAndAssertExpressionsFactory
                 continue;
             }
             if ($expr instanceof Instanceof_) {
-                if (!$expr->class instanceof Name) {
-                    return null;
+                if ($expr->class instanceof Name) {
+                    $classNameExpr = new ClassConstFetch(new FullyQualified($expr->class->name), 'class');
+                } else {
+                    $classNameExpr = $expr->class;
                 }
-                $className = $expr->class->name;
-                $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertInstanceOf', [new ClassConstFetch(new FullyQualified($className), 'class'), $expr->expr]);
+                $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertInstanceOf', [$classNameExpr, $expr->expr]);
                 continue;
             }
             if ($expr instanceof Identical) {
