@@ -2203,6 +2203,7 @@ class ComposerStaticInit5aaa317fb889359e4f26fc1675fc6a8d
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowSingleWillReturnCallbackRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowSingleWillReturnCallbackRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\ScalarArgumentToExpectedParamTypeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/ScalarArgumentToExpectedParamTypeRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SimplerWithIsInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SimplerWithIsInstanceOfRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SingleWithConsecutiveToWithRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SingleWithConsecutiveToWithRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\StringCastAssertStringContainsStringRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/StringCastAssertStringContainsStringRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',

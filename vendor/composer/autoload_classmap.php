@@ -1955,6 +1955,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\NarrowSingleWillReturnCallbackRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/NarrowSingleWillReturnCallbackRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\ScalarArgumentToExpectedParamTypeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/ScalarArgumentToExpectedParamTypeRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SimplerWithIsInstanceOfRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SimplerWithIsInstanceOfRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\SingleWithConsecutiveToWithRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/SingleWithConsecutiveToWithRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\StringCastAssertStringContainsStringRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/StringCastAssertStringContainsStringRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
