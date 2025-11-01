@@ -40,6 +40,12 @@ final class FromBinaryAndAssertExpressionsFactory
     {
         $assertMethodCalls = [];
         foreach ($exprs as $expr) {
+            if ($expr instanceof FuncCall && $this->nodeNameResolver->isName($expr, 'array_key_exists')) {
+                $variableExpr = $expr->getArgs()[1]->value;
+                $dimExpr = $expr->getArgs()[0]->value;
+                $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertArrayHasKey', [$dimExpr, $variableExpr]);
+                continue;
+            }
             if ($expr instanceof Isset_) {
                 foreach ($expr->vars as $issetVariable) {
                     if ($issetVariable instanceof ArrayDimFetch) {
