@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\Ternary;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Ternary;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\Tokenizer\ParenthesizedNestedTernaryAnalyzer;

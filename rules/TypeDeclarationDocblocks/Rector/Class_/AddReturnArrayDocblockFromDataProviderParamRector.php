@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ArrayType;
