@@ -2152,6 +2152,7 @@ class ComposerStaticInit5aaa317fb889359e4f26fc1675fc6a8d
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\TicketAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Enum\\NonAssertNonStaticMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Enum/NonAssertNonStaticMethods.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\AssertMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/AssertMethodAnalyzer.php',
+        'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ClosureUsesResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ClosureUsesResolver.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\NullableObjectAssignCollector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/NullableObjectAssignCollector.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\SetUpAssignedMockTypesResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/SetUpAssignedMockTypesResolver.php',

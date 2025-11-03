@@ -35,9 +35,9 @@ final class FromBinaryAndAssertExpressionsFactory
     }
     /**
      * @param Expr[] $exprs
-     * @return Stmt[]|null
+     * @return Stmt[]
      */
-    public function create(array $exprs): ?array
+    public function create(array $exprs): array
     {
         $assertMethodCalls = [];
         foreach ($exprs as $expr) {
@@ -53,7 +53,7 @@ final class FromBinaryAndAssertExpressionsFactory
                         $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertArrayHasKey', [$issetVariable->dim, $issetVariable->var]);
                     } else {
                         // not supported yet
-                        return null;
+                        return [];
                     }
                 }
                 continue;
@@ -76,17 +76,17 @@ final class FromBinaryAndAssertExpressionsFactory
                         continue;
                     }
                     // unclear, fallback to no change
-                    return null;
+                    return [];
                 }
                 // create assertSame()
                 $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', $expr instanceof Identical ? 'assertSame' : 'assertEquals', [$expr->right, $expr->left]);
             } else {
                 // not supported expr
-                return null;
+                return [];
             }
         }
         if ($assertMethodCalls === []) {
-            return null;
+            return [];
         }
         // to keep order from binary
         $assertMethodCalls = array_reverse($assertMethodCalls);

@@ -1904,6 +1904,7 @@ return array(
     'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\TicketAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Enum\\NonAssertNonStaticMethods' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Enum/NonAssertNonStaticMethods.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\AssertMethodAnalyzer' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/AssertMethodAnalyzer.php',
+    'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ClosureUsesResolver' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ClosureUsesResolver.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\NullableObjectAssignCollector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/NullableObjectAssignCollector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\SetUpAssignedMockTypesResolver' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/SetUpAssignedMockTypesResolver.php',

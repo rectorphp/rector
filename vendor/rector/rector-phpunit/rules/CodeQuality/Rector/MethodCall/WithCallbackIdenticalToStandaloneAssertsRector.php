@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\ClosureUse;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -16,10 +16,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\ClosureUsesResolver;
 use Rector\PHPUnit\CodeQuality\NodeFactory\FromBinaryAndAssertExpressionsFactory;
 use Rector\PHPUnit\CodeQuality\ValueObject\ArgAndFunctionLike;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -34,20 +34,20 @@ final class WithCallbackIdenticalToStandaloneAssertsRector extends AbstractRecto
     /**
      * @readonly
      */
+    private ClosureUsesResolver $closureUsesResolver;
+    /**
+     * @readonly
+     */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @readonly
      */
     private FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory, BetterNodeFinder $betterNodeFinder)
+    public function __construct(ClosureUsesResolver $closureUsesResolver, TestsNodeAnalyzer $testsNodeAnalyzer, FromBinaryAndAssertExpressionsFactory $fromBinaryAndAssertExpressionsFactory)
     {
+        $this->closureUsesResolver = $closureUsesResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->fromBinaryAndAssertExpressionsFactory = $fromBinaryAndAssertExpressionsFactory;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -106,58 +106,47 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $argAndFunctionLike = $this->matchWithCallbackInnerClosure($node);
-        if (!$argAndFunctionLike instanceof ArgAndFunctionLike) {
+        $hasChanged = \false;
+        if (!$this->isName($node->name, 'with')) {
             return null;
         }
-        if (!$argAndFunctionLike->hasParams()) {
-            return null;
-        }
-        $innerSoleExpr = $this->matchInnerSoleExpr($argAndFunctionLike->getFunctionLike());
-        if ($innerSoleExpr instanceof BooleanAnd) {
-            $joinedExprs = $this->extractJoinedExprs($innerSoleExpr);
-        } elseif ($innerSoleExpr instanceof Identical || $innerSoleExpr instanceof Instanceof_ || $innerSoleExpr instanceof Isset_ || $innerSoleExpr instanceof FuncCall && $this->isName($innerSoleExpr->name, 'array_key_exists') || $innerSoleExpr instanceof Equal) {
-            $joinedExprs = [$innerSoleExpr];
-        } else {
-            return null;
-        }
-        if ($joinedExprs === null || $joinedExprs === []) {
-            return null;
-        }
-        $assertExpressions = $this->fromBinaryAndAssertExpressionsFactory->create($joinedExprs);
-        if ($assertExpressions === null) {
-            return null;
-        }
-        // all stmts but last
-        $functionLike = $argAndFunctionLike->getFunctionLike();
-        if ($functionLike instanceof Closure) {
-            $functionStmts = $functionLike->stmts;
-            if (count($functionStmts) >= 2) {
-                unset($functionStmts[array_key_last($functionStmts)]);
-            } else {
-                $functionStmts = [];
+        foreach ($node->getArgs() as $arg) {
+            $argAndFunctionLike = $this->matchCallbackArgAndFunctionLike($arg);
+            if (!$argAndFunctionLike instanceof ArgAndFunctionLike) {
+                continue;
             }
-        } else {
-            $functionStmts = [];
+            $joinedExprs = $this->resolveInnerReturnJoinedExprs($argAndFunctionLike);
+            if ($joinedExprs === []) {
+                continue;
+            }
+            $assertExpressions = $this->fromBinaryAndAssertExpressionsFactory->create($joinedExprs);
+            if ($assertExpressions === []) {
+                continue;
+            }
+            $nonReturnCallbackStmts = $this->resolveNonReturnCallbackStmts($argAndFunctionLike);
+            // last si return true;
+            $assertExpressions[] = new Return_($this->nodeFactory->createTrue());
+            $innerFunctionLike = $argAndFunctionLike->getFunctionLike();
+            if ($innerFunctionLike instanceof Closure) {
+                $innerFunctionLike->stmts = array_merge($nonReturnCallbackStmts, $assertExpressions);
+            } else {
+                // arrow function -> flip to closure
+                $functionLikeInArg = $argAndFunctionLike->getArg();
+                $externalVariables = $this->closureUsesResolver->resolveFromArrowFunction($innerFunctionLike);
+                $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('bool'), 'uses' => $externalVariables]);
+                $functionLikeInArg->value = $closure;
+            }
+            $hasChanged = \true;
         }
-        // last si return true;
-        $assertExpressions[] = new Return_($this->nodeFactory->createTrue());
-        $innerFunctionLike = $argAndFunctionLike->getFunctionLike();
-        if ($innerFunctionLike instanceof Closure) {
-            $innerFunctionLike->stmts = array_merge($functionStmts, $assertExpressions);
-        } else {
-            // arrow function -> flip to closure
-            $functionLikeInArg = $argAndFunctionLike->getArg();
-            $externalVariables = $this->resolveExternalClosureUses($innerFunctionLike);
-            $closure = new Closure(['params' => $argAndFunctionLike->getFunctionLike()->params, 'stmts' => $assertExpressions, 'returnType' => new Identifier('bool'), 'uses' => $externalVariables]);
-            $functionLikeInArg->value = $closure;
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
     /**
-     * @return Expr[]|null
+     * @return Expr[]
      */
-    private function extractJoinedExprs(BooleanAnd $booleanAnd): ?array
+    private function extractJoinedExprs(BooleanAnd $booleanAnd): array
     {
         // must be full queue of BooleanAnds
         $joinedExprs = [];
@@ -165,32 +154,13 @@ CODE_SAMPLE
         do {
             // is binary op, but not "&&"
             if ($currentNode->right instanceof BooleanOr) {
-                return null;
+                return [];
             }
             $joinedExprs[] = $currentNode->right;
             $currentNode = $currentNode->left;
         } while ($currentNode instanceof BooleanAnd);
         $joinedExprs[] = $currentNode;
         return $joinedExprs;
-    }
-    private function matchWithCallbackInnerClosure(MethodCall $methodCall): ?\Rector\PHPUnit\CodeQuality\ValueObject\ArgAndFunctionLike
-    {
-        if (!$this->isName($methodCall->name, 'with')) {
-            return null;
-        }
-        $firstArg = $methodCall->getArgs()[0];
-        if (!$firstArg->value instanceof MethodCall) {
-            return null;
-        }
-        if (!$this->isName($firstArg->value->name, 'callback')) {
-            return null;
-        }
-        $callbackMethodCall = $firstArg->value;
-        $innerFirstArg = $callbackMethodCall->getArgs()[0];
-        if ($innerFirstArg->value instanceof Closure || $innerFirstArg->value instanceof ArrowFunction) {
-            return new ArgAndFunctionLike($innerFirstArg, $innerFirstArg->value);
-        }
-        return null;
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
@@ -208,35 +178,52 @@ CODE_SAMPLE
         }
         return $functionLike->expr;
     }
-    /**
-     * @return ClosureUse[]
-     */
-    private function resolveExternalClosureUses(ArrowFunction $arrowFunction): array
+    private function matchCallbackArgAndFunctionLike(Arg $arg): ?ArgAndFunctionLike
     {
-        // fill needed uses from arrow function to closure
-        $arrowFunctionVariables = $this->betterNodeFinder->findInstancesOfScoped($arrowFunction->getStmts(), Variable::class);
-        $paramNames = [];
-        foreach ($arrowFunction->getParams() as $param) {
-            $paramNames[] = $this->getName($param);
+        if (!$arg->value instanceof MethodCall) {
+            return null;
         }
-        $externalVariableNames = [];
-        foreach ($arrowFunctionVariables as $arrowFunctionVariable) {
-            // skip those defined in params
-            if ($this->isNames($arrowFunctionVariable, $paramNames)) {
-                continue;
+        if (!$this->isName($arg->value->name, 'callback')) {
+            return null;
+        }
+        $callbackMethodCall = $arg->value;
+        $innerFirstArg = $callbackMethodCall->getArgs()[0];
+        if (!$innerFirstArg->value instanceof Closure && !$innerFirstArg->value instanceof ArrowFunction) {
+            return null;
+        }
+        return new ArgAndFunctionLike($innerFirstArg, $innerFirstArg->value);
+    }
+    /**
+     * @return Expr[]
+     */
+    private function resolveInnerReturnJoinedExprs(ArgAndFunctionLike $argAndFunctionLike): array
+    {
+        $innerSoleExpr = $this->matchInnerSoleExpr($argAndFunctionLike->getFunctionLike());
+        if ($innerSoleExpr instanceof BooleanAnd) {
+            return $this->extractJoinedExprs($innerSoleExpr);
+        }
+        if ($innerSoleExpr instanceof Identical || $innerSoleExpr instanceof Instanceof_ || $innerSoleExpr instanceof Isset_ || $innerSoleExpr instanceof FuncCall && $this->isName($innerSoleExpr->name, 'array_key_exists') || $innerSoleExpr instanceof Equal) {
+            return [$innerSoleExpr];
+        }
+        return [];
+    }
+    /**
+     * @return Stmt[]
+     */
+    private function resolveNonReturnCallbackStmts(ArgAndFunctionLike $argAndFunctionLike): array
+    {
+        // all stmts but last
+        $functionLike = $argAndFunctionLike->getFunctionLike();
+        if ($functionLike instanceof Closure) {
+            $functionStmts = $functionLike->stmts;
+            foreach ($functionStmts as $key => $value) {
+                if (!$value instanceof Return_) {
+                    continue;
+                }
+                unset($functionStmts[$key]);
             }
-            $variableName = $this->getName($arrowFunctionVariable);
-            if (!is_string($variableName)) {
-                continue;
-            }
-            $externalVariableNames[] = $variableName;
+            return $functionStmts;
         }
-        $externalVariableNames = array_unique($externalVariableNames);
-        $externalVariableNames = array_diff($externalVariableNames, ['this']);
-        $closureUses = [];
-        foreach ($externalVariableNames as $externalVariableName) {
-            $closureUses[] = new ClosureUse(new Variable($externalVariableName));
-        }
-        return $closureUses;
+        return [];
     }
 }
