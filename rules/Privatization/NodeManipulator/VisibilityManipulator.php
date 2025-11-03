@@ -167,10 +167,6 @@ final class VisibilityManipulator
         if ($node->flags === 0) {
             return;
         }
-        if ($node instanceof Param) {
-            $node->flags = 0;
-            return;
-        }
         if ($node->isPublic()) {
             $node->flags |= Modifiers::PUBLIC;
             $node->flags -= Modifiers::PUBLIC;
