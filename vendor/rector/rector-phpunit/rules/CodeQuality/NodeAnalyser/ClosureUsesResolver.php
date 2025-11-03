@@ -45,11 +45,7 @@ final class ClosureUsesResolver
         }
         $externalVariableNames = array_unique($externalVariableNames);
         $externalVariableNames = array_diff($externalVariableNames, ['this']);
-        $closureUses = [];
-        foreach ($externalVariableNames as $externalVariableName) {
-            $closureUses[] = new ClosureUse(new Variable($externalVariableName));
-        }
-        return $closureUses;
+        return $this->createClosureUses($externalVariableNames);
     }
     /**
      * @return string[]
@@ -61,5 +57,17 @@ final class ClosureUsesResolver
             $paramNames[] = $this->nodeNameResolver->getName($param);
         }
         return $paramNames;
+    }
+    /**
+     * @param string[] $externalVariableNames
+     * @return ClosureUse[]
+     */
+    private function createClosureUses(array $externalVariableNames): array
+    {
+        $closureUses = [];
+        foreach ($externalVariableNames as $externalVariableName) {
+            $closureUses[] = new ClosureUse(new Variable($externalVariableName));
+        }
+        return $closureUses;
     }
 }

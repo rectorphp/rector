@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Int_;
@@ -41,6 +42,11 @@ final class FromBinaryAndAssertExpressionsFactory
     {
         $assertMethodCalls = [];
         foreach ($exprs as $expr) {
+            // implicit bool compare
+            if ($expr instanceof MethodCall) {
+                $assertMethodCalls[] = $this->nodeFactory->createMethodCall('this', 'assertTrue', [$expr]);
+                continue;
+            }
             if ($expr instanceof FuncCall && $this->nodeNameResolver->isName($expr, 'array_key_exists')) {
                 $variableExpr = $expr->getArgs()[1]->value;
                 $dimExpr = $expr->getArgs()[0]->value;
