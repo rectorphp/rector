@@ -33,7 +33,7 @@ echo $array[array_key_last($array)];
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 echo array_first($array);
-echo array_last($array;
+echo array_last($array);
 CODE_SAMPLE
 )]);
     }
