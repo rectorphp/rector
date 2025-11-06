@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ValueObject;
 
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Variable;
 use RectorPrefix202511\Webmozart\Assert\Assert;
 final class ConditionAndResult
 {

@@ -92,9 +92,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof ClassMethod) {
-            return null;
-        }
         $returnType = $node->returnType;
         if (!$returnType instanceof Identifier && !$returnType instanceof FullyQualified) {
             return null;
@@ -136,7 +133,7 @@ CODE_SAMPLE
         }
         $declaredObjectType = new ObjectType($declaredType);
         $classReflection = $declaredObjectType->getClassReflection();
-        if ($classReflection === null) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return $classReflection->isFinalByKeyword();
@@ -145,7 +142,7 @@ CODE_SAMPLE
     {
         $actualObjectType = new ObjectType($actualType);
         $classReflection = $actualObjectType->getClassReflection();
-        if ($classReflection === null) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return $classReflection->isAnonymous();
@@ -178,11 +175,11 @@ CODE_SAMPLE
                 continue;
             }
             $parentClassMethod = $this->astResolver->resolveClassMethod($ancestor->getName(), $methodName);
-            if ($parentClassMethod === null) {
+            if (!$parentClassMethod instanceof ClassMethod) {
                 continue;
             }
             $parentReturnType = $parentClassMethod->returnType;
-            if ($parentReturnType === null) {
+            if (!$parentReturnType instanceof Node) {
                 continue;
             }
             if ($parentReturnType instanceof Identifier && $parentReturnType->name === 'object') {
@@ -192,9 +189,9 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function getActualReturnClass(ClassMethod $node): ?string
+    private function getActualReturnClass(ClassMethod $classMethod): ?string
     {
-        $returnStatements = $this->betterNodeFinder->findReturnsScoped($node);
+        $returnStatements = $this->betterNodeFinder->findReturnsScoped($classMethod);
         if ($returnStatements === []) {
             return null;
         }
