@@ -9,4 +9,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony74/symfony74-console.php');
     $rectorConfig->import(__DIR__ . '/symfony74/symfony74-framework-bundle.php');
     $rectorConfig->import(__DIR__ . '/symfony74/symfony74-routing.php');
+    $rectorConfig->import(__DIR__ . '/symfony74/symfony74-workflow.php');
 };
