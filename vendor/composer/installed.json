@@ -1861,12 +1861,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "effe05f311f5bfa9b63fa5206a11650a3238e74b"
+                "reference": "65b31d69a4ad77ab42e4fb8f077472df4650cdde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/effe05f311f5bfa9b63fa5206a11650a3238e74b",
-                "reference": "effe05f311f5bfa9b63fa5206a11650a3238e74b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/65b31d69a4ad77ab42e4fb8f077472df4650cdde",
+                "reference": "65b31d69a4ad77ab42e4fb8f077472df4650cdde",
                 "shasum": ""
             },
             "require": {
@@ -1898,7 +1898,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-11-07T08:58:58+00:00",
+            "time": "2025-11-08T18:54:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2725,17 +2725,17 @@
         },
         {
             "name": "symfony\/service-contracts",
-            "version": "v3.6.0",
-            "version_normalized": "3.6.0.0",
+            "version": "v3.6.1",
+            "version_normalized": "3.6.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/service-contracts.git",
-                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4"
+                "reference": "45112560a3ba2d715666a509a0bc9521d10b6c43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/service-contracts\/zipball\/f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
-                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/service-contracts\/zipball\/45112560a3ba2d715666a509a0bc9521d10b6c43",
+                "reference": "45112560a3ba2d715666a509a0bc9521d10b6c43",
                 "shasum": ""
             },
             "require": {
@@ -2746,7 +2746,7 @@
             "conflict": {
                 "ext-psr": "<1.1|>=2"
             },
-            "time": "2025-04-25T09:37:31+00:00",
+            "time": "2025-07-15T11:30:57+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2791,7 +2791,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/service-contracts\/tree\/v3.6.0"
+                "source": "https:\/\/github.com\/symfony\/service-contracts\/tree\/v3.6.1"
             },
             "funding": [
                 {
@@ -2800,6 +2800,10 @@
                 },
                 {
                     "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/github.com\/nicolas-grekas",
                     "type": "github"
                 },
                 {
