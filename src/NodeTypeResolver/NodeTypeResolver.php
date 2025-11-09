@@ -368,7 +368,7 @@ final class NodeTypeResolver
         }
         return $type;
     }
-    private function resolveNativeUnionType(UnionType $unionType): Type
+    private function resolveNativeUnionType(UnionType $unionType): UnionType
     {
         $hasChanged = \false;
         $types = $unionType->getTypes();
