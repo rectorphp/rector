@@ -7,8 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -34,11 +40,21 @@ final class NarrowObjectReturnTypeRector extends AbstractRector
      * @readonly
      */
     private AstResolver $astResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    /**
+     * @readonly
+     */
+    private DocBlockUpdater $docBlockUpdater;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, AstResolver $astResolver, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->astResolver = $astResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -124,7 +140,24 @@ CODE_SAMPLE
             return null;
         }
         $node->returnType = new FullyQualified($actualReturnClass);
+        $this->updateDocblock($node, $actualReturnClass);
         return $node;
+    }
+    private function updateDocblock(ClassMethod $classMethod, string $actualReturnClass): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return;
+        }
+        if (!$returnTagValueNode->type instanceof GenericTypeNode) {
+            return;
+        }
+        $returnTagValueNode->type->type = new FullyQualifiedIdentifierTypeNode($actualReturnClass);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     private function isDeclaredTypeFinal(string $declaredType): bool
     {
