@@ -9,16 +9,19 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -43,16 +46,26 @@ final class NarrowObjectReturnTypeRector extends AbstractRector
     /**
      * @readonly
      */
+    private StaticTypeMapper $staticTypeMapper;
+    /**
+     * @readonly
+     */
+    private TypeComparator $typeComparator;
+    /**
+     * @readonly
+     */
     private PhpDocInfoFactory $phpDocInfoFactory;
     /**
      * @readonly
      */
     private DocBlockUpdater $docBlockUpdater;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, AstResolver $astResolver, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator, PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->astResolver = $astResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->typeComparator = $typeComparator;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockUpdater = $docBlockUpdater;
     }
@@ -153,10 +166,24 @@ CODE_SAMPLE
         if (!$returnTagValueNode instanceof ReturnTagValueNode) {
             return;
         }
-        if (!$returnTagValueNode->type instanceof GenericTypeNode) {
+        if ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+            $oldType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type, $classMethod);
+        } elseif ($returnTagValueNode->type instanceof GenericTypeNode) {
+            $oldType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($returnTagValueNode->type->type, $classMethod);
+        } else {
             return;
         }
-        $returnTagValueNode->type->type = new FullyQualifiedIdentifierTypeNode($actualReturnClass);
+        if ($oldType instanceof ObjectType) {
+            $objectType = new ObjectType($actualReturnClass);
+            if ($this->typeComparator->areTypesEqual($oldType, $objectType)) {
+                return;
+            }
+        }
+        if ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+            $returnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($actualReturnClass);
+        } else {
+            $returnTagValueNode->type->type = new FullyQualifiedIdentifierTypeNode($actualReturnClass);
+        }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     private function isDeclaredTypeFinal(string $declaredType): bool
