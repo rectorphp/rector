@@ -35,13 +35,7 @@ final class ConsoleApplication extends Application
     }
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
-        if (!$isXdebugAllowed) {
-            $xdebugHandler = new XdebugHandler('rector');
-            $xdebugHandler->setPersistent();
-            $xdebugHandler->check();
-            unset($xdebugHandler);
-        }
+        $this->enableXdebug($input);
         $shouldFollowByNewline = \false;
         // skip in this case, since generate content must be clear from meta-info
         if ($this->shouldPrintMetaInformation($input)) {
@@ -88,18 +82,28 @@ final class ConsoleApplication extends Application
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
     {
         $options = $inputDefinition->getOptions();
-        unset($options['quiet'], $options['no-interaction']);
+        unset($options['quiet'], $options['verbose'], $options['no-interaction']);
         $inputDefinition->setOptions($options);
     }
     private function addCustomOptions(InputDefinition $inputDefinition): void
     {
         $inputDefinition->addOption(new InputOption(Option::CONFIG, 'c', InputOption::VALUE_REQUIRED, 'Path to config file', $this->getDefaultConfigPath()));
-        $inputDefinition->addOption(new InputOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Enable debug verbosity (-vvv)'));
+        $inputDefinition->addOption(new InputOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Enable debug verbosity'));
         $inputDefinition->addOption(new InputOption(Option::XDEBUG, null, InputOption::VALUE_NONE, 'Allow running xdebug'));
         $inputDefinition->addOption(new InputOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear cache'));
     }
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.php';
+    }
+    private function enableXdebug(InputInterface $input): void
+    {
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
+        if (!$isXdebugAllowed) {
+            $xdebugHandler = new XdebugHandler('rector');
+            $xdebugHandler->setPersistent();
+            $xdebugHandler->check();
+            unset($xdebugHandler);
+        }
     }
 }

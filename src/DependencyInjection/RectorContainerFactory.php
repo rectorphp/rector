@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use Rector\Config\RectorConfig;
 use Rector\Autoloading\BootstrapFilesIncluder;
 use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Config\RectorConfig;
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {

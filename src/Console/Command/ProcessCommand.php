@@ -101,19 +101,19 @@ final class ProcessCommand extends Command
         $this->setHelp(<<<'EOF'
 The <info>%command.name%</info> command will run Rector main feature:
 
-  <info>%command.full_name%</info>
+  <info>vendor/bin/rector</info>
 
 To specify a folder or a file, you can run:
 
-  <info>%command.full_name% src/Controller</info>
+  <info>vendor/bin/rector src/Controller</info>
 
 You can also dry run to see the changes that Rector will make with the <comment>--dry-run</comment> option:
 
-  <info>%command.full_name% src/Controller --dry-run</info>
+  <info>vendor/bin/rector src/Controller --dry-run</info>
 
 It's also possible to get debug via the <comment>--debug</comment> option:
 
-  <info>%command.full_name% src/Controller --dry-run --debug</info>
+  <info>vendor/bin/rector src/Controller --dry-run --debug</info>
 EOF
 );
         ProcessConfigureDecorator::decorate($this);
