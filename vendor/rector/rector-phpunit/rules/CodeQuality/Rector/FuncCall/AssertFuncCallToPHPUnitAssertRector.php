@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -74,14 +75,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Closure::class, FuncCall::class];
+        return [ClassMethod::class, Closure::class, FuncCall::class];
     }
     /**
-     * @param Closure|FuncCall $node
+     * @param ClassMethod|Closure|FuncCall $node
      * @return StaticCall|MethodCall|null|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof ClassMethod) {
+            if ($node->isStatic()) {
+                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            }
+            return null;
+        }
         if ($node instanceof Closure) {
             if ($node->static) {
                 return NodeVisitor::DONT_TRAVERSE_CHILDREN;
