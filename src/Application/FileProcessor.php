@@ -85,7 +85,7 @@ final class FileProcessor
         $parsingSystemError = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemError instanceof SystemError) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            return new FileProcessResult([$parsingSystemError], null);
+            return new FileProcessResult([$parsingSystemError], null, \false);
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
@@ -119,7 +119,7 @@ final class FileProcessor
             $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($configuration->shouldShowDiffs(), $file, $file->getOriginalFileContent(), $file->getFileContent(), $file->getRectorWithLineChanges());
             $file->setFileDiff($currentFileDiff);
         }
-        return new FileProcessResult([], $file->getFileDiff());
+        return new FileProcessResult([], $file->getFileDiff(), $file->hasChanged());
     }
     private function parseFileAndDecorateNodes(File $file): ?SystemError
     {

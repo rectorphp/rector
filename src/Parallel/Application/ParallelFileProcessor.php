@@ -99,6 +99,7 @@ final class ParallelFileProcessor
         $serverPort = parse_url($serverAddress, \PHP_URL_PORT);
         $systemErrorsCount = 0;
         $reachedSystemErrorsCountLimit = \false;
+        $totalChanged = 0;
         $handleErrorCallable = function (Throwable $throwable) use (&$systemErrors, &$systemErrorsCount, &$reachedSystemErrorsCountLimit): void {
             $systemErrors[] = new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
             ++$systemErrorsCount;
@@ -111,14 +112,22 @@ final class ParallelFileProcessor
         };
         $timeoutInSeconds = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
         $fileChunksBudgetPerProcess = [];
-        $processSpawner = function () use (&$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner): void {
+        $processSpawner = function () use (&$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged): void {
             $processIdentifier = Random::generate();
             $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, ProcessCommand::class, 'worker', $input, $processIdentifier, $serverPort);
             $fileChunksBudgetPerProcess[$processIdentifier] = self::MAX_CHUNKS_PER_WORKER;
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
-                function (array $json) use ($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier, &$fileChunksBudgetPerProcess, &$processSpawner): void {
+                function (array $json) use ($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged): void {
+                    /** @var array{
+                     *      total_changed: int,
+                     *      system_errors: mixed[],
+                     *      file_diffs: array<string, mixed>,
+                     *      files_count: int,
+                     *      system_errors_count: int
+                     * } $json */
+                    $totalChanged += $json[Bridge::TOTAL_CHANGED];
                     // decode arrays to objects
                     foreach ($json[Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (is_string($jsonError)) {
@@ -177,6 +186,6 @@ final class ParallelFileProcessor
         if ($reachedSystemErrorsCountLimit) {
             $systemErrors[] = new SystemError(sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
         }
-        return new ProcessResult($systemErrors, $fileDiffs);
+        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged);
     }
 }
