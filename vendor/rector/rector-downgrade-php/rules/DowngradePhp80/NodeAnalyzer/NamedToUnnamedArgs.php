@@ -50,7 +50,7 @@ final class NamedToUnnamedArgs
                 if (!$this->nodeNameResolver->isName($currentArg->name, $parameterReflectionName)) {
                     continue;
                 }
-                $unnamedArgs[$paramPosition] = new Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, [], null);
+                $unnamedArgs[$paramPosition] = new Arg($currentArg->value, $currentArg->byRef, $currentArg->unpack, []);
             }
         }
         return $unnamedArgs;
@@ -86,7 +86,7 @@ final class NamedToUnnamedArgs
             if (!$defaultValue instanceof Expr) {
                 continue;
             }
-            $unnamedArgs[$i] = new Arg($defaultValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), [], null);
+            $unnamedArgs[$i] = new Arg($defaultValue, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), []);
         }
         return $unnamedArgs;
     }

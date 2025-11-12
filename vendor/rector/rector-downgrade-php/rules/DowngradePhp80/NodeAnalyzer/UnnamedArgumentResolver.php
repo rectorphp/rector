@@ -43,7 +43,7 @@ final class UnnamedArgumentResolver
         $toFillArgs = [];
         foreach ($currentArgs as $key => $arg) {
             if (!$arg->name instanceof Identifier) {
-                $unnamedArgs[$key] = new Arg($arg->value, $arg->byRef, $arg->unpack, [], null);
+                $unnamedArgs[$key] = new Arg($arg->value, $arg->byRef, $arg->unpack, []);
                 continue;
             }
             /** @var string $argName */

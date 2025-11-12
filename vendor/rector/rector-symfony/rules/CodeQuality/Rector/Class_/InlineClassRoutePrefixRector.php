@@ -196,6 +196,7 @@ CODE_SAMPLE
                                 unset($attribute->args[$attributeArgKey]);
                             }
                         }
+                        $attribute->args = array_values($attribute->args);
                         // nothing to keep, remove whole attribute
                         if ($attribute->args === []) {
                             unset($attrGroup->attrs[$attributeKey]);
