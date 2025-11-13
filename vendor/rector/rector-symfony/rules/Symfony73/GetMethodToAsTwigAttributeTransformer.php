@@ -155,10 +155,8 @@ final class GetMethodToAsTwigAttributeTransformer
             if ($mappedName === null) {
                 continue;
             }
-            if ($mappedName === 'isSafeCallback') {
-                if ($item->value instanceof MethodCall && $item->value->isFirstClassCallable()) {
-                    continue;
-                }
+            if ($mappedName === 'isSafeCallback' && ($item->value instanceof MethodCall && $item->value->isFirstClassCallable())) {
+                continue;
             }
             $arg = new Arg($item->value);
             $arg->name = new Identifier($mappedName);

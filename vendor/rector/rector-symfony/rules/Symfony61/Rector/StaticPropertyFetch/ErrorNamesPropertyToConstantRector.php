@@ -92,9 +92,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorStaticPropertyFetch(StaticPropertyFetch $node, ClassReflection $classReflection): ?ClassConstFetch
+    private function refactorStaticPropertyFetch(StaticPropertyFetch $staticPropertyFetch, ClassReflection $classReflection): ?ClassConstFetch
     {
-        if (!$this->isName($node->name, 'errorNames')) {
+        if (!$this->isName($staticPropertyFetch->name, 'errorNames')) {
             return null;
         }
         $parentClass = $classReflection->getParentClass();
