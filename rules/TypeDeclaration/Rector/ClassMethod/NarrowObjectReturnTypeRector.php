@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -149,7 +150,7 @@ CODE_SAMPLE
         if ($this->isActualTypeAnonymous($actualReturnClass)) {
             return null;
         }
-        if (!$this->isNarrowingValid($declaredType, $actualReturnClass)) {
+        if (!$this->isNarrowingValid($node, $declaredType, $actualReturnClass)) {
             return null;
         }
         $node->returnType = new FullyQualified($actualReturnClass);
@@ -207,14 +208,22 @@ CODE_SAMPLE
         }
         return $classReflection->isAnonymous();
     }
-    private function isNarrowingValid(string $declaredType, string $actualType): bool
+    private function isNarrowingValid(ClassMethod $classMethod, string $declaredType, string $actualType): bool
     {
         if ($declaredType === 'object') {
             return \true;
         }
         $actualObjectType = new ObjectType($actualType);
         $declaredObjectType = new ObjectType($declaredType);
-        return $declaredObjectType->isSuperTypeOf($actualObjectType)->yes();
+        if (!$declaredObjectType->isSuperTypeOf($actualObjectType)->yes()) {
+            return \false;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return \true;
+        }
+        $returnType = $phpDocInfo->getReturnType();
+        return !$returnType instanceof GenericObjectType;
     }
     private function hasParentMethodWithNonObjectReturn(ClassMethod $classMethod): bool
     {

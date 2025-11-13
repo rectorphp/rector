@@ -18,7 +18,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
+        'S' =>
         array (
             'Symplify\\RuleDocGenerator\\' => 26,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -26,7 +26,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
-        'R' => 
+        'R' =>
         array (
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
@@ -65,7 +65,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
             'RectorPrefix202511\\Composer\\Pcre\\' => 33,
             'RectorPrefix202511\\Clue\\React\\NDJson\\' => 37,
         ),
-        'P' => 
+        'P' =>
         array (
             'PhpParser\\' => 10,
             'PHPStan\\PhpDocParser\\' => 21,
@@ -73,181 +73,181 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symplify\\RuleDocGenerator\\' => 
+        'Symplify\\RuleDocGenerator\\' =>
         array (
             0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
-        'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
+        'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Rector\\Utils\\' => 
+        'Rector\\Utils\\' =>
         array (
             0 => __DIR__ . '/../..' . '/utils',
         ),
-        'Rector\\Symfony\\' => 
+        'Rector\\Symfony\\' =>
         array (
             0 => __DIR__ . '/..' . '/rector/rector-symfony/src',
             1 => __DIR__ . '/..' . '/rector/rector-symfony/rules',
         ),
-        'Rector\\RectorInstaller\\' => 
+        'Rector\\RectorInstaller\\' =>
         array (
             0 => __DIR__ . '/..' . '/rector/extension-installer/src',
         ),
-        'Rector\\PHPUnit\\' => 
+        'Rector\\PHPUnit\\' =>
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpunit/src',
             1 => __DIR__ . '/..' . '/rector/rector-phpunit/rules',
         ),
-        'Rector\\Doctrine\\' => 
+        'Rector\\Doctrine\\' =>
         array (
             0 => __DIR__ . '/..' . '/rector/rector-doctrine/src',
             1 => __DIR__ . '/..' . '/rector/rector-doctrine/rules',
         ),
-        'Rector\\' => 
+        'Rector\\' =>
         array (
             0 => __DIR__ . '/../..' . '/rules',
             1 => __DIR__ . '/../..' . '/src',
             2 => __DIR__ . '/..' . '/rector/rector-downgrade-php/src',
             3 => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules',
         ),
-        'RectorPrefix202511\\Webmozart\\Assert\\' => 
+        'RectorPrefix202511\\Webmozart\\Assert\\' =>
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
-        'RectorPrefix202511\\Symplify\\EasyParallel\\' => 
+        'RectorPrefix202511\\Symplify\\EasyParallel\\' =>
         array (
             0 => __DIR__ . '/..' . '/symplify/easy-parallel/src',
         ),
-        'RectorPrefix202511\\Symfony\\Contracts\\Service\\' => 
+        'RectorPrefix202511\\Symfony\\Contracts\\Service\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\Yaml\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\Yaml\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\String\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\String\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\Process\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\Process\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\Finder\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\Finder\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\Filesystem\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\Filesystem\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/filesystem',
         ),
-        'RectorPrefix202511\\Symfony\\Component\\Console\\' => 
+        'RectorPrefix202511\\Symfony\\Component\\Console\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
-        'RectorPrefix202511\\React\\Stream\\' => 
+        'RectorPrefix202511\\React\\Stream\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/stream/src',
         ),
-        'RectorPrefix202511\\React\\Socket\\' => 
+        'RectorPrefix202511\\React\\Socket\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/socket/src',
         ),
-        'RectorPrefix202511\\React\\Promise\\' => 
+        'RectorPrefix202511\\React\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
         ),
-        'RectorPrefix202511\\React\\EventLoop\\' => 
+        'RectorPrefix202511\\React\\EventLoop\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/event-loop/src',
         ),
-        'RectorPrefix202511\\React\\Dns\\' => 
+        'RectorPrefix202511\\React\\Dns\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/dns/src',
         ),
-        'RectorPrefix202511\\React\\ChildProcess\\' => 
+        'RectorPrefix202511\\React\\ChildProcess\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/child-process/src',
         ),
-        'RectorPrefix202511\\React\\Cache\\' => 
+        'RectorPrefix202511\\React\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/cache/src',
         ),
-        'RectorPrefix202511\\Psr\\SimpleCache\\' => 
+        'RectorPrefix202511\\Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'RectorPrefix202511\\Psr\\Log\\' => 
+        'RectorPrefix202511\\Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
-        'RectorPrefix202511\\Psr\\Container\\' => 
+        'RectorPrefix202511\\Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'RectorPrefix202511\\OndraM\\CiDetector\\' => 
+        'RectorPrefix202511\\OndraM\\CiDetector\\' =>
         array (
             0 => __DIR__ . '/..' . '/ondram/ci-detector/src',
         ),
-        'RectorPrefix202511\\Nette\\' => 
+        'RectorPrefix202511\\Nette\\' =>
         array (
             0 => __DIR__ . '/..' . '/nette/utils/src',
         ),
-        'RectorPrefix202511\\Illuminate\\Contracts\\' => 
+        'RectorPrefix202511\\Illuminate\\Contracts\\' =>
         array (
             0 => __DIR__ . '/..' . '/illuminate/contracts',
         ),
-        'RectorPrefix202511\\Illuminate\\Container\\' => 
+        'RectorPrefix202511\\Illuminate\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
-        'RectorPrefix202511\\Fidry\\CpuCoreCounter\\' => 
+        'RectorPrefix202511\\Fidry\\CpuCoreCounter\\' =>
         array (
             0 => __DIR__ . '/..' . '/fidry/cpu-core-counter/src',
         ),
-        'RectorPrefix202511\\Evenement\\' => 
+        'RectorPrefix202511\\Evenement\\' =>
         array (
             0 => __DIR__ . '/..' . '/evenement/evenement/src',
         ),
-        'RectorPrefix202511\\Doctrine\\Inflector\\' => 
+        'RectorPrefix202511\\Doctrine\\Inflector\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/src',
         ),
-        'RectorPrefix202511\\Composer\\XdebugHandler\\' => 
+        'RectorPrefix202511\\Composer\\XdebugHandler\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/xdebug-handler/src',
         ),
-        'RectorPrefix202511\\Composer\\Semver\\' => 
+        'RectorPrefix202511\\Composer\\Semver\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/semver/src',
         ),
-        'RectorPrefix202511\\Composer\\Pcre\\' => 
+        'RectorPrefix202511\\Composer\\Pcre\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/pcre/src',
         ),
-        'RectorPrefix202511\\Clue\\React\\NDJson\\' => 
+        'RectorPrefix202511\\Clue\\React\\NDJson\\' =>
         array (
             0 => __DIR__ . '/..' . '/clue/ndjson-react/src',
         ),
-        'PhpParser\\' => 
+        'PhpParser\\' =>
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'PHPStan\\PhpDocParser\\' => 
+        'PHPStan\\PhpDocParser\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
         ),
