@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
@@ -98,27 +99,16 @@ CODE_SAMPLE
             return null;
         }
         $rootExpr = $currentMethodCall;
+        if (!$rootExpr instanceof New_) {
+            return null;
+        }
         if ($this->shouldSkipForVendorOrInternal($firstMethodCall)) {
             return null;
         }
         $variableName = $this->resolveVariableName($rootExpr);
         $someVariable = new Variable($variableName);
         $firstAssign = new Assign($someVariable, $rootExpr);
-        $stmts = [new Expression($firstAssign)];
-        // revert to normal order
-        $methodCalls = array_reverse($methodCalls);
-        foreach ($methodCalls as $methodCall) {
-            $methodCall->var = $someVariable;
-            // inlines indent and removes () around first expr
-            $methodCall->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $stmts[] = new Expression($methodCall);
-        }
-        if ($node instanceof Return_) {
-            $node->expr = $someVariable;
-            $stmts[] = $node;
-        }
-        $node->expr = $someVariable;
-        return $stmts;
+        return $this->createStmts($firstAssign, $methodCalls, $someVariable, $node);
     }
     private function resolveVariableName(Expr $expr): string
     {
@@ -144,5 +134,28 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    /**
+     * @param MethodCall[] $methodCalls
+     * @return Stmt[]
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $firstStmt
+     */
+    private function createStmts(Assign $firstAssign, array $methodCalls, Variable $someVariable, $firstStmt): array
+    {
+        $stmts = [new Expression($firstAssign)];
+        // revert to normal order
+        $methodCalls = array_reverse($methodCalls);
+        foreach ($methodCalls as $methodCall) {
+            $methodCall->var = $someVariable;
+            // inlines indent and removes () around first expr
+            $methodCall->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $stmts[] = new Expression($methodCall);
+        }
+        if ($firstStmt instanceof Return_) {
+            $firstStmt->expr = $someVariable;
+            $stmts[] = $firstStmt;
+        }
+        $firstStmt->expr = $someVariable;
+        return $stmts;
     }
 }
