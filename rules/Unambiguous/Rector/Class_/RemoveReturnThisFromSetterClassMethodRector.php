@@ -85,7 +85,7 @@ CODE_SAMPLE
             if (!is_string($paramName)) {
                 continue;
             }
-            if (!$this->classMethodAndPropertyAnalyzer->hasPropertyAssignWithReturnThis($classMethod, $paramName)) {
+            if (!$this->classMethodAndPropertyAnalyzer->hasPropertyAssignWithReturnThis($classMethod)) {
                 continue;
             }
             // remove 2nd stmts, that is "return $this;"
