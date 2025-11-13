@@ -16,6 +16,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -103,6 +104,9 @@ CODE_SAMPLE
         }
         $propertyMetadatas = [];
         foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->isMagic() && !$this->isName($classMethod->name, MethodName::INVOKE)) {
+                continue;
+            }
             if (!$this->controllerMethodAnalyzer->isAction($classMethod)) {
                 continue;
             }
