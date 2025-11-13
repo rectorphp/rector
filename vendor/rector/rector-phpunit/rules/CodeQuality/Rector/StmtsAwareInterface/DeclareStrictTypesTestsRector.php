@@ -12,6 +12,7 @@ use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\DeclareStrictTypeFinder;
@@ -83,7 +84,15 @@ CODE_SAMPLE
         $rootStmt = current($nodes);
         // when first stmt is Declare_, verify if there is strict_types definition already,
         // as multiple declare is allowed, with declare(strict_types=1) only allowed on very first stmt
-        if ($this->declareStrictTypeFinder->hasDeclareStrictTypes($rootStmt)) {
+        if ($rootStmt instanceof FileWithoutNamespace) {
+            $currentNode = current($rootStmt->stmts);
+            if (!$currentNode instanceof Stmt) {
+                return null;
+            }
+            if ($this->declareStrictTypeFinder->hasDeclareStrictTypes($currentNode)) {
+                return null;
+            }
+        } elseif ($this->declareStrictTypeFinder->hasDeclareStrictTypes($rootStmt)) {
             return null;
         }
         if (!$this->hasPHPUnitTestClass($nodes)) {
@@ -91,6 +100,13 @@ CODE_SAMPLE
         }
         $rectorWithLineChange = new RectorWithLineChange(self::class, $rootStmt->getStartLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
+        if ($rootStmt instanceof FileWithoutNamespace) {
+            $stmts = [$this->nodeFactory->createDeclaresStrictType()];
+            $stmts = array_merge($stmts, [new Nop()]);
+            $stmts = array_merge($stmts, $rootStmt->stmts);
+            $rootStmt->stmts = $stmts;
+            return [$rootStmt];
+        }
         return array_merge([$this->nodeFactory->createDeclaresStrictType(), new Nop()], $nodes);
     }
     /**
