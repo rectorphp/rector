@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Unambiguous\Rector\Expression;
 
+use PHPStan\Type\ObjectType;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -92,6 +94,9 @@ CODE_SAMPLE
             return null;
         }
         $rootExpr = $currentMethodCall;
+        if ($this->shouldSkipForVendorOrInternal($firstMethodCall)) {
+            return null;
+        }
         $variableName = $this->resolveVariableName($rootExpr);
         $someVariable = new Variable($variableName);
         $firstAssign = new Assign($someVariable, $rootExpr);
@@ -114,5 +119,20 @@ CODE_SAMPLE
             return $this->propertyNaming->fqnToVariableName($expr->class);
         }
         return 'someVariable';
+    }
+    private function shouldSkipForVendorOrInternal(MethodCall $firstMethodCall): bool
+    {
+        $callerType = $this->getType($firstMethodCall);
+        if ($callerType instanceof ObjectType) {
+            $classReflection = $callerType->getClassReflection();
+            if (!$classReflection instanceof ClassReflection) {
+                return \false;
+            }
+            $fileName = $classReflection->getFileName();
+            if ($fileName === null || strpos($fileName, 'vendor') !== \false) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
