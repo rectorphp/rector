@@ -2860,6 +2860,7 @@ return array(
     'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => $baseDir . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
     'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => $baseDir . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
+    'Rector\\Unambiguous\\Rector\\Class_\\RemoveReturnThisFromSetterClassMethodRector' => $baseDir . '/rules/Unambiguous/Rector/Class_/RemoveReturnThisFromSetterClassMethodRector.php',
     'Rector\\Util\\ArrayChecker' => $baseDir . '/src/Util/ArrayChecker.php',
     'Rector\\Util\\ArrayParametersMerger' => $baseDir . '/src/Util/ArrayParametersMerger.php',
     'Rector\\Util\\FileHasher' => $baseDir . '/src/Util/FileHasher.php',
