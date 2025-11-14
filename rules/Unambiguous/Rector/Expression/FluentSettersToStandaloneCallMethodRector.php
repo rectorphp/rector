@@ -86,9 +86,22 @@ CODE_SAMPLE
         /** @var MethodCall[] $methodCalls */
         $methodCalls = [];
         $currentMethodCall = $firstMethodCall;
+        $classNameObjectType = null;
         while ($currentMethodCall instanceof MethodCall) {
+            if ($currentMethodCall->isFirstClassCallable()) {
+                return null;
+            }
             // must be exactly one argument
             if (count($currentMethodCall->getArgs()) !== 1) {
+                return null;
+            }
+            $objectType = $this->getType($currentMethodCall->var);
+            if (!$objectType instanceof ObjectType) {
+                return null;
+            }
+            if ($classNameObjectType === null) {
+                $classNameObjectType = $objectType->getClassName();
+            } elseif ($classNameObjectType !== $objectType->getClassName()) {
                 return null;
             }
             $methodCalls[] = $currentMethodCall;
