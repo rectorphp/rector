@@ -2860,6 +2860,7 @@ return array(
     'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => $baseDir . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
     'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => $baseDir . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
+    'Rector\\Unambiguous\\NodeAnalyzer\\FluentMethodCallsCollector' => $baseDir . '/rules/Unambiguous/NodeAnalyzer/FluentMethodCallsCollector.php',
     'Rector\\Unambiguous\\Rector\\Class_\\RemoveReturnThisFromSetterClassMethodRector' => $baseDir . '/rules/Unambiguous/Rector/Class_/RemoveReturnThisFromSetterClassMethodRector.php',
     'Rector\\Unambiguous\\Rector\\Expression\\FluentSettersToStandaloneCallMethodRector' => $baseDir . '/rules/Unambiguous/Rector/Expression/FluentSettersToStandaloneCallMethodRector.php',
     'Rector\\Util\\ArrayChecker' => $baseDir . '/src/Util/ArrayChecker.php',

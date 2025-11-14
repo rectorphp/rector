@@ -3108,6 +3108,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
         'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
+        'Rector\\Unambiguous\\NodeAnalyzer\\FluentMethodCallsCollector' => __DIR__ . '/../..' . '/rules/Unambiguous/NodeAnalyzer/FluentMethodCallsCollector.php',
         'Rector\\Unambiguous\\Rector\\Class_\\RemoveReturnThisFromSetterClassMethodRector' => __DIR__ . '/../..' . '/rules/Unambiguous/Rector/Class_/RemoveReturnThisFromSetterClassMethodRector.php',
         'Rector\\Unambiguous\\Rector\\Expression\\FluentSettersToStandaloneCallMethodRector' => __DIR__ . '/../..' . '/rules/Unambiguous/Rector/Expression/FluentSettersToStandaloneCallMethodRector.php',
         'Rector\\Util\\ArrayChecker' => __DIR__ . '/../..' . '/src/Util/ArrayChecker.php',

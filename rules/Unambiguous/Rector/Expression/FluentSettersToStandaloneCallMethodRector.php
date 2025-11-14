@@ -18,6 +18,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use Rector\Unambiguous\NodeAnalyzer\FluentMethodCallsCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,9 +32,14 @@ final class FluentSettersToStandaloneCallMethodRector extends AbstractRector
      * @readonly
      */
     private PropertyNaming $propertyNaming;
-    public function __construct(PropertyNaming $propertyNaming)
+    /**
+     * @readonly
+     */
+    private FluentMethodCallsCollector $fluentMethodCallsCollector;
+    public function __construct(PropertyNaming $propertyNaming, FluentMethodCallsCollector $fluentMethodCallsCollector)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->fluentMethodCallsCollector = $fluentMethodCallsCollector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -78,44 +84,17 @@ CODE_SAMPLE
         if (!$node->expr instanceof MethodCall) {
             return null;
         }
-        $firstMethodCall = $node->expr;
-        // must be nested method call, so we avoid only single one
-        if (!$firstMethodCall->var instanceof MethodCall) {
-            return null;
-        }
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = [];
-        $currentMethodCall = $firstMethodCall;
-        $classNameObjectType = null;
-        while ($currentMethodCall instanceof MethodCall) {
-            if ($currentMethodCall->isFirstClassCallable()) {
-                return null;
-            }
-            // must be exactly one argument
-            if (count($currentMethodCall->getArgs()) !== 1) {
-                return null;
-            }
-            $objectType = $this->getType($currentMethodCall->var);
-            if (!$objectType instanceof ObjectType) {
-                return null;
-            }
-            if ($classNameObjectType === null) {
-                $classNameObjectType = $objectType->getClassName();
-            } elseif ($classNameObjectType !== $objectType->getClassName()) {
-                return null;
-            }
-            $methodCalls[] = $currentMethodCall;
-            $currentMethodCall = $currentMethodCall->var;
-        }
+        $methodCalls = $this->fluentMethodCallsCollector->resolve($node->expr);
         // at least 2 method calls
         if (count($methodCalls) < 1) {
             return null;
         }
-        $rootExpr = $currentMethodCall;
+        $lastMethodCall = end($methodCalls);
+        $rootExpr = $lastMethodCall->var;
         if (!$rootExpr instanceof New_) {
             return null;
         }
-        if ($this->shouldSkipForVendorOrInternal($firstMethodCall)) {
+        if ($this->shouldSkipForVendorOrInternal($node->expr)) {
             return null;
         }
         $variableName = $this->resolveVariableName($rootExpr);
