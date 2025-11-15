@@ -30,7 +30,6 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertFalseStrposToContainsRect
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertInstanceOfComparisonRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertIssetToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertNotOperatorRector;
-use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertPropertyExistsRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector;
@@ -86,7 +85,6 @@ return static function (RectorConfig $rectorConfig): void {
         AssertFalseStrposToContainsRector::class,
         AssertIssetToSpecificMethodRector::class,
         AssertInstanceOfComparisonRector::class,
-        AssertPropertyExistsRector::class,
         AssertRegExpRector::class,
         AssertFuncCallToPHPUnitAssertRector::class,
         SimplifyForeachInstanceOfRector::class,
