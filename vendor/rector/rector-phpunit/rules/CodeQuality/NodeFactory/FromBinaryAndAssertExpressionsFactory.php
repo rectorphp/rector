@@ -65,8 +65,10 @@ final class FromBinaryAndAssertExpressionsFactory
                 continue;
             }
             if ($expr instanceof Instanceof_) {
-                if ($expr->class instanceof Name) {
+                if ($expr->class instanceof FullyQualified) {
                     $classNameExpr = new ClassConstFetch(new FullyQualified($expr->class->name), 'class');
+                } elseif ($expr->class instanceof Name) {
+                    $classNameExpr = new ClassConstFetch(new Name($expr->class->name), 'class');
                 } else {
                     $classNameExpr = $expr->class;
                 }
