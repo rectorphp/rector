@@ -182,15 +182,17 @@ CODE_SAMPLE
         $coversGroups = [];
         $methodGroups = [];
         $hasCoversDefault = \false;
+        $coversDefaultClass = '';
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
         if ($phpDocInfo instanceof PhpDocInfo) {
             $coversDefaultGroups = $this->handleCoversDefaultClass($phpDocInfo);
             // If there is a ::coversDefaultClass, @covers ::function will refer to class methods, otherwise it will refer to global functions.
             $hasCoversDefault = $coversDefaultGroups !== [];
+            $coversDefaultClass = $hasCoversDefault ? $this->getName($coversDefaultGroups[0]->attrs[0]->args[0]->value) : null;
             $coversGroups = $this->handleCovers($phpDocInfo, $hasCoversDefault);
         }
         foreach ($class->getMethods() as $classMethod) {
-            $methodGroups = array_merge($methodGroups, $this->resolveMethodAttributes($classMethod, $hasCoversDefault));
+            $methodGroups = array_merge($methodGroups, $this->resolveMethodAttributes($classMethod, $coversDefaultClass));
         }
         return array_merge($coversDefaultGroups, $coversGroups, $methodGroups);
     }
@@ -244,8 +246,9 @@ CODE_SAMPLE
     /**
      * @return array<string, AttributeGroup>
      */
-    private function resolveMethodAttributes(ClassMethod $classMethod, bool $hasCoversDefault): array
+    private function resolveMethodAttributes(ClassMethod $classMethod, ?string $coversDefaultClass): array
     {
+        $hasCoversDefault = $coversDefaultClass !== null;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return [];
@@ -257,14 +260,17 @@ CODE_SAMPLE
                 continue;
             }
             $covers = $desiredTagValueNode->value->value;
-            if (strncmp($covers, '\\', strlen('\\')) === 0 || !$hasCoversDefault && strncmp($covers, '::', strlen('::')) === 0) {
-                $attributeGroup = $this->createAttributeGroup($covers);
-                // phpunit 10 may not fully support attribute
-                if (!$attributeGroup instanceof AttributeGroup) {
-                    continue;
-                }
-                $attributeGroups[$covers] = $attributeGroup;
+            if (strncmp($covers, '\\', strlen('\\')) !== 0 && strncmp($covers, '::', strlen('::')) !== 0) {
+                continue;
             }
+            if ($hasCoversDefault && strncmp($covers, '::', strlen('::')) === 0) {
+                $covers = $coversDefaultClass . $covers;
+            }
+            $attributeGroup = $this->createAttributeGroup($covers);
+            if (!$attributeGroup instanceof AttributeGroup) {
+                continue;
+            }
+            $attributeGroups[$covers] = $attributeGroup;
         }
         return $attributeGroups;
     }
