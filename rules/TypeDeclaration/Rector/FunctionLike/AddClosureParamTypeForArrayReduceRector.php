@@ -145,13 +145,15 @@ CODE_SAMPLE
         if (count($types) === 1) {
             return $types[0];
         }
-        foreach ($types as $type) {
+        foreach ($types as $key => $type) {
             if ($type instanceof UnionType) {
                 foreach ($type->getTypes() as $unionedType) {
                     if ($unionedType instanceof IntersectionType) {
                         return null;
                     }
                 }
+                $types = array_merge($types, $type->getTypes());
+                unset($types[$key]);
             }
         }
         return new UnionType(UnionTypeHelper::sortTypes($types));
