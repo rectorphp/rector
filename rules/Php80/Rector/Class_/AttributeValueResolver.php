@@ -24,7 +24,9 @@ final class AttributeValueResolver
         $docValue = (string) $phpDocTagNode->value;
         if ($phpDocTagNode->value instanceof DoctrineAnnotationTagValueNode) {
             $originalContent = (string) $phpDocTagNode->value->getOriginalContent();
-            if ($docValue !== '') {
+            if ($docValue === '') {
+                $docValue = $originalContent;
+            } else {
                 $attributeComment = ltrim($originalContent, $docValue);
                 if ($attributeComment !== '') {
                     $docValue .= "\n" . $attributeComment;
