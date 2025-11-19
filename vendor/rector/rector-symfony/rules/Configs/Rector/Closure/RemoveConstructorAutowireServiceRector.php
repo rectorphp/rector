@@ -15,8 +15,8 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\Rector\Reflection\ConstructorReflectionTypesResolver;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\Symfony\Enum\SymfonyFunctionName;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-use RectorPrefix202511\Symplify\PHPStanRules\Enum\SymfonyFunctionName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

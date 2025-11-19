@@ -2729,6 +2729,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
         'Rector\\Symfony\\Enum\\SymfonyAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyClass.php',
+        'Rector\\Symfony\\Enum\\SymfonyFunctionName' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyFunctionName.php',
         'Rector\\Symfony\\Enum\\TwigClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/TwigClass.php',
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
         'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',

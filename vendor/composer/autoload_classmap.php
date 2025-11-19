@@ -2481,6 +2481,7 @@ return array(
     'Rector\\Symfony\\Enum\\SymfonyAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
     'Rector\\Symfony\\Enum\\SymfonyAttribute' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyAttribute.php',
     'Rector\\Symfony\\Enum\\SymfonyClass' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyClass.php',
+    'Rector\\Symfony\\Enum\\SymfonyFunctionName' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyFunctionName.php',
     'Rector\\Symfony\\Enum\\TwigClass' => $vendorDir . '/rector/rector-symfony/src/Enum/TwigClass.php',
     'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => $vendorDir . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
     'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => $vendorDir . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
