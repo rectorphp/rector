@@ -1,36 +1,46 @@
 <?php
 
 declare (strict_types=1);
-namespace PhpParser;
+namespace Rector\PhpParser\NodeTraverser;
 
-class NodeTraverser implements \PhpParser\NodeTraverserInterface
+use LogicException;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
+use PhpParser\NodeTraverserInterface;
+use PhpParser\NodeVisitor;
+abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
 {
     /**
      * @deprecated Use NodeVisitor::DONT_TRAVERSE_CHILDREN instead.
      */
-    public const DONT_TRAVERSE_CHILDREN = \PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN;
+    public const DONT_TRAVERSE_CHILDREN = NodeVisitor::DONT_TRAVERSE_CHILDREN;
     /**
      * @deprecated Use NodeVisitor::STOP_TRAVERSAL instead.
      */
-    public const STOP_TRAVERSAL = \PhpParser\NodeVisitor::STOP_TRAVERSAL;
+    public const STOP_TRAVERSAL = NodeVisitor::STOP_TRAVERSAL;
     /**
      * @deprecated Use NodeVisitor::REMOVE_NODE instead.
      */
-    public const REMOVE_NODE = \PhpParser\NodeVisitor::REMOVE_NODE;
+    public const REMOVE_NODE = NodeVisitor::REMOVE_NODE;
     /**
      * @deprecated Use NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN instead.
      */
-    public const DONT_TRAVERSE_CURRENT_AND_CHILDREN = \PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-    /** @var list<NodeVisitor> Visitors */
+    public const DONT_TRAVERSE_CURRENT_AND_CHILDREN = NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+    /**
+     * @var list<NodeVisitor> Visitors
+     */
     protected array $visitors = [];
-    /** @var bool Whether traversal should be stopped */
+    /**
+     * @var bool Whether traversal should be stopped
+     */
     protected bool $stopTraversal;
     /**
      * Create a traverser with the given visitors.
      *
      * @param NodeVisitor ...$visitors Node visitors
      */
-    public function __construct(\PhpParser\NodeVisitor ...$visitors)
+    public function __construct(NodeVisitor ...$visitors)
     {
         $this->visitors = $visitors;
     }
@@ -39,16 +49,16 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @param NodeVisitor $visitor Visitor to add
      */
-    public function addVisitor(\PhpParser\NodeVisitor $visitor): void
+    public function addVisitor(NodeVisitor $visitor): void
     {
         $this->visitors[] = $visitor;
     }
     /**
      * Removes an added visitor.
      */
-    public function removeVisitor(\PhpParser\NodeVisitor $visitor): void
+    public function removeVisitor(NodeVisitor $visitor): void
     {
-        $index = array_search($visitor, $this->visitors);
+        $index = array_search($visitor, $this->visitors, \true);
         if ($index !== \false) {
             array_splice($this->visitors, $index, 1, []);
         }
@@ -78,11 +88,15 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
         return $nodes;
     }
     /**
+     * @return NodeVisitor[]
+     */
+    abstract public function getVisitorsForNode(Node $node): array;
+    /**
      * Recursively traverse a node.
      *
      * @param Node $node Node to traverse.
      */
-    protected function traverseNode(\PhpParser\Node $node): void
+    protected function traverseNode(Node $node): void
     {
         foreach ($node->getSubNodeNames() as $name) {
             $subNode = $node->{$name};
@@ -93,30 +107,32 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 }
                 continue;
             }
-            if (!$subNode instanceof \PhpParser\Node) {
+            if (!$subNode instanceof Node) {
                 continue;
             }
             $traverseChildren = \true;
             $visitorIndex = -1;
-            foreach ($this->visitors as $visitorIndex => $visitor) {
+            $currentNodeVisitors = $this->getVisitorsForNode($subNode);
+            foreach ($currentNodeVisitors as $visitorIndex => $visitor) {
                 $return = $visitor->enterNode($subNode);
-                if (null !== $return) {
-                    if ($return instanceof \PhpParser\Node) {
+                if ($return !== null) {
+                    if ($return instanceof Node) {
                         $this->ensureReplacementReasonable($subNode, $return);
-                        $subNode = $node->{$name} = $return;
-                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
+                        $subNode = $return;
+                        $node->{$name} = $return;
+                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
                         $traverseChildren = \false;
-                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
+                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
                         $traverseChildren = \false;
                         break;
-                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
                         $this->stopTraversal = \true;
                         break 2;
-                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
                         $node->{$name} = null;
                         continue 2;
                     } else {
-                        throw new \LogicException('enterNode() returned invalid value of type ' . gettype($return));
+                        throw new LogicException('enterNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
@@ -127,22 +143,23 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 }
             }
             for (; $visitorIndex >= 0; --$visitorIndex) {
-                $visitor = $this->visitors[$visitorIndex];
+                $visitor = $currentNodeVisitors[$visitorIndex];
                 $return = $visitor->leaveNode($subNode);
-                if (null !== $return) {
-                    if ($return instanceof \PhpParser\Node) {
+                if ($return !== null) {
+                    if ($return instanceof Node) {
                         $this->ensureReplacementReasonable($subNode, $return);
-                        $subNode = $node->{$name} = $return;
-                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                        $subNode = $return;
+                        $node->{$name} = $return;
+                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
                         $this->stopTraversal = \true;
                         break 2;
-                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
+                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
                         $node->{$name} = null;
                         break;
                     } elseif (\is_array($return)) {
-                        throw new \LogicException('leaveNode() may only return an array ' . 'if the parent structure is an array');
+                        throw new LogicException('leaveNode() may only return an array if the parent structure is an array');
                     } else {
-                        throw new \LogicException('leaveNode() returned invalid value of type ' . gettype($return));
+                        throw new LogicException('leaveNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
@@ -151,7 +168,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
     /**
      * Recursively traverse array (usually of nodes).
      *
-     * @param array $nodes Array to traverse
+     * @param Node[] $nodes Array to traverse
      *
      * @return array Result of traversal (may be original array or changed one)
      */
@@ -159,38 +176,39 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
     {
         $doNodes = [];
         foreach ($nodes as $i => $node) {
-            if (!$node instanceof \PhpParser\Node) {
+            if (!$node instanceof Node) {
                 if (\is_array($node)) {
-                    throw new \LogicException('Invalid node structure: Contains nested arrays');
+                    throw new LogicException('Invalid node structure: Contains nested arrays');
                 }
                 continue;
             }
             $traverseChildren = \true;
             $visitorIndex = -1;
-            foreach ($this->visitors as $visitorIndex => $visitor) {
+            $currentNodeVisitors = $this->getVisitorsForNode($node);
+            foreach ($currentNodeVisitors as $visitorIndex => $visitor) {
                 $return = $visitor->enterNode($node);
-                if (null !== $return) {
-                    if ($return instanceof \PhpParser\Node) {
+                if ($return !== null) {
+                    if ($return instanceof Node) {
                         $this->ensureReplacementReasonable($node, $return);
                         $nodes[$i] = $node = $return;
                     } elseif (\is_array($return)) {
                         $doNodes[] = [$i, $return];
                         continue 2;
-                    } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
+                    } elseif ($return === NodeVisitor::REMOVE_NODE) {
                         $doNodes[] = [$i, []];
                         continue 2;
-                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CHILDREN === $return) {
+                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
                         $traverseChildren = \false;
-                    } elseif (\PhpParser\NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN === $return) {
+                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
                         $traverseChildren = \false;
                         break;
-                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
                         $this->stopTraversal = \true;
                         break 2;
-                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                        throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
+                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
+                        throw new LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
                     } else {
-                        throw new \LogicException('enterNode() returned invalid value of type ' . gettype($return));
+                        throw new LogicException('enterNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
@@ -201,43 +219,43 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
                 }
             }
             for (; $visitorIndex >= 0; --$visitorIndex) {
-                $visitor = $this->visitors[$visitorIndex];
+                $visitor = $currentNodeVisitors[$visitorIndex];
                 $return = $visitor->leaveNode($node);
-                if (null !== $return) {
-                    if ($return instanceof \PhpParser\Node) {
+                if ($return !== null) {
+                    if ($return instanceof Node) {
                         $this->ensureReplacementReasonable($node, $return);
                         $nodes[$i] = $node = $return;
                     } elseif (\is_array($return)) {
                         $doNodes[] = [$i, $return];
                         break;
-                    } elseif (\PhpParser\NodeVisitor::REMOVE_NODE === $return) {
+                    } elseif ($return === NodeVisitor::REMOVE_NODE) {
                         $doNodes[] = [$i, []];
                         break;
-                    } elseif (\PhpParser\NodeVisitor::STOP_TRAVERSAL === $return) {
+                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
                         $this->stopTraversal = \true;
                         break 2;
-                    } elseif (\PhpParser\NodeVisitor::REPLACE_WITH_NULL === $return) {
-                        throw new \LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
+                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
+                        throw new LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
                     } else {
-                        throw new \LogicException('leaveNode() returned invalid value of type ' . gettype($return));
+                        throw new LogicException('leaveNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
         }
-        if (!empty($doNodes)) {
-            while (list($i, $replace) = array_pop($doNodes)) {
+        if ($doNodes !== []) {
+            while ([$i, $replace] = array_pop($doNodes)) {
                 array_splice($nodes, $i, 1, $replace);
             }
         }
         return $nodes;
     }
-    private function ensureReplacementReasonable(\PhpParser\Node $old, \PhpParser\Node $new): void
+    private function ensureReplacementReasonable(Node $old, Node $new): void
     {
-        if ($old instanceof \PhpParser\Node\Stmt && $new instanceof \PhpParser\Node\Expr) {
-            throw new \LogicException("Trying to replace statement ({$old->getType()}) " . "with expression ({$new->getType()}). Are you missing a " . "Stmt_Expression wrapper?");
+        if ($old instanceof Stmt && $new instanceof Expr) {
+            throw new LogicException(sprintf('Trying to replace statement (%s) ', $old->getType()) . sprintf('with expression (%s). Are you missing a ', $new->getType()) . 'Stmt_Expression wrapper?');
         }
-        if ($old instanceof \PhpParser\Node\Expr && $new instanceof \PhpParser\Node\Stmt) {
-            throw new \LogicException("Trying to replace expression ({$old->getType()}) " . "with statement ({$new->getType()})");
+        if ($old instanceof Expr && $new instanceof Stmt) {
+            throw new LogicException(sprintf('Trying to replace expression (%s) ', $old->getType()) . sprintf('with statement (%s)', $new->getType()));
         }
     }
 }

@@ -5,7 +5,6 @@ namespace Rector\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Contract\Rector\RectorInterface;
@@ -13,7 +12,7 @@ use Rector\VersionBonding\PhpVersionedFilter;
 /**
  * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
  */
-final class RectorNodeTraverser extends NodeTraverser
+final class RectorNodeTraverser extends \Rector\PhpParser\NodeTraverser\AbstractImmutableNodeTraverser
 {
     /**
      * @var RectorInterface[]
@@ -29,7 +28,7 @@ final class RectorNodeTraverser extends NodeTraverser
     private ConfigurationRuleFilter $configurationRuleFilter;
     private bool $areNodeVisitorsPrepared = \false;
     /**
-     * @var array<class-string<Node>,RectorInterface[]>
+     * @var array<class-string<Node>, NodeVisitor[]>
      */
     private array $visitorsPerNodeClass = [];
     /**
@@ -63,9 +62,6 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->areNodeVisitorsPrepared = \false;
     }
     /**
-     * We return the list of visitors (rector rules) that can be applied to each node class
-     * This list is cached so that we don't need to continually check if a rule can be applied to a node
-     *
      * @return NodeVisitor[]
      */
     public function getVisitorsForNode(Node $node): array
@@ -73,8 +69,8 @@ final class RectorNodeTraverser extends NodeTraverser
         $nodeClass = get_class($node);
         if (!isset($this->visitorsPerNodeClass[$nodeClass])) {
             $this->visitorsPerNodeClass[$nodeClass] = [];
+            /** @var RectorInterface $visitor */
             foreach ($this->visitors as $visitor) {
-                assert($visitor instanceof RectorInterface);
                 foreach ($visitor->getNodeTypes() as $nodeType) {
                     if (is_a($nodeClass, $nodeType, \true)) {
                         $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
@@ -86,10 +82,9 @@ final class RectorNodeTraverser extends NodeTraverser
         return $this->visitorsPerNodeClass[$nodeClass];
     }
     /**
-     * This must happen after $this->configuration is set after ProcessCommand::execute() is run,
-     * otherwise we get default false positives.
+     * This must happen after $this->configuration is set after ProcessCommand::execute() is run, otherwise we get default false positives.
      *
-     * This hack should be removed after https://github.com/rectorphp/rector/issues/5584 is resolved
+     * This should be removed after https://github.com/rectorphp/rector/issues/5584 is resolved
      */
     private function prepareNodeVisitors(): void
     {

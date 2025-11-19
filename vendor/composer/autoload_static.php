@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
+class ComposerStaticInit08d6ee6e810c27fd2c2d1c8618e0e61e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2513,6 +2513,7 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
         'Rector\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
+        'Rector\\PhpParser\\NodeTraverser\\AbstractImmutableNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/AbstractImmutableNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
         'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
@@ -3174,9 +3175,9 @@ class ComposerStaticInit3c3c60267d78014b1515949c3dda719b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3c3c60267d78014b1515949c3dda719b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3c3c60267d78014b1515949c3dda719b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3c3c60267d78014b1515949c3dda719b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit08d6ee6e810c27fd2c2d1c8618e0e61e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit08d6ee6e810c27fd2c2d1c8618e0e61e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit08d6ee6e810c27fd2c2d1c8618e0e61e::$classMap;
 
         }, null, ClassLoader::class);
     }
