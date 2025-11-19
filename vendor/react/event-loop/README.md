@@ -889,7 +889,7 @@ This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-composer require react/event-loop:^1.5
+composer require react/event-loop:^1.6
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.

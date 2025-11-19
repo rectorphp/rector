@@ -112,6 +112,9 @@ CODE_SAMPLE
         }
         $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCallExpressions);
         $classNames = array_map(static fn(ClassNameAndFilePath $classNameAndFilePath): string => $classNameAndFilePath->getClassName(), $classNamesAndFilesPaths);
+        if (count($classNames) < 2) {
+            return null;
+        }
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();

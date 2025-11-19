@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0 (2025-11-17)
+
+*   Feature: Improve PHP 8.5+ support by avoiding deprecated method calls.
+    (#280 and #282 by @WyriHaximus)
+
 ## 1.5.0 (2023-11-13)
 
 *   Feature: Improve performance by using `spl_object_id()` on PHP 7.2+.

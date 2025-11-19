@@ -1233,17 +1233,17 @@
         },
         {
             "name": "react\/dns",
-            "version": "v1.13.0",
-            "version_normalized": "1.13.0.0",
+            "version": "v1.14.0",
+            "version_normalized": "1.14.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/dns.git",
-                "reference": "eb8ae001b5a455665c89c1df97f6fb682f8fb0f5"
+                "reference": "7562c05391f42701c1fccf189c8225fece1cd7c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/eb8ae001b5a455665c89c1df97f6fb682f8fb0f5",
-                "reference": "eb8ae001b5a455665c89c1df97f6fb682f8fb0f5",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/7562c05391f42701c1fccf189c8225fece1cd7c3",
+                "reference": "7562c05391f42701c1fccf189c8225fece1cd7c3",
                 "shasum": ""
             },
             "require": {
@@ -1257,7 +1257,7 @@
                 "react\/async": "^4.3 || ^3 || ^2",
                 "react\/promise-timer": "^1.11"
             },
-            "time": "2024-06-13T14:18:03+00:00",
+            "time": "2025-11-18T19:34:28+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1300,7 +1300,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/dns\/issues",
-                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.13.0"
+                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.14.0"
             },
             "funding": [
                 {
@@ -1312,17 +1312,17 @@
         },
         {
             "name": "react\/event-loop",
-            "version": "v1.5.0",
-            "version_normalized": "1.5.0.0",
+            "version": "v1.6.0",
+            "version_normalized": "1.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/event-loop.git",
-                "reference": "bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354"
+                "reference": "ba276bda6083df7e0050fd9b33f66ad7a4ac747a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/event-loop\/zipball\/bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354",
-                "reference": "bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/event-loop\/zipball\/ba276bda6083df7e0050fd9b33f66ad7a4ac747a",
+                "reference": "ba276bda6083df7e0050fd9b33f66ad7a4ac747a",
                 "shasum": ""
             },
             "require": {
@@ -1334,7 +1334,7 @@
             "suggest": {
                 "ext-pcntl": "For signal handling support when using the StreamSelectLoop"
             },
-            "time": "2023-11-13T13:48:05+00:00",
+            "time": "2025-11-17T20:46:25+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1375,7 +1375,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/event-loop\/issues",
-                "source": "https:\/\/github.com\/reactphp\/event-loop\/tree\/v1.5.0"
+                "source": "https:\/\/github.com\/reactphp\/event-loop\/tree\/v1.6.0"
             },
             "funding": [
                 {
@@ -1861,12 +1861,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "56184c625a20a59196268e7b4f02c84d23e18534"
+                "reference": "67a5bf1759e0aebc0a7e60e28775c98cc824910c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/56184c625a20a59196268e7b4f02c84d23e18534",
-                "reference": "56184c625a20a59196268e7b4f02c84d23e18534",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/67a5bf1759e0aebc0a7e60e28775c98cc824910c",
+                "reference": "67a5bf1759e0aebc0a7e60e28775c98cc824910c",
                 "shasum": ""
             },
             "require": {
@@ -1898,7 +1898,7 @@
                 "tomasvotruba\/unused-public": "^2.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-11-13T16:34:52+00:00",
+            "time": "2025-11-18T18:57:00+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

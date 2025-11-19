@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
+use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
@@ -154,6 +155,21 @@ CODE_SAMPLE
         });
     }
     /**
+     * @param string[] $refVariableNames
+     */
+    private function collectAssignRefVariableNames(Stmt $stmt, array &$refVariableNames): void
+    {
+        if (!$stmt instanceof StmtsAwareInterface) {
+            return;
+        }
+        $this->traverseNodesWithCallable($stmt, function (Node $subNode) use (&$refVariableNames): Node {
+            if ($subNode instanceof AssignRef && $subNode->var instanceof Variable) {
+                $refVariableNames[] = (string) $this->getName($subNode->var);
+            }
+            return $subNode;
+        });
+    }
+    /**
      * @param array<int, Stmt> $stmts
      * @return array<int, string>
      */
@@ -163,6 +179,7 @@ CODE_SAMPLE
         $refVariableNames = [];
         foreach ($stmts as $key => $stmt) {
             if (!$stmt instanceof Expression) {
+                $this->collectAssignRefVariableNames($stmt, $refVariableNames);
                 continue;
             }
             if ($stmt->expr instanceof AssignRef && $stmt->expr->var instanceof Variable) {
