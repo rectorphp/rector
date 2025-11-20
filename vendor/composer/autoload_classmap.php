@@ -2052,6 +2052,7 @@ return array(
     'Rector\\Php70\\EregToPcreTransformer' => $baseDir . '/rules/Php70/EregToPcreTransformer.php',
     'Rector\\Php70\\Exception\\InvalidEregException' => $baseDir . '/rules/Php70/Exception/InvalidEregException.php',
     'Rector\\Php70\\NodeAnalyzer\\BattleshipTernaryAnalyzer' => $baseDir . '/rules/Php70/NodeAnalyzer/BattleshipTernaryAnalyzer.php',
+    'Rector\\Php70\\NodeAnalyzer\\MethodCallNameAnalyzer' => $baseDir . '/rules/Php70/NodeAnalyzer/MethodCallNameAnalyzer.php',
     'Rector\\Php70\\NodeAnalyzer\\Php4ConstructorClassMethodAnalyzer' => $baseDir . '/rules/Php70/NodeAnalyzer/Php4ConstructorClassMethodAnalyzer.php',
     'Rector\\Php70\\Rector\\Assign\\ListSplitStringRector' => $baseDir . '/rules/Php70/Rector/Assign/ListSplitStringRector.php',
     'Rector\\Php70\\Rector\\Assign\\ListSwapArrayOrderRector' => $baseDir . '/rules/Php70/Rector/Assign/ListSwapArrayOrderRector.php',

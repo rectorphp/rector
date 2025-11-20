@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.17.0 (2025-11-19)
+
+*   Feature: Improve PHP 8.5+ support by avoiding deprecated `setAccessible()` calls.
+    (#325 by @W0rma and #330 by @WyriHaximus)
+
+*   Improve test suite and update test environment.
+    (#326 and #330 by @WyriHaximus)
+
 ## 1.16.0 (2024-07-26)
 
 *   Feature: Improve PHP 8.4+ support by avoiding implicitly nullable type declarations.

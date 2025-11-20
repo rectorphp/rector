@@ -2300,6 +2300,7 @@ class ComposerStaticInit08d6ee6e810c27fd2c2d1c8618e0e61e
         'Rector\\Php70\\EregToPcreTransformer' => __DIR__ . '/../..' . '/rules/Php70/EregToPcreTransformer.php',
         'Rector\\Php70\\Exception\\InvalidEregException' => __DIR__ . '/../..' . '/rules/Php70/Exception/InvalidEregException.php',
         'Rector\\Php70\\NodeAnalyzer\\BattleshipTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/BattleshipTernaryAnalyzer.php',
+        'Rector\\Php70\\NodeAnalyzer\\MethodCallNameAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/MethodCallNameAnalyzer.php',
         'Rector\\Php70\\NodeAnalyzer\\Php4ConstructorClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/Php4ConstructorClassMethodAnalyzer.php',
         'Rector\\Php70\\Rector\\Assign\\ListSplitStringRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSplitStringRector.php',
         'Rector\\Php70\\Rector\\Assign\\ListSwapArrayOrderRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSwapArrayOrderRector.php',
