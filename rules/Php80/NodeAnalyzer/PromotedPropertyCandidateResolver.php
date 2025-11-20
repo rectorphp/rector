@@ -64,16 +64,18 @@ final class PromotedPropertyCandidateResolver
             return [];
         }
         $propertyPromotionCandidates = [];
-        foreach ($class->getProperties() as $property) {
-            $propertyCount = count($property->props);
-            if ($propertyCount !== 1) {
+        foreach ($class->stmts as $classStmtPosition => $classStmt) {
+            if (!$classStmt instanceof Property) {
                 continue;
             }
-            $propertyPromotionCandidate = $this->matchPropertyPromotionCandidate($property, $constructClassMethod);
+            if (count($classStmt->props) !== 1) {
+                continue;
+            }
+            $propertyPromotionCandidate = $this->matchPropertyPromotionCandidate($classStmt, $constructClassMethod, $classStmtPosition);
             if (!$propertyPromotionCandidate instanceof PropertyPromotionCandidate) {
                 continue;
             }
-            if (!$allowModelBasedClasses && $this->hasModelTypeCheck($property, ClassName::JMS_TYPE)) {
+            if (!$allowModelBasedClasses && $this->hasModelTypeCheck($classStmt, ClassName::JMS_TYPE)) {
                 continue;
             }
             $propertyPromotionCandidates[] = $propertyPromotionCandidate;
@@ -91,7 +93,7 @@ final class PromotedPropertyCandidateResolver
         }
         return $this->phpAttributeAnalyzer->hasPhpAttribute($node, $modelType);
     }
-    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod): ?PropertyPromotionCandidate
+    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod, int $propertyStmtPosition): ?PropertyPromotionCandidate
     {
         if ($property->flags === 0) {
             return null;
@@ -100,7 +102,7 @@ final class PromotedPropertyCandidateResolver
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
         // match property name to assign in constructor
-        foreach ((array) $constructClassMethod->stmts as $stmt) {
+        foreach ((array) $constructClassMethod->stmts as $assignStmtPosition => $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
             }
@@ -127,7 +129,7 @@ final class PromotedPropertyCandidateResolver
             if ($this->shouldSkipParam($matchedParam, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
-            return new PropertyPromotionCandidate($property, $matchedParam, $stmt);
+            return new PropertyPromotionCandidate($property, $matchedParam, $propertyStmtPosition, $assignStmtPosition);
         }
         return null;
     }

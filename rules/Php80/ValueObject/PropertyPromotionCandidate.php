@@ -5,10 +5,8 @@ namespace Rector\Php80\ValueObject;
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyPromotionCandidate
 {
     /**
@@ -22,12 +20,17 @@ final class PropertyPromotionCandidate
     /**
      * @readonly
      */
-    private Expression $expression;
-    public function __construct(Property $property, Param $param, Expression $expression)
+    private int $propertyStmtPosition;
+    /**
+     * @readonly
+     */
+    private int $constructorAssignStmtPosition;
+    public function __construct(Property $property, Param $param, int $propertyStmtPosition, int $constructorAssignStmtPosition)
     {
         $this->property = $property;
         $this->param = $param;
-        $this->expression = $expression;
+        $this->propertyStmtPosition = $propertyStmtPosition;
+        $this->constructorAssignStmtPosition = $constructorAssignStmtPosition;
     }
     public function getProperty(): Property
     {
@@ -48,8 +51,12 @@ final class PropertyPromotionCandidate
         }
         return $paramVar->name;
     }
-    public function getStmtPosition(): int
+    public function getPropertyStmtPosition(): int
     {
-        return $this->expression->getAttribute(AttributeKey::STMT_KEY);
+        return $this->propertyStmtPosition;
+    }
+    public function getConstructorAssignStmtPosition(): int
+    {
+        return $this->constructorAssignStmtPosition;
     }
 }

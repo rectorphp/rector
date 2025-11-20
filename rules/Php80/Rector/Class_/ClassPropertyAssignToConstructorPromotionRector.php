@@ -25,7 +25,6 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Naming\PropertyRenamer\PropertyPromotionRenamer;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeAnalyzer\ParamAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\DocBlock\PropertyPromotionDocBlockMerger;
 use Rector\Php80\Guard\MakePropertyPromotionGuard;
@@ -204,16 +203,14 @@ CODE_SAMPLE
             if (!$this->renameProperty && $paramName !== $propertyName) {
                 continue;
             }
-            if ($property->type instanceof Node && $param->type instanceof Node && $property->hooks !== [] && !$this->nodeComparator->areNodesEqual($property->type, $param->type)) {
+            if ($this->shouldSkipPropertyOrParam($property, $param)) {
                 continue;
             }
             $hasChanged = \true;
             // remove property from class
-            $propertyStmtKey = $property->getAttribute(AttributeKey::STMT_KEY);
-            unset($node->stmts[$propertyStmtKey]);
+            unset($node->stmts[$promotionCandidate->getPropertyStmtPosition()]);
             // remove assign in constructor
-            $assignStmtPosition = $promotionCandidate->getStmtPosition();
-            unset($constructClassMethod->stmts[$assignStmtPosition]);
+            unset($constructClassMethod->stmts[$promotionCandidate->getConstructorAssignStmtPosition()]);
             $oldParamName = $this->getName($param);
             $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, $oldParamName, $propertyName);
             $paramTagValueNode = $constructorPhpDocInfo->getParamTagValueByName($paramName);
@@ -308,5 +305,9 @@ CODE_SAMPLE
     private function isCallableTypeIdentifier(?Node $node): bool
     {
         return $node instanceof Identifier && $this->isName($node, 'callable');
+    }
+    private function shouldSkipPropertyOrParam(Property $property, Param $param): bool
+    {
+        return $property->type instanceof Node && $param->type instanceof Node && $property->hooks !== [] && !$this->nodeComparator->areNodesEqual($property->type, $param->type);
     }
 }
