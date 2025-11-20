@@ -23,7 +23,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 final class NodeAttributeReIndexer
 {
-    public static function reIndexStmtsKeys(Node $node): ?Node
+    private static function reIndexStmtsKeys(Node $node): ?Node
     {
         if (!$node instanceof StmtsAwareInterface && !$node instanceof ClassLike && !$node instanceof Declare_ && !$node instanceof Block) {
             return null;
@@ -34,11 +34,9 @@ final class NodeAttributeReIndexer
         $node->stmts = array_values($node->stmts);
         return $node;
     }
-    public static function reIndexNodeAttributes(Node $node, bool $reIndexStmtsKeys = \true): ?Node
+    public static function reIndexNodeAttributes(Node $node): ?Node
     {
-        if ($reIndexStmtsKeys) {
-            self::reIndexStmtsKeys($node);
-        }
+        self::reIndexStmtsKeys($node);
         if ($node instanceof If_) {
             $node->elseifs = array_values($node->elseifs);
             return $node;
