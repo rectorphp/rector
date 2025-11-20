@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -52,6 +50,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if ($node instanceof FuncCall && !$this->isName($node->name, 'finfo_buffer')) {
             return null;
         }
@@ -69,9 +70,9 @@ CODE_SAMPLE
         return PhpVersionFeature::DEPRECATE_FINFO_BUFFER_CONTEXT;
     }
     /**
-     * @param FuncCall|MethodCall $callLike
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall $callLike
      */
-    private function removeContextArg(CallLike $callLike): bool
+    private function removeContextArg($callLike): bool
     {
         // In `finfo::buffer` method calls, the first parameter, compared to `finfo_buffer`, does not exist.
         $methodArgCorrection = 0;
@@ -81,14 +82,7 @@ CODE_SAMPLE
         if (count($callLike->args) <= 2 + $methodArgCorrection) {
             return \false;
         }
-        // Cannot handle variadic args
-        foreach ($callLike->args as $position => $arg) {
-            if (!$arg instanceof Arg) {
-                return \false;
-            }
-        }
-        /** @var array<Arg> $args */
-        $args = $callLike->args;
+        $args = $callLike->getArgs();
         // Argument 3 ($flags) and argument 4 ($context) are optional, thus named parameters must be considered
         if (!$this->argsAnalyzer->hasNamedArg($args)) {
             if (count($args) < 4 + $methodArgCorrection) {
@@ -98,7 +92,7 @@ CODE_SAMPLE
             return \true;
         }
         foreach ($args as $position => $arg) {
-            if ($arg->name instanceof Identifier && $arg->name->name === 'context') {
+            if ($arg->name instanceof Identifier && $this->isName($arg->name, 'context')) {
                 unset($callLike->args[$position]);
                 return \true;
             }
