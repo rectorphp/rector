@@ -5,7 +5,6 @@ namespace Rector\Doctrine\Bundle210\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
@@ -17,7 +16,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Doctrine\Enum\DoctrineClass;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -112,52 +110,57 @@ CODE_SAMPLE
         if (!$this->hasImplements($node, DoctrineClass::EVENT_SUBSCRIBER) && !$this->hasImplements($node, DoctrineClass::EVENT_SUBSCRIBER_INTERFACE)) {
             return null;
         }
-        //        $this->subscriberClass = $class;
-        $getSubscribedEventsClassMethod = $node->getMethod('getSubscribedEvents');
-        if (!$getSubscribedEventsClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        $stmts = (array) $getSubscribedEventsClassMethod->stmts;
-        if ($stmts === []) {
-            return null;
-        }
-        if ($stmts[0] instanceof Return_ && $stmts[0]->expr instanceof Array_) {
-            $this->handleArray($node, $stmts);
-        }
-        $this->removeImplements($node, [DoctrineClass::EVENT_SUBSCRIBER, DoctrineClass::EVENT_SUBSCRIBER_INTERFACE]);
-        unset($node->stmts[$getSubscribedEventsClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
-        return $node;
-    }
-    /**
-     * @param array<int, Node\Stmt> $expressions
-     */
-    private function handleArray(Class_ $class, array $expressions): void
-    {
-        foreach ($expressions as $expression) {
-            if (!$expression instanceof Return_ || !$expression->expr instanceof Array_) {
+        foreach ($node->stmts as $key => $classStmt) {
+            if (!$classStmt instanceof ClassMethod) {
                 continue;
             }
-            $arguments = $this->parseArguments($expression->expr);
-            $this->addAttribute($class, $arguments);
+            if (!$this->isName($classStmt, 'getSubscribedEvents')) {
+                continue;
+            }
+            $getSubscribedEventsClassMethod = $classStmt;
+            if ($getSubscribedEventsClassMethod->stmts === []) {
+                continue;
+            }
+            //            $firstStmt = $getSubscribedEventsClassMethod->stmts[0];
+            //            if ($firstStmt instanceof Return_ && $firstStmt->expr instanceof Array_
+            //            ) {
+            $this->refactorSubscriberArrayToClassAttributes($node, $getSubscribedEventsClassMethod);
+            //            }
+            $this->removeImplements($node, [DoctrineClass::EVENT_SUBSCRIBER, DoctrineClass::EVENT_SUBSCRIBER_INTERFACE]);
+            // remove method
+            unset($node->stmts[$key]);
+            return $node;
+        }
+        return null;
+    }
+    private function refactorSubscriberArrayToClassAttributes(Class_ $class, ClassMethod $getSubscribedEventsClassMethod): void
+    {
+        foreach ((array) $getSubscribedEventsClassMethod->stmts as $stmt) {
+            if (!$stmt instanceof Return_) {
+                continue;
+            }
+            if (!$stmt->expr instanceof Array_) {
+                continue;
+            }
+            $arguments = $this->extractArrayItemsToExprs($stmt->expr);
+            $this->addClassAttribute($class, $arguments);
         }
     }
     /**
      * @return array<Expr>
      */
-    private function parseArguments(Array_ $array): array
+    private function extractArrayItemsToExprs(Array_ $array): array
     {
+        $arguments = [];
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem) {
-                continue;
-            }
             $arguments[] = $item->value;
         }
-        return $arguments ?? [];
+        return $arguments;
     }
     /**
      * @param array<Expr> $arguments
      */
-    private function addAttribute(Class_ $class, array $arguments): void
+    private function addClassAttribute(Class_ $class, array $arguments): void
     {
         foreach ($arguments as $argument) {
             $class->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(DoctrineClass::AS_DOCTRINE_LISTENER_ATTRIBUTE), [new Arg($argument, \false, \false, [], new Identifier('event'))])]);

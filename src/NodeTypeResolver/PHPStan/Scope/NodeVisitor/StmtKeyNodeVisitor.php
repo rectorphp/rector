@@ -11,6 +11,6 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
 {
     public function enterNode(Node $node): ?Node
     {
-        return NodeAttributeReIndexer::reIndexStmtKeyNodeAttributes($node);
+        return NodeAttributeReIndexer::reIndexStmtsKeys($node);
     }
 }

@@ -13,7 +13,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Helper\MessengerHelper;
@@ -25,7 +24,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector\MessageSubscriberInterfaceToAttributeRectorTest
+ * @see \Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector\MessageSubscriberInterfaceToAttributeRectorTest
  */
 final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
@@ -45,7 +44,6 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
      * @readonly
      */
     private ValueResolver $valueResolver;
-    private Class_ $subscriberClass;
     private string $newInvokeMethodName;
     public function __construct(MessengerHelper $messengerHelper, ClassManipulator $classManipulator, ClassAnalyzer $classAnalyzer, ValueResolver $valueResolver)
     {
@@ -124,49 +122,49 @@ CODE_SAMPLE
         if (!$this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE)) {
             return null;
         }
-        $this->subscriberClass = $node;
-        $getHandledMessagesClassMethod = $node->getMethod('getHandledMessages');
-        if (!$getHandledMessagesClassMethod instanceof ClassMethod) {
-            return null;
+        foreach ($node->stmts as $key => $classStmt) {
+            if (!$classStmt instanceof ClassMethod) {
+                continue;
+            }
+            if (!$this->isName($classStmt, 'getHandledMessages')) {
+                continue;
+            }
+            $getHandledMessagesClassMethod = $classStmt;
+            $stmts = (array) $getHandledMessagesClassMethod->stmts;
+            if ($stmts === []) {
+                return null;
+            }
+            $this->handleYields($node, $getHandledMessagesClassMethod);
+            $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
+            unset($node->stmts[$key]);
+            return $node;
         }
-        $stmts = (array) $getHandledMessagesClassMethod->stmts;
-        if ($stmts === []) {
-            return null;
-        }
-        if ($stmts[0] instanceof Expression && $stmts[0]->expr instanceof Yield_) {
-            $this->handleYields($stmts);
-        }
-        $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
-        unset($node->stmts[$getHandledMessagesClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
-        return $node;
+        return null;
     }
-    /**
-     * @param array<int, Node\Stmt> $expressions
-     */
-    private function handleYields(array $expressions): void
+    private function handleYields(Class_ $class, ClassMethod $getHandledMessagesClassMethod): void
     {
-        foreach ($expressions as $expression) {
-            if (!$expression instanceof Expression || !$expression->expr instanceof Yield_) {
+        foreach ((array) $getHandledMessagesClassMethod->stmts as $stmt) {
+            if (!$stmt instanceof Expression || !$stmt->expr instanceof Yield_) {
                 continue;
             }
             $method = MethodName::INVOKE;
             $arguments = [];
-            if ($expression->expr->key instanceof ClassConstFetch) {
-                $array = $expression->expr->value;
+            if ($stmt->expr->key instanceof ClassConstFetch) {
+                $array = $stmt->expr->value;
                 if (!$array instanceof Array_) {
                     continue;
                 }
                 $arguments = $this->parseArguments($array, $method);
-                $this->addAttribute($method, $arguments);
+                $this->addAttribute($class, $method, $arguments);
                 continue;
             }
-            $value = $expression->expr->value;
+            $value = $stmt->expr->value;
             if (!$value instanceof ClassConstFetch || !$value->class instanceof Name) {
                 continue;
             }
             $classParts = $value->class->getParts();
             $this->newInvokeMethodName = 'handle' . end($classParts);
-            $this->addAttribute($method, $arguments);
+            $this->addAttribute($class, $method, $arguments);
         }
     }
     /**
@@ -191,19 +189,15 @@ CODE_SAMPLE
     /**
      * @param array<string, mixed> $arguments
      */
-    private function addAttribute(string $classMethodName, array $arguments): void
+    private function addAttribute(Class_ $class, string $classMethodName, array $arguments): void
     {
-        $classMethod = $this->subscriberClass->getMethod($classMethodName);
+        $classMethod = $class->getMethod($classMethodName);
         if (!$classMethod instanceof ClassMethod) {
             return;
         }
         if ($classMethodName === MethodName::INVOKE) {
-            $this->renameInvoke($classMethod);
+            $classMethod->name = new Identifier($this->newInvokeMethodName);
         }
         $this->messengerHelper->addAttribute($classMethod, $arguments);
-    }
-    private function renameInvoke(ClassMethod $classMethod): void
-    {
-        $classMethod->name = new Identifier($this->newInvokeMethodName);
     }
 }

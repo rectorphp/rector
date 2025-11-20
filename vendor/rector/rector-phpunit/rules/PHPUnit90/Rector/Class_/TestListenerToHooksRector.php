@@ -9,7 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -125,21 +125,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('PHPUnit\Framework\TestListener'))) {
+        if (!$this->isObjectType($node, new ObjectType(PHPUnitClassName::TEST_LISTENER))) {
             return null;
         }
         foreach ($node->implements as $key => $implement) {
-            if (!$this->isName($implement, 'PHPUnit\Framework\TestListener')) {
+            if (!$this->isName($implement, PHPUnitClassName::TEST_LISTENER)) {
                 continue;
             }
             unset($node->implements[$key]);
         }
-        foreach ($node->getMethods() as $classMethod) {
-            $this->processClassMethod($node, $classMethod);
+        foreach ($node->stmts as $key => $classStmt) {
+            if (!$classStmt instanceof ClassMethod) {
+                continue;
+            }
+            $this->processClassMethod($node, $key, $classStmt);
         }
         return $node;
     }
-    private function processClassMethod(Class_ $class, ClassMethod $classMethod): void
+    private function processClassMethod(Class_ $class, int $classMethodPosition, ClassMethod $classMethod): void
     {
         foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $hookClassAndMethod) {
             /** @var string $methodName */
@@ -148,8 +151,7 @@ CODE_SAMPLE
             }
             // remove empty methods
             if ($classMethod->stmts === [] || $classMethod->stmts === null) {
-                $stmtKey = $classMethod->getAttribute(AttributeKey::STMT_KEY);
-                unset($class->stmts[$stmtKey]);
+                unset($class->stmts[$classMethodPosition]);
             } else {
                 $class->implements[] = new FullyQualified($hookClassAndMethod[0]);
                 $classMethod->name = new Identifier($hookClassAndMethod[1]);

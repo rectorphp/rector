@@ -21,4 +21,8 @@ final class PHPUnitClassName
      * @var string
      */
     public const INVOCATION_ORDER = 'PHPUnit\Framework\MockObject\Rule\InvocationOrder';
+    /**
+     * @var string
+     */
+    public const TEST_LISTENER = 'PHPUnit\Framework\TestListener';
 }

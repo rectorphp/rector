@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -110,28 +110,33 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($this->shouldSkip($node, $constructClassMethod)) {
-            return null;
-        }
-        $addedStmts = $this->resolveStmtsToAddToSetUp($constructClassMethod);
-        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
-        if (!$setUpClassMethod instanceof ClassMethod) {
-            // no setUp() method yet, rename it to setUp :)
-            $constructClassMethod->name = new Identifier(MethodName::SET_UP);
-            $constructClassMethod->params = [];
-            $constructClassMethod->stmts = $addedStmts;
-            $this->setUpMethodDecorator->decorate($constructClassMethod);
-            $this->visibilityManipulator->makeProtected($constructClassMethod);
-        } else {
-            $stmtKey = $constructClassMethod->getAttribute(AttributeKey::STMT_KEY);
+        foreach ($node->stmts as $stmtKey => $classStmt) {
+            if (!$classStmt instanceof ClassMethod) {
+                continue;
+            }
+            if (!$this->isName($classStmt->name, MethodName::CONSTRUCT)) {
+                continue;
+            }
+            if ($this->shouldSkip($node, $classStmt)) {
+                return null;
+            }
+            $addedStmts = $this->resolveStmtsToAddToSetUp($classStmt);
+            $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
+            if (!$setUpClassMethod instanceof ClassMethod) {
+                // no setUp() method yet, rename it to setUp :)
+                $classStmt->name = new Identifier(MethodName::SET_UP);
+                $classStmt->params = [];
+                $classStmt->stmts = $addedStmts;
+                $this->setUpMethodDecorator->decorate($classStmt);
+                $this->visibilityManipulator->makeProtected($classStmt);
+                return $node;
+            }
+            // remove constructor and add stmts to already existing setUp() method
             unset($node->stmts[$stmtKey]);
             $setUpClassMethod->stmts = array_merge((array) $setUpClassMethod->stmts, $addedStmts);
+            return $node;
         }
-        return $node;
+        return null;
     }
     private function shouldSkip(Class_ $class, ClassMethod $classMethod): bool
     {
@@ -143,7 +148,7 @@ CODE_SAMPLE
         if (!$currentParent instanceof ClassReflection) {
             return \true;
         }
-        if ($currentParent->getName() !== 'PHPUnit\Framework\TestCase') {
+        if ($currentParent->getName() !== PHPUnitClassName::TEST_CASE) {
             return \true;
         }
         $paramNames = [];
