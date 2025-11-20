@@ -108,7 +108,6 @@ CODE_SAMPLE;
         }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
-        NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $refactoredNode = $this->refactor($node);
         // nothing to change → continue
         if ($refactoredNode === null) {
@@ -118,6 +117,7 @@ CODE_SAMPLE;
             $errorMessage = sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
+        NodeAttributeReIndexer::reIndexNodeAttributes($node);
         $isIntRefactoredNode = is_int($refactoredNode);
         /**
          * If below node and/or its children not traversed on current rule

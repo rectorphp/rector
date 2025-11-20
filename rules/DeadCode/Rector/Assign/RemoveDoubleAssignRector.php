@@ -53,19 +53,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $stmts = $node->stmts;
-        if ($stmts === null) {
+        if ($node->stmts === null) {
             return null;
         }
         $hasChanged = \false;
-        foreach ($stmts as $key => $stmt) {
-            if (!isset($stmts[$key + 1])) {
+        foreach ($node->stmts as $key => $stmt) {
+            if (!isset($node->stmts[$key + 1])) {
                 continue;
             }
             if (!$stmt instanceof Expression) {
                 continue;
             }
-            $nextStmt = $stmts[$key + 1];
+            $nextStmt = $node->stmts[$key + 1];
             if (!$nextStmt instanceof Expression) {
                 continue;
             }

@@ -2080,7 +2080,6 @@ class ComposerStaticInit748e22e82472dc8a14b6ece734377306
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\NameNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/NameNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
-        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StmtKeyNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StmtKeyNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\RectorNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/RectorNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
