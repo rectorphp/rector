@@ -67,7 +67,7 @@ CODE_SAMPLE
         if (strncmp($className, 'Symfony\Component\Validator\Constraints\\', strlen('Symfony\Component\Validator\Constraints\\')) !== 0) {
             return null;
         }
-        if (count($node->args) === 0 || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
+        if ($node->args === [] || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
             return null;
         }
         $argName = $node->args[0]->name;

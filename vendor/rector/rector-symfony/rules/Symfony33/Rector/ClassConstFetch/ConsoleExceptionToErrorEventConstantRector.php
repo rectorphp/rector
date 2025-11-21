@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202511\Symfony\Component\Console\ConsoleEvents;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,7 +30,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [new CodeSample('"console.exception"', 'Symfony\Component\Console\ConsoleEvents::ERROR'), new CodeSample('Symfony\Component\Console\ConsoleEvents::EXCEPTION', 'Symfony\Component\Console\ConsoleEvents::ERROR')]);
+        return new RuleDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [new CodeSample('"console.exception"', ConsoleEvents::class . '::ERROR'), new CodeSample(ConsoleEvents::class . '::EXCEPTION', ConsoleEvents::class . '::ERROR')]);
     }
     /**
      * @return array<class-string<Node>>

@@ -92,7 +92,8 @@ CODE_SAMPLE
     private function extractSupportsArguments(Class_ $class, int $key, ClassMethod $classMethod): array
     {
         $isIdentical = \true;
-        $supportFirstArg = $supportSecondArg = null;
+        $supportFirstArg = null;
+        $supportSecondArg = null;
         if ($classMethod->getStmts() === null) {
             return [$isIdentical, $supportFirstArg, $supportSecondArg];
         }

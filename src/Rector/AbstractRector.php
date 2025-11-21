@@ -149,6 +149,10 @@ CODE_SAMPLE;
         if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
             return null;
         }
+        // nothing to change here
+        if ($this->toBeRemovedNodeId === null && $this->nodesToReturn === []) {
+            return null;
+        }
         $objectId = spl_object_id($node);
         if ($this->toBeRemovedNodeId === $objectId) {
             $this->toBeRemovedNodeId = null;
