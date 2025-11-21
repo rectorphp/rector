@@ -5,6 +5,7 @@ namespace Rector\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\FileSystem\GitDirtyFileFetcher;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202511\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202511\Symfony\Component\Console\Style\SymfonyStyle;
@@ -97,6 +98,12 @@ final class ConfigurationFactory
             $this->setFilesWithoutExtensionParameter($commandLinePaths);
             return $commandLinePaths;
         }
+
+        $optionDirty = (bool) $input->getOption(\Rector\Configuration\Option::DIRTY);
+        if ($optionDirty) {
+            return (new GitDirtyFileFetcher())->fetchDirtyFiles();
+        }
+
         // fallback to parameter
         $configPaths = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::PATHS);
         $this->setFilesWithoutExtensionParameter($configPaths);
