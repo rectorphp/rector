@@ -8,8 +8,8 @@ about: Report errors and problems
 
 <!-- First, thank you for reporting a bug. That takes time and we appreciate that! -->
 
-| Subject        | Details                                                         |
-| :------------- | :---------------------------------------------------------------|
+| Subject        | Details                                                        |
+| :------------- | :------------------------------------------------------------- |
 | Rector version | e.g. v1.0.0 (invoke `vendor/bin/rector --version`)             |
 
 <!-- Please describe your problem here. -->
