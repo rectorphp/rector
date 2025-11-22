@@ -53,6 +53,10 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * @var string[]
+     */
+    private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ['Entity', 'Document', 'Model'];
     public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
@@ -134,6 +138,11 @@ CODE_SAMPLE
                 }
                 if ($this->isNames($param->type, $entityClasses)) {
                     continue;
+                }
+                foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {
+                    if (strpos($this->getName($param->type), $commonEntityContainsNamespace) !== \false) {
+                        continue 2;
+                    }
                 }
                 // @todo allow parameter converter
                 unset($classMethod->params[$key]);
