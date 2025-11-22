@@ -56,7 +56,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ['Entity', 'Document', 'Model'];
+    private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
     public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
