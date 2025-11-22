@@ -2083,11 +2083,11 @@ Makes array_search search for identical elements
 
 <br>
 
-### SymplifyQuoteEscapeRector
+### SimplifyQuoteEscapeRector
 
 Prefer quote that are not inside the string
 
-- class: [`Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector`](../rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php)
+- class: [`Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector`](../rules/CodingStyle/Rector/String_/SimplifyQuoteEscapeRector.php)
 
 ```diff
  class SomeClass
