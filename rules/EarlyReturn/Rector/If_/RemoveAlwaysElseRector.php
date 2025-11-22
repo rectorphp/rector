@@ -63,7 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
-        if ($this->doesLastStatementBreakFlow($node)) {
+        if ($this->doesNotLastStatementBreakFlow($node)) {
             return null;
         }
         if ($node->elseifs !== []) {
@@ -89,7 +89,7 @@ CODE_SAMPLE
             /** @var ElseIf_ $currentElseIf */
             $currentElseIf = array_shift($if->elseifs);
             // If the last statement in the `elseif` breaks flow, merge it into the original `if` and stop processing
-            if ($this->doesLastStatementBreakFlow($currentElseIf)) {
+            if ($this->doesNotLastStatementBreakFlow($currentElseIf)) {
                 $this->updateIfWithElseIf($if, $currentElseIf);
                 $nodesToReturn = array_merge($nodesToReturn, [$if], $this->getStatementsElseIfs($if));
                 break;
@@ -105,7 +105,17 @@ CODE_SAMPLE
             $nodesToReturn[] = $this->createIfFromNode($currentElseIf);
         }
         if ($originalIf->else instanceof Else_) {
-            $nodesToReturn[] = $originalIf->else;
+            $mergeStmts = \true;
+            foreach ($nodesToReturn as $nodeToReturn) {
+                if ($this->doesNotLastStatementBreakFlow($nodeToReturn)) {
+                    $nodesToReturn[] = $originalIf->else;
+                    $mergeStmts = \false;
+                    break;
+                }
+            }
+            if ($mergeStmts) {
+                $nodesToReturn = array_merge($nodesToReturn, $originalIf->else->stmts);
+            }
         }
         return $nodesToReturn;
     }
@@ -116,7 +126,7 @@ CODE_SAMPLE
     {
         $statements = [];
         foreach ($if->elseifs as $key => $elseif) {
-            if ($this->doesLastStatementBreakFlow($elseif) && $elseif->stmts !== []) {
+            if ($this->doesNotLastStatementBreakFlow($elseif) && $elseif->stmts !== []) {
                 continue;
             }
             $statements[] = $elseif;
@@ -127,15 +137,15 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $node
      */
-    private function doesLastStatementBreakFlow($node): bool
+    private function doesNotLastStatementBreakFlow($node): bool
     {
         $lastStmt = end($node->stmts);
         if ($lastStmt instanceof If_ && $lastStmt->else instanceof Else_) {
-            if ($this->doesLastStatementBreakFlow($lastStmt) || $this->doesLastStatementBreakFlow($lastStmt->else)) {
+            if ($this->doesNotLastStatementBreakFlow($lastStmt) || $this->doesNotLastStatementBreakFlow($lastStmt->else)) {
                 return \true;
             }
             foreach ($lastStmt->elseifs as $elseIf) {
-                if ($this->doesLastStatementBreakFlow($elseIf)) {
+                if ($this->doesNotLastStatementBreakFlow($elseIf)) {
                     return \true;
                 }
             }
