@@ -8,14 +8,17 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeManipulator\ClassDependencyManipulator;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -42,12 +45,22 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private AttributeFinder $attributeFinder;
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->attributeFinder = $attributeFinder;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -109,13 +122,17 @@ CODE_SAMPLE
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
+            $entityClasses = $this->resolveParamConverterEntityClasses($classMethod);
             foreach ($classMethod->getParams() as $key => $param) {
                 // skip scalar and empty values, as not services
-                if ($param->type === null || $param->type instanceof Identifier) {
+                if ($param->type === null || !$param->type instanceof FullyQualified) {
                     continue;
                 }
                 // request is allowed
-                if ($param->type instanceof Name && $this->isName($param->type, SymfonyClass::REQUEST)) {
+                if ($this->isName($param->type, SymfonyClass::REQUEST)) {
+                    continue;
+                }
+                if ($this->isNames($param->type, $entityClasses)) {
                     continue;
                 }
                 // @todo allow parameter converter
@@ -169,5 +186,25 @@ CODE_SAMPLE
             return \true;
         }
         return !$this->controllerMethodAnalyzer->isAction($classMethod);
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveParamConverterEntityClasses(ClassMethod $classMethod): array
+    {
+        $entityClasses = [];
+        $paramConverterAttributes = $this->attributeFinder->findManyByClass($classMethod, SensioAttribute::PARAM_CONVERTER);
+        foreach ($paramConverterAttributes as $paramConverterAttribute) {
+            foreach ($paramConverterAttribute->args as $arg) {
+                if ($arg->name instanceof Identifier && $this->isName($arg->name, 'class')) {
+                    $entityClass = $this->valueResolver->getValue($arg->value);
+                    if (!is_string($entityClass)) {
+                        continue;
+                    }
+                    $entityClasses[] = $entityClass;
+                }
+            }
+        }
+        return $entityClasses;
     }
 }
