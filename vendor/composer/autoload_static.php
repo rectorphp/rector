@@ -2726,6 +2726,7 @@ class ComposerStaticInit748e22e82472dc8a14b6ece734377306
         'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
         'Rector\\Symfony\\Enum\\CommandMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/CommandMethodName.php',
         'Rector\\Symfony\\Enum\\FosAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosAnnotation.php',
+        'Rector\\Symfony\\Enum\\FosClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosClass.php',
         'Rector\\Symfony\\Enum\\JMSAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/JMSAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',

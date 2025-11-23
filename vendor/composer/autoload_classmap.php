@@ -2478,6 +2478,7 @@ return array(
     'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
     'Rector\\Symfony\\Enum\\CommandMethodName' => $vendorDir . '/rector/rector-symfony/src/Enum/CommandMethodName.php',
     'Rector\\Symfony\\Enum\\FosAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/FosAnnotation.php',
+    'Rector\\Symfony\\Enum\\FosClass' => $vendorDir . '/rector/rector-symfony/src/Enum/FosClass.php',
     'Rector\\Symfony\\Enum\\JMSAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/JMSAnnotation.php',
     'Rector\\Symfony\\Enum\\SensioAttribute' => $vendorDir . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
     'Rector\\Symfony\\Enum\\SymfonyAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',

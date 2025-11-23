@@ -18,6 +18,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Enum\FosClass;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
@@ -133,7 +134,7 @@ CODE_SAMPLE
                     continue;
                 }
                 // request is allowed
-                if ($this->isName($param->type, SymfonyClass::REQUEST)) {
+                if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER])) {
                     continue;
                 }
                 if ($this->isNames($param->type, $entityClasses)) {
