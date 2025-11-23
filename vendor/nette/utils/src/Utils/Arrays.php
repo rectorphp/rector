@@ -467,7 +467,7 @@ class Arrays
      */
     public static function toKey($value)
     {
-        return key([$value => null]);
+        return key(@[$value => null]);
     }
     /**
      * Returns copy of the $array where every item is converted to string
