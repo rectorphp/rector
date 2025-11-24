@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeManipulator\ClassDependencyManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
@@ -181,6 +182,9 @@ CODE_SAMPLE
                     return null;
                 }
                 if (!$this->isNames($node, $paramNamesToReplace)) {
+                    return null;
+                }
+                if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
                     return null;
                 }
                 $propertyName = $this->getName($node);

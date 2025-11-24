@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (!is_string($className)) {
             return null;
         }
-        if (strncmp($className, 'Symfony\Component\Validator\Constraints\\', strlen('Symfony\Component\Validator\Constraints\\')) !== 0) {
+        if (strncmp($className, 'Symfony\Component\Validator\Constraints\\', strlen('Symfony\Component\Validator\Constraints\\')) !== 0 && strncmp($className, 'Symfony\Bridge\Doctrine\Validator\Constraints\\', strlen('Symfony\Bridge\Doctrine\Validator\Constraints\\')) !== 0) {
             return null;
         }
         if ($node->args === [] || !$node->args[0] instanceof Arg || !$node->args[0]->value instanceof Array_) {
