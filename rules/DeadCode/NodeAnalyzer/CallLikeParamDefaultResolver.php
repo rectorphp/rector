@@ -32,6 +32,12 @@ final class CallLikeParamDefaultResolver
         if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
             return [];
         }
+        if ($reflection instanceof MethodReflection && $reflection->getName() === 'get') {
+            $classReflection = $reflection->getDeclaringClass();
+            if ($classReflection->getName() === 'Ds\Map') {
+                return [];
+            }
+        }
         $nullPositions = [];
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());
         foreach ($extendedParametersAcceptor->getParameters() as $position => $extendedParameterReflection) {
