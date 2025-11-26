@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use PhpParser\NodeVisitor;
 use Rector\Bridge\SetProviderCollector;
 use Rector\Bridge\SetRectorsResolver;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -17,11 +18,13 @@ use Rector\Config\RegisteredService;
 use Rector\Configuration\Levels\LevelRulesResolver;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Notifier;
+use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Enum\Config\Defaults;
 use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
@@ -832,7 +835,21 @@ final class RectorConfigBuilder
     }
     public function registerService(string $className, ?string $alias = null, ?string $tag = null): self
     {
+        // BC layer since 2.2.9
+        if ($tag === ScopeResolverNodeVisitorInterface::class) {
+            $tag = DecoratingNodeVisitorInterface::class;
+        }
         $this->registerServices[] = new RegisteredService($className, $alias, $tag);
+        return $this;
+    }
+    /**
+     * DX helper
+     * @see https://getrector.com/documentation/creating-a-node-visitor
+     */
+    public function registerDecoratingNodeVisitor(string $decoratingNodeVisitorClass): self
+    {
+        Assert::isAOf($decoratingNodeVisitorClass, NodeVisitor::class);
+        $this->registerServices[] = new RegisteredService($decoratingNodeVisitorClass, null, DecoratingNodeVisitorInterface::class);
         return $this;
     }
     public function withDowngradeSets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false): self

@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
+final class StaticVariableNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
      * @readonly

@@ -33,10 +33,10 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
+final class ContextNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
      * @readonly

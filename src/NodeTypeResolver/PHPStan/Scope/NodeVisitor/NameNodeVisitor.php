@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
-final class NameNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
+final class NameNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     public function enterNode(Node $node): ?Node
     {

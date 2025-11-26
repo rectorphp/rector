@@ -101,10 +101,10 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
+use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202511\Webmozart\Assert\Assert;
@@ -147,9 +147,9 @@ final class PHPStanNodeScopeResolver
      */
     private NodeTraverser $nodeTraverser;
     /**
-     * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
+     * @param DecoratingNodeVisitorInterface[] $decoratingNodeVisitors
      */
-    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -157,7 +157,8 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
-        $this->nodeTraverser = new NodeTraverser(...$nodeVisitors);
+        // @todo make use of immutable, to avoid tedious traversing
+        $this->nodeTraverser = new NodeTraverser(...$decoratingNodeVisitors);
     }
     /**
      * @param Stmt[] $stmts
