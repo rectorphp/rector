@@ -29,7 +29,7 @@ final class ArrayMergeFromArraySpreadFactory
     }
     public function createFromArray(Array_ $array, MutatingScope $mutatingScope): FuncCall
     {
-        $newArrayItems = $this->disolveArrayItems($array);
+        $newArrayItems = $this->dissolveArrayItems($array);
         return $this->createArrayMergeFuncCall($newArrayItems, $mutatingScope);
     }
     /**
@@ -40,7 +40,7 @@ final class ArrayMergeFromArraySpreadFactory
      *    to be added once the next spread is found, or at the end
      * @return ArrayItem[]
      */
-    private function disolveArrayItems(Array_ $array): array
+    private function dissolveArrayItems(Array_ $array): array
     {
         $newItems = [];
         $accumulatedItems = [];

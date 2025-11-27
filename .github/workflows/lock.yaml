@@ -20,4 +20,4 @@ jobs:
                       This issue has been automatically locked because it has been closed for 150 days.
                       Please open a new issue if you have a similar problem.
 
-                  exclude-issue-labels: "keep-open,no-lock"
+                  exclude-any-issue-labels: "keep-open,no-lock"

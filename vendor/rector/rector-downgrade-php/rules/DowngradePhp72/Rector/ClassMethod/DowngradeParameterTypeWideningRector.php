@@ -109,7 +109,7 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $method) {
-            $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverrideable($node, $method);
+            $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverridable($node, $method);
             if ($ancestorOverridableAnonymousClass instanceof ClassReflection) {
                 $classMethod = $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $method);
                 if ($classMethod instanceof ClassMethod) {

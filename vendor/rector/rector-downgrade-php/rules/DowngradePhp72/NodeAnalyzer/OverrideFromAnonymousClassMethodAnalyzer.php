@@ -34,7 +34,7 @@ final class OverrideFromAnonymousClassMethodAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function matchAncestorClassReflectionOverrideable(ClassLike $classLike, ClassMethod $classMethod): ?ClassReflection
+    public function matchAncestorClassReflectionOverridable(ClassLike $classLike, ClassMethod $classMethod): ?ClassReflection
     {
         if (!$this->classAnalyzer->isAnonymousClass($classLike)) {
             return null;
