@@ -97,6 +97,8 @@ final class DeadCodeLevel
         RemoveUselessAssignFromPropertyPromotionRector::class,
         RemoveConcatAutocastRector::class,
         SimplifyIfElseWithSameContentRector::class,
+        // needs more testing, Nov 2025
+        // RemoveNextSameValueConditionRector::class,
         SimplifyUselessVariableRector::class,
         RemoveDeadZeroAndOneOperationRector::class,
         // docblock

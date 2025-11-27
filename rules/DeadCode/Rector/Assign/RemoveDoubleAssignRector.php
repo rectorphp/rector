@@ -101,6 +101,8 @@ CODE_SAMPLE
         if (!$hasChanged) {
             return null;
         }
+        // update array keys to fit printer
+        $node->stmts = array_values($node->stmts);
         return $node;
     }
     private function isSelfReferencing(Assign $assign): bool

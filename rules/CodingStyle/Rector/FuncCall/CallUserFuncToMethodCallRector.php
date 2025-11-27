@@ -71,12 +71,13 @@ CODE_SAMPLE
         if (!$firstArgValue instanceof Array_) {
             return null;
         }
+        // remove first arg
+        $originalArgs = $node->getArgs();
+        array_shift($originalArgs);
         $methodCall = $this->arrayCallableToMethodCallFactory->create($firstArgValue);
         if (!$methodCall instanceof MethodCall) {
             return null;
         }
-        $originalArgs = $node->args;
-        unset($originalArgs[0]);
         $methodCall->args = $originalArgs;
         return $methodCall;
     }
