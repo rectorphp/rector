@@ -1582,7 +1582,7 @@ class ComposerStaticInita7e267cdc27b27e669e2bfb1953e23ac
         'Rector\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
         'Rector\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Contract\\DependencyInjection\\RelatedConfigInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/RelatedConfigInterface.php',
-        'Rector\\Contract\\DependencyInjection\\ResetableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResetableInterface.php',
+        'Rector\\Contract\\DependencyInjection\\ResettableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResettableInterface.php',
         'Rector\\Contract\\PhpParser\\DecoratingNodeVisitorInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/DecoratingNodeVisitorInterface.php',
         'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',

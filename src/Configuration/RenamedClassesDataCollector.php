@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use PHPStan\Type\ObjectType;
-use Rector\Contract\DependencyInjection\ResetableInterface;
-final class RenamedClassesDataCollector implements ResetableInterface
+use Rector\Contract\DependencyInjection\ResettableInterface;
+final class RenamedClassesDataCollector implements ResettableInterface
 {
     /**
      * @var array<string, string>

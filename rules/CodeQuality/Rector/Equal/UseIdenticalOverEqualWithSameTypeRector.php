@@ -81,15 +81,15 @@ CODE_SAMPLE
     }
     private function hasObjectType(Type $type): bool
     {
-        $hasObjecType = \false;
-        TypeTraverser::map($type, function (Type $type, callable $traverseCallback) use (&$hasObjecType): Type {
+        $hasObjectType = \false;
+        TypeTraverser::map($type, function (Type $type, callable $traverseCallback) use (&$hasObjectType): Type {
             // maybe has object type? mark as object type
             if (!$type->isObject()->no()) {
-                $hasObjecType = \true;
+                $hasObjectType = \true;
             }
             return $traverseCallback($type);
         });
-        return $hasObjecType;
+        return $hasObjectType;
     }
     private function normalizeScalarType(Type $type): Type
     {

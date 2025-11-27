@@ -45,7 +45,7 @@ final class TypeNormalizer
     /**
      * @var int
      */
-    private const MAX_PRINTED_UNION_DOC_LENGHT = 77;
+    private const MAX_PRINTED_UNION_DOC_LENGTH = 77;
     public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver, TypeHasher $typeHasher)
     {
         $this->typeFactory = $typeFactory;
@@ -124,7 +124,7 @@ final class TypeNormalizer
                     // avoid too huge print in docblock
                     $unionedDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedUnionType);
                     // too long
-                    if (strlen((string) $unionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGHT && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
+                    if (strlen((string) $unionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGTH && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
                         $alwaysKnownArrayType = $this->narrowToAlwaysKnownArrayType($generalizedUnionType);
                         if ($alwaysKnownArrayType instanceof ArrayType) {
                             return $alwaysKnownArrayType;

@@ -94,7 +94,7 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
-            if ($this->isNames($classMethod, [MethodName::CONSTRUCT, MethodName::DESCTRUCT])) {
+            if ($this->isNames($classMethod, [MethodName::CONSTRUCT, MethodName::DESTRUCT])) {
                 continue;
             }
             $parentClassMethodReturnType = $this->getReturnTypeRecursive($classMethod);

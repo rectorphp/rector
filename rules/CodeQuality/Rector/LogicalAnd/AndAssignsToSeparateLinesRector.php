@@ -17,7 +17,7 @@ final class AndAssignsToSeparateLinesRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Split 2 assigns with ands to separate line', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split 2 assigns with "and" to separate lines', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

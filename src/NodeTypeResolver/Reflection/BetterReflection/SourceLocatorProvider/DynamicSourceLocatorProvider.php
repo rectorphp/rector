@@ -8,12 +8,12 @@ use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
-use Rector\Contract\DependencyInjection\ResetableInterface;
+use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 /**
  * @api phpstan external
  */
-final class DynamicSourceLocatorProvider implements ResetableInterface
+final class DynamicSourceLocatorProvider implements ResettableInterface
 {
     /**
      * @readonly

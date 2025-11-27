@@ -1334,7 +1334,7 @@ return array(
     'Rector\\Console\\Style\\RectorStyle' => $baseDir . '/src/Console/Style/RectorStyle.php',
     'Rector\\Console\\Style\\SymfonyStyleFactory' => $baseDir . '/src/Console/Style/SymfonyStyleFactory.php',
     'Rector\\Contract\\DependencyInjection\\RelatedConfigInterface' => $baseDir . '/src/Contract/DependencyInjection/RelatedConfigInterface.php',
-    'Rector\\Contract\\DependencyInjection\\ResetableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResetableInterface.php',
+    'Rector\\Contract\\DependencyInjection\\ResettableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResettableInterface.php',
     'Rector\\Contract\\PhpParser\\DecoratingNodeVisitorInterface' => $baseDir . '/src/Contract/PhpParser/DecoratingNodeVisitorInterface.php',
     'Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface' => $baseDir . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php',
     'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',
