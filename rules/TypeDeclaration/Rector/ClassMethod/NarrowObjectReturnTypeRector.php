@@ -26,7 +26,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * Narrows return type from generic object to specific class in final classes/methods.
+ * Narrows return type from generic object or parent class to specific class in final classes/methods.
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\NarrowObjectReturnTypeRector\NarrowObjectReturnTypeRectorTest
  */
@@ -72,7 +72,7 @@ final class NarrowObjectReturnTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Narrows return type from generic object to specific class in final classes/methods', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Narrows return type from generic object or parent class to specific class in final classes/methods', [new CodeSample(<<<'CODE_SAMPLE'
 final class TalkFactory extends AbstractFactory
 {
     protected function build(): object
@@ -133,9 +133,6 @@ CODE_SAMPLE
         if (!$classReflection->isFinalByKeyword() && !$node->isFinal()) {
             return null;
         }
-        if ($this->hasParentMethodWithNonObjectReturn($node)) {
-            return null;
-        }
         $actualReturnClass = $this->getActualReturnClass($node);
         if ($actualReturnClass === null) {
             return null;
@@ -151,6 +148,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->isNarrowingValid($node, $declaredType, $actualReturnClass)) {
+            return null;
+        }
+        if (!$this->isNarrowingValidFromParent($node, $actualReturnClass)) {
             return null;
         }
         $node->returnType = new FullyQualified($actualReturnClass);
@@ -225,14 +225,14 @@ CODE_SAMPLE
         $returnType = $phpDocInfo->getReturnType();
         return !$returnType instanceof GenericObjectType;
     }
-    private function hasParentMethodWithNonObjectReturn(ClassMethod $classMethod): bool
+    private function isNarrowingValidFromParent(ClassMethod $classMethod, string $actualReturnClass): bool
     {
         if ($classMethod->isPrivate()) {
-            return \false;
+            return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
-            return \false;
+            return \true;
         }
         $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
         $methodName = $this->getName($classMethod);
@@ -248,15 +248,15 @@ CODE_SAMPLE
                 continue;
             }
             $parentReturnType = $parentClassMethod->returnType;
-            if (!$parentReturnType instanceof Node) {
+            if (!$parentReturnType instanceof Identifier && !$parentReturnType instanceof FullyQualified) {
                 continue;
             }
-            if ($parentReturnType instanceof Identifier && $parentReturnType->name === 'object') {
-                continue;
+            $parentReturnTypeName = $parentReturnType->toString();
+            if (!$this->isNarrowingValid($parentClassMethod, $parentReturnTypeName, $actualReturnClass)) {
+                return \false;
             }
-            return \true;
         }
-        return \false;
+        return \true;
     }
     private function getActualReturnClass(ClassMethod $classMethod): ?string
     {
