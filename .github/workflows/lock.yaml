@@ -1,0 +1,23 @@
+name: "Lock closed issues"
+
+on:
+    schedule:
+        - cron: "0 3 * * *" # every day at 03:00 UTC
+    workflow_dispatch:
+
+jobs:
+    lock:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: dessant/lock-threads@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+
+                  issue-inactive-days: 150
+
+                  issue-comment: >
+                      This issue has been automatically locked because it has been closed for 150 days.
+                      Please open a new issue if you have a similar problem.
+
+                  exclude-issue-labels: "keep-open,no-lock"

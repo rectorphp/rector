@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 /**
  * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
@@ -39,7 +38,7 @@ final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
     /**
      * @param Node\IntersectionType $node
      */
-    public function mapToPHPStan(Node $node): Type
+    public function mapToPHPStan(Node $node): IntersectionType
     {
         $types = [];
         foreach ($node->types as $intersectionedType) {

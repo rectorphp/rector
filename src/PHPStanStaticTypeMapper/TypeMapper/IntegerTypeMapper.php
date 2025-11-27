@@ -6,7 +6,6 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
@@ -32,7 +31,7 @@ final class IntegerTypeMapper implements TypeMapperInterface
     /**
      * @param IntegerType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type): IdentifierTypeNode
     {
         // note: cannot be handled by PHPStan as uses explicit values
         return new IdentifierTypeNode('int');

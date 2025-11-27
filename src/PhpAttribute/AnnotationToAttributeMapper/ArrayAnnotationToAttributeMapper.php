@@ -42,7 +42,7 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
     /**
      * @param mixed[] $value
      */
-    public function map($value): Expr
+    public function map($value): Array_
     {
         $arrayItems = [];
         foreach ($value as $key => $singleValue) {

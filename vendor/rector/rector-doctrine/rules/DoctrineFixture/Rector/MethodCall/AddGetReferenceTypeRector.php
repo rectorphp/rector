@@ -90,11 +90,11 @@ CODE_SAMPLE
         if (count($nestedMethodCall->getArgs()) === 2) {
             return null;
         }
-        $callerParameterObjetType = $this->parameterTypeResolver->resolveCallerFirstParameterObjectType($node);
-        if (!$callerParameterObjetType instanceof ObjectType) {
+        $callerParameterObjectType = $this->parameterTypeResolver->resolveCallerFirstParameterObjectType($node);
+        if (!$callerParameterObjectType instanceof ObjectType) {
             return null;
         }
-        $nestedMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($callerParameterObjetType->getClassName()), 'class'));
+        $nestedMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($callerParameterObjectType->getClassName()), 'class'));
         return $node;
     }
     private function isInAbstractFixture(MethodCall $methodCall): bool

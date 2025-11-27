@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -23,7 +22,7 @@ final class StringNodeAnnotationToAttributeMapper implements AnnotationToAttribu
     /**
      * @param StringNode $value
      */
-    public function map($value): Expr
+    public function map($value): String_
     {
         return new String_($value->value, [AttributeKey::KIND => $value->getAttribute(AttributeKey::KIND)]);
     }
