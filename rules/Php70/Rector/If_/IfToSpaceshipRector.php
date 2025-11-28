@@ -12,10 +12,10 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Php70\Enum\BattleshipCompareOrder;
 use Rector\Php70\NodeAnalyzer\BattleshipTernaryAnalyzer;
 use Rector\Php70\ValueObject\ComparedExprs;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -63,10 +63,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class, If_::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface|If_ $node
+     * @param StmtsAware $node
+     * @return StmtsAware|Return_|null
      */
     public function refactor(Node $node): ?Node
     {

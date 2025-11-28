@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\NodeManipulator\StmtsManipulator;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -70,12 +70,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param StmtsAware $node
+     * @return ?StmtsAware
      */
-    public function refactor(Node $node): ?StmtsAwareInterface
+    public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
             return null;

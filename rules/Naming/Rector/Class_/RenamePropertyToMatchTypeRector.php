@@ -119,7 +119,7 @@ CODE_SAMPLE
             if (!$propertyRename instanceof PropertyRename) {
                 continue;
             }
-            if ($this->skipDateTimeOrMockObjectPropertyType($property)) {
+            if ($this->skipExactTypes($property)) {
                 continue;
             }
             $renameProperty = $this->matchTypePropertyRenamer->rename($propertyRename);
@@ -133,7 +133,7 @@ CODE_SAMPLE
      * Such properties can have "xMock" names that are not compatible with "MockObject" suffix
      * They should be kept and handled by another naming rule that deals with mocks
      */
-    private function skipDateTimeOrMockObjectPropertyType(Property $property): bool
+    private function skipExactTypes(Property $property): bool
     {
         if (!$property->type instanceof Name) {
             return \false;

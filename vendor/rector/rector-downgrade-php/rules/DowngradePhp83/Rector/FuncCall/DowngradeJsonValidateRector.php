@@ -14,11 +14,11 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Parser\InlineCodeParser;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
@@ -87,10 +87,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
+        $stmtsAware = NodeGroup::STMTS_AWARE;
+        return array_merge($stmtsAware, [Switch_::class, Return_::class, Expression::class, Echo_::class]);
     }
     /**
-     * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
+     * @param StmtsAware|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
     public function refactor(Node $node): ?array

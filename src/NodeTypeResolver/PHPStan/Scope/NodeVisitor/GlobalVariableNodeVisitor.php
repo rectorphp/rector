@@ -12,9 +12,10 @@ use PhpParser\Node\Stmt\Global_;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\Enum\NodeGroup;
+use RectorPrefix202511\Webmozart\Assert\Assert;
 final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
@@ -27,9 +28,10 @@ final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements Dec
     }
     public function enterNode(Node $node): ?Node
     {
-        if (!$node instanceof StmtsAwareInterface) {
+        if (!NodeGroup::isStmtAwareNode($node)) {
             return null;
         }
+        Assert::propertyExists($node, 'stmts');
         if ($node->stmts === null) {
             return null;
         }

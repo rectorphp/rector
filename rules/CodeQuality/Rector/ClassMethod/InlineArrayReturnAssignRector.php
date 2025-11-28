@@ -15,8 +15,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Exception\NotImplementedYetException;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -61,14 +61,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param StmtsAware $node
      */
     public function refactor(Node $node): ?Node
     {
-        $stmts = (array) $node->stmts;
+        if ($node->stmts === null) {
+            return null;
+        }
+        $stmts = $node->stmts;
         // skip primitive cases, as may be on purpose
         if (count($stmts) < 3) {
             return null;
@@ -169,7 +172,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param Expression[] $stmts
+     * @param Stmt[] $stmts
      */
     private function resolveDefaultEmptyArrayAssign(array $stmts, string $returnedVariableName): ?Assign
     {

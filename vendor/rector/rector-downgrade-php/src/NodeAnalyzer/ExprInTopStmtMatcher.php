@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Analyser\Scope;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 /**
@@ -35,7 +34,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     public function match($stmt, callable $filter): ?\PhpParser\Node\Expr
     {
@@ -72,7 +71,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     private function resolveOnReturnOrExpression($stmt, callable $filter): ?Expr
     {
@@ -87,7 +86,7 @@ final class ExprInTopStmtMatcher
     /**
      * @param Expr[]|Expr $exprs
      * @param callable(Node $node): bool $filter
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     private function resolveExpr($stmt, $exprs, callable $filter): ?Expr
     {
@@ -107,7 +106,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     private function resolveFromChildCond($stmt, callable $filter): ?\PhpParser\Node\Expr
     {

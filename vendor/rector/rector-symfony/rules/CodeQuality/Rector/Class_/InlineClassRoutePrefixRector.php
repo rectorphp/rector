@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
@@ -216,7 +217,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipMethod(Node\Stmt\ClassMethod $classMethod): bool
+    private function shouldSkipMethod(ClassMethod $classMethod): bool
     {
         return !$classMethod->isPublic() || $this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod);
     }

@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -76,7 +75,10 @@ final class StmtsManipulator
         });
         return $stmts;
     }
-    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName): bool
+    /**
+     * @param StmtsAware $stmtsAware
+     */
+    public function isVariableUsedInNextStmt(Node $stmtsAware, int $jumpToKey, string $variableName): bool
     {
         if ($stmtsAware->stmts === null) {
             return \false;

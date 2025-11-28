@@ -24,10 +24,10 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -79,10 +79,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
+        $stmtsAware = NodeGroup::STMTS_AWARE;
+        return array_merge($stmtsAware, [Switch_::class, Return_::class, Expression::class, Echo_::class]);
     }
     /**
-     * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
+     * @param StmtsAware|Switch_|Return_|Expression|Echo_ $node
      * @return Node[]|null
      */
     public function refactor(Node $node): ?array
@@ -122,7 +123,7 @@ CODE_SAMPLE
     }
     /**
      * @return Node[]|null
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt): ?array
     {
@@ -152,7 +153,7 @@ CODE_SAMPLE
     }
     /**
      * @return Node[]|null
-     * @param \Rector\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
     private function refactorArrayKeyLast(FuncCall $funcCall, $stmt): ?array
     {
@@ -179,7 +180,7 @@ CODE_SAMPLE
         }
         $newStmts[] = $stmt;
         $resetExpression = new Expression($this->nodeFactory->createFuncCall('reset', [$array]));
-        if ($stmt instanceof StmtsAwareInterface) {
+        if (property_exists($stmt, 'stmts')) {
             $stmt->stmts = array_merge([$resetExpression], $stmt->stmts);
         } elseif (!$stmt instanceof Return_) {
             $newStmts[] = $resetExpression;
@@ -188,7 +189,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable $array
-     * @param \PhpParser\Node\Stmt|\Rector\Contract\PhpParser\Node\StmtsAwareInterface $stmt
+     * @param \PhpParser\Node\Stmt|\PhpParser\Node $stmt
      * @return \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_
      */
     private function resolvePrependNewStmt($array, FuncCall $funcCall, $stmt)

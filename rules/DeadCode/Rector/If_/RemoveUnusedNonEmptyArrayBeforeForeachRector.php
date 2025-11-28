@@ -13,13 +13,13 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\ReservedKeywordAnalyzer;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -92,11 +92,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [If_::class, StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param If_|StmtsAwareInterface $node
-     * @return Foreach_|StmtsAwareInterface|null
+     * @param StmtsAware $node
+     * @return StmtsAware|null
      */
     public function refactor(Node $node): ?\PhpParser\Node
     {
@@ -143,7 +143,11 @@ CODE_SAMPLE
         }
         return $this->countManipulator->isCounterHigherThanOne($booleanAnd->right, $foreachExpr);
     }
-    private function refactorStmtsAware(StmtsAwareInterface $stmtsAware): ?StmtsAwareInterface
+    /**
+     * @param StmtsAware $stmtsAware
+     * @return StmtsAware|null
+     */
+    private function refactorStmtsAware(Node $stmtsAware): ?Node
     {
         if ($stmtsAware->stmts === null) {
             return null;

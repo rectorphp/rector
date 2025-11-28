@@ -14,11 +14,11 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -104,10 +104,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param StmtsAware $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -140,9 +140,11 @@ CODE_SAMPLE
         return null;
     }
     /**
+     * @param StmtsAware $stmtsAware
+     * @return StmtsAware|null
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
-    private function processSimplifyUselessVariable(StmtsAwareInterface $stmtsAware, Return_ $return, $assign, int $key): ?StmtsAwareInterface
+    private function processSimplifyUselessVariable(Node $stmtsAware, Return_ $return, $assign, int $key): ?Node
     {
         if (!$assign instanceof Assign) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);

@@ -14,9 +14,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\Php84\NodeAnalyzer\ForeachKeyUsedInConditionalAnalyzer;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -78,10 +78,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param StmtsAware $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -94,8 +94,14 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::ARRAY_ANY;
     }
-    private function refactorBooleanAssignmentPattern(StmtsAwareInterface $stmtsAware): ?Node
+    /**
+     * @param StmtsAware $stmtsAware
+     */
+    private function refactorBooleanAssignmentPattern(Node $stmtsAware): ?Node
     {
+        if ($stmtsAware->stmts === null) {
+            return null;
+        }
         foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
                 continue;
@@ -144,8 +150,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorEarlyReturnPattern(StmtsAwareInterface $stmtsAware): ?Node
+    /**
+     * @param StmtsAware $stmtsAware
+     */
+    private function refactorEarlyReturnPattern(Node $stmtsAware): ?Node
     {
+        if ($stmtsAware->stmts === null) {
+            return null;
+        }
         foreach ($stmtsAware->stmts as $key => $stmt) {
             if (!$stmt instanceof Foreach_) {
                 continue;

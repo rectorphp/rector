@@ -199,7 +199,7 @@ CODE_SAMPLE
             if ($node instanceof Closure || $node instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!$node instanceof StmtsAwareInterface) {
+            if (!property_exists($node, 'stmts')) {
                 return null;
             }
             $hasChangedNode = $this->refactorStmtsAwareNode($node, $templateTagValueNodeOrAttribute, $hasThisRenderOrReturnsResponse, $classMethod);

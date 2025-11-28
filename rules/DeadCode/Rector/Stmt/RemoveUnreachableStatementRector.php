@@ -5,8 +5,8 @@ namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\NodeAnalyzer\TerminatedNodeAnalyzer;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,10 +52,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StmtsAwareInterface::class];
+        return NodeGroup::STMTS_AWARE;
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param StmtsAware $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -75,10 +75,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
+     * @param StmtsAware $stmtsAware
+     *
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processCleanUpUnreachableStmts(StmtsAwareInterface $stmtsAware, array $stmts): array
+    private function processCleanUpUnreachableStmts(Node $stmtsAware, array $stmts): array
     {
         foreach ($stmts as $key => $stmt) {
             if (!isset($stmts[$key - 1])) {

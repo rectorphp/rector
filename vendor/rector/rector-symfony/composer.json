@@ -14,7 +14,7 @@
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
         "rector\/jack": "^0.2.9",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-tv-stmts-interface",
         "rector\/type-perfect": "^2.1",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",

@@ -13,7 +13,7 @@
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-tv-stmts-interface",
         "rector\/swiss-knife": "^1.0",
         "rector\/type-perfect": "^2.1",
         "symplify\/phpstan-extensions": "^12.0",

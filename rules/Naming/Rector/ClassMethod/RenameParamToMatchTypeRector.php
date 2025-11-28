@@ -51,7 +51,6 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    private bool $hasChanged = \false;
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, ParamRenamer $paramRenamer, ReflectionResolver $reflectionResolver)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
@@ -95,7 +94,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->hasChanged = \false;
+        $hasChanged = \false;
         foreach ($node->params as $param) {
             // skip as array-like
             if ($param->variadic) {
@@ -103,6 +102,9 @@ CODE_SAMPLE
             }
             if ($param->type === null) {
                 continue;
+            }
+            if ($this->skipExactType($param)) {
+                return null;
             }
             if ($node instanceof ClassMethod && $this->shouldSkipClassMethodFromVendor($node)) {
                 return null;
@@ -123,13 +125,17 @@ CODE_SAMPLE
                 continue;
             }
             $this->paramRenamer->rename($paramRename);
-            $this->hasChanged = \true;
+            $hasChanged = \true;
         }
-        if (!$this->hasChanged) {
+        if (!$hasChanged) {
             return null;
         }
         return $node;
     }
+    /**
+     * Avoid renaming parameters of a class method, that is located in /vendor,
+     * to keep name matching for named arguments.
+     */
     private function shouldSkipClassMethodFromVendor(ClassMethod $classMethod): bool
     {
         if ($classMethod->isPrivate()) {
@@ -139,17 +145,17 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
+        $ancestorClassReflections = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
         $methodName = $this->getName($classMethod);
-        foreach ($ancestors as $ancestor) {
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
             // internal
-            if ($ancestor->getFileName() === null) {
+            if ($ancestorClassReflection->getFileName() === null) {
                 continue;
             }
-            if (!$ancestor->hasNativeMethod($methodName)) {
+            if (!$ancestorClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
-            $path = PathNormalizer::normalize($ancestor->getFileName());
+            $path = PathNormalizer::normalize($ancestorClassReflection->getFileName());
             if (strpos($path, '/vendor/') !== \false) {
                 return \true;
             }
@@ -174,5 +180,15 @@ CODE_SAMPLE
             return \false;
         }
         return $param->isPromoted();
+    }
+    /**
+     * Skip couple quote vague types, that could be named explicitly on purpose.
+     */
+    private function skipExactType(Param $param): bool
+    {
+        if (!$param->type instanceof Node) {
+            return \false;
+        }
+        return $this->isName($param->type, Node::class);
     }
 }

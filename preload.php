@@ -26,6 +26,7 @@ function isPHPStanTestPreloaded(): bool
 }
 
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node.php';
+// @todo to be deprecated
 require_once __DIR__ . '/src/Contract/PhpParser/Node/StmtsAwareInterface.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeAbstract.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Expr.php';
