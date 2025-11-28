@@ -75,6 +75,6 @@ CODE_SAMPLE
             return null;
         }
         $secondArg->value = new String_($secondArg->value);
-        return null;
+        return $node;
     }
 }

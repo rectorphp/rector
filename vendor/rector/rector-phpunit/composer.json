@@ -13,13 +13,14 @@
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
+        "rector\/jack": "^0.4.0",
         "rector\/rector-src": "dev-tv-stmts-interface",
         "rector\/swiss-knife": "^1.0",
         "rector\/type-perfect": "^2.1",
         "symplify\/phpstan-extensions": "^12.0",
         "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^1.2",
-        "tracy\/tracy": "^2.10"
+        "tracy\/tracy": "^2.11"
     },
     "autoload": {
         "psr-4": {
