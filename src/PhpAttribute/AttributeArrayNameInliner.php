@@ -14,13 +14,17 @@ use RectorPrefix202511\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**
+     * @var class-string
+     */
+    private const OPEN_API_PROPERTY_ATTRIBUTE = 'OpenApi\Attributes\Property';
+    /**
      * @param Array_|list<Arg> $array
      * @return list<Arg>
      */
-    public function inlineArrayToArgs($array): array
+    public function inlineArrayToArgs($array, ?string $attributeClass = null): array
     {
         if (is_array($array)) {
-            return $this->inlineArray($array);
+            return $this->inlineArray($array, $attributeClass);
         }
         return $this->inlineArrayNode($array);
     }
@@ -48,10 +52,13 @@ final class AttributeArrayNameInliner
      * @param list<Arg> $args
      * @return list<Arg>
      */
-    private function inlineArray(array $args): array
+    private function inlineArray(array $args, ?string $attributeClass = null): array
     {
         Assert::allIsAOf($args, Arg::class);
         foreach ($args as $arg) {
+            if ($attributeClass === self::OPEN_API_PROPERTY_ATTRIBUTE && $arg->name instanceof Identifier && $arg->name->toString() === 'example') {
+                continue;
+            }
             if ($arg->value instanceof String_ && is_numeric($arg->value->value)) {
                 // use equal over identical on purpose to verify if it is an integer
                 if ((float) $arg->value->value == (int) $arg->value->value) {

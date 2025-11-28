@@ -32,4 +32,10 @@ if (!\class_exists(Application::class)) {
     \fwrite(\STDERR, 'You need the "symfony/console" component in order to run the Yaml linter.' . \PHP_EOL);
     exit(1);
 }
-(new Application())->add($command = new LintCommand())->getApplication()->setDefaultCommand($command->getName(), \true)->run();
+$command = new LintCommand();
+if (\method_exists($app = new Application(), 'addCommand')) {
+    $app->addCommand($command);
+} else {
+    $app->add($command);
+}
+$app->setDefaultCommand($command->getName(), \true)->run();

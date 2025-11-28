@@ -2815,23 +2815,24 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v7.3.4",
-            "version_normalized": "7.3.4.0",
+            "version": "v7.4.0",
+            "version_normalized": "7.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "f96476035142921000338bad71e5247fbc138872"
+                "reference": "d50e862cb0a0e0886f73ca1f31b865efbb795003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/f96476035142921000338bad71e5247fbc138872",
-                "reference": "f96476035142921000338bad71e5247fbc138872",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/d50e862cb0a0e0886f73ca1f31b865efbb795003",
+                "reference": "d50e862cb0a0e0886f73ca1f31b865efbb795003",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
+                "symfony\/deprecation-contracts": "^2.5|^3.0",
                 "symfony\/polyfill-ctype": "~1.8",
-                "symfony\/polyfill-intl-grapheme": "~1.0",
+                "symfony\/polyfill-intl-grapheme": "~1.33",
                 "symfony\/polyfill-intl-normalizer": "~1.0",
                 "symfony\/polyfill-mbstring": "~1.0"
             },
@@ -2839,13 +2840,13 @@
                 "symfony\/translation-contracts": "<2.5"
             },
             "require-dev": {
-                "symfony\/emoji": "^7.1",
-                "symfony\/http-client": "^6.4|^7.0",
-                "symfony\/intl": "^6.4|^7.0",
+                "symfony\/emoji": "^7.1|^8.0",
+                "symfony\/http-client": "^6.4|^7.0|^8.0",
+                "symfony\/intl": "^6.4|^7.0|^8.0",
                 "symfony\/translation-contracts": "^2.5|^3.0",
-                "symfony\/var-exporter": "^6.4|^7.0"
+                "symfony\/var-exporter": "^6.4|^7.0|^8.0"
             },
-            "time": "2025-09-11T14:36:48+00:00",
+            "time": "2025-11-27T13:27:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2884,7 +2885,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v7.3.4"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v7.4.0"
             },
             "funding": [
                 {
@@ -2908,31 +2909,31 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.3.5",
-            "version_normalized": "7.3.5.0",
+            "version": "v7.4.0",
+            "version_normalized": "7.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "90208e2fc6f68f613eae7ca25a2458a931b1bacc"
+                "reference": "6c84a4b55aee4cd02034d1c528e83f69ddf63810"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/90208e2fc6f68f613eae7ca25a2458a931b1bacc",
-                "reference": "90208e2fc6f68f613eae7ca25a2458a931b1bacc",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/6c84a4b55aee4cd02034d1c528e83f69ddf63810",
+                "reference": "6c84a4b55aee4cd02034d1c528e83f69ddf63810",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
-                "symfony\/deprecation-contracts": "^2.5|^3.0",
+                "symfony\/deprecation-contracts": "^2.5|^3",
                 "symfony\/polyfill-ctype": "^1.8"
             },
             "conflict": {
                 "symfony\/console": "<6.4"
             },
             "require-dev": {
-                "symfony\/console": "^6.4|^7.0"
+                "symfony\/console": "^6.4|^7.0|^8.0"
             },
-            "time": "2025-09-27T09:00:46+00:00",
+            "time": "2025-11-16T10:14:42+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -2963,7 +2964,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.3.5"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.4.0"
             },
             "funding": [
                 {

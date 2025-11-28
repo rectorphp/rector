@@ -187,7 +187,7 @@ EOF
             return;
         }
         foreach ($this->getDirectoryIterator($fileOrDirectory) as $file) {
-            if (!\in_array($file->getExtension(), ['yml', 'yaml'])) {
+            if (!\in_array($file->getExtension(), ['yml', 'yaml'], \true)) {
                 continue;
             }
             yield $file;

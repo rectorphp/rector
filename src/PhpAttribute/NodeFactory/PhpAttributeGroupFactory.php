@@ -89,7 +89,7 @@ final class PhpAttributeGroupFactory
         $values = $doctrineAnnotationTagValueNode->getValuesWithSilentKey();
         $args = $this->createArgsFromItems($values, '', $annotationToAttribute->getClassReferenceFields());
         $this->annotationToAttributeIntegerValueCaster->castAttributeTypes($annotationToAttribute, $args);
-        $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
+        $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args, $annotationToAttribute->getAttributeClass());
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
         // keep FQN in the attribute, so it can be easily detected later
         $attributeName->setAttribute(AttributeKey::PHP_ATTRIBUTE_NAME, $annotationToAttribute->getAttributeClass());
