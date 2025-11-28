@@ -570,6 +570,7 @@ return array(
     'RectorPrefix202511\\Illuminate\\Contracts\\Foundation\\MaintenanceMode' => $vendorDir . '/illuminate/contracts/Foundation/MaintenanceMode.php',
     'RectorPrefix202511\\Illuminate\\Contracts\\Hashing\\Hasher' => $vendorDir . '/illuminate/contracts/Hashing/Hasher.php',
     'RectorPrefix202511\\Illuminate\\Contracts\\Http\\Kernel' => $vendorDir . '/illuminate/contracts/Http/Kernel.php',
+    'RectorPrefix202511\\Illuminate\\Contracts\\JsonSchema\\JsonSchema' => $vendorDir . '/illuminate/contracts/JsonSchema/JsonSchema.php',
     'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\Attachable' => $vendorDir . '/illuminate/contracts/Mail/Attachable.php',
     'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\Factory' => $vendorDir . '/illuminate/contracts/Mail/Factory.php',
     'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\MailQueue' => $vendorDir . '/illuminate/contracts/Mail/MailQueue.php',

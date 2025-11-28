@@ -818,6 +818,7 @@ class ComposerStaticInita7e267cdc27b27e669e2bfb1953e23ac
         'RectorPrefix202511\\Illuminate\\Contracts\\Foundation\\MaintenanceMode' => __DIR__ . '/..' . '/illuminate/contracts/Foundation/MaintenanceMode.php',
         'RectorPrefix202511\\Illuminate\\Contracts\\Hashing\\Hasher' => __DIR__ . '/..' . '/illuminate/contracts/Hashing/Hasher.php',
         'RectorPrefix202511\\Illuminate\\Contracts\\Http\\Kernel' => __DIR__ . '/..' . '/illuminate/contracts/Http/Kernel.php',
+        'RectorPrefix202511\\Illuminate\\Contracts\\JsonSchema\\JsonSchema' => __DIR__ . '/..' . '/illuminate/contracts/JsonSchema/JsonSchema.php',
         'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\Attachable' => __DIR__ . '/..' . '/illuminate/contracts/Mail/Attachable.php',
         'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\Factory' => __DIR__ . '/..' . '/illuminate/contracts/Mail/Factory.php',
         'RectorPrefix202511\\Illuminate\\Contracts\\Mail\\MailQueue' => __DIR__ . '/..' . '/illuminate/contracts/Mail/MailQueue.php',

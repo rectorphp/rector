@@ -134,6 +134,10 @@ CODE_SAMPLE
                 if ($param->type === null || !$param->type instanceof FullyQualified) {
                     continue;
                 }
+                // most likely mapped by attribute or autowired with specific type
+                if ($param->attrGroups !== []) {
+                    continue;
+                }
                 // request is allowed
                 if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER])) {
                     continue;
