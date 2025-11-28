@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\Int_;
@@ -54,10 +56,8 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (!isset($node->args[0])) {
-            return null;
-        }
-        $argExpr = $args[0]->value;
+        $firstArg = $args[0];
+        $argExpr = $firstArg->value;
         $type = $this->nodeTypeResolver->getNativeType($argExpr);
         if (!$type->isString()->yes() && !$type->isInteger()->yes()) {
             return null;
@@ -65,22 +65,40 @@ CODE_SAMPLE
         $value = $this->valueResolver->getValue($argExpr);
         $isInt = is_int($value);
         if (!$argExpr instanceof Int_) {
-            if ($isInt) {
-                return null;
-            }
-            $args[0]->value = new ArrayDimFetch($argExpr, new Int_(0));
-            $node->args = $args;
-            return $node;
+            return $this->refactorStringType($argExpr, $isInt, $args, $node);
         }
-        $value = (string) $value;
-        $byte = $value[0] ?? '';
-        $byteValue = $isInt ? new Int_((int) $byte) : new String_($byte);
-        $args[0]->value = $byteValue;
-        $node->args = $args;
-        return $node;
+        return $this->refactorInt($value, $isInt, $args, $node);
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::DEPRECATE_ORD_WITH_MULTIBYTE_STRING;
+    }
+    /**
+     * @param Arg[] $args
+     */
+    private function refactorStringType(Expr $argExpr, bool $isInt, array $args, FuncCall $funcCall): ?\PhpParser\Node\Expr\FuncCall
+    {
+        if ($argExpr instanceof ArrayDimFetch) {
+            return null;
+        }
+        if ($isInt) {
+            return null;
+        }
+        $args[0]->value = new ArrayDimFetch($argExpr, new Int_(0));
+        $funcCall->args = $args;
+        return $funcCall;
+    }
+    /**
+     * @param Arg[] $args
+     * @param mixed $value
+     */
+    private function refactorInt($value, bool $isInt, array $args, FuncCall $funcCall): FuncCall
+    {
+        $value = (string) $value;
+        $byte = $value[0] ?? '';
+        $byteValue = $isInt ? new Int_((int) $byte) : new String_($byte);
+        $args[0]->value = $byteValue;
+        $funcCall->args = $args;
+        return $funcCall;
     }
 }
