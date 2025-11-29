@@ -7,10 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -93,6 +95,9 @@ CODE_SAMPLE
                 continue;
             }
             unset($node->stmts[$key - 1]);
+            if ($stmt->expr instanceof Ternary) {
+                $stmt->expr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+            }
             $stmt->expr = new Coalesce($ifOnlyStmt->expr, $stmt->expr);
             return $node;
         }
