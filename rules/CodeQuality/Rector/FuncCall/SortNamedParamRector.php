@@ -5,6 +5,8 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -59,17 +61,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class];
+        return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class, Attribute::class];
     }
     /**
-     * @param MethodCall|StaticCall|New_|FuncCall $node
+     * @param MethodCall|StaticCall|New_|FuncCall|Attribute $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFirstClassCallable()) {
+        if ($node instanceof CallLike && $node->isFirstClassCallable()) {
             return null;
         }
-        $args = $node->getArgs();
+        if ($node instanceof Attribute) {
+            $args = $node->args;
+        } else {
+            $args = $node->getArgs();
+        }
         if (count($args) <= 1) {
             return null;
         }
@@ -78,6 +84,8 @@ CODE_SAMPLE
         }
         if ($node instanceof New_) {
             $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);
+        } elseif ($node instanceof Attribute) {
+            $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromAttribute($node);
         } else {
             $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         }

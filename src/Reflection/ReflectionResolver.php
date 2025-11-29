@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Reflection;
 
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -228,6 +229,16 @@ final class ReflectionResolver
             return null;
         }
         $scope = $new->getAttribute(AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($className, MethodName::CONSTRUCT, $scope);
+    }
+    public function resolveMethodReflectionFromAttribute(Attribute $attribute): ?MethodReflection
+    {
+        $attributeClassType = $this->nodeTypeResolver->getType($attribute->name);
+        $className = ClassNameFromObjectTypeResolver::resolve($attributeClassType);
+        if ($className === null) {
+            return null;
+        }
+        $scope = $attribute->getAttribute(AttributeKey::SCOPE);
         return $this->resolveMethodReflection($className, MethodName::CONSTRUCT, $scope);
     }
     /**
