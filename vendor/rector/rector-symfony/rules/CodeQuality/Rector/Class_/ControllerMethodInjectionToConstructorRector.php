@@ -24,6 +24,7 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -56,10 +57,14 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
      */
     private ValueResolver $valueResolver;
     /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard;
+    /**
      * @var string[]
      */
     private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
@@ -67,6 +72,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
+        $this->parentClassMethodOverrideGuard = $parentClassMethodOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -121,6 +127,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (!$this->controllerAnalyzer->isController($node)) {
+            return null;
+        }
+        if ($node->isAbstract()) {
             return null;
         }
         $propertyMetadatas = [];
@@ -203,7 +212,10 @@ CODE_SAMPLE
         if ($classMethod->isMagic() && !$this->isName($classMethod->name, MethodName::INVOKE)) {
             return \true;
         }
-        return !$this->controllerMethodAnalyzer->isAction($classMethod);
+        if (!$this->controllerMethodAnalyzer->isAction($classMethod)) {
+            return \true;
+        }
+        return $this->parentClassMethodOverrideGuard->hasParentClassMethod($classMethod);
     }
     /**
      * @return string[]
