@@ -3,14 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php;
 
+use PHPStan\Analyser\Scope;
 final class ReservedKeywordAnalyzer
 {
-    /**
-     * @var string[]
-     */
-    private const NATIVE_VARIABLE_NAMES = ['_ENV', '_POST', '_GET', '_COOKIE', '_SERVER', '_FILES', '_REQUEST', '_SESSION', 'GLOBALS'];
     public function isNativeVariable(string $name): bool
     {
-        return in_array($name, self::NATIVE_VARIABLE_NAMES, \true);
+        return in_array($name, Scope::SUPERGLOBAL_VARIABLES, \true);
     }
 }
