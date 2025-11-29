@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\TraitUse;
 use Rector\Comments\CommentResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,6 +74,9 @@ CODE_SAMPLE
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
             if (!isset($classLike->stmts[$key], $classLike->stmts[$key + 1])) {
                 break;
+            }
+            if ($classLike->stmts[$key + 1] instanceof TraitUse) {
+                continue;
             }
             $stmt = $classLike->stmts[$key];
             $nextStmt = $classLike->stmts[$key + 1];
