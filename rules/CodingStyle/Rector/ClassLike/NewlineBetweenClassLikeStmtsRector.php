@@ -75,11 +75,11 @@ CODE_SAMPLE
             if (!isset($classLike->stmts[$key], $classLike->stmts[$key + 1])) {
                 break;
             }
-            if ($classLike->stmts[$key + 1] instanceof TraitUse) {
-                continue;
-            }
             $stmt = $classLike->stmts[$key];
             $nextStmt = $classLike->stmts[$key + 1];
+            if ($stmt instanceof TraitUse && $nextStmt instanceof TraitUse) {
+                continue;
+            }
             $endLine = $stmt->getEndLine();
             $rangeLine = $nextStmt->getStartLine() - $endLine;
             if ($rangeLine > 1) {
