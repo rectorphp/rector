@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
+use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -15,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\ShortenElseIfRectorTest
  */
-final class ShortenElseIfRector extends AbstractRector
+final class ShortenElseIfRector extends AbstractRector implements HTMLAverseRectorInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
