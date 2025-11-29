@@ -56,6 +56,9 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
+        if (!isset($args[0])) {
+            return null;
+        }
         $firstArg = $args[0];
         $argExpr = $firstArg->value;
         $type = $this->nodeTypeResolver->getNativeType($argExpr);

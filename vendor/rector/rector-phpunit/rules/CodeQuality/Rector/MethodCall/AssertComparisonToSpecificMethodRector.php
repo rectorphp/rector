@@ -46,7 +46,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->binaryOpWithAssertMethods = [new BinaryOpWithAssertMethod(Identical::class, 'assertSame', 'assertNotSame'), new BinaryOpWithAssertMethod(NotIdentical::class, 'assertNotSame', 'assertSame'), new BinaryOpWithAssertMethod(Equal::class, 'assertEquals', 'assertNotEquals'), new BinaryOpWithAssertMethod(NotEqual::class, 'assertNotEquals', 'assertEquals'), new BinaryOpWithAssertMethod(Greater::class, 'assertGreaterThan', 'assertLessThan'), new BinaryOpWithAssertMethod(Smaller::class, 'assertLessThan', 'assertGreaterThan'), new BinaryOpWithAssertMethod(GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new BinaryOpWithAssertMethod(SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
+        $this->binaryOpWithAssertMethods = [new BinaryOpWithAssertMethod(Identical::class, 'assertSame', 'assertNotSame'), new BinaryOpWithAssertMethod(NotIdentical::class, 'assertNotSame', 'assertSame'), new BinaryOpWithAssertMethod(Equal::class, 'assertEquals', 'assertNotEquals'), new BinaryOpWithAssertMethod(NotEqual::class, 'assertNotEquals', 'assertEquals'), new BinaryOpWithAssertMethod(Greater::class, 'assertGreaterThan', 'assertLessThanOrEqual'), new BinaryOpWithAssertMethod(Smaller::class, 'assertLessThan', 'assertGreaterThanOrEqual'), new BinaryOpWithAssertMethod(GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThan'), new BinaryOpWithAssertMethod(SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThan')];
     }
     public function getRuleDefinition(): RuleDefinition
     {
