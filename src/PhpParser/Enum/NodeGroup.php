@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Enum;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt\Block;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
@@ -35,7 +36,7 @@ final class NodeGroup
      *
      * @var array<class-string<Node>>
      */
-    public const STMTS_AWARE = [Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileWithoutNamespace::class];
+    public const STMTS_AWARE = [Block::class, Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileWithoutNamespace::class];
     /**
      * @var array<class-string<Node>>
      */
