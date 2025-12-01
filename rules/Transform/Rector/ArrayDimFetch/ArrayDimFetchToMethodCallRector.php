@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ArrayDimFetchToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -72,9 +73,13 @@ CODE_SAMPLE
             if (!$node->var instanceof ArrayDimFetch) {
                 return null;
             }
-            return $this->getMethodCall($node->var, 'set', $node->expr) ?? NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            return $this->createExplicitMethodCall($node->var, 'set', $node->expr);
         }
-        return $this->getMethodCall($node, 'get');
+        // is part of assign, skip
+        if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED)) {
+            return null;
+        }
+        return $this->createExplicitMethodCall($node, 'get');
     }
     public function configure(array $configuration): void
     {
@@ -90,7 +95,7 @@ CODE_SAMPLE
         $exprs = [];
         foreach ($isset->vars as $var) {
             if ($var instanceof ArrayDimFetch) {
-                $methodCall = $this->getMethodCall($var, 'exists');
+                $methodCall = $this->createExplicitMethodCall($var, 'exists');
                 if ($methodCall instanceof MethodCall) {
                     $exprs[] = $methodCall;
                     continue;
@@ -116,7 +121,7 @@ CODE_SAMPLE
         $stmts = [];
         foreach ($unset->vars as $var) {
             if ($var instanceof ArrayDimFetch) {
-                $methodCall = $this->getMethodCall($var, 'unset');
+                $methodCall = $this->createExplicitMethodCall($var, 'unset');
                 if ($methodCall instanceof MethodCall) {
                     $stmts[] = new Expression($methodCall);
                     continue;
@@ -136,7 +141,7 @@ CODE_SAMPLE
     /**
      * @param 'get'|'set'|'exists'|'unset' $action
      */
-    private function getMethodCall(ArrayDimFetch $arrayDimFetch, string $action, ?Expr $expr = null): ?MethodCall
+    private function createExplicitMethodCall(ArrayDimFetch $arrayDimFetch, string $action, ?Expr $expr = null): ?MethodCall
     {
         if (!$arrayDimFetch->dim instanceof Node) {
             return null;
