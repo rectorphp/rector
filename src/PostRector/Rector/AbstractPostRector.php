@@ -9,7 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\Application\File;
-use RectorPrefix202511\Webmozart\Assert\Assert;
+use RectorPrefix202512\Webmozart\Assert\Assert;
 abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**

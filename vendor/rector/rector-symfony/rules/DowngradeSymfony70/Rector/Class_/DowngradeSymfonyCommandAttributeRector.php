@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\ValueObject\Visibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -95,7 +96,7 @@ CODE_SAMPLE
         }
         foreach ($node->attrGroups as $keyAttribute => $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attr) {
-                if ($attr->name->toString() === 'Symfony\Component\Console\Attribute\AsCommand') {
+                if ($this->isName($attr->name, SymfonyAttribute::AS_COMMAND)) {
                     unset($attrGroup->attrs[$key]);
                 }
             }
@@ -114,7 +115,7 @@ CODE_SAMPLE
         $description = null;
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name->toString() !== 'Symfony\Component\Console\Attribute\AsCommand') {
+                if (!$this->isName($attr->name, SymfonyAttribute::AS_COMMAND)) {
                     continue;
                 }
                 foreach ($attr->args as $arg) {

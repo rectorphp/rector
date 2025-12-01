@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202511\Doctrine\Inflector\Rules;
+namespace RectorPrefix202512\Doctrine\Inflector\Rules;
 
 use function array_map;
 use function implode;

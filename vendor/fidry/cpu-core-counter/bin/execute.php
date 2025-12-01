@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202511;
+namespace RectorPrefix202512;
 
-use RectorPrefix202511\Fidry\CpuCoreCounter\Diagnoser;
-use RectorPrefix202511\Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use RectorPrefix202512\Fidry\CpuCoreCounter\Diagnoser;
+use RectorPrefix202512\Fidry\CpuCoreCounter\Finder\FinderRegistry;
 require_once __DIR__ . '/../vendor/autoload.php';
 echo 'Executing finders...' . \PHP_EOL . \PHP_EOL;
 echo Diagnoser::execute(FinderRegistry::getAllVariants()) . \PHP_EOL;

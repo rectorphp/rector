@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202511\Illuminate\Contracts\Queue;
+namespace RectorPrefix202512\Illuminate\Contracts\Queue;
 
 interface ShouldBeUnique
 {

@@ -23,11 +23,11 @@ use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202511\Symfony\Component\Console\Application;
-use RectorPrefix202511\Symfony\Component\Console\Command\Command;
-use RectorPrefix202511\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202511\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202511\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202512\Symfony\Component\Console\Application;
+use RectorPrefix202512\Symfony\Component\Console\Command\Command;
+use RectorPrefix202512\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202512\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202512\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends Command
 {
     /**

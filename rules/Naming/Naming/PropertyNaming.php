@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix202511\Nette\Utils\Strings;
+use RectorPrefix202512\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;

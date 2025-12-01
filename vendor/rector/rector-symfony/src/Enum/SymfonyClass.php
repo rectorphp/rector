@@ -157,4 +157,20 @@ final class SymfonyClass
      * @var string
      */
     public const VALUE_RESOLVER_INTERFACE = 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface';
+    /**
+     * @var string
+     */
+    public const VOTER_INTERFACE = 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface';
+    /**
+     * @var string
+     */
+    public const VOTER_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Voter';
+    /**
+     * @var string
+     */
+    public const VOTE_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Vote';
+    /**
+     * @var string
+     */
+    public const USER_INTERFACE = 'Symfony\Component\Security\Core\User\UserInterface';
 }

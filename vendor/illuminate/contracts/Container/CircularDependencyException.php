@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202511\Illuminate\Contracts\Container;
+namespace RectorPrefix202512\Illuminate\Contracts\Container;
 
 use Exception;
-use RectorPrefix202511\Psr\Container\ContainerExceptionInterface;
+use RectorPrefix202512\Psr\Container\ContainerExceptionInterface;
 class CircularDependencyException extends Exception implements ContainerExceptionInterface
 {
     //

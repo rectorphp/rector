@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202511\Illuminate\Contracts\Auth;
+namespace RectorPrefix202512\Illuminate\Contracts\Auth;
 
 interface PasswordBrokerFactory
 {

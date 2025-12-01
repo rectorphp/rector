@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202511;
+namespace RectorPrefix202512;
 
 use Rector\Assert\Rector\ClassMethod\AddAssertArrayFromClassMethodDocblockRector;
 use Rector\Config\RectorConfig;

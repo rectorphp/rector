@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202511\\Illuminate\\Contracts\\": ""
+            "RectorPrefix202512\\Illuminate\\Contracts\\": ""
         }
     },
     "extra": {

@@ -7,20 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\CodeQuality\NodeAnalyzer\ParamConverterClassesResolver;
 use Rector\Symfony\Enum\FosClass;
-use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -51,28 +49,23 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     /**
      * @readonly
      */
-    private AttributeFinder $attributeFinder;
+    private ParamConverterClassesResolver $paramConverterClassesResolver;
     /**
      * @readonly
      */
-    private ValueResolver $valueResolver;
-    /**
-     * @readonly
-     */
-    private ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard;
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
     /**
      * @var string[]
      */
     private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, AttributeFinder $attributeFinder, ValueResolver $valueResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, ParamConverterClassesResolver $paramConverterClassesResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->attributeFinder = $attributeFinder;
-        $this->valueResolver = $valueResolver;
-        $this->parentClassMethodOverrideGuard = $parentClassMethodOverrideGuard;
+        $this->paramConverterClassesResolver = $paramConverterClassesResolver;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -137,7 +130,7 @@ CODE_SAMPLE
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
-            $entityClasses = $this->resolveParamConverterEntityClasses($classMethod);
+            $entityClasses = $this->paramConverterClassesResolver->resolveEntityClasses($classMethod);
             foreach ($classMethod->getParams() as $key => $param) {
                 // skip scalar and empty values, as not services
                 if ($param->type === null || !$param->type instanceof FullyQualified) {
@@ -147,11 +140,8 @@ CODE_SAMPLE
                 if ($param->attrGroups !== []) {
                     continue;
                 }
-                // request is allowed
-                if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER])) {
-                    continue;
-                }
-                if ($this->isNames($param->type, $entityClasses)) {
+                // skip allowed known objectsallowed
+                if ($this->isNames($param->type, array_merge([SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER], $entityClasses))) {
                     continue;
                 }
                 foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {
@@ -159,9 +149,13 @@ CODE_SAMPLE
                         continue 2;
                     }
                 }
-                // @todo allow parameter converter
-                unset($classMethod->params[$key]);
                 $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+                if ($paramType instanceof ObjectType) {
+                    if ($paramType->isEnum()->yes()) {
+                        continue;
+                    }
+                }
+                unset($classMethod->params[$key]);
                 $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
             }
         }
@@ -181,30 +175,8 @@ CODE_SAMPLE
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
-            // replace param use with property fetch
-            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($paramNamesToReplace) {
-                if ($node instanceof Closure) {
-                    foreach ($node->uses as $key => $closureUse) {
-                        if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
-                            unset($node->uses[$key]);
-                        }
-                    }
-                    return $node;
-                }
-                if (!$node instanceof Variable) {
-                    return null;
-                }
-                if (!$this->isNames($node, $paramNamesToReplace)) {
-                    return null;
-                }
-                if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
-                    return null;
-                }
-                $propertyName = $this->getName($node);
-                return new PropertyFetch(new Variable('this'), $propertyName);
-            });
+            $this->replaceParamUseWithPropertyFetch($classMethod, $paramNamesToReplace);
         }
-        // 2. replace in method bodies
         return $node;
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
@@ -215,26 +187,36 @@ CODE_SAMPLE
         if (!$this->controllerMethodAnalyzer->isAction($classMethod)) {
             return \true;
         }
-        return $this->parentClassMethodOverrideGuard->hasParentClassMethod($classMethod);
+        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
     /**
-     * @return string[]
+     * @param string[] $paramNamesToReplace
      */
-    private function resolveParamConverterEntityClasses(ClassMethod $classMethod): array
+    private function replaceParamUseWithPropertyFetch(ClassMethod $classMethod, array $paramNamesToReplace): void
     {
-        $entityClasses = [];
-        $paramConverterAttributes = $this->attributeFinder->findManyByClass($classMethod, SensioAttribute::PARAM_CONVERTER);
-        foreach ($paramConverterAttributes as $paramConverterAttribute) {
-            foreach ($paramConverterAttribute->args as $arg) {
-                if ($arg->name instanceof Identifier && $this->isName($arg->name, 'class')) {
-                    $entityClass = $this->valueResolver->getValue($arg->value);
-                    if (!is_string($entityClass)) {
-                        continue;
-                    }
-                    $entityClasses[] = $entityClass;
-                }
-            }
+        if ($classMethod->stmts === null) {
+            return;
         }
-        return $entityClasses;
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($paramNamesToReplace) {
+            if ($node instanceof Closure) {
+                foreach ($node->uses as $key => $closureUse) {
+                    if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
+                        unset($node->uses[$key]);
+                    }
+                }
+                return $node;
+            }
+            if (!$node instanceof Variable) {
+                return null;
+            }
+            if (!$this->isNames($node, $paramNamesToReplace)) {
+                return null;
+            }
+            if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
+                return null;
+            }
+            $propertyName = $this->getName($node);
+            return new PropertyFetch(new Variable('this'), $propertyName);
+        });
     }
 }
