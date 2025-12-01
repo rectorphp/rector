@@ -15,6 +15,9 @@ use const DIRECTORY_SEPARATOR;
  */
 final class FileInfo extends \SplFileInfo
 {
+    /**
+     * @readonly
+     */
     private string $relativePath;
     public function __construct(string $file, string $relativePath = '')
     {

@@ -22,7 +22,6 @@ use const GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
  */
 class Finder implements \IteratorAggregate
 {
-    use Nette\SmartObject;
     /** @var array<array{string, string}> */
     private array $find = [];
     /** @var string[] */
@@ -349,7 +348,7 @@ class Finder implements \IteratorAggregate
             }
             $relativePathname = FileSystem::unixSlashes($file->getRelativePathname());
             foreach ($searches as $search) {
-                if ($file->{'is' . $search->mode}() && preg_match($search->pattern, $relativePathname) && $this->proveFilters($this->filters, $file, $cache)) {
+                if (("is_{$search->mode}")(Helpers::IsWindows && $file->isLink() ? $file->getLinkTarget() : $file->getPathname()) && preg_match($search->pattern, $relativePathname) && $this->proveFilters($this->filters, $file, $cache)) {
                     yield $pathName => $file;
                     break;
                 }

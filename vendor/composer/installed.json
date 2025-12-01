@@ -615,21 +615,21 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v4.0.9",
-            "version_normalized": "4.0.9.0",
+            "version": "v4.1.0",
+            "version_normalized": "4.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "505a30ad386daa5211f08a318e47015b501cad30"
+                "reference": "fa1f0b8261ed150447979eb22e373b7b7ad5a8e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/505a30ad386daa5211f08a318e47015b501cad30",
-                "reference": "505a30ad386daa5211f08a318e47015b501cad30",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/fa1f0b8261ed150447979eb22e373b7b7ad5a8e0",
+                "reference": "fa1f0b8261ed150447979eb22e373b7b7ad5a8e0",
                 "shasum": ""
             },
             "require": {
-                "php": "8.0 - 8.5"
+                "php": "8.2 - 8.5"
             },
             "conflict": {
                 "nette\/finder": "<3",
@@ -649,11 +649,11 @@
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2025-10-31T00:45:47+00:00",
+            "time": "2025-12-01T17:49:23+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "installation-source": "dist",
@@ -701,7 +701,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.0.9"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.1.0"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -1862,12 +1862,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "bd799523d63cb2952ac745a403f54831c7aa4746"
+                "reference": "36488eda3cdd8ea517e5181aae07b3f18256a056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/bd799523d63cb2952ac745a403f54831c7aa4746",
-                "reference": "bd799523d63cb2952ac745a403f54831c7aa4746",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/36488eda3cdd8ea517e5181aae07b3f18256a056",
+                "reference": "36488eda3cdd8ea517e5181aae07b3f18256a056",
                 "shasum": ""
             },
             "require": {
@@ -1899,7 +1899,7 @@
                 "tomasvotruba\/unused-public": "^2.1",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2025-12-01T10:51:35+00:00",
+            "time": "2025-12-01T17:53:23+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

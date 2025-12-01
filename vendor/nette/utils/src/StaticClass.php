@@ -18,13 +18,4 @@ trait StaticClass
     private function __construct()
     {
     }
-    /**
-     * Call to undefined static method.
-     * @throws MemberAccessException
-     * @return mixed
-     */
-    public static function __callStatic(string $name, array $args)
-    {
-        Utils\ObjectHelpers::strictStaticCall(static::class, $name);
-    }
 }

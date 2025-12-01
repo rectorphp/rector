@@ -9,8 +9,8 @@ namespace RectorPrefix202512\Nette\Utils;
 
 use RectorPrefix202512\JetBrains\PhpStorm\Language;
 use RectorPrefix202512\Nette;
-use function array_combine, array_intersect_key, array_is_list, array_key_exists, array_key_first, array_key_last, array_keys, array_reverse, array_search, array_slice, array_walk_recursive, count, func_num_args, in_array, is_array, is_int, is_object, key, preg_split, range;
-use const PHP_VERSION_ID, PREG_GREP_INVERT, PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY;
+use function array_combine, array_intersect_key, array_is_list, array_key_exists, array_key_first, array_key_last, array_keys, array_reverse, array_search, array_slice, array_walk_recursive, count, func_num_args, in_array, is_array, is_int, is_object, key, preg_split;
+use const PREG_GREP_INVERT, PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY;
 /**
  * Array tools library.
  */
@@ -255,7 +255,7 @@ class Arrays
             }
             return \true;
         };
-        return is_array($value) && (PHP_VERSION_ID < 80100 ? !$value || array_keys($value) === range(0, count($value) - 1) : $arrayIsListFunction($value));
+        return is_array($value) && $arrayIsListFunction($value);
     }
     /**
      * Reformats table to associative tree. Path looks like 'field|field[]field->field=field'.

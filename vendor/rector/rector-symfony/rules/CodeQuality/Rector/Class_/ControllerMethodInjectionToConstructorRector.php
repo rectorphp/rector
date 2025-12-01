@@ -126,6 +126,15 @@ CODE_SAMPLE
             return null;
         }
         $propertyMetadatas = [];
+        $constructParamVariables = [];
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if ($constructClassMethod instanceof ClassMethod) {
+            foreach ($constructClassMethod->params as $param) {
+                if ($param->type instanceof FullyQualified) {
+                    $constructParamVariables[$param->type->toString()] = $this->getName($param->var);
+                }
+            }
+        }
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
@@ -150,10 +159,14 @@ CODE_SAMPLE
                     }
                 }
                 $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-                if ($paramType instanceof ObjectType) {
-                    if ($paramType->isEnum()->yes()) {
-                        continue;
-                    }
+                if (!$paramType instanceof ObjectType) {
+                    continue;
+                }
+                if ($paramType->isEnum()->yes()) {
+                    continue;
+                }
+                if ($constructParamVariables !== [] && in_array($this->getName($param->var), $constructParamVariables, \true) && !in_array($this->getName($param->type), array_keys($constructParamVariables), \true)) {
+                    continue;
                 }
                 unset($classMethod->params[$key]);
                 $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
