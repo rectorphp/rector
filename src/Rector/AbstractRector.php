@@ -234,6 +234,10 @@ CODE_SAMPLE;
     }
     private function decorateCurrentAndChildren(Node $node): void
     {
+        // skip sole type, as no other nodes to filter out
+        if (count($this->getNodeTypes()) === 1) {
+            return;
+        }
         // filter only types that
         //    1. registered in getNodesTypes() method
         //    2. different with current node type, as already decorated above
