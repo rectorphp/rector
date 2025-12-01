@@ -2,7 +2,7 @@ name: "Lock closed issues"
 
 on:
     schedule:
-        - cron: "0 3 * * *" # every day at 03:00 UTC
+        - cron: "0 3 * * 0" # every Sunday at 03:00 UTC
     workflow_dispatch:
 
 jobs:
