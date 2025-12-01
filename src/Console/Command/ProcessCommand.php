@@ -178,6 +178,7 @@ EOF
         $outputFormatter->report($processResult, $configuration);
         $this->deprecatedRulesReporter->reportDeprecatedRules();
         $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
+        $this->deprecatedRulesReporter->reportDeprecatedNodeTypes();
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         return $this->resolveReturnCode($processResult, $configuration);
     }
