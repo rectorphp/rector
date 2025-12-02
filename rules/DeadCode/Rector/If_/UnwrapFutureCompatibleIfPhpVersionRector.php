@@ -57,7 +57,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null|int
+     * @return Stmt[]|null|NodeVisitor::REMOVE_NODE
      */
     public function refactor(Node $node)
     {
@@ -92,7 +92,7 @@ CODE_SAMPLE
         return $if->stmts;
     }
     /**
-     * @return Stmt[]|int
+     * @return Stmt[]|NodeVisitor::REMOVE_NODE
      */
     private function refactorIsNotMatch(If_ $if)
     {

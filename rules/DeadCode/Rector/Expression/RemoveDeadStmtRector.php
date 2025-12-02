@@ -66,7 +66,7 @@ CODE_SAMPLE
     }
     /**
      * @param Expression $node
-     * @return Node[]|Node|null|int
+     * @return Node[]|Node|null|NodeVisitor::REMOVE_NODE
      */
     public function refactor(Node $node)
     {
@@ -104,7 +104,7 @@ CODE_SAMPLE
         return !$phpPropertyReflection instanceof PhpPropertyReflection;
     }
     /**
-     * @return int|\PhpParser\Node
+     * @return NodeVisitor::REMOVE_NODE|Node
      */
     private function removeNodeAndKeepComments(Expression $expression)
     {

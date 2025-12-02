@@ -73,7 +73,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Stmt[]|null|int|If_
+     * @return Stmt[]|null|NodeVisitor::REMOVE_NODE|If_
      */
     public function refactor(Node $node)
     {
@@ -92,7 +92,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|Stmt[]|int
+     * @return null|Stmt[]|NodeVisitor::REMOVE_NODE
      */
     private function refactorStmtAndInstanceof(If_ $if, Instanceof_ $instanceof)
     {

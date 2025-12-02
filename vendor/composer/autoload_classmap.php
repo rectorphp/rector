@@ -1834,6 +1834,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefReturnNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefReturnNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefVariableNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefVariableNodeVisitor.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ClassConstFetchNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ClassConstFetchNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ContextNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ContextNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\NameNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/NameNodeVisitor.php',

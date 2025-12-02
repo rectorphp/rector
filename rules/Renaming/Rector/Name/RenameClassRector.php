@@ -4,16 +4,13 @@ declare (strict_types=1);
 namespace Rector\Renaming\Rector\Name;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -80,7 +77,6 @@ CODE_SAMPLE
     public function getNodeTypes(): array
     {
         return [
-            ClassConstFetch::class,
             // place FullyQualified before Name on purpose executed early before the Name as parent
             FullyQualified::class,
             // Name as parent of FullyQualified executed later for fallback annotation to attribute rename to Name
@@ -93,17 +89,16 @@ CODE_SAMPLE
         ];
     }
     /**
-     * @param ClassConstFetch|FunctionLike|FullyQualified|Name|ClassLike|Expression|Property|If_ $node
-     * @return null|NodeVisitor::DONT_TRAVERSE_CHILDREN|Node
+     * @param FunctionLike|FullyQualified|Name|ClassLike|Expression|Property|If_ $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {
             return null;
         }
-        if ($node instanceof ClassConstFetch) {
-            return $this->processClassConstFetch($node, $oldToNewClasses);
+        if ($node instanceof FullyQualified && $this->shouldSkipClassConstFetchForMissingConstantName($node, $oldToNewClasses)) {
+            return null;
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         return $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
@@ -119,31 +114,31 @@ CODE_SAMPLE
     }
     /**
      * @param array<string, string> $oldToNewClasses
-     * @return null|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
-    private function processClassConstFetch(ClassConstFetch $classConstFetch, array $oldToNewClasses): ?int
+    private function shouldSkipClassConstFetchForMissingConstantName(FullyQualified $fullyQualified, array $oldToNewClasses): bool
     {
-        if (!$classConstFetch->class instanceof FullyQualified || !$classConstFetch->name instanceof Identifier || !$this->reflectionProvider->hasClass($classConstFetch->class->toString())) {
-            return null;
+        if (!$this->reflectionProvider->hasClass($fullyQualified->toString())) {
+            return \false;
+        }
+        // not part of class const fetch (e.g. SomeClass::SOME_VALUE)
+        $constFetchName = $fullyQualified->getAttribute(AttributeKey::CLASS_CONST_FETCH_NAME);
+        if (!is_string($constFetchName)) {
+            return \false;
         }
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if (!$this->isName($classConstFetch->class, $oldClass)) {
+            if (!$this->isName($fullyQualified, $oldClass)) {
                 continue;
             }
             if (!$this->reflectionProvider->hasClass($newClass)) {
                 continue;
             }
             $classReflection = $this->reflectionProvider->getClass($newClass);
-            if (!$classReflection->isInterface()) {
-                continue;
-            }
             $oldClassReflection = $this->reflectionProvider->getClass($oldClass);
-            if ($oldClassReflection->hasConstant($classConstFetch->name->toString()) && !$classReflection->hasConstant($classConstFetch->name->toString())) {
-                // no constant found on new interface? skip node below ClassConstFetch on this rule
-                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            if ($oldClassReflection->hasConstant($constFetchName) && !$classReflection->hasConstant($constFetchName)) {
+                // should be skipped as new class does not have access to the constant
+                return \true;
             }
         }
-        // continue to next Name usage
-        return null;
+        return \false;
     }
 }
