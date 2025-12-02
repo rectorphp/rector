@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Comments\CommentResolver;
@@ -78,6 +79,9 @@ CODE_SAMPLE
             $stmt = $classLike->stmts[$key];
             $nextStmt = $classLike->stmts[$key + 1];
             if ($stmt instanceof TraitUse && $nextStmt instanceof TraitUse) {
+                continue;
+            }
+            if ($stmt instanceof EnumCase && $nextStmt instanceof EnumCase) {
                 continue;
             }
             $endLine = $stmt->getEndLine();
