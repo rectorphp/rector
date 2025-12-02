@@ -12,6 +12,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
@@ -34,7 +35,9 @@ final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements Decora
         if ($stmts === null) {
             return null;
         }
+        SimpleNodeTraverser::decorateWithAttributeValue($stmts, AttributeKey::IS_INSIDE_BYREF_FUNCTION_LIKE, \true);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $node) {
+            // avoid nested functions or classes
             if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }

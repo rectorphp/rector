@@ -238,4 +238,5 @@ final class AttributeKey
     public const IS_DEFAULT_PROPERTY_VALUE = 'is_default_property_value';
     public const IS_CLASS_CONST_VALUE = 'is_default_class_const_value';
     public const IS_INSIDE_SYMFONY_PHP_CLOSURE = 'is_inside_symfony_php_closure';
+    public const IS_INSIDE_BYREF_FUNCTION_LIKE = 'is_inside_byref_function_like';
 }

@@ -10,13 +10,12 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\ExprAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
@@ -94,19 +93,19 @@ CODE_SAMPLE
     }
     /**
      * @param StmtsAware $node
-     * @return null|Node|NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?\PhpParser\Node
     {
         if (!is_array($node->stmts)) {
             return null;
         }
-        if ($node instanceof FunctionLike && $node->returnsByRef()) {
-            return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-        }
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Switch_) {
+                continue;
+            }
+            // possible reference override, where match
+            if ($stmt->getAttribute(AttributeKey::IS_INSIDE_BYREF_FUNCTION_LIKE)) {
                 continue;
             }
             $nextStmt = $node->stmts[$key + 1] ?? null;

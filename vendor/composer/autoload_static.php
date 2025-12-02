@@ -2525,7 +2525,7 @@ class ComposerStaticInitd7faddeaafe22cf1903ddfcba3e7de0e
         'Rector\\PhpParser\\NodeTraverser\\AbstractImmutableNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/AbstractImmutableNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
-        'Rector\\PhpParser\\NodeTraverser\\SimpleTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/SimpleTraverser.php',
+        'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
         'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => __DIR__ . '/../..' . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',

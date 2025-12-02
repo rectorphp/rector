@@ -2277,7 +2277,7 @@ return array(
     'Rector\\PhpParser\\NodeTraverser\\AbstractImmutableNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/AbstractImmutableNodeTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
-    'Rector\\PhpParser\\NodeTraverser\\SimpleTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/SimpleTraverser.php',
+    'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
     'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => $baseDir . '/src/PhpParser/Node/AssignAndBinaryMap.php',
     'Rector\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',
     'Rector\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => $baseDir . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
