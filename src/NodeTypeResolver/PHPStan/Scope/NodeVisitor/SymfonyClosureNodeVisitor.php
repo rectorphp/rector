@@ -28,7 +28,7 @@ final class SymfonyClosureNodeVisitor extends NodeVisitorAbstract implements Dec
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
-        SimpleNodeTraverser::decorateWithAttributeValue((array) $node->stmts, AttributeKey::IS_INSIDE_SYMFONY_PHP_CLOSURE, \true);
+        SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, AttributeKey::IS_INSIDE_SYMFONY_PHP_CLOSURE, \true);
         return null;
     }
 }
