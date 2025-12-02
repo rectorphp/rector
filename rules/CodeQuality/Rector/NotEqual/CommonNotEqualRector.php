@@ -5,7 +5,6 @@ namespace Rector\CodeQuality\Rector\NotEqual;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -48,23 +47,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?NotEqual
     {
-        if (!$this->doesNotEqualContainsShipCompareToken($node)) {
-            return null;
-        }
-        // invoke override to default "!="
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        return $node;
-    }
-    private function doesNotEqualContainsShipCompareToken(NotEqual $notEqual): bool
-    {
-        $tokenStartPos = $notEqual->getStartTokenPos();
-        $tokenEndPos = $notEqual->getEndTokenPos();
+        $tokenStartPos = $node->getStartTokenPos();
+        $tokenEndPos = $node->getEndTokenPos();
         for ($i = $tokenStartPos; $i < $tokenEndPos; ++$i) {
             $token = $this->file->getOldTokens()[$i];
             if ((string) $token === '<>') {
-                return \true;
+                $token->text = '!=';
+                return $node;
             }
         }
-        return \false;
+        return null;
     }
 }
