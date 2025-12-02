@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPUnit\Enum\ProphecyClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -35,10 +36,6 @@ final class AddProphecyTraitRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    /**
-     * @var string
-     */
-    private const PROPHECY_TRAIT = 'Prophecy\PhpUnit\ProphecyTrait';
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -89,7 +86,7 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $traitUse = new TraitUse([new FullyQualified(self::PROPHECY_TRAIT)]);
+        $traitUse = new TraitUse([new FullyQualified(ProphecyClassName::PROPHECY_TRAIT)]);
         $node->stmts = array_merge([$traitUse], $node->stmts);
         return $node;
     }
@@ -103,6 +100,6 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return $classReflection->hasTraitUse(self::PROPHECY_TRAIT);
+        return $classReflection->hasTraitUse(ProphecyClassName::PROPHECY_TRAIT);
     }
 }

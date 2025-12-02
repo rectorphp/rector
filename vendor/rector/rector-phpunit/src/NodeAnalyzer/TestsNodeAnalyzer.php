@@ -12,6 +12,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\Reflection\ReflectionResolver;
 final class TestsNodeAnalyzer
@@ -32,10 +33,6 @@ final class TestsNodeAnalyzer
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    /**
-     * @var string[]
-     */
-    private const TEST_CASE_OBJECT_CLASSES = [PHPUnitClassName::TEST_CASE, PHPUnitClassName::TEST_CASE_LEGACY];
     public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -49,7 +46,7 @@ final class TestsNodeAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        foreach (self::TEST_CASE_OBJECT_CLASSES as $testCaseObjectClass) {
+        foreach (PHPUnitClassName::TEST_CLASSES as $testCaseObjectClass) {
             if ($classReflection->is($testCaseObjectClass)) {
                 return \true;
             }
@@ -66,7 +63,7 @@ final class TestsNodeAnalyzer
         }
         foreach ($classMethod->getAttrGroups() as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attribute) {
-                if ($attribute->name->toString() === 'PHPUnit\Framework\Attributes\Test') {
+                if ($this->nodeNameResolver->isName($attribute->name, PHPUnitAttribute::TEST)) {
                     return \true;
                 }
             }

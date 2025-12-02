@@ -18,13 +18,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeVisitor;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\Enum\AssertMethod;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,9 +37,14 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private TestsNodeAnalyzer $testsNodeAnalyzer;
+    public function __construct(ValueResolver $valueResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->valueResolver = $valueResolver;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -75,82 +80,90 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Closure::class, FuncCall::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod|Closure|FuncCall $node
-     * @return StaticCall|MethodCall|null|NodeVisitor::DONT_TRAVERSE_CHILDREN
+     * @param Class_ $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Class_
     {
-        if ($node instanceof ClassMethod) {
-            if ($node->isStatic()) {
-                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+        if (!$this->testsNodeAnalyzer->isInTestClass($node) && !$this->isBehatContext($node)) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->stmts === null) {
+                continue;
             }
+            $useStaticAssert = $classMethod->isStatic() ?: $this->isBehatContext($node);
+            $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use (&$useStaticAssert, &$hasChanged) {
+                if ($node instanceof Closure && $node->static) {
+                    $useStaticAssert = \true;
+                    return null;
+                }
+                if (!$node instanceof FuncCall) {
+                    return null;
+                }
+                if ($node->isFirstClassCallable()) {
+                    return null;
+                }
+                if (!$this->isName($node, 'assert')) {
+                    return null;
+                }
+                $comparedExpr = $node->getArgs()[0]->value;
+                if ($comparedExpr instanceof Equal) {
+                    $methodName = AssertMethod::ASSERT_EQUALS;
+                    $exprs = [$comparedExpr->right, $comparedExpr->left];
+                } elseif ($comparedExpr instanceof Identical) {
+                    $methodName = AssertMethod::ASSERT_SAME;
+                    $exprs = [$comparedExpr->right, $comparedExpr->left];
+                } elseif ($comparedExpr instanceof NotIdentical) {
+                    if ($this->valueResolver->isNull($comparedExpr->right)) {
+                        $methodName = 'assertNotNull';
+                        $exprs = [$comparedExpr->left];
+                    } else {
+                        return null;
+                    }
+                } elseif ($comparedExpr instanceof Bool_) {
+                    $methodName = 'assertTrue';
+                    $exprs = [$comparedExpr];
+                } elseif ($comparedExpr instanceof FuncCall) {
+                    if ($this->isName($comparedExpr, 'method_exists')) {
+                        $methodName = 'assertTrue';
+                        $exprs = [$comparedExpr];
+                    } else {
+                        return null;
+                    }
+                } elseif ($comparedExpr instanceof Instanceof_) {
+                    // outside TestCase
+                    $methodName = 'assertInstanceOf';
+                    $exprs = [];
+                    if ($comparedExpr->class instanceof FullyQualified) {
+                        $classConstFetch = new ClassConstFetch($comparedExpr->class, 'class');
+                        $exprs[] = $classConstFetch;
+                    } else {
+                        return null;
+                    }
+                    $exprs[] = $comparedExpr->expr;
+                } else {
+                    return null;
+                }
+                // is there a comment message
+                if (isset($node->getArgs()[1])) {
+                    $exprs[] = $node->getArgs()[1]->value;
+                }
+                $hasChanged = \true;
+                return $this->createAssertCall($methodName, $exprs, $useStaticAssert);
+            });
+        }
+        if (!$hasChanged) {
             return null;
         }
-        if ($node instanceof Closure) {
-            if ($node->static) {
-                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
-            }
-            return null;
-        }
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        if (!$this->isName($node, 'assert')) {
-            return null;
-        }
-        if (!$this->isTestFilePath($node) && !$this->isBehatContext($node)) {
-            return null;
-        }
-        $comparedExpr = $node->getArgs()[0]->value;
-        if ($comparedExpr instanceof Equal) {
-            $methodName = AssertMethod::ASSERT_EQUALS;
-            $exprs = [$comparedExpr->right, $comparedExpr->left];
-        } elseif ($comparedExpr instanceof Identical) {
-            $methodName = AssertMethod::ASSERT_SAME;
-            $exprs = [$comparedExpr->right, $comparedExpr->left];
-        } elseif ($comparedExpr instanceof NotIdentical) {
-            if ($this->valueResolver->isNull($comparedExpr->right)) {
-                $methodName = 'assertNotNull';
-                $exprs = [$comparedExpr->left];
-            } else {
-                return null;
-            }
-        } elseif ($comparedExpr instanceof Bool_) {
-            $methodName = 'assertTrue';
-            $exprs = [$comparedExpr];
-        } elseif ($comparedExpr instanceof FuncCall) {
-            if ($this->isName($comparedExpr, 'method_exists')) {
-                $methodName = 'assertTrue';
-                $exprs = [$comparedExpr];
-            } else {
-                return null;
-            }
-        } elseif ($comparedExpr instanceof Instanceof_) {
-            // outside TestCase
-            $methodName = 'assertInstanceOf';
-            $exprs = [];
-            if ($comparedExpr->class instanceof FullyQualified) {
-                $classConstFetch = new ClassConstFetch($comparedExpr->class, 'class');
-                $exprs[] = $classConstFetch;
-            } else {
-                return null;
-            }
-            $exprs[] = $comparedExpr->expr;
-        } else {
-            return null;
-        }
-        // is there a comment message
-        if (isset($node->getArgs()[1])) {
-            $exprs[] = $node->getArgs()[1]->value;
-        }
-        return $this->createCall($node, $methodName, $exprs);
+        return $node;
     }
-    private function isBehatContext(FuncCall $funcCall): bool
+    private function isBehatContext(Class_ $class): bool
     {
-        $scope = ScopeFetcher::fetch($funcCall);
+        $scope = ScopeFetcher::fetch($class);
         if (!$scope->getClassReflection() instanceof ClassReflection) {
             return \false;
         }
@@ -158,29 +171,17 @@ CODE_SAMPLE
         // special case with static call
         return substr_compare($className, 'Context', -strlen('Context')) === 0;
     }
-    private function isTestFilePath(FuncCall $funcCall): bool
-    {
-        $scope = ScopeFetcher::fetch($funcCall);
-        if (!$scope->getClassReflection() instanceof ClassReflection) {
-            return \false;
-        }
-        $className = $scope->getClassReflection()->getName();
-        if (substr_compare($className, 'Test', -strlen('Test')) === 0) {
-            return \true;
-        }
-        return substr_compare($className, 'TestCase', -strlen('TestCase')) === 0;
-    }
     /**
      * @param Expr[] $exprs
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
-    private function createCall(FuncCall $funcCall, string $methodName, array $exprs)
+    private function createAssertCall(string $methodName, array $exprs, bool $useStaticAssert)
     {
         $args = [];
         foreach ($exprs as $expr) {
             $args[] = new Arg($expr);
         }
-        if ($this->isBehatContext($funcCall)) {
+        if ($useStaticAssert) {
             $assertFullyQualified = new FullyQualified(PHPUnitClassName::ASSERT);
             return new StaticCall($assertFullyQualified, $methodName, $args);
         }

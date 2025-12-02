@@ -110,22 +110,23 @@ CODE_SAMPLE
             return $this->refactorClassMethod($node);
         }
         $hasChanged = \false;
-        if ($node instanceof Class_) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-            if ($phpDocInfo instanceof PhpDocInfo) {
-                $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
-                if ($requiresAttributeGroups !== []) {
-                    $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-                    $node->attrGroups = array_merge($node->attrGroups, $requiresAttributeGroups);
-                    $this->removeMethodRequiresAnnotations($phpDocInfo);
-                    $hasChanged = \true;
-                }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $requiresAttributeGroups = $this->handleRequires($phpDocInfo);
+            if ($requiresAttributeGroups !== []) {
+                $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+                $node->attrGroups = array_merge($node->attrGroups, $requiresAttributeGroups);
+                $this->removeMethodRequiresAnnotations($phpDocInfo);
+                $hasChanged = \true;
             }
         }
-        return $hasChanged ? $node : null;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     /**
-     * @return array<string, AttributeGroup|null>
+     * @return array<string, AttributeGroup>
      */
     private function handleRequires(PhpDocInfo $phpDocInfo): array
     {
@@ -136,7 +137,11 @@ CODE_SAMPLE
                 continue;
             }
             $requires = $desiredTagValueNode->value->value;
-            $attributeGroups[$requires] = $this->requiresAttributeFactory->create($requires);
+            $requiresAttributeGroup = $this->requiresAttributeFactory->create($requires);
+            if (!$requiresAttributeGroup instanceof AttributeGroup) {
+                continue;
+            }
+            $attributeGroups[$requires] = $requiresAttributeGroup;
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
         return $attributeGroups;

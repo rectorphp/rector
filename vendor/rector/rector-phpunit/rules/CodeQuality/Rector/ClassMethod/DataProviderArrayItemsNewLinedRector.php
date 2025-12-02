@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -128,9 +127,6 @@ CODE_SAMPLE
     private function shouldRePrint(Array_ $array): bool
     {
         foreach ($array->items as $key => $item) {
-            if (!$item instanceof ArrayItem) {
-                continue;
-            }
             if (!isset($array->items[$key + 1])) {
                 continue;
             }
