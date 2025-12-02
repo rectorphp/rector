@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22
+class ComposerStaticInitd7faddeaafe22cf1903ddfcba3e7de0e
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2087,6 +2087,7 @@ class ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\NameNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/NameNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\PropertyOrClassConstDefaultNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/PropertyOrClassConstDefaultNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\SymfonyClosureNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/SymfonyClosureNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\RectorNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/RectorNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
@@ -3188,9 +3189,9 @@ class ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita05020a1ba1c38c2596fcbea78eb7e22::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd7faddeaafe22cf1903ddfcba3e7de0e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd7faddeaafe22cf1903ddfcba3e7de0e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd7faddeaafe22cf1903ddfcba3e7de0e::$classMap;
 
         }, null, ClassLoader::class);
     }

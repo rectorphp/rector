@@ -1839,6 +1839,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\NameNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/NameNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\PropertyOrClassConstDefaultNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/PropertyOrClassConstDefaultNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\SymfonyClosureNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/NodeVisitor/SymfonyClosureNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\RectorNodeScopeResolver' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/RectorNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',

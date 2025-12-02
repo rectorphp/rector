@@ -8,7 +8,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -51,18 +50,14 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [AssignOp::class, Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
+        return [Assign::class, Isset_::class, Unset_::class, ArrayDimFetch::class];
     }
     /**
-     * @template TNode of ArrayDimFetch|Assign|Isset_|Unset_
-     * @param TNode $node
+     * @param ArrayDimFetch|Assign|Isset_|Unset_ $node
      * @return ($node is Unset_ ? Stmt[]|int : ($node is Isset_ ? Expr|int : MethodCall|int|null))
      */
     public function refactor(Node $node)
     {
-        if ($node instanceof AssignOp) {
-            return NodeVisitor::DONT_TRAVERSE_CHILDREN;
-        }
         if ($node instanceof Unset_) {
             return $this->handleUnset($node);
         }
@@ -77,6 +72,9 @@ CODE_SAMPLE
         }
         // is part of assign, skip
         if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED)) {
+            return null;
+        }
+        if ($node->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR)) {
             return null;
         }
         return $this->createExplicitMethodCall($node, 'get');

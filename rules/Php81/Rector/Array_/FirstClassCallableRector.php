@@ -6,13 +6,11 @@ namespace Rector\Php81\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\VariadicPlaceholder;
-use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -23,7 +21,6 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -46,16 +43,11 @@ final class FirstClassCallableRector extends AbstractRector implements MinPhpVer
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
-    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, SymfonyPhpClosureDetector $symfonyPhpClosureDetector)
+    public function __construct(ArrayCallableMethodMatcher $arrayCallableMethodMatcher, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
     {
         $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
-        $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,18 +84,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Array_::class, Closure::class];
+        return [Array_::class];
     }
     /**
-     * @param Array_|Closure $node
-     * @return StaticCall|MethodCall|null|NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN
+     * @param Array_ $node
+     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
     public function refactor(Node $node)
     {
-        if ($node instanceof Closure) {
-            if ($this->symfonyPhpClosureDetector->detect($node)) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
+        if ($node->getAttribute(AttributeKey::IS_INSIDE_SYMFONY_PHP_CLOSURE)) {
             return null;
         }
         $scope = ScopeFetcher::fetch($node);
