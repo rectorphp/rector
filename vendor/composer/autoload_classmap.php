@@ -2671,6 +2671,7 @@ return array(
     'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => $baseDir . '/src/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
     'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => $baseDir . '/src/Testing/PHPUnit/ValueObject/RectorTestResult.php',
     'Rector\\Testing\\TestingParser\\TestingParser' => $baseDir . '/src/Testing/TestingParser/TestingParser.php',
+    'Rector\\Transform\\Enum\\MagicPropertyHandler' => $baseDir . '/rules/Transform/Enum/MagicPropertyHandler.php',
     'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => $baseDir . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
     'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => $baseDir . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
     'Rector\\Transform\\NodeTypeAnalyzer\\TypeProvidingExprFromClassResolver' => $baseDir . '/rules/Transform/NodeTypeAnalyzer/TypeProvidingExprFromClassResolver.php',

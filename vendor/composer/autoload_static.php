@@ -2919,6 +2919,7 @@ class ComposerStaticInit8c176ed86b5fadc237951ab75eb50545
         'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
         'Rector\\Testing\\PHPUnit\\ValueObject\\RectorTestResult' => __DIR__ . '/../..' . '/src/Testing/PHPUnit/ValueObject/RectorTestResult.php',
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/src/Testing/TestingParser/TestingParser.php',
+        'Rector\\Transform\\Enum\\MagicPropertyHandler' => __DIR__ . '/../..' . '/rules/Transform/Enum/MagicPropertyHandler.php',
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
         'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
         'Rector\\Transform\\NodeTypeAnalyzer\\TypeProvidingExprFromClassResolver' => __DIR__ . '/../..' . '/rules/Transform/NodeTypeAnalyzer/TypeProvidingExprFromClassResolver.php',

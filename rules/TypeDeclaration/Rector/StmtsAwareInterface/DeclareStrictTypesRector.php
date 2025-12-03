@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Rector\StmtsAwareInterface;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\NodeVisitor;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\PhpParser\Enum\NodeGroup;
@@ -90,12 +89,13 @@ CODE_SAMPLE
     }
     /**
      * @param StmtsAware $node
+     * @return null
      */
-    public function refactor(Node $node): int
+    public function refactor(Node $node)
     {
         // workaround, as Rector now only hooks to specific nodes, not arrays
         // avoid traversing, as we already handled in beforeTraverse()
-        return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        return null;
     }
     public function provideMinPhpVersion(): int
     {

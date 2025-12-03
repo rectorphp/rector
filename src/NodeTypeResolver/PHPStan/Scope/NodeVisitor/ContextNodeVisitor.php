@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -59,6 +60,12 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         if ($node instanceof Unset_) {
             foreach ($node->vars as $var) {
                 $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
+            }
+            return null;
+        }
+        if ($node instanceof Isset_) {
+            foreach ($node->vars as $var) {
+                $var->setAttribute(AttributeKey::IS_ISSET_VAR, \true);
             }
             return null;
         }
