@@ -57,7 +57,9 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             return null;
         }
         if ($node instanceof Unset_) {
-            $this->processContextInUnset($node);
+            foreach ($node->vars as $var) {
+                $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
+            }
             return null;
         }
         if ($node instanceof Attribute) {
@@ -112,12 +114,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             }
             return null;
         });
-    }
-    private function processContextInUnset(Unset_ $unset): void
-    {
-        foreach ($unset->vars as $var) {
-            $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
-        }
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_ $node

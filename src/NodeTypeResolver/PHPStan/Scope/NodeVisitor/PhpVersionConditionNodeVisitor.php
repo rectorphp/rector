@@ -28,7 +28,7 @@ final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implement
         if (($node instanceof Ternary || $node instanceof If_) && $this->hasVersionCompareCond($node)) {
             if ($node instanceof Ternary) {
                 $nodes = [$node->else];
-                if ($node->if instanceof \PhpParser\Node) {
+                if ($node->if instanceof Node) {
                     $nodes[] = $node->if;
                 }
             } else {

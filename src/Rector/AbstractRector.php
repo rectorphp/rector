@@ -8,9 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Const_;
-use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitor;
@@ -20,7 +18,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\Provider\CurrentFileProvider;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
@@ -59,13 +57,14 @@ CODE_SAMPLE;
     private ChangedNodeScopeRefresher $changedNodeScopeRefresher;
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     private CurrentFileProvider $currentFileProvider;
+    private CommentsMerger $commentsMerger;
     /**
      * @var array<int, Node[]>
      */
     private array $nodesToReturn = [];
     private CreatedByRuleDecorator $createdByRuleDecorator;
     private ?int $toBeRemovedNodeId = null;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher): void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, CommentsMerger $commentsMerger): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -76,6 +75,7 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
+        $this->commentsMerger = $commentsMerger;
     }
     /**
      * @return Node[]|null
@@ -142,7 +142,8 @@ CODE_SAMPLE;
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-     * @return mixed[]|int|\PhpParser\Node|null
+     *
+     * @return Node|Node[]|NodeVisitor::REMOVE_NODE|null
      */
     final public function leaveNode(Node $node)
     {
@@ -211,26 +212,7 @@ CODE_SAMPLE;
     }
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
-        if ($this->nodeComparator->areSameNode($newNode, $oldNode)) {
-            return;
-        }
-        if ($oldNode instanceof InlineHTML) {
-            return;
-        }
-        $oldPhpDocInfo = $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $newPhpDocInfo = $newNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($newPhpDocInfo instanceof PhpDocInfo) {
-            if (!$oldPhpDocInfo instanceof PhpDocInfo) {
-                return;
-            }
-            if ((string) $oldPhpDocInfo->getPhpDocNode() !== (string) $newPhpDocInfo->getPhpDocNode()) {
-                return;
-            }
-        }
-        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldPhpDocInfo);
-        if (!$newNode instanceof Nop) {
-            $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
-        }
+        $this->commentsMerger->mirrorComments($newNode, $oldNode);
     }
     private function decorateCurrentAndChildren(Node $node): void
     {
