@@ -1735,6 +1735,7 @@ class ComposerStaticInit8c176ed86b5fadc237951ab75eb50545
         'Rector\\Doctrine\\DoctrineFixture\\Rector\\MethodCall\\AddGetReferenceTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/DoctrineFixture/Rector/MethodCall/AddGetReferenceTypeRector.php',
         'Rector\\Doctrine\\DoctrineFixture\\Reflection\\ParameterTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/DoctrineFixture/Reflection/ParameterTypeResolver.php',
         'Rector\\Doctrine\\Enum\\DoctrineClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/DoctrineClass.php',
+        'Rector\\Doctrine\\Enum\\EventClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/EventClass.php',
         'Rector\\Doctrine\\Enum\\MappingClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/MappingClass.php',
         'Rector\\Doctrine\\Enum\\OdmMappingClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/OdmMappingClass.php',
         'Rector\\Doctrine\\Enum\\TestClass' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Enum/TestClass.php',

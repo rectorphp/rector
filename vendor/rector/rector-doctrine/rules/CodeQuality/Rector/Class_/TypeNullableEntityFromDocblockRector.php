@@ -153,7 +153,10 @@ CODE_SAMPLE
                 continue;
             }
             $propertyType = $this->columnPropertyTypeResolver->resolve($property, \true);
-            if (!$propertyType instanceof Type || $propertyType instanceof MixedType) {
+            if (!$propertyType instanceof Type) {
+                continue;
+            }
+            if ($propertyType instanceof MixedType) {
                 continue;
             }
             $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);

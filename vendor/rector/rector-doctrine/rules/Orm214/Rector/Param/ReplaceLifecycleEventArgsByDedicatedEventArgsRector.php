@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\Enum\DoctrineClass;
+use Rector\Doctrine\Enum\EventClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceLifecycleEventArgsByDedicatedEventArgsRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string>
+     * @var array<string, EventClass::*>
      */
-    private const EVENT_CLASSES = ['prePersist' => 'Doctrine\ORM\Event\PrePersistEventArgs', 'preUpdate' => 'Doctrine\ORM\Event\PreUpdateEventArgs', 'preRemove' => 'Doctrine\ORM\Event\PreRemoveEventArgs', 'postPersist' => 'Doctrine\ORM\Event\PostPersistEventArgs', 'postUpdate' => 'Doctrine\ORM\Event\PostUpdateEventArgs', 'postRemove' => 'Doctrine\ORM\Event\PostRemoveEventArgs', 'postLoad' => 'Doctrine\ORM\Event\PostLoadEventArgs'];
+    private const EVENT_CLASSES = ['prePersist' => EventClass::PRE_PERSIST_EVENT_ARGS, 'preUpdate' => EventClass::PRE_UPDATE_EVENT_ARGS, 'preRemove' => EventClass::PRE_REMOVE_EVENT_ARGS, 'postPersist' => EventClass::POST_PERSIST_EVENT_ARGS, 'postUpdate' => EventClass::POST_UPDATE_EVENT_ARGS, 'postRemove' => EventClass::POST_REMOVE_EVENT_ARGS, 'postLoad' => EventClass::POST_LOAD_EVENT_ARGS];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace Doctrine\ORM\Event\LifecycleEventArgs with specific event classes based on the function call', [new CodeSample(<<<'CODE_SAMPLE'
@@ -64,11 +66,13 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($node->params as $param) {
-            if (!$this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\LifecycleEventArgs'))) {
+            if (!$this->isObjectType($param, new ObjectType(DoctrineClass::LIFECYCLE_EVENT_ARGS))) {
                 continue;
             }
-            if ($this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PrePersistEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PreUpdateEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PreRemoveEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PostPersistEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PostUpdateEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PostRemoveEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\ORM\Event\PostLoadEventArgs'))) {
-                continue;
+            foreach (EventClass::ALL as $eventClass) {
+                if ($this->isObjectType($param, new ObjectType($eventClass))) {
+                    continue 2;
+                }
             }
             $eventClass = self::EVENT_CLASSES[$node->name->name] ?? null;
             if ($eventClass === null) {

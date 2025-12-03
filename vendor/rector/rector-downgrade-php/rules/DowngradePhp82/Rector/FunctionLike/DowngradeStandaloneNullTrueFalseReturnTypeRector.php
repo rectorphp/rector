@@ -140,7 +140,7 @@ CODE_SAMPLE
             return null;
         }
         $methodName = $classMethod->name->toString();
-        $parents = array_merge(is_array($classReflection->getParents()) ? $classReflection->getParents() : iterator_to_array($classReflection->getParents()), is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : iterator_to_array($classReflection->getInterfaces()));
+        $parents = array_merge(is_array($classReflection->getParents()) ? $classReflection->getParents() : iterator_to_array(is_array($classReflection->getParents()) ? new \ArrayIterator($classReflection->getParents()) : $classReflection->getParents()), is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : iterator_to_array(is_array($classReflection->getInterfaces()) ? new \ArrayIterator($classReflection->getInterfaces()) : $classReflection->getInterfaces()));
         foreach ($parents as $parent) {
             if (!$parent->hasMethod($methodName)) {
                 continue;

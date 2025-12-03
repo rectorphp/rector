@@ -5,20 +5,12 @@ namespace Rector\DowngradePhp81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeVisitor;
 use PHPStan\Type\IntegerRangeType;
-use Rector\DeadCode\ConditionResolver;
-use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
@@ -38,17 +30,15 @@ final class DowngradeHashAlgorithmXxHashRector extends AbstractRector
      */
     private ValueResolver $valueResolver;
     /**
-     * @readonly
+     * @var array<string, int>
      */
-    private ConditionResolver $conditionResolver;
     private const HASH_ALGORITHMS_TO_DOWNGRADE = ['xxh32' => \MHASH_XXH32, 'xxh64' => \MHASH_XXH64, 'xxh3' => \MHASH_XXH3, 'xxh128' => \MHASH_XXH128];
     private const REPLACEMENT_ALGORITHM = 'md5';
     private int $argNamedKey;
-    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver, ConditionResolver $conditionResolver)
+    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver)
     {
         $this->argsAnalyzer = $argsAnalyzer;
         $this->valueResolver = $valueResolver;
-        $this->conditionResolver = $conditionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -77,27 +67,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [If_::class, Ternary::class, FuncCall::class];
+        return [FuncCall::class];
     }
     /**
-     * @param If_|Ternary|FuncCall $node
-     * @return null|NodeVisitor::DONT_TRAVERSE_CHILDREN|Node
+     * @param FuncCall $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?FuncCall
     {
-        if ($node instanceof If_) {
-            if ($this->isVersionCompareIf($node)) {
-                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
-            }
-            return null;
-        }
-        if ($node instanceof Ternary) {
-            if ($this->isVersionCompareTernary($node)) {
-                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
-            }
-            return null;
-        }
         if ($this->shouldSkip($node)) {
+            return null;
+        }
+        if ($node->getAttribute(AttributeKey::PHP_VERSION_CONDITIONED)) {
             return null;
         }
         $this->argNamedKey = 0;
@@ -112,44 +92,6 @@ CODE_SAMPLE
         $arg = $args[$this->argNamedKey];
         $arg->value = new String_(self::REPLACEMENT_ALGORITHM);
         return $node;
-    }
-    private function isVersionCompareIf(If_ $if): bool
-    {
-        if ($if->cond instanceof FuncCall) {
-            // per use case reported only
-            if (count($if->stmts) !== 1) {
-                return \false;
-            }
-            $versionCompare = $this->conditionResolver->resolveFromExpr($if->cond);
-            if (!$versionCompare instanceof VersionCompareCondition || $versionCompare->getSecondVersion() !== 80100) {
-                return \false;
-            }
-            if ($versionCompare->getCompareSign() !== '>=') {
-                return \false;
-            }
-            if ($if->stmts[0] instanceof Expression && $if->stmts[0]->expr instanceof Assign && $if->stmts[0]->expr->expr instanceof FuncCall) {
-                return $this->isName($if->stmts[0]->expr->expr, 'hash');
-            }
-            if ($if->stmts[0] instanceof Return_ && $if->stmts[0]->expr instanceof FuncCall) {
-                return $this->isName($if->stmts[0]->expr, 'hash');
-            }
-        }
-        return \false;
-    }
-    private function isVersionCompareTernary(Ternary $ternary): bool
-    {
-        if ($ternary->if instanceof Expr && $ternary->cond instanceof FuncCall) {
-            $versionCompare = $this->conditionResolver->resolveFromExpr($ternary->cond);
-            if ($versionCompare instanceof VersionCompareCondition && $versionCompare->getSecondVersion() === 80100) {
-                if ($versionCompare->getCompareSign() === '>=') {
-                    return $ternary->if instanceof FuncCall && $this->isName($ternary->if, 'hash');
-                }
-                if ($versionCompare->getCompareSign() === '<') {
-                    return $ternary->else instanceof FuncCall && $this->isName($ternary->else, 'hash');
-                }
-            }
-        }
-        return \false;
     }
     private function shouldSkip(FuncCall $funcCall): bool
     {

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/dbal/pull/6504/files
  *
- * @see \Dbal40\Rector\MethodCall\New_\AddArrayResultColumnNamesRector\AddArrayResultColumnNamesRectorTest
+ * @see \Rector\Doctrine\Tests\Dbal42\Rector\New_\AddArrayResultColumnNamesRector\AddArrayResultColumnNamesRectorTest
  */
 final class AddArrayResultColumnNamesRector extends AbstractRector
 {

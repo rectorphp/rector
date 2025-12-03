@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\Doctrine\CodeQuality\Enum\CollectionMapping;
 use Rector\Doctrine\CodeQuality\Enum\EntityMappingKey;
+use Rector\Doctrine\Enum\MappingClass;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\NodeAnalyzer\TargetEntityResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -45,7 +46,6 @@ final class ToOneRelationPropertyTypeResolver
      * @readonly
      */
     private TargetEntityResolver $targetEntityResolver;
-    private const JOIN_COLUMN = ['Doctrine\ORM\Mapping\JoinColumn', 'Doctrine\ORM\Mapping\Column'];
     public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory, ClassAnnotationMatcher $classAnnotationMatcher, AttributeFinder $attributeFinder, TargetEntityResolver $targetEntityResolver)
     {
         $this->typeFactory = $typeFactory;
@@ -105,7 +105,7 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function resolveFromDocBlock(PhpDocInfo $phpDocInfo, Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, bool $forceNullable): Type
     {
-        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\ORM\Mapping\JoinColumn');
+        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(MappingClass::JOIN_COLUMN);
         return $this->processToOneRelation($property, $doctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode, $forceNullable);
     }
     private function resolveFromObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable): Type
@@ -126,7 +126,7 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function isNullableJoinColumn(Property $property): bool
     {
-        $joinExpr = $this->attributeFinder->findAttributeByClassesArgByName($property, self::JOIN_COLUMN, 'nullable');
+        $joinExpr = $this->attributeFinder->findAttributeByClassesArgByName($property, [MappingClass::JOIN_COLUMN, MappingClass::COLUMN], 'nullable');
         return $joinExpr instanceof ConstFetch && !in_array('false', $joinExpr->name->getParts(), \true);
     }
 }

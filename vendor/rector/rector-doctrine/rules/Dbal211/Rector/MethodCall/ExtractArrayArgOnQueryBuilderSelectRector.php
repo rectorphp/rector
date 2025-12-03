@@ -9,6 +9,7 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,7 +53,7 @@ CODE_SAMPLE
         if (!$varType instanceof ObjectType) {
             return null;
         }
-        if (!$varType->isInstanceOf('Doctrine\DBAL\Query\QueryBuilder')->yes()) {
+        if (!$varType->isInstanceOf(DoctrineClass::DBAL_QUERY_BUILDER)->yes()) {
             return null;
         }
         if (!$this->isNames($node->name, ['select', 'addSelect', 'groupBy', 'addGroupBy'])) {

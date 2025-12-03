@@ -19,8 +19,8 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://wiki.php.net/rfc/pipe-operator-v3
  * @see \Rector\Tests\DowngradePhp85\Rector\StmtsAwareInterface\DowngradePipeOperatorRector\DowngradePipeOperatorRectorTest
+ * @see https://wiki.php.net/rfc/pipe-operator-v3
  */
 final class DowngradePipeOperatorRector extends AbstractRector
 {

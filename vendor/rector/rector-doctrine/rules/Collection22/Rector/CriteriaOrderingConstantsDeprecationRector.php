@@ -14,11 +14,12 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see
+ * @see \Rector\Doctrine\Tests\Collection22\Rector\CriteriaOrderingConstantsDeprecations\CriteriaOrderingConstantDeprecationRectorTest
  */
 final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
 {
@@ -28,7 +29,7 @@ final class CriteriaOrderingConstantsDeprecationRector extends AbstractRector
     private ObjectType $criteriaObjectType;
     public function __construct()
     {
-        $this->criteriaObjectType = new ObjectType('Doctrine\Common\Collections\Criteria');
+        $this->criteriaObjectType = new ObjectType(DoctrineClass::COLLECTIONS_CRITERIA);
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -75,10 +76,7 @@ CODE_SAMPLE
     }
     private function refactorClassConstFetch(ClassConstFetch $classConstFetch): ?Node
     {
-        if (!$classConstFetch->name instanceof Identifier) {
-            return null;
-        }
-        if (!in_array($classConstFetch->name->name, ['ASC', 'DESC'])) {
+        if (!$this->isNames($classConstFetch->name, ['ASC', 'DESC'])) {
             return null;
         }
         if (!$classConstFetch->class instanceof Name) {
@@ -87,7 +85,9 @@ CODE_SAMPLE
         if (!$this->criteriaObjectType->isSuperTypeOf(new ObjectType($classConstFetch->class->toCodeString()))->yes()) {
             return null;
         }
-        switch ($classConstFetch->name->name) {
+        /** @var "ASC"|"DESC" $constantName */
+        $constantName = $this->getName($classConstFetch->name);
+        switch ($constantName) {
             case 'ASC':
                 return new String_('ASC');
             case 'DESC':
@@ -144,7 +144,7 @@ CODE_SAMPLE
      */
     private function buildArrayItem(string $direction, ?\PhpParser\Node\Expr $key): ArrayItem
     {
-        $classConstFetch = $this->nodeFactory->createClassConstFetch('Doctrine\Common\Collections\Order', (function () use ($direction) {
+        $classConstFetch = $this->nodeFactory->createClassConstFetch(DoctrineClass::ORDER, (function () use ($direction) {
             switch ($direction) {
                 case 'ASC':
                     return 'Ascending';

@@ -13,18 +13,20 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/orm/pull/9490
  * @see https://github.com/doctrine/orm/blob/3.0.x/UPGRADE.md#query-querybuilder-and-nativequery-parameters-bc-break
+ *
+ * @see \Rector\Doctrine\Tests\Orm30\Rector\MethodCall\SetParametersArrayToCollectionRector\SetParametersArrayToCollectionRectorTest
  */
 final class SetParametersArrayToCollectionRector extends AbstractRector
 {
@@ -87,13 +89,13 @@ CODE_SAMPLE
                 continue;
             }
             if ($stmt->expr instanceof Assign && $stmt->expr->expr instanceof Array_ && $stmt->expr->var instanceof Variable && $stmt->expr->var->name === $variable->name) {
-                $newCollection = new New_(new FullyQualified('Doctrine\Common\Collections\ArrayCollection'));
+                $newCollection = new New_(new FullyQualified(DoctrineClass::ARRAY_COLLECTION));
                 $newCollection->args = [new Arg(new Array_($this->convertArrayToParameters($stmt->expr->expr)['parameters']))];
                 $stmt->expr->expr = $newCollection;
                 $hasChanges = \true;
             }
             if ($stmt->expr instanceof Assign && $stmt->expr->var instanceof ArrayDimFetch && $stmt->expr->var->dim instanceof Expr && $stmt->expr->var->var instanceof Variable && $stmt->expr->var->var->name === $variable->name) {
-                $newParameter = new New_(new FullyQualified('Doctrine\ORM\Query\Parameter'));
+                $newParameter = new New_(new FullyQualified(DoctrineClass::QUERY_PARAMETER));
                 $newParameter->args = [new Arg($stmt->expr->var->dim), new Arg($stmt->expr->expr)];
                 $stmt->expr = new MethodCall($stmt->expr->var->var, 'add', [new Arg($newParameter)]);
                 $hasChanges = \true;
@@ -108,9 +110,12 @@ CODE_SAMPLE
     {
         $statements = $classMethod->getStmts() ?? [];
         foreach ($statements as $statement) {
-            if ($statement instanceof Expression && $statement->expr instanceof MethodCall && $statement->expr->name instanceof Identifier && $statement->expr->name->name === 'setParameters' && count($statement->expr->args) === 1 && $statement->expr->args[0] instanceof Arg && $statement->expr->args[0]->value instanceof Variable) {
+            if ($statement instanceof Expression && $statement->expr instanceof MethodCall && $this->isName($statement->expr->name, 'setParameters') && count($statement->expr->args) === 1 && $statement->expr->args[0] instanceof Arg && $statement->expr->args[0]->value instanceof Variable) {
                 $varType = $this->nodeTypeResolver->getType($statement->expr->var);
-                if (!$varType instanceof ObjectType || !$varType->isInstanceOf('Doctrine\ORM\QueryBuilder')->yes()) {
+                if (!$varType instanceof ObjectType) {
+                    continue;
+                }
+                if (!$varType->isInstanceOf(DoctrineClass::QUERY_BUILDER)->yes()) {
                     continue;
                 }
                 yield $statement->expr->args[0]->value;

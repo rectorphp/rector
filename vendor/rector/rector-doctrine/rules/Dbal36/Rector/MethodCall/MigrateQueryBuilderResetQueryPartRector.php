@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -64,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Doctrine\DBAL\Query\QueryBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType(DoctrineClass::DBAL_QUERY_BUILDER))) {
             return null;
         }
         if (!$this->isName($node->name, 'resetQueryPart')) {

@@ -5,45 +5,27 @@ namespace Rector\Doctrine\Enum;
 
 final class DoctrineClass
 {
-    /**
-     * @var string
-     */
     public const ABSTRACT_FIXTURE = 'Doctrine\Common\DataFixtures\AbstractFixture';
-    /**
-     * @var string
-     */
     public const AS_DOCTRINE_LISTENER_ATTRIBUTE = 'Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener';
-    /**
-     * @var string
-     */
     public const EVENT_SUBSCRIBER = 'Doctrine\Common\EventSubscriber';
     public const EVENT_SUBSCRIBER_INTERFACE = 'Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface';
-    /**
-     * @var string
-     */
     public const COLLECTION = 'Doctrine\Common\Collections\Collection';
-    /**
-     * @var string
-     */
     public const ARRAY_COLLECTION = 'Doctrine\Common\Collections\ArrayCollection';
-    /**
-     * @var string
-     */
     public const SERVICE_DOCUMENT_REPOSITORY = 'Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository';
-    /**
-     * @var string
-     */
     public const SERVICE_ENTITY_REPOSITORY = 'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository';
-    /**
-     * @var string
-     */
     public const ENTITY_REPOSITORY = 'Doctrine\ORM\EntityRepository';
-    /**
-     * @var string
-     */
     public const OBJECT_REPOSITORY = 'Doctrine\Persistence\ObjectRepository';
-    /**
-     * @var string
-     */
     public const ARRAY_RESULT = 'Doctrine\DBAL\Cache\ArrayResult';
+    public const CONNECTION = 'Doctrine\DBAL\Connection';
+    public const RESULT_STATEMENT = 'Doctrine\DBAL\Driver\ResultStatement';
+    public const DBAL_QUERY_BUILDER = 'Doctrine\DBAL\Query\QueryBuilder';
+    public const QUERY_EXPR = 'Doctrine\ORM\Query\Expr';
+    public const QUERY_PARAMETER = 'Doctrine\ORM\Query\Parameter';
+    public const DBAL_STATEMENT = 'Doctrine\DBAL\Statement';
+    public const COMPOSITE_EXPRESSION = 'Doctrine\DBAL\Query\Expression\CompositeExpression';
+    public const ABSTRACT_QUERY = 'Doctrine\ORM\AbstractQuery';
+    public const LIFECYCLE_EVENT_ARGS = 'Doctrine\ORM\Event\LifecycleEventArgs';
+    public const COLLECTIONS_CRITERIA = 'Doctrine\Common\Collections\Criteria';
+    public const QUERY_BUILDER = 'Doctrine\ORM\QueryBuilder';
+    public const ORDER = 'Doctrine\Common\Collections\Order';
 }

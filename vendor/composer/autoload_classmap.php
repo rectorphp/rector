@@ -1487,6 +1487,7 @@ return array(
     'Rector\\Doctrine\\DoctrineFixture\\Rector\\MethodCall\\AddGetReferenceTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/DoctrineFixture/Rector/MethodCall/AddGetReferenceTypeRector.php',
     'Rector\\Doctrine\\DoctrineFixture\\Reflection\\ParameterTypeResolver' => $vendorDir . '/rector/rector-doctrine/rules/DoctrineFixture/Reflection/ParameterTypeResolver.php',
     'Rector\\Doctrine\\Enum\\DoctrineClass' => $vendorDir . '/rector/rector-doctrine/src/Enum/DoctrineClass.php',
+    'Rector\\Doctrine\\Enum\\EventClass' => $vendorDir . '/rector/rector-doctrine/src/Enum/EventClass.php',
     'Rector\\Doctrine\\Enum\\MappingClass' => $vendorDir . '/rector/rector-doctrine/src/Enum/MappingClass.php',
     'Rector\\Doctrine\\Enum\\OdmMappingClass' => $vendorDir . '/rector/rector-doctrine/src/Enum/OdmMappingClass.php',
     'Rector\\Doctrine\\Enum\\TestClass' => $vendorDir . '/rector/rector-doctrine/src/Enum/TestClass.php',
