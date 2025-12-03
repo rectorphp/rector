@@ -17,7 +17,7 @@ interface RectorInterface extends NodeVisitor
     public function getNodeTypes(): array;
     /**
      * Process Node of matched type
-     * @return Node|Node[]|null|NodeVisitor::*
+     * @return Node|Node[]|null|NodeVisitor::REMOVE_NODE
      */
     public function refactor(Node $node);
 }

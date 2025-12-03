@@ -33,10 +33,7 @@ final class RectifiedAnalyzer
         if ($this->hasConsecutiveCreatedByRule($rectorClass, $node, $originalNode)) {
             return \true;
         }
-        if ($this->isJustReprintedOverlappedTokenStart($node, $originalNode)) {
-            return \true;
-        }
-        return $node->getAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE) === $rectorClass;
+        return $this->isJustReprintedOverlappedTokenStart($node, $originalNode);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass

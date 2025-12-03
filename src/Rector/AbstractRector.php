@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
@@ -91,7 +92,7 @@ CODE_SAMPLE;
         return null;
     }
     /**
-     * @return int|\PhpParser\Node|null
+     * @return NodeTraverser::REMOVE_NODE|Node|null
      */
     final public function enterNode(Node $node)
     {
@@ -107,37 +108,32 @@ CODE_SAMPLE;
         }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
-        $refactoredNode = $this->refactor($node);
+        $refactoredNodeOrState = $this->refactor($node);
         // nothing to change → continue
-        if ($refactoredNode === null) {
+        if ($refactoredNodeOrState === null) {
             return null;
         }
-        if ($refactoredNode === []) {
+        if ($refactoredNodeOrState === []) {
             $errorMessage = sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        $isIntRefactoredNode = is_int($refactoredNode);
-        /**
-         * If below node and/or its children not traversed on current rule
-         * early return null with decorate current and children node with skipped by "only" current rule
-         */
-        if ($isIntRefactoredNode) {
+        $isState = is_int($refactoredNodeOrState);
+        if ($isState) {
             $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
-            if (in_array($refactoredNode, [NodeVisitor::DONT_TRAVERSE_CHILDREN, NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN], \true)) {
-                $this->decorateCurrentAndChildren($node);
+            // only remove node is supported
+            if ($refactoredNodeOrState !== NodeVisitor::REMOVE_NODE) {
+                // @todo warn about unsupported state in the future
                 return null;
             }
-            // @see NodeVisitor::* codes, e.g. removal of node of stopping the traversing
-            if ($refactoredNode === NodeVisitor::REMOVE_NODE) {
-                // log here, so we can remove the node in leaveNode() method
-                $this->toBeRemovedNodeId = spl_object_id($originalNode);
-            }
-            // notify this rule changing code
+            // log here, so we can remove the node in leaveNode() method
+            $this->toBeRemovedNodeId = spl_object_id($originalNode);
+            // notify this rule changed code
             $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
-            return $refactoredNode === NodeVisitor::REMOVE_NODE ? $originalNode : $refactoredNode;
+            // keep original node as node will be removed in leaveNode()
+            return $originalNode;
         }
-        return $this->postRefactorProcess($originalNode, $node, $refactoredNode, $filePath);
+        return $this->postRefactorProcess($originalNode, $node, $refactoredNodeOrState, $filePath);
     }
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
@@ -213,27 +209,6 @@ CODE_SAMPLE;
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
         $this->commentsMerger->mirrorComments($newNode, $oldNode);
-    }
-    private function decorateCurrentAndChildren(Node $node): void
-    {
-        // skip sole type, as no other nodes to filter out
-        if (count($this->getNodeTypes()) === 1) {
-            return;
-        }
-        // filter only types that
-        //    1. registered in getNodesTypes() method
-        //    2. different with current node type, as already decorated above
-        //
-        $otherTypes = array_filter($this->getNodeTypes(), static fn(string $nodeType): bool => $nodeType !== get_class($node));
-        if ($otherTypes === []) {
-            return;
-        }
-        $this->traverseNodesWithCallable($node, static function (Node $subNode) use ($otherTypes) {
-            if (in_array(get_class($subNode), $otherTypes, \true)) {
-                $subNode->setAttribute(AttributeKey::SKIPPED_BY_RECTOR_RULE, static::class);
-            }
-            return null;
-        });
     }
     /**
      * @param Node|Node[] $refactoredNode
