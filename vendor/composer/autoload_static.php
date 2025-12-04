@@ -3068,7 +3068,6 @@ class ComposerStaticInit8c176ed86b5fadc237951ab75eb50545
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
-        'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
         'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayFunctionClosureParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayFunctionClosureParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrowFunctionParamArrayWhereDimFetchRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrowFunctionParamArrayWhereDimFetchRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayMapRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayMapRector.php',

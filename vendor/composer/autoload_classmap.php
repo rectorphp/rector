@@ -2820,7 +2820,6 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
-    'Rector\\TypeDeclaration\\Rector\\Expression\\InlineVarDocTagToAssertRector' => $baseDir . '/rules/TypeDeclaration/Rector/Expression/InlineVarDocTagToAssertRector.php',
     'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayFunctionClosureParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayFunctionClosureParamTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrowFunctionParamArrayWhereDimFetchRector' => $baseDir . '/rules/TypeDeclaration/Rector/FuncCall/AddArrowFunctionParamArrayWhereDimFetchRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayMapRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayMapRector.php',
