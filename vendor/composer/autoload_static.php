@@ -1681,6 +1681,7 @@ class ComposerStaticInit8c176ed86b5fadc237951ab75eb50545
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\DependencyInjection\\Laravel\\ContainerMemento' => __DIR__ . '/../..' . '/src/DependencyInjection/Laravel/ContainerMemento.php',
         'Rector\\DependencyInjection\\LazyContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/LazyContainerFactory.php',
+        'Rector\\DependencyInjection\\PHPStan\\PHPStanContainerMemento' => __DIR__ . '/../..' . '/src/DependencyInjection/PHPStan/PHPStanContainerMemento.php',
         'Rector\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
         'Rector\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
         'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',

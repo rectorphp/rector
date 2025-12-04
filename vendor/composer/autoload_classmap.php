@@ -1433,6 +1433,7 @@ return array(
     'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
     'Rector\\DependencyInjection\\Laravel\\ContainerMemento' => $baseDir . '/src/DependencyInjection/Laravel/ContainerMemento.php',
     'Rector\\DependencyInjection\\LazyContainerFactory' => $baseDir . '/src/DependencyInjection/LazyContainerFactory.php',
+    'Rector\\DependencyInjection\\PHPStan\\PHPStanContainerMemento' => $baseDir . '/src/DependencyInjection/PHPStan/PHPStanContainerMemento.php',
     'Rector\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Differ\\DefaultDiffer' => $baseDir . '/src/Differ/DefaultDiffer.php',
     'Rector\\Doctrine\\Bundle210\\Rector\\Class_\\EventSubscriberInterfaceToAttributeRector' => $vendorDir . '/rector/rector-doctrine/rules/Bundle210/Rector/Class_/EventSubscriberInterfaceToAttributeRector.php',
