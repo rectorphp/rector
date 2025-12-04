@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -97,6 +98,7 @@ CODE_SAMPLE
                     // possibly request stack push
                     $array = new Array_([new ArrayItem($pushMethodCall->getArgs()[0]->value)]);
                     $requestStack->args[] = new Arg($array);
+                    $requestStack->setAttribute(AttributeKey::ORIGINAL_NODE, null);
                     $hasChanged = \true;
                     unset($node->stmts[$key]);
                 }
